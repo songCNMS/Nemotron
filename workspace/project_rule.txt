@@ -1,0 +1,3 @@
+# Nemotron - Project Rules
+
+> Applies to all interns working under the Nemotron project.
