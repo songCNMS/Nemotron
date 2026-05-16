@@ -1,0 +1,67 @@
+run:
+  env:
+    container: anyscale/ray:2.49.2-py312
+
+# M1 Agentic SFT v0 data-prep config.
+#
+# First generate the local JSONL blend:
+#   python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
+#     --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
+#     --output-dir ${PWD}/../output/super3/m1_agentic_sft_v0
+#
+# Then run:
+#   nemotron super3 data prep sft -c agentic_v0
+
+blend_path: ${oc.env:PWD}/../output/super3/m1_agentic_sft_v0/data_blend_agentic_sft_v0.json
+output_dir: ${oc.env:PWD}/../output/super3/stage1_sft_agentic_v0
+
+num_shards: 16
+
+tokenizer:
+  model: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16
+  add_bos: false
+  add_eos: true
+
+pack_size: 4096
+algorithm: first_fit_shuffle
+seed: null
+parquet_row_group_size: 1000
+parquet_compression: zstd
+
+train_ratio: 0.98
+valid_ratio: 0.01
+test_ratio: 0.01
+
+# Super3 currently reuses the checked-in Nano3 template implementation for
+# tool call rendering until a separate Super3 template is added.
+chat_template: nano3
+messages_field: messages
+tools_field: tools
+used_in_filter: super3_agentic_sft_v0
+used_in_field: used_in
+max_doc_tokens: null
+
+sample: null
+sample_seed: 42
+force: false
+execution_mode: auto
+config_name: agentic_v0
+
+plan:
+  planner_cpus: 0.5
+
+download:
+  batch_size: 1
+  stage_cpus: 0.5
+  hf_xet_high_performance: true
+  hf_xet_concurrent_range_gets: 32
+  max_retries: 3
+  timeout_sec: 300
+
+tokenization:
+  cpus_per_worker: 1
+
+observability:
+  pipeline_logging_interval_s: 30
+  wandb_log_pipeline_stats: true
+
