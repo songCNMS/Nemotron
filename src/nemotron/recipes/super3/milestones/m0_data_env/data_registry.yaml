@@ -32,7 +32,7 @@ datasets:
     environment: code_execution_python
     domain: coding
     hf_dataset: google-research-datasets/mbpp
-    hf_config: sanitized
+    hf_config: full
     hf_split: train
     hf_revision: 4bb6404fdc6cacfda99d4ac4205087b89d32030c
     source_url: https://huggingface.co/datasets/google-research-datasets/mbpp
@@ -49,10 +49,10 @@ datasets:
       - M1 SWE-RL preflight
     fields:
       id: task_id
-      prompt: prompt
+      prompt: text
       reference_code: code
       tests: test_list
-      imports: test_imports
+      imports: test_setup_code
 
   - id: m0_tool_calling_hermes
     environment: general_tool_calling
@@ -103,4 +103,3 @@ datasets:
     fields:
       question: question
       answer: answer
-

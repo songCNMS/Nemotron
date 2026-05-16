@@ -175,9 +175,15 @@ def transform_hotpotqa_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -
 
 
 def transform_mbpp_code_execution(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
-    question = str(row["prompt"]).strip()
+    question = str(row.get("prompt") or row.get("text") or "").strip()
     tests = list(row.get("test_list") or [])
-    imports = list(row.get("test_imports") or [])
+    imports_value = row.get("test_imports")
+    if imports_value is None:
+        imports_value = row.get("test_setup_code")
+    if isinstance(imports_value, str):
+        imports = [imports_value] if imports_value.strip() else []
+    else:
+        imports = list(imports_value or [])
     user_content = (
         "Write a Python function or program for the task below. Return only executable Python code.\n\n"
         f"Task:\n{question}\n\n"

@@ -10,7 +10,7 @@ source revision, reward type, and contamination notes in `data_registry.yaml`.
 | M0 area | HF dataset | Environment | Default rows | License |
 |---|---|---|---:|---|
 | Search | `hotpotqa/hotpot_qa` (`distractor`) | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
-| Coding | `google-research-datasets/mbpp` (`sanitized`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
+| Coding | `google-research-datasets/mbpp` (`full`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
 | General tool calling | `NousResearch/hermes-function-calling-v1` | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
 | Reasoning | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
 
@@ -83,4 +83,3 @@ Nemotron RL data transforms:
   }
 }
 ```
-
