@@ -1,6 +1,6 @@
 # Multi-Environment RL Post-Training 计划中文版（文本与 Agentic-only）
 
-最后更新：2026-05-15
+最后更新：2026-05-16
 
 ## 1. 背景与目标
 
@@ -29,23 +29,92 @@
 
 ## 3. 总体里程碑
 
-| 时间 | 目标 | 核心工作 | 验收口径 |
-|---|---|---|---|
-| 2026-05-14 到 2026-07-31 | **M1：达到 Nemotron 3 Super-level performance** | 完成数据 inventory、license/质量标签、难度分桶和去重。复用 Super3 SFT 与 6-stage RL flow。搭建 21-env RLVR、SWE1/SWE2 sandbox、GenRM RLHF。Agentic SFT v0 覆盖 tool call、terminal、search、structured output 和 SWE traces。执行 small-run -> full RLVR -> SWE -> RLHF。 | 在 Super3 eval basket 上接近 Super3：MMLU-Pro、AIME/HMMT/GPQA、LiveCodeBench、TerminalBench、SWE-Bench、TauBench、IFBench/MultiChallenge、RULER、MMLU-ProX/WMT。目标是加权均分 within 1-2%，且没有关键类别大回退。 |
-| 2026-08-01 到 2026-10-16 | **M2：匹配 Qwen/Qwen3.5-122B-A10B** | 环境扩到 35-50 个：browser/search、TauBench 多域、BIRD/SQL、TerminalBench v2、SWE multi-harness、多语言 IF/code、长上下文、安全、jailbreak、over-refusal。Agentic SFT v1 加入 multi-turn tool traces、自纠错和失败修复轨迹。RL 使用 curriculum、dynamic sampling 和 fast/slow env 分队列。加入 reward calibration、judge ensemble、rollout store 和 env health dashboard。 | 在选定 text/agentic/coding basket 上匹配 Qwen3.5-122B-A10B：MMLU-Pro、GPQA、HLE、LiveCodeBench、SWE-Bench Verified、IFBench、MultiChallenge、AA-LCR/LongBench、TerminalBench、TauBench。目标是加权 parity，关键单项 gap 不超过 3-5%。 |
-| 2026-10-17 到 2026-12-31 | **M3：年底匹配 Qwen/Qwen3.5-397B-A17B** | 环境扩到 70-100+，rollout 规模提升到百万级以上。加入 GUI/MCP/browser、deep SWE、代码安全、long-horizon workplace assistant、多语言 agent、更难长上下文任务和更强安全/对齐任务。Agentic SFT v2 使用 M2 成功轨迹、负例修复、teacher reranking 和 GenRM reranking。最终 RL 分三波：高信号 RLVR、慢速 SWE/browser/GUI、最终 GenRM/RLHF。Infra 升级到 1K GPU-class async GRPO、env quota scheduler、sandbox pool、shadow eval 和自动回滚。 | 2026-12-31 前冻结最终 checkpoint。在约定 text/agent/coding basket 上匹配 Qwen3.5-397B-A17B，例如 BFCL、TAU2、VITA、DeepPlanning、Tool Decathlon、MCP-Mark、SWE-Bench、TerminalBench、HLE、GPQA、LiveCodeBench、长上下文和多语言评估。 |
+### M0：数据与环境前置基线
+
+**周数。** 第 0-2 周。
+
+**核心工作。**
+
+- 完成面向 search、coding、general tool calling、reasoning 的数据和环境底座。
+- 数据侧建立 source、license、quality、difficulty、reward type、contamination 标签。
+- 将数据统一到 OpenAI responses 与 NeMo-Gym JSONL。
+- 环境侧打通 search/browser retrieval、code execution/code repair、function calling/schema adherence、math/STEM/formal reasoning 等 smoke-test 环境。
+- 为每个重点环境定义 reward、timeout、max turns、sandbox/resource requirements 和 held-out split。
+
+**验收口径。**
+
+- 形成可训练的数据 registry 和环境 registry。
+- 每个重点环境准备 100-500 条 smoke/eval set。
+- 输出统一 JSONL schema、reward/verifier spec 和环境健康检查。
+- 产出 baseline pass@1/best@k 报告。
+- 所有重点环境能在 small-run 中稳定返回 reward 和 telemetry。
+
+### M1：达到 Nemotron 3 Super-level performance
+
+**周数。** 第 3-12 周。
+
+**核心工作。**
+
+- 完成数据 inventory、license/质量标签、难度分桶和去重。
+- 复用 Super3 SFT 与 6-stage RL flow。
+- 搭建 21-env RLVR、SWE1/SWE2 sandbox、GenRM RLHF。
+- Agentic SFT v0 覆盖 tool call、terminal、search、structured output 和 SWE traces。
+- 执行 small-run -> full RLVR -> SWE -> RLHF。
+
+**验收口径。**
+
+- 在 Super3 eval basket 上接近 Super3。
+- 覆盖 MMLU-Pro、AIME/HMMT/GPQA、LiveCodeBench、TerminalBench、SWE-Bench、TauBench、IFBench/MultiChallenge、RULER、MMLU-ProX/WMT。
+- 加权均分达到 Super3 within 1-2%。
+- 没有关键类别大回退。
+
+### M2：匹配 Qwen/Qwen3.5-122B-A10B
+
+**周数。** 第 13-23 周。
+
+**核心工作。**
+
+- 环境扩到 35-50 个，重点包括 browser/search、TauBench 多域、BIRD/SQL、TerminalBench v2、SWE multi-harness、多语言 IF/code、长上下文、安全、jailbreak、over-refusal。
+- Agentic SFT v1 加入 multi-turn tool traces、自纠错和失败修复轨迹。
+- RL 使用 curriculum、dynamic sampling 和 fast/slow env 分队列。
+- 加入 reward calibration、judge ensemble、rollout store 和 env health dashboard。
+
+**验收口径。**
+
+- 在选定 text/agentic/coding basket 上匹配 Qwen3.5-122B-A10B。
+- 覆盖 MMLU-Pro、GPQA、HLE、LiveCodeBench、SWE-Bench Verified、IFBench、MultiChallenge、AA-LCR/LongBench、TerminalBench、TauBench。
+- 达到加权 parity。
+- 关键单项 gap 不超过 3-5%。
+
+### M3：年底匹配 Qwen/Qwen3.5-397B-A17B
+
+**周数。** 第 24-33 周。
+
+**核心工作。**
+
+- 环境扩到 70-100+，rollout 规模提升到百万级以上。
+- 加入 GUI/MCP/browser、deep SWE、代码安全、long-horizon workplace assistant、多语言 agent、更难长上下文任务和更强安全/对齐任务。
+- Agentic SFT v2 使用 M2 成功轨迹、负例修复、teacher reranking 和 GenRM reranking。
+- 最终 RL 分三波：高信号 RLVR、慢速 SWE/browser/GUI、最终 GenRM/RLHF。
+- Infra 升级到 1K GPU-class async GRPO、env quota scheduler、sandbox pool、shadow eval 和自动回滚。
+
+**验收口径。**
+
+- 第 33 周前冻结最终 checkpoint。
+- 在约定 text/agent/coding basket 上匹配 Qwen3.5-397B-A17B。
+- 覆盖 BFCL、TAU2、VITA、DeepPlanning、Tool Decathlon、MCP-Mark、SWE-Bench、TerminalBench、HLE、GPQA、LiveCodeBench、长上下文和多语言评估。
 
 ## 4. 执行时间表
 
-| 阶段 | 日期 | 交付物 |
-|---|---:|---|
-| Foundation | 2026-05-14 到 2026-05-31 | 数据目录、环境目录、冻结 eval basket、artifact/W&B lineage、sandbox/SIF 准备、Super3 dry-run 和 small-run。 |
-| Agentic SFT v0 | 2026-06-01 到 2026-06-21 | tool、terminal、search、SWE trajectory SFT。统一 OpenAI responses/tool schema。确定 loss mask 和 reasoning mode 规范。 |
-| M1 RL | 2026-06-22 到 2026-07-31 | RLVR1-3、SWE1-2、RLHF、Super3-parity checkpoint、regression report。 |
-| M2 Environment Expansion | 2026-08-01 到 2026-08-31 | 新环境接入、失败样本挖掘、reward/judge calibration、rollout store、env health dashboard。 |
-| M2 Training Sprint | 2026-09-01 到 2026-10-16 | 大规模 Agentic RL v1、Qwen3.5-122B-A10B parity checkpoint、gap analysis。 |
-| M3 Expansion | 2026-10-17 到 2026-11-15 | GUI/browser/MCP/SWE/long-context/multilingual/safety 环境扩展、Agentic SFT v2。 |
-| M3 Convergence | 2026-11-16 到 2026-12-31 | 最终 RLVR/SWE/browser/GUI/RLHF 训练、全量 eval、quantization/serving validation、checkpoint freeze。 |
+| 阶段 | 周数 | 交付物 |
+|---|---|---|
+| M0 Data & Environment Foundation | 第 0-2 周 | search、coding、general tool calling、reasoning 的数据目录、环境目录、统一 JSONL schema、reward/verifier spec、sandbox/SIF 准备、环境 health check、baseline small-run。 |
+| Agentic SFT v0 | 第 3-5 周 | tool、terminal、search、SWE trajectory SFT。统一 OpenAI responses/tool schema。确定 loss mask 和 reasoning mode 规范。 |
+| M1 RL | 第 6-12 周 | RLVR1-3、SWE1-2、RLHF、Super3-parity checkpoint、regression report。 |
+| M2 Environment Expansion | 第 13-17 周 | 新环境接入、失败样本挖掘、reward/judge calibration、rollout store、env health dashboard。 |
+| M2 Training Sprint | 第 18-23 周 | 大规模 Agentic RL v1、Qwen3.5-122B-A10B parity checkpoint、gap analysis。 |
+| M3 Expansion | 第 24-27 周 | GUI/browser/MCP/SWE/long-context/multilingual/safety 环境扩展、Agentic SFT v2。 |
+| M3 Convergence | 第 28-33 周 | 最终 RLVR/SWE/browser/GUI/RLHF 训练、全量 eval、quantization/serving validation、checkpoint freeze。 |
 
 ## 5. 主训练流水线详解：SFT -> 3 轮 RLVR -> 2 轮 SWE-RL -> RLHF -> Eval
 
