@@ -82,6 +82,35 @@ Each sub-stage has its own data prep command because the data blends differ (RLV
 
 ---
 
+## M0 Data and Environment Foundation
+
+The multi-environment RL milestone plan adds a pre-RL M0 layer for public
+smoke/eval data and reward environment metadata. The M0 assets live under:
+
+```text
+src/nemotron/recipes/super3/milestones/m0_data_env/
+```
+
+They cover search, coding, general tool calling, and reasoning with public HF
+datasets, pinned revisions, licenses, intended use stages, reward types, and
+contamination notes. The preparation script writes NeMo-Gym-compatible JSONL
+with `responses_create_params.input`, `question`, `expected_answer`,
+`reward_config`, `extra_env_info`, and metadata fields.
+
+```bash
+source /work-agents/.venv/bin/activate
+python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \
+  --output-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516 \
+  --max-train-per-dataset 100 \
+  --max-val-per-dataset 25
+```
+
+See
+`src/nemotron/recipes/super3/milestones/m0_data_env/README.md`
+for the registry schema and output layout.
+
+---
+
 ## Output
 
 ```
