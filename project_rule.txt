@@ -1,0 +1,6 @@
+- Debug: all codes shall be running remotely on a node called "NemTron"
+- Codes: Codes shall be sync to /root first.
+- For debug purpose, you can use a smaller model checkpoint at /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
+- All downloads shall happen locally in the cpu first and then copy to "NemTron"
+- If packages need to be installed, first download on "NemTron" directly, if errors happen, download first on the local cpu and then copy to "NemTron"
+- /mnt/3fs/data/lei.song/ is mounted both on the local cpu as well as on the "NemTron", you can leverage but never delete existing files
