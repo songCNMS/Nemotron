@@ -1,0 +1,106 @@
+schema_version: 1
+milestone: M0
+description: Public M0 data registry for search, coding, general tool calling, and reasoning smoke sets.
+datasets:
+  - id: m0_search_hotpotqa
+    environment: search_grounded_qa
+    domain: search
+    hf_dataset: hotpotqa/hotpot_qa
+    hf_config: distractor
+    hf_split: train
+    hf_revision: 1908d6afbbead072334abe2965f91bd2709910ab
+    source_url: https://huggingface.co/datasets/hotpotqa/hotpot_qa
+    license: cc-by-sa-4.0
+    converter: hotpotqa_search
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: mixed
+    reward_type: normalized_exact_or_contains
+    contamination: decontaminate against held-out QA and search eval baskets before training scale-up
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLVR search/browser retrieval smoke
+      - M2 browser/search expansion
+    fields:
+      id: id
+      question: question
+      answer: answer
+      context: context
+      difficulty: level
+
+  - id: m0_coding_mbpp
+    environment: code_execution_python
+    domain: coding
+    hf_dataset: google-research-datasets/mbpp
+    hf_config: sanitized
+    hf_split: train
+    hf_revision: 4bb6404fdc6cacfda99d4ac4205087b89d32030c
+    source_url: https://huggingface.co/datasets/google-research-datasets/mbpp
+    license: cc-by-4.0
+    converter: mbpp_code_execution
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: intro_python
+    reward_type: python_unit_tests
+    contamination: decontaminate against LiveCodeBench, HumanEval, MBPP eval, and internal coding evals
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLVR code execution smoke
+      - M1 SWE-RL preflight
+    fields:
+      id: task_id
+      prompt: prompt
+      reference_code: code
+      tests: test_list
+      imports: test_imports
+
+  - id: m0_tool_calling_hermes
+    environment: general_tool_calling
+    domain: general_tool_calling
+    hf_dataset: NousResearch/hermes-function-calling-v1
+    hf_config: null
+    hf_split: train
+    hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
+    source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
+    license: apache-2.0
+    converter: hermes_function_calling
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: mixed
+    reward_type: tool_schema_and_argument_match
+    contamination: decontaminate against BFCL, TauBench, tool-use heldouts, and internal tool schemas
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 tool syntax
+      - M1 RLVR tool-call smoke
+      - M2 tool-use expansion
+    fields:
+      id: id
+      conversations: conversations
+      tools: tools
+      category: category
+      subcategory: subcategory
+
+  - id: m0_reasoning_gsm8k
+    environment: math_reasoning_numeric
+    domain: reasoning
+    hf_dataset: openai/gsm8k
+    hf_config: main
+    hf_split: train
+    hf_revision: 740312add88f781978c0658806c59bc2815b9866
+    source_url: https://huggingface.co/datasets/openai/gsm8k
+    license: mit
+    converter: gsm8k_numeric_reasoning
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: grade_school_math
+    reward_type: normalized_numeric_exact_match
+    contamination: decontaminate against GSM8K eval and broader math benchmark baskets
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLVR math/reasoning smoke
+      - M2 harder reasoning curriculum
+    fields:
+      question: question
+      answer: answer
+

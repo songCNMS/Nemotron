@@ -1,0 +1,118 @@
+schema_version: 1
+milestone: M0
+description: M0 NeMo-Gym-compatible reward environment registry for smoke and small-run validation.
+environments:
+  - id: search_grounded_qa
+    family: search
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: normalized_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: answer must match the expected short answer after normalization
+    resources:
+      sandbox: none
+      tools:
+        - static_retrieval_context
+      timeout_s: 20
+      max_turns: 2
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - latency_ms
+      - normalized_answer
+      - context_doc_count
+      - timeout
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.context_documents
+
+  - id: code_execution_python
+    family: coding
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: python_unit_tests
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: submitted Python solution must pass the provided tests
+    resources:
+      sandbox: python_subprocess_or_container
+      tools:
+        - run_python_tests
+      timeout_s: 30
+      max_turns: 3
+      expected_runtime_ms: 2000
+    telemetry:
+      - reward
+      - tests_passed
+      - tests_total
+      - latency_ms
+      - timeout
+      - runtime_error
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.test_list
+
+  - id: general_tool_calling
+    family: general_tool_calling
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: tool_schema_and_argument_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted tool name and JSON arguments must match the reference call
+    resources:
+      sandbox: none
+      tools:
+        - openai_function_schema
+      timeout_s: 20
+      max_turns: 2
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - invalid_tool_call
+      - schema_error
+      - argument_match
+      - latency_ms
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - responses_create_params.tools
+        - extra_env_info.expected_tool_calls
+
+  - id: math_reasoning_numeric
+    family: reasoning
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: normalized_numeric_exact_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: final numeric answer must match after comma and whitespace normalization
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 20
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - normalized_answer
+      - latency_ms
+      - malformed_final_answer
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - responses_create_params.input
+
