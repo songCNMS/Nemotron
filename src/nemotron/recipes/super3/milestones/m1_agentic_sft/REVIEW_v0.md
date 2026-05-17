@@ -9,10 +9,11 @@ Reviewer: intern_nemontron_review_cc
 | v3 (this PR fixes) | 2026-05-17 | task004 — P0 #2 + N2 fixed, see PR #11 |
 | v4 (this PR fixes) | 2026-05-17 | task006 — P1 #3 + N1 fixed, see PR #12 |
 | v5 (this PR fixes) | 2026-05-17 | task007 — P1 #4 + #11 + #14 fixed, see PR #13 |
+| v6 (this PR fixes) | 2026-05-17 | task008 — P2 #7 + #10 fixed, see PR #14 |
 
 Plan reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8.
 
-Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **56 passed + 1 skipped** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11 → +3 from PR #12 → +5 from PR #13; the 1 skip is the optional `cosmos_xenna`-gated end-to-end loss-mask test).
+Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **62 passed + 1 skipped** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11 → +3 from PR #12 → +5 from PR #13 → +6 from PR #14; the 1 skip is the optional `cosmos_xenna`-gated end-to-end loss-mask test).
 
 Files inspected:
 
@@ -44,10 +45,10 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 4 | no empty-content guard on supervision messages | P1 | ✓ Fixed in PR #13 task007 (`_ensure_assistant_supervision_non_empty` in `convert_m0_record` now raises ValueError for every env when no assistant message has non-empty content or tool_calls; `assistant_for_search` returns empty content for empty answer so the guard fires uniformly) |
 | 5 | SWE / terminal / structured-output absent from v0 | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
 | 6 | no negative examples (malformed tool / hallucinated tool output) | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
-| 7 | no difficulty curriculum / pass-rate filtering | P2 | ✗ Still open — not in any task |
+| 7 | no difficulty curriculum / pass-rate filtering | P2 | ✓ Fixed in PR #14 task008 — `load_difficulty_signal` reads M0 `health_baseline_report.json`; each SFT row carries `metadata.difficulty_bucket` ∈ {trivial, hard, unknown}; `manifest.difficulty_buckets` summarizes counts per split. v0 still emits a single blend entry — a future curriculum sampler can stratify on the new metadata. |
 | 8 | chat template pinned to `nano3` | P3 | ✗ Still open |
 | 9 | two-stage SFT loss not implemented | P3 | ✗ Still open |
-| 10 | `metadata.m1_use` hardcoded and name-mismatched | P2 | ✗ Still open — same 4 strings; "search grounded answer format" still false |
+| 10 | `metadata.m1_use` hardcoded and name-mismatched | P2 | ✓ Fixed in PR #14 task008 — `m1_use` is now a per-env list from `M1_USE_BY_ENV` (plan §8 aligned): search → `["search pattern"]`, code → `["code solution format", "structured output"]`, tool → `["tool call syntax"]`, reasoning → `["reasoning answer format"]` |
 | 11 | `search_grounded_qa` supervision is a bare short answer | P1 | ✓ Fixed in PR #13 task007 — `assistant_for_search` now emits a grounded template referencing supporting-facts titles ("Based on the retrieved passages ([1] Title1, [2] Title2), the answer is …") |
 | 12 | M0 `used_in` lineage dropped | P3 | ✗ Still open |
 | 13 | tool-calling system-prompt replacement is asymmetric and undocumented | P3 | ✗ Still open |
@@ -63,7 +64,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 23 | `m1_agentic_smoke.yaml` lacks a schema test | P3 | ◐ Partial — new `test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer` covers one field; full schema validation still missing |
 | 24 | M0 `cleanup_stale_split_files` semantics under-documented | P3 | ✗ Still open |
 
-Aggregate: **7 fixed (#1 by PR #10; #2 #N2 by PR #11; #3 #N1 #16 by PR #12; #4 #11 #14 by PR #13), 1 partial (#23), 11 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N1 / N2 fixed; N3 still open. PR #10 brought **1 useful side-fix (T1)**.
+Aggregate: **9 fixed (#1 by PR #10; #2 #N2 by PR #11; #3 #N1 #16 by PR #12; #4 #11 #14 by PR #13; #7 #10 by PR #14), 1 partial (#23), 9 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N1 / N2 fixed; N3 still open. PR #10 brought **1 useful side-fix (T1)**.
 
 ---
 
