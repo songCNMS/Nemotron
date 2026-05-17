@@ -119,12 +119,38 @@ def base_messages(record: Mapping[str, Any]) -> list[JsonDict]:
     return converted
 
 
+_TOOL_CALL_OR_TOOLS_RE = re.compile(
+    r"<(tool_call|tools)>.*?</\1>\s*", re.DOTALL | re.IGNORECASE
+)
+
+
+def _scrub_tool_call_xml(text: str) -> str:
+    """Strip Hermes-style ``<tool_call>...</tool_call>`` and ``<tools>...</tools>``
+    blocks from user content.
+
+    The tool schema is delivered via the OpenAI-style ``tools`` field that the
+    chat template injects on its own; leaving demo / example tool-call XML in
+    the user message would teach the model to echo the example or interpret
+    user-typed XML as a real call. Mirrors the system-side scrub
+    (``TOOL_CALLING_SYSTEM_PROMPT``) but for the user turn so the cleanup is
+    symmetric.
+    """
+    return _TOOL_CALL_OR_TOOLS_RE.sub("", text).strip()
+
+
 def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDict]:
     messages = base_messages(record)
     if environment != "general_tool_calling":
         return messages
-    non_system_messages = [message for message in messages if message["role"] != "system"]
-    return [{"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}, *non_system_messages]
+    cleaned: list[JsonDict] = []
+    for message in messages:
+        if message["role"] == "system":
+            continue
+        if message["role"] == "user":
+            cleaned.append({"role": "user", "content": _scrub_tool_call_xml(message["content"])})
+        else:
+            cleaned.append(message)
+    return [{"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}, *cleaned]
 
 
 def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
@@ -386,6 +412,13 @@ def m1_metadata(
 ) -> JsonDict:
     source_metadata = record.get("metadata", {})
     env_id = str(record.get("environment", ""))
+    # P3 #12: preserve the M0 stage lineage (e.g. ["M0 data_env_foundation",
+    # "M1 RLVR …"]) so downstream contamination / curriculum tooling can still
+    # see which M0 stages this row was tagged for, even after we overwrite the
+    # top-level `used_in` with the M1-specific tags.
+    m0_use_stage = record.get("used_in")
+    if not isinstance(m0_use_stage, list):
+        m0_use_stage = []
     return {
         "m1_stage": "Agentic SFT v0",
         "m1_milestone": MILESTONE,
@@ -395,6 +428,7 @@ def m1_metadata(
         ),
         "m0_environment": record.get("environment"),
         "m0_split": split,
+        "m0_use_stage": list(m0_use_stage),
         "m0_source_dataset": source_metadata.get("source_dataset"),
         "m0_source_config": source_metadata.get("source_config"),
         "m0_source_revision": source_metadata.get("source_revision"),

@@ -31,6 +31,12 @@ tokenizer:
   tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16}
 
 train:
+  # The 1700 default is a placeholder, not a tuned value: on M0 smoke data
+  # (~400 raw rows → ~5-20 packed sequences at pack_size=4096) it represents
+  # hundreds of epochs of overfitting. Use the planner
+  # (src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py)
+  # to recompute train_iters from packed_train_rows × epochs / global_batch_size
+  # before launching a real run, then override here.
   train_iters: 1700
   global_batch_size: 4
   micro_batch_size: 1

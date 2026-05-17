@@ -70,3 +70,16 @@ and writes:
 | `code_execution_python` | User coding prompt, assistant reference Python solution |
 | `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` |
 | `math_reasoning_numeric` | User math prompt, assistant reference reasoning solution |
+
+### System prompt handling (tool-calling is special)
+
+`prompt_messages` rewrites the system prompt to `TOOL_CALLING_SYSTEM_PROMPT`
+only for `general_tool_calling` records — the other three environments keep
+the M0-prepared system text verbatim. The override scrubs Hermes's verbose
+`<tools>[]</tools>` system content so the M1 SFT input doesn't carry the
+upstream prompt format. The same scrub is applied to user content so demo
+`<tool_call>...</tool_call>` blocks shipped inside Hermes user turns don't
+become part of the training prompt. The actual tool schema reaches the model
+through the `tools` field rendered by the chat template, not through inline
+XML in messages.
+

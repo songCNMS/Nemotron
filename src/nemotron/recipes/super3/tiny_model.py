@@ -27,13 +27,28 @@ Used by ``test_train.py`` in both ``stage0_pretrain`` and ``stage1_sft``.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 try:
     from megatron.bridge.models.nemotronh import Nemotron3SuperProvider as _Nemotron3SuperBaseProvider
+    _SUPER_PROVIDER_AVAILABLE = True
 except ImportError:
     from megatron.bridge.models.nemotronh.nemotron_h_provider import (
         Nemotron3NanoProvider as _Nemotron3SuperBaseProvider,
+    )
+    _SUPER_PROVIDER_AVAILABLE = False
+    # P3 #19: silently swapping the base provider to Nano makes the tiny
+    # "Super3" integration test no longer cover Super3-shaped architecture
+    # paths. Surface the swap so operators / CI know they're getting a Nano
+    # tiny model and the Super3 assertions in the docstring no longer hold.
+    logger.warning(
+        "Nemotron3SuperProvider unavailable in this megatron-bridge build; "
+        "Nemotron3SuperTinyProvider is falling back to Nemotron3NanoProvider. "
+        "Super3-specific features (hybrid layer pattern, latent MoE routing) "
+        "may not be exercised by the resulting tiny model."
     )
 
 _BASE_SUPPORTS_HYBRID_LAYER_PATTERN = "hybrid_layer_pattern" in getattr(
