@@ -1,10 +1,15 @@
 import json
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (
+    DIFFICULTY_HARD,
+    DIFFICULTY_TRIVIAL,
+    DIFFICULTY_UNKNOWN,
+    M1_USE_BY_ENV,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
     convert_m0_record,
+    load_difficulty_signal,
     prepare,
 )
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
@@ -171,6 +176,7 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     class Args:
         m0_input_dir = m0_root
         output_dir = tmp_path / "out"
+        m0_health_baseline = None
         max_records_per_env = None
         max_val_shadow_per_env = None
         overwrite = False
@@ -182,6 +188,9 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     assert (Args.output_dir / "agentic_sft_v0_train.jsonl").exists()
     assert (Args.output_dir / "agentic_sft_v0_val_shadow.jsonl").exists()
     assert (Args.output_dir / "data_blend_agentic_sft_v0.json").exists()
+    # No M0 baseline supplied → every row falls into the unknown bucket.
+    assert manifest["difficulty_buckets"]["train"] == {"unknown": 1}
+    assert manifest["difficulty_buckets"]["val_shadow"] == {"unknown": 1}
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:
@@ -638,3 +647,189 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
     assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
     assert (Args.output_dir / "unit" / "training_manifest.json").exists()
     assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
+
+
+def test_m1_use_is_scoped_per_environment() -> None:
+    """Regression for review finding P2 #10: m1_use was a hardcoded 4-string list per row."""
+    for env_id, expected in M1_USE_BY_ENV.items():
+        record = _base_record(env_id)
+        if env_id == "math_reasoning_numeric":
+            record["extra_env_info"]["reference_solution"] = "42"
+        elif env_id == "code_execution_python":
+            record["extra_env_info"]["reference_code"] = "def f():\n    return 1"
+        elif env_id == "general_tool_calling":
+            record["extra_env_info"]["expected_trajectory"] = [
+                {"role": "assistant", "content": "ok", "tool_calls": []},
+            ]
+        # search_grounded_qa: _base_record's expected_answer="Answer" suffices
+        converted = convert_m0_record(record, split="train")
+        assert converted["metadata"]["m1_use"] == expected, (
+            f"env={env_id!r} expected m1_use={expected} got {converted['metadata']['m1_use']}"
+        )
+
+
+def test_load_difficulty_signal_maps_oracle_failures_to_hard(tmp_path) -> None:
+    """Regression for review finding P2 #7: M0 oracle pass/fail must surface as difficulty."""
+    report = {
+        "baselines": {
+            "environments": {
+                "math_reasoning_numeric": {
+                    "splits": {
+                        "train": {
+                            "oracle": {
+                                "rows": 4,
+                                "scored_rows": 4,
+                                "failure_count": 2,
+                                "failures": [{"row_index": 1}, {"row_index": 3}],
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    report_path = tmp_path / "report.json"
+    report_path.write_text(json.dumps(report), encoding="utf-8")
+
+    signal = load_difficulty_signal(report_path)
+
+    assert signal[("math_reasoning_numeric", "train", 0)] == DIFFICULTY_TRIVIAL
+    assert signal[("math_reasoning_numeric", "train", 1)] == DIFFICULTY_HARD
+    assert signal[("math_reasoning_numeric", "train", 2)] == DIFFICULTY_TRIVIAL
+    assert signal[("math_reasoning_numeric", "train", 3)] == DIFFICULTY_HARD
+
+
+def test_load_difficulty_signal_skips_truncated_failure_lists(tmp_path) -> None:
+    """evaluate_policy caps failures at 20; unlisted rows must stay unknown, not trivial."""
+    report = {
+        "baselines": {
+            "environments": {
+                "math_reasoning_numeric": {
+                    "splits": {
+                        "train": {
+                            "oracle": {
+                                "rows": 30,
+                                "scored_rows": 30,
+                                "failure_count": 25,  # higher than the 1 listed
+                                "failures": [{"row_index": 5}],
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    report_path = tmp_path / "report.json"
+    report_path.write_text(json.dumps(report), encoding="utf-8")
+
+    signal = load_difficulty_signal(report_path)
+
+    # row 5 still gets marked hard because it appears in the (truncated) failures
+    assert signal[("math_reasoning_numeric", "train", 5)] == DIFFICULTY_HARD
+    # but row 0 must NOT be trivial — we don't know whether it's one of the 24
+    # unlisted failures
+    assert ("math_reasoning_numeric", "train", 0) not in signal
+
+
+def test_load_difficulty_signal_returns_empty_for_missing_report() -> None:
+    from pathlib import Path
+
+    assert load_difficulty_signal(None) == {}
+    assert load_difficulty_signal(Path("/nonexistent/report.json")) == {}
+
+
+def test_prepare_propagates_difficulty_bucket_per_row(tmp_path) -> None:
+    """End-to-end: difficulty_signal flows through prepare into per-record metadata + manifest counts."""
+    m0_root = tmp_path / "m0"
+    env_dir = m0_root / "math_reasoning_numeric"
+    env_dir.mkdir(parents=True)
+    record = _base_record("math_reasoning_numeric")
+    record["extra_env_info"]["reference_solution"] = "42"
+    for split in ("train", "val"):
+        # Write three identical math rows per split so we can address row_index 0/1/2.
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for _ in range(3):
+                json.dump(record, f)
+                f.write("\n")
+
+    # Mark row 1 in train as hard; row 0 in val as hard; the rest are oracle-pass.
+    health = m0_root / "health_baseline" / "health_baseline_report.json"
+    health.parent.mkdir()
+    health.write_text(
+        json.dumps(
+            {
+                "baselines": {
+                    "environments": {
+                        "math_reasoning_numeric": {
+                            "splits": {
+                                "train": {
+                                    "oracle": {
+                                        "rows": 3,
+                                        "scored_rows": 3,
+                                        "failure_count": 1,
+                                        "failures": [{"row_index": 1}],
+                                    }
+                                },
+                                "val": {
+                                    "oracle": {
+                                        "rows": 3,
+                                        "scored_rows": 3,
+                                        "failure_count": 1,
+                                        "failures": [{"row_index": 0}],
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None  # rely on the default discovery
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+
+    manifest = prepare(Args())
+
+    assert manifest["m0_health_baseline"] == str(health)
+    assert manifest["difficulty_buckets"]["train"] == {DIFFICULTY_HARD: 1, DIFFICULTY_TRIVIAL: 2}
+    assert manifest["difficulty_buckets"]["val_shadow"] == {DIFFICULTY_HARD: 1, DIFFICULTY_TRIVIAL: 2}
+
+    # Spot-check the metadata on the produced JSONL.
+    train_jsonl = (Args.output_dir / "agentic_sft_v0_train.jsonl").read_text(encoding="utf-8").splitlines()
+    train_records = [json.loads(line) for line in train_jsonl]
+    assert train_records[0]["metadata"]["difficulty_bucket"] == DIFFICULTY_TRIVIAL
+    assert train_records[1]["metadata"]["difficulty_bucket"] == DIFFICULTY_HARD
+    assert train_records[2]["metadata"]["difficulty_bucket"] == DIFFICULTY_TRIVIAL
+
+
+def test_prepare_marks_difficulty_unknown_without_baseline(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+    env_dir = m0_root / "math_reasoning_numeric"
+    env_dir.mkdir(parents=True)
+    record = _base_record("math_reasoning_numeric")
+    record["extra_env_info"]["reference_solution"] = "42"
+    for split in ("train", "val"):
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            json.dump(record, f)
+            f.write("\n")
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+
+    manifest = prepare(Args())
+
+    assert manifest["m0_health_baseline"] is None
+    assert manifest["difficulty_buckets"]["train"] == {DIFFICULTY_UNKNOWN: 1}
+    assert manifest["difficulty_buckets"]["val_shadow"] == {DIFFICULTY_UNKNOWN: 1}
