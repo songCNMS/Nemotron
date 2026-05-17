@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
@@ -138,10 +139,27 @@ def assistant_for_code(record: Mapping[str, Any]) -> JsonDict:
 
 
 def assistant_for_reasoning(record: Mapping[str, Any]) -> JsonDict:
+    # GSM8K's raw `answer` (M0 carries it as extra_env_info.reference_solution)
+    # ends with the verifier marker `#### <number>`. If we put that string into
+    # the SFT target verbatim, the model learns to literally emit `####` on
+    # every reasoning task — that pattern then escapes GSM8K and shows up on
+    # unrelated math prompts at inference. M0's `expected_answer` is the
+    # already-normalized numeric answer (no `####`), so prefer it; fall back to
+    # `reference_solution` only with the marker stripped.
+    expected_answer = str(record.get("expected_answer", "")).strip()
+    if expected_answer:
+        return {"role": "assistant", "content": expected_answer}
     reference = record.get("extra_env_info", {}).get("reference_solution")
     if reference is None:
-        reference = record.get("expected_answer", "")
-    return {"role": "assistant", "content": str(reference).strip()}
+        reference = ""
+    return {"role": "assistant", "content": _strip_gsm8k_marker(str(reference)).strip()}
+
+
+_GSM8K_MARKER_RE = re.compile(r"####\s*")
+
+
+def _strip_gsm8k_marker(text: str) -> str:
+    return _GSM8K_MARKER_RE.sub("", text)
 
 
 def assistant_for_tool_calling(record: Mapping[str, Any]) -> JsonDict:
