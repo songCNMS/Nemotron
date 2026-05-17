@@ -7,10 +7,11 @@ Reviewer: intern_nemontron_review_cc
 | v1 (original review) | 2026-05-17 | `47cb0ee..bd0ff62` — PR #3 / #6 / #7 |
 | v2 (update) | 2026-05-17 | post-PR #10 / #8 — main at `19f682d` |
 | v3 (this PR fixes) | 2026-05-17 | task004 — P0 #2 + N2 fixed, see PR #11 |
+| v4 (this PR fixes) | 2026-05-17 | task006 — P1 #3 + N1 fixed, see PR #12 |
 
 Plan reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8.
 
-Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **49 passed** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11).
+Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **52 passed** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11 → +3 from PR #12).
 
 Files inspected:
 
@@ -38,7 +39,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 |---|---|---|---|
 | 1 | cross-intern repo dir in planner default | P0 | ✓ Fixed in PR #10 (`DEFAULT_REPO_DIR=None`, falls back to `Path.cwd()`) |
 | 2 | `global_batch_size=4` × `gpus_per_node=8` × `mbs=1` violates GBS≥DP×MBS | P0 | ✓ Fixed in PR #11 task004 (`ensure_batch_geometry` guard in `build_plan`; default GBS bumped 4→8) |
-| 3 | GSM8K `#### N` marker leaks into SFT reasoning target | P1 | ✗ Still open — `assistant_for_reasoning` still prefers `reference_solution` |
+| 3 | GSM8K `#### N` marker leaks into SFT reasoning target | P1 | ✓ Fixed in PR #12 task006 (`assistant_for_reasoning` prefers `expected_answer`; `_strip_gsm8k_marker` strips `####\s*` from fallback) |
 | 4 | no empty-content guard on supervision messages | P1 | ◐ Partial — tool_calling now warns when neither tool_calls nor text; math/code/search still unguarded; warning is not a `raise` |
 | 5 | SWE / terminal / structured-output absent from v0 | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
 | 6 | no negative examples (malformed tool / hallucinated tool output) | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
@@ -51,7 +52,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 13 | tool-calling system-prompt replacement is asymmetric and undocumented | P3 | ✗ Still open |
 | 14 | `tool` role loss-mask behavior not verified end-to-end | P1 | ◐ Partial — PR #10 added `tool_call_id` wiring; mask question (does nano3 template + PackedSftParquetStage mask tool tokens?) still untested |
 | 15 | `content="" + tool_calls=[...]` render path untested at template level | P3 | ✗ Still open — structural tests only |
-| 16 | hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths | P3 | ◐ Partial — all M1 planner / prepare defaults now `None` or `../output/...`, **but** PR #8's `qwen_local_train.py:25 DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/..."` re-introduces the same drift class. See **N1**. |
+| 16 | hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths | P3 | ✓ Fixed in PR #12 task006 — M1 planner / prepare already moved to `None`/`../output/...` by PR #10; PR #8's Qwen entry default cleared (see **N1** below) |
 | 17 | `train_iters: 1700` default oversized for M0 smoke data | P3 | ✗ Still open |
 | 18 | `smoke_runtime.patch_dataset_helper_compile_if_prebuilt` silently no-ops on import failure | P3 | ✗ Still open |
 | 19 | `tiny_model.py` silently degrades Super3 → Nano3 provider | P3 | ✗ Still open |
@@ -61,13 +62,15 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 23 | `m1_agentic_smoke.yaml` lacks a schema test | P3 | ◐ Partial — new `test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer` covers one field; full schema validation still missing |
 | 24 | M0 `cleanup_stale_split_files` semantics under-documented | P3 | ✗ Still open |
 
-Aggregate: **2 fixed (#1 by PR #10, #2 by PR #11), 4 partial, 16 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N2 fixed by PR #11; N1 / N3 still open. PR #10 brought **1 useful side-fix (T1)**.
+Aggregate: **4 fixed (#1 #16 by PR #10/#12, #2 #N2 by PR #11, #3 #N1 by PR #12), 3 partial (#4 #14 #23), 14 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N1 / N2 fixed; N3 still open. PR #10 brought **1 useful side-fix (T1)**.
 
 ---
 
 ## v2 — New findings since v1
 
 ### N1 — `qwen_local_train.py:25` re-introduces a `/mnt/3fs/data/lei.song/...` default (P3 #16 regression)
+
+**Status (v4): ✓ Fixed in PR #12 task006** — `DEFAULT_QWEN_MODEL` removed; `resolve_qwen_hf_model()` now reads `SUPER3_M1_QWEN_HF_MODEL` and `raise ValueError` if unset, with a message pointing operators at the local-import script. Regression tests `test_qwen_local_train_requires_env_var` and `test_qwen_local_train_uses_env_var_when_set` cover both branches.
 
 ```python
 DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507"

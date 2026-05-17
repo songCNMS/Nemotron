@@ -9,25 +9,42 @@ import os
 import sys
 from pathlib import Path
 
-import torch
-from megatron.bridge import AutoBridge
-from megatron.bridge.recipes.common import _sft_common
-from megatron.bridge.training.config import ConfigContainer
+# torch / megatron / nemotron.kit are only needed at runtime when the recipe
+# is built; deferring their imports lets unit tests poke at `resolve_qwen_hf_model`
+# without pulling the whole training stack into the test environment.
 from omegaconf import DictConfig, OmegaConf
-
-from nemotron.kit.train_script import parse_config_and_overrides
-from nemotron.recipes.super3.smoke_runtime import patch_dataset_helper_compile_if_prebuilt
-from nemotron.recipes.super3.stage1_sft.train import run_finetune
 
 logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "m1_agentic_train.yaml"
-DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507"
+QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 
 
-def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
+def resolve_qwen_hf_model() -> str:
+    """Return the local Qwen3 4B HF dir, requiring an explicit operator hint.
+
+    A hardcoded fallback used to point at one engineer's home (`/mnt/3fs/data/
+    lei.song/...`); other interns running this debug entry without the env var
+    set would hit a "directory not found" deep inside the HF auto-bridge stack.
+    Force an explicit `SUPER3_M1_QWEN_HF_MODEL` so the failure mode is obvious.
+    """
+    value = os.environ.get(QWEN_MODEL_ENV_VAR)
+    if not value:
+        raise ValueError(
+            f"{QWEN_MODEL_ENV_VAR} is required — point it at a local Qwen3 4B HF model directory "
+            "(e.g. one produced by scripts/import_qwen3_4b_local_to_megatron.py)"
+        )
+    return value
+
+
+def _qwen_local_recipe_builder(config: DictConfig) -> "ConfigContainer":
     """Build a Qwen3 4B SFT config from a local HF model directory."""
-    hf_model = os.environ.get("SUPER3_M1_QWEN_HF_MODEL", DEFAULT_QWEN_MODEL)
+    import torch
+    from megatron.bridge import AutoBridge
+    from megatron.bridge.recipes.common import _sft_common
+    from megatron.bridge.training.config import ConfigContainer  # noqa: F401
+
+    hf_model = resolve_qwen_hf_model()
     cfg = _sft_common()
     cfg.model = AutoBridge.from_hf_pretrained(hf_model, trust_remote_code=True).to_megatron_provider(
         load_weights=False
@@ -77,6 +94,10 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
 
 def main() -> None:
     """Entry point for local-path Qwen3 4B M1 Agentic SFT."""
+    from nemotron.kit.train_script import parse_config_and_overrides
+    from nemotron.recipes.super3.smoke_runtime import patch_dataset_helper_compile_if_prebuilt
+    from nemotron.recipes.super3.stage1_sft.train import run_finetune
+
     patch_dataset_helper_compile_if_prebuilt()
 
     try:

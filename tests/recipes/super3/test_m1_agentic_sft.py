@@ -43,16 +43,35 @@ def _base_record(environment: str) -> dict:
     }
 
 
-def test_convert_reasoning_record_uses_reference_solution() -> None:
+def test_convert_reasoning_record_prefers_expected_answer_over_reference_solution() -> None:
+    """Regression for review finding P1 #3: GSM8K `####` marker used to leak into SFT target."""
     record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
     record["extra_env_info"]["reference_solution"] = "Work it out.\n#### 42"
 
     converted = convert_m0_record(record, split="train")
 
-    assert converted["messages"][-1] == {"role": "assistant", "content": "Work it out.\n#### 42"}
+    # SFT target should be the normalized answer, never the verifier marker.
+    assert converted["messages"][-1] == {"role": "assistant", "content": "42"}
+    assert "####" not in converted["messages"][-1]["content"]
     assert USED_IN_TAG in converted["used_in"]
     assert converted["metadata"]["m0_environment"] == "math_reasoning_numeric"
     assert converted["metadata"]["m1_stage"] == "Agentic SFT v0"
+
+
+def test_convert_reasoning_record_strips_gsm8k_marker_when_falling_back() -> None:
+    """If expected_answer is empty, reference_solution is used but `####` is stripped."""
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = ""
+    record["extra_env_info"]["reference_solution"] = "Step 1: do something.\n#### 24"
+
+    converted = convert_m0_record(record, split="train")
+
+    content = converted["messages"][-1]["content"]
+    assert "####" not in content
+    # The reasoning text is preserved.
+    assert "Step 1: do something." in content
+    assert content.endswith("24")
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -370,6 +389,31 @@ def test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env(monkey
     train_cfg = OmegaConf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"))
     train_pc = OmegaConf.to_yaml(train_cfg.checkpoint)
     assert "SUPER3_M1_PRETRAINED_CHECKPOINT" in train_pc
+
+
+def test_qwen_local_train_requires_env_var(monkeypatch) -> None:
+    """Regression for review finding N1: hardcoded lei.song default removed."""
+    import pytest
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import (
+        QWEN_MODEL_ENV_VAR,
+        resolve_qwen_hf_model,
+    )
+
+    monkeypatch.delenv(QWEN_MODEL_ENV_VAR, raising=False)
+    with pytest.raises(ValueError, match=QWEN_MODEL_ENV_VAR):
+        resolve_qwen_hf_model()
+
+
+def test_qwen_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import (
+        QWEN_MODEL_ENV_VAR,
+        resolve_qwen_hf_model,
+    )
+
+    target = tmp_path / "qwen3-4b"
+    target.mkdir()
+    monkeypatch.setenv(QWEN_MODEL_ENV_VAR, str(target))
+    assert resolve_qwen_hf_model() == str(target)
 
 
 def test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer() -> None:
