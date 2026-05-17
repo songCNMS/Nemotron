@@ -2,8 +2,10 @@ from pathlib import Path
 
 import pytest
 
+from nemotron.recipes.super3.milestones.m0_data_env import run_m0_health_baseline
 from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline import (
     MISSING,
+    aggregate_scored_rows,
     build_report,
     evaluate_policy,
     get_path,
@@ -12,8 +14,10 @@ from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline impor
     overall_status,
     run_python_unit_tests,
     score_record,
+    score_rows,
     score_text,
     score_tool_call,
+    summarize_baselines,
     summarize_health,
 )
 
@@ -205,3 +209,56 @@ def test_build_report_raises_for_missing_input_dir(tmp_path: Path) -> None:
 
     with pytest.raises(FileNotFoundError):
         build_report(args)
+
+
+def test_summarize_baselines_does_not_rescore_for_aggregate(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Regression for review finding #15: aggregate used to re-run the verifier per row."""
+    rows_by_env = {
+        "math_reasoning_numeric": {
+            "train": [
+                {"expected_answer": "1", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+                {"expected_answer": "2", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+            ],
+            "val": [
+                {"expected_answer": "3", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+            ],
+        }
+    }
+    calls = {"count": 0}
+    original_score_record = run_m0_health_baseline.score_record
+
+    def counting_score_record(*args, **kwargs):
+        calls["count"] += 1
+        return original_score_record(*args, **kwargs)
+
+    monkeypatch.setattr(run_m0_health_baseline, "score_record", counting_score_record)
+
+    summary = summarize_baselines(
+        rows_by_env,
+        policies=["oracle"],
+        best_k=1,
+        run_code=False,
+    )
+
+    # oracle policy has 1 candidate; total rows = 3; aggregate must reuse split scores.
+    assert calls["count"] == 3
+
+    env = summary["environments"]["math_reasoning_numeric"]
+    assert env["splits"]["train"]["oracle"]["scored_rows"] == 2
+    assert env["splits"]["val"]["oracle"]["scored_rows"] == 1
+    assert env["aggregate"]["oracle"]["scored_rows"] == 3
+    assert env["aggregate"]["oracle"]["pass_at_1"] == 1.0
+
+
+def test_score_rows_and_aggregate_match_evaluate_policy() -> None:
+    """evaluate_policy keeps working as a thin wrapper after the refactor."""
+    rows = [
+        {"expected_answer": "42", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+        {"expected_answer": "7", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+    ]
+
+    scored = score_rows(rows, policy="oracle", best_k=2, run_code=False)
+    aggregated = aggregate_scored_rows(scored, policy="oracle", best_k=2)
+    direct = evaluate_policy(rows, policy="oracle", best_k=2, run_code=False)
+
+    assert aggregated == direct

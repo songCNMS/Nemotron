@@ -262,29 +262,68 @@ def strip_tool_call_blocks(text: str) -> str:
     return TOOL_CALL_RE.sub("", text).strip()
 
 
+HERMES_ROLE_MAP = {
+    "system": "system",
+    "human": "user",
+    "user": "user",
+    "gpt": "assistant",
+    "assistant": "assistant",
+    "tool": "tool",
+    "function": "tool",
+    "function_response": "tool",
+    "observation": "tool",
+}
+
+
 def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> tuple[list[JsonDict], JsonDict]:
-    role_map = {
-        "system": "system",
-        "human": "user",
-        "user": "user",
-        "gpt": "assistant",
-        "assistant": "assistant",
-    }
+    """Split a Hermes function-calling conversation into model input vs expected trajectory.
+
+    `input_messages` covers the prompt context up to (but not including) the first
+    assistant turn — that is what the policy sees at inference time. Everything from
+    the first assistant turn onward (assistant tool calls, tool observations,
+    follow-up assistant turns, final answer) is captured in `expected_trajectory`
+    so that downstream verifiers can score multi-turn behavior, not just the first
+    tool emission.
+    """
     input_messages: list[JsonDict] = []
+    expected_trajectory: list[JsonDict] = []
     expected_tool_calls: list[JsonDict] = []
     expected_assistant_content = ""
+    first_assistant_seen = False
+    last_assistant_content = ""
+    last_assistant_had_tool_calls = False
 
     for turn in conversations:
         raw_role = str(turn.get("from") or turn.get("role") or "").strip()
-        role = role_map.get(raw_role)
+        role = HERMES_ROLE_MAP.get(raw_role)
         if role is None:
             continue
         content = str(turn.get("value") or turn.get("content") or "")
         if role == "assistant":
-            expected_tool_calls = parse_tool_calls(content)
-            expected_assistant_content = strip_tool_call_blocks(content)
-            break
-        input_messages.append({"role": role, "content": content})
+            tool_calls = parse_tool_calls(content)
+            stripped = strip_tool_call_blocks(content)
+            expected_trajectory.append(
+                {
+                    "role": "assistant",
+                    "content": stripped,
+                    "tool_calls": tool_calls,
+                }
+            )
+            last_assistant_content = stripped
+            last_assistant_had_tool_calls = bool(tool_calls)
+            if not first_assistant_seen:
+                expected_tool_calls = tool_calls
+                expected_assistant_content = stripped
+                first_assistant_seen = True
+        elif role == "tool":
+            expected_trajectory.append({"role": "tool", "content": content, "tool_calls": []})
+        else:  # system / user
+            if first_assistant_seen:
+                # Late system/user turn after the assistant has spoken — record in
+                # the trajectory rather than leaking it into model input.
+                expected_trajectory.append({"role": role, "content": content, "tool_calls": []})
+            else:
+                input_messages.append({"role": role, "content": content})
 
     if not any(message["role"] == "system" for message in input_messages):
         input_messages.insert(0, {"role": "system", "content": SYSTEM_PROMPTS["general_tool_calling"]})
@@ -292,6 +331,9 @@ def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> 
     return input_messages, {
         "expected_tool_calls": expected_tool_calls,
         "expected_assistant_content": expected_assistant_content,
+        "expected_trajectory": expected_trajectory,
+        "expected_final_content": last_assistant_content if not last_assistant_had_tool_calls else "",
+        "expected_turn_count": len(expected_trajectory),
     }
 
 
@@ -329,6 +371,9 @@ def transform_hermes_function_calling(row: Mapping[str, Any], spec: Mapping[str,
         extra_env_info={
             "expected_tool_calls": expected["expected_tool_calls"],
             "expected_assistant_content": expected["expected_assistant_content"],
+            "expected_trajectory": expected["expected_trajectory"],
+            "expected_final_content": expected["expected_final_content"],
+            "expected_turn_count": expected["expected_turn_count"],
             "category": row.get("category"),
             "subcategory": row.get("subcategory"),
             "task": row.get("task"),

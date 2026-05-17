@@ -60,8 +60,19 @@ datasets:
     environment: general_tool_calling
     domain: general_tool_calling
     hf_dataset: NousResearch/hermes-function-calling-v1
-    hf_config: null
+    # Hermes ships multiple configs (func_calling_singleturn, func_calling,
+    # glaive_func_calling, json_mode_singleturn, json_mode_agentic). Without an
+    # explicit config, `load_dataset` is ambiguous on this dataset. M0 targets
+    # the single-turn function-calling subset because the `general_tool_calling`
+    # environment registry currently runs with max_turns=2. Multi-turn config
+    # (`func_calling`) is reserved for M1 when the agent loop is wired up.
+    hf_config: func_calling_singleturn
     hf_split: train
+    # NousResearch/hermes-function-calling-v1 does not ship train/val splits per
+    # config — there is only `train`. We intentionally leave hf_val_split unset
+    # so prepare_m0_assets falls back to its sequential-slice path and records
+    # the "not a true holdout" warning in manifest.warnings. This is the same
+    # signal the README surfaces.
     hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
     source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
     license: apache-2.0
