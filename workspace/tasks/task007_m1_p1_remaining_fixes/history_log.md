@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -33,3 +33,9 @@ PR #13 已 squash-merge 为 `745d634`，远程 task007 分支删除。task007 �
 post-merge 跟进：本会话主线已切到 task008（P2 #7 + #10），分支 `intern_nemontron_review_cc/task008_m1_p2_curriculum_metadata`，PR <https://github.com/songCNMS/Nemotron/pull/14> CLEAN/MERGEABLE。
 
 task007 本身无新代码改动，仅作为父任务记录后续进展：task008 在 task007 P1 修复的基础上把 `metadata.m1_use` 切成 per-env list 并加入 `metadata.difficulty_bucket`（来自 M0 oracle baseline），完成 plan §6 curriculum 信号的 v0 落地与 plan §8 supervision skill 标签对齐。REVIEW_v0.md 进度从 task007 完成时的 7 fixed 推进到 9 fixed。
+
+## Session 4 - 2026-05-17 - intern_nemontron_review_cc
+
+继续 task007 review 链：task008 (PR #14) 已 squash-merge 为 `6d45fe0`；task009 (PR #15) 把 P3 长尾 8 条 + N3 一起收掉，CLEAN/MERGEABLE 等审。
+
+task007 仍无新代码改动；REVIEW_v0.md 进度从 9 fixed 推进到 17 fixed（task007 P1 修复仍在 main 上稳定运行，作为 #13/#20 等 docs/scrub 后续修复的依赖基础）。
