@@ -104,6 +104,18 @@ torchrun --nproc_per_node=1 \
   --config src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml
 ```
 
+For the production training entry on local/shared paths, use
+`config/m1_agentic_train.yaml` or generate a checked launch plan:
+
+```bash
+python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py \
+  --packed-sft-dir /path/to/m1_agentic_sft/splits \
+  --pretrained-checkpoint /path/to/super3_pretrain/checkpoints \
+  --save-dir /path/to/m1_agentic_sft_train/checkpoints \
+  --output-dir /path/to/m1_agentic_sft_train/plans \
+  --run-name m1-agentic-sft-v0
+```
+
 ### Input
 
 OpenAI chat format datasets defined in `config/data_prep/data_blend_raw.json`:

@@ -1,0 +1,56 @@
+run:
+  train_script: src/nemotron/recipes/super3/stage1_sft/train.py
+  data: null
+  model: null
+  env:
+    container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
+    nodes: 1
+    gpus_per_node: 8
+    ntasks_per_node: 8
+
+artifacts:
+  wandb: false
+  manifest:
+    root: null
+
+recipe:
+  _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
+  packed_sequence: true
+  peft: null
+
+dataset:
+  super3_packed_sft_dir: ${oc.env:SUPER3_M1_AGENTIC_PACKED_DIR,../output/super3/stage1_sft_agentic_v0/splits}
+  seq_length: 4096
+  packed_sequence_specs:
+    packed_sequence_size: 4096
+
+tokenizer:
+  tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16}
+
+train:
+  train_iters: 1700
+  global_batch_size: 4
+  micro_batch_size: 1
+
+model:
+  seq_length: 4096
+
+scheduler:
+  lr_warmup_iters: 4
+
+logger:
+  log_interval: 10
+  wandb_project: null
+  wandb_entity: null
+  wandb_exp_name: m1-agentic-sft-v0
+
+checkpoint:
+  save: ${oc.env:SUPER3_M1_SFT_SAVE,../output/super3/m1_agentic_sft_v0/checkpoints}
+  load: null
+  save_interval: 20
+  pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT,null}
+  finetune: true
+
+convert_to_hf:
+  enabled: false
+  hf_model_id: "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-Base-BF16"
