@@ -128,7 +128,48 @@ def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDic
 
 
 def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
-    return {"role": "assistant", "content": str(record.get("expected_answer", "")).strip()}
+    """Render a grounded SFT target instead of a bare short answer.
+
+    plan §8 names "search pattern" as a v0 goal: the model should learn to
+    attend to retrieved passages and acknowledge them, not just memorize the
+    answer string. Wrap the M0 short answer in a template that references the
+    titles named in `supporting_facts`, so the SFT supervision shapes a
+    grounding habit even though the verifier still only checks the answer span.
+
+    Returns an assistant message with empty content when `expected_answer` is
+    missing — the global empty-supervision guard in `convert_m0_record` then
+    refuses the row rather than emitting "Based on the retrieved passages, the
+    answer is ." as a (technically non-empty) target.
+    """
+    expected_answer = str(record.get("expected_answer", "")).strip()
+    if not expected_answer:
+        return {"role": "assistant", "content": ""}
+    titles = _supporting_fact_titles(record)
+    if titles:
+        evidence_line = ", ".join(f"[{i + 1}] {title}" for i, title in enumerate(titles))
+        content = (
+            f"Based on the retrieved passages ({evidence_line}), "
+            f"the answer is {expected_answer}."
+        )
+    else:
+        content = f"Based on the retrieved passages, the answer is {expected_answer}."
+    return {"role": "assistant", "content": content}
+
+
+def _supporting_fact_titles(record: Mapping[str, Any]) -> list[str]:
+    extra = record.get("extra_env_info", {}) or {}
+    supporting_facts = extra.get("supporting_facts")
+    if not isinstance(supporting_facts, Mapping):
+        return []
+    raw_titles = supporting_facts.get("title")
+    if not isinstance(raw_titles, list):
+        return []
+    seen: list[str] = []
+    for title in raw_titles:
+        text = str(title).strip()
+        if text and text not in seen:
+            seen.append(text)
+    return seen
 
 
 def assistant_for_code(record: Mapping[str, Any]) -> JsonDict:
@@ -273,6 +314,7 @@ def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
         supervision_messages = [builder(record)]
     if not supervision_messages:
         raise ValueError(f"unsupported M0 environment: {environment}")
+    _ensure_assistant_supervision_non_empty(supervision_messages, environment_id=environment_id)
     messages = [*prompt_messages(record, environment_id), *supervision_messages]
     tools = normalize_tools(record.get("responses_create_params", {}).get("tools"))
     output = {
@@ -281,18 +323,37 @@ def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
         "used_in": ["super3", USED_IN_TAG, "m1_agentic_sft_v0"],
         "metadata": m1_metadata(record, split),
     }
-    if environment_id == "general_tool_calling":
-        has_tool_call = any(message.get("tool_calls") for message in supervision_messages)
-        has_assistant_text = any(
-            message.get("role") == "assistant" and str(message.get("content") or "").strip()
-            for message in supervision_messages
-        )
-        # A tool-calling row is legitimate when it has either a tool_call or a
-        # text final answer; flag only when supervision has neither (which would
-        # produce an empty assistant turn).
-        if not has_tool_call and not has_assistant_text:
-            output["metadata"]["warning"] = "no tool_calls or assistant text in supervision"
     return output
+
+
+def _ensure_assistant_supervision_non_empty(
+    supervision_messages: Sequence[Mapping[str, Any]],
+    *,
+    environment_id: str,
+) -> None:
+    """Refuse rows where the assistant target is empty across the board.
+
+    M0 task001 already raises in transform_hermes_function_calling when a Hermes
+    record has neither expected_tool_calls nor expected_assistant_content; we
+    mirror that on the M1 side so reasoning / code / search rows with empty
+    expected_answer (and empty reference_*) can't quietly write a `loss_mask=1`
+    target of empty tokens.
+    """
+    has_assistant_signal = False
+    for message in supervision_messages:
+        if message.get("role") != "assistant":
+            continue
+        if str(message.get("content") or "").strip():
+            has_assistant_signal = True
+            break
+        if message.get("tool_calls"):
+            has_assistant_signal = True
+            break
+    if not has_assistant_signal:
+        raise ValueError(
+            f"M0 record for environment {environment_id!r} has no assistant content "
+            "and no tool_calls; supervision target would be empty"
+        )
 
 
 def discover_m0_files(input_dir: Path) -> dict[str, dict[str, Path]]:
