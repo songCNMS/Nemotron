@@ -8,6 +8,7 @@ datasets:
     hf_dataset: hotpotqa/hotpot_qa
     hf_config: distractor
     hf_split: train
+    hf_val_split: validation
     hf_revision: 1908d6afbbead072334abe2965f91bd2709910ab
     source_url: https://huggingface.co/datasets/hotpotqa/hotpot_qa
     license: cc-by-sa-4.0
@@ -34,6 +35,7 @@ datasets:
     hf_dataset: google-research-datasets/mbpp
     hf_config: full
     hf_split: train
+    hf_val_split: validation
     hf_revision: 4bb6404fdc6cacfda99d4ac4205087b89d32030c
     source_url: https://huggingface.co/datasets/google-research-datasets/mbpp
     license: cc-by-4.0
@@ -87,6 +89,7 @@ datasets:
     hf_dataset: openai/gsm8k
     hf_config: main
     hf_split: train
+    hf_val_split: test
     hf_revision: 740312add88f781978c0658806c59bc2815b9866
     source_url: https://huggingface.co/datasets/openai/gsm8k
     license: mit
