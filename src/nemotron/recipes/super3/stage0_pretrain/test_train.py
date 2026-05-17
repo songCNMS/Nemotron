@@ -54,13 +54,12 @@ import logging
 import sys
 from pathlib import Path
 
-from megatron.bridge.recipes.nemotronh.nemotron_3_super import (
-    nemotron_3_super_pretrain_config,
-)
+from megatron.bridge.recipes.common import _pretrain_common
 from megatron.bridge.training.config import ConfigContainer
 from omegaconf import DictConfig, OmegaConf
 
 from nemotron.kit.train_script import parse_config_and_overrides
+from nemotron.recipes.super3.smoke_runtime import patch_dataset_helper_compile_if_prebuilt
 from nemotron.recipes.super3.stage0_pretrain.train import run_pretrain
 from nemotron.recipes.super3.tiny_model import make_tiny_super3_model
 
@@ -73,22 +72,21 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 def _tiny_recipe_builder(config: DictConfig) -> ConfigContainer:
     """Build a single-GPU Super3 pretrain config with the tiny provider."""
-    # Extract data config so the recipe can resolve blend/blend_per_split
-    # (per_split_data_args_path is a recipe parameter, not a GPTDatasetConfig field)
-    data_kwargs = {}
-    if "data" in config:
-        data_section = OmegaConf.to_container(config.data, resolve=True)
-        if isinstance(data_section, dict):
-            data_kwargs = data_section
-
-    # Start from the public production recipe (gets optimizer, DDP, dataset, etc.)
-    cfg = nemotron_3_super_pretrain_config(**data_kwargs)
+    # Start from Megatron-Bridge's pretrain common template instead of the
+    # production Super3 recipe. The production recipe resolves the full HF
+    # config at build time, while this test path must stay offline and tiny.
+    cfg = _pretrain_common()
 
     # Swap in the tiny model with single-node parallelism
-    cfg.model = make_tiny_super3_model()
+    seq_length = OmegaConf.select(config, "dataset.seq_length", default=4096)
+    cfg.model = make_tiny_super3_model(seq_length=int(seq_length))
 
     # Disable TP comm overlap (meaningless at TP=1)
     cfg.comm_overlap = None
+
+    # Super3 calculates per-token loss; Megatron-Core requires reductions to
+    # happen without averaging inside the collective in that mode.
+    cfg.ddp.average_in_collective = False
 
     # Use standard bf16 precision (production uses nvfp4 which needs larger models)
     cfg.mixed_precision = "bf16_mixed"
@@ -105,6 +103,8 @@ DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "test.yaml"
 
 def main() -> None:
     """Entry point for tiny Super3 integration-test pretraining."""
+    patch_dataset_helper_compile_if_prebuilt()
+
     try:
         config_path, cli_overrides = parse_config_and_overrides(
             default_config=DEFAULT_CONFIG_PATH,

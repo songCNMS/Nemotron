@@ -58,13 +58,12 @@ import logging
 import sys
 from pathlib import Path
 
-from megatron.bridge.recipes.nemotronh.nemotron_3_super import (
-    nemotron_3_super_finetune_config,
-)
+from megatron.bridge.recipes.common import _sft_common
 from megatron.bridge.training.config import ConfigContainer
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 from nemotron.kit.train_script import parse_config_and_overrides
+from nemotron.recipes.super3.smoke_runtime import patch_dataset_helper_compile_if_prebuilt
 from nemotron.recipes.super3.stage1_sft.train import run_finetune
 from nemotron.recipes.super3.tiny_model import make_tiny_super3_model
 
@@ -81,14 +80,14 @@ def _tiny_recipe_builder(config: DictConfig) -> ConfigContainer:  # noqa: ARG001
     Uses full-parameter SFT (no LoRA) with packed sequences, matching the
     production Super3 SFT recipe but at tiny scale.
     """
-    # Start from the public production finetune recipe
-    cfg = nemotron_3_super_finetune_config(
-        packed_sequence=True,
-        peft=None,  # Full SFT, no LoRA
-    )
+    # Start from Megatron-Bridge's SFT common template instead of the production
+    # Super3 recipe. The production recipe resolves the full HF config at build
+    # time, while this test path must stay offline and tiny.
+    cfg = _sft_common()
 
     # Swap in the tiny model with single-node parallelism
-    cfg.model = make_tiny_super3_model(seq_length=4096)
+    seq_length = OmegaConf.select(config, "dataset.seq_length", default=4096)
+    cfg.model = make_tiny_super3_model(seq_length=int(seq_length))
 
     # Disable TP comm overlap (meaningless at TP=1)
     cfg.comm_overlap = None
@@ -108,6 +107,8 @@ DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "test.yaml"
 
 def main() -> None:
     """Entry point for tiny Super3 integration-test SFT."""
+    patch_dataset_helper_compile_if_prebuilt()
+
     try:
         config_path, cli_overrides = parse_config_and_overrides(
             default_config=DEFAULT_CONFIG_PATH,

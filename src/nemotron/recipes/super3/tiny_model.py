@@ -29,11 +29,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from megatron.bridge.models.nemotronh import Nemotron3SuperProvider
+try:
+    from megatron.bridge.models.nemotronh import Nemotron3SuperProvider as _Nemotron3SuperBaseProvider
+except ImportError:
+    from megatron.bridge.models.nemotronh.nemotron_h_provider import (
+        Nemotron3NanoProvider as _Nemotron3SuperBaseProvider,
+    )
+
+_BASE_SUPPORTS_HYBRID_LAYER_PATTERN = "hybrid_layer_pattern" in getattr(
+    _Nemotron3SuperBaseProvider,
+    "__dataclass_fields__",
+    {},
+)
 
 
 @dataclass
-class Nemotron3SuperTinyProvider(Nemotron3SuperProvider):
+class Nemotron3SuperTinyProvider(_Nemotron3SuperBaseProvider):
     """Architecturally-valid tiny Super3 for integration testing.
 
     ~7M params total.  Preserves every Super3-unique feature at minimal scale:
@@ -54,7 +65,8 @@ class Nemotron3SuperTinyProvider(Nemotron3SuperProvider):
     ==================  ==========  ======  ==============================
     """
 
-    hybrid_override_pattern: str = "MEM*EME"
+    hybrid_override_pattern: str | None = None if _BASE_SUPPORTS_HYBRID_LAYER_PATTERN else "MEM*EME"
+    hybrid_layer_pattern: str | None = "MEM*EME" if _BASE_SUPPORTS_HYBRID_LAYER_PATTERN else None
     num_layers: int = 7
     hidden_size: int = 256
     num_attention_heads: int = 4

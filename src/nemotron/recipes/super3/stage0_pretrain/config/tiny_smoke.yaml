@@ -1,0 +1,40 @@
+run:
+  train_script: src/nemotron/recipes/super3/stage0_pretrain/test_train.py
+  data: null
+  model: null
+  env:
+    container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
+    nodes: 1
+    gpus_per_node: 1
+    ntasks_per_node: 1
+
+artifacts:
+  wandb: false
+  manifest:
+    root: null
+
+dataset:
+  seq_length: 4096
+  blend: null
+  blend_per_split: null
+
+tokenizer:
+  tokenizer_model: ${oc.env:SUPER3_TINY_PRETRAIN_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16}
+
+train:
+  train_iters: 1
+  global_batch_size: 1
+  micro_batch_size: 1
+
+scheduler:
+  lr_warmup_iters: 0
+
+logger:
+  log_interval: 1
+  wandb_project: null
+  wandb_entity: null
+
+checkpoint:
+  save: ${oc.env:SUPER3_TINY_PRETRAIN_SMOKE_SAVE,../output/super3/tiny_pretrain_smoke/checkpoints}
+  load: null
+  save_interval: 1
