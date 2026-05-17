@@ -1,9 +1,15 @@
 # M1 Agentic SFT v0 — Review Findings
 
 Reviewer: intern_nemontron_review_cc
-Date: 2026-05-17
-Scope: commit range `47cb0ee..HEAD` (post M0 task001/task002 merge), focused on PR #3 / #6 / #7
-Reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8
+
+| Revision | Date | Against |
+|---|---|---|
+| v1 (original review) | 2026-05-17 | `47cb0ee..bd0ff62` — PR #3 / #6 / #7 |
+| v2 (update) | 2026-05-17 | post-PR #10 / #8 — main at `19f682d` |
+
+Plan reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8.
+
+Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **45 passed** (v1 baseline 32 → +13 from PR #10).
 
 Files inspected:
 
@@ -13,50 +19,122 @@ Files inspected:
 - `src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml`
 - `src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml`
 - `src/nemotron/recipes/super3/stage1_sft/config/data_prep/agentic_v0.yaml`
+- `src/nemotron/recipes/super3/stage1_sft/{train.py, qwen_local_train.py (new), test_train.py}`
 - `src/nemotron/recipes/super3/smoke_runtime.py`
 - `src/nemotron/recipes/super3/tiny_model.py`
 - `src/nemotron/recipes/super3/stage0_pretrain/{config/tiny_smoke.yaml, test_train.py}`
-- `src/nemotron/recipes/super3/stage1_sft/{test_train.py, train.py}`
-- `tests/recipes/super3/test_m1_agentic_sft.py`
-- M0 fix commit `126222e` (`Fix M0 subset overwrite and M1 tool SFT conversion`)
+- `src/nemotron/recipes/super3/milestones/m0_data_env/{prepare_m0_assets.py, run_m0_health_baseline.py, data_registry.yaml}`
+- `scripts/import_qwen3_4b_local_to_megatron.py` (new in PR #8)
+- `tests/recipes/super3/test_m1_agentic_sft.py`, `tests/recipes/super3/test_m0_*.py`
 
-Run: `PYTHONPATH=src pytest tests/recipes/super3/` → 32 passed.
-
----
-
-## Priority summary
-
-| Level | # | Topic |
-|---|---|---|
-| P0 (run-blocker / cross-intern) | #1 | cross-intern repo dir in planner default |
-| P0 | #2 | default `global_batch_size=4` incompatible with default `gpus_per_node=8` |
-| P1 (training-data correctness) | #3 | GSM8K `####` marker leaks into SFT reasoning target |
-| P1 | #4 | no empty-content guard on supervision messages |
-| P1 | #11 | `search_grounded_qa` supervision is a bare short answer; no grounding pattern |
-| P1 | #14 | `tool` role loss-mask behavior not verified end-to-end |
-| P2 (plan gap) | #5 | SWE / terminal / structured-output absent from v0 |
-| P2 | #6 | no negative examples (malformed tool / hallucinated tool output) |
-| P2 | #7 | no difficulty curriculum / pass-rate filtering |
-| P2 | #10 | `metadata.m1_use` name-mismatched and hardcoded across records |
-| P3 (tech debt / clarity) | #8, #9, #12, #13, #15–#24 | see below |
+Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tracked in another task.
 
 ---
 
-## P0 — Run-blocker / cross-intern leakage
+## v2 status summary (24 v1 findings)
 
-### #1 `plan_m1_agentic_sft_training.py:27` `DEFAULT_REPO_DIR` points to another intern's worktree
+| # | Topic | v1 priority | v2 status |
+|---|---|---|---|
+| 1 | cross-intern repo dir in planner default | P0 | ✓ Fixed in PR #10 (`DEFAULT_REPO_DIR=None`, falls back to `Path.cwd()`) |
+| 2 | `global_batch_size=4` × `gpus_per_node=8` × `mbs=1` violates GBS≥DP×MBS | P0 | ✗ Still open — defaults unchanged; planner has no GBS/DP guard (only `nodes!=1` guard) |
+| 3 | GSM8K `#### N` marker leaks into SFT reasoning target | P1 | ✗ Still open — `assistant_for_reasoning` still prefers `reference_solution` |
+| 4 | no empty-content guard on supervision messages | P1 | ◐ Partial — tool_calling now warns when neither tool_calls nor text; math/code/search still unguarded; warning is not a `raise` |
+| 5 | SWE / terminal / structured-output absent from v0 | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
+| 6 | no negative examples (malformed tool / hallucinated tool output) | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
+| 7 | no difficulty curriculum / pass-rate filtering | P2 | ✗ Still open — not in any task |
+| 8 | chat template pinned to `nano3` | P3 | ✗ Still open |
+| 9 | two-stage SFT loss not implemented | P3 | ✗ Still open |
+| 10 | `metadata.m1_use` hardcoded and name-mismatched | P2 | ✗ Still open — same 4 strings; "search grounded answer format" still false |
+| 11 | `search_grounded_qa` supervision is a bare short answer | P1 | ✗ Still open — `assistant_for_search` unchanged |
+| 12 | M0 `used_in` lineage dropped | P3 | ✗ Still open |
+| 13 | tool-calling system-prompt replacement is asymmetric and undocumented | P3 | ✗ Still open |
+| 14 | `tool` role loss-mask behavior not verified end-to-end | P1 | ◐ Partial — PR #10 added `tool_call_id` wiring; mask question (does nano3 template + PackedSftParquetStage mask tool tokens?) still untested |
+| 15 | `content="" + tool_calls=[...]` render path untested at template level | P3 | ✗ Still open — structural tests only |
+| 16 | hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths | P3 | ◐ Partial — all M1 planner / prepare defaults now `None` or `../output/...`, **but** PR #8's `qwen_local_train.py:25 DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/..."` re-introduces the same drift class. See **N1**. |
+| 17 | `train_iters: 1700` default oversized for M0 smoke data | P3 | ✗ Still open |
+| 18 | `smoke_runtime.patch_dataset_helper_compile_if_prebuilt` silently no-ops on import failure | P3 | ✗ Still open |
+| 19 | `tiny_model.py` silently degrades Super3 → Nano3 provider | P3 | ✗ Still open |
+| 20 | user-content `<tool_call>` / `<tools>` blocks not scrubbed | P3 | ✗ Still open |
+| 21 | `compute_train_iters` derived-rows path uncovered | P3 | ✗ Still open |
+| 22 | no end-to-end test for prepare_m1 → super3 data prep sft → planner | P3 | ✗ Still open |
+| 23 | `m1_agentic_smoke.yaml` lacks a schema test | P3 | ◐ Partial — new `test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer` covers one field; full schema validation still missing |
+| 24 | M0 `cleanup_stale_split_files` semantics under-documented | P3 | ✗ Still open |
+
+Aggregate: **1 fixed, 4 partial, 17 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** and **1 useful side-fix (T1)**.
+
+---
+
+## v2 — New findings since v1
+
+### N1 — `qwen_local_train.py:25` re-introduces a `/mnt/3fs/data/lei.song/...` default (P3 #16 regression)
+
+```python
+DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507"
+```
+
+After v1's P3 #16 was largely cleaned up by PR #10 (planner / prepare defaults now relative or required), PR #8 added a debug entry that puts another intern's home directory back as the default Qwen weight path. Any intern who runs `python qwen_local_train.py` without `SUPER3_M1_QWEN_HF_MODEL` set will hit a "directory does not exist" deep inside the HF auto-bridge stack. Same drift class as v1 #16; suggested fix: leave the default as `None`, require either env var or CLI flag, and document the expected layout in the script docstring.
+
+### N2 — `m1_agentic_smoke.yaml` now hard-requires `SUPER3_M1_PRETRAINED_CHECKPOINT` even when `finetune=false` (P1 regression)
+
+PR #10 changed both smoke and full configs:
+
+```yaml
+# Omit the default so OmegaConf raises clearly when the env var is unset.
+pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT}
+```
+
+The intent (catch the literal-`"null"` string trap that `${oc.env:VAR,null}` produces) is correct for `m1_agentic_train.yaml`. But `m1_agentic_smoke.yaml` has `finetune: false` — its purpose is to wire data loading + tiny-model training from random init, no pretrain checkpoint involved. `train.py:367` logs `cfg.checkpoint.pretrained_checkpoint` unconditionally, so OmegaConf raises `MissingMandatoryValue` even though nothing downstream uses the value. The documented offline smoke flow is now broken without setting an env var that the README never mentions.
+
+Fix: in `m1_agentic_smoke.yaml`, write `pretrained_checkpoint: null` literally (YAML null, not `oc.env`); leave `m1_agentic_train.yaml` with the strict env-var resolution.
+
+### N3 — `data_registry.yaml` newly enables `trust_remote_code: true` for hotpotqa with no operator-visible note
+
+PR #10 added `trust_remote_code: true` to `m0_search_hotpotqa`. This is **required** (hotpotqa ships a custom loader script and `datasets>=2.16` refuses to run it otherwise), so the change itself is correct. But:
+
+- M0 README's "Public Sources" table doesn't mention that one of the four sources now executes arbitrary Python from HF Hub at data-prep time.
+- The only protection beyond the loader-script gate is the pinned `hf_revision`. If the revision is rotated later, the new loader runs unchecked.
+
+Suggested follow-up: mark `trust_remote_code: true` rows in the M0 README, and add a one-line `SECURITY.md` / data-prep doc entry pointing at `hf_revision` as the only content guarantee.
+
+### T1 (informational, not a finding) — `resolve_min_rows` + manifest `requested_rows`
+
+PR #10 added a small useful feature: `prepare_m0_assets.py` writes `manifest["requested_rows"] = {"max_train_per_dataset", "max_val_per_dataset"}`, and `run_m0_health_baseline.py` caps the env spec's `min_rows_per_split` floor by what was actually requested. This stops the health gate from auto-failing legitimate 10-row smoke runs that fall below the registry's 25-row floor. Solid test coverage (`test_resolve_min_rows_caps_floor_to_requested_count`, `test_summarize_health_honors_requested_rows`). Calling out so it survives in the review record.
+
+---
+
+## Recommended next actions (revised)
+
+1. **Still-open P0 / P1 — one focused PR each:**
+   - #2 add `global_batch_size >= dp_size * micro_batch_size` assertion in `plan_m1_agentic_sft_training.build_plan` (where `dp_size = gpus_per_node * nodes // (tp_size * pp_size)`), and pick saner defaults (either `--global-batch-size 8` or `--gpus-per-node 1`).
+   - #3 flip `assistant_for_reasoning` to prefer `expected_answer` for GSM8K; or strip `####\s*\d+` from `reference_solution` before emitting.
+   - #4 raise (not warn) on empty supervision content/tool_calls for all environments, mirroring M0 task001's hermes path.
+   - #11 template `search_grounded_qa` supervision into a grounded shape ("Answer: …\nEvidence: [n] …") instead of a bare short answer.
+   - #14 add a render-time test that runs supervision through nano3 chat template + `PackedSftParquetStage` and asserts `loss_mask == 0` for tool-role tokens.
+   - **N1** drop the lei.song Qwen default, require flag/env var.
+   - **N2** revert `m1_agentic_smoke.yaml` to `pretrained_checkpoint: null` (YAML literal).
+   - **N3** README/data-prep doc note on `trust_remote_code`.
+
+2. **Plan gaps:** continue under `task005_m1_sft_v0_scope_expansion` (#5 / #6); separately scope #7 difficulty curriculum.
+
+3. **Tech debt:** P3 items can fold into the next M1 scope-expansion or planner cleanup PR.
+
+---
+
+## v1 (original review — kept for traceability)
+
+The v1 detail for findings 1–24 below is preserved verbatim as historical record. v2 statuses above are the authoritative state.
+
+### P0 — Run-blocker / cross-intern leakage
+
+#### #1 `plan_m1_agentic_sft_training.py:27` `DEFAULT_REPO_DIR` points to another intern's worktree
 
 ```python
 DEFAULT_REPO_DIR = Path("/work-agents/intern_nemontron_code_reading/Nemotron")
 ```
 
-Any intern who runs the planner without `--repo-dir` produces a `run_m1_agentic_sft.sh` whose first line is `cd /work-agents/intern_nemontron_code_reading/Nemotron`. That walks the training job into another intern's working tree — polluting in-progress branches and racing with their git state. The default needs to be either:
+Any intern who runs the planner without `--repo-dir` produces a `run_m1_agentic_sft.sh` whose first line is `cd /work-agents/intern_nemontron_code_reading/Nemotron`. That walks the training job into another intern's working tree — polluting in-progress branches and racing with their git state.
 
-- the repo root resolved from `Path(__file__)` walking up the tree, or
-- `${PWD}` / a documented env var, or
-- removed entirely so the flag is required.
-
-### #2 Default GBS=4 × GPUs=8 × MBS=1 violates `GBS ≥ DP × MBS`
+#### #2 Default GBS=4 × GPUs=8 × MBS=1 violates `GBS ≥ DP × MBS`
 
 `plan_m1_agentic_sft_training.py:369-370` plus `:365`:
 
@@ -66,80 +144,41 @@ parser.add_argument("--global-batch-size", type=int, default=4)
 parser.add_argument("--micro-batch-size", type=int, default=1)
 ```
 
-With no TP/PP overrides DP = 8, so each rank would need < 1 micro batch — Megatron asserts on this during model+optimizer setup and the job never reaches the first step. `m1_agentic_train.yaml:32 global_batch_size: 4` carries the same value.
+With no TP/PP overrides DP = 8, so each rank would need < 1 micro batch — Megatron asserts on this during model+optimizer setup and the job never reaches the first step.
 
-Either bump the default GBS to ≥ 8 (a multiple of DP × MBS) or default `gpus_per_node` to 1 and document the multi-GPU override.
+### P1 — Training-data correctness
 
----
+#### #3 GSM8K `#### N` verifier marker leaks into reasoning SFT target
 
-## P1 — Training-data correctness
+`prepare_m1_agentic_sft.py:assistant_for_reasoning` prefers `extra_env_info.reference_solution` (raw GSM8K `answer` with `#### 24`). The cleaned numeric value in `expected_answer` is skipped. SFT therefore teaches the model to literally emit `####` on every reasoning task.
 
-### #3 GSM8K `#### N` verifier marker leaks into reasoning SFT target
+#### #4 No empty-content guard on supervision messages
 
-`prepare_m1_agentic_sft.py:assistant_for_reasoning`:
+`convert_m0_record` does not verify that the assistant message has either non-empty `content` or non-empty `tool_calls`. M0 task001's hermes path already added the same defensive `raise ValueError`; mirror it here.
 
-```python
-reference = record.get("extra_env_info", {}).get("reference_solution")
-if reference is None:
-    reference = record.get("expected_answer", "")
-return {"role": "assistant", "content": str(reference).strip()}
-```
+#### #11 `search_grounded_qa` supervision is a bare short answer; no grounding pattern
 
-`extra_env_info.reference_solution` is M0's untouched GSM8K `answer` field, which keeps the `#### 24` benchmark separator. The cleaned numeric value lives in `expected_answer` (normalized by `normalize_numeric_answer`). The SFT target therefore teaches the model to literally emit `####`, a verifier marker, on every reasoning task — that pattern then escapes GSM8K-shaped data and shows up on unrelated math prompts at inference time.
+`assistant_for_search` outputs `{"content": expected_answer.strip()}`, e.g. literally `"London"`. plan §8 calls out "search pattern" as a v0 goal — a one-word target teaches the model neither passage attention nor citation form.
 
-Suggested fix: prefer `expected_answer` for reasoning supervision, or strip `####\s*` from `reference_solution`.
+#### #14 `tool` role loss-mask behavior is not verified
 
-### #4 No empty-content guard on supervision messages
+plan §5.1 prescribes `system/user loss_mask=0, assistant=1` but is silent on `tool`. Convention is `tool=0` (environment output, not the policy). `prepare_m1_agentic_sft.py` emits `{"role":"tool", ...}` into `messages`; `agentic_v0.yaml` does not configure tool masking and `chat_template: nano3` is reused unchanged.
 
-`convert_m0_record` does not verify that the assistant message has either non-empty `content` or non-empty `tool_calls`. If any future M0 row arrives with both `reference_solution` and `expected_answer` empty, SFT will silently train on `{"role":"assistant","content":""}` (loss_mask = 1, target = EOS only). M0 task001's hermes path already added the same defensive `raise ValueError`; mirror it here.
+### P2 — Plan vs implementation gaps
 
-### #11 `search_grounded_qa` supervision is a bare short answer; no grounding pattern
+#### #5 Coverage shortfall: SWE / terminal / structured-output absent
 
-`assistant_for_search` outputs `{"content": expected_answer.strip()}`, e.g. literally `"London"`. plan §8 calls out "search pattern" as a v0 goal, by which it means a "look at passages → cite → answer" template. A one-word target teaches the model neither passage attention nor citation form. Suggested supervision shape:
+plan §8 lists v0 as "tool-call syntax · terminal basics · search pattern · structured output · 短 SWE traces". The implementation only sources four M0 environments (`search`, `code`, `general_tool_calling`, `math_reasoning_numeric`). terminal, structured output, short SWE traces are absent.
 
-```
-Answer: <ans>
-Evidence: [n] <one supporting sentence>
-```
+#### #6 No negative examples
 
-— even fixed-format templating is better than the current bare answer.
+plan §8: "加入 malformed tool call、hallucinated tool output 等负例". Current implementation has only positive supervision.
 
-### #14 `tool` role loss-mask behavior is not verified
+#### #7 No difficulty curriculum / pass-rate filtering
 
-plan §5.1 prescribes `system/user loss_mask=0, assistant=1` but is silent on `tool`. Convention is `tool=0` (environment output, not the policy). `prepare_m1_agentic_sft.py` emits `{"role":"tool", ...}` into `messages`; `agentic_v0.yaml` does not configure tool masking and `chat_template: nano3` is reused unchanged from non-agentic flow. Concretely:
+plan §6: "先用当前 SFT 模型过滤掉稳定做对的样本，再按 pass rate、judge confidence、rollout length 排序". `prepare_m1_agentic_sft.py` takes all M0 train rows verbatim and ignores M0's `health_baseline_report.json`.
 
-- Inspect what `PackedSftParquetStage` + nano3 chat template emit for a tool message — is the role boundary captured and `loss_mask=0` applied?
-- If not, the trajectory turns under #15 (commit 126222e) will train the model to imitate tool outputs.
-
-Add either a render-side assertion in `tests/recipes/super3/test_m1_agentic_sft.py` (`render → assert loss_mask == 0 for tool tokens`) or a config field that explicitly masks tool messages.
-
----
-
-## P2 — Plan vs implementation gaps
-
-### #5 Coverage shortfall: SWE / terminal / structured-output absent
-
-plan §8 lists v0 as "tool-call syntax · terminal basics · search pattern · structured output · 短 SWE traces". The implementation only sources four M0 environments (`search`, `code`, `general_tool_calling`, `math_reasoning_numeric`). Concretely missing:
-
-- terminal basics — no terminal_pivot or shell env in M0 either.
-- structured output (strict JSON / schema adherence beyond function-calling) — `code_execution_python` is close but not the same.
-- short SWE traces — no SWE env in M0; plan §5.4 / §5.5 only kicks in after M1 RL.
-
-If the v0 scope is intentionally narrowed, README should say so explicitly. Otherwise the M0 env registry needs the three missing families before M1 Agentic SFT v0 is complete.
-
-### #6 No negative examples
-
-plan §8: "加入 malformed tool call、hallucinated tool output 等负例". Current implementation has only positive supervision. `convert_m0_record` tags a record with `metadata.warning = "missing expected tool_calls"` when general_tool_calling has no tool calls, but does not deliberately construct negatives.
-
-Suggested follow-up: at v0 supervision time, mix in a small fraction (~5%) of intentionally malformed records (broken JSON, hallucinated tool name) with assistant supervision teaching the recovery pattern (apologize + retry with valid call).
-
-### #7 No difficulty curriculum / pass-rate filtering
-
-plan §6: "先用当前 SFT 模型过滤掉稳定做对的样本，再按 pass rate、judge confidence、rollout length 排序". `prepare_m1_agentic_sft.py` takes all M0 train rows verbatim, ignores M0's `health_baseline/health_baseline_report.json` even though oracle pass/fail is available, and emits a single blend entry with `weight: 1.0`. Curriculum stratification is the explicit M1 → M2 lever; v0 should at least lay the metadata.
-
-### #10 `metadata.m1_use` is hardcoded and name-mismatched
-
-`prepare_m1_agentic_sft.py:195-200`:
+#### #10 `metadata.m1_use` is hardcoded and name-mismatched
 
 ```python
 "m1_use": [
@@ -150,86 +189,62 @@ plan §6: "先用当前 SFT 模型过滤掉稳定做对的样本，再按 pass r
 ],
 ```
 
-Two problems:
+Same 4 strings on every record; "search grounded answer format" is false advertising (see #11).
 
-1. Same 4 strings on every record regardless of environment — should be per-row narrowed.
-2. "search grounded answer format" is false advertising: see #11, the supervision is a bare short answer, not a grounded format.
+### P3 — Clarity / tech debt
 
-Also missing here vs plan §8: `terminal basics`, `structured output`, `short SWE traces`, `negative repair`.
+#### #8 Chat template still pinned to `nano3`
 
----
+`agentic_v0.yaml:37 chat_template: nano3`; README acknowledges this as a TODO until a Super3 template is added.
 
-## P3 — Clarity / tech debt
+#### #9 plan §5.1 two-stage SFT loss (token-level → sample-level) is not implemented
 
-### #8 Chat template still pinned to `nano3`
+`m1_agentic_train.yaml` uses only next-token loss with assistant mask via `packed_sequence_specs`.
 
-`agentic_v0.yaml:37 chat_template: nano3`; README says "reuses the checked-in Nano3 template implementation for tool call rendering until a separate Super3 template is added". plan §5.1 says reasoning-mode / chat template should align with Super3. Acknowledged TODO; track explicitly so it does not leak into M1 final.
+#### #12 M0 `used_in` lineage is dropped
 
-### #9 plan §5.1 two-stage SFT loss (token-level → sample-level) is not implemented
+M0 records carry `used_in: ["M0 data_env_foundation", "M1 RLVR ..."]`. M1 overwrites the field with `["super3", "super3_agentic_sft_v0", "m1_agentic_sft_v0"]` — preserve as `metadata.m0_use_stage`.
 
-`m1_agentic_train.yaml` uses only next-token loss with assistant mask via `packed_sequence_specs`. Acceptable for v0, but the README / config comment should explicitly state "two-stage SFT loss deferred to v1+" so the next reviewer doesn't re-discover it.
+#### #13 Tool-calling system prompt replacement is asymmetric
 
-### #12 M0 `used_in` lineage is dropped
+`prompt_messages` only rewrites system for `general_tool_calling`. Document in README "Supervision Mapping" table.
 
-M0 records carry `used_in: ["M0 data_env_foundation", "M1 RLVR ..."]` (stage lineage). M1 overwrites the field with `["super3", "super3_agentic_sft_v0", "m1_agentic_sft_v0"]`. Lineage / contamination tracking later will need the original M0 stages; preserve as `metadata.m0_use_stage`.
+#### #15 Assistant supervision may carry `content=""` + `tool_calls=[...]`
 
-### #13 Tool-calling system prompt replacement is asymmetric
+`trajectory_for_tool_calling` emits `{"role":"assistant","content":"","tool_calls":[...]}` when an assistant turn is pure tool emission. Add a template-render test.
 
-`prompt_messages` only rewrites system for `general_tool_calling` (replaces M0's per-env system with a single canonical line). Other envs keep their M0-prepared system text. Intentional (commit 126222e) to scrub Hermes `<tools>[]</tools>` content, but downstream readers will trip over the inconsistency. Document this in the README "Supervision Mapping" table.
+#### #16 Hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths
 
-### #15 Assistant supervision may carry `content=""` + `tool_calls=[...]`
+Multiple defaults pinned to one intern's home — switch to `${PWD}`-relative defaults or required flags.
 
-`trajectory_for_tool_calling` emits `{"role":"assistant","content":"","tool_calls":[...]}` when an assistant turn is pure tool emission. Most chat templates render this correctly, but nano3 in particular has not been asserted to do so. Add a `tests/recipes/super3/` test that renders such a message through `PackedSftParquetStage`'s chat path and verifies the produced token sequence.
+#### #17 `m1_agentic_train.yaml:32 train_iters: 1700` is grossly over-sized for M0 smoke data
 
-### #16 Hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths
+Either lower the default or add a startup assertion / warning that the planner output should be sourced first.
 
-Multiple defaults are pinned to one intern's home:
+#### #18 `smoke_runtime.patch_dataset_helper_compile_if_prebuilt` silently no-ops on import failure
 
-- `prepare_m1_agentic_sft.py:19 DEFAULT_M0_INPUT_DIR`
-- `plan_m1_agentic_sft_training.py:20 DEFAULT_PACKED_SFT_DIR`
-- `plan_m1_agentic_sft_training.py:23 DEFAULT_OUTPUT_DIR`
-- `plan_m1_agentic_sft_training.py:24 DEFAULT_SAVE_DIR`
-- `plan_m1_agentic_sft_training.py:27 DEFAULT_REPO_DIR` (also #1)
+Add `logger.warning("dataset helpers patch skipped: %s", exc)`.
 
-Switch to `${PWD}`-relative defaults or required flags.
+#### #19 `tiny_model.py` silently degrades Super3 → Nano3 provider
 
-### #17 `m1_agentic_train.yaml:32 train_iters: 1700` is grossly over-sized for M0 smoke data
+Add `logger.warning("Super3 provider missing; tiny model uses Nano3 base")` and surface the active base class.
 
-100/env × 4 envs ≈ 400 raw rows → ~5–20 packed sequences at pack_size 4096. GBS=4 → ~5 iters covers a full epoch. Default 1700 = ~350 epochs of overfitting if anyone runs the config without first invoking the planner. Either lower the default or add a startup assertion / warning that the planner output should be sourced first.
+#### #20 user-content `<tool_call>` / `<tools>` blocks not scrubbed
 
-### #18 `smoke_runtime.patch_dataset_helper_compile_if_prebuilt` silently no-ops on import failure
+The system-prompt cleanup in `prompt_messages` only sanitizes `system`. user content from Hermes that includes demo `<tool_call>` blocks survives into SFT input.
 
-`try / except Exception: return` — if `helpers_cpp` is missing AND the Makefile is also missing, training still fails with "Makefile not found" at first step. The patch is useful only when `helpers_cpp` is already importable. Add `logger.warning("dataset helpers patch skipped: %s", exc)` to make the failure mode visible.
+#### #21 `compute_train_iters` derived-rows path is uncovered
 
-### #19 `tiny_model.py` silently degrades Super3 → Nano3 provider
+Tests write `b"not-a-real-parquet"` shards; `maybe_count_parquet_rows` returns None.
 
-The `try / except ImportError` fallback uses `Nemotron3NanoProvider` when `Nemotron3SuperProvider` is unavailable. The docstring still claims "preserves every Super3-unique feature at minimal scale" — false after the fallback. Add `logger.warning("Super3 provider missing; tiny model uses Nano3 base — Super3-specific tests are no longer Super3-shaped")` and surface the active base class in the smoke run output.
+#### #22 No end-to-end test for prepare_m1 → super3 data prep sft → planner
 
-### #20 user-content `<tool_call>` / `<tools>` blocks not scrubbed
+Each leg is tested in isolation, but no test stitches them together.
 
-The system-prompt cleanup in `prompt_messages` (commit 126222e) only sanitizes `system`. user content from Hermes that includes demo `<tool_call>` blocks survives into SFT input. Either run `strip_tool_call_blocks` on user content too, or assert in a test that user content never contains `<tool_call>`.
+#### #23 `m1_agentic_smoke.yaml` lacks a config-schema test
 
-### #21 `compute_train_iters` derived-rows path is uncovered
+Add a yaml-loading + required-fields test to prevent silent drift.
 
-`tests/recipes/super3/test_m1_agentic_sft.py:test_plan_m1_training_writes_manifest_and_run_script` writes `b"not-a-real-parquet"` shards; `maybe_count_parquet_rows` returns None, and the test only exercises the explicit `train_iters` path. Add a tiny real-parquet fixture (1 row) so the "infer from packed rows" arm gets coverage.
+#### #24 M0 `cleanup_stale_split_files` semantics under-documented (commit 126222e)
 
-### #22 No end-to-end test for prepare_m1 → super3 data prep sft → planner
-
-Each leg is tested in isolation, but no test stitches them together. A minimal stub pipeline (mock packed_sft_dir + minimal metadata.json) verifying the planner can consume what prepare_m1 produces would catch field-name drift early.
-
-### #23 `m1_agentic_smoke.yaml` lacks a config-schema test
-
-The full-train yaml is indirectly covered by planner tests; the smoke yaml only appears in the README. Add a yaml-loading + required-fields test to prevent silent drift.
-
-### #24 M0 `cleanup_stale_split_files` semantics under-documented (commit 126222e)
-
-The new stale-cleanup logic in `prepare_m0_assets.py` is correct, but `--overwrite` now both replaces active files AND deletes stale env directories. The README / `--overwrite` help string still reads as "overwrite target files generated by this script"; mention the new destructive behavior.
-
----
-
-## Recommended next actions
-
-1. P0 first: open a focused follow-up PR fixing #1 (cross-intern repo dir) and #2 (GBS×DP defaults). Both are one-liners.
-2. P1 batch: another PR for #3 (GSM8K `####`), #4 (empty-content guard), #11 (search supervision template), #14 (tool loss-mask verification + test).
-3. P2 plan-gap items: surface as task / Linear issues against the M0/M1 owners; they imply data-source additions that are outside a single PR.
-4. P3 items can be folded into the next M1 milestone PR or its README cleanup pass.
+`--overwrite` now both replaces active files AND deletes stale env directories. README / `--overwrite` help string still reads as "overwrite target files generated by this script".
