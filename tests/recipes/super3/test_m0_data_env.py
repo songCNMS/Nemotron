@@ -130,3 +130,31 @@ def test_hermes_parser_and_transform_extract_expected_tool_call() -> None:
     assert expected["expected_tool_calls"][0]["function"]["arguments"] == {"query": "weather"}
     assert record["responses_create_params"]["tools"][0]["function"]["name"] == "lookup"
     assert record["extra_env_info"]["expected_tool_calls"][0]["function"]["name"] == "lookup"
+
+
+def test_hermes_rejects_row_with_neither_tool_call_nor_assistant_content() -> None:
+    """Regression for review finding #1: empty expected used to score 1.0 in oracle baseline."""
+    import pytest
+
+    row = {
+        "id": "tool-empty",
+        "conversations": [
+            {"from": "system", "value": "Use tools when useful."},
+            {"from": "human", "value": "What is the weather?"},
+            {"from": "gpt", "value": "   "},
+        ],
+        "tools": "[]",
+    }
+
+    with pytest.raises(ValueError, match="hermes row has neither"):
+        transform_hermes_function_calling(row, _spec("m0_tool_calling_hermes"))
+
+
+def test_data_registry_specifies_hf_val_split_for_holdout_capable_datasets() -> None:
+    """Regression for review finding #4: val rows must come from a real holdout split when available."""
+    registry = load_yaml(DATA_REGISTRY_PATH)
+    by_id = {dataset["id"]: dataset for dataset in registry["datasets"]}
+
+    assert by_id["m0_reasoning_gsm8k"]["hf_val_split"] == "test"
+    assert by_id["m0_coding_mbpp"]["hf_val_split"] == "validation"
+    assert by_id["m0_search_hotpotqa"]["hf_val_split"] == "validation"

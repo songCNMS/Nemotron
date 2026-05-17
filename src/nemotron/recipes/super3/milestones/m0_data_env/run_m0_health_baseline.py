@@ -102,7 +102,9 @@ def score_text(candidate: Any, expected: Any) -> float:
     normalized_candidate = normalize_text_answer(candidate)
     normalized_expected = normalize_text_answer(expected)
     if not normalized_expected:
-        return 1.0 if not normalized_candidate else 0.0
+        # An empty expected answer is a data-quality problem, not a wiring success.
+        # Refuse to silently call this a pass.
+        return 0.0
     if normalized_candidate == normalized_expected:
         return 1.0
     return 1.0 if normalized_expected in normalized_candidate else 0.0
@@ -125,6 +127,9 @@ def score_tool_call(candidate: Any, expected: Any, record: Mapping[str, Any]) ->
     if isinstance(expected, list):
         if not expected and expected_content:
             return score_text(candidate, expected_content)
+        if not expected and not expected_content:
+            # No expected tool calls and no expected assistant content — cannot verify.
+            return 0.0
         if not isinstance(candidate, list):
             return 0.0
         if len(candidate) != len(expected):
@@ -178,7 +183,7 @@ def run_python_unit_tests(candidate: Any, record: Mapping[str, Any], timeout_s: 
     }
 
 
-def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = True) -> tuple[float, JsonDict]:
+def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = True) -> tuple[float | None, JsonDict]:
     verifier = record.get("reward_config", {}).get("verifier")
     expected = record.get("expected_answer")
     if verifier == "normalized_exact_or_contains":
@@ -189,7 +194,7 @@ def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = 
         return score_tool_call(candidate, expected, record), {}
     if verifier == "python_unit_tests":
         if not run_code:
-            return 0.0, {"skipped": "code execution disabled"}
+            return None, {"skipped": "code execution disabled"}
         timeout_s = int(record.get("reward_config", {}).get("timeout_s", 30))
         return run_python_unit_tests(candidate, record, timeout_s=timeout_s)
     return 0.0, {"error": f"unsupported verifier: {verifier}"}
@@ -227,18 +232,27 @@ def evaluate_policy(
     total_score_at_1 = 0.0
     total_best_score_at_k = 0.0
     errors: list[JsonDict] = []
+    skipped_rows = 0
+    scored_rows = 0
     threshold = 1.0
 
     for index, record in enumerate(rows):
         candidates = candidates_for_policy(record, policy)
-        scores = []
-        diagnostics = []
+        scores: list[float] = []
+        diagnostics: list[JsonDict] = []
         for candidate in candidates[: max(best_k, 1)]:
             score, detail = score_record(candidate, record, run_code=run_code)
-            scores.append(score)
             diagnostics.append(detail)
-        first_score = scores[0] if scores else 0.0
-        best_score = max(scores[:best_k]) if scores else 0.0
+            if score is None:
+                continue
+            scores.append(score)
+        if not scores:
+            # Every candidate for this row was skipped (e.g. code execution disabled).
+            skipped_rows += 1
+            continue
+        scored_rows += 1
+        first_score = scores[0]
+        best_score = max(scores[:best_k])
         pass_at_1 += int(first_score >= threshold)
         best_at_k += int(best_score >= threshold)
         total_score_at_1 += first_score
@@ -257,10 +271,12 @@ def evaluate_policy(
             )
 
     total = len(rows)
-    denominator = total or 1
+    denominator = scored_rows or 1
     return {
         "policy": policy,
         "rows": total,
+        "scored_rows": scored_rows,
+        "skipped_rows": skipped_rows,
         "pass_at_1": pass_at_1 / denominator,
         f"best_at_{best_k}": best_at_k / denominator,
         "mean_score_at_1": total_score_at_1 / denominator,
@@ -365,6 +381,9 @@ def summarize_baselines(
 
 
 def overall_status(health: Mapping[str, Any], baselines: Mapping[str, Any]) -> str:
+    if not health.get("environments"):
+        # No known M0 environment data was discovered. An empty report is not a pass.
+        return "fail"
     if health.get("unknown_environments"):
         return "fail"
     for env_summary in health.get("environments", {}).values():
@@ -372,12 +391,20 @@ def overall_status(health: Mapping[str, Any], baselines: Mapping[str, Any]) -> s
             return "fail"
     for env_summary in baselines.get("environments", {}).values():
         oracle = env_summary.get("aggregate", {}).get("oracle")
-        if oracle and oracle.get("pass_at_1") != 1.0:
+        if not oracle:
+            continue
+        if oracle.get("scored_rows", 0) == 0:
+            # Every oracle row was skipped (e.g. --skip-code-execution). Treat as
+            # an unverified env and refuse to pass the gate.
+            return "fail"
+        if oracle.get("pass_at_1") != 1.0:
             return "fail"
     return "pass"
 
 
 def build_report(args: argparse.Namespace) -> JsonDict:
+    if not args.input_dir.is_dir():
+        raise FileNotFoundError(f"input directory not found: {args.input_dir}")
     env_specs = load_environment_specs(args.environment_registry)
     rows_by_env = discover_environment_rows(args.input_dir)
     policies = args.policy or ["oracle", "empty", "oracle_then_empty"]
@@ -450,15 +477,18 @@ def write_markdown(path: Path, report: Mapping[str, Any]) -> None:
             "",
             "## Baseline Metrics",
             "",
-            f"| Environment | Policy | Rows | pass@1 | best@{best_k} | mean score@1 | mean best@{best_k} | Failures |",
-            "|---|---|---:|---:|---:|---:|---:|---:|",
+            f"| Environment | Policy | Rows | Scored | Skipped | pass@1 | best@{best_k} | mean score@1 | mean best@{best_k} | Failures |",
+            "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for env_id, env_summary in sorted(report["baselines"]["environments"].items()):
         for policy, metrics in sorted(env_summary["aggregate"].items()):
             lines.append(
                 (
-                    f"| {env_id} | {policy} | {metrics['rows']} | {metrics['pass_at_1']:.3f} | "
+                    f"| {env_id} | {policy} | {metrics['rows']} | "
+                    f"{metrics.get('scored_rows', metrics['rows'])} | "
+                    f"{metrics.get('skipped_rows', 0)} | "
+                    f"{metrics['pass_at_1']:.3f} | "
                     f"{metrics[f'best_at_{best_k}']:.3f} | {metrics['mean_score_at_1']:.3f} | "
                     f"{metrics[f'mean_best_score_at_{best_k}']:.3f} | {metrics['failure_count']} |"
                 )

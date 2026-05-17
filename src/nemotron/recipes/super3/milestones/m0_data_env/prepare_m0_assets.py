@@ -23,6 +23,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_REGISTRY_PATH = SCRIPT_DIR / "data_registry.yaml"
 ENV_REGISTRY_PATH = SCRIPT_DIR / "environment_registry.yaml"
 DEFAULT_OUTPUT_DIR = Path("data/super3/milestones/m0_data_env_foundation")
+MISSING_CONFIG = object()
 
 TOOL_CALL_RE = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 
@@ -299,6 +300,13 @@ def transform_hermes_function_calling(row: Mapping[str, Any], spec: Mapping[str,
     if not isinstance(conversations, list):
         conversations = []
     input_messages, expected = convert_hermes_conversations(conversations)
+    has_tool_calls = bool(expected["expected_tool_calls"])
+    has_assistant_text = bool(str(expected["expected_assistant_content"]).strip())
+    if not has_tool_calls and not has_assistant_text:
+        raise ValueError(
+            "hermes row has neither expected_tool_calls nor non-empty expected_assistant_content; "
+            "cannot verify"
+        )
     tools = parse_json_maybe(row.get("tools"), default=[])
     if isinstance(tools, Mapping):
         tools = [dict(tools)]
@@ -336,20 +344,27 @@ CONVERTERS = {
 }
 
 
-def iter_hf_rows(spec: Mapping[str, Any], *, streaming: bool) -> Iterator[Mapping[str, Any]]:
+def iter_hf_rows(
+    spec: Mapping[str, Any],
+    *,
+    streaming: bool,
+    split: str | None = None,
+    config: str | None = MISSING_CONFIG,
+) -> Iterator[Mapping[str, Any]]:
     try:
         from datasets import load_dataset
     except ImportError as exc:
         raise RuntimeError("Install the `datasets` package or run inside /work-agents/.venv") from exc
 
-    config = spec.get("hf_config")
+    use_split = split if split is not None else spec["hf_split"]
+    use_config = spec.get("hf_config") if config is MISSING_CONFIG else config
     kwargs = {
-        "split": spec["hf_split"],
+        "split": use_split,
         "revision": spec["hf_revision"],
         "streaming": streaming,
     }
-    if config:
-        dataset = load_dataset(spec["hf_dataset"], config, **kwargs)
+    if use_config:
+        dataset = load_dataset(spec["hf_dataset"], use_config, **kwargs)
     else:
         dataset = load_dataset(spec["hf_dataset"], **kwargs)
     yield from dataset
@@ -449,6 +464,7 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
         "datasets": [],
         "files": [],
         "errors": [],
+        "warnings": [],
     }
     file_counts: dict[tuple[str, str], int] = defaultdict(int)
 
@@ -456,29 +472,65 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
         train_target, val_target = desired_counts(spec, args)
         split_counts = {"train": 0, "val": 0}
         converter = CONVERTERS[spec["converter"]]
-        for raw_index, row in enumerate(iter_hf_rows(spec, streaming=not args.non_streaming)):
-            if split_counts["train"] >= train_target and split_counts["val"] >= val_target:
-                break
-            try:
-                record = converter(row, spec)
-            except Exception as exc:  # noqa: BLE001 - keep data-prep running and report bad rows.
-                manifest["errors"].append(
-                    {
-                        "dataset": spec["id"],
-                        "source_row_index": raw_index,
-                        "error": str(exc),
-                    }
-                )
-                continue
+        val_split_name = spec.get("hf_val_split")
+        if val_split_name:
+            val_config = spec.get("hf_val_config", spec.get("hf_config"))
+            sources = [
+                ("train", spec["hf_split"], spec.get("hf_config"), train_target),
+                ("val", val_split_name, val_config, val_target),
+            ]
+        else:
+            manifest["warnings"].append(
+                {
+                    "dataset": spec["id"],
+                    "warning": (
+                        f"no hf_val_split configured; val rows will be a sequential continuation of "
+                        f"hf_split={spec['hf_split']} and are NOT a true holdout"
+                    ),
+                }
+            )
+            sources = [("shared", spec["hf_split"], spec.get("hf_config"), train_target + val_target)]
 
-            split = "train" if split_counts["train"] < train_target else "val"
-            split_counts[split] += 1
-            record["metadata"]["source_row_index"] = raw_index
-            record["metadata"]["prepared_split"] = split
-            record["metadata"]["prepared_by"] = "prepare_m0_assets.py"
-            path = output_dir / spec["environment"] / f"{split}-split.jsonl"
-            write_jsonl_line(path, record)
-            file_counts[(spec["environment"], split)] += 1
+        for source_mode, hf_split, hf_config, source_target in sources:
+            for raw_index, row in enumerate(
+                iter_hf_rows(
+                    spec,
+                    streaming=not args.non_streaming,
+                    split=hf_split,
+                    config=hf_config,
+                )
+            ):
+                if source_mode == "shared":
+                    if split_counts["train"] >= train_target and split_counts["val"] >= val_target:
+                        break
+                else:
+                    if split_counts[source_mode] >= source_target:
+                        break
+                try:
+                    record = converter(row, spec)
+                except Exception as exc:  # noqa: BLE001 - keep data-prep running and report bad rows.
+                    manifest["errors"].append(
+                        {
+                            "dataset": spec["id"],
+                            "hf_split": hf_split,
+                            "source_row_index": raw_index,
+                            "error": str(exc),
+                        }
+                    )
+                    continue
+
+                if source_mode == "shared":
+                    split = "train" if split_counts["train"] < train_target else "val"
+                else:
+                    split = source_mode
+                split_counts[split] += 1
+                record["metadata"]["source_row_index"] = raw_index
+                record["metadata"]["source_hf_split"] = hf_split
+                record["metadata"]["prepared_split"] = split
+                record["metadata"]["prepared_by"] = "prepare_m0_assets.py"
+                path = output_dir / spec["environment"] / f"{split}-split.jsonl"
+                write_jsonl_line(path, record)
+                file_counts[(spec["environment"], split)] += 1
 
         manifest["datasets"].append(
             {
@@ -488,12 +540,14 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
                 "hf_dataset": spec["hf_dataset"],
                 "hf_config": spec.get("hf_config"),
                 "hf_split": spec["hf_split"],
+                "hf_val_split": spec.get("hf_val_split"),
                 "hf_revision": spec["hf_revision"],
                 "source_url": spec["source_url"],
                 "license": spec["license"],
                 "use_stage": spec["use_stage"],
                 "train_rows": split_counts["train"],
                 "val_rows": split_counts["val"],
+                "val_holdout": bool(val_split_name),
             }
         )
         if split_counts["train"] < train_target or split_counts["val"] < val_target:
