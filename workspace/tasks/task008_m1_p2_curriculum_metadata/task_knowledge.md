@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=0 -->
 
 ## 编写规则
 

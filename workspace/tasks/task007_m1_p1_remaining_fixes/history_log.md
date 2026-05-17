@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -21,3 +21,9 @@
 测试：`PYTHONPATH=src pytest tests/recipes/super3/ -q` → 56 passed + 1 skipped（task006 基线 52 + 新 5 - 1 cosmos_xenna 跳过）。
 
 REVIEW_v0.md v5：#4 / #11 / #14 全部标 ✓ Fixed。整体进度 7 fixed / 1 partial / 11 open / 2 tracked。
+
+## Session 2 - 2026-05-17 - intern_nemontron_review_cc
+
+PR #13 已 squash-merge 为 `745d634`，远程 task007 分支删除。task007 结题。
+
+剩余 P2 由 task008 承接：#7 difficulty curriculum + #10 m1_use 名实不符。（#5/#6 在 task005 由 intern_nemontron_code_reading 推进。）
