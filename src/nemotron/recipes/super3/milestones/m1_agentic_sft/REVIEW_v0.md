@@ -8,10 +8,11 @@ Reviewer: intern_nemontron_review_cc
 | v2 (update) | 2026-05-17 | post-PR #10 / #8 — main at `19f682d` |
 | v3 (this PR fixes) | 2026-05-17 | task004 — P0 #2 + N2 fixed, see PR #11 |
 | v4 (this PR fixes) | 2026-05-17 | task006 — P1 #3 + N1 fixed, see PR #12 |
+| v5 (this PR fixes) | 2026-05-17 | task007 — P1 #4 + #11 + #14 fixed, see PR #13 |
 
 Plan reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8.
 
-Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **52 passed** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11 → +3 from PR #12).
+Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **56 passed + 1 skipped** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11 → +3 from PR #12 → +5 from PR #13; the 1 skip is the optional `cosmos_xenna`-gated end-to-end loss-mask test).
 
 Files inspected:
 
@@ -40,17 +41,17 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 1 | cross-intern repo dir in planner default | P0 | ✓ Fixed in PR #10 (`DEFAULT_REPO_DIR=None`, falls back to `Path.cwd()`) |
 | 2 | `global_batch_size=4` × `gpus_per_node=8` × `mbs=1` violates GBS≥DP×MBS | P0 | ✓ Fixed in PR #11 task004 (`ensure_batch_geometry` guard in `build_plan`; default GBS bumped 4→8) |
 | 3 | GSM8K `#### N` marker leaks into SFT reasoning target | P1 | ✓ Fixed in PR #12 task006 (`assistant_for_reasoning` prefers `expected_answer`; `_strip_gsm8k_marker` strips `####\s*` from fallback) |
-| 4 | no empty-content guard on supervision messages | P1 | ◐ Partial — tool_calling now warns when neither tool_calls nor text; math/code/search still unguarded; warning is not a `raise` |
+| 4 | no empty-content guard on supervision messages | P1 | ✓ Fixed in PR #13 task007 (`_ensure_assistant_supervision_non_empty` in `convert_m0_record` now raises ValueError for every env when no assistant message has non-empty content or tool_calls; `assistant_for_search` returns empty content for empty answer so the guard fires uniformly) |
 | 5 | SWE / terminal / structured-output absent from v0 | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
 | 6 | no negative examples (malformed tool / hallucinated tool output) | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
 | 7 | no difficulty curriculum / pass-rate filtering | P2 | ✗ Still open — not in any task |
 | 8 | chat template pinned to `nano3` | P3 | ✗ Still open |
 | 9 | two-stage SFT loss not implemented | P3 | ✗ Still open |
 | 10 | `metadata.m1_use` hardcoded and name-mismatched | P2 | ✗ Still open — same 4 strings; "search grounded answer format" still false |
-| 11 | `search_grounded_qa` supervision is a bare short answer | P1 | ✗ Still open — `assistant_for_search` unchanged |
+| 11 | `search_grounded_qa` supervision is a bare short answer | P1 | ✓ Fixed in PR #13 task007 — `assistant_for_search` now emits a grounded template referencing supporting-facts titles ("Based on the retrieved passages ([1] Title1, [2] Title2), the answer is …") |
 | 12 | M0 `used_in` lineage dropped | P3 | ✗ Still open |
 | 13 | tool-calling system-prompt replacement is asymmetric and undocumented | P3 | ✗ Still open |
-| 14 | `tool` role loss-mask behavior not verified end-to-end | P1 | ◐ Partial — PR #10 added `tool_call_id` wiring; mask question (does nano3 template + PackedSftParquetStage mask tool tokens?) still untested |
+| 14 | `tool` role loss-mask behavior not verified end-to-end | P1 | ✓ Fixed in PR #13 task007 — added `test_tool_role_supervision_survives_to_chat_template_input` (structural) + `test_tokenize_chunks_with_mask_pins_tool_role_to_zero` (end-to-end, `cosmos_xenna`-gated; auto-skipped in test envs without the full data-prep stack) |
 | 15 | `content="" + tool_calls=[...]` render path untested at template level | P3 | ✗ Still open — structural tests only |
 | 16 | hardcoded `/mnt/3fs/data/lei.song/...` and per-intern paths | P3 | ✓ Fixed in PR #12 task006 — M1 planner / prepare already moved to `None`/`../output/...` by PR #10; PR #8's Qwen entry default cleared (see **N1** below) |
 | 17 | `train_iters: 1700` default oversized for M0 smoke data | P3 | ✗ Still open |
@@ -62,7 +63,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 23 | `m1_agentic_smoke.yaml` lacks a schema test | P3 | ◐ Partial — new `test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer` covers one field; full schema validation still missing |
 | 24 | M0 `cleanup_stale_split_files` semantics under-documented | P3 | ✗ Still open |
 
-Aggregate: **4 fixed (#1 #16 by PR #10/#12, #2 #N2 by PR #11, #3 #N1 by PR #12), 3 partial (#4 #14 #23), 14 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N1 / N2 fixed; N3 still open. PR #10 brought **1 useful side-fix (T1)**.
+Aggregate: **7 fixed (#1 by PR #10; #2 #N2 by PR #11; #3 #N1 #16 by PR #12; #4 #11 #14 by PR #13), 1 partial (#23), 11 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N1 / N2 fixed; N3 still open. PR #10 brought **1 useful side-fix (T1)**.
 
 ---
 
