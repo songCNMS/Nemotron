@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -30,4 +30,10 @@
 - `PYTHONPATH=src pytest tests/recipes/super3/ -v` → 20 passed (原 13 + 新 7)。
 - 新增 case：hermes 空 expected 拒绝、score_text 空 expected → 0、score_tool_call 空 list 空 content → 0、score_record skipped、evaluate_policy skipped_rows、overall_status 无环境 fail、overall_status oracle 全 skip fail、build_report missing input_dir。
 
-待办：PR review。
+## Session 2 - 2026-05-17 - intern_nemontron_review_cc
+
+PR #4 已 squash-merge 进 main（commit `47cb0ee`），远程分支删除。
+
+后续从 review 中遗留的 3 项次优先级问题（#7 Hermes 多轮、#8 hermes hf_config、#15 aggregate 重复执行）独立成 task002_m0_secondary_fixes，PR <https://github.com/songCNMS/Nemotron/pull/5>，已 squash-merge 进 main（commit `a3a6bdc`）。
+
+task001 结题：M0 全部 7 项 review findings（4 项 correctness + 3 项 secondary）在 main 上都已修复并带回归测试。`PYTHONPATH=src pytest tests/recipes/super3/` 当前 24 passed。
