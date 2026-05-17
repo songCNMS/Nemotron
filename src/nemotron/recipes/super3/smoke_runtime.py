@@ -1,0 +1,28 @@
+"""Runtime compatibility helpers for single-GPU smoke tests."""
+
+from __future__ import annotations
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def patch_dataset_helper_compile_if_prebuilt() -> None:
+    """Skip Megatron's helper rebuild when a wheel already ships the extension.
+
+    Some Megatron-Core wheels include ``helpers_cpp`` but not the Makefile used
+    by the runtime rebuild path. Smoke tests can safely use the packaged
+    extension and avoid failing before the first training step.
+    """
+    try:
+        import megatron.core.datasets.helpers_cpp  # noqa: F401
+        import megatron.core.datasets.utils as dataset_utils
+        import megatron.bridge.training.initialize as bridge_initialize
+    except Exception:
+        return
+
+    def _compile_helpers_noop() -> None:
+        logger.info("Using prebuilt Megatron dataset helper extension")
+
+    dataset_utils.compile_helpers = _compile_helpers_noop
+    bridge_initialize.compile_helpers = _compile_helpers_noop

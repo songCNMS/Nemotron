@@ -1,0 +1,50 @@
+run:
+  train_script: src/nemotron/recipes/super3/stage1_sft/test_train.py
+  data: null
+  model: null
+  env:
+    container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
+    nodes: 1
+    gpus_per_node: 1
+    ntasks_per_node: 1
+
+# Local smoke config for M1 Agentic SFT packed data. It intentionally avoids
+# artifact references so direct script execution can validate data loading before
+# a real pretrain checkpoint artifact is available.
+artifacts:
+  wandb: false
+  manifest:
+    root: null
+
+dataset:
+  super3_packed_sft_dir: ${oc.env:SUPER3_M1_AGENTIC_PACKED_DIR,../output/super3/stage1_sft_agentic_v0/splits}
+  seq_length: 4096
+  packed_sequence_specs:
+    packed_sequence_size: 4096
+
+tokenizer:
+  tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16}
+
+train:
+  train_iters: 1
+  global_batch_size: 1
+  micro_batch_size: 1
+
+scheduler:
+  lr_warmup_iters: 0
+
+logger:
+  log_interval: 1
+  wandb_project: null
+  wandb_entity: null
+
+checkpoint:
+  save: ${oc.env:SUPER3_M1_SFT_SMOKE_SAVE,../output/super3/m1_agentic_sft_smoke/checkpoints}
+  load: null
+  save_interval: 1
+  pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT,null}
+  finetune: false
+
+convert_to_hf:
+  enabled: false
+  hf_model_id: "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"

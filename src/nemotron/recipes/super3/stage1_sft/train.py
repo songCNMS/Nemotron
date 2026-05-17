@@ -91,7 +91,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 # Default config path relative to this file
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "default.yaml"
 
-DEFAULT_RECIPE_TARGET = "megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_finetune_config"
+DEFAULT_RECIPE_TARGET = "megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config"
 
 
 def convert_megatron_to_hf(

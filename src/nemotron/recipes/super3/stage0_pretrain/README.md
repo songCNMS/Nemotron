@@ -62,6 +62,17 @@ python train.py --config config/tiny.yaml
 torchrun --nproc_per_node=8 train.py --config config/phase1.yaml
 ```
 
+For an offline single-GPU smoke test that produces a tiny checkpoint for M1
+SFT validation:
+
+```bash
+SUPER3_TINY_PRETRAIN_TOKENIZER_MODEL=/path/to/local/tokenizer \
+SUPER3_TINY_PRETRAIN_SMOKE_SAVE=/path/to/tiny_pretrain/checkpoints \
+torchrun --nproc_per_node=1 \
+  src/nemotron/recipes/super3/stage0_pretrain/test_train.py \
+  --config src/nemotron/recipes/super3/stage0_pretrain/config/tiny_smoke.yaml
+```
+
 ## Data Preparation
 
 The `data_prep.py` script tokenizes raw text datasets into Megatron's binary format using a 3-stage Ray pipeline: `PlanStage → DownloadStage → BinIdxTokenizationStage`.

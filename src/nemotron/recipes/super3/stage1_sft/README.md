@@ -85,6 +85,25 @@ uv run nemotron super3 data prep sft -c agentic_v0 \
   blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 
+For a single-GPU smoke test against already-packed M1 data, first create or
+reuse a tiny pretrain checkpoint, then point SFT at the packed `splits/`
+directory and checkpoint:
+
+```bash
+SUPER3_TINY_PRETRAIN_TOKENIZER_MODEL=/path/to/local/tokenizer \
+SUPER3_TINY_PRETRAIN_SMOKE_SAVE=/path/to/tiny_pretrain/checkpoints \
+torchrun --nproc_per_node=1 \
+  src/nemotron/recipes/super3/stage0_pretrain/test_train.py \
+  --config src/nemotron/recipes/super3/stage0_pretrain/config/tiny_smoke.yaml
+
+SUPER3_M1_AGENTIC_PACKED_DIR=/path/to/m1_agentic_sft/splits \
+SUPER3_M1_TOKENIZER_MODEL=/path/to/local/tokenizer \
+SUPER3_M1_PRETRAINED_CHECKPOINT=/path/to/tiny_pretrain/checkpoints \
+torchrun --nproc_per_node=1 \
+  src/nemotron/recipes/super3/stage1_sft/test_train.py \
+  --config src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml
+```
+
 ### Input
 
 OpenAI chat format datasets defined in `config/data_prep/data_blend_raw.json`:
@@ -167,7 +186,7 @@ test_ratio: 0.01
 
 ## Training
 
-The `train.py` script runs supervised fine-tuning using Megatron-Bridge with the `nemotron_3_super_finetune_config` recipe.
+The `train.py` script runs supervised fine-tuning using Megatron-Bridge with the `nemotron_3_super_sft_config` recipe.
 
 ### CLI Command
 
@@ -214,7 +233,7 @@ run:
     container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
 
 recipe:
-  _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_finetune_config
+  _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
   packed_sequence: true
   peft: null  # Disable LoRA, do full SFT
 
