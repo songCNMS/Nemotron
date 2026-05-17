@@ -22,8 +22,11 @@ dataset:
   packed_sequence_specs:
     packed_sequence_size: 4096
 
+# Must match the tokenizer that produced the packed parquet shards
+# (see config/data_prep/agentic_v0.yaml). Mixing tokenizers between data prep
+# and training silently reinterprets the input_ids.
 tokenizer:
-  tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16}
+  tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16}
 
 train:
   train_iters: 1
@@ -42,9 +45,12 @@ checkpoint:
   save: ${oc.env:SUPER3_M1_SFT_SMOKE_SAVE,../output/super3/m1_agentic_sft_smoke/checkpoints}
   load: null
   save_interval: 1
-  pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT,null}
+  # Omit the default so OmegaConf raises clearly when the env var is unset.
+  # `${oc.env:VAR,null}` would yield the literal string "null".
+  pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT}
   finetune: false
 
 convert_to_hf:
   enabled: false
-  hf_model_id: "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"
+  # Match default.yaml / m1_agentic_train.yaml — convention is the `-Base-` HF id.
+  hf_model_id: "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-Base-BF16"

@@ -100,6 +100,45 @@ def test_mbpp_transform_keeps_tests_for_reward_environment() -> None:
     assert record["metadata"]["source_id"] == "11"
 
 
+def test_data_registry_marks_hotpotqa_trust_remote_code() -> None:
+    """Regression for review finding B1: hotpotqa/hotpot_qa requires a custom loader."""
+    registry = load_yaml(DATA_REGISTRY_PATH)
+    hotpot = next(dataset for dataset in registry["datasets"] if dataset["id"] == "m0_search_hotpotqa")
+
+    assert hotpot.get("trust_remote_code") is True
+
+
+def test_parse_tool_calls_assigns_deterministic_ids() -> None:
+    """Regression for review finding B6: chat templates need tool_calls[].id."""
+    text = (
+        '<tool_call>{"name":"a","arguments":{}}</tool_call>'
+        '<tool_call>{"name":"b","arguments":{"x":1}}</tool_call>'
+    )
+
+    calls = parse_tool_calls(text)
+
+    assert [call["id"] for call in calls] == ["call_0", "call_1"]
+    assert all(call["type"] == "function" for call in calls)
+
+
+def test_convert_hermes_pairs_tool_results_with_call_ids() -> None:
+    """tool turns must reference the preceding assistant call via tool_call_id."""
+    conversations = [
+        {"from": "system", "value": "Use tools when useful."},
+        {"from": "human", "value": "Look up Paris."},
+        {"from": "gpt", "value": '<tool_call>{"name":"lookup","arguments":{"q":"paris"}}</tool_call>'},
+        {"from": "tool", "value": '{"city":"Paris"}'},
+        {"from": "gpt", "value": "It is Paris."},
+    ]
+
+    _, expected = convert_hermes_conversations(conversations)
+
+    trajectory = expected["expected_trajectory"]
+    assistant_call_id = trajectory[0]["tool_calls"][0]["id"]
+    assert assistant_call_id == "call_0"
+    assert trajectory[1]["tool_call_id"] == "call_0"
+
+
 def test_hermes_parser_and_transform_extract_expected_tool_call() -> None:
     tool_call = '<tool_call>{"name":"lookup","arguments":{"query":"weather"}}</tool_call>'
     tools = [

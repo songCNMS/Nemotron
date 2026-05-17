@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_M0_INPUT_DIR = Path("/mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25")
+DEFAULT_M0_INPUT_DIR: Path | None = None
 DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0")
 USED_IN_TAG = "super3_agentic_sft_v0"
 MILESTONE = "M1"
@@ -57,7 +57,7 @@ def write_json(path: Path, value: Mapping[str, Any]) -> None:
         f.write("\n")
 
 
-def normalize_tool_call(call: Any) -> JsonDict | None:
+def normalize_tool_call(call: Any, *, fallback_id: str | None = None) -> JsonDict | None:
     if not isinstance(call, Mapping):
         return None
     function = call.get("function")
@@ -75,13 +75,19 @@ def normalize_tool_call(call: Any) -> JsonDict | None:
         arguments = parsed_arguments if isinstance(parsed_arguments, Mapping) else {}
     if not name:
         return None
-    return {
+    call_id = call.get("id")
+    if not isinstance(call_id, str) or not call_id:
+        call_id = fallback_id
+    normalized: JsonDict = {
         "type": "function",
         "function": {
             "name": name,
             "arguments": arguments if isinstance(arguments, Mapping) else {},
         },
     }
+    if call_id:
+        normalized["id"] = call_id
+    return normalized
 
 
 def normalize_tools(tools: Any) -> list[JsonDict]:
@@ -143,7 +149,11 @@ def assistant_for_tool_calling(record: Mapping[str, Any]) -> JsonDict:
     expected_calls = extra.get("expected_tool_calls") or record.get("expected_answer") or []
     if not isinstance(expected_calls, list):
         expected_calls = []
-    tool_calls = [call for call in (normalize_tool_call(call) for call in expected_calls) if call is not None]
+    tool_calls: list[JsonDict] = []
+    for index, call in enumerate(expected_calls):
+        normalized = normalize_tool_call(call, fallback_id=f"call_{index}")
+        if normalized is not None:
+            tool_calls.append(normalized)
     content = str(extra.get("expected_assistant_content") or "").strip()
     return {
         "role": "assistant",
@@ -157,7 +167,14 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
     if not isinstance(trajectory, list) or not trajectory:
         return [assistant_for_tool_calling(record)]
 
-    messages = []
+    messages: list[JsonDict] = []
+    # Track outstanding assistant tool_call ids so the following `tool` turn(s)
+    # can reference the right call via `tool_call_id`. Hermes interleaves
+    # one tool result per assistant tool_call, so we consume ids in arrival
+    # order, with `call_<assistant-index>_<call-index>` as a deterministic
+    # fallback when the upstream trajectory left the id unset.
+    pending_tool_call_ids: list[str] = []
+    assistant_count = 0
     for turn in trajectory:
         if not isinstance(turn, Mapping):
             continue
@@ -167,14 +184,28 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
             tool_calls = turn.get("tool_calls") or []
             if not isinstance(tool_calls, list):
                 tool_calls = []
-            normalized_calls = [
-                call for call in (normalize_tool_call(call) for call in tool_calls) if call is not None
-            ]
+            normalized_calls: list[JsonDict] = []
+            for call_index, call in enumerate(tool_calls):
+                fallback_id = f"call_{assistant_count}_{call_index}"
+                normalized = normalize_tool_call(call, fallback_id=fallback_id)
+                if normalized is None:
+                    continue
+                normalized_calls.append(normalized)
+                pending_tool_call_ids.append(str(normalized.get("id") or fallback_id))
+            assistant_count += 1
             message: JsonDict = {"role": "assistant", "content": str(content or "").strip()}
             if normalized_calls:
                 message["tool_calls"] = normalized_calls
             messages.append(message)
-        elif role in {"tool", "user", "system"} and content is not None:
+        elif role == "tool" and content is not None:
+            tool_message: JsonDict = {"role": "tool", "content": str(content)}
+            explicit_id = turn.get("tool_call_id")
+            if isinstance(explicit_id, str) and explicit_id:
+                tool_message["tool_call_id"] = explicit_id
+            elif pending_tool_call_ids:
+                tool_message["tool_call_id"] = pending_tool_call_ids.pop(0)
+            messages.append(tool_message)
+        elif role in {"user", "system"} and content is not None:
             messages.append({"role": str(role), "content": str(content)})
 
     return messages or [assistant_for_tool_calling(record)]
@@ -232,10 +263,17 @@ def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
         "used_in": ["super3", USED_IN_TAG, "m1_agentic_sft_v0"],
         "metadata": m1_metadata(record, split),
     }
-    if environment_id == "general_tool_calling" and not any(
-        message.get("tool_calls") for message in supervision_messages
-    ):
-        output["metadata"]["warning"] = "missing expected tool_calls"
+    if environment_id == "general_tool_calling":
+        has_tool_call = any(message.get("tool_calls") for message in supervision_messages)
+        has_assistant_text = any(
+            message.get("role") == "assistant" and str(message.get("content") or "").strip()
+            for message in supervision_messages
+        )
+        # A tool-calling row is legitimate when it has either a tool_call or a
+        # text final answer; flag only when supervision has neither (which would
+        # produce an empty assistant turn).
+        if not has_tool_call and not has_assistant_text:
+            output["metadata"]["warning"] = "no tool_calls or assistant text in supervision"
     return output
 
 
@@ -340,6 +378,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
 
 
 def prepare(args: argparse.Namespace) -> JsonDict:
+    if args.m0_input_dir is None:
+        raise ValueError("--m0-input-dir is required")
     check_output_paths(args.output_dir, args.overwrite)
     files_by_env = discover_m0_files(args.m0_input_dir)
     if not files_by_env:

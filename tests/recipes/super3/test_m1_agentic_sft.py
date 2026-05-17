@@ -165,6 +165,74 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     assert (Args.output_dir / "data_blend_agentic_sft_v0.json").exists()
 
 
+def test_convert_tool_record_attaches_tool_call_ids() -> None:
+    """Regression for review finding B6: chat templates need tool_call_id wiring."""
+    record = _base_record("general_tool_calling")
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}
+            ],
+        },
+        {"role": "tool", "content": '{"result": "y"}', "tool_calls": []},
+        {"role": "assistant", "content": "Done.", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+
+    assistant = converted["messages"][2]
+    tool = converted["messages"][3]
+    assert assistant["tool_calls"][0]["id"] == "call_0"
+    assert tool["tool_call_id"] == "call_0"
+
+
+def test_convert_tool_record_fills_missing_ids_deterministically() -> None:
+    """If upstream forgot to set ids, prepare_m1_agentic_sft must generate them."""
+    record = _base_record("general_tool_calling")
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{"type": "function", "function": {"name": "lookup", "arguments": {}}}],
+        },
+        {"role": "tool", "content": "{}", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+    assistant_call_id = converted["messages"][2]["tool_calls"][0]["id"]
+    tool_call_id = converted["messages"][3]["tool_call_id"]
+    assert assistant_call_id == tool_call_id == "call_0_0"
+
+
+def test_convert_tool_record_text_only_final_is_not_warned() -> None:
+    """Regression for review finding S5: text-only finals are legitimate."""
+    record = _base_record("general_tool_calling")
+    record["extra_env_info"]["expected_trajectory"] = [
+        {"role": "assistant", "content": "Just the answer.", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+
+    assert "warning" not in converted["metadata"]
+
+
+def test_prepare_requires_m0_input_dir() -> None:
+    """Regression for review finding S4: hard-coded user-specific defaults removed."""
+    import pytest
+
+    class Args:
+        m0_input_dir = None
+        output_dir = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+
+    with pytest.raises(ValueError, match="--m0-input-dir is required"):
+        prepare(Args())
+
+
 def test_compute_train_iters_from_rows_and_epochs() -> None:
     assert compute_train_iters(
         explicit_train_iters=None,
@@ -187,6 +255,61 @@ def test_compute_train_iters_from_rows_and_epochs() -> None:
         epochs=2.0,
         fallback=1700,
     ) == 1700
+
+
+def test_plan_m1_rejects_multi_node_run(tmp_path) -> None:
+    """Regression for review finding B4: planner used to silently emit single-node command."""
+    import pytest
+    from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import build_torchrun_command
+
+    manifest = {
+        "resources": {"nodes": 4, "gpus_per_node": 8},
+        "training": {
+            "train_iters": 9,
+            "global_batch_size": 4,
+            "micro_batch_size": 1,
+            "seq_length": 4096,
+            "save_interval": 3,
+        },
+        "paths": {
+            "script_path": tmp_path / "train.py",
+            "config_path": tmp_path / "config.yaml",
+        },
+    }
+    with pytest.raises(ValueError, match="single-node launch"):
+        build_torchrun_command(manifest)
+
+
+def test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer() -> None:
+    """Regression for review finding B2: training defaults used the Nano tokenizer."""
+    import yaml
+    from pathlib import Path
+
+    root = Path("src/nemotron/recipes/super3/stage1_sft/config")
+    with (root / "data_prep" / "agentic_v0.yaml").open(encoding="utf-8") as f:
+        data_prep = yaml.safe_load(f)
+    data_prep_tokenizer = data_prep["tokenizer"]["model"]
+
+    for config_name in ("m1_agentic_train.yaml", "m1_agentic_smoke.yaml"):
+        with (root / config_name).open(encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+        assert data_prep_tokenizer in cfg["tokenizer"]["tokenizer_model"], (
+            f"{config_name} fallback tokenizer must match data prep ({data_prep_tokenizer})"
+        )
+
+
+def test_m1_agentic_train_yaml_pretrained_checkpoint_has_no_string_null_default() -> None:
+    """Regression for review finding B3: oc.env default `null` becomes literal string."""
+    from pathlib import Path
+
+    for path in (
+        Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"),
+        Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml"),
+    ):
+        text = path.read_text(encoding="utf-8")
+        assert "${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT,null}" not in text, (
+            f"{path} still uses ${{oc.env:VAR,null}} which OmegaConf treats as the string 'null'"
+        )
 
 
 def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:

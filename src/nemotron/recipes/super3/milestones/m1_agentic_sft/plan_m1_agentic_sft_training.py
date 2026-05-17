@@ -17,14 +17,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_PACKED_SFT_DIR = Path(
-    "/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/packed-expanded-20260517-300x80/splits"
-)
-DEFAULT_OUTPUT_DIR = Path("/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/train-plans")
-DEFAULT_SAVE_DIR = Path("/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/training-runs/m1-agentic-sft-v0/checkpoints")
+DEFAULT_PACKED_SFT_DIR: Path | None = None
+DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0/train-plans")
+DEFAULT_SAVE_DIR = Path("../output/super3/m1_agentic_sft_v0/checkpoints")
 DEFAULT_CONFIG_PATH = Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml")
 DEFAULT_SCRIPT_PATH = Path("src/nemotron/recipes/super3/stage1_sft/train.py")
-DEFAULT_REPO_DIR = Path("/work-agents/intern_nemontron_code_reading/Nemotron")
+DEFAULT_REPO_DIR: Path | None = None
 MILESTONE = "M1"
 STAGE = "Agentic SFT v0 training"
 
@@ -130,6 +128,16 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
     resources = manifest["resources"]
     training = manifest["training"]
     paths = manifest["paths"]
+    nodes = int(resources.get("nodes", 1))
+    if nodes != 1:
+        # Multi-node launches need rendezvous endpoint, node_rank, and a launcher
+        # (slurm srun, MPI, or torchrun's c10d backend) that this planner does
+        # not have enough context to emit safely. Surface the limit explicitly
+        # instead of silently downgrading to a single-node run.
+        raise ValueError(
+            f"plan_m1_agentic_sft_training only emits single-node launch commands, got nodes={nodes}; "
+            "wrap the produced script with slurm srun or extend build_torchrun_command for multi-node"
+        )
     command = [
         "python",
         "-m",
@@ -253,6 +261,9 @@ def ensure_inputs(
 
 
 def build_plan(args: argparse.Namespace) -> JsonDict:
+    if args.packed_sft_dir is None:
+        raise ValueError("--packed-sft-dir is required")
+    repo_dir = args.repo_dir if args.repo_dir is not None else Path.cwd()
     packed_sft_dir = normalize_packed_sft_dir(args.packed_sft_dir)
     metadata_path = metadata_path_for(packed_sft_dir)
     metadata = read_json(metadata_path) if metadata_path else {}
@@ -295,7 +306,7 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         "run_name": run_name,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "paths": {
-            "repo_dir": str(args.repo_dir),
+            "repo_dir": str(repo_dir),
             "script_path": str(args.script_path),
             "config_path": str(args.config_path),
             "packed_sft_dir": str(packed_sft_dir),

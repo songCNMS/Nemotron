@@ -12,6 +12,9 @@ datasets:
     hf_revision: 1908d6afbbead072334abe2965f91bd2709910ab
     source_url: https://huggingface.co/datasets/hotpotqa/hotpot_qa
     license: cc-by-sa-4.0
+    # hotpotqa/hotpot_qa ships a custom HF loader script. `datasets>=2.16`
+    # refuses to execute it unless trust_remote_code is set explicitly.
+    trust_remote_code: true
     converter: hotpotqa_search
     default_train_rows: 100
     default_val_rows: 25

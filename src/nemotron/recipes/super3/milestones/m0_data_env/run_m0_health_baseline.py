@@ -367,9 +367,39 @@ def base_contract_fields() -> list[str]:
     ]
 
 
+def resolve_min_rows(
+    spec_min_rows: int,
+    *,
+    split: str,
+    requested_rows: Mapping[str, Any] | None,
+) -> int:
+    """Cap the env's spec-level min_rows_per_split by what prep was asked to produce.
+
+    When ``prepare_m0_assets.py --max-train-per-dataset N`` writes a manifest
+    requesting fewer rows than the env spec demands, the env's floor would
+    auto-fail a legitimately small smoke run. Honor whichever is smaller and
+    fall back to the spec floor when no manifest hint is present.
+    """
+    if not requested_rows:
+        return spec_min_rows
+    key = "max_train_per_dataset" if split == "train" else "max_val_per_dataset"
+    requested = requested_rows.get(key)
+    if requested is None:
+        return spec_min_rows
+    try:
+        requested_int = int(requested)
+    except (TypeError, ValueError):
+        return spec_min_rows
+    if requested_int <= 0:
+        return spec_min_rows
+    return min(spec_min_rows, requested_int)
+
+
 def summarize_health(
     rows_by_env: Mapping[str, Mapping[str, Sequence[JsonDict]]],
     env_specs: Mapping[str, Mapping[str, Any]],
+    *,
+    requested_rows: Mapping[str, Any] | None = None,
 ) -> JsonDict:
     summary: JsonDict = {"environments": {}, "unknown_environments": []}
     for env_id, splits in rows_by_env.items():
@@ -377,10 +407,11 @@ def summarize_health(
         if spec is None:
             summary["unknown_environments"].append(env_id)
             continue
-        min_rows = int(spec.get("health_check", {}).get("min_rows_per_split", 1))
+        spec_min_rows = int(spec.get("health_check", {}).get("min_rows_per_split", 1))
         required_fields = [*base_contract_fields(), *spec.get("health_check", {}).get("required_fields", [])]
         env_summary = {"splits": {}, "status": "pass"}
         for split, rows in sorted(splits.items()):
+            min_rows = resolve_min_rows(spec_min_rows, split=split, requested_rows=requested_rows)
             missing_required = check_required_fields(rows, required_fields)
             row_count_ok = len(rows) >= min_rows
             split_status = "pass" if row_count_ok and not missing_required else "fail"
@@ -389,6 +420,7 @@ def summarize_health(
             env_summary["splits"][split] = {
                 "rows": len(rows),
                 "min_rows": min_rows,
+                "spec_min_rows": spec_min_rows,
                 "row_count_ok": row_count_ok,
                 "missing_required_fields": missing_required,
                 "status": split_status,
@@ -452,13 +484,34 @@ def overall_status(health: Mapping[str, Any], baselines: Mapping[str, Any]) -> s
     return "pass"
 
 
+def load_requested_rows(input_dir: Path) -> JsonDict | None:
+    """Read the row counts requested by prepare_m0_assets, if available.
+
+    The manifest is the authoritative source for "how many rows did the user
+    ask for"; falling back to env-registry floors when it's missing keeps the
+    health check working for pre-existing data drops generated before this
+    field was added.
+    """
+    manifest_path = input_dir / "manifest.json"
+    if not manifest_path.is_file():
+        return None
+    try:
+        with manifest_path.open(encoding="utf-8") as f:
+            manifest = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    requested = manifest.get("requested_rows") if isinstance(manifest, Mapping) else None
+    return requested if isinstance(requested, Mapping) else None
+
+
 def build_report(args: argparse.Namespace) -> JsonDict:
     if not args.input_dir.is_dir():
         raise FileNotFoundError(f"input directory not found: {args.input_dir}")
     env_specs = load_environment_specs(args.environment_registry)
     rows_by_env = discover_environment_rows(args.input_dir)
+    requested_rows = load_requested_rows(args.input_dir)
     policies = args.policy or ["oracle", "empty", "oracle_then_empty"]
-    health = summarize_health(rows_by_env, env_specs)
+    health = summarize_health(rows_by_env, env_specs, requested_rows=requested_rows)
     baselines = summarize_baselines(rows_by_env, policies=policies, best_k=args.best_k, run_code=not args.skip_code_execution)
     report = {
         "schema_version": 1,
@@ -467,6 +520,7 @@ def build_report(args: argparse.Namespace) -> JsonDict:
         "input_dir": str(args.input_dir),
         "environment_registry": str(args.environment_registry),
         "code_execution": not args.skip_code_execution,
+        "requested_rows": requested_rows or {},
         "health": health,
         "baselines": baselines,
     }
