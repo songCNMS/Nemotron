@@ -1,11 +1,11 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task001_m0_correctness_fixes -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 0 |
+| Status | Working |
+| Current Task | task001_m0_correctness_fixes |
+| PR | https://github.com/songCNMS/Nemotron/pull/4 |
+| Session | 1 |
