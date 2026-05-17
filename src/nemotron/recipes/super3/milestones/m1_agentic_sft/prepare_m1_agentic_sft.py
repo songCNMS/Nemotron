@@ -20,6 +20,7 @@ DEFAULT_M0_INPUT_DIR = Path("/mnt/3fs/data/lei.song/nemotron/m0_data_env_foundat
 DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0")
 USED_IN_TAG = "super3_agentic_sft_v0"
 MILESTONE = "M1"
+TOOL_CALLING_SYSTEM_PROMPT = "You are a tool-using assistant. Use the available functions when needed."
 
 JsonDict = dict[str, Any]
 
@@ -66,6 +67,12 @@ def normalize_tool_call(call: Any) -> JsonDict | None:
     else:
         name = call.get("name")
         arguments = call.get("arguments", {})
+    if isinstance(arguments, str):
+        try:
+            parsed_arguments = json.loads(arguments)
+        except json.JSONDecodeError:
+            parsed_arguments = {}
+        arguments = parsed_arguments if isinstance(parsed_arguments, Mapping) else {}
     if not name:
         return None
     return {
@@ -105,6 +112,14 @@ def base_messages(record: Mapping[str, Any]) -> list[JsonDict]:
     return converted
 
 
+def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDict]:
+    messages = base_messages(record)
+    if environment != "general_tool_calling":
+        return messages
+    non_system_messages = [message for message in messages if message["role"] != "system"]
+    return [{"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}, *non_system_messages]
+
+
 def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
     return {"role": "assistant", "content": str(record.get("expected_answer", "")).strip()}
 
@@ -137,10 +152,37 @@ def assistant_for_tool_calling(record: Mapping[str, Any]) -> JsonDict:
     }
 
 
+def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
+    trajectory = record.get("extra_env_info", {}).get("expected_trajectory")
+    if not isinstance(trajectory, list) or not trajectory:
+        return [assistant_for_tool_calling(record)]
+
+    messages = []
+    for turn in trajectory:
+        if not isinstance(turn, Mapping):
+            continue
+        role = turn.get("role")
+        content = turn.get("content")
+        if role == "assistant":
+            tool_calls = turn.get("tool_calls") or []
+            if not isinstance(tool_calls, list):
+                tool_calls = []
+            normalized_calls = [
+                call for call in (normalize_tool_call(call) for call in tool_calls) if call is not None
+            ]
+            message: JsonDict = {"role": "assistant", "content": str(content or "").strip()}
+            if normalized_calls:
+                message["tool_calls"] = normalized_calls
+            messages.append(message)
+        elif role in {"tool", "user", "system"} and content is not None:
+            messages.append({"role": str(role), "content": str(content)})
+
+    return messages or [assistant_for_tool_calling(record)]
+
+
 ASSISTANT_BUILDERS = {
     "search_grounded_qa": assistant_for_search,
     "code_execution_python": assistant_for_code,
-    "general_tool_calling": assistant_for_tool_calling,
     "math_reasoning_numeric": assistant_for_reasoning,
 }
 
@@ -172,10 +214,17 @@ def m1_metadata(record: Mapping[str, Any], split: str) -> JsonDict:
 
 def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
     environment = record.get("environment")
-    builder = ASSISTANT_BUILDERS.get(str(environment))
-    if builder is None:
+    environment_id = str(environment)
+    if environment_id == "general_tool_calling":
+        supervision_messages = trajectory_for_tool_calling(record)
+    else:
+        builder = ASSISTANT_BUILDERS.get(environment_id)
+        if builder is None:
+            raise ValueError(f"unsupported M0 environment: {environment}")
+        supervision_messages = [builder(record)]
+    if not supervision_messages:
         raise ValueError(f"unsupported M0 environment: {environment}")
-    messages = [*base_messages(record), builder(record)]
+    messages = [*prompt_messages(record, environment_id), *supervision_messages]
     tools = normalize_tools(record.get("responses_create_params", {}).get("tools"))
     output = {
         "messages": messages,
@@ -183,7 +232,9 @@ def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
         "used_in": ["super3", USED_IN_TAG, "m1_agentic_sft_v0"],
         "metadata": m1_metadata(record, split),
     }
-    if environment == "general_tool_calling" and not messages[-1].get("tool_calls"):
+    if environment_id == "general_tool_calling" and not any(
+        message.get("tool_calls") for message in supervision_messages
+    ):
         output["metadata"]["warning"] = "missing expected tool_calls"
     return output
 

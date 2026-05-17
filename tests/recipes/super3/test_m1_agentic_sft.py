@@ -1,6 +1,7 @@
 import json
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (
+    TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
     convert_m0_record,
@@ -60,6 +61,10 @@ def test_convert_code_record_uses_reference_code() -> None:
 
 def test_convert_tool_record_preserves_tools_and_tool_calls() -> None:
     record = _base_record("general_tool_calling")
+    record["responses_create_params"]["input"][0]["content"] = (
+        "You are a function calling AI model.\n<tools>[]</tools>\n"
+        '<tool_call>{"name": "lookup", "arguments": {}}</tool_call>'
+    )
     record["responses_create_params"]["tools"] = [
         {
             "type": "function",
@@ -75,9 +80,49 @@ def test_convert_tool_record_preserves_tools_and_tool_calls() -> None:
 
     converted = convert_m0_record(record, split="train")
 
+    assert converted["messages"][0] == {"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}
+    assert "<tools>" not in converted["messages"][0]["content"]
+    assert "<tool_call>" not in converted["messages"][0]["content"]
     assert converted["tools"][0]["function"]["name"] == "lookup"
     assert converted["messages"][-1]["tool_calls"][0]["function"]["arguments"] == {"query": "x"}
     assert converted["messages"][-1]["content"] == ""
+
+
+def test_convert_tool_record_expands_expected_trajectory() -> None:
+    record = _base_record("general_tool_calling")
+    record["responses_create_params"]["tools"] = [
+        {
+            "type": "function",
+            "function": {
+                "name": "lookup",
+                "description": "Lookup.",
+                "parameters": {"type": "object", "properties": {"query": {"type": "string"}}},
+            },
+        }
+    ]
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{"type": "function", "function": {"name": "lookup", "arguments": '{"query": "x"}'}}],
+        },
+        {"role": "tool", "content": '{"result": "y"}', "tool_calls": []},
+        {"role": "assistant", "content": "The result is y.", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+
+    assert [message["role"] for message in converted["messages"]] == [
+        "system",
+        "user",
+        "assistant",
+        "tool",
+        "assistant",
+    ]
+    assert converted["messages"][2]["tool_calls"][0]["function"]["arguments"] == {"query": "x"}
+    assert converted["messages"][3]["content"] == '{"result": "y"}'
+    assert converted["messages"][4]["content"] == "The result is y."
+    assert "warning" not in converted["metadata"]
 
 
 def test_build_blend_points_to_train_jsonl() -> None:

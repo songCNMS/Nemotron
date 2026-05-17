@@ -3,10 +3,13 @@ import json
 from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     DATA_REGISTRY_PATH,
     ENV_REGISTRY_PATH,
+    cleanup_stale_split_files,
     convert_hermes_conversations,
     load_yaml,
     normalize_numeric_answer,
     parse_tool_calls,
+    stale_split_files,
+    target_files,
     transform_gsm8k_numeric_reasoning,
     transform_hermes_function_calling,
     transform_hotpotqa_search,
@@ -201,3 +204,21 @@ def test_hermes_converter_captures_multi_turn_trajectory() -> None:
     # Final content surfaces the last assistant turn that wasn't a tool call.
     assert expected["expected_final_content"] == final_answer
     assert expected["expected_turn_count"] == 3
+
+
+def test_cleanup_stale_split_files_removes_unselected_dataset_outputs(tmp_path) -> None:
+    full_specs = [{"environment": "search_grounded_qa"}, {"environment": "code_execution_python"}]
+    active_specs = [{"environment": "search_grounded_qa"}]
+    full_paths = target_files(tmp_path, full_specs)
+    active_paths = target_files(tmp_path, active_specs)
+    for path in full_paths:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.name.endswith("-split.jsonl"):
+            path.write_text("old\n", encoding="utf-8")
+
+    stale_before = stale_split_files(tmp_path, active_paths)
+    removed = cleanup_stale_split_files(tmp_path, active_paths)
+
+    assert sorted(removed) == stale_before
+    assert not (tmp_path / "code_execution_python" / "train-split.jsonl").exists()
+    assert (tmp_path / "search_grounded_qa" / "train-split.jsonl").exists()
