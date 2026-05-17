@@ -1,7 +1,27 @@
 # history_log
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
 - 由 intern_nemontron_review_cc 创建任务，PR #11–#14 合并后按 REVIEW_v0.md 把 P3 中"docs + telemetry + lineage" 8 条小改打包成一个 PR。
+
+## Session 1 - 2026-05-17 - intern_nemontron_review_cc
+
+完成 8 项 P3+N3 修复 + 5 个回归测试。
+
+分支 `intern_nemontron_review_cc/task009_m1_p3_telemetry_lineage`，PR <https://github.com/songCNMS/Nemotron/pull/15>，CLEAN/MERGEABLE。
+
+修复要点：
+1. **#12** `m1_metadata.m0_use_stage` 保留 M0 used_in lineage
+2. **#13** M1 README 新增 System prompt handling 文档段
+3. **#17** `m1_agentic_train.yaml train_iters` 加 placeholder 注释指向 planner
+4. **#18** `smoke_runtime` patch 失败时 logger.warning
+5. **#19** `tiny_model` Super3→Nano fallback logger.warning + `_SUPER_PROVIDER_AVAILABLE` flag
+6. **#20** `prompt_messages` 对 user content 跑 `_scrub_tool_call_xml`
+7. **#24** M0 README `--overwrite` 段标 stale dir cleanup
+8. **N3** M0 README 标 hotpotqa `trust_remote_code: true` 安全说明
+
+测试：`PYTHONPATH=src pytest tests/recipes/super3/ -q` → 66 passed + 2 skipped（task008 基线 62 + 新 4 + 1 megatron-bridge gated skip）。
+
+REVIEW_v0.md v7：8 项 ✓ Fixed。**17 fixed / 1 partial / 2 still open (#8 #9) / 2 tracked**。
