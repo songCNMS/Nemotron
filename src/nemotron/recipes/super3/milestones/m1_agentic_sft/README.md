@@ -28,6 +28,29 @@ uv run nemotron super3 data prep sft -c agentic_v0 \
   blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 
+After data prep writes packed `splits/`, generate a reproducible training
+plan and launch script:
+
+```bash
+python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py \
+  --packed-sft-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/packed-expanded-20260517-300x80/splits \
+  --pretrained-checkpoint /mnt/3fs/data/lei.song/nemotron/checkpoints/super3-pretrain/checkpoints \
+  --save-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/training-runs/m1-agentic-sft-v0/checkpoints \
+  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/train-plans \
+  --run-name m1-agentic-sft-v0
+```
+
+The planner validates packed train/valid shards, reads `metadata.json`, infers
+the tokenizer path, computes `train_iters` from packed train rows when possible,
+and writes:
+
+```text
+<output-dir>/<run-name>/
+├── training_manifest.json
+├── run_m1_agentic_sft.sh
+└── report.md
+```
+
 ## Output
 
 ```text
@@ -47,4 +70,3 @@ uv run nemotron super3 data prep sft -c agentic_v0 \
 | `code_execution_python` | User coding prompt, assistant reference Python solution |
 | `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` |
 | `math_reasoning_numeric` | User math prompt, assistant reference reasoning solution |
-

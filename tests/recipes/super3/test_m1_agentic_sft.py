@@ -7,6 +7,12 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     convert_m0_record,
     prepare,
 )
+from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
+    build_plan,
+    compute_train_iters,
+    render_run_script,
+    write_plan,
+)
 
 
 def _base_record(environment: str) -> dict:
@@ -157,3 +163,83 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     assert (Args.output_dir / "agentic_sft_v0_train.jsonl").exists()
     assert (Args.output_dir / "agentic_sft_v0_val_shadow.jsonl").exists()
     assert (Args.output_dir / "data_blend_agentic_sft_v0.json").exists()
+
+
+def test_compute_train_iters_from_rows_and_epochs() -> None:
+    assert compute_train_iters(
+        explicit_train_iters=None,
+        train_rows=189,
+        global_batch_size=16,
+        epochs=2.0,
+        fallback=1700,
+    ) == 24
+    assert compute_train_iters(
+        explicit_train_iters=7,
+        train_rows=189,
+        global_batch_size=16,
+        epochs=2.0,
+        fallback=1700,
+    ) == 7
+    assert compute_train_iters(
+        explicit_train_iters=None,
+        train_rows=None,
+        global_batch_size=16,
+        epochs=2.0,
+        fallback=1700,
+    ) == 1700
+
+
+def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid", "test"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"not-a-real-parquet")
+    tokenizer_dir = tmp_path / "tokenizer"
+    tokenizer_dir.mkdir()
+    checkpoint_dir = tmp_path / "checkpoint"
+    checkpoint_dir.mkdir()
+    metadata = {
+        "type": "SFTDataArtifact",
+        "tokenizer_uri": f"file://{tokenizer_dir}",
+        "total_sequences": 1200,
+        "pack_size": 4096,
+    }
+    with (splits_dir / "metadata.json").open("w", encoding="utf-8") as f:
+        json.dump(metadata, f)
+
+    class Args:
+        packed_sft_dir = packed_root
+        pretrained_checkpoint = checkpoint_dir
+        tokenizer_model = None
+        save_dir = tmp_path / "save"
+        output_dir = tmp_path / "plans"
+        run_name = "unit"
+        repo_dir = tmp_path / "repo"
+        script_path = "src/nemotron/recipes/super3/stage1_sft/train.py"
+        config_path = "src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"
+        venv = tmp_path / "venv"
+        nodes = 1
+        gpus_per_node = 2
+        epochs = 1.0
+        train_iters = 9
+        fallback_train_iters = 1700
+        global_batch_size = 4
+        micro_batch_size = 1
+        seq_length = 4096
+        save_interval = 3
+        allow_missing_checkpoint = False
+
+    manifest = build_plan(Args())
+    write_plan(manifest, overwrite=False)
+    script = render_run_script(manifest)
+
+    assert manifest["paths"]["packed_sft_dir"] == str(splits_dir)
+    assert manifest["paths"]["tokenizer_model"] == str(tokenizer_dir)
+    assert manifest["training"]["train_iters"] == 9
+    assert manifest["splits"]["train"]["shards"] == 1
+    assert "--nproc_per_node=2" in script
+    assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
+    assert (Args.output_dir / "unit" / "training_manifest.json").exists()
+    assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
