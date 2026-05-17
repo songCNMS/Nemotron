@@ -416,6 +416,142 @@ def test_qwen_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
     assert resolve_qwen_hf_model() == str(target)
 
 
+def test_convert_m0_record_raises_on_empty_supervision_across_all_envs() -> None:
+    """Regression for review finding P1 #4: every env must reject empty assistant supervision.
+
+    Previously only general_tool_calling carried a soft `metadata.warning`;
+    reasoning / code / search rows with empty expected_answer + empty
+    reference_* would silently train on `{"role":"assistant","content":""}`.
+    """
+    import pytest
+
+    for environment in ("math_reasoning_numeric", "code_execution_python", "search_grounded_qa"):
+        record = _base_record(environment)
+        record["expected_answer"] = ""
+        record["extra_env_info"]["reference_solution"] = ""
+        record["extra_env_info"]["reference_code"] = ""
+        with pytest.raises(ValueError, match="supervision target would be empty"):
+            convert_m0_record(record, split="train")
+
+    # general_tool_calling with neither tool_calls nor assistant content
+    record = _base_record("general_tool_calling")
+    record["extra_env_info"]["expected_trajectory"] = [
+        {"role": "assistant", "content": "", "tool_calls": []},
+    ]
+    with pytest.raises(ValueError, match="supervision target would be empty"):
+        convert_m0_record(record, split="train")
+
+
+def test_assistant_for_search_emits_grounded_template() -> None:
+    """Regression for review finding P1 #11: search target used to be a bare short answer."""
+    record = _base_record("search_grounded_qa")
+    record["expected_answer"] = "London"
+    record["extra_env_info"]["supporting_facts"] = {
+        "title": ["Ada Lovelace", "Ada Lovelace", "London"],
+        "sent_id": [0, 1, 0],
+    }
+
+    converted = convert_m0_record(record, split="train")
+
+    content = converted["messages"][-1]["content"]
+    # Grounded template references supporting passages, not a bare token.
+    assert content != "London"
+    assert "London" in content
+    assert "[1] Ada Lovelace" in content
+    assert "[2] London" in content
+    assert "retrieved passages" in content
+
+
+def test_assistant_for_search_falls_back_without_supporting_facts() -> None:
+    record = _base_record("search_grounded_qa")
+    record["expected_answer"] = "Paris"
+    # No supporting_facts in extra_env_info — should still produce a grounded
+    # template, just without indexed citations.
+    converted = convert_m0_record(record, split="train")
+    content = converted["messages"][-1]["content"]
+    assert content == "Based on the retrieved passages, the answer is Paris."
+
+
+def test_tool_role_supervision_survives_to_chat_template_input() -> None:
+    """Regression for review finding P1 #14: tool turns must reach the template intact.
+
+    The downstream loss-mask rule in
+    `src/nemotron/data_prep/core/chat_sft_shard_core.py::_tokenize_chunks_with_mask`
+    assigns `mask = 1 if chunk["role"] == "assistant" else 0`. Any future
+    refactor of `convert_m0_record` that renames tool turns to user/assistant
+    (e.g. to "fix" a chat-template quirk) would silently flip those tokens to
+    loss_mask=1 and start training the model to mimic tool outputs. This test
+    pins the role identity at the conversion boundary.
+    """
+    record = _base_record("general_tool_calling")
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}
+            ],
+        },
+        {"role": "tool", "content": '{"result": "y"}', "tool_calls": []},
+        {"role": "assistant", "content": "Done.", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+
+    roles = [m["role"] for m in converted["messages"]]
+    assert "tool" in roles, f"tool role missing from converted messages: {roles}"
+    for tool_msg in (m for m in converted["messages"] if m["role"] == "tool"):
+        # tool messages must not carry tool_calls — only assistant messages do.
+        assert not tool_msg.get("tool_calls"), (
+            "tool message accidentally adopted assistant tool_calls payload — "
+            "loss_mask logic would still treat its tokens as 0, but downstream "
+            "renderers may misinterpret the schema"
+        )
+
+
+def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:
+    """Regression for review finding P1 #14: the role-based mask contract.
+
+    Runs the actual `_tokenize_chunks_with_mask` from
+    `src.nemotron.data_prep.core.chat_sft_shard_core` and asserts that only
+    assistant chunks contribute to the SFT loss. Skipped locally when the
+    `cosmos_xenna` runtime helpers used by the surrounding data-prep package
+    aren't installed; CI environments that ship the full data-prep stack will
+    run this end-to-end.
+    """
+    import pytest
+
+    pytest.importorskip("cosmos_xenna")
+    from nemotron.data_prep.core.chat_sft_shard_core import _tokenize_chunks_with_mask
+
+    class _StubTokenizer:
+        def encode(self, text, add_special_tokens=False):  # noqa: ARG002
+            # One pseudo-token per whitespace-delimited word; deterministic.
+            words = text.split()
+            return list(range(len(words))) if words else []
+
+    chunks = [
+        {"role": "system", "content": "sys prompt one two"},
+        {"role": "user", "content": "the question"},
+        {"role": "assistant", "content": "answer one two three"},
+        {"role": "tool", "content": "tool observation result"},
+        {"role": "assistant", "content": "final answer"},
+    ]
+
+    _input_ids, loss_mask = _tokenize_chunks_with_mask(_StubTokenizer(), chunks)
+
+    cursor = 0
+    for chunk in chunks:
+        n_tokens = len(chunk["content"].split())
+        expected = 1 if chunk["role"] == "assistant" else 0
+        chunk_mask = loss_mask[cursor : cursor + n_tokens]
+        assert all(m == expected for m in chunk_mask), (
+            f"role={chunk['role']!r} expected loss_mask {expected} got {chunk_mask}"
+        )
+        cursor += n_tokens
+    assert cursor == len(loss_mask)
+
+
 def test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer() -> None:
     """Regression for review finding B2: training defaults used the Nano tokenizer."""
     import yaml
