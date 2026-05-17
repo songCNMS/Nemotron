@@ -6,10 +6,11 @@ Reviewer: intern_nemontron_review_cc
 |---|---|---|
 | v1 (original review) | 2026-05-17 | `47cb0ee..bd0ff62` — PR #3 / #6 / #7 |
 | v2 (update) | 2026-05-17 | post-PR #10 / #8 — main at `19f682d` |
+| v3 (this PR fixes) | 2026-05-17 | task004 — P0 #2 + N2 fixed, see PR #11 |
 
 Plan reference: `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §3 / §4 / §5.1 / §6 / §8.
 
-Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **45 passed** (v1 baseline 32 → +13 from PR #10).
+Tests after update: `PYTHONPATH=src pytest tests/recipes/super3/ -q` → **49 passed** (v1 baseline 32 → +13 from PR #10 → +4 from PR #11).
 
 Files inspected:
 
@@ -36,7 +37,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | # | Topic | v1 priority | v2 status |
 |---|---|---|---|
 | 1 | cross-intern repo dir in planner default | P0 | ✓ Fixed in PR #10 (`DEFAULT_REPO_DIR=None`, falls back to `Path.cwd()`) |
-| 2 | `global_batch_size=4` × `gpus_per_node=8` × `mbs=1` violates GBS≥DP×MBS | P0 | ✗ Still open — defaults unchanged; planner has no GBS/DP guard (only `nodes!=1` guard) |
+| 2 | `global_batch_size=4` × `gpus_per_node=8` × `mbs=1` violates GBS≥DP×MBS | P0 | ✓ Fixed in PR #11 task004 (`ensure_batch_geometry` guard in `build_plan`; default GBS bumped 4→8) |
 | 3 | GSM8K `#### N` marker leaks into SFT reasoning target | P1 | ✗ Still open — `assistant_for_reasoning` still prefers `reference_solution` |
 | 4 | no empty-content guard on supervision messages | P1 | ◐ Partial — tool_calling now warns when neither tool_calls nor text; math/code/search still unguarded; warning is not a `raise` |
 | 5 | SWE / terminal / structured-output absent from v0 | P2 | 📋 Tracked in `task005_m1_sft_v0_scope_expansion` |
@@ -60,7 +61,7 @@ Status legend used below: ✓ Fixed · ◐ Partial · ✗ Still open · 📋 Tra
 | 23 | `m1_agentic_smoke.yaml` lacks a schema test | P3 | ◐ Partial — new `test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer` covers one field; full schema validation still missing |
 | 24 | M0 `cleanup_stale_split_files` semantics under-documented | P3 | ✗ Still open |
 
-Aggregate: **1 fixed, 4 partial, 17 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** and **1 useful side-fix (T1)**.
+Aggregate: **2 fixed (#1 by PR #10, #2 by PR #11), 4 partial, 16 still open, 2 tracked elsewhere.** PR #10 + PR #8 also introduced **3 new issues (N1–N3)** — N2 fixed by PR #11; N1 / N3 still open. PR #10 brought **1 useful side-fix (T1)**.
 
 ---
 
@@ -75,6 +76,8 @@ DEFAULT_QWEN_MODEL = "/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507"
 After v1's P3 #16 was largely cleaned up by PR #10 (planner / prepare defaults now relative or required), PR #8 added a debug entry that puts another intern's home directory back as the default Qwen weight path. Any intern who runs `python qwen_local_train.py` without `SUPER3_M1_QWEN_HF_MODEL` set will hit a "directory does not exist" deep inside the HF auto-bridge stack. Same drift class as v1 #16; suggested fix: leave the default as `None`, require either env var or CLI flag, and document the expected layout in the script docstring.
 
 ### N2 — `m1_agentic_smoke.yaml` now hard-requires `SUPER3_M1_PRETRAINED_CHECKPOINT` even when `finetune=false` (P1 regression)
+
+**Status (v3): ✓ Fixed in PR #11 task004** — smoke yaml `pretrained_checkpoint` reverted to YAML literal `null`; full-train yaml keeps the strict `${oc.env:VAR}` form. Regression test `test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env` covers the fix.
 
 PR #10 changed both smoke and full configs:
 
