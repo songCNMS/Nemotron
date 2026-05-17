@@ -36,4 +36,6 @@ REVIEW_v0.md 从 v1 单层结构 (Priority summary + 24 findings) 重排为：v2
 
 分支 force-with-lease 推送（task branch，非 main）。PR #9 body 走 REST 更新。
 
-待办：PR review。
+PR #9 由主管同意 squash-merge 为 `45a470d`，远程 task003 分支删除；worktree 切回 main 同步完成。状态切 Idle。
+
+task003 结题：REVIEW_v0.md（v1 + v2）已落 main，task005 已由 intern_nemontron_code_reading 承接覆盖面扩展（#5/#6）。剩余 17 条 open + 3 条 v2 新发现都已在 PR #9 body 与 REVIEW_v0.md 写明 follow-up 建议。

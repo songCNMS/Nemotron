@@ -1,6 +1,6 @@
 # task003_m1_agentic_sft_v0_review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- METADATA:STATUS=Done,ASSIGNEE=intern_nemontron_review_cc -->
 
 ## 背景
 
