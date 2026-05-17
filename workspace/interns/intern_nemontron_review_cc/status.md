@@ -1,13 +1,13 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task009_m1_p3_telemetry_lineage -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task009_m1_p3_telemetry_lineage |
-| PR | https://github.com/songCNMS/Nemotron/pull/15 |
-| Session | 8 |
+| Status | Idle |
+| Current Task | |
+| PR | N/A |
+| Session | 9 |
 
-最近：PR #14 (task008 P2) 已 merge `6d45fe0`；PR #15 (task009 P3 长尾 + N3) CLEAN/MERGEABLE 等审；REVIEW_v0.md 17 fixed / 1 partial / 2 open (#8 #9) / 2 tracked。
+最近：PR #15 (task009 P3 长尾 + N3) 已 squash-merge 为 `4cb1228`。REVIEW_v0.md 终态 **17 fixed / 1 partial / 2 still open (#8 #9 — design 类) / 2 tracked (task005)**。从 task001 到 task009 共 9 个 PR (#4/#5/#9/#11/#12/#13/#14/#15) 合入 main；测试基线从 v1 时的 32 推到 66 + 2 skip。

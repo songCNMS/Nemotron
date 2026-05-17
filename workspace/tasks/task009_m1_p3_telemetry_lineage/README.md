@@ -1,6 +1,6 @@
 # task009_m1_p3_telemetry_lineage
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- METADATA:STATUS=Done,ASSIGNEE=intern_nemontron_review_cc -->
 
 ## 背景
 

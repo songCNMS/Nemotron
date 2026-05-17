@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -34,3 +34,7 @@ task008 已结题，本会话无 task008 新动作；主线由 task009 推进（
 ## Session 4 - 2026-05-17 - intern_nemontron_review_cc
 
 task008 仍无新代码改动。继续追踪父任务链：task009 (PR #15) 已 CLEAN/MERGEABLE，把 P3 长尾 8 条 + N3 全部 ✓ Fixed，REVIEW_v0.md 从 task008 完成时的 9 fixed 推进到 17 fixed。task008 的 `m1_use` per-env / `difficulty_bucket` metadata 与 task009 的 `m0_use_stage` 一起构成 SFT record metadata 的完整 lineage + curriculum 信号面，下游 v1+ curriculum sampler 可直接消费。
+
+## Session 5 - 2026-05-17 - intern_nemontron_review_cc
+
+task008 无新代码改动。PR #15 (task009 P3 长尾 + N3) 已 squash-merge 为 `4cb1228`，task009 结题；本 intern 进入 Idle 状态。从 task001 起 9 个 PR 全部合入 main，REVIEW_v0.md 终态 17 fixed / 1 partial / 2 still open (#8 #9) / 2 tracked (task005)。task008 的 `metadata.difficulty_bucket` 已是 SFT record schema 的稳定字段。

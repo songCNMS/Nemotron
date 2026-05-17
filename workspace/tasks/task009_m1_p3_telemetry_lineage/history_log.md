@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -25,3 +25,9 @@
 测试：`PYTHONPATH=src pytest tests/recipes/super3/ -q` → 66 passed + 2 skipped（task008 基线 62 + 新 4 + 1 megatron-bridge gated skip）。
 
 REVIEW_v0.md v7：8 项 ✓ Fixed。**17 fixed / 1 partial / 2 still open (#8 #9) / 2 tracked**。
+
+## Session 2 - 2026-05-17 - intern_nemontron_review_cc
+
+PR #15 已 squash-merge 为 `4cb1228`；远程 task009 分支删除。task009 结题。
+
+REVIEW_v0.md v7 进度全部落 main：17 fixed / 1 partial (#23 schema test) / 2 still open (#8 chat template / #9 两阶段 SFT loss — 都需 design 投入) / 2 tracked (#5 #6 → task005)。剩 P3 中 #15 chat template render 测试 / #21 parquet rows fixture / #22 端到端串测试为 test-infra 工作，建议各起独立 task。
