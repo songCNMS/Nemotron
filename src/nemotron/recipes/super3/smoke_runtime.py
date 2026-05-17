@@ -18,7 +18,16 @@ def patch_dataset_helper_compile_if_prebuilt() -> None:
         import megatron.core.datasets.helpers_cpp  # noqa: F401
         import megatron.core.datasets.utils as dataset_utils
         import megatron.bridge.training.initialize as bridge_initialize
-    except Exception:
+    except Exception as exc:
+        # P3 #18: surface the no-op so a missing helpers_cpp + missing Makefile
+        # combo at least leaves a breadcrumb instead of crashing later with
+        # "Makefile not found" during initialize().
+        logger.warning(
+            "Skipping dataset-helper compile patch: %s. If a later training "
+            "step fails with a missing Makefile, the prebuilt helpers_cpp is "
+            "also unavailable in this environment.",
+            exc,
+        )
         return
 
     def _compile_helpers_noop() -> None:

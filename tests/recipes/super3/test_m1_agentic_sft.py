@@ -833,3 +833,90 @@ def test_prepare_marks_difficulty_unknown_without_baseline(tmp_path) -> None:
     assert manifest["m0_health_baseline"] is None
     assert manifest["difficulty_buckets"]["train"] == {DIFFICULTY_UNKNOWN: 1}
     assert manifest["difficulty_buckets"]["val_shadow"] == {DIFFICULTY_UNKNOWN: 1}
+
+
+def test_m0_use_stage_lineage_is_preserved_in_metadata() -> None:
+    """Regression for review finding P3 #12: M0 used_in stage tags were dropped."""
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["used_in"] = ["M0 data_env_foundation", "M1 RLVR math/reasoning smoke"]
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["used_in"] == ["super3", USED_IN_TAG, "m1_agentic_sft_v0"]
+    assert converted["metadata"]["m0_use_stage"] == [
+        "M0 data_env_foundation",
+        "M1 RLVR math/reasoning smoke",
+    ]
+
+
+def test_m0_use_stage_lineage_defaults_to_empty_when_m0_missing_used_in() -> None:
+    """Records that lack the M0 used_in field still get a deterministic m0_use_stage value."""
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record.pop("used_in", None)
+
+    converted = convert_m0_record(record, split="train")
+    assert converted["metadata"]["m0_use_stage"] == []
+
+
+def test_prompt_messages_scrubs_demo_tool_call_xml_from_user_content() -> None:
+    """Regression for review finding P3 #20: Hermes demo `<tool_call>` blocks leaked into user content."""
+    record = _base_record("general_tool_calling")
+    record["responses_create_params"]["input"] = [
+        {"role": "system", "content": "<tools>[]</tools>"},
+        {
+            "role": "user",
+            "content": (
+                "What is the weather?\n"
+                '<tool_call>{"name": "lookup", "arguments": {"q": "weather"}}</tool_call>\n'
+                "<tools>[{\"function\":{\"name\":\"lookup\"}}]</tools>"
+            ),
+        },
+    ]
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "weather"}}}
+            ],
+        },
+    ]
+
+    converted = convert_m0_record(record, split="train")
+    user_message = next(m for m in converted["messages"] if m["role"] == "user")
+
+    assert "<tool_call>" not in user_message["content"]
+    assert "<tools>" not in user_message["content"]
+    assert "What is the weather?" in user_message["content"]
+
+
+def test_smoke_runtime_patch_logs_warning_when_helpers_missing(monkeypatch, caplog) -> None:
+    """Regression for review finding P3 #18: silent no-op masked missing helpers_cpp."""
+    import logging
+    import sys
+
+    monkeypatch.setitem(sys.modules, "megatron.core.datasets.helpers_cpp", None)
+    from nemotron.recipes.super3 import smoke_runtime
+
+    with caplog.at_level(logging.WARNING, logger=smoke_runtime.logger.name):
+        smoke_runtime.patch_dataset_helper_compile_if_prebuilt()
+
+    assert any("Skipping dataset-helper compile patch" in r.message for r in caplog.records)
+
+
+def test_tiny_model_surfaces_super_provider_availability_flag() -> None:
+    """Regression for review finding P3 #19: silent Super3->Nano fallback.
+
+    The module-level `_SUPER_PROVIDER_AVAILABLE` boolean is the new contract;
+    when Super3 is missing the import emits a warning, when present it is True.
+    Skip when megatron-bridge isn't installed in the test environment (the
+    module raises ImportError before exposing the flag).
+    """
+    import pytest
+
+    pytest.importorskip("megatron.bridge.models.nemotronh")
+    import nemotron.recipes.super3.tiny_model as tiny_model_module
+
+    assert isinstance(tiny_model_module._SUPER_PROVIDER_AVAILABLE, bool)
