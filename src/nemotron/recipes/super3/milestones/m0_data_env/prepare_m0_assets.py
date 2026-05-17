@@ -23,6 +23,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_REGISTRY_PATH = SCRIPT_DIR / "data_registry.yaml"
 ENV_REGISTRY_PATH = SCRIPT_DIR / "environment_registry.yaml"
 DEFAULT_OUTPUT_DIR = Path("data/super3/milestones/m0_data_env_foundation")
+MISSING_CONFIG = object()
 
 TOOL_CALL_RE = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 
@@ -261,29 +262,68 @@ def strip_tool_call_blocks(text: str) -> str:
     return TOOL_CALL_RE.sub("", text).strip()
 
 
+HERMES_ROLE_MAP = {
+    "system": "system",
+    "human": "user",
+    "user": "user",
+    "gpt": "assistant",
+    "assistant": "assistant",
+    "tool": "tool",
+    "function": "tool",
+    "function_response": "tool",
+    "observation": "tool",
+}
+
+
 def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> tuple[list[JsonDict], JsonDict]:
-    role_map = {
-        "system": "system",
-        "human": "user",
-        "user": "user",
-        "gpt": "assistant",
-        "assistant": "assistant",
-    }
+    """Split a Hermes function-calling conversation into model input vs expected trajectory.
+
+    `input_messages` covers the prompt context up to (but not including) the first
+    assistant turn — that is what the policy sees at inference time. Everything from
+    the first assistant turn onward (assistant tool calls, tool observations,
+    follow-up assistant turns, final answer) is captured in `expected_trajectory`
+    so that downstream verifiers can score multi-turn behavior, not just the first
+    tool emission.
+    """
     input_messages: list[JsonDict] = []
+    expected_trajectory: list[JsonDict] = []
     expected_tool_calls: list[JsonDict] = []
     expected_assistant_content = ""
+    first_assistant_seen = False
+    last_assistant_content = ""
+    last_assistant_had_tool_calls = False
 
     for turn in conversations:
         raw_role = str(turn.get("from") or turn.get("role") or "").strip()
-        role = role_map.get(raw_role)
+        role = HERMES_ROLE_MAP.get(raw_role)
         if role is None:
             continue
         content = str(turn.get("value") or turn.get("content") or "")
         if role == "assistant":
-            expected_tool_calls = parse_tool_calls(content)
-            expected_assistant_content = strip_tool_call_blocks(content)
-            break
-        input_messages.append({"role": role, "content": content})
+            tool_calls = parse_tool_calls(content)
+            stripped = strip_tool_call_blocks(content)
+            expected_trajectory.append(
+                {
+                    "role": "assistant",
+                    "content": stripped,
+                    "tool_calls": tool_calls,
+                }
+            )
+            last_assistant_content = stripped
+            last_assistant_had_tool_calls = bool(tool_calls)
+            if not first_assistant_seen:
+                expected_tool_calls = tool_calls
+                expected_assistant_content = stripped
+                first_assistant_seen = True
+        elif role == "tool":
+            expected_trajectory.append({"role": "tool", "content": content, "tool_calls": []})
+        else:  # system / user
+            if first_assistant_seen:
+                # Late system/user turn after the assistant has spoken — record in
+                # the trajectory rather than leaking it into model input.
+                expected_trajectory.append({"role": role, "content": content, "tool_calls": []})
+            else:
+                input_messages.append({"role": role, "content": content})
 
     if not any(message["role"] == "system" for message in input_messages):
         input_messages.insert(0, {"role": "system", "content": SYSTEM_PROMPTS["general_tool_calling"]})
@@ -291,6 +331,9 @@ def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> 
     return input_messages, {
         "expected_tool_calls": expected_tool_calls,
         "expected_assistant_content": expected_assistant_content,
+        "expected_trajectory": expected_trajectory,
+        "expected_final_content": last_assistant_content if not last_assistant_had_tool_calls else "",
+        "expected_turn_count": len(expected_trajectory),
     }
 
 
@@ -299,6 +342,13 @@ def transform_hermes_function_calling(row: Mapping[str, Any], spec: Mapping[str,
     if not isinstance(conversations, list):
         conversations = []
     input_messages, expected = convert_hermes_conversations(conversations)
+    has_tool_calls = bool(expected["expected_tool_calls"])
+    has_assistant_text = bool(str(expected["expected_assistant_content"]).strip())
+    if not has_tool_calls and not has_assistant_text:
+        raise ValueError(
+            "hermes row has neither expected_tool_calls nor non-empty expected_assistant_content; "
+            "cannot verify"
+        )
     tools = parse_json_maybe(row.get("tools"), default=[])
     if isinstance(tools, Mapping):
         tools = [dict(tools)]
@@ -321,6 +371,9 @@ def transform_hermes_function_calling(row: Mapping[str, Any], spec: Mapping[str,
         extra_env_info={
             "expected_tool_calls": expected["expected_tool_calls"],
             "expected_assistant_content": expected["expected_assistant_content"],
+            "expected_trajectory": expected["expected_trajectory"],
+            "expected_final_content": expected["expected_final_content"],
+            "expected_turn_count": expected["expected_turn_count"],
             "category": row.get("category"),
             "subcategory": row.get("subcategory"),
             "task": row.get("task"),
@@ -336,20 +389,27 @@ CONVERTERS = {
 }
 
 
-def iter_hf_rows(spec: Mapping[str, Any], *, streaming: bool) -> Iterator[Mapping[str, Any]]:
+def iter_hf_rows(
+    spec: Mapping[str, Any],
+    *,
+    streaming: bool,
+    split: str | None = None,
+    config: str | None = MISSING_CONFIG,
+) -> Iterator[Mapping[str, Any]]:
     try:
         from datasets import load_dataset
     except ImportError as exc:
         raise RuntimeError("Install the `datasets` package or run inside /work-agents/.venv") from exc
 
-    config = spec.get("hf_config")
+    use_split = split if split is not None else spec["hf_split"]
+    use_config = spec.get("hf_config") if config is MISSING_CONFIG else config
     kwargs = {
-        "split": spec["hf_split"],
+        "split": use_split,
         "revision": spec["hf_revision"],
         "streaming": streaming,
     }
-    if config:
-        dataset = load_dataset(spec["hf_dataset"], config, **kwargs)
+    if use_config:
+        dataset = load_dataset(spec["hf_dataset"], use_config, **kwargs)
     else:
         dataset = load_dataset(spec["hf_dataset"], **kwargs)
     yield from dataset
@@ -449,6 +509,7 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
         "datasets": [],
         "files": [],
         "errors": [],
+        "warnings": [],
     }
     file_counts: dict[tuple[str, str], int] = defaultdict(int)
 
@@ -456,29 +517,65 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
         train_target, val_target = desired_counts(spec, args)
         split_counts = {"train": 0, "val": 0}
         converter = CONVERTERS[spec["converter"]]
-        for raw_index, row in enumerate(iter_hf_rows(spec, streaming=not args.non_streaming)):
-            if split_counts["train"] >= train_target and split_counts["val"] >= val_target:
-                break
-            try:
-                record = converter(row, spec)
-            except Exception as exc:  # noqa: BLE001 - keep data-prep running and report bad rows.
-                manifest["errors"].append(
-                    {
-                        "dataset": spec["id"],
-                        "source_row_index": raw_index,
-                        "error": str(exc),
-                    }
-                )
-                continue
+        val_split_name = spec.get("hf_val_split")
+        if val_split_name:
+            val_config = spec.get("hf_val_config", spec.get("hf_config"))
+            sources = [
+                ("train", spec["hf_split"], spec.get("hf_config"), train_target),
+                ("val", val_split_name, val_config, val_target),
+            ]
+        else:
+            manifest["warnings"].append(
+                {
+                    "dataset": spec["id"],
+                    "warning": (
+                        f"no hf_val_split configured; val rows will be a sequential continuation of "
+                        f"hf_split={spec['hf_split']} and are NOT a true holdout"
+                    ),
+                }
+            )
+            sources = [("shared", spec["hf_split"], spec.get("hf_config"), train_target + val_target)]
 
-            split = "train" if split_counts["train"] < train_target else "val"
-            split_counts[split] += 1
-            record["metadata"]["source_row_index"] = raw_index
-            record["metadata"]["prepared_split"] = split
-            record["metadata"]["prepared_by"] = "prepare_m0_assets.py"
-            path = output_dir / spec["environment"] / f"{split}-split.jsonl"
-            write_jsonl_line(path, record)
-            file_counts[(spec["environment"], split)] += 1
+        for source_mode, hf_split, hf_config, source_target in sources:
+            for raw_index, row in enumerate(
+                iter_hf_rows(
+                    spec,
+                    streaming=not args.non_streaming,
+                    split=hf_split,
+                    config=hf_config,
+                )
+            ):
+                if source_mode == "shared":
+                    if split_counts["train"] >= train_target and split_counts["val"] >= val_target:
+                        break
+                else:
+                    if split_counts[source_mode] >= source_target:
+                        break
+                try:
+                    record = converter(row, spec)
+                except Exception as exc:  # noqa: BLE001 - keep data-prep running and report bad rows.
+                    manifest["errors"].append(
+                        {
+                            "dataset": spec["id"],
+                            "hf_split": hf_split,
+                            "source_row_index": raw_index,
+                            "error": str(exc),
+                        }
+                    )
+                    continue
+
+                if source_mode == "shared":
+                    split = "train" if split_counts["train"] < train_target else "val"
+                else:
+                    split = source_mode
+                split_counts[split] += 1
+                record["metadata"]["source_row_index"] = raw_index
+                record["metadata"]["source_hf_split"] = hf_split
+                record["metadata"]["prepared_split"] = split
+                record["metadata"]["prepared_by"] = "prepare_m0_assets.py"
+                path = output_dir / spec["environment"] / f"{split}-split.jsonl"
+                write_jsonl_line(path, record)
+                file_counts[(spec["environment"], split)] += 1
 
         manifest["datasets"].append(
             {
@@ -488,12 +585,14 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
                 "hf_dataset": spec["hf_dataset"],
                 "hf_config": spec.get("hf_config"),
                 "hf_split": spec["hf_split"],
+                "hf_val_split": spec.get("hf_val_split"),
                 "hf_revision": spec["hf_revision"],
                 "source_url": spec["source_url"],
                 "license": spec["license"],
                 "use_stage": spec["use_stage"],
                 "train_rows": split_counts["train"],
                 "val_rows": split_counts["val"],
+                "val_holdout": bool(val_split_name),
             }
         )
         if split_counts["train"] < train_target or split_counts["val"] < val_target:

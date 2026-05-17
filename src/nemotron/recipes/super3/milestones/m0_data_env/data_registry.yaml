@@ -8,6 +8,7 @@ datasets:
     hf_dataset: hotpotqa/hotpot_qa
     hf_config: distractor
     hf_split: train
+    hf_val_split: validation
     hf_revision: 1908d6afbbead072334abe2965f91bd2709910ab
     source_url: https://huggingface.co/datasets/hotpotqa/hotpot_qa
     license: cc-by-sa-4.0
@@ -34,6 +35,7 @@ datasets:
     hf_dataset: google-research-datasets/mbpp
     hf_config: full
     hf_split: train
+    hf_val_split: validation
     hf_revision: 4bb6404fdc6cacfda99d4ac4205087b89d32030c
     source_url: https://huggingface.co/datasets/google-research-datasets/mbpp
     license: cc-by-4.0
@@ -58,8 +60,19 @@ datasets:
     environment: general_tool_calling
     domain: general_tool_calling
     hf_dataset: NousResearch/hermes-function-calling-v1
-    hf_config: null
+    # Hermes ships multiple configs (func_calling_singleturn, func_calling,
+    # glaive_func_calling, json_mode_singleturn, json_mode_agentic). Without an
+    # explicit config, `load_dataset` is ambiguous on this dataset. M0 targets
+    # the single-turn function-calling subset because the `general_tool_calling`
+    # environment registry currently runs with max_turns=2. Multi-turn config
+    # (`func_calling`) is reserved for M1 when the agent loop is wired up.
+    hf_config: func_calling_singleturn
     hf_split: train
+    # NousResearch/hermes-function-calling-v1 does not ship train/val splits per
+    # config — there is only `train`. We intentionally leave hf_val_split unset
+    # so prepare_m0_assets falls back to its sequential-slice path and records
+    # the "not a true holdout" warning in manifest.warnings. This is the same
+    # signal the README surfaces.
     hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
     source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
     license: apache-2.0
@@ -87,6 +100,7 @@ datasets:
     hf_dataset: openai/gsm8k
     hf_config: main
     hf_split: train
+    hf_val_split: test
     hf_revision: 740312add88f781978c0658806c59bc2815b9866
     source_url: https://huggingface.co/datasets/openai/gsm8k
     license: mit
