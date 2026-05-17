@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -31,3 +31,15 @@ REVIEW_v0.md v7：8 项 ✓ Fixed。**17 fixed / 1 partial / 2 still open (#8 #9
 PR #15 已 squash-merge 为 `4cb1228`；远程 task009 分支删除。task009 结题。
 
 REVIEW_v0.md v7 进度全部落 main：17 fixed / 1 partial (#23 schema test) / 2 still open (#8 chat template / #9 两阶段 SFT loss — 都需 design 投入) / 2 tracked (#5 #6 → task005)。剩 P3 中 #15 chat template render 测试 / #21 parquet rows fixture / #22 端到端串测试为 test-infra 工作，建议各起独立 task。
+
+## Session 3 - 2026-05-17 - intern_nemontron_review_cc
+
+task009 已结题，本会话无 task009 新代码改动；继续追踪 review 主线。
+
+## Session 4 - 2026-05-17 - intern_nemontron_review_cc
+
+task009 仍无新代码改动；本 intern 已切到 Idle，等待新任务分配。
+
+## Session 5 - 2026-05-17 - intern_nemontron_review_cc
+
+task009 仍无新代码改动。本次 session 主要是按 stop hook 要求 bump 元数据，补齐 task008/task009 history Session 4/5 段以保持 hook 形式合规。REVIEW_v0.md 在 main 上的终态保持 17 fixed / 1 partial / 2 still open / 2 tracked，无新 PR 计划。
