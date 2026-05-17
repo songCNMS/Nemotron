@@ -220,22 +220,20 @@ def candidates_for_policy(record: Mapping[str, Any], policy: str) -> list[Any]:
     raise ValueError(f"unknown baseline policy: {policy}")
 
 
-def evaluate_policy(
+def score_rows(
     rows: Sequence[Mapping[str, Any]],
     *,
     policy: str,
     best_k: int,
     run_code: bool,
-) -> JsonDict:
-    pass_at_1 = 0
-    best_at_k = 0
-    total_score_at_1 = 0.0
-    total_best_score_at_k = 0.0
-    errors: list[JsonDict] = []
-    skipped_rows = 0
-    scored_rows = 0
-    threshold = 1.0
+) -> list[JsonDict]:
+    """Score each row once and return raw per-row results.
 
+    Pulled out of `evaluate_policy` so that aggregate metrics can be derived from
+    the same per-row scores as the split metrics, instead of re-invoking the
+    verifier (and, for python_unit_tests, re-spawning subprocesses).
+    """
+    out: list[JsonDict] = []
     for index, record in enumerate(rows):
         candidates = candidates_for_policy(record, policy)
         scores: list[float] = []
@@ -246,8 +244,36 @@ def evaluate_policy(
             if score is None:
                 continue
             scores.append(score)
+        out.append(
+            {
+                "row_index": index,
+                "scores": scores,
+                "diagnostics": diagnostics,
+                "metadata": record.get("metadata", {}),
+                "verifier": record.get("reward_config", {}).get("verifier"),
+            }
+        )
+    return out
+
+
+def aggregate_scored_rows(
+    scored: Sequence[Mapping[str, Any]],
+    *,
+    policy: str,
+    best_k: int,
+) -> JsonDict:
+    pass_at_1 = 0
+    best_at_k = 0
+    total_score_at_1 = 0.0
+    total_best_score_at_k = 0.0
+    errors: list[JsonDict] = []
+    skipped_rows = 0
+    scored_rows = 0
+    threshold = 1.0
+
+    for entry in scored:
+        scores = entry["scores"]
         if not scores:
-            # Every candidate for this row was skipped (e.g. code execution disabled).
             skipped_rows += 1
             continue
         scored_rows += 1
@@ -258,19 +284,19 @@ def evaluate_policy(
         total_score_at_1 += first_score
         total_best_score_at_k += best_score
         if best_score < threshold:
-            metadata = record.get("metadata", {})
+            metadata = entry["metadata"]
             errors.append(
                 {
-                    "row_index": index,
+                    "row_index": entry["row_index"],
                     "source_dataset": metadata.get("source_dataset"),
                     "source_id": metadata.get("source_id"),
                     "source_row_index": metadata.get("source_row_index"),
-                    "verifier": record.get("reward_config", {}).get("verifier"),
-                    "diagnostics": diagnostics,
+                    "verifier": entry["verifier"],
+                    "diagnostics": entry["diagnostics"],
                 }
             )
 
-    total = len(rows)
+    total = len(scored)
     denominator = scored_rows or 1
     return {
         "policy": policy,
@@ -284,6 +310,20 @@ def evaluate_policy(
         "failures": errors[:20],
         "failure_count": len(errors),
     }
+
+
+def evaluate_policy(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    policy: str,
+    best_k: int,
+    run_code: bool,
+) -> JsonDict:
+    """Score and aggregate in one pass. Kept for callers that don't need
+    the per-row breakdown (existing tests, direct CLI users).
+    """
+    scored = score_rows(rows, policy=policy, best_k=best_k, run_code=run_code)
+    return aggregate_scored_rows(scored, policy=policy, best_k=best_k)
 
 
 def load_environment_specs(path: Path) -> dict[str, JsonDict]:
@@ -366,16 +406,26 @@ def summarize_baselines(
 ) -> JsonDict:
     summary: JsonDict = {"best_k": best_k, "policies": list(policies), "environments": {}}
     for env_id, splits in rows_by_env.items():
-        env_summary = {"splits": {}, "aggregate": {}}
-        aggregate_rows = []
+        env_summary: JsonDict = {"splits": {}, "aggregate": {}}
+        # Cache per-(split, policy) scored rows so the aggregate metric reuses
+        # the same scores instead of re-running the verifier (which, for
+        # python_unit_tests, halves the number of subprocess forks).
+        scored_cache: dict[tuple[str, str], list[JsonDict]] = {}
         for split, rows in sorted(splits.items()):
-            aggregate_rows.extend(rows)
-            env_summary["splits"][split] = {
-                policy: evaluate_policy(rows, policy=policy, best_k=best_k, run_code=run_code) for policy in policies
-            }
-        env_summary["aggregate"] = {
-            policy: evaluate_policy(aggregate_rows, policy=policy, best_k=best_k, run_code=run_code) for policy in policies
-        }
+            env_summary["splits"][split] = {}
+            for policy in policies:
+                scored = score_rows(rows, policy=policy, best_k=best_k, run_code=run_code)
+                scored_cache[(split, policy)] = scored
+                env_summary["splits"][split][policy] = aggregate_scored_rows(
+                    scored, policy=policy, best_k=best_k
+                )
+        for policy in policies:
+            combined: list[JsonDict] = []
+            for split in sorted(splits):
+                combined.extend(scored_cache[(split, policy)])
+            env_summary["aggregate"][policy] = aggregate_scored_rows(
+                combined, policy=policy, best_k=best_k
+            )
         summary["environments"][env_id] = env_summary
     return summary
 
