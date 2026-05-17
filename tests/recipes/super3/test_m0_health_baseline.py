@@ -89,6 +89,60 @@ def test_policy_metrics_compute_pass_at_1_and_best_at_k() -> None:
     assert empty["failure_count"] == 2
 
 
+def test_resolve_min_rows_caps_floor_to_requested_count() -> None:
+    """Regression for review finding S6: small smoke runs must not auto-fail."""
+    from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline import resolve_min_rows
+
+    assert resolve_min_rows(25, split="train", requested_rows=None) == 25
+    assert resolve_min_rows(25, split="train", requested_rows={"max_train_per_dataset": 10}) == 10
+    assert resolve_min_rows(25, split="val", requested_rows={"max_val_per_dataset": 5}) == 5
+    # Requesting more than the spec floor doesn't raise the gate above the spec.
+    assert resolve_min_rows(25, split="train", requested_rows={"max_train_per_dataset": 100}) == 25
+    # Bad / unset values fall back to the spec floor.
+    assert resolve_min_rows(25, split="train", requested_rows={"max_train_per_dataset": None}) == 25
+    assert resolve_min_rows(25, split="train", requested_rows={"max_train_per_dataset": 0}) == 25
+
+
+def test_summarize_health_honors_requested_rows() -> None:
+    rows_by_env = {
+        "math_reasoning_numeric": {
+            "train": [
+                {
+                    "environment": "math_reasoning_numeric",
+                    "milestone": "M0",
+                    "use_stage": ["M0 data_env_foundation"],
+                    "question": "1+1?",
+                    "expected_answer": "2",
+                    "responses_create_params": {"input": [{"role": "user", "content": "1+1?"}]},
+                    "reward_config": {"verifier": "normalized_numeric_exact_match"},
+                    "metadata": {"source_dataset": "x", "license": "mit", "data_stage": "M0"},
+                }
+            ]
+        }
+    }
+    env_specs = {
+        "math_reasoning_numeric": {
+            "health_check": {
+                "min_rows_per_split": 25,
+                "required_fields": ["question", "expected_answer", "responses_create_params.input"],
+            }
+        }
+    }
+
+    # Without prep manifest hints the floor is the env spec → 1 row fails.
+    strict = summarize_health(rows_by_env, env_specs)
+    assert strict["environments"]["math_reasoning_numeric"]["splits"]["train"]["status"] == "fail"
+
+    # With a small requested count the floor moves down → 1 row passes.
+    relaxed = summarize_health(
+        rows_by_env, env_specs, requested_rows={"max_train_per_dataset": 1}
+    )
+    split = relaxed["environments"]["math_reasoning_numeric"]["splits"]["train"]
+    assert split["status"] == "pass"
+    assert split["min_rows"] == 1
+    assert split["spec_min_rows"] == 25
+
+
 def test_health_summary_checks_required_fields_and_min_rows(tmp_path: Path) -> None:
     del tmp_path
     rows_by_env = {

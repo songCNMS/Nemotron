@@ -238,23 +238,36 @@ def transform_gsm8k_numeric_reasoning(row: Mapping[str, Any], spec: Mapping[str,
 
 
 def parse_tool_calls(text: str) -> list[JsonDict]:
+    """Extract tool calls from a Hermes-style ``<tool_call>...</tool_call>`` block.
+
+    Returns OpenAI-style tool-call dicts. Every call carries a deterministic
+    ``id`` (``call_<index>``) so downstream chat templates can pair the
+    assistant ``tool_calls[].id`` with the matching ``tool`` message's
+    ``tool_call_id``.
+    """
     calls = []
-    for match in TOOL_CALL_RE.finditer(text):
+    for index, match in enumerate(TOOL_CALL_RE.finditer(text)):
         parsed = parse_json_maybe(match.group(1), default=None)
         if not isinstance(parsed, Mapping):
             continue
+        call_id = f"call_{index}"
         if "function" in parsed:
-            calls.append(dict(parsed))
+            call: JsonDict = {"type": "function", **dict(parsed)}
+            existing_id = parsed.get("id")
+            if isinstance(existing_id, str) and existing_id:
+                call["id"] = existing_id
+            else:
+                call["id"] = call_id
         else:
-            calls.append(
-                {
-                    "type": "function",
-                    "function": {
-                        "name": parsed.get("name"),
-                        "arguments": parsed.get("arguments", {}),
-                    },
-                }
-            )
+            call = {
+                "id": call_id,
+                "type": "function",
+                "function": {
+                    "name": parsed.get("name"),
+                    "arguments": parsed.get("arguments", {}),
+                },
+            }
+        calls.append(call)
     return calls
 
 
@@ -292,6 +305,10 @@ def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> 
     first_assistant_seen = False
     last_assistant_content = ""
     last_assistant_had_tool_calls = False
+    # Maps tool-result turns to the id of the assistant tool call they answer.
+    # Hermes interleaves <tool_call> blocks with tool-result turns one-for-one,
+    # so we consume call ids in arrival order.
+    pending_tool_call_ids: list[str] = []
 
     for turn in conversations:
         raw_role = str(turn.get("from") or turn.get("role") or "").strip()
@@ -309,6 +326,9 @@ def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> 
                     "tool_calls": tool_calls,
                 }
             )
+            pending_tool_call_ids.extend(
+                str(call.get("id")) for call in tool_calls if isinstance(call.get("id"), str)
+            )
             last_assistant_content = stripped
             last_assistant_had_tool_calls = bool(tool_calls)
             if not first_assistant_seen:
@@ -316,7 +336,11 @@ def convert_hermes_conversations(conversations: Iterable[Mapping[str, Any]]) -> 
                 expected_assistant_content = stripped
                 first_assistant_seen = True
         elif role == "tool":
-            expected_trajectory.append({"role": "tool", "content": content, "tool_calls": []})
+            tool_call_id = pending_tool_call_ids.pop(0) if pending_tool_call_ids else None
+            tool_turn: JsonDict = {"role": "tool", "content": content, "tool_calls": []}
+            if tool_call_id:
+                tool_turn["tool_call_id"] = tool_call_id
+            expected_trajectory.append(tool_turn)
         else:  # system / user
             if first_assistant_seen:
                 # Late system/user turn after the assistant has spoken — record in
@@ -403,11 +427,15 @@ def iter_hf_rows(
 
     use_split = split if split is not None else spec["hf_split"]
     use_config = spec.get("hf_config") if config is MISSING_CONFIG else config
-    kwargs = {
+    kwargs: JsonDict = {
         "split": use_split,
         "revision": spec["hf_revision"],
         "streaming": streaming,
     }
+    if spec.get("trust_remote_code"):
+        # Required for HF datasets that ship a custom loader script (e.g. hotpotqa);
+        # `datasets>=2.16` refuses to run those without an explicit opt-in.
+        kwargs["trust_remote_code"] = True
     if use_config:
         dataset = load_dataset(spec["hf_dataset"], use_config, **kwargs)
     else:
@@ -527,6 +555,10 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
         "output_dir": str(output_dir),
         "data_registry": str(args.data_registry),
         "environment_registry": str(args.environment_registry),
+        "requested_rows": {
+            "max_train_per_dataset": args.max_train_per_dataset,
+            "max_val_per_dataset": args.max_val_per_dataset,
+        },
         "datasets": [],
         "files": [],
         "errors": [],
