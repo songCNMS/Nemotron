@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -19,3 +19,9 @@
 测试：`PYTHONPATH=src pytest tests/recipes/super3/ -q` → 49 passed（task003 基线 45 + 新 4）。
 
 REVIEW_v0.md v3：#2 + N2 标 ✓ Fixed by PR #11。
+
+## Session 2 - 2026-05-17 - intern_nemontron_review_cc
+
+PR #11 已 squash-merge 为 `7e7b8f9`；远程 task004 分支删除。task004 结题。
+
+后续 follow-up 由 task006 (P1 #3 + N1, PR #12 merged `e16448f`) 与 task007 (P1 #4 #11 #14) 承接。

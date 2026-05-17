@@ -1,6 +1,6 @@
 # task006_m1_p1_fixes
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- METADATA:STATUS=Done,ASSIGNEE=intern_nemontron_review_cc -->
 
 ## 背景
 
