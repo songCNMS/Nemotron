@@ -277,17 +277,122 @@ ASSISTANT_BUILDERS = {
 }
 
 
-def m1_metadata(record: Mapping[str, Any], split: str) -> JsonDict:
+# Per-environment supervision targets, aligned with plan §8 v0 goals. Each
+# record only carries the capability tag for the env it actually exercises, so
+# downstream curriculum samplers can stratify by skill instead of treating
+# every record as covering all four areas.
+M1_USE_BY_ENV: dict[str, list[str]] = {
+    "search_grounded_qa": ["search pattern"],
+    "code_execution_python": ["code solution format", "structured output"],
+    "general_tool_calling": ["tool call syntax"],
+    "math_reasoning_numeric": ["reasoning answer format"],
+}
+
+
+def _m1_use_for_env(env_id: str) -> list[str]:
+    return list(M1_USE_BY_ENV.get(env_id, ["unknown"]))
+
+
+DIFFICULTY_UNKNOWN = "unknown"
+DIFFICULTY_TRIVIAL = "trivial"
+DIFFICULTY_HARD = "hard"
+
+
+def load_difficulty_signal(path: Path | None) -> dict[tuple[str, str, int], str]:
+    """Read M0 health_baseline_report.json into a per-row difficulty map.
+
+    plan §6 calls out difficulty curriculum / pass-rate filtering as a v0 → v1
+    lever. The oracle baseline is the only signal we have at SFT-prep time —
+    cheap, deterministic, and already produced by `run_m0_health_baseline.py`.
+
+    Mapping:
+      (env_id, split, row_index) → ``"trivial"`` when oracle passed,
+                                   ``"hard"`` when oracle failed.
+
+    Rows whose oracle bucket cannot be determined (no report, missing env,
+    truncated `failures` list capped at 20 by evaluate_policy) are left
+    unmapped; callers fall back to ``"unknown"`` for those.
+    """
+    if path is None or not path.is_file():
+        return {}
+    try:
+        with path.open(encoding="utf-8") as f:
+            report = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: dict[tuple[str, str, int], str] = {}
+    envs = report.get("baselines", {}).get("environments", {})
+    if not isinstance(envs, Mapping):
+        return out
+    for env_id, env_data in envs.items():
+        if not isinstance(env_data, Mapping):
+            continue
+        splits = env_data.get("splits")
+        if not isinstance(splits, Mapping):
+            continue
+        for split_name, policies in splits.items():
+            if not isinstance(policies, Mapping):
+                continue
+            oracle = policies.get("oracle")
+            if not isinstance(oracle, Mapping):
+                continue
+            scored_rows = int(oracle.get("scored_rows") or 0)
+            if scored_rows <= 0:
+                continue
+            failures = oracle.get("failures") or []
+            failure_count = int(oracle.get("failure_count") or 0)
+            failed_indices: set[int] = set()
+            for failure in failures:
+                if not isinstance(failure, Mapping):
+                    continue
+                row_idx = failure.get("row_index")
+                if isinstance(row_idx, int):
+                    failed_indices.add(row_idx)
+            # `evaluate_policy` caps `failures` at the first 20 rows. Only mark
+            # rows trivial when we know we have every failed index — otherwise
+            # they stay unmapped (caller renders as "unknown").
+            all_failures_listed = len(failed_indices) >= failure_count
+            total_rows = int(oracle.get("rows") or 0)
+            for idx in range(total_rows):
+                if idx in failed_indices:
+                    out[(str(env_id), str(split_name), idx)] = DIFFICULTY_HARD
+                elif all_failures_listed:
+                    out[(str(env_id), str(split_name), idx)] = DIFFICULTY_TRIVIAL
+    return out
+
+
+def _difficulty_for(
+    record: Mapping[str, Any],
+    *,
+    split: str,
+    row_index: int | None,
+    difficulty_signal: Mapping[tuple[str, str, int], str] | None,
+) -> str:
+    if difficulty_signal is None or row_index is None:
+        return DIFFICULTY_UNKNOWN
+    env_id = str(record.get("environment", ""))
+    # M1 maps M0 val split to its own "val_shadow" tag; difficulty_signal is
+    # keyed by M0 split names (`train` / `val`), so use those for lookup.
+    m0_split = "val" if split == "val_shadow" else split
+    return difficulty_signal.get((env_id, m0_split, row_index), DIFFICULTY_UNKNOWN)
+
+
+def m1_metadata(
+    record: Mapping[str, Any],
+    split: str,
+    *,
+    row_index: int | None = None,
+    difficulty_signal: Mapping[tuple[str, str, int], str] | None = None,
+) -> JsonDict:
     source_metadata = record.get("metadata", {})
+    env_id = str(record.get("environment", ""))
     return {
         "m1_stage": "Agentic SFT v0",
         "m1_milestone": MILESTONE,
-        "m1_use": [
-            "tool call syntax",
-            "search grounded answer format",
-            "code solution format",
-            "reasoning answer format",
-        ],
+        "m1_use": _m1_use_for_env(env_id),
+        "difficulty_bucket": _difficulty_for(
+            record, split=split, row_index=row_index, difficulty_signal=difficulty_signal
+        ),
         "m0_environment": record.get("environment"),
         "m0_split": split,
         "m0_source_dataset": source_metadata.get("source_dataset"),
@@ -302,7 +407,13 @@ def m1_metadata(record: Mapping[str, Any], split: str) -> JsonDict:
     }
 
 
-def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
+def convert_m0_record(
+    record: Mapping[str, Any],
+    *,
+    split: str,
+    row_index: int | None = None,
+    difficulty_signal: Mapping[tuple[str, str, int], str] | None = None,
+) -> JsonDict:
     environment = record.get("environment")
     environment_id = str(environment)
     if environment_id == "general_tool_calling":
@@ -321,7 +432,7 @@ def convert_m0_record(record: Mapping[str, Any], *, split: str) -> JsonDict:
         "messages": messages,
         "tools": tools,
         "used_in": ["super3", USED_IN_TAG, "m1_agentic_sft_v0"],
-        "metadata": m1_metadata(record, split),
+        "metadata": m1_metadata(record, split, row_index=row_index, difficulty_signal=difficulty_signal),
     }
     return output
 
@@ -370,6 +481,7 @@ def convert_split(
     *,
     split: str,
     max_records_per_env: int | None,
+    difficulty_signal: Mapping[tuple[str, str, int], str] | None = None,
 ) -> tuple[list[JsonDict], list[JsonDict]]:
     converted = []
     errors = []
@@ -383,7 +495,14 @@ def convert_split(
             rows = rows[:max_records_per_env]
         for row_index, record in enumerate(rows):
             try:
-                converted.append(convert_m0_record(record, split=split))
+                converted.append(
+                    convert_m0_record(
+                        record,
+                        split=split,
+                        row_index=row_index,
+                        difficulty_signal=difficulty_signal,
+                    )
+                )
             except Exception as exc:  # noqa: BLE001 - keep conversion running and report row-level issues.
                 errors.append(
                     {
@@ -414,6 +533,14 @@ def count_by_environment(rows: Sequence[Mapping[str, Any]]) -> dict[str, int]:
     for row in rows:
         env = row.get("metadata", {}).get("m0_environment", "unknown")
         counts[str(env)] += 1
+    return dict(sorted(counts.items()))
+
+
+def count_difficulty_buckets(rows: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for row in rows:
+        bucket = row.get("metadata", {}).get("difficulty_bucket", DIFFICULTY_UNKNOWN)
+        counts[str(bucket)] += 1
     return dict(sorted(counts.items()))
 
 
@@ -464,15 +591,26 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     if not files_by_env:
         raise ValueError(f"no M0 split files found under {args.m0_input_dir}")
 
+    health_baseline_path = args.m0_health_baseline
+    if health_baseline_path is None:
+        # Default to the path run_m0_health_baseline.py writes when --output-dir
+        # is left at its default.
+        candidate = args.m0_input_dir / "health_baseline" / "health_baseline_report.json"
+        if candidate.is_file():
+            health_baseline_path = candidate
+    difficulty_signal = load_difficulty_signal(health_baseline_path)
+
     train_rows, train_errors = convert_split(
         files_by_env,
         split="train",
         max_records_per_env=args.max_records_per_env,
+        difficulty_signal=difficulty_signal,
     )
     val_rows, val_errors = convert_split(
         files_by_env,
         split="val",
         max_records_per_env=args.max_val_shadow_per_env,
+        difficulty_signal=difficulty_signal,
     )
 
     train_path = args.output_dir / "agentic_sft_v0_train.jsonl"
@@ -493,9 +631,14 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "train_path": str(train_path),
         "val_shadow_path": str(val_shadow_path),
         "blend_path": str(blend_path),
+        "m0_health_baseline": str(health_baseline_path) if health_baseline_path else None,
         "counts": {
             "train": count_by_environment(train_rows),
             "val_shadow": count_by_environment(val_rows),
+        },
+        "difficulty_buckets": {
+            "train": count_difficulty_buckets(train_rows),
+            "val_shadow": count_difficulty_buckets(val_rows),
         },
         "errors": [*train_errors, *val_errors],
     }
@@ -508,6 +651,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--m0-input-dir", type=Path, default=DEFAULT_M0_INPUT_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--m0-health-baseline",
+        type=Path,
+        default=None,
+        help=(
+            "Path to run_m0_health_baseline.py's health_baseline_report.json. "
+            "Used to populate metadata.difficulty_bucket and "
+            "manifest.difficulty_buckets. Defaults to "
+            "<m0_input_dir>/health_baseline/health_baseline_report.json when present."
+        ),
+    )
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-shadow-per-env", type=int, default=None)
     parser.add_argument("--overwrite", action="store_true")
