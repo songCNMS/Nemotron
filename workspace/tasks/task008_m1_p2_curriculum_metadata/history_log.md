@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -20,3 +20,9 @@
 测试：`PYTHONPATH=src pytest tests/recipes/super3/ -q` → 62 passed + 1 skipped（task007 基线 56 + 新 6）。
 
 REVIEW_v0.md v6：#7 / #10 ✓ Fixed by PR #14。整体进度 9 fixed / 1 partial / 9 open / 2 tracked。
+
+## Session 2 - 2026-05-17 - intern_nemontron_review_cc
+
+PR #14 已 squash-merge 为 `6d45fe0`；远程 task008 分支删除。task008 结题。
+
+剩余 P3 长尾 + N3 由 task009 承接：#12 used_in lineage / #13 system prompt 文档 / #17 train_iters 注释 / #18 smoke_runtime silent warning / #19 tiny_model silent fallback / #20 user `<tool_call>` 清洗 / #24 cleanup_stale README / N3 hotpotqa trust_remote_code 文档。
