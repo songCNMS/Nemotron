@@ -488,6 +488,24 @@ def reset_target_files(paths: Sequence[Path]) -> None:
             path.write_text("", encoding="utf-8")
 
 
+def stale_split_files(output_dir: Path, active_paths: Sequence[Path]) -> list[Path]:
+    if not output_dir.exists():
+        return []
+    active = {path.resolve() for path in active_paths if path.name.endswith("-split.jsonl")}
+    return sorted(
+        path
+        for path in output_dir.glob("*/*-split.jsonl")
+        if path.resolve() not in active
+    )
+
+
+def cleanup_stale_split_files(output_dir: Path, active_paths: Sequence[Path]) -> list[Path]:
+    stale_paths = stale_split_files(output_dir, active_paths)
+    for path in stale_paths:
+        path.unlink()
+    return stale_paths
+
+
 def prepare_assets(args: argparse.Namespace) -> JsonDict:
     data_registry = load_yaml(args.data_registry)
     env_registry = load_yaml(args.environment_registry)
@@ -496,7 +514,10 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
 
     output_dir = args.output_dir
     paths = target_files(output_dir, specs)
-    check_overwrite(paths, args.overwrite)
+    stale_paths = stale_split_files(output_dir, paths)
+    check_overwrite([*paths, *stale_paths], args.overwrite)
+    if args.overwrite:
+        cleanup_stale_split_files(output_dir, paths)
     reset_target_files(paths)
 
     manifest: JsonDict = {

@@ -66,6 +66,25 @@ uv run nemotron super3 data prep sft [options]
 | `--sample N` | Limit rows per dataset (for testing) |
 | `--force` | Force re-run, ignoring cache |
 
+### M1 Agentic SFT v0 Entry
+
+M1 adds a narrow Agentic SFT v0 entry that converts the public M0
+search/coding/tool-calling/reasoning JSONL into OpenAI chat/tool SFT records.
+Generate the local blend first:
+
+```bash
+python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
+  --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
+  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516
+```
+
+Then run the existing packed SFT pipeline with the generated blend:
+
+```bash
+uv run nemotron super3 data prep sft -c agentic_v0 \
+  blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
+```
+
 ### Input
 
 OpenAI chat format datasets defined in `config/data_prep/data_blend_raw.json`:
