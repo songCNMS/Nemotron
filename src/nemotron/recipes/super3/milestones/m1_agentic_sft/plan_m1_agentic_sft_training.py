@@ -260,9 +260,49 @@ def ensure_inputs(
         raise FileNotFoundError(f"tokenizer model does not exist: {tokenizer_model}")
 
 
+def ensure_batch_geometry(
+    *,
+    global_batch_size: int,
+    micro_batch_size: int,
+    gpus_per_node: int,
+    nodes: int,
+) -> None:
+    """Refuse plans that would crash Megatron's GBS / DP×MBS check at setup.
+
+    Megatron-Core requires ``global_batch_size`` to be a positive multiple of
+    ``data_parallel_size * micro_batch_size``. The planner does not surface
+    tensor- or pipeline-parallel flags, so DP collapses to
+    ``gpus_per_node * nodes`` here — this is a necessary, not sufficient, check
+    (a downstream config that adds TP/PP will only ever shrink DP further).
+    """
+    if global_batch_size <= 0:
+        raise ValueError(f"global_batch_size must be positive, got {global_batch_size}")
+    if micro_batch_size <= 0:
+        raise ValueError(f"micro_batch_size must be positive, got {micro_batch_size}")
+    if gpus_per_node <= 0 or nodes <= 0:
+        raise ValueError(
+            f"gpus_per_node and nodes must be positive, got gpus_per_node={gpus_per_node}, nodes={nodes}"
+        )
+    dp_size = gpus_per_node * nodes
+    step_size = dp_size * micro_batch_size
+    if global_batch_size % step_size != 0:
+        raise ValueError(
+            f"global_batch_size={global_batch_size} must be a positive multiple of "
+            f"data_parallel_size * micro_batch_size = {dp_size} * {micro_batch_size} = {step_size}; "
+            f"set --global-batch-size to {step_size} or another multiple of {step_size}, "
+            f"or lower --gpus-per-node / --nodes"
+        )
+
+
 def build_plan(args: argparse.Namespace) -> JsonDict:
     if args.packed_sft_dir is None:
         raise ValueError("--packed-sft-dir is required")
+    ensure_batch_geometry(
+        global_batch_size=args.global_batch_size,
+        micro_batch_size=args.micro_batch_size,
+        gpus_per_node=args.gpus_per_node,
+        nodes=args.nodes,
+    )
     repo_dir = args.repo_dir if args.repo_dir is not None else Path.cwd()
     packed_sft_dir = normalize_packed_sft_dir(args.packed_sft_dir)
     metadata_path = metadata_path_for(packed_sft_dir)
@@ -377,7 +417,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--epochs", type=float, default=1.0)
     parser.add_argument("--train-iters", type=int, default=None)
     parser.add_argument("--fallback-train-iters", type=int, default=1700)
-    parser.add_argument("--global-batch-size", type=int, default=4)
+    parser.add_argument("--global-batch-size", type=int, default=8)
     parser.add_argument("--micro-batch-size", type=int, default=1)
     parser.add_argument("--seq-length", type=int, default=4096)
     parser.add_argument("--save-interval", type=int, default=20)

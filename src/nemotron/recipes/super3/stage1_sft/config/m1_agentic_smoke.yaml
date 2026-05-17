@@ -45,9 +45,12 @@ checkpoint:
   save: ${oc.env:SUPER3_M1_SFT_SMOKE_SAVE,../output/super3/m1_agentic_sft_smoke/checkpoints}
   load: null
   save_interval: 1
-  # Omit the default so OmegaConf raises clearly when the env var is unset.
-  # `${oc.env:VAR,null}` would yield the literal string "null".
-  pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT}
+  # Smoke runs with finetune=false train from random init, so no pretrain
+  # checkpoint is involved. Use a literal YAML null — `${oc.env:VAR,null}` would
+  # yield the literal string "null", and the env-var-only form `${oc.env:VAR}`
+  # would raise MissingMandatoryValue when train.py:367 logs the field even
+  # though finetune=false means it's unused downstream.
+  pretrained_checkpoint: null
   finetune: false
 
 convert_to_hf:
