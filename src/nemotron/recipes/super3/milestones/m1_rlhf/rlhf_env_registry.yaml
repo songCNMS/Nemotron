@@ -1,0 +1,63 @@
+schema_version: 1
+milestone: M1
+description: |
+  Declarative registry for the M1 RLHF stage. Source of truth:
+  `stage2_rl/stage3_rlhf/config/default.yaml::nemo_gym.config_paths`, which
+  loads two env configs:
+
+    - resources_servers/genrm_compare/configs/genrm_compare.yaml
+    - resources_servers/single_step_tool_use_with_argument_comparison/
+        configs/single_step_tool_use_with_argument_comparison.yaml
+
+  The first env is the GenRM preference judge (uses
+  `nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603` as default judge model;
+  pref-pair comparison + circular aggregator). The second env enforces
+  tool-call validity per plan §5.6: the policy must keep emitting
+  well-formed tool calls during preference optimisation, so a parallel
+  schema-match verifier rides alongside the GenRM judge.
+
+  Statuses match the m1_rlvr / m1_swe1 / m1_swe2 registries:
+    - `active`
+    - `m0_missing`
+    - `verifier_mismatch`
+    - `blocked_external`
+
+  Preference data candidates live in ``rlhf_pref_data_registry.yaml``;
+  the bridge consults it to populate `coverage.pref_dataset_breakdown`
+  and (Session 2+) to wire active rows to a concrete HF source.
+
+envs:
+  - nemo_gym_env: genrm_compare
+    mix: rlhf
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: genrm_compare (preference judge, circular aggregator)
+    pref_dataset_candidate: helpsteer2
+    license: cc-by-4.0
+    status: blocked_external
+    notes: |
+      Blocked twofold: (1) needs M0 RLHF prompt set + paired preference
+      labels (task018 Session 2 lands the HelpSteer-2 / UltraFeedback
+      converter); (2) GenRM judge model server
+      (`nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`, router_dp_size=8,
+      TP=8) deployment is cluster-ops work. Both can land independently;
+      whichever finishes second flips the row to `active`.
+
+  - nemo_gym_env: single_step_tool_use_with_argument_comparison
+    mix: rlhf
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: argument_match (RLHF parallel validity check)
+    pref_dataset_candidate: null
+    license: apache-2.0
+    status: m0_missing
+    notes: |
+      Same env name RLVR1 (rlvr1 mix) maps `general_tool_calling` →
+      `single_step_tool_use_with_argument_comparison` for; RLHF wires
+      the same env as a *parallel validity check* during preference
+      optimisation per plan §5.6. Today we cannot just route the rlvr1
+      Hermes singleturn rows here because RLHF wants tool-call rows that
+      are paired with the preference prompts (so the schema check runs
+      on the same prompts the GenRM judge sees). M0 SFT supervision
+      already has compatible tool-call data, but the pairing harness
+      needs design — Session 2 territory.

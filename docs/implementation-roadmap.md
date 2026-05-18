@@ -170,12 +170,30 @@ Missing the runtime stack:
 exists. Missing the judge service + preference data:
 
 **task018_m1_rlhf_genrm_service** —
-- GenRM router deployment for `genrm_compare` env (plan §5.6) — separate
-  inference service, configurable model.
-- Preference data: HelpSteer-2, UltraFeedback, or similar; license + revision
-  pin in the M1 registry.
-- KL penalty 1e-4 path verified end-to-end (reference policy = SWE2
-  checkpoint).
+- ✓ Session 1: RLHF bridge skeleton (4th registry-driven bridge copy) +
+  preference-data candidate registry + KL invariant pytest. New module
+  `src/nemotron/recipes/super3/milestones/m1_rlhf/` with
+  `rlhf_env_registry.yaml` (two NeMo-Gym envs declared:
+  `genrm_compare` and `single_step_tool_use_with_argument_comparison`
+  per `stage3_rlhf/config/default.yaml`),
+  `rlhf_pref_data_registry.yaml` (HelpSteer-2 / UltraFeedback / Orca
+  DPO pairs declared with license + revision pin requirement),
+  `prepare_m1_rlhf_jsonl.py` (registry-driven; coverage block adds
+  `pref_dataset_breakdown` + `known_pref_candidates`; today active=0
+  → coverage-aware error). `tests/recipes/super3/test_rlhf_kl_invariants.py`
+  reads `default.yaml` and asserts plan §5.6 KL trio
+  (`reference_policy_kl_penalty == 1e-4`, `kl_type == "k3"`,
+  `use_kl_in_reward == false`) — regression gate before any cluster run.
+- ☐ Session 2: M0 RLHF data converter for the picked preference source
+  (default candidate: HelpSteer-2). Lands an M0 env + transformer
+  producing `chosen/rejected` pairs + tool-call validity pairing
+  harness. Flips the relevant `rlhf_env_registry.yaml` row to `active`.
+- ☐ Session 3: GenRM judge model deployment (cluster ops — separate
+  inference service running `nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`
+  at router_dp_size=8 / TP=8). Blocked external.
+- ☐ Session 4: End-to-end RLHF smoke run from SWE2 checkpoint with the
+  GenRM judge live; verify KL penalty applies; verify tool-call
+  validity still passes per plan §5.6 note.
 - **Acceptance:** single-prompt RLHF rollout returns judge reward; KL penalty
   applied; tool-call-validity check still passes per plan §5.6 note.
 
@@ -406,7 +424,11 @@ Critical path to the M1 promotion gate, single-track execution:
    2 (OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog)
    / Session 3 (cluster smoke + Docker fallback) / Session 4
    (`_bridge_base.py` extraction) still to go.
-8. **task018** — M1 RLHF GenRM service.
+8. **task018** — M1 RLHF GenRM service. Session 1 landed (RLHF bridge
+   skeleton with two-env registry + preference-data candidate registry
+   + KL invariant pytest reading `default.yaml`); Session 2 (HelpSteer-2
+   M0 converter) / Session 3 (GenRM judge model deployment) / Session 4
+   (end-to-end smoke from SWE2 checkpoint) still to go.
 
 Then in parallel:
 9. **task019** + **task020** — M1 eval basket (can start once task014 has a
