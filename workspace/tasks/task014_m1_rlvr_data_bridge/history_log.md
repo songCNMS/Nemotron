@@ -46,3 +46,14 @@ Session 2 (RLVR1 smoke launcher) 不在本 PR：要动
 `stage1_rlvr/config/data_prep/rlvr1.yaml` 让 input_path 指 M0 artifact，
 加 `config/smoke.yaml`，并跑通真 launch path——后者需要集群 + NeMo-Gym
 servers，sandbox 验证不了，等接到 NemTron cluster 再开。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #34 已 squash-merge 为 `4a50941` 进 main —
+`prepare_m1_rlvr_jsonl.py` + RLVR1_ENV_MAP + 9 个新 pytest case + lineage
+都进了 main。intern status 回 Idle (Session 22)。task014 整 task 仍
+InProgress：Session 2 (RLVR1 config wiring + `nemotron super3 rl rlvr1
+-c smoke` launcher) 没启动，要 NemTron cluster 跑真 launch path 才能
+acceptance。下一个 critical-path 候选 (roadmap §5)：task015 (RLVR 21-env
+mix) 或 task016 (M1 SWE1 pivot data)。
+
