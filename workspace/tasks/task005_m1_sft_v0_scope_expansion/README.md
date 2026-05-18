@@ -100,6 +100,11 @@ M0 health gate 已稳定，task003 / task004 把 M1 现有 4 个 env 的 correct
 - [ ] `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §8 中 v0 的 6 项覆盖面，在 `README.md`（M0 + M1）中有对应表格说明。
 - [ ] 末尾的 SFT 数据 blend 在 `prepare_m1_agentic_sft` manifest.counts 中按环境分桶展示。
 
+## Session 2 round-trip 进展
+
+- PR #19 merge 后，新增 CPU-friendly `run_m1_sft_roundtrip_smoke.py`，在没有 `cosmos_xenna` / `transformers` 的工作区也能先检查 M1 JSONL → Nano3 chat render → assistant loss mask → packed parquet → read-back schema。
+- repair-negative 数据已改成单个 user turn，并在 prompt 中转义无效 artifact 的 XML 标签，避免 data-prep validator 把负例误判成裸 `<tool_call>` 样本。
+
 ## 参考文件
 
 - `src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py`

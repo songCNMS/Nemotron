@@ -317,6 +317,10 @@ def test_hermes_tool_call_repair_negative_synthesizes_repair_target() -> None:
     assert record["metadata"]["repair_target"][0]["function"]["name"] == "lookup"
     assert record["extra_env_info"]["repair_target"][0]["function"]["arguments"] == {"query": "weather"}
     assert record["responses_create_params"]["tools"][0]["function"]["name"] == "lookup"
+    assert record["extra_env_info"]["invalid_artifact"].startswith("<tool_call>")
+    assert "&lt;tool_call&gt;" in record["extra_env_info"]["prompt_invalid_artifact"]
+    assert "<tool_call>" not in record["responses_create_params"]["input"][-1]["content"]
+    assert [message["role"] for message in record["responses_create_params"]["input"]] == ["system", "user"]
 
 
 def test_hermes_converter_captures_multi_turn_trajectory() -> None:

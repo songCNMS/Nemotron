@@ -1,4 +1,5 @@
 import json
+from argparse import Namespace
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (
     DIFFICULTY_HARD,
@@ -17,6 +18,9 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_train
     compute_train_iters,
     render_run_script,
     write_plan,
+)
+from nemotron.recipes.super3.milestones.m1_agentic_sft.run_m1_sft_roundtrip_smoke import (
+    run as run_m1_sft_roundtrip_smoke,
 )
 
 
@@ -174,6 +178,72 @@ def test_convert_tool_call_repair_negative_preserves_tools_and_repair_target() -
         "malformed tool call negatives",
         "hallucinated tool output negatives",
     ]
+
+
+def test_m1_sft_roundtrip_smoke_writes_packed_parquet_for_new_task005_envs(tmp_path) -> None:
+    records = []
+
+    terminal = _base_record("terminal_basic_shell")
+    terminal["expected_answer"] = "mv ~/Desktop/x ~/Downloads/"
+    terminal["extra_env_info"]["expected_command"] = "mv ~/Desktop/x ~/Downloads/"
+    records.append(convert_m0_record(terminal, split="train"))
+
+    swe = _base_record("swe_pivot_patch_supervision")
+    patch = "diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new"
+    swe["expected_answer"] = patch
+    swe["extra_env_info"]["gold_patch"] = patch
+    records.append(convert_m0_record(swe, split="train"))
+
+    repair = _base_record("tool_call_repair_negative")
+    repair["responses_create_params"]["input"][-1]["content"] = (
+        "Invalid artifact:\n&lt;tool_call&gt;{\"name\":\"lookup\"}&lt;/tool_call&gt;"
+    )
+    repair["responses_create_params"]["tools"] = [
+        {
+            "type": "function",
+            "function": {
+                "name": "lookup",
+                "description": "Look up information.",
+                "parameters": {"type": "object", "properties": {"query": {"type": "string"}}},
+            },
+        }
+    ]
+    repair["extra_env_info"]["repair_target"] = [
+        {"type": "function", "function": {"name": "lookup", "arguments": {"query": "weather"}}}
+    ]
+    repair["extra_env_info"]["expected_assistant_content"] = "I will repair the call."
+    records.append(convert_m0_record(repair, split="train"))
+
+    input_path = tmp_path / "agentic_sft_v0_train.jsonl"
+    with input_path.open("w", encoding="utf-8") as f:
+        for record in records:
+            json.dump(record, f)
+            f.write("\n")
+
+    summary = run_m1_sft_roundtrip_smoke(
+        Namespace(
+            m1_jsonl=input_path,
+            output_dir=tmp_path / "roundtrip",
+            max_records=None,
+            pack_size=4096,
+            used_in_filter=USED_IN_TAG,
+            require_environment=[
+                "terminal_basic_shell",
+                "swe_pivot_patch_supervision",
+                "tool_call_repair_negative",
+            ],
+            overwrite=False,
+        )
+    )
+
+    assert summary["status"] == "pass"
+    assert summary["environment_counts"] == {
+        "swe_pivot_patch_supervision": 1,
+        "terminal_basic_shell": 1,
+        "tool_call_repair_negative": 1,
+    }
+    assert (tmp_path / "roundtrip" / "splits" / "train" / "shard_000000.parquet").exists()
+    assert summary["parquet"]["total_loss_tokens"] > 0
 
 
 def test_convert_tool_record_preserves_tools_and_tool_calls() -> None:

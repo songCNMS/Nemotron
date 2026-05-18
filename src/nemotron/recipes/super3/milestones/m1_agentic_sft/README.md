@@ -28,6 +28,22 @@ uv run nemotron super3 data prep sft -c agentic_v0 \
   blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 
+For CPU workspaces that do not have the full Xenna runtime and HuggingFace
+tokenizer stack installed, run the lightweight round-trip smoke first. It uses
+the same M1 JSONL contract and Nano3 chat template, a deterministic local
+tokenizer, and writes a packed Parquet shard that is read back for schema and
+loss-mask checks:
+
+```bash
+python src/nemotron/recipes/super3/milestones/m1_agentic_sft/run_m1_sft_roundtrip_smoke.py \
+  --m1-jsonl /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/agentic_sft_v0_train.jsonl \
+  --output-dir /tmp/nemotron-m1-agentic-sft-roundtrip \
+  --require-environment terminal_basic_shell \
+  --require-environment swe_pivot_patch_supervision \
+  --require-environment tool_call_repair_negative \
+  --overwrite
+```
+
 After data prep writes packed `splits/`, generate a reproducible training
 plan and launch script:
 

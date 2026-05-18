@@ -32,7 +32,9 @@ SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
-    "structured_outputs_json": "You are a structured-output assistant. Return only valid JSON that matches the schema.",
+    "structured_outputs_json": (
+        "You are a structured-output assistant. Return only valid JSON that matches the schema."
+    ),
     "terminal_basic_shell": "You are a terminal assistant. Return a safe shell command only.",
     "swe_pivot_patch_supervision": "You are a software engineering assistant. Return a unified diff patch only.",
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
@@ -576,6 +578,16 @@ def hallucinated_tool_output_artifact(call: Mapping[str, Any]) -> str:
     return f"<tool_output>{json.dumps(fake_output, ensure_ascii=False)}</tool_output>"
 
 
+def escape_tool_markup_for_prompt(text: str) -> str:
+    """Keep invalid tool markup as quoted text, not as raw chat-template syntax."""
+    return (
+        text.replace("<tool_call>", "&lt;tool_call&gt;")
+        .replace("</tool_call>", "&lt;/tool_call&gt;")
+        .replace("<tool_output>", "&lt;tool_output&gt;")
+        .replace("</tool_output>", "&lt;/tool_output&gt;")
+    )
+
+
 def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     base_spec = dict(spec)
     base_spec["environment"] = "general_tool_calling"
@@ -593,23 +605,23 @@ def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Map
     else:
         bad_artifact = hallucinated_tool_output_artifact(first_call)
         repair_message = "The previous tool output was hallucinated. I will issue the valid tool call instead."
+    prompt_artifact = escape_tool_markup_for_prompt(bad_artifact)
 
-    base_prompt_messages = [
-        message
+    base_prompt_parts = [
+        str(message.get("content") or "").strip()
         for message in base_record["responses_create_params"].get("input", [])
-        if isinstance(message, Mapping) and message.get("role") != "system"
+        if isinstance(message, Mapping) and message.get("role") == "user" and str(message.get("content") or "").strip()
     ]
+    base_prompt = "\n\n".join(base_prompt_parts)
+    repair_instruction = (
+        "A previous assistant produced the invalid tool-use artifact below. "
+        "Identify that it is invalid and repair it using the available tool schema.\n\n"
+        f"Invalid artifact:\n{prompt_artifact}"
+    )
+    user_content = f"{base_prompt}\n\n{repair_instruction}" if base_prompt else repair_instruction
     input_messages = [
         {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
-        *base_prompt_messages,
-        {
-            "role": "user",
-            "content": (
-                "A previous assistant produced the invalid tool-use artifact below. "
-                "Identify that it is invalid and repair it using the available tool schema.\n\n"
-                f"Invalid artifact:\n{bad_artifact}"
-            ),
-        },
+        {"role": "user", "content": user_content},
     ]
     expected_answer = {
         "repair_message": repair_message,
@@ -630,6 +642,7 @@ def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Map
         extra_env_info={
             "negative_kind": negative_kind,
             "invalid_artifact": bad_artifact,
+            "prompt_invalid_artifact": prompt_artifact,
             "repair_target": repair_target,
             "expected_assistant_content": repair_message,
             "source_expected_trajectory": base_record["extra_env_info"].get("expected_trajectory", []),
