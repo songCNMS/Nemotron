@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import re
 import sys
 from collections import defaultdict
@@ -16,6 +17,8 @@ from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_M0_INPUT_DIR: Path | None = None
 DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0")
@@ -339,16 +342,41 @@ def load_difficulty_signal(path: Path | None) -> dict[tuple[str, str, int], str]
     truncated `failures` list capped at 20 by evaluate_policy) are left
     unmapped; callers fall back to ``"unknown"`` for those.
     """
-    if path is None or not path.is_file():
+    if path is None:
+        return {}
+    if not path.is_file():
+        logger.warning(
+            "M0 health baseline report not found at %s; every M1 SFT row will be tagged difficulty=unknown",
+            path,
+        )
         return {}
     try:
         with path.open(encoding="utf-8") as f:
             report = json.load(f)
-    except (OSError, json.JSONDecodeError):
+    except (OSError, json.JSONDecodeError) as exc:
+        # Silent failure here used to hide bad / truncated baseline files: every
+        # row would be tagged difficulty=unknown with no signal to the operator.
+        # Surface the underlying error so the misconfiguration is visible.
+        logger.warning(
+            "M0 health baseline at %s could not be parsed (%s: %s); falling back to difficulty=unknown",
+            path,
+            type(exc).__name__,
+            exc,
+        )
         return {}
     out: dict[tuple[str, str, int], str] = {}
+    if not isinstance(report, Mapping):
+        logger.warning(
+            "M0 health baseline at %s did not contain a JSON object; falling back to difficulty=unknown",
+            path,
+        )
+        return out
     envs = report.get("baselines", {}).get("environments", {})
     if not isinstance(envs, Mapping):
+        logger.warning(
+            "M0 health baseline at %s has no `baselines.environments` mapping; falling back to difficulty=unknown",
+            path,
+        )
         return out
     for env_id, env_data in envs.items():
         if not isinstance(env_data, Mapping):
@@ -397,10 +425,11 @@ def _difficulty_for(
     if difficulty_signal is None or row_index is None:
         return DIFFICULTY_UNKNOWN
     env_id = str(record.get("environment", ""))
-    # M1 maps M0 val split to its own "val_shadow" tag; difficulty_signal is
-    # keyed by M0 split names (`train` / `val`), so use those for lookup.
-    m0_split = "val" if split == "val_shadow" else split
-    return difficulty_signal.get((env_id, m0_split, row_index), DIFFICULTY_UNKNOWN)
+    # `difficulty_signal` is keyed by M0 split names (`train` / `val`). The
+    # converter passes the M0 split verbatim (`"train"` or `"val"`); the
+    # `"val_shadow"` tag is applied later when summarizing into the manifest,
+    # so we never look up by `"val_shadow"` here.
+    return difficulty_signal.get((env_id, split, row_index), DIFFICULTY_UNKNOWN)
 
 
 def m1_metadata(
@@ -600,6 +629,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         f"- M0 input directory: `{manifest['m0_input_dir']}`",
         f"- Output directory: `{manifest['output_dir']}`",
         f"- Training blend: `{manifest['blend_path']}`",
+        f"- M0 health baseline: `{manifest.get('m0_health_baseline') or '(none — every row tagged difficulty=unknown)'}`",
         "",
         "## Counts",
         "",
@@ -609,6 +639,26 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
     for split in ("train", "val_shadow"):
         for environment, count in manifest["counts"][split].items():
             lines.append(f"| {split} | {environment} | {count} |")
+    difficulty_buckets = manifest.get("difficulty_buckets") or {}
+    if difficulty_buckets:
+        lines.extend(
+            [
+                "",
+                "## Difficulty buckets",
+                "",
+                "Derived from `oracle` policy in the M0 health-baseline report. "
+                "`trivial` = oracle passed, `hard` = oracle failed, `unknown` = "
+                "no signal (no report, oracle skipped, or truncated failures list).",
+                "",
+                "| Split | Bucket | Rows |",
+                "|---|---|---:|",
+            ]
+        )
+        for split in ("train", "val_shadow"):
+            buckets = difficulty_buckets.get(split) or {}
+            for bucket in (DIFFICULTY_TRIVIAL, DIFFICULTY_HARD, DIFFICULTY_UNKNOWN):
+                if bucket in buckets:
+                    lines.append(f"| {split} | {bucket} | {buckets[bucket]} |")
     if manifest["errors"]:
         lines.extend(["", "## Errors", ""])
         for error in manifest["errors"]:

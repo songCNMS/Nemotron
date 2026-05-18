@@ -382,9 +382,13 @@ def test_build_plan_uses_batch_geometry_guard(tmp_path) -> None:
 
 def test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env(monkeypatch) -> None:
     """Regression for review finding N2: smoke yaml used to raise MissingMandatoryValue."""
+    import pytest
     from pathlib import Path
 
-    from omegaconf import OmegaConf
+    # omegaconf is a megatron-bridge / nemo_runspec dep; skip gracefully when
+    # the test env doesn't have it (matches the cosmos_xenna / megatron.bridge
+    # skip gates elsewhere in this file).
+    OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 
     monkeypatch.delenv("SUPER3_M1_PRETRAINED_CHECKPOINT", raising=False)
     cfg = OmegaConf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml"))
@@ -403,6 +407,10 @@ def test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env(monkey
 def test_qwen_local_train_requires_env_var(monkeypatch) -> None:
     """Regression for review finding N1: hardcoded lei.song default removed."""
     import pytest
+
+    # qwen_local_train top-imports omegaconf; skip cleanly when it's absent
+    # rather than failing collection.
+    pytest.importorskip("omegaconf")
     from nemotron.recipes.super3.stage1_sft.qwen_local_train import (
         QWEN_MODEL_ENV_VAR,
         resolve_qwen_hf_model,
@@ -414,6 +422,9 @@ def test_qwen_local_train_requires_env_var(monkeypatch) -> None:
 
 
 def test_qwen_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
+    import pytest
+
+    pytest.importorskip("omegaconf")
     from nemotron.recipes.super3.stage1_sft.qwen_local_train import (
         QWEN_MODEL_ENV_VAR,
         resolve_qwen_hf_model,
@@ -647,6 +658,153 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
     assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
     assert (Args.output_dir / "unit" / "training_manifest.json").exists()
     assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
+
+
+def test_build_plan_derives_train_iters_from_packed_rows(tmp_path, monkeypatch) -> None:
+    """Regression for review finding #21: derived-rows path through summarize_split was uncovered.
+
+    The existing happy-path test fixes ``train_iters`` explicitly, so the
+    ``packed_train_rows × epochs / global_batch_size`` derivation in
+    ``compute_train_iters`` never executes from ``build_plan``. Monkeypatch
+    ``maybe_count_parquet_rows`` to return a known row count so the chain
+    ``summarize_split → compute_train_iters → manifest.training.train_iters``
+    is exercised end-to-end.
+    """
+    from nemotron.recipes.super3.milestones.m1_agentic_sft import plan_m1_agentic_sft_training as planner
+
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid", "test"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"placeholder")
+    tokenizer_dir = tmp_path / "tokenizer"
+    tokenizer_dir.mkdir()
+    checkpoint_dir = tmp_path / "checkpoint"
+    checkpoint_dir.mkdir()
+    metadata = {"type": "SFTDataArtifact", "tokenizer_uri": f"file://{tokenizer_dir}"}
+    with (splits_dir / "metadata.json").open("w", encoding="utf-8") as f:
+        json.dump(metadata, f)
+
+    # 240 rows × 2 epochs / GBS 16 = ceil(30) = 30
+    monkeypatch.setattr(planner, "maybe_count_parquet_rows", lambda paths: 240)
+
+    class Args:
+        packed_sft_dir = packed_root
+        pretrained_checkpoint = checkpoint_dir
+        tokenizer_model = None
+        save_dir = tmp_path / "save"
+        output_dir = tmp_path / "plans"
+        run_name = "derived"
+        repo_dir = tmp_path / "repo"
+        script_path = "src/nemotron/recipes/super3/stage1_sft/train.py"
+        config_path = "src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"
+        venv = None
+        nodes = 1
+        gpus_per_node = 8
+        epochs = 2.0
+        train_iters = None  # <-- the path under test
+        fallback_train_iters = 999
+        global_batch_size = 16
+        micro_batch_size = 1
+        seq_length = 4096
+        save_interval = 5
+        allow_missing_checkpoint = False
+
+    manifest = planner.build_plan(Args())
+
+    assert manifest["splits"]["train"]["rows"] == 240
+    # ceil(240 * 2.0 / 16) = 30 (not the 999 fallback)
+    assert manifest["training"]["train_iters"] == 30
+
+
+def test_load_difficulty_signal_warns_on_corrupt_report(tmp_path, caplog) -> None:
+    """Silent failure on a bad report used to leave every row tagged 'unknown'
+    with no operator-visible signal. Surface the parse error via a warning."""
+    bad_path = tmp_path / "health_baseline_report.json"
+    bad_path.write_text("{not valid json", encoding="utf-8")
+
+    with caplog.at_level("WARNING"):
+        signal = load_difficulty_signal(bad_path)
+
+    assert signal == {}
+    warnings = [r.message for r in caplog.records if r.levelname == "WARNING"]
+    assert any("could not be parsed" in m and "JSONDecodeError" in m for m in warnings)
+
+
+def test_load_difficulty_signal_warns_when_report_missing_environments_mapping(tmp_path, caplog) -> None:
+    """A health-baseline file with the wrong shape used to silently return {}."""
+    weird = tmp_path / "health_baseline_report.json"
+    weird.write_text(json.dumps({"baselines": {"environments": "not a dict"}}), encoding="utf-8")
+
+    with caplog.at_level("WARNING"):
+        signal = load_difficulty_signal(weird)
+
+    assert signal == {}
+    warnings = [r.message for r in caplog.records if r.levelname == "WARNING"]
+    assert any("no `baselines.environments` mapping" in m for m in warnings)
+
+
+def test_prepare_report_md_lists_difficulty_buckets(tmp_path) -> None:
+    """The report.md used to only render counts; difficulty_buckets stayed in
+    manifest.json. Surface it so operators don't have to spelunk JSON."""
+    m0_root = tmp_path / "m0"
+    env_dir = m0_root / "math_reasoning_numeric"
+    env_dir.mkdir(parents=True)
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = "Solve.\n#### 42"
+    for split in ("train", "val"):
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            json.dump(record, f)
+            f.write("\n")
+    # Provide a minimal health baseline so at least one row gets tagged trivial.
+    health_dir = m0_root / "health_baseline"
+    health_dir.mkdir()
+    report = {
+        "baselines": {
+            "environments": {
+                "math_reasoning_numeric": {
+                    "splits": {
+                        "train": {
+                            "oracle": {
+                                "rows": 1,
+                                "scored_rows": 1,
+                                "failure_count": 0,
+                                "failures": [],
+                            }
+                        },
+                        "val": {
+                            "oracle": {
+                                "rows": 1,
+                                "scored_rows": 1,
+                                "failure_count": 0,
+                                "failures": [],
+                            }
+                        },
+                    }
+                }
+            }
+        }
+    }
+    with (health_dir / "health_baseline_report.json").open("w", encoding="utf-8") as f:
+        json.dump(report, f)
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None  # exercise the auto-resolve path
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+
+    manifest = prepare(Args())
+
+    assert manifest["difficulty_buckets"]["train"] == {"trivial": 1}
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Difficulty buckets" in report_md
+    assert "| train | trivial | 1 |" in report_md
+    assert "M0 health baseline" in report_md
 
 
 def test_m1_use_is_scoped_per_environment() -> None:
