@@ -1,6 +1,7 @@
 # task017_m1_swe2_sandbox_runtime
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #40 / e9adcba on 2026-05-18 -->
 
 ## 背景
 
