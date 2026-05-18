@@ -59,3 +59,14 @@ Roadmap §1.5 task017 + §5 critical-path 加 Session 1 ✓ + Session 2/3/4 ☐ 
 
 Session 2+ 不在本 PR：OpenHands wrapper / Docker / cluster / bridge base
 抽取都要其他依赖。这次只把数据/基础设施层 sandbox 部分铺好。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #40 已 squash-merge 为 `e9adcba` 进 main — m1_swe2 模块 +
+SIF registry/resolver + env registry + 第三份 bridge copy + 19 个 pytest
+case 都进了 main。intern status 回 Idle (Session 28)。task017 整 task 仍
+InProgress：Session 2 (OpenHands wrapper + SWE-Gym converter + sandbox
+watchdog) / Session 3 (cluster smoke + Docker fallback) / Session 4
+(`_bridge_base.py` 抽取) 没启动。下一个 critical-path 候选 (roadmap §5)：
+task018 (M1 RLHF GenRM service)。
+
