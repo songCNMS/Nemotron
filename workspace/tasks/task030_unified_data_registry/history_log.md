@@ -51,3 +51,16 @@ Session 2+ 不在本 PR:
 - task019 / task020 落地后加 eval_basket_registry kind + index row
 - Pre-commit / pre-PR hook 自动跑 `validate_unified_index()`
 - 把 8 个 module-local loader 接进 schema 层 (merge 两层校验逻辑)
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #48 已 squash-merge 为 `ec1b271` 进 main — data_registries
+模块 + schema 层 + 索引 + 3 个 inventory walk + 19 个 pytest case 都进
+了 main。intern status 回 Idle (Session 36)。task030 整 task 仍
+InProgress：Session 2 (eval basket registry + schema enforcement +
+module-local loader merge) 未启动。
+
+下一个候选：之前 task 的 Session 2+ 大都需 cluster/Docker。Sandbox-
+runnable 候选：task019/020 (eval basket — 但 block on task014 Session 2
+真 RLVR checkpoint)。
+
