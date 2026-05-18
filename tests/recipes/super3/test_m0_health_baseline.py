@@ -23,6 +23,8 @@ from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline impor
     score_tool_call,
     summarize_baselines,
     summarize_health,
+    summarize_telemetry,
+    telemetry_gap,
 )
 
 
@@ -367,4 +369,146 @@ def test_score_rows_and_aggregate_match_evaluate_policy() -> None:
     aggregated = aggregate_scored_rows(scored, policy="oracle", best_k=2)
     direct = evaluate_policy(rows, policy="oracle", best_k=2, run_code=False)
 
+    # task021 Session 1: telemetry block now carries per-scorer timing,
+    # which is non-deterministic between two runs. Compare everything
+    # else verbatim and just check that telemetry shows up for both
+    # paths with the same keys.
+    aggregated_telemetry = aggregated.pop("telemetry", {})
+    direct_telemetry = direct.pop("telemetry", {})
+    assert set(aggregated_telemetry.keys()) == set(direct_telemetry.keys())
     assert aggregated == direct
+
+
+def test_score_record_emits_latency_for_every_verifier() -> None:
+    """task021 Session 1: every supported verifier path threads its scoring
+    through a `time.perf_counter()` wrap so the diagnostics dict always
+    carries a `latency_ms` field."""
+    cases = [
+        ({"expected_answer": "answer", "reward_config": {"verifier": "normalized_exact_or_contains"}}, "answer"),
+        ({"expected_answer": "42", "reward_config": {"verifier": "normalized_numeric_exact_match"}}, "42"),
+        ({"expected_answer": '{"a":1}', "reward_config": {"verifier": "json_value_exact_match"}}, '{"a":1}'),
+        ({"expected_answer": "ls -la", "reward_config": {"verifier": "command_substring_match"}}, "ls -la"),
+        (
+            {"expected_answer": "diff --git a b\n--- a\n+++ b\n", "reward_config": {"verifier": "patch_diff_match"}},
+            "diff --git a b\n--- a\n+++ b\n",
+        ),
+        (
+            {
+                "expected_answer": [{"type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}],
+                "reward_config": {"verifier": "tool_schema_and_argument_match"},
+                "extra_env_info": {"expected_tool_calls": []},
+            },
+            [{"type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}],
+        ),
+    ]
+    for record, candidate in cases:
+        score, detail = score_record(candidate, record)
+        assert score == 1.0, f"oracle for {record['reward_config']['verifier']} expected 1.0, got {score}"
+        assert "latency_ms" in detail
+        assert isinstance(detail["latency_ms"], float)
+        assert detail["latency_ms"] >= 0.0
+
+
+def test_score_record_emits_tool_specific_telemetry() -> None:
+    """tool_schema_and_argument_match emits `invalid_tool_call` +
+    `argument_match` (both False/True at oracle time)."""
+    record = {
+        "expected_answer": [
+            {"type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}
+        ],
+        "reward_config": {"verifier": "tool_schema_and_argument_match"},
+        "extra_env_info": {"expected_tool_calls": []},
+    }
+
+    # Oracle: same list → argument_match True, invalid_tool_call False
+    score_ok, detail_ok = score_record(record["expected_answer"], record)
+    assert score_ok == 1.0
+    assert detail_ok["invalid_tool_call"] is False
+    assert detail_ok["argument_match"] is True
+
+    # Format drift: string candidate → invalid_tool_call True
+    score_bad, detail_bad = score_record("not a list", record)
+    assert score_bad == 0.0
+    assert detail_bad["invalid_tool_call"] is True
+    assert detail_bad["argument_match"] is False
+
+
+def test_score_record_emits_numeric_malformed_flag() -> None:
+    """normalized_numeric_exact_match emits `malformed_final_answer`
+    True when the candidate has no digit-bearing token."""
+    record = {"expected_answer": "42", "reward_config": {"verifier": "normalized_numeric_exact_match"}}
+
+    _, detail_clean = score_record("42", record)
+    assert detail_clean["malformed_final_answer"] is False
+    assert detail_clean["normalized_answer"] == "42"
+
+    _, detail_bad = score_record("no number here", record)
+    assert detail_bad["malformed_final_answer"] is True
+
+
+def test_summarize_telemetry_coerces_kinds() -> None:
+    """numeric vs bool vs other are each summarized with appropriate shape."""
+    summary = summarize_telemetry(
+        [
+            {"latency_ms": 1.0, "invalid_tool_call": False, "normalized_answer": "hello"},
+            {"latency_ms": 2.0, "invalid_tool_call": True, "normalized_answer": "hi"},
+            {"latency_ms": 3.0, "invalid_tool_call": False, "normalized_answer": "hello"},
+        ]
+    )
+
+    assert summary["latency_ms"]["kind"] == "numeric"
+    assert summary["latency_ms"]["min"] == 1.0
+    assert summary["latency_ms"]["max"] == 3.0
+    assert summary["latency_ms"]["mean"] == 2.0
+
+    assert summary["invalid_tool_call"]["kind"] == "bool"
+    assert summary["invalid_tool_call"]["true_count"] == 1
+    assert summary["invalid_tool_call"]["false_count"] == 2
+
+    assert summary["normalized_answer"]["kind"] == "other"
+    assert summary["normalized_answer"]["distinct_count"] == 2
+
+
+def test_telemetry_gap_flags_declared_but_unemitted_names() -> None:
+    """env_registry telemetry declarations that aren't backed by any
+    scorer emitter land in `telemetry_gap`. `reward` is always treated as
+    derivable from the score and never counted as a gap."""
+    declared = ["reward", "latency_ms", "invalid_tool_call", "overlong"]
+    emitted = {"latency_ms": {}, "invalid_tool_call": {}}
+
+    assert telemetry_gap(declared, emitted) == ["overlong"]
+
+
+def test_summarize_baselines_attaches_telemetry_gap_per_env() -> None:
+    """summarize_baselines runs the gap cross-check using env_specs and
+    surfaces the result in the per-env aggregate block."""
+    rows_by_env = {
+        "math_reasoning_numeric": {
+            "train": [
+                {"expected_answer": "1", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+                {"expected_answer": "2", "reward_config": {"verifier": "normalized_numeric_exact_match"}},
+            ],
+        }
+    }
+    env_specs = {
+        "math_reasoning_numeric": {
+            "telemetry": ["reward", "normalized_answer", "latency_ms", "malformed_final_answer", "overlong"],
+        }
+    }
+
+    summary = summarize_baselines(
+        rows_by_env,
+        policies=["oracle"],
+        best_k=1,
+        run_code=False,
+        env_specs=env_specs,
+    )
+    aggregate = summary["environments"]["math_reasoning_numeric"]["aggregate"]["oracle"]
+
+    # All four scorer-emitted names show up; `overlong` is the only one
+    # gap-listed (no emitter wires it at M0 baseline time).
+    assert "latency_ms" in aggregate["telemetry"]
+    assert "normalized_answer" in aggregate["telemetry"]
+    assert "malformed_final_answer" in aggregate["telemetry"]
+    assert aggregate["telemetry_gap"] == ["overlong"]
+    assert aggregate["declared_telemetry"] == env_specs["math_reasoning_numeric"]["telemetry"]
