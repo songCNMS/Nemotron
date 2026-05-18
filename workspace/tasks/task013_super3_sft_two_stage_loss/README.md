@@ -1,6 +1,7 @@
 # task013_super3_sft_two_stage_loss
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #44 / 10e1393 on 2026-05-18 -->
 
 ## 背景
 
