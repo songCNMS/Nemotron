@@ -12,6 +12,7 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     target_files,
     transform_gsm8k_numeric_reasoning,
     transform_hermes_function_calling,
+    transform_hermes_json_mode,
     transform_hotpotqa_search,
     transform_mbpp_code_execution,
     validate_registries,
@@ -38,6 +39,7 @@ def test_registries_are_consistent() -> None:
         "search",
         "coding",
         "general_tool_calling",
+        "structured_output",
         "reasoning",
     }
     for dataset in data_registry["datasets"]:
@@ -209,6 +211,35 @@ def test_data_registry_pins_explicit_hf_config_for_hermes() -> None:
 
     assert hermes["hf_config"] == "func_calling_singleturn"
     assert hermes["hf_config"] is not None
+
+
+def test_hermes_json_mode_transform_extracts_structured_answer_and_schema() -> None:
+    row = {
+        "id": "json-1",
+        "conversations": [
+            {
+                "from": "system",
+                "value": (
+                    "You are a helpful assistant that answers in JSON.\n"
+                    "<schema>{\"type\":\"object\",\"required\":[\"city\"]}</schema>"
+                ),
+            },
+            {"from": "human", "value": "Return the city as JSON."},
+            {"from": "gpt", "value": "{\"city\":\"Paris\",\"country\":\"France\"}"},
+        ],
+        "schema": "{\"type\":\"object\",\"required\":[\"city\"]}",
+        "category": "travel",
+        "subcategory": "city",
+    }
+
+    record = transform_hermes_json_mode(row, _spec("m0_structured_outputs_hermes_json"))
+
+    assert record["environment"] == "structured_outputs_json"
+    assert record["expected_answer"] == '{"city": "Paris", "country": "France"}'
+    assert record["extra_env_info"]["expected_json"] == {"city": "Paris", "country": "France"}
+    assert record["extra_env_info"]["schema"]["required"] == ["city"]
+    assert record["reward_config"]["verifier"] == "json_value_exact_match"
+    assert record["responses_create_params"]["input"][-1]["role"] == "user"
 
 
 def test_hermes_converter_captures_multi_turn_trajectory() -> None:

@@ -31,6 +31,7 @@ SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
+    "structured_outputs_json": "You are a structured-output assistant. Return only valid JSON that matches the schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
 }
 
@@ -405,10 +406,75 @@ def transform_hermes_function_calling(row: Mapping[str, Any], spec: Mapping[str,
     )
 
 
+def transform_hermes_json_mode(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    conversations = row.get("conversations") or []
+    if not isinstance(conversations, list):
+        conversations = []
+
+    input_messages: list[JsonDict] = []
+    expected_json: Any = None
+    expected_json_text = ""
+    first_assistant_seen = False
+    question = ""
+
+    for turn in conversations:
+        if not isinstance(turn, Mapping):
+            continue
+        raw_role = str(turn.get("from") or turn.get("role") or "").strip()
+        role = HERMES_ROLE_MAP.get(raw_role)
+        if role is None:
+            continue
+        content = str(turn.get("value") or turn.get("content") or "")
+        if role == "assistant":
+            if first_assistant_seen:
+                continue
+            expected_json = parse_json_maybe(content, default=None)
+            if not isinstance(expected_json, (Mapping, list)):
+                raise ValueError("hermes json-mode row has no parseable JSON assistant answer")
+            expected_json_text = json.dumps(expected_json, ensure_ascii=False)
+            first_assistant_seen = True
+        elif role in {"system", "user"} and not first_assistant_seen:
+            input_messages.append({"role": role, "content": content})
+            if role == "user":
+                question = content
+
+    if not any(message["role"] == "system" for message in input_messages):
+        input_messages.insert(0, {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]})
+    if not question:
+        question = next((message["content"] for message in input_messages if message["role"] == "user"), "")
+    if expected_json is None:
+        raise ValueError("hermes json-mode row has no assistant answer")
+
+    schema = parse_json_maybe(row.get("schema"), default={})
+    if not isinstance(schema, Mapping):
+        schema = {}
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=expected_json_text,
+        input_messages=input_messages,
+        reward_config={
+            "verifier": "json_value_exact_match",
+            "max_score": 1.0,
+            "match": ["json_structure", "json_values"],
+            "allow_extra_text": False,
+        },
+        extra_env_info={
+            "schema": dict(schema),
+            "expected_json": expected_json,
+            "category": row.get("category"),
+            "subcategory": row.get("subcategory"),
+        },
+    )
+
+
 CONVERTERS = {
     "hotpotqa_search": transform_hotpotqa_search,
     "mbpp_code_execution": transform_mbpp_code_execution,
     "hermes_function_calling": transform_hermes_function_calling,
+    "hermes_json_mode": transform_hermes_json_mode,
     "gsm8k_numeric_reasoning": transform_gsm8k_numeric_reasoning,
 }
 

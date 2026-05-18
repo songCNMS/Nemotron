@@ -232,6 +232,20 @@ def _strip_gsm8k_marker(text: str) -> str:
     return _GSM8K_MARKER_RE.sub("", text)
 
 
+def assistant_for_structured_output(record: Mapping[str, Any]) -> JsonDict:
+    expected = record.get("expected_answer", "")
+    if not str(expected).strip():
+        expected = record.get("extra_env_info", {}).get("expected_json", "")
+    if isinstance(expected, str):
+        try:
+            expected = json.loads(expected)
+        except json.JSONDecodeError:
+            return {"role": "assistant", "content": expected.strip()}
+    if isinstance(expected, (Mapping, list)):
+        return {"role": "assistant", "content": json.dumps(expected, ensure_ascii=False)}
+    return {"role": "assistant", "content": str(expected).strip()}
+
+
 def assistant_for_tool_calling(record: Mapping[str, Any]) -> JsonDict:
     extra = record.get("extra_env_info", {})
     expected_calls = extra.get("expected_tool_calls") or record.get("expected_answer") or []
@@ -302,6 +316,7 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
 ASSISTANT_BUILDERS = {
     "search_grounded_qa": assistant_for_search,
     "code_execution_python": assistant_for_code,
+    "structured_outputs_json": assistant_for_structured_output,
     "math_reasoning_numeric": assistant_for_reasoning,
 }
 
@@ -314,6 +329,7 @@ M1_USE_BY_ENV: dict[str, list[str]] = {
     "search_grounded_qa": ["search pattern"],
     "code_execution_python": ["code solution format", "structured output"],
     "general_tool_calling": ["tool call syntax"],
+    "structured_outputs_json": ["structured output"],
     "math_reasoning_numeric": ["reasoning answer format"],
 }
 
@@ -446,6 +462,8 @@ def m1_metadata(
     # see which M0 stages this row was tagged for, even after we overwrite the
     # top-level `used_in` with the M1-specific tags.
     m0_use_stage = record.get("used_in")
+    if not isinstance(m0_use_stage, list):
+        m0_use_stage = record.get("use_stage")
     if not isinstance(m0_use_stage, list):
         m0_use_stage = []
     return {

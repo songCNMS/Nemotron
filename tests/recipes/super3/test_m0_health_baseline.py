@@ -13,6 +13,7 @@ from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline impor
     normalize_text_answer,
     overall_status,
     run_python_unit_tests,
+    score_json_value,
     score_record,
     score_rows,
     score_text,
@@ -59,6 +60,18 @@ def test_tool_call_verifier_matches_name_and_arguments() -> None:
 
     assert score == 1.0
     assert score_record([{"type": "function", "function": {"name": "lookup", "arguments": {"query": "y"}}}], record)[0] == 0.0
+
+
+def test_json_value_verifier_matches_parsed_json_exactly() -> None:
+    record = {
+        "expected_answer": "{\"city\":\"Paris\",\"population\":2148000}",
+        "reward_config": {"verifier": "json_value_exact_match"},
+    }
+
+    assert score_json_value('{"city": "Paris", "population": 2148000}', record["expected_answer"]) == 1.0
+    assert score_record({"city": "Paris", "population": 2148000}, record)[0] == 1.0
+    assert score_record('{"city": "Paris"}', record)[0] == 0.0
+    assert score_record("The answer is {\"city\":\"Paris\",\"population\":2148000}", record)[0] == 0.0
 
 
 def test_python_unit_test_verifier_runs_reference_code() -> None:

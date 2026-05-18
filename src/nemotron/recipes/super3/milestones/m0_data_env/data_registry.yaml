@@ -1,6 +1,6 @@
 schema_version: 1
 milestone: M0
-description: Public M0 data registry for search, coding, general tool calling, and reasoning smoke sets.
+description: Public M0 data registry for search, coding, general tool calling, structured output, and reasoning smoke sets.
 datasets:
   - id: m0_search_hotpotqa
     environment: search_grounded_qa
@@ -94,6 +94,36 @@ datasets:
       id: id
       conversations: conversations
       tools: tools
+      category: category
+      subcategory: subcategory
+
+  - id: m0_structured_outputs_hermes_json
+    environment: structured_outputs_json
+    domain: structured_output
+    hf_dataset: NousResearch/hermes-function-calling-v1
+    hf_config: json_mode_singleturn
+    hf_split: train
+    # Same source/revision/license family as the function-calling subset above.
+    # The dataset only ships a train split for this config, so val rows use the
+    # sequential-slice fallback and manifest warning.
+    hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
+    source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
+    license: apache-2.0
+    converter: hermes_json_mode
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: mixed
+    reward_type: json_value_exact_match
+    contamination: decontaminate against structured-output, JSON-mode, BFCL, and tool-use heldouts
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 structured output
+      - M1 RLVR structured output smoke
+      - M2 tool-use expansion
+    fields:
+      id: id
+      conversations: conversations
+      schema: schema
       category: category
       subcategory: subcategory
 

@@ -29,7 +29,7 @@ records. Plan §8 v0 lists six capability targets. Coverage today:
 |---|---|---|---|
 | tool call syntax | ✓ | — | `general_tool_calling` env, Hermes singleturn |
 | search pattern | ✓ | — | `search_grounded_qa`, grounded template added in PR #13 |
-| structured output | ✗ | env, converter | candidate source: hermes `json_mode_singleturn` config (same license/revision as the tool-calling source) |
+| structured output | ◐ | env, converter, M1 SFT builder landed for Hermes `json_mode_singleturn`; scale data not regenerated in repo | same license/revision as the tool-calling source |
 | terminal basics | ✗ | env, converter, source | candidate sources: agent-flan / orca-agentinstruct shell subset; license audit needed |
 | short SWE traces | ✗ | env, converter | candidate: SWE-Bench_Lite issue + gold patch (no sandbox at SFT stage) |
 | malformed tool / hallucinated tool output negatives | ✗ | synthesis path | derive from `func_calling_singleturn`; tag `metadata.negative_kind` + `metadata.repair_target` for downstream RL repair |
