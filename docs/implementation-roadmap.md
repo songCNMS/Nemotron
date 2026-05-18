@@ -147,19 +147,34 @@ wired to NeMo Evaluator.
 
 ### 1.8 M1 infra — required before scaling
 
-Per plan §10 M1 infra list (everything downstream depends on this):
+Per plan §10 M1 infra list (everything downstream depends on this).
+Sliced into four Sessions; tracker lives at
+`workspace/tasks/task021_m1_infra_minimum/README.md`:
 
 **task021_m1_infra_minimum** —
-- Verify NeMo-RL / Ray / vLLM / NeMo-Gym launch path on a real cluster
-  (currently all configs are paper-only).
-- SIF/Docker/Podman sandbox container build script for code-exec, Lean,
-  terminal.
-- W&B artifact lineage:
+- ✗ Session 4: verify NeMo-RL / Ray / vLLM / NeMo-Gym launch path on a
+  real cluster (currently all configs are paper-only). Needs NemTron
+  access; unsandbox-runnable.
+- ✗ Session 3: SIF/Docker/Podman sandbox container build script for
+  code-exec, Lean, terminal.
+- ✗ Session 2: W&B artifact lineage —
   `RawDataArtifact → SFTDataArtifact → ModelArtifact-sft → RLVR{1,2,3}` →
-  `SWE{1,2} → RLHF → EvalReport`.
-- Per-env telemetry emitter (reward, latency, timeout, crash,
-  invalid_tool_call, overlong); the env_registry lists these names today
-  but no emitter exists.
+  `SWE{1,2} → RLHF → EvalReport`. Schema + manifest field
+  sandbox-runnable; W&B publish needs runtime credentials.
+- ✓ Session 1: per-env telemetry emitter for the M0 oracle health-
+  baseline path. `run_m0_health_baseline.py` now threads each scorer
+  through a `time.perf_counter()` wrap and emits per-verifier
+  telemetry (`latency_ms` everywhere; `invalid_tool_call` /
+  `argument_match` / `malformed_final_answer` / `timeout` /
+  `runtime_error` / `command_match` / `patch_match` / `repair_target_match`
+  per verifier). `summarize_baselines` cross-checks
+  env_registry's declared `telemetry: [...]` list against what scorers
+  actually emit and surfaces the diff as `telemetry_gap` so the
+  registry stops "lying". Aggregate block summarizes per-row values
+  (numeric → min/mean/max, bool → true/false counts, other → distinct).
+  Sandbox-runnable; the shape is the contract that the future
+  stage2_rl runtime emitter (Session 2+) plugs into without schema
+  changes.
 
 ---
 
@@ -306,7 +321,9 @@ Critical path to the M1 promotion gate, single-track execution:
    structured / short SWE / negatives).
 2. ~~**task012** — Super3 chat template~~ *(landed; REVIEW #8 closed)*.
 3. **task021** — M1 infra minimum (lineage + telemetry; everything downstream
-   depends on this).
+   depends on this). Session 1 landed (per-env telemetry emitter for the M0
+   oracle baseline); Session 2-4 (lineage, sandbox containers, cluster verify)
+   still to go.
 4. **task014** — M1 RLVR data bridge (smoke-run-able from M0 in one day).
 5. **task015** — M1 RLVR full 21-env mix.
 6. **task016** — M1 SWE1 pivot data.

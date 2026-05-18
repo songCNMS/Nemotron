@@ -14,6 +14,7 @@ import string
 import subprocess
 import sys
 import tempfile
+import time
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
@@ -261,28 +262,103 @@ def run_python_unit_tests(candidate: Any, record: Mapping[str, Any], timeout_s: 
 
 
 def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = True) -> tuple[float | None, JsonDict]:
+    """Score a row and emit per-verifier telemetry alongside the diagnostic dict.
+
+    Telemetry names align with the `telemetry:` list each env declares in
+    `environment_registry.yaml`; the M0 baseline is the first emitter
+    (task021 Session 1). The shape stays compatible — telemetry rides
+    inside the returned diagnostic dict — so existing callers and
+    fixtures keep working unchanged.
+
+    The scorer call itself is timed (`latency_ms`); the verifier-specific
+    code below adds bool / numeric signals that are derivable at oracle
+    time. Values that need a real model rollout (`overlong`,
+    `malformed_thinking`, `crash`, etc.) are intentionally absent here
+    and will be filled in by the future stage2_rl runtime emitter.
+    """
     verifier = record.get("reward_config", {}).get("verifier")
     expected = record.get("expected_answer")
+    if verifier == "python_unit_tests" and not run_code:
+        return None, {"skipped": "code execution disabled"}
+
+    t0 = time.perf_counter()
+    score: float | None
+    diagnostics: JsonDict
     if verifier == "normalized_exact_or_contains":
-        return score_text(candidate, expected), {}
-    if verifier == "normalized_numeric_exact_match":
-        return score_numeric(candidate, expected), {}
-    if verifier == "json_value_exact_match":
-        return score_json_value(candidate, expected), {}
-    if verifier == "command_substring_match":
-        return score_command(candidate, expected), {}
-    if verifier == "patch_diff_match":
-        return score_patch(candidate, expected), {}
-    if verifier == "negative_recognition":
-        return score_negative_recognition(candidate, expected, record), {}
-    if verifier == "tool_schema_and_argument_match":
-        return score_tool_call(candidate, expected, record), {}
-    if verifier == "python_unit_tests":
-        if not run_code:
-            return None, {"skipped": "code execution disabled"}
+        score = score_text(candidate, expected)
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(candidate),
+        }
+    elif verifier == "normalized_numeric_exact_match":
+        normalized_candidate = normalize_numeric_candidate(candidate)
+        score = score_numeric(candidate, expected)
+        diagnostics = {
+            "normalized_answer": normalized_candidate,
+            # No digit-bearing token in the candidate → the answer wasn't
+            # parseable as a number. Trivially False at oracle time
+            # (oracle always carries the cleaned numeric).
+            "malformed_final_answer": not bool(NUMBER_RE.search(str(candidate))),
+        }
+    elif verifier == "json_value_exact_match":
+        parsed = parse_json_strict(candidate)
+        score = score_json_value(candidate, expected)
+        diagnostics = {
+            "json_parse_error": parsed is MISSING,
+            "exact_value_match": bool(score == 1.0),
+        }
+    elif verifier == "command_substring_match":
+        score = score_command(candidate, expected)
+        diagnostics = {"command_match": bool(score == 1.0)}
+    elif verifier == "patch_diff_match":
+        normalized_candidate = normalize_patch_text(candidate)
+        score = score_patch(candidate, expected)
+        diagnostics = {
+            "patch_match": bool(score == 1.0),
+            # A "diff" without the `diff --git` / `---`/`+++` headers is
+            # malformed. Trivially False at oracle time.
+            "malformed_diff": (
+                bool(normalized_candidate)
+                and "diff --git" not in normalized_candidate
+                and "---" not in normalized_candidate
+            ),
+        }
+    elif verifier == "negative_recognition":
+        score = score_negative_recognition(candidate, expected, record)
+        diagnostics = {
+            "repair_target_match": bool(score == 1.0),
+            # Oracle replays the repair target → never invalid here.
+            "invalid_tool_call": False,
+        }
+    elif verifier == "tool_schema_and_argument_match":
+        score = score_tool_call(candidate, expected, record)
+        # The verifier returns 0.0 either when the candidate isn't a valid
+        # tool-call structure OR when args don't match. Distinguish the
+        # two so the dashboard can separate format-drift from semantic
+        # disagreement.
+        candidate_calls = candidate
+        if isinstance(candidate, str):
+            candidate_calls = parse_json_maybe(candidate, default=candidate)
+        diagnostics = {
+            "invalid_tool_call": not isinstance(candidate_calls, list),
+            "argument_match": bool(score == 1.0),
+        }
+    elif verifier == "python_unit_tests":
         timeout_s = int(record.get("reward_config", {}).get("timeout_s", 30))
-        return run_python_unit_tests(candidate, record, timeout_s=timeout_s)
-    return 0.0, {"error": f"unsupported verifier: {verifier}"}
+        score, raw = run_python_unit_tests(candidate, record, timeout_s=timeout_s)
+        diagnostics = dict(raw)
+        diagnostics.setdefault("timeout", diagnostics.get("error") == "timeout")
+        # `returncode != 0` covers both syntax errors and assertion failures
+        # in the candidate solution. Treat `timeout` separately for clarity.
+        rc = diagnostics.get("returncode")
+        diagnostics.setdefault(
+            "runtime_error",
+            bool(rc is not None and rc != 0) and not diagnostics["timeout"],
+        )
+    else:
+        return 0.0, {"error": f"unsupported verifier: {verifier}"}
+
+    diagnostics["latency_ms"] = (time.perf_counter() - t0) * 1000.0
+    return score, diagnostics
 
 
 def oracle_candidate(record: Mapping[str, Any]) -> Any:
@@ -356,6 +432,7 @@ def aggregate_scored_rows(
     scored_rows = 0
     threshold = 1.0
 
+    per_row_telemetry: list[JsonDict] = []
     for entry in scored:
         scores = entry["scores"]
         if not scores:
@@ -368,6 +445,14 @@ def aggregate_scored_rows(
         best_at_k += int(best_score >= threshold)
         total_score_at_1 += first_score
         total_best_score_at_k += best_score
+        # Collect telemetry from the first scored candidate's diagnostics
+        # so the aggregate reflects pass@1-style behavior. Skipped entries
+        # contribute nothing.
+        diagnostics_list = entry.get("diagnostics") or []
+        if diagnostics_list:
+            first_diag = diagnostics_list[0]
+            if isinstance(first_diag, Mapping):
+                per_row_telemetry.append(dict(first_diag))
         if best_score < threshold:
             metadata = entry["metadata"]
             errors.append(
@@ -392,9 +477,82 @@ def aggregate_scored_rows(
         f"best_at_{best_k}": best_at_k / denominator,
         "mean_score_at_1": total_score_at_1 / denominator,
         f"mean_best_score_at_{best_k}": total_best_score_at_k / denominator,
+        "telemetry": summarize_telemetry(per_row_telemetry),
         "failures": errors[:20],
         "failure_count": len(errors),
     }
+
+
+# Telemetry-summary helpers. Designed so that environment_registry.yaml's
+# `telemetry:` list (declaration) and the actual emitted keys (collected
+# from `score_record` per-verifier diagnostics) can be cross-checked.
+# `reward` is always derivable from the score and is included even if no
+# verifier branch emits it explicitly — keep this name handy because
+# every env declares it.
+
+
+def summarize_telemetry(per_row: Sequence[Mapping[str, Any]]) -> JsonDict:
+    """Aggregate per-row telemetry into a per-key summary.
+
+    Coercion rules:
+    - All-bool field → ``{"kind": "bool", "true_count", "false_count", "rows"}``
+    - All-numeric field → ``{"kind": "numeric", "min", "max", "mean", "rows"}``
+    - Mixed / other → ``{"kind": "other", "distinct_count", "rows"}``
+
+    `latency_ms` is rounded to 3 decimals on the way out; raw values stay
+    in the per-row diagnostics dicts for callers that want them.
+    """
+    if not per_row:
+        return {}
+    keys: set[str] = set()
+    for row in per_row:
+        if isinstance(row, Mapping):
+            keys.update(row.keys())
+
+    summary: JsonDict = {}
+    for key in sorted(keys):
+        values = [row[key] for row in per_row if isinstance(row, Mapping) and key in row]
+        if not values:
+            continue
+        # bool is a subclass of int; check bool first.
+        if all(isinstance(v, bool) for v in values):
+            true_count = sum(1 for v in values if v)
+            summary[key] = {
+                "kind": "bool",
+                "true_count": true_count,
+                "false_count": len(values) - true_count,
+                "rows": len(values),
+            }
+        elif all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in values):
+            numeric = [float(v) for v in values]
+            summary[key] = {
+                "kind": "numeric",
+                "min": round(min(numeric), 3),
+                "max": round(max(numeric), 3),
+                "mean": round(sum(numeric) / len(numeric), 3),
+                "rows": len(numeric),
+            }
+        else:
+            summary[key] = {
+                "kind": "other",
+                "distinct_count": len({str(v) for v in values}),
+                "rows": len(values),
+            }
+    return summary
+
+
+def telemetry_gap(
+    declared: Sequence[str],
+    emitted_summary: Mapping[str, Any],
+) -> list[str]:
+    """Names declared by env_registry but never emitted in this run.
+
+    `reward` is treated as always-derivable from the score and never
+    counted as a gap — every env declares it but it lives one level up
+    in the aggregate (`pass_at_1`, `mean_score_at_1`).
+    """
+    emitted = set(emitted_summary.keys()) | {"reward"}
+    return sorted(name for name in declared if name not in emitted)
 
 
 def evaluate_policy(
@@ -520,6 +678,7 @@ def summarize_baselines(
     policies: Sequence[str],
     best_k: int,
     run_code: bool,
+    env_specs: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> JsonDict:
     summary: JsonDict = {"best_k": best_k, "policies": list(policies), "environments": {}}
     for env_id, splits in rows_by_env.items():
@@ -536,13 +695,23 @@ def summarize_baselines(
                 env_summary["splits"][split][policy] = aggregate_scored_rows(
                     scored, policy=policy, best_k=best_k
                 )
+        declared_telemetry: list[str] = []
+        if env_specs is not None and env_id in env_specs:
+            declared_telemetry = list(env_specs[env_id].get("telemetry") or [])
         for policy in policies:
             combined: list[JsonDict] = []
             for split in sorted(splits):
                 combined.extend(scored_cache[(split, policy)])
-            env_summary["aggregate"][policy] = aggregate_scored_rows(
-                combined, policy=policy, best_k=best_k
+            aggregate = aggregate_scored_rows(combined, policy=policy, best_k=best_k)
+            # Cross-check: every env_registry telemetry name should
+            # eventually be emitted by some scorer. Names that aren't
+            # populated yet land in `telemetry_gap` so dashboards /
+            # downstream emitters can see what's still spec-only.
+            aggregate["declared_telemetry"] = declared_telemetry
+            aggregate["telemetry_gap"] = telemetry_gap(
+                declared_telemetry, aggregate.get("telemetry") or {}
             )
+            env_summary["aggregate"][policy] = aggregate
         summary["environments"][env_id] = env_summary
     return summary
 
@@ -597,7 +766,13 @@ def build_report(args: argparse.Namespace) -> JsonDict:
     requested_rows = load_requested_rows(args.input_dir)
     policies = args.policy or ["oracle", "empty", "oracle_then_empty"]
     health = summarize_health(rows_by_env, env_specs, requested_rows=requested_rows)
-    baselines = summarize_baselines(rows_by_env, policies=policies, best_k=args.best_k, run_code=not args.skip_code_execution)
+    baselines = summarize_baselines(
+        rows_by_env,
+        policies=policies,
+        best_k=args.best_k,
+        run_code=not args.skip_code_execution,
+        env_specs=env_specs,
+    )
     report = {
         "schema_version": 1,
         "milestone": "M0",
@@ -682,6 +857,52 @@ def write_markdown(path: Path, report: Mapping[str, Any]) -> None:
                     f"{metrics[f'mean_best_score_at_{best_k}']:.3f} | {metrics['failure_count']} |"
                 )
             )
+
+    # Per-env telemetry block (task021 Session 1). Surfaces the per-verifier
+    # signals (latency, bool flags, etc.) collected during oracle scoring,
+    # plus any telemetry names declared in env_registry that aren't yet
+    # emitted (so the registry stops "lying").
+    lines.extend(
+        [
+            "",
+            "## Telemetry (oracle policy, aggregate across splits)",
+            "",
+            "Per-row scoring telemetry collected from `score_record` diagnostics.",
+            "Numeric fields show min/mean/max; bool fields show true/false counts. ",
+            "`gap` lists env_registry telemetry names that no scorer emits yet — they",
+            "are reserved for the future stage2_rl runtime emitter.",
+            "",
+            "| Environment | Policy | Telemetry | Gap |",
+            "|---|---|---|---|",
+        ]
+    )
+    for env_id, env_summary in sorted(report["baselines"]["environments"].items()):
+        for policy, metrics in sorted(env_summary["aggregate"].items()):
+            telemetry = metrics.get("telemetry") or {}
+            gap = metrics.get("telemetry_gap") or []
+            if not telemetry and not gap:
+                continue
+            field_summaries = []
+            for name, agg in telemetry.items():
+                if agg.get("kind") == "numeric":
+                    field_summaries.append(
+                        f"`{name}` "
+                        f"min={agg['min']}/mean={agg['mean']}/max={agg['max']} "
+                        f"(n={agg['rows']})"
+                    )
+                elif agg.get("kind") == "bool":
+                    field_summaries.append(
+                        f"`{name}` "
+                        f"true={agg['true_count']}/false={agg['false_count']}"
+                    )
+                else:
+                    field_summaries.append(
+                        f"`{name}` distinct={agg.get('distinct_count')} "
+                        f"(n={agg.get('rows')})"
+                    )
+            telemetry_cell = "; ".join(field_summaries) if field_summaries else "-"
+            gap_cell = ", ".join(f"`{name}`" for name in gap) if gap else "-"
+            lines.append(f"| {env_id} | {policy} | {telemetry_cell} | {gap_cell} |")
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
