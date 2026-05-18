@@ -295,6 +295,22 @@ def assistant_for_swe_patch(record: Mapping[str, Any]) -> JsonDict:
     return {"role": "assistant", "content": str(patch).strip()}
 
 
+def assistant_for_lean_proof(record: Mapping[str, Any]) -> JsonDict:
+    """SFT target for ``math_formal_lean``: the gold Lean proof body.
+
+    Source-agnostic — works against any Lean dataset whose M0 transform
+    is ``transform_lean_proof_stub``. The transform puts the gold proof
+    in ``expected_answer`` (canonical) and also in
+    ``extra_env_info.reference_proof`` (defensive copy); we prefer the
+    canonical path so re-prep with a different source flows through
+    without touching this builder.
+    """
+    proof = str(record.get("expected_answer") or "").strip()
+    if not proof:
+        proof = str(record.get("extra_env_info", {}).get("reference_proof", "")).strip()
+    return {"role": "assistant", "content": proof}
+
+
 def assistant_for_tool_call_repair(record: Mapping[str, Any]) -> JsonDict:
     extra = record.get("extra_env_info", {})
     expected_answer = record.get("expected_answer")
@@ -399,6 +415,10 @@ ASSISTANT_BUILDERS = {
     # the reasoning builder will prefer it (and the `_strip_gsm8k_marker`
     # fallback is harmless for non-GSM8K rows).
     "math_competition_numeric": assistant_for_reasoning,
+    # math_formal_lean uses a dedicated builder so the Lean proof text
+    # passes through verbatim — no boxed-answer extraction, no marker
+    # stripping (Lean proof syntax must stay literal).
+    "math_formal_lean": assistant_for_lean_proof,
 }
 
 
@@ -418,6 +438,7 @@ M1_USE_BY_ENV: dict[str, list[str]] = {
     "tool_call_repair_negative": ["malformed tool call negatives", "hallucinated tool output negatives"],
     "math_reasoning_numeric": ["reasoning answer format"],
     "math_competition_numeric": ["reasoning answer format", "competition math"],
+    "math_formal_lean": ["formal-proof syntax", "Lean tactic-style proof"],
 }
 
 
