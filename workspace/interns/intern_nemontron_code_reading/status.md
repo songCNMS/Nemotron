@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Working |
 | Current Task | task005_m1_sft_v0_scope_expansion |
-| PR | https://github.com/songCNMS/Nemotron/pull/21 |
-| Session | 2 |
-| Branch | intern_nemontron_code_reading/task005_m1_sft_roundtrip_session2 |
-| Latest | PR #19 已合并；PR #21 已提交，覆盖 M1 SFT round-trip smoke 与 repair-negative template 兼容修复。 |
+| PR | pending |
+| Session | 3 |
+| Branch | intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3 |
+| Latest | PR #21 已合并；已在 cosmos_xenna + transformers 环境运行完整 `nemotron super3 data prep sft -c agentic_v0`，使用项目规则里的本地 Qwen3-4B-Instruct tokenizer 验证真实 packed parquet artifacts。 |

@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -31,3 +31,22 @@
 - 小样本验证已跑通：三个新 slice 各生成 `2 train / 1 val`，M0 health baseline `status=pass`，M1 SFT 输出 `6 train / 3 val_shadow`，round-trip packed parquet 输出 `1` 个 row、`3978` tokens、`802` assistant loss tokens。
 - 本地目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3` 为 `84 passed, 2 skipped`；`git diff --check` 通过；`ruff` 在 `/work-agents/.venv` 中不可用。
 - 代码已提交到 PR #21：`intern_nemontron_code_reading/task005_m1_sft_roundtrip_session2`。
+
+## Session 3 - 2026-05-18 - intern_nemontron_code_reading
+
+- 合并 PR #21，将 M1 SFT round-trip smoke 与 repair-negative template 兼容修复进入 `main`，merge commit 为 `905de2db13620eeab05ccebd2e3eff68f599cb1d`。
+- 从最新 `main` 创建 `intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3`，继续做真实 `agentic_v0` data-prep 验证。
+- 补齐 CPU venv 的完整运行依赖：`cosmos_xenna`、`transformers 5.8.1`、`ray 2.49.2`、`pydantic-settings`、`nemo-run`；根 CLI eager import `data sdg long-document` 时还需要 `data-designer` optional extra。
+- 生成本轮完整覆盖的小样本 M0/M1 数据：
+  - M0 公开数据覆盖 8 个环境：search、coding、terminal、SWE patch、general tool calling、repair negative、structured output、reasoning；每个 dataset 输出 `2 train / 1 val`。
+  - M0 health baseline `status=pass`。
+  - M1 Agentic SFT blend 输出 `16 train / 8 val_shadow`，`errors=0`，blend path 为 `../outputs/task005-session3/m1/data_blend_agentic_sft_v0.json`。
+- 先用 HF 真实 tokenizer `Qwen/Qwen3-0.6B` 跑通 CLI 实际执行：`PYTHONPATH=src python -m nemotron super3 data prep sft -c agentic_v0 ... sample=8 num_shards=1`，产出 `8` sequences、`5279` tokens；单 shard 场景按实现只生成 train split。
+- 按 project rule 改用本地真实 tokenizer `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`，运行不带 `sample` 的完整小 blend 命令：`PYTHONPATH=src python -m nemotron super3 data prep sft -c agentic_v0 ... force=true observability.wandb_log_pipeline_stats=false`。
+- 完整小 blend packed artifact 校验通过：
+  - output path：`../outputs/task005-session3/packed-agentic-v0-full/splits`。
+  - metadata：`num_shards=16`、`total_sequences=16`、`total_tokens=10332`、`pack_size=4096`、`tokenizer_uri=file:///mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`。
+  - split 目录覆盖 `train`、`valid`、`test`；共 `16` 个 parquet symlink。
+  - parquet schema 为 `input_ids: list<int32>`、`loss_mask: list<uint8>`、`seq_start_id: list<int32>`；读回统计 `loss_tokens=1775`，`empty_loss_rows=0`。
+- `data-designer 0.6.0` 安装时会把 `pyarrow` 降到 `19.0.1`，与当前 `datasets 4.8.5` 的 `pyarrow>=21` 声明冲突；本轮验证后已恢复 `pyarrow 24.0.0`，并确认 `agentic_v0 --dry-run` 仍可编译。
+- 本地目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3` 为 `85 passed, 1 skipped`。
