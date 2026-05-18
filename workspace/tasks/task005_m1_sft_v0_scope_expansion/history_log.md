@@ -50,3 +50,4 @@
   - parquet schema 为 `input_ids: list<int32>`、`loss_mask: list<uint8>`、`seq_start_id: list<int32>`；读回统计 `loss_tokens=1775`，`empty_loss_rows=0`。
 - `data-designer 0.6.0` 安装时会把 `pyarrow` 降到 `19.0.1`，与当前 `datasets 4.8.5` 的 `pyarrow>=21` 声明冲突；本轮验证后已恢复 `pyarrow 24.0.0`，并确认 `agentic_v0 --dry-run` 仍可编译。
 - 本地目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3` 为 `85 passed, 1 skipped`。
+- 记录更新已提交到 PR #23：`intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3`。
