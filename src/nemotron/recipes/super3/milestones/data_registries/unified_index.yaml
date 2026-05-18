@@ -1,0 +1,105 @@
+schema_version: 1
+milestone: M1
+description: |
+  Unified index of every data / env / config registry in the Super3 RL
+  post-training pipeline. Plan §6 W1 acceptance is "unified data registry
+  across SFT + RL + Eval"; this index is task030 Session 1's source of
+  truth for "where does X live".
+
+  Each entry pairs a registry kind (defined in ``schema.py``) with its
+  on-disk path. ``unified_index_loader.py`` reads this file, resolves
+  every path, and runs the kind-appropriate schema validator. The result
+  is a single CLI / pytest surface to check "do all registries still
+  match their declared shape?" before any cluster run touches the data.
+
+  Adding a new registry (e.g., M1 eval basket when task019 lands) takes
+  one row here + a new validator in ``schema.py``; the rest of the
+  inventory tooling auto-picks it up.
+
+registries:
+  # M0 — data foundation + reward env catalog (plan §3)
+  - id: m0_data
+    kind: m0_data_registry
+    path: ../m0_data_env/data_registry.yaml
+    summary: |
+      11 public HF datasets backing M0 environments (HotpotQA, MuSiQue,
+      MBPP, SWE-bench Lite, Hermes function-calling, GSM8K, NuminaMath,
+      etc.). Each row carries hf_revision pin + license + contamination
+      notes.
+    produced_by: prepare_m0_assets.py
+    consumed_by: [prepare_m0_assets.py]
+
+  - id: m0_environment
+    kind: m0_environment_registry
+    path: ../m0_data_env/environment_registry.yaml
+    summary: |
+      11 M0 reward environments with verifier name, telemetry contract,
+      sandbox needs, and health-check thresholds.
+    produced_by: (authored)
+    consumed_by:
+      - prepare_m0_assets.py
+      - run_m0_health_baseline.py
+      - downstream M1 bridges (M0 env names flow through nemo_gym_env tags)
+
+  # M1 — registry-driven bridges (task014-018)
+  - id: m1_rlvr_envs
+    kind: bridge_env_registry
+    path: ../m1_rlvr/rlvr_env_registry.yaml
+    summary: |
+      21 NeMo-Gym envs covering RLVR1/2/3 mixes. Each row pairs a
+      NeMo-Gym env with its M0 source (or m0_missing) + status +
+      verifier shape notes. task015 Session 1 source of truth.
+    produced_by: (authored)
+    consumed_by: [prepare_m1_rlvr_jsonl.py]
+    expected_mixes: [rlvr1, rlvr2, rlvr3]
+
+  - id: m1_swe1_envs
+    kind: bridge_env_registry
+    path: ../m1_swe1/swe1_env_registry.yaml
+    summary: |
+      Single NeMo-Gym env (swe_pivot_single_step_tool_use_with_argument_comparison).
+      task016 Session 1 source of truth.
+    produced_by: (authored)
+    consumed_by: [prepare_m1_swe1_jsonl.py]
+    expected_mixes: [swe1]
+
+  - id: m1_swe2_envs
+    kind: bridge_env_registry
+    path: ../m1_swe2/swe2_env_registry.yaml
+    summary: |
+      Single NeMo-Gym agent (swe_agents) with one row per SIF source family.
+      task017 Session 1 source of truth.
+    produced_by: (authored)
+    consumed_by: [prepare_m1_swe2_jsonl.py]
+    expected_mixes: [swe2]
+
+  - id: m1_swe2_sif
+    kind: sif_registry
+    path: ../m1_swe2/swe2_sif_registry.yaml
+    summary: |
+      Three SIF filename families per stage2_swe2 container_formatter
+      (swebench / swegym / r2egym). Holds filename templates + candidate
+      M0 sources + upstream dataset + license.
+    produced_by: (authored)
+    consumed_by:
+      - prepare_m1_swe2_jsonl.py (resolve_sif_path / validate_sif_exists)
+
+  - id: m1_rlhf_envs
+    kind: bridge_env_registry
+    path: ../m1_rlhf/rlhf_env_registry.yaml
+    summary: |
+      Two NeMo-Gym envs (genrm_compare + single_step_tool_use_with_argument_comparison)
+      for the RLHF stage. task018 Session 1 source of truth.
+    produced_by: (authored)
+    consumed_by: [prepare_m1_rlhf_jsonl.py]
+    expected_mixes: [rlhf]
+
+  - id: m1_rlhf_pref_data
+    kind: pref_data_registry
+    path: ../m1_rlhf/rlhf_pref_data_registry.yaml
+    summary: |
+      3 candidate preference-data sources (HelpSteer-2 / UltraFeedback /
+      distilabel-orca-pairs) with license + revision-pin requirements.
+      task018 Session 1 source of truth; Session 2 picks one to land in M0.
+    produced_by: (authored)
+    consumed_by: [prepare_m1_rlhf_jsonl.py]

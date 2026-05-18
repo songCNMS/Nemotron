@@ -395,7 +395,7 @@ long-context, multilingual` per plan §3 M3 acceptance.
 
 | Workflow | Plan ref | Gap | Suggested task |
 |---|---|---|---|
-| W1 unified data registry across SFT + RL + Eval | §6 | M0 has registry; M1 SFT links to M0; RL and eval data have no registry | **task030_unified_data_registry** — merge M0 yaml format, extend with RL/eval fields |
+| W1 unified data registry across SFT + RL + Eval | §6 | Session 1 ⚠ — schema layer + unified index over 8 existing registry YAMLs (M0 data + M0 env + 4 bridge env + SIF + pref data); cross-registry inventory walks (licenses / HF datasets / M0→downstream) sandbox-runnable. Eval basket registry still missing — plugs into the same index when task019 lands. | **task030_unified_data_registry** — Session 1 ✓ (schema + index + inventories; opted to layer-not-merge so module locations stay unchanged); Session 2 (eval basket + schema enforcement at write time) still to go |
 | W1 difficulty curriculum sampler | §6 | task008 added bucket metadata; sampler not wired | **task040_curriculum_sampler** — depends on task008 (bucket metadata) + task032 (rollout store) |
 | W1 failure rollout → SFT repair pipeline | §6 | ✗ | folded into task031 / task047 |
 | W2 env telemetry emitter | §7 | env_registry lists names; emitter missing | folded into task021 + task037 |
@@ -447,7 +447,11 @@ Then in parallel:
    stage-a/stage-b YAMLs + cluster verify) still to go.
 10. **task019** + **task020** — M1 eval basket (can start once task014 has a
     real checkpoint).
-11. **task030** — unified data registry (saves cleanup work across M2).
+11. **task030** — unified data registry. Session 1 landed (schema layer
+    + unified index over 8 existing registries + sandbox-runnable
+    inventory walks for licenses / HF datasets / M0→downstream cross-
+    walk); Session 2 (M1 eval basket registry + schema enforcement at
+    write time) still to go.
 
 After all M1 tasks land, M2 fanout (task022-038) becomes possible. M3 only
 makes sense after M2 ships a working 122B-parity checkpoint.
