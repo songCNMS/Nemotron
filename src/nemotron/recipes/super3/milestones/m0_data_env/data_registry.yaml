@@ -1,6 +1,6 @@
 schema_version: 1
 milestone: M0
-description: Public M0 data registry for search, coding, terminal basics, SWE patches, tool repair, structured output, general tool calling, and reasoning smoke sets.
+description: Public M0 data registry for search (single-hop + multi-hop), coding, terminal basics, SWE patches, tool repair, structured output, general tool calling (single-turn + multi-turn), and reasoning (grade-school + competition) smoke sets.
 datasets:
   - id: m0_search_hotpotqa
     environment: search_grounded_qa
@@ -31,6 +31,35 @@ datasets:
       answer: answer
       context: context
       difficulty: level
+
+  - id: m0_search_musique
+    environment: search_multihop_qa
+    domain: search
+    hf_dataset: dgslibisey/MuSiQue
+    # MuSiQue ships a single default config (Ans subset variant). Pin a
+    # revision so the downloaded loader / row layout cannot drift mid-run.
+    hf_config: null
+    hf_split: train
+    hf_val_split: validation
+    hf_revision: cf7a59f47c11b51c3b5d0a39bc24c54a48d80b0d
+    source_url: https://huggingface.co/datasets/dgslibisey/MuSiQue
+    license: cc-by-4.0
+    converter: musique_search
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: multi_hop_2_to_4_hops
+    reward_type: normalized_exact_or_contains
+    contamination: decontaminate against MuSiQue eval and held-out multi-hop QA baskets
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLVR multi-hop search smoke
+      - M2 browser/search expansion
+    fields:
+      id: id
+      question: question
+      answer: answer
+      paragraphs: paragraphs
+      supporting: paragraphs.is_supporting
 
   - id: m0_coding_mbpp
     environment: code_execution_python
@@ -150,6 +179,39 @@ datasets:
       category: category
       subcategory: subcategory
 
+  - id: m0_tool_calling_hermes_multi
+    environment: multi_turn_tool_use
+    domain: general_tool_calling
+    hf_dataset: NousResearch/hermes-function-calling-v1
+    # Multi-turn `func_calling` config (the singleturn config powers
+    # `general_tool_calling`). `transform_hermes_function_calling` already
+    # captures multi-turn `expected_trajectory` via task002's fix, so the
+    # converter is shared; only the env id and `max_turns` differ here.
+    hf_config: func_calling
+    hf_split: train
+    # Like func_calling_singleturn, this config ships only `train`; prepare
+    # falls back to the sequential val-slice with a manifest warning (task001).
+    hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
+    source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
+    license: apache-2.0
+    converter: hermes_function_calling
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: multi_turn_tool_use
+    reward_type: tool_schema_and_argument_match
+    contamination: decontaminate against BFCL multi-turn, TauBench, and internal tool schemas
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 multi-turn tool trace
+      - M1 RLVR multi-turn tool-call smoke
+      - M2 tool-use expansion
+    fields:
+      id: id
+      conversations: conversations
+      tools: tools
+      category: category
+      subcategory: subcategory
+
   - id: m0_tool_call_repair_negative_hermes
     environment: tool_call_repair_negative
     domain: general_tool_calling
@@ -230,3 +292,31 @@ datasets:
     fields:
       question: question
       answer: answer
+
+  - id: m0_math_numinamath
+    environment: math_competition_numeric
+    domain: reasoning
+    hf_dataset: AI-MO/NuminaMath-CoT
+    hf_config: null
+    hf_split: train
+    hf_val_split: test
+    hf_revision: d5fbeac4a1ad8e3ff32024e29bff4f2b3ab74e7c
+    source_url: https://huggingface.co/datasets/AI-MO/NuminaMath-CoT
+    license: apache-2.0
+    converter: numinamath_competition
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: competition_math_mixed
+    reward_type: normalized_exact_or_contains
+    # NuminaMath-CoT is built from MATH, AMC/AIME, cn_k12, olympiads etc.
+    # Decontamination is non-negotiable for any M1+ eval using the
+    # corresponding benchmarks; M0 smoke uses it only for wiring verification.
+    contamination: decontaminate against MATH, AIME-24/25, AMC, AMC-10/12, HMMT, GSM8K eval baskets
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLVR competition math smoke
+      - M2 harder reasoning curriculum
+    fields:
+      problem: problem
+      solution: solution
+      source: source

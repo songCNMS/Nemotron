@@ -6,29 +6,33 @@ Companion to `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.
 (plan §3, §6, §7) and `docs/implementation-roadmap.md`. Scopes the remaining
 M0 work needed to give M1+ a complete data foundation. Reflects `main` after
 `task005_m1_sft_v0_scope_expansion` follow-up PRs landed terminal, short SWE
-trace, tool-repair-negative, and structured-output envs.
+trace, tool-repair-negative, and structured-output envs, plus this PR's
+task056 Session 1 adding NuminaMath, MuSiQue, and multi-turn Hermes.
 
-## 1. State of `main` (`3e37616`)
+## 1. State of `main`
 
-Eight M0 environments wired end-to-end (registry + JSONL contract + oracle
-health gate + difficulty signal + M1 SFT supervision builder):
+**Eleven** M0 environments wired end-to-end (registry + JSONL contract +
+oracle health gate + difficulty signal + M1 SFT supervision builder):
 
 | Env | Source | Plan §7 family | Landed via |
 |---|---|---|---|
 | `search_grounded_qa` | `hotpotqa/hotpot_qa` distractor | Search / Browser | M0 baseline |
+| `search_multihop_qa` | `dgslibisey/MuSiQue` | Search / Browser (multi-hop) | task056 Session 1 |
 | `code_execution_python` | `google-research-datasets/mbpp` full | Code Generation | M0 baseline |
 | `general_tool_calling` | `NousResearch/hermes-function-calling-v1` singleturn | Tool Use | M0 baseline |
+| `multi_turn_tool_use` | `NousResearch/hermes-function-calling-v1` `func_calling` (multi-turn) | Tool Use (multi-turn) | task056 Session 1 |
 | `math_reasoning_numeric` | `openai/gsm8k` main | Math / Reasoning | M0 baseline |
+| `math_competition_numeric` | `AI-MO/NuminaMath-CoT` | Math / Reasoning (competition) | task056 Session 1 |
 | `terminal_basic_shell` | `aelhalili/bash-commands-dataset` | Terminal / Workplace | task005 (PR e2d0bcd / 3e37616) |
 | `swe_pivot_patch_supervision` | `princeton-nlp/SWE-bench_Lite` | SWE | task005 |
 | `tool_call_repair_negative` | derived from Hermes singleturn | Tool Use (negatives) | task005 |
 | `structured_outputs_json` | `NousResearch/hermes-function-calling-v1` json_mode_singleturn | Structured Output | task005 |
 
-That clears 5 of plan §7's 10 family list (Search single-hop, Code, Tool
-Use, Math grade-school, Terminal, SWE pivot, Structured Output) and 4 of
-the v0 capabilities plan §8 names. Notable gaps remain in Math (competition,
-formal), Search (multi-hop), Tool Use (multi-turn), SQL, Safety,
-Long-context, and Multilingual.
+That clears 6 of plan §7's 10 family list (Search single-hop + multi-hop,
+Code, Tool Use single-turn + multi-turn, Math grade-school + competition,
+Terminal, SWE pivot, Structured Output) and 5 of the v0 capabilities plan
+§8 names. Remaining gaps: Math (formal Lean), SQL, Safety, Long-context,
+Multilingual.
 
 ## 2. Production references uncovered during the original audit
 
@@ -71,19 +75,20 @@ Priority criteria:
 
 | Env id (M0) | HF source | License | Rows | Verifier | Status |
 |---|---|---|---|---|---|
-| `math_competition_numeric` | `AI-MO/NuminaMath-CoT` | Apache-2.0 | 859 608 | `normalized_exact_or_contains` (matches the `\boxed{…}` answer span) | ✗ — task056 |
-| `search_multihop_qa` | `dgslibisey/MuSiQue` (Ans) | CC-BY-4.0 | 24 814 | `normalized_exact_or_contains` (mirrors HotpotQA verifier) | ✗ — task056 |
-| `multi_turn_tool_use` | `NousResearch/hermes-function-calling-v1` (`func_calling` config) | Apache-2.0 | reuses existing pin | `tool_schema_and_argument_match` + trajectory check | ✗ — task056 |
-| `math_formal_lean` | `nvidia/Nemotron-Math-Proofs-v1` (Lean split) | CC-BY-SA-4.0 ⚠ | ~925 K | new `lean_proof_stub` verifier (M0 stage only checks non-empty) | ✗ — task056 |
+| `math_competition_numeric` | `AI-MO/NuminaMath-CoT` | Apache-2.0 | 859 608 | `normalized_exact_or_contains` (matches the `\boxed{…}` answer span) | ✓ — task056 Session 1 |
+| `search_multihop_qa` | `dgslibisey/MuSiQue` (Ans) | CC-BY-4.0 | 24 814 | `normalized_exact_or_contains` (mirrors HotpotQA verifier) | ✓ — task056 Session 1 |
+| `multi_turn_tool_use` | `NousResearch/hermes-function-calling-v1` (`func_calling` config) | Apache-2.0 | reuses existing pin | `tool_schema_and_argument_match` + trajectory check | ✓ — task056 Session 1 |
+| `math_formal_lean` | `nvidia/Nemotron-Math-Proofs-v1` (Lean split) | CC-BY-SA-4.0 ⚠ | ~925 K | new `lean_proof_stub` verifier (M0 stage only checks non-empty) | ✗ — task056 Session 2 (blocked on legal/share-alike clearance) |
 | `structured_outputs_json` | `NousResearch/hermes-function-calling-v1` (`json_mode_singleturn`) | Apache-2.0 | reuses existing pin | `json_value_exact_match` | ✓ — landed via task005 |
 | `terminal_basic_shell` | `aelhalili/bash-commands-dataset` | MIT | 100 train / 25 val | `command_substring_match` | ✓ — landed via task005 |
 | `swe_pivot_patch_supervision` | `princeton-nlp/SWE-bench_Lite` | source-repo-specific | 100 train / 20 val | `patch_diff_match` | ✓ — landed via task005 |
 | `tool_call_repair_negative` | derived from Hermes singleturn | Apache-2.0 | ≤ 100/env | `negative_recognition` | ✓ — landed via task005 |
 
-Four Tier-1 envs remain. The first three (NuminaMath, MuSiQue, multi-turn
-Hermes) reuse existing converters / verifiers and are estimated at a single
-PR. `math_formal_lean` carries a CC-BY-SA-4.0 share-alike obligation that
-needs legal/product clearance before it can enter the M1 SFT v0 blend.
+Only `math_formal_lean` remains, and it's blocked on the §6 share-alike
+question (CC-BY-SA-4.0 — obligation cascades through any derived artifact).
+Once legal/product clears it, the wiring is a single follow-up PR
+(converter + new `lean_proof_stub` verifier + an `assistant_for_lean_proof`
+M1 supervision builder).
 
 ### Tier 2 — plan-§7 mandated, each has a notable contamination or licensing concern (task057)
 
@@ -176,6 +181,7 @@ references for new env work.
 | `workspace/tasks/task057_m0_tier2_expansion/` | scaffolded |
 | `workspace/tasks/task058_production_dataset_slug_fixes/` | scaffolded; slug + naming bug fixes deferred to that task |
 | 4 of 8 Tier-1 envs (terminal, SWE-pivot, tool-repair negatives, structured-output) | ✓ — landed independently via task005 on main |
-| 4 remaining Tier-1 envs (NuminaMath, MuSiQue, multi-turn Hermes, Lean) | ✗ — task056 Session 1+ |
+| 3 Tier-1 envs landed in this PR (NuminaMath, MuSiQue, multi-turn Hermes) | ✓ — task056 Session 1 |
+| 1 remaining Tier-1 env (`math_formal_lean`) | ✗ — task056 Session 2, blocked on §6 share-alike clearance |
 | 6 Tier-2 envs (SQL, terminal v2, safety, multilingual, long-context, math-with-tools) | ✗ — task057 |
 | Production slug / subset / contamination fixes | ✗ — task058 |
