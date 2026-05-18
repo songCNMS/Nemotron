@@ -1,14 +1,18 @@
-"""Tests for the M0 → M1 RLVR data bridge (task014 Session 1).
+"""Tests for the M0 → M1 RLVR data bridge (task014 Session 1, task015 Session 1).
 
 Covers:
 
-- ``RLVR1_ENV_MAP`` matches roadmap §1.3 (four NeMo-Gym envs)
-- Unknown mix names raise; rlvr2/rlvr3 slots are reserved but unbuildable
+- Registry loader returns 21 NeMo-Gym envs with valid statuses
+- ``RLVR1_ENV_MAP`` matches the post-audit registry (task015 Session 1 corrected
+  the task014-era names against ``stage1_rlvr/config/default.yaml``)
+- RLVR2 has registry-derived active mappings (math_with_judge + structured_outputs_json)
 - ``prepare()`` writes ``train.jsonl`` / ``val.jsonl`` / ``manifest.json``
 - Output rows carry ``nemo_gym_env`` + ``nemo_gym_mix`` tags
 - M0 envs outside the mix are filtered out
 - Missing splits surface in ``manifest.errors``
-- Lineage block declares ``RLVR1`` artifact pointing at the M0 manifest
+- Lineage block declares the correct RLVR{1,2,3} artifact pointing at the M0 manifest
+- ``coverage`` block reports per-status env lists in the manifest + report
+- Unknown mix raises with clear message
 """
 
 from __future__ import annotations
@@ -19,15 +23,23 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from nemotron.recipes.super3.milestones.lineage import (
     RLVR1_ARTIFACT,
+    RLVR2_ARTIFACT,
     LineageRecord,
 )
 from nemotron.recipes.super3.milestones.m1_rlvr.prepare_m1_rlvr_jsonl import (
+    KNOWN_STATUSES,
     MIX_PROFILES,
+    REGISTRY_PATH,
     RLVR1_ENV_MAP,
     RLVR2_ENV_MAP,
     RLVR3_ENV_MAP,
+    coverage_report,
+    derive_env_map,
+    load_rlvr_env_registry,
     prepare,
     tag_record,
 )
@@ -89,28 +101,139 @@ def _args(m0_root: Path, out_dir: Path, *, mix: str = "rlvr1") -> argparse.Names
     )
 
 
-def test_rlvr1_env_map_covers_roadmap_four_envs() -> None:
-    """Roadmap §1.3 task014 declares exactly these 4 M0 → NeMo-Gym mappings."""
+# ---------- Registry-level tests (task015 Session 1) ----------
+
+
+def test_registry_loads_with_expected_shape() -> None:
+    """The on-disk registry must parse, declare ≥ 21 envs (one per
+    NeMo-Gym server config in `stage1_rlvr/config/default.yaml`), and
+    use only the four known statuses."""
+    registry = load_rlvr_env_registry()
+    assert len(registry) >= 21, "expected ≥ 21 envs (one per stage1_rlvr default.yaml config)"
+    # Every row has the contract fields.
+    for row in registry:
+        assert {"nemo_gym_env", "mix", "status"} <= row.keys()
+        assert row["status"] in KNOWN_STATUSES
+        assert row["mix"] in {"rlvr1", "rlvr2", "rlvr3"}
+
+
+def test_registry_path_resolves_to_yaml_in_module() -> None:
+    """The bundled registry must live next to the script so direct-script
+    execution (PEP 723 banner) and packaged import both find it."""
+    assert REGISTRY_PATH.is_file()
+    assert REGISTRY_PATH.suffix == ".yaml"
+    assert REGISTRY_PATH.parent.name == "m1_rlvr"
+
+
+def test_registry_rejects_unknown_status(tmp_path: Path) -> None:
+    """Authorship sanity check — typos in `status` must be caught at load
+    time so a bad commit doesn't make the bridge silently skip rows."""
+    bad = tmp_path / "registry.yaml"
+    bad.write_text(
+        """schema_version: 1
+envs:
+  - nemo_gym_env: stub
+    mix: rlvr1
+    status: definitely-not-a-status
+""",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="status"):
+        load_rlvr_env_registry(bad)
+
+
+def test_derive_env_map_filters_to_active_with_m0_source(tmp_path: Path) -> None:
+    """Only `active` rows with a concrete `m0_env_id` count."""
+    fake_registry = [
+        {"nemo_gym_env": "ngym_a", "mix": "rlvr1", "m0_env_id": "m0_a", "status": "active"},
+        {"nemo_gym_env": "ngym_b", "mix": "rlvr1", "m0_env_id": None, "status": "m0_missing"},
+        {"nemo_gym_env": "ngym_c", "mix": "rlvr1", "m0_env_id": "m0_c", "status": "verifier_mismatch"},
+        {"nemo_gym_env": "ngym_d", "mix": "rlvr2", "m0_env_id": "m0_d", "status": "active"},
+    ]
+    assert derive_env_map(fake_registry, "rlvr1") == {"m0_a": "ngym_a"}
+    assert derive_env_map(fake_registry, "rlvr2") == {"m0_d": "ngym_d"}
+    assert derive_env_map(fake_registry, "rlvr3") == {}
+
+
+def test_derive_env_map_rejects_conflicting_active_rows() -> None:
+    """Two `active` rows claiming the same M0 env for different NeMo-Gym
+    targets is an authorship bug — must raise instead of silently picking one."""
+    fake_registry = [
+        {"nemo_gym_env": "ngym_a", "mix": "rlvr1", "m0_env_id": "m0_a", "status": "active"},
+        {"nemo_gym_env": "ngym_other", "mix": "rlvr1", "m0_env_id": "m0_a", "status": "active"},
+    ]
+    with pytest.raises(ValueError, match="two active mappings"):
+        derive_env_map(fake_registry, "rlvr1")
+
+
+def test_coverage_report_counts_statuses_per_mix() -> None:
+    fake_registry = [
+        {"nemo_gym_env": "a", "mix": "rlvr2", "m0_env_id": "m0_a", "status": "active"},
+        {"nemo_gym_env": "b", "mix": "rlvr2", "m0_env_id": None, "status": "m0_missing"},
+        {"nemo_gym_env": "c", "mix": "rlvr2", "m0_env_id": "m0_c", "status": "verifier_mismatch"},
+        {"nemo_gym_env": "d", "mix": "rlvr2", "m0_env_id": None, "status": "blocked_external"},
+        {"nemo_gym_env": "x", "mix": "rlvr3", "m0_env_id": None, "status": "m0_missing"},
+    ]
+    coverage = coverage_report(fake_registry, "rlvr2")
+    assert coverage["mix"] == "rlvr2"
+    assert coverage["total_target_envs"] == 4
+    assert coverage["counts"] == {
+        "active": 1,
+        "m0_missing": 1,
+        "verifier_mismatch": 1,
+        "blocked_external": 1,
+    }
+    assert coverage["active"] == ["a"]
+    assert coverage["m0_missing"] == ["b"]
+
+
+# ---------- RLVR1 / RLVR2 mix shape (post-audit) ----------
+
+
+def test_rlvr1_env_map_post_audit_matches_default_yaml() -> None:
+    """task015 Session 1 audited RLVR1_ENV_MAP against
+    `stage1_rlvr/config/default.yaml::nemo_gym.config_paths` and corrected
+    two task014-era names that did not exist on the NeMo-Gym side:
+
+      - `general_tool_calling` was renamed to
+        `single_step_tool_use_with_argument_comparison` (verifier semantics
+        match: both compare emitted tool-call arguments against a schema)
+      - `search_grounded_qa` was removed from active rlvr1 — there is no
+        single-hop QA env in `default.yaml`, and HotpotQA shape does not
+        fit `search_pivot_single_step_tool_use_with_argument_comparison`.
+        It now lives in the registry as `m0_missing` so the gap is visible
+        in the coverage report.
+    """
     assert RLVR1_ENV_MAP == {
         "math_reasoning_numeric": "math_with_judge",
         "code_execution_python": "code_gen",
-        "search_grounded_qa": "search_grounded_qa",
-        "general_tool_calling": "general_tool_calling",
+        "general_tool_calling": "single_step_tool_use_with_argument_comparison",
     }
-    # Profile picks up the same map and tags the right artifact type.
-    assert MIX_PROFILES["rlvr1"]["env_map"] is RLVR1_ENV_MAP
+    assert MIX_PROFILES["rlvr1"]["env_map"] == RLVR1_ENV_MAP
     assert MIX_PROFILES["rlvr1"]["artifact_type"] == RLVR1_ARTIFACT
 
 
-def test_rlvr2_and_rlvr3_slots_reserved_but_unbuildable() -> None:
-    """Future RLVR2 / RLVR3 mixes (task015) declare the slot but no env map.
+def test_rlvr2_now_has_active_envs_from_m0_today() -> None:
+    """task015 Session 1: rlvr2 is no longer empty. Whatever M0 envs the
+    registry marks `active` for `mix: rlvr2` make it in, even before
+    task057 finishes M0 expansion."""
+    assert RLVR2_ENV_MAP, "rlvr2 should have at least one active mapping from M0 today"
+    # Math competition and structured outputs already exist in M0 main.
+    assert "math_competition_numeric" in RLVR2_ENV_MAP
+    assert RLVR2_ENV_MAP["math_competition_numeric"] == "math_with_judge"
+    assert "structured_outputs_json" in RLVR2_ENV_MAP
+    assert RLVR2_ENV_MAP["structured_outputs_json"] == "structured_outputs_json"
+    assert MIX_PROFILES["rlvr2"]["artifact_type"] == RLVR2_ARTIFACT
 
-    Until the per-env reward verifier registration lands, calling prepare
-    with those mix names must surface a clear "unbuildable" error rather
-    than silently emit an empty mix.
-    """
-    assert RLVR2_ENV_MAP == {}
+
+def test_rlvr3_active_map_reflects_registry_judgement() -> None:
+    """rlvr3 currently has no `active` rows (everything is m0_missing,
+    verifier_mismatch, or blocked_external) — calling prepare on rlvr3
+    should raise a coverage-aware error rather than emit an empty file."""
     assert RLVR3_ENV_MAP == {}
+
+
+# ---------- tag_record + prepare end-to-end ----------
 
 
 def test_tag_record_preserves_m0_payload_and_adds_nemo_gym_tags() -> None:
@@ -137,7 +260,8 @@ def test_tag_record_preserves_m0_payload_and_adds_nemo_gym_tags() -> None:
 
 
 def test_prepare_writes_jsonl_and_manifest(tmp_path: Path) -> None:
-    """End-to-end happy path with 2 rows per env across the 4-env mix."""
+    """End-to-end happy path: 2 rows per env across the 3-env post-audit
+    rlvr1 mix (math, code, single-step tool use)."""
     env_rows = {
         env: {
             "train": [_m0_record(env, f"train q{i}", f"a{i}") for i in range(2)],
@@ -156,8 +280,9 @@ def test_prepare_writes_jsonl_and_manifest(tmp_path: Path) -> None:
     assert val_path.is_file()
     train_rows = [json.loads(line) for line in train_path.read_text().splitlines() if line]
     val_rows = [json.loads(line) for line in val_path.read_text().splitlines() if line]
-    assert len(train_rows) == 8  # 4 envs × 2 rows
-    assert len(val_rows) == 4  # 4 envs × 1 row
+    expected_envs = len(RLVR1_ENV_MAP)
+    assert len(train_rows) == 2 * expected_envs
+    assert len(val_rows) == 1 * expected_envs
     assert manifest["mix"] == "rlvr1"
     assert manifest["counts"]["train"] == {env: 2 for env in RLVR1_ENV_MAP}
     assert manifest["counts"]["val"] == {env: 1 for env in RLVR1_ENV_MAP}
@@ -201,7 +326,6 @@ def test_prepare_records_missing_split_as_error(tmp_path: Path) -> None:
             "train": [_m0_record("math_reasoning_numeric", "q", "a")],
             # No val split — bridge should still emit train rows + record the gap.
         },
-        # Mix envs absent from M0 entirely surface a separate "not in M0 mix" error.
     }
     m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
     out_dir = tmp_path / "rlvr1_out"
@@ -217,8 +341,8 @@ def test_prepare_records_missing_split_as_error(tmp_path: Path) -> None:
         s.startswith("math_reasoning_numeric::val::missing")
         for s in error_strings
     )
-    # Three other rlvr1 envs absent from M0 → "not in M0 mix" on both splits
-    for missing_env in ("code_execution_python", "search_grounded_qa", "general_tool_calling"):
+    # Other rlvr1 envs absent from M0 → "not in M0 mix" on both splits.
+    for missing_env in (env for env in RLVR1_ENV_MAP if env != "math_reasoning_numeric"):
         assert any(s.startswith(f"{missing_env}::train::") for s in error_strings)
         assert any(s.startswith(f"{missing_env}::val::") for s in error_strings)
 
@@ -249,42 +373,71 @@ def test_prepare_emits_lineage_pointing_at_m0_manifest(tmp_path: Path) -> None:
     assert {"m1_rlvr_train_jsonl", "m1_rlvr_val_jsonl"}.issubset(output_kinds)
 
 
-def test_prepare_rejects_unknown_mix(tmp_path: Path) -> None:
+def test_prepare_manifest_includes_coverage_block(tmp_path: Path) -> None:
+    """task015 Session 1: every emitted manifest carries a `coverage` block
+    summarising registry status counts for the mix being prepared."""
     env_rows = {
-        env: {"train": [], "val": []} for env in RLVR1_ENV_MAP
+        env: {
+            "train": [_m0_record(env, "q", "a")],
+            "val": [_m0_record(env, "q", "a")],
+        }
+        for env in RLVR1_ENV_MAP
     }
     m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
     out_dir = tmp_path / "rlvr1_out"
 
-    import pytest
+    manifest = prepare(_args(m0_root, out_dir))
+
+    coverage = manifest["coverage"]
+    assert coverage["mix"] == "rlvr1"
+    # The active count must match the post-audit env_map cardinality.
+    assert coverage["counts"]["active"] == len(RLVR1_ENV_MAP)
+    # search_pivot_... is registered as m0_missing in rlvr1.
+    assert "search_pivot_single_step_tool_use_with_argument_comparison" in coverage["m0_missing"]
+
+
+def test_prepare_rlvr2_emits_correct_artifact_and_coverage(tmp_path: Path) -> None:
+    """rlvr2 with the M0 envs the registry marks active (math_competition_numeric
+    + structured_outputs_json) writes a real artifact and a coverage report."""
+    env_rows = {
+        m0_env: {
+            "train": [_m0_record(m0_env, "q", "a") for _ in range(3)],
+            "val": [_m0_record(m0_env, "q", "a") for _ in range(2)],
+        }
+        for m0_env in RLVR2_ENV_MAP
+    }
+    m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
+    out_dir = tmp_path / "rlvr2_out"
+
+    manifest = prepare(_args(m0_root, out_dir, mix="rlvr2"))
+
+    assert manifest["mix"] == "rlvr2"
+    lineage = LineageRecord.from_jsonable(manifest["lineage"])
+    assert lineage.artifact_type == RLVR2_ARTIFACT
+    # Coverage reports the m0_missing rlvr2 envs so the operator sees what
+    # task057 still owes.
+    assert manifest["coverage"]["counts"]["active"] == len(RLVR2_ENV_MAP)
+    assert manifest["coverage"]["m0_missing"], "rlvr2 should still have m0_missing envs (task057)"
+
+
+def test_prepare_rlvr3_raises_coverage_aware_error(tmp_path: Path) -> None:
+    """rlvr3 has no active rows yet — calling prepare must raise an error
+    that lists the gap (which envs are missing / blocked) so the operator
+    can act on it."""
+    env_rows = {"math_reasoning_numeric": {"train": [], "val": []}}
+    m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
+    out_dir = tmp_path / "rlvr3_out"
+
+    with pytest.raises(ValueError, match="no active M0"):
+        prepare(_args(m0_root, out_dir, mix="rlvr3"))
+
+
+def test_prepare_rejects_unknown_mix(tmp_path: Path) -> None:
+    env_rows = {env: {"train": [], "val": []} for env in RLVR1_ENV_MAP}
+    m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
+    out_dir = tmp_path / "rlvr1_out"
 
     # argparse `choices=` would catch this at CLI parse time; calling prepare
     # directly bypasses argparse and lands inside the MIX_PROFILES lookup.
     with pytest.raises(ValueError, match="unknown mix"):
         prepare(_args(m0_root, out_dir, mix="not_a_mix"))
-
-
-def test_prepare_rejects_rlvr2_until_task015(tmp_path: Path) -> None:
-    """rlvr2/rlvr3 profile slots exist but their env_map is empty."""
-    # Add rlvr2 to the choices list at runtime so argparse-bypass works;
-    # MIX_PROFILES only has rlvr1 today, so prepare's ValueError path is the
-    # one that flags the missing env_map.
-    profiles_before = MIX_PROFILES.copy()
-    MIX_PROFILES["rlvr2"] = {
-        "artifact_type": "RLVR2",
-        "stage": "M1 RLVR2",
-        "env_map": RLVR2_ENV_MAP,
-        "used_in_tag": "super3_rlvr2_v0",
-    }
-    try:
-        env_rows = {env: {"train": [], "val": []} for env in RLVR1_ENV_MAP}
-        m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
-        out_dir = tmp_path / "rlvr2_out"
-
-        import pytest
-
-        with pytest.raises(ValueError, match="task015"):
-            prepare(_args(m0_root, out_dir, mix="rlvr2"))
-    finally:
-        MIX_PROFILES.clear()
-        MIX_PROFILES.update(profiles_before)

@@ -77,17 +77,34 @@ cannot launch a verifiable smoke run from M0 assets today.
   env; W&B lineage `M0 → SFT artifact → RLVR1 artifact` lit up.
 
 **task015_m1_rlvr_full_mix** — extend mix from 4 → 21 envs per plan §5.3:
-- Add HF-resolution path for: `workplace_assistant`, `mcqa`,
-  `instruction_following`, `structured_outputs_json`, `calendar`,
-  `reasoning_gym`, `terminal_pivot`, `ns_tools`, `math_formal_lean`,
-  `jailbreak_detection`, `over_refusal_detection`, `multichallenge`,
-  `inverse_if`,
-  `search_pivot_single_step_tool_use_with_argument_comparison`,
-  `toolcall_schema_single_step_tool_use_with_argument_comparison`.
-- License audit per source; pin `hf_revision`.
-- Per-env reward verifier registration on the NeMo-Gym side.
-- **Acceptance:** rlvr1/2/3 each have a registry; single-node smoke runs with
-  ≥ 8 envs live; per-env reward histograms in W&B.
+- ✓ Session 1: registry-driven mix derivation. New
+  `src/nemotron/recipes/super3/milestones/m1_rlvr/rlvr_env_registry.yaml`
+  declares all 21 NeMo-Gym envs from `stage1_rlvr/config/default.yaml`,
+  pairs each with an M0 source (or `m0_missing` / `verifier_mismatch` /
+  `blocked_external`), and assigns a mix (rlvr1 / rlvr2 / rlvr3).
+  `prepare_m1_rlvr_jsonl.py::MIX_PROFILES` is now derived from the
+  registry; flipping a row from `m0_missing` to `active` lights up that
+  env without Python edits. **Correction shipped:** task014 Session 1's
+  `RLVR1_ENV_MAP` named two NeMo-Gym envs (`search_grounded_qa`,
+  `general_tool_calling`) that don't appear in `default.yaml`;
+  Session 1 renames `general_tool_calling` →
+  `single_step_tool_use_with_argument_comparison` (verifier semantics
+  match) and removes `search_grounded_qa` from active rlvr1 until a
+  proper single-hop QA NeMo-Gym env exists. RLVR2 picks up two active
+  envs from M0 today (math_competition_numeric, structured_outputs_json);
+  RLVR3 stays empty until task057 / task016 / task056 Session 2 land.
+- ☐ Session 2+: per-env M0 expansion (largely task057 territory); the
+  bridge auto-picks them up as registry rows flip to `active`. Acceptance
+  threshold (≥ 8 active envs across mixes) needs task057 progress.
+- HF-resolution path remaining for: `workplace_assistant`, `mcqa`,
+  `instruction_following`, `calendar`, `reasoning_gym`, `terminal_pivot`,
+  `ns_tools`, `math_formal_lean`, `jailbreak_detection`,
+  `over_refusal_detection`, `multichallenge`, `inverse_if`,
+  `search_pivot_single_step_tool_use_with_argument_comparison`. Each
+  needs license audit + `hf_revision` pin (task057) + NeMo-Gym verifier
+  registration (external).
+- **Acceptance:** rlvr1/2/3 each have a registry ✓; single-node smoke runs
+  with ≥ 8 envs live ☐; per-env reward histograms in W&B ☐.
 
 ### 1.4 M1 SWE1 — pivot data
 
@@ -344,7 +361,11 @@ Critical path to the M1 promotion gate, single-track execution:
    Session 1 landed (M0 → RLVR1 JSONL bridge `prepare_m1_rlvr_jsonl.py` +
    NeMo-Gym env map + lineage); Session 2 (RLVR1 config wiring + smoke
    launcher) still to go.
-5. **task015** — M1 RLVR full 21-env mix.
+5. **task015** — M1 RLVR full 21-env mix. Session 1 landed (declarative
+   `rlvr_env_registry.yaml` for all 21 NeMo-Gym envs, registry-driven
+   `MIX_PROFILES`, RLVR1 name audit + correction, rlvr2 lit up with 2
+   M0-available envs); remaining sessions auto-light as task057 lands M0
+   sources.
 6. **task016** — M1 SWE1 pivot data.
 7. **task017** — M1 SWE2 sandbox runtime.
 8. **task018** — M1 RLHF GenRM service.
