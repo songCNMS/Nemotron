@@ -1,0 +1,259 @@
+schema_version: 1
+milestone: M1
+description: |
+  Declarative registry of the 21 NeMo-Gym envs that `stage2_rl/stage1_rlvr/
+  config/default.yaml` loads (lines 327-352, `nemo_gym.config_paths`). Each
+  row pairs an env with its current M0 sourcing status and target RLVR mix.
+  `prepare_m1_rlvr_jsonl.py` derives `MIX_PROFILES` from this file rather
+  than hardcoding the maps — so as M0 expansion (task057) lands new envs
+  the bridge picks them up by flipping a row from `m0_missing` to `active`,
+  no Python edits required.
+
+  Statuses:
+    - `active`           : M0 emits rows AND the verifier semantics line up
+                           with this NeMo-Gym env. Bridge includes by default.
+    - `m0_missing`       : No M0 source exists yet. Bridge skips; manifest
+                           records the gap. Unblocks when task057 lands the
+                           upstream M0 env.
+    - `verifier_mismatch`: M0 has data but the verifier on each side differs
+                           enough that the row may not produce a meaningful
+                           reward signal. Bridge skips by default; future
+                           --include-mismatched flag (Session 2+) can opt in.
+    - `blocked_external` : Blocked on something outside this repo — judge
+                           model deployment, license clearance, etc.
+
+  Mix assignment follows the family layout suggested in plan §5.3:
+  rlvr1 = foundations (math + code + single-step tool/search),
+  rlvr2 = instruction-following + structured + reasoning,
+  rlvr3 = safety + advanced reasoning + tools.
+
+  Reward-verifier match notes call out where M0 and NeMo-Gym verifier
+  names differ — that's where `verifier_mismatch` rows come from.
+
+envs:
+  # ---------- rlvr1 — foundations ----------
+  - nemo_gym_env: math_with_judge
+    mix: rlvr1
+    m0_env_id: math_reasoning_numeric
+    m0_verifier: normalized_numeric_exact_match
+    nemo_gym_verifier: math_with_judge (LLM judge)
+    license: mit
+    status: active
+    notes: gsm8k grade-school math; NeMo-Gym uses LLM judge but verifier still accepts a numeric short answer.
+
+  - nemo_gym_env: code_gen
+    mix: rlvr1
+    m0_env_id: code_execution_python
+    m0_verifier: python_unit_tests
+    nemo_gym_verifier: code_gen (unit tests)
+    license: cc-by-4.0
+    status: active
+    notes: mbpp; both sides run unit tests against the candidate.
+
+  - nemo_gym_env: single_step_tool_use_with_argument_comparison
+    mix: rlvr1
+    m0_env_id: general_tool_calling
+    m0_verifier: tool_schema_and_argument_match
+    nemo_gym_verifier: argument_match (single-step)
+    license: apache-2.0
+    status: active
+    notes: |
+      hermes func_calling_singleturn. Task014 Session 1 mismapped this to a
+      NeMo-Gym env named `general_tool_calling` (which does not appear in
+      `default.yaml`). Corrected here: verifier semantics on both sides
+      compare emitted tool-call arguments against the gold schema.
+
+  - nemo_gym_env: search_pivot_single_step_tool_use_with_argument_comparison
+    mix: rlvr1
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: argument_match (single-step search)
+    license: unknown
+    status: m0_missing
+    notes: |
+      M0 `search_grounded_qa` (HotpotQA) is single-hop retrieval QA, not
+      pivot-style tool-use — wrong verifier shape. A dedicated search-pivot
+      M0 env is task057 territory. Removing the task014-era mapping here
+      because it would have failed the cluster verify in Session 2.
+
+  - nemo_gym_env: toolcall_schema_single_step_tool_use_with_argument_comparison
+    mix: rlvr1
+    m0_env_id: tool_call_repair_negative
+    m0_verifier: negative_recognition
+    nemo_gym_verifier: argument_match (schema check)
+    license: apache-2.0
+    status: verifier_mismatch
+    notes: |
+      M0 `tool_call_repair_negative` rewards recognizing a malformed call;
+      NeMo-Gym's schema-comparison verifier rewards emitting a correctly
+      shaped call. Same family, different reward direction — bridging
+      blindly would give the policy garbage signal. Opt-in via
+      --include-mismatched (Session 2+) after verifier alignment.
+
+  # ---------- rlvr2 — instruction-following + structured + reasoning ----------
+  - nemo_gym_env: math_with_judge
+    mix: rlvr2
+    m0_env_id: math_competition_numeric
+    m0_verifier: normalized_exact_or_contains
+    nemo_gym_verifier: math_with_judge (LLM judge)
+    license: apache-2.0
+    status: active
+    notes: NuminaMath-CoT competition math; doubles up the math_with_judge env at competition difficulty.
+
+  - nemo_gym_env: structured_outputs_json
+    mix: rlvr2
+    m0_env_id: structured_outputs_json
+    m0_verifier: json_value_exact_match
+    nemo_gym_verifier: structured_outputs_json (json schema + value match)
+    license: apache-2.0
+    status: active
+    notes: hermes json_mode_singleturn; exact env-name + verifier match on both sides.
+
+  - nemo_gym_env: workplace_assistant
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: workplace_assistant (judge)
+    license: unknown
+    status: m0_missing
+    notes: needs HF source + license audit (task057 / task030).
+
+  - nemo_gym_env: mcqa
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: mcqa (exact match)
+    license: unknown
+    status: m0_missing
+    notes: candidate source MMLU/MMLU-Pro; task057 territory.
+
+  - nemo_gym_env: instruction_following
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: instruction_following (IFEval-style)
+    license: unknown
+    status: m0_missing
+    notes: candidate source IFEval / Nemotron-Instruction-Following-Chat-v1; task057.
+
+  - nemo_gym_env: calendar
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: calendar (structured I/O)
+    license: unknown
+    status: m0_missing
+    notes: task057 territory; no obvious public dataset yet.
+
+  - nemo_gym_env: reasoning_gym
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: reasoning_gym (programmatic)
+    license: unknown
+    status: m0_missing
+    notes: candidate source `reasoning-gym/reasoning-gym` HF dataset; task057.
+
+  - nemo_gym_env: multichallenge
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: multichallenge (judge model)
+    license: unknown
+    status: blocked_external
+    notes: Needs nl2bash_judge_model deployed (server cfg in default.yaml).
+
+  - nemo_gym_env: inverse_if
+    mix: rlvr2
+    m0_env_id: null
+    nemo_gym_verifier: inverse_if (judge model)
+    license: unknown
+    status: blocked_external
+    notes: Needs nl2bash_judge_model deployed.
+
+  # ---------- rlvr3 — safety + advanced reasoning + tools ----------
+  - nemo_gym_env: swerl_gen
+    mix: rlvr3
+    m0_env_id: swe_pivot_patch_supervision
+    m0_verifier: patch_diff_match
+    nemo_gym_verifier: swerl_gen (diff-apply + test-run)
+    license: source-repository-specific
+    status: verifier_mismatch
+    notes: |
+      M0 `swe_pivot_patch_supervision` checks the emitted diff against the
+      gold patch text; NeMo-Gym swerl_gen applies the diff and runs tests.
+      Same data, different reward signal — task016 covers a clean SWE pivot
+      M0 env that aligns with swerl_gen.
+
+  - nemo_gym_env: terminal_pivot
+    mix: rlvr3
+    m0_env_id: terminal_basic_shell
+    m0_verifier: command_substring_match
+    nemo_gym_verifier: terminal_pivot (tool-use w/ simple_agent)
+    license: mit
+    status: verifier_mismatch
+    notes: |
+      terminal_pivot runs a tool-use agent against terminal env (see
+      `terminal_pivot_simple_agent` cfg in default.yaml). M0 basic_shell
+      just checks the substring of the emitted command — single-step,
+      no tool-use loop. Same family, different shape; opt-in later.
+
+  - nemo_gym_env: ns_tools
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: ns_tools (custom)
+    license: unknown
+    status: m0_missing
+    notes: NVIDIA-internal tools env; no clean public alt today.
+
+  - nemo_gym_env: math_formal_lean_multi_turn
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: lean_proof (Lean compiler check)
+    license: cc-by-sa-4.0
+    status: blocked_external
+    notes: |
+      task056 Session 2 holds the M0 enablement; blocked on legal/share-alike
+      clearance for `nvidia/Nemotron-Math-Proofs-v1`.
+
+  - nemo_gym_env: swerl_gen  # second slot intentionally left out — single row per (nemo_gym_env, mix)
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: swerl_gen (diff-apply + test-run, R2E source)
+    license: source-repository-specific
+    status: m0_missing
+    notes: |
+      A second swerl_gen row reserved for the R2E-Gym SWE data (task016).
+      Will populate when task016 Session 1 lands the M0 SWE pivot env that
+      matches the swerl_gen verifier shape.
+
+  - nemo_gym_env: jailbreak_detection
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: jailbreak_detection (safety judge)
+    license: unknown
+    status: blocked_external
+    notes: Needs nvidia/Nemotron-Content-Safety-Reasoning-4B judge deployed (safety_judge_model in default.yaml).
+
+  - nemo_gym_env: over_refusal_detection
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: over_refusal_detection (safety judge)
+    license: unknown
+    status: blocked_external
+    notes: Same safety judge dependency as jailbreak_detection.
+
+  - nemo_gym_env: equivalence_llm_judge
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: equivalence_llm_judge (judge model)
+    license: unknown
+    status: blocked_external
+    notes: |
+      `default.yaml` loads three configs of this server (lc_judge,
+      nl2bash-equivalency, equivalence_llm_judge); they share the nl2bash
+      judge model. Tracking as one env row here.
+
+  - nemo_gym_env: genrm_compare
+    mix: rlvr3
+    m0_env_id: null
+    nemo_gym_verifier: genrm_compare (preference judge)
+    license: unknown
+    status: blocked_external
+    notes: |
+      Pref-data env. Real population is the RLHF stage (task018).
+      Listed here for completeness; not part of typical RLVR3 blend.
