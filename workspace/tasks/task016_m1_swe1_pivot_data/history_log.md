@@ -39,3 +39,13 @@ Roadmap §1.4 task016 + §5 critical-path 加 Session 1 ✓ + Session 2/3 ☐ �
 Session 2 (M0 SWE pivot 数据 converter) 不在本 PR：要看 SWE-Gym-Lite /
 R2E-Gym 真实数据 shape，再决定从 agent trajectory 里怎么抽 "gold first
 tool call"。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #38 已 squash-merge 为 `d04b694` 进 main — m1_swe1 模块 +
+registry + bridge + 13 个 pytest case 都进了 main。intern status 回 Idle
+(Session 26)。task016 整 task 仍 InProgress：Session 2 (M0 SWE pivot
+converter) + Session 3 (cluster smoke launcher) 没启动。下一个 critical-
+path 候选 (roadmap §5)：task017 (M1 SWE2 sandbox runtime) 或 task013
+(two-stage SFT loss) 或 task018 (RLHF GenRM service)。
+
