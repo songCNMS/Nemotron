@@ -26,3 +26,7 @@
 剩 `math_formal_lean` (CC-BY-SA-4.0) 等 §6 share-alike posture 拍板再做 Session 3。
 
 测试：sandbox 没装 pyarrow / jinja2，M1 test 文件 collection 失败 (pre-existing — `run_m1_sft_roundtrip_smoke` 模块顶层 import pyarrow)。M0 test 套件 43 passed (38 前 + 5 新)。M1 routing 用 stub pyarrow 手工验证全部通过 (NuminaMath -> reasoning builder、MuSiQue -> grounded template、multi-turn Hermes -> trajectory builder)。完整 pytest 等 NemTron 跑。
+
+## Session 3 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #25 (`4e95552`) + 配套 doc refresh PR #26 (`910eb57`) 都已 squash-merge 进 main。intern status 回 Idle (Session 14)，task056 整体保留 InProgress —— Session 4 (`math_formal_lean`) 等 §6 share-alike posture 拍板再启动；那时再把这一行勾掉、task056 整体 Done。
