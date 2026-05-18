@@ -68,8 +68,11 @@ and writes:
 |---|---|
 | `search_grounded_qa` | User prompt with retrieved passages, assistant emits a grounded template referencing supporting-fact titles (e.g. `"Based on the retrieved passages ([1] Title), the answer is …"`) |
 | `code_execution_python` | User coding prompt, assistant reference Python solution |
+| `terminal_basic_shell` | User terminal task prompt, assistant emits the expected shell command as content-only supervision |
+| `swe_pivot_patch_supervision` | User issue prompt with repo/instance metadata, assistant emits the gold unified diff patch |
 | `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` (multi-turn trajectories propagate `tool_call_id` so `tool` turns pair with the originating call) |
 | `structured_outputs_json` | User JSON-mode prompt with schema in the system message, assistant emits the reference JSON object |
+| `tool_call_repair_negative` | User sees a malformed or hallucinated tool-use artifact, assistant emits a repair message plus corrected `tool_calls` |
 | `math_reasoning_numeric` | User math prompt, assistant emits the normalized numeric answer (GSM8K `####` verifier marker is stripped from any `reference_solution` fallback) |
 
 ## Difficulty signal (optional)
@@ -98,8 +101,8 @@ silently downgrading the signal.
 ### System prompt handling (tool-calling is special)
 
 `prompt_messages` rewrites the system prompt to `TOOL_CALLING_SYSTEM_PROMPT`
-only for `general_tool_calling` records — the other three environments keep
-the M0-prepared system text verbatim. The override scrubs Hermes's verbose
+only for `general_tool_calling` records — the other environments keep the
+M0-prepared system text verbatim. The override scrubs Hermes's verbose
 `<tools>[]</tools>` system content so the M1 SFT input doesn't carry the
 upstream prompt format. The same scrub is applied to user content so demo
 `<tool_call>...</tool_call>` blocks shipped inside Hermes user turns don't

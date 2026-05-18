@@ -19,11 +19,11 @@
 |---|---|---|
 | search pattern | ✓ `search_grounded_qa` | hotpotqa/hotpot_qa |
 | tool call syntax | ✓ `general_tool_calling` | NousResearch/hermes-function-calling-v1 (singleturn) |
-| short SWE traces | ✗ | — |
-| terminal basics | ✗ | — |
+| short SWE traces | ◐ `swe_pivot_patch_supervision` | princeton-nlp/SWE-bench_Lite |
+| terminal basics | ◐ `terminal_basic_shell` | aelhalili/bash-commands-dataset |
 | structured output | ◐ `structured_outputs_json` | NousResearch/hermes-function-calling-v1 (`json_mode_singleturn`) |
-| malformed tool call 负例 | ✗ | — |
-| hallucinated tool output 负例 | ✗ | — |
+| malformed tool call 负例 | ◐ `tool_call_repair_negative` | NousResearch/hermes-function-calling-v1 派生合成 |
+| hallucinated tool output 负例 | ◐ `tool_call_repair_negative` | NousResearch/hermes-function-calling-v1 派生合成 |
 | reasoning（plan 中 RLVR 项，SFT v0 也需要 reasoning 形态范例） | ✓ `math_reasoning_numeric` | openai/gsm8k |
 | code | ✓ `code_execution_python` | google-research-datasets/mbpp |
 
@@ -44,13 +44,11 @@ M0 health gate 已稳定，task003 / task004 把 M1 现有 4 个 env 的 correct
 
 ### A. Terminal basics
 
-候选公开数据源（按优先级）：
+本轮选定公开数据源：
 
-- `princeton-nlp/SWE-Gym-Lite` 中的 bash 子集（如可剥离）。
-- `THUDM/agent-flan` / `THUDM/AgentInstruct` 的 OS/Linux 子集，需要确认 license。
-- `microsoft/orca-agentinstruct-1M-v1` 的 shell 子集（CC-BY-4.0）。
+- `aelhalili/bash-commands-dataset`：字段为 `prompt` / `response`，license `mit`，revision `67a539a9c6358574fe4f22e126cba3421fff4645`。
 
-环境名建议：`terminal_basic_shell`，verifier 走 `command_substring_match` + 单步 exit-code 占位（M0 不接真 sandbox，沿用 oracle smoke 形态）。
+环境名：`terminal_basic_shell`，verifier 走 `command_substring_match` + 单步 exit-code 占位（M0 不接真 sandbox，沿用 oracle smoke 形态）。
 
 ### B. Structured output
 
@@ -64,12 +62,11 @@ M0 health gate 已稳定，task003 / task004 把 M1 现有 4 个 env 的 correct
 
 ### C. Short SWE traces
 
-候选数据源：
+本轮选定公开数据源：
 
-- `princeton-nlp/SWE-Bench_Lite` 的 issue + patch（公开）—— 仅取 issue text + gold patch 做 SFT，不进 sandbox。
-- `THUDM/SWE-Fixer` 的 trace 数据，需 license 复核。
+- `princeton-nlp/SWE-bench_Lite`：使用 `test` split 作 train slice、`dev` split 作 val slice，revision `6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2`。HF card 无统一 license tag，registry 标记为 `source-repository-specific`。
 
-环境名建议：`swe_pivot_patch_supervision`。reward verifier 写 stub（`patch_diff_match`），实际 reward 由 M1 SWE-RL stage 接管。
+环境名：`swe_pivot_patch_supervision`。reward verifier 写轻量 `patch_diff_match`，实际 reward 由 M1 SWE-RL stage 接管。
 
 ### D. 负例（malformed tool call + hallucinated tool output）
 
@@ -86,7 +83,7 @@ M0 health gate 已稳定，task003 / task004 把 M1 现有 4 个 env 的 correct
 
 `prepare_m1_agentic_sft.py` 当前的 `ASSISTANT_BUILDERS` 只有 `search / code / reasoning` 三个，tool 走 `trajectory_for_tool_calling`。新环境的 supervision 需要在那一层加 builder：
 
-- `terminal_basic_shell` → assistant = 命令字符串 + 注释（content-only）。
+- `terminal_basic_shell` → assistant = 命令字符串（content-only）。
 - `structured_outputs_json` → assistant = JSON 字符串（content-only）。
 - `swe_pivot_patch_supervision` → assistant = unified diff 文本。
 - `tool_call_repair_negative` → assistant = "我注意到调用不合 schema，正确的调用是 …" + 正确 tool_calls。

@@ -1,6 +1,6 @@
 schema_version: 1
 milestone: M0
-description: Public M0 data registry for search, coding, general tool calling, structured output, and reasoning smoke sets.
+description: Public M0 data registry for search, coding, terminal basics, SWE patches, tool repair, structured output, general tool calling, and reasoning smoke sets.
 datasets:
   - id: m0_search_hotpotqa
     environment: search_grounded_qa
@@ -59,6 +59,59 @@ datasets:
       tests: test_list
       imports: test_setup_code
 
+  - id: m0_terminal_bash_commands
+    environment: terminal_basic_shell
+    domain: terminal
+    hf_dataset: aelhalili/bash-commands-dataset
+    hf_config: default
+    hf_split: train
+    hf_revision: 67a539a9c6358574fe4f22e126cba3421fff4645
+    source_url: https://huggingface.co/datasets/aelhalili/bash-commands-dataset
+    license: mit
+    converter: bash_command
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: basic_shell
+    reward_type: command_substring_match
+    contamination: decontaminate against TerminalBench and held-out shell command evals
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 terminal basics
+      - M1 RLVR terminal smoke
+      - M2 TerminalBench expansion
+    fields:
+      prompt: prompt
+      response: response
+
+  - id: m0_swe_patch_lite
+    environment: swe_pivot_patch_supervision
+    domain: software_engineering
+    hf_dataset: princeton-nlp/SWE-bench_Lite
+    hf_config: default
+    hf_split: test
+    hf_val_split: dev
+    hf_revision: 6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2
+    source_url: https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite
+    license: source-repository-specific
+    converter: swe_bench_patch
+    default_train_rows: 100
+    default_val_rows: 20
+    difficulty: repo_issue_patch
+    reward_type: patch_diff_match
+    contamination: exclude from SWE-Bench Lite and SWE-Bench Verified eval baskets when used for training
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 short SWE traces
+      - M1 SWE-RL preflight
+      - M2 SWE multi-harness expansion
+    fields:
+      id: instance_id
+      repo: repo
+      base_commit: base_commit
+      problem_statement: problem_statement
+      patch: patch
+      test_patch: test_patch
+
   - id: m0_tool_calling_hermes
     environment: general_tool_calling
     domain: general_tool_calling
@@ -89,6 +142,33 @@ datasets:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 tool syntax
       - M1 RLVR tool-call smoke
+      - M2 tool-use expansion
+    fields:
+      id: id
+      conversations: conversations
+      tools: tools
+      category: category
+      subcategory: subcategory
+
+  - id: m0_tool_call_repair_negative_hermes
+    environment: tool_call_repair_negative
+    domain: general_tool_calling
+    hf_dataset: NousResearch/hermes-function-calling-v1
+    hf_config: func_calling_singleturn
+    hf_split: train
+    hf_revision: dae3e1d28cfbcf4b915c04ea1e072030529b4bda
+    source_url: https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1
+    license: apache-2.0
+    converter: hermes_tool_call_repair_negative
+    default_train_rows: 100
+    default_val_rows: 25
+    difficulty: mixed
+    reward_type: negative_recognition
+    contamination: decontaminate against BFCL, TauBench, tool repair heldouts, and internal tool schemas
+    use_stage:
+      - M0 data_env_foundation
+      - M1 Agentic SFT v0 tool repair negatives
+      - M1 RLVR tool-call repair smoke
       - M2 tool-use expansion
     fields:
       id: id

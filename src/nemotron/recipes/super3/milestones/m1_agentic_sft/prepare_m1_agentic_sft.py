@@ -246,6 +246,41 @@ def assistant_for_structured_output(record: Mapping[str, Any]) -> JsonDict:
     return {"role": "assistant", "content": str(expected).strip()}
 
 
+def assistant_for_terminal(record: Mapping[str, Any]) -> JsonDict:
+    command = record.get("extra_env_info", {}).get("expected_command")
+    if command is None:
+        command = record.get("expected_answer", "")
+    return {"role": "assistant", "content": str(command).strip()}
+
+
+def assistant_for_swe_patch(record: Mapping[str, Any]) -> JsonDict:
+    patch = record.get("extra_env_info", {}).get("gold_patch")
+    if patch is None:
+        patch = record.get("expected_answer", "")
+    return {"role": "assistant", "content": str(patch).strip()}
+
+
+def assistant_for_tool_call_repair(record: Mapping[str, Any]) -> JsonDict:
+    extra = record.get("extra_env_info", {})
+    expected_answer = record.get("expected_answer")
+    expected_calls = extra.get("repair_target")
+    if expected_calls is None and isinstance(expected_answer, Mapping):
+        expected_calls = expected_answer.get("tool_calls", [])
+    if not isinstance(expected_calls, list):
+        expected_calls = []
+    tool_calls: list[JsonDict] = []
+    for index, call in enumerate(expected_calls):
+        normalized = normalize_tool_call(call, fallback_id=f"repair_call_{index}")
+        if normalized is not None:
+            tool_calls.append(normalized)
+    content = str(extra.get("expected_assistant_content") or "").strip()
+    return {
+        "role": "assistant",
+        "content": content,
+        "tool_calls": tool_calls,
+    }
+
+
 def assistant_for_tool_calling(record: Mapping[str, Any]) -> JsonDict:
     extra = record.get("extra_env_info", {})
     expected_calls = extra.get("expected_tool_calls") or record.get("expected_answer") or []
@@ -316,7 +351,10 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
 ASSISTANT_BUILDERS = {
     "search_grounded_qa": assistant_for_search,
     "code_execution_python": assistant_for_code,
+    "terminal_basic_shell": assistant_for_terminal,
+    "swe_pivot_patch_supervision": assistant_for_swe_patch,
     "structured_outputs_json": assistant_for_structured_output,
+    "tool_call_repair_negative": assistant_for_tool_call_repair,
     "math_reasoning_numeric": assistant_for_reasoning,
 }
 
@@ -328,8 +366,11 @@ ASSISTANT_BUILDERS = {
 M1_USE_BY_ENV: dict[str, list[str]] = {
     "search_grounded_qa": ["search pattern"],
     "code_execution_python": ["code solution format", "structured output"],
+    "terminal_basic_shell": ["terminal basics"],
+    "swe_pivot_patch_supervision": ["short SWE traces"],
     "general_tool_calling": ["tool call syntax"],
     "structured_outputs_json": ["structured output"],
+    "tool_call_repair_negative": ["malformed tool call negatives", "hallucinated tool output negatives"],
     "math_reasoning_numeric": ["reasoning answer format"],
 }
 

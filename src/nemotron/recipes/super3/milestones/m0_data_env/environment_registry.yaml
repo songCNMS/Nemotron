@@ -61,6 +61,63 @@ environments:
         - expected_answer
         - extra_env_info.test_list
 
+  - id: terminal_basic_shell
+    family: terminal
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: command_substring_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted shell command must contain the expected command after lightweight normalization
+    resources:
+      sandbox: none
+      tools:
+        - shell_command_prompt
+      timeout_s: 20
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - command_match
+      - latency_ms
+      - unsafe_command_flag
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.expected_command
+
+  - id: swe_pivot_patch_supervision
+    family: software_engineering
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: patch_diff_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted unified diff must match the gold patch after newline normalization
+    resources:
+      sandbox: none
+      tools:
+        - unified_diff_patch
+      timeout_s: 20
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - patch_match
+      - latency_ms
+      - malformed_diff
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.repo
+        - extra_env_info.gold_patch
+
   - id: general_tool_calling
     family: general_tool_calling
     stage: M0 data_env_foundation
@@ -88,6 +145,36 @@ environments:
       required_fields:
         - responses_create_params.tools
         - extra_env_info.expected_tool_calls
+
+  - id: tool_call_repair_negative
+    family: general_tool_calling
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: negative_recognition
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: response must repair a malformed or hallucinated tool-use artifact to the reference tool call
+    resources:
+      sandbox: none
+      tools:
+        - openai_function_schema
+      timeout_s: 20
+      max_turns: 2
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - negative_kind
+      - repair_target_match
+      - invalid_tool_call
+      - latency_ms
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - responses_create_params.tools
+        - metadata.negative_kind
+        - metadata.repair_target
+        - extra_env_info.repair_target
 
   - id: structured_outputs_json
     family: structured_output

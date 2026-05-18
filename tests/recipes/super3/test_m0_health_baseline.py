@@ -13,7 +13,10 @@ from nemotron.recipes.super3.milestones.m0_data_env.run_m0_health_baseline impor
     normalize_text_answer,
     overall_status,
     run_python_unit_tests,
+    score_command,
     score_json_value,
+    score_negative_recognition,
+    score_patch,
     score_record,
     score_rows,
     score_text,
@@ -72,6 +75,42 @@ def test_json_value_verifier_matches_parsed_json_exactly() -> None:
     assert score_record({"city": "Paris", "population": 2148000}, record)[0] == 1.0
     assert score_record('{"city": "Paris"}', record)[0] == 0.0
     assert score_record("The answer is {\"city\":\"Paris\",\"population\":2148000}", record)[0] == 0.0
+
+
+def test_command_substring_verifier_matches_fenced_or_plain_command() -> None:
+    record = {
+        "expected_answer": "mv ~/Desktop/x ~/Downloads/",
+        "reward_config": {"verifier": "command_substring_match"},
+    }
+
+    assert score_command("```bash\nmv ~/Desktop/x ~/Downloads/\n```", record["expected_answer"]) == 1.0
+    assert score_record("Run: mv ~/Desktop/x ~/Downloads/", record)[0] == 1.0
+    assert score_record("cp ~/Desktop/x ~/Downloads/", record)[0] == 0.0
+
+
+def test_patch_diff_verifier_matches_normalized_patch() -> None:
+    patch = "diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new\n"
+    record = {
+        "expected_answer": patch,
+        "reward_config": {"verifier": "patch_diff_match"},
+    }
+
+    assert score_patch(patch.rstrip(), patch) == 1.0
+    assert score_record(patch, record)[0] == 1.0
+    assert score_record(patch.replace("+new", "+other"), record)[0] == 0.0
+
+
+def test_negative_recognition_verifier_matches_repair_target_tool_calls() -> None:
+    tool_calls = [{"type": "function", "function": {"name": "lookup", "arguments": {"query": "x"}}}]
+    record = {
+        "expected_answer": {"repair_message": "fixed", "tool_calls": tool_calls},
+        "extra_env_info": {"repair_target": tool_calls},
+        "reward_config": {"verifier": "negative_recognition"},
+    }
+
+    assert score_negative_recognition({"tool_calls": tool_calls}, record["expected_answer"], record) == 1.0
+    assert score_record({"tool_calls": tool_calls}, record)[0] == 1.0
+    assert score_record({"tool_calls": [{"type": "function", "function": {"name": "lookup", "arguments": {"query": "y"}}}]}, record)[0] == 0.0
 
 
 def test_python_unit_test_verifier_runs_reference_code() -> None:
