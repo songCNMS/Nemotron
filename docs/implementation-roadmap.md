@@ -58,13 +58,21 @@ config; `stage2_rl/data_prep.py` is 16 KB. The rlvr1/2/3 data-prep YAMLs are
 cannot launch a verifiable smoke run from M0 assets today.
 
 **task014_m1_rlvr_data_bridge** — bridge M0 → RLVR1 smoke:
-- New `prepare_m1_rlvr_jsonl.py` (parallel to `prepare_m1_agentic_sft.py`):
-  re-emit M0 records with `responses_create_params` + `reward_config` already
-  in M0 shape, plus an `environment` tag NeMo-Gym recognizes for each row.
-- Map M0's 4 environments → RLVR1 mix: `math_with_judge` (gsm8k), `code_gen`
-  (mbpp), `search_grounded_qa` (hotpot), `general_tool_calling` (hermes).
-- Smoke launcher: `nemotron super3 rl rlvr1 -c smoke` with
-  `nodes=1, gpus_per_node=1, prompts_per_step=1, max_generations=2`.
+- ✓ Session 1: New `prepare_m1_rlvr_jsonl.py` (parallel to
+  `prepare_m1_agentic_sft.py`) tags M0 rows with the matching NeMo-Gym env
+  name without touching the `responses_create_params` / `reward_config`
+  payload that M0 already emits. M0 → RLVR1 env map:
+  `math_reasoning_numeric → math_with_judge` (gsm8k),
+  `code_execution_python → code_gen` (mbpp),
+  `search_grounded_qa → search_grounded_qa` (hotpot),
+  `general_tool_calling → general_tool_calling` (hermes). Outputs
+  `train.jsonl` / `val.jsonl` / `manifest.json` consumable by the existing
+  `SplitJsonlDataArtifact` shape; lineage block emits `RLVR1` artifact with
+  the M0 manifest as the upstream `manifest` input.
+- ☐ Session 2: Smoke launcher — `nemotron super3 rl rlvr1 -c smoke` with
+  `nodes=1, gpus_per_node=1, prompts_per_step=1, max_generations=2`; flip
+  `stage1_rlvr/config/data_prep/rlvr1.yaml` from the `/lustre/...` placeholder
+  to the M0-derived artifact.
 - **Acceptance:** end-to-end smoke run completes; reward telemetry emitted per
   env; W&B lineage `M0 → SFT artifact → RLVR1 artifact` lit up.
 
@@ -333,6 +341,9 @@ Critical path to the M1 promotion gate, single-track execution:
    lineage schema/wiring); Session 3 (sandbox containers) + Session 4
    (cluster verify) still to go.
 4. **task014** — M1 RLVR data bridge (smoke-run-able from M0 in one day).
+   Session 1 landed (M0 → RLVR1 JSONL bridge `prepare_m1_rlvr_jsonl.py` +
+   NeMo-Gym env map + lineage); Session 2 (RLVR1 config wiring + smoke
+   launcher) still to go.
 5. **task015** — M1 RLVR full 21-env mix.
 6. **task016** — M1 SWE1 pivot data.
 7. **task017** — M1 SWE2 sandbox runtime.
