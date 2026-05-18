@@ -166,7 +166,8 @@ src/nemotron/data_prep/
 │   └── splits.py            # Split utilities
 │
 └── templates/
-    └── nano3.jinja          # Nano3 chat template
+    ├── nano3.jinja          # Nano3 chat template
+    └── super3.jinja         # Super3 chat template (starts as a verbatim copy of nano3)
 ```
 
 ## Quick Start

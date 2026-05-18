@@ -32,9 +32,10 @@ train_ratio: 0.98
 valid_ratio: 0.01
 test_ratio: 0.01
 
-# Super3 currently reuses the checked-in Nano3 template implementation for
-# tool call rendering until a separate Super3 template is added.
-chat_template: nano3
+# Super3 ships its own jinja (`super3.jinja`); it starts as a verbatim copy
+# of nano3 and may diverge as Super3-specific behavior is identified. The
+# resolver in `chat_sft_shard_core._apply_chat_template` knows both names.
+chat_template: super3
 messages_field: messages
 tools_field: tools
 used_in_filter: super3_agentic_sft_v0

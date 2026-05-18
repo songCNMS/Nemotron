@@ -47,9 +47,8 @@ train_ratio: 0.98
 valid_ratio: 0.01
 test_ratio: 0.01
 
-# Chat template: 'super3', path to .jinja file, or inline template
-# TODO(super3): Replace with super3 chat template once available
-chat_template: nano3
+# Chat template: 'nano3' / 'super3' / path to .jinja file / inline template
+chat_template: super3
 
 # Field name for OpenAI-format messages in input records
 messages_field: messages

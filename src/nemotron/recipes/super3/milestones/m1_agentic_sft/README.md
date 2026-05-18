@@ -30,7 +30,7 @@ uv run nemotron super3 data prep sft -c agentic_v0 \
 
 For CPU workspaces that do not have the full Xenna runtime and HuggingFace
 tokenizer stack installed, run the lightweight round-trip smoke first. It uses
-the same M1 JSONL contract and Nano3 chat template, a deterministic local
+the same M1 JSONL contract and Super3 chat template, a deterministic local
 tokenizer, and writes a packed Parquet shard that is read back for schema and
 loss-mask checks:
 

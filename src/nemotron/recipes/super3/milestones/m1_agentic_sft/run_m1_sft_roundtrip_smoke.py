@@ -7,7 +7,7 @@
 
 The production `nemotron super3 data prep sft -c agentic_v0` path requires the
 Xenna pipeline runtime plus a HuggingFace tokenizer. This smoke keeps the same
-M1 JSONL contract and Nano3 chat template, but uses a deterministic local
+M1 JSONL contract and Super3 chat template, but uses a deterministic local
 tokenizer so CPU workspaces can catch schema/template/filtering issues before
 launching the full data-prep job.
 """
@@ -30,7 +30,12 @@ import pyarrow.parquet as pq
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 REPO_ROOT = Path(__file__).resolve().parents[6]
-NANO3_TEMPLATE = REPO_ROOT / "src/nemotron/data_prep/templates/nano3.jinja"
+# Super3 ships its own jinja that starts as a verbatim copy of nano3
+# (see `task012_super3_chat_template`). Switching here keeps the
+# roundtrip smoke aligned with the data-prep configs in
+# `stage1_sft/config/data_prep/*.yaml`, which all declare
+# `chat_template: super3`.
+SUPER3_TEMPLATE = REPO_ROOT / "src/nemotron/data_prep/templates/super3.jinja"
 CHAT_TEMPLATE_MODULE = REPO_ROOT / "src/nemotron/data_prep/core/chat_template.py"
 DEFAULT_OUTPUT_DIR = Path("../outputs/task005_m1_sft_roundtrip_smoke")
 USED_IN_TAG = "super3_agentic_sft_v0"
@@ -296,7 +301,7 @@ def run(args: argparse.Namespace) -> JsonDict:
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     rows = read_jsonl(args.m1_jsonl)
-    tokenizer = SmokeTokenizer(NANO3_TEMPLATE.read_text(encoding="utf-8"))
+    tokenizer = SmokeTokenizer(SUPER3_TEMPLATE.read_text(encoding="utf-8"))
     sequences, loss_masks, tokenization = tokenize_rows(
         rows,
         tokenizer=tokenizer,
