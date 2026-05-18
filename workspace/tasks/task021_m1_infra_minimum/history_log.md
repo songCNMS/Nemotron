@@ -62,3 +62,8 @@ Session 1 PR #30 已 squash-merge 为 `09c9089` 进 main。intern status 回 Idl
 - 测试 `tests/recipes/super3/test_lineage.py` (8 cases): JSON 双向转换、constants 完整、walker oldest-first、validate 报破链、happy-path 静默、end-to-end M1 emission 走 prepare() 真出 manifest 看 lineage。
 
 测试基线推到 60 passed + 1 skipped (52 + 8 新)。Session 3 (sandbox containers) / Session 4 (cluster verify) 仍 InProgress。
+
+## Session 4 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 3 PR #32 已 squash-merge 为 `62b7774` 进 main — cross-stage lineage schema (`lineage.py`) + M0/M1 manifest emission + 8 个新 pytest case 都进了 main。intern status 回 Idle (Session 20)。task021 整 task 仍 InProgress：Session 3 (sandbox container build：code-exec / Lean / terminal Dockerfile) 和 Session 4 (NeMo-RL / Ray / vLLM 真集群验证) 都没启动；Session 4 仍 block 在 NemTron cluster access 上。下一个 critical-path 候选 (roadmap §5)：task014 (M1 RLVR data bridge) 或 task015 (RLVR 21-env mix)。
+

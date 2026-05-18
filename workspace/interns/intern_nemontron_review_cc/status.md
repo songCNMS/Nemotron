@@ -1,13 +1,13 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task021_m1_infra_minimum -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task021_m1_infra_minimum |
-| PR | pending push |
-| Session | 19 |
+| Status | Idle |
+| Current Task | |
+| PR | N/A |
+| Session | 20 |
 
-最近：开 task021 Session 2 — 新增 `src/nemotron/recipes/super3/milestones/lineage.py` (lightweight dataclasses + walker + validator) + 把 M0 / M1 prep 的 manifest.json 都加 `lineage` block。Schema 用 plan §10 artifact-type 词汇 (`RawDataArtifact`/`SFTDataArtifact`/…) 作为模块常量，未来接 W&B publish 不用 reshape。测试基线推到 60 passed + 1 skipped。task021 整 task 仍 InProgress (Session 3 sandbox containers / Session 4 cluster verify 还没启动)。
+最近：task021 Session 2 (PR #32 `62b7774`) 已 squash-merge 进 main — 新加 `src/nemotron/recipes/super3/milestones/lineage.py` (cross-stage 模式 schema + walker + validator)，M0 / M1 prep 的 manifest.json 都 emit `lineage` 块，plan §10 artifact-type 词汇 (`RawDataArtifact`/`SFTDataArtifact`/…) 作为模块常量 export。task021 整 task 仍 InProgress；Session 3 (sandbox container build) / Session 4 (cluster verify) 待开。M0 测试基线推到 60 passed + 1 skipped。
