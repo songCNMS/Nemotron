@@ -6,23 +6,15 @@
 """Prepare M1 SWE1 JSONL by bridging M0 SWE pivot data into the
 ``swe_pivot_single_step_tool_use_with_argument_comparison`` env.
 
-Structure mirrors ``m1_rlvr/prepare_m1_rlvr_jsonl.py``: the M0 prepare
-script emits records in the NeMo-Gym contract shape, this bridge just
-filters + tags + emits manifest/lineage. SWE1 differs from RLVR in two
-ways:
+Shared scaffolding lives in
+``src/nemotron/recipes/super3/milestones/_bridge_base.py``. This
+module only carries SWE1-specific bits: single ``swe1`` mix, single
+NeMo-Gym env target, ``swe1_env_registry.yaml`` source of truth.
 
-- single NeMo-Gym env (``swe_pivot_single_step_tool_use_with_argument_comparison``)
-  loaded by ``stage2_rl/stage2_swe1/config/default.yaml``;
-- the only currently registered M0 source (``swe_pivot_patch_supervision``)
-  uses a different verifier shape (``patch_diff_match`` vs the NeMo-Gym
-  side's ``argument_match``), so the registry marks it
-  ``verifier_mismatch``. Session 2 lands a proper M0 SWE pivot env and
-  flips a registry row to ``active``; the bridge auto-picks it up with
-  no Python edits required.
-
-The implementation duplicates ~80% of the RLVR bridge. A
-``_bridge_base.py`` extraction makes sense once task017 SWE2 lands a
-third copy — flagged in roadmap §1.4 / §1.5 follow-up.
+Session 1 (task016) shipped this bridge as a verbatim copy of the
+RLVR pattern. Session 4 (task017) factored the common helpers into
+``_bridge_base``; from here, M0 SWE pivot data converter work
+(task016 Session 2) only needs to flip a registry row to ``active``.
 """
 
 from __future__ import annotations
@@ -31,13 +23,24 @@ import argparse
 import json
 import logging
 import sys
-from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
+    from nemotron.recipes.super3.milestones._bridge_base import (
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from nemotron.recipes.super3.milestones.lineage import (
         SWE1_ARTIFACT,
         LineageInput,
@@ -46,6 +49,18 @@ try:
     )
 except ModuleNotFoundError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from _bridge_base import (  # type: ignore[no-redef]
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from lineage import (  # type: ignore[no-redef]
         SWE1_ARTIFACT,
         LineageInput,
@@ -64,79 +79,15 @@ MIX_NAME = "swe1"
 
 REGISTRY_PATH = Path(__file__).with_name("swe1_env_registry.yaml")
 
-STATUS_ACTIVE = "active"
-STATUS_M0_MISSING = "m0_missing"
-STATUS_VERIFIER_MISMATCH = "verifier_mismatch"
-STATUS_BLOCKED_EXTERNAL = "blocked_external"
-KNOWN_STATUSES = frozenset(
-    {STATUS_ACTIVE, STATUS_M0_MISSING, STATUS_VERIFIER_MISMATCH, STATUS_BLOCKED_EXTERNAL}
-)
-
 
 def load_swe1_env_registry(path: Path | None = None) -> list[JsonDict]:
-    """Load the SWE1 registry. Same shape as the RLVR registry loader."""
-    import yaml
-
-    target = path or REGISTRY_PATH
-    with target.open(encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "envs" not in data:
-        raise ValueError(f"{target}: registry must be a mapping with an 'envs' key")
-    rows = data["envs"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'envs' must be a list")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: envs[{index}] must be a mapping")
-        for required in ("nemo_gym_env", "mix", "status"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: envs[{index}] missing required field {required!r}"
-                )
-        if row["status"] not in KNOWN_STATUSES:
-            raise ValueError(
-                f"{target}: envs[{index}] status {row['status']!r} not in {sorted(KNOWN_STATUSES)}"
-            )
-        if row["mix"] != MIX_NAME:
-            raise ValueError(
-                f"{target}: envs[{index}] mix {row['mix']!r} not in {{{MIX_NAME!r}}} "
-                f"— SWE1 registry should only carry swe1 rows"
-            )
-    return rows
-
-
-def derive_env_map(registry: Sequence[Mapping[str, Any]]) -> dict[str, str]:
-    """Pull ``{m0_env_id: nemo_gym_env}`` for the single SWE1 mix."""
-    env_map: dict[str, str] = {}
-    for row in registry:
-        if row["status"] != STATUS_ACTIVE:
-            continue
-        m0_env = row.get("m0_env_id")
-        if not m0_env:
-            continue
-        if m0_env in env_map and env_map[m0_env] != row["nemo_gym_env"]:
-            raise ValueError(
-                f"registry has two active mappings for M0 env {m0_env!r}: "
-                f"{env_map[m0_env]} vs {row['nemo_gym_env']}"
-            )
-        env_map[m0_env] = row["nemo_gym_env"]
-    return env_map
+    """Load ``swe1_env_registry.yaml``."""
+    return load_env_registry(path or REGISTRY_PATH, expected_mix=MIX_NAME)
 
 
 def coverage_report(registry: Sequence[Mapping[str, Any]]) -> JsonDict:
-    """Per-mix counts + gap lists. Mirrors RLVR coverage_report."""
-    by_status: dict[str, list[str]] = defaultdict(list)
-    for row in registry:
-        by_status[row["status"]].append(row["nemo_gym_env"])
-    return {
-        "mix": MIX_NAME,
-        "total_target_envs": len(registry),
-        "counts": {status: len(by_status.get(status, [])) for status in sorted(KNOWN_STATUSES)},
-        "active": sorted(by_status.get(STATUS_ACTIVE, [])),
-        "m0_missing": sorted(by_status.get(STATUS_M0_MISSING, [])),
-        "verifier_mismatch": sorted(by_status.get(STATUS_VERIFIER_MISMATCH, [])),
-        "blocked_external": sorted(by_status.get(STATUS_BLOCKED_EXTERNAL, [])),
-    }
+    """SWE1 coverage report (single mix, no extension fields)."""
+    return base_coverage_report(registry, mix_name=MIX_NAME)
 
 
 def build_mix_profile(
@@ -163,47 +114,6 @@ except (FileNotFoundError, ImportError):
 SWE1_ENV_MAP: dict[str, str] = SWE1_PROFILE.get("env_map", {})
 
 
-def read_jsonl(path: Path) -> list[JsonDict]:
-    rows: list[JsonDict] = []
-    with path.open(encoding="utf-8") as f:
-        for line_number, line in enumerate(f, start=1):
-            stripped = line.strip()
-            if not stripped:
-                continue
-            try:
-                value = json.loads(stripped)
-            except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{line_number}: invalid JSON: {exc}") from exc
-            if not isinstance(value, dict):
-                raise ValueError(f"{path}:{line_number}: expected JSON object")
-            rows.append(value)
-    return rows
-
-
-def write_jsonl(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        for row in rows:
-            json.dump(row, f, ensure_ascii=False, sort_keys=True)
-            f.write("\n")
-
-
-def write_json(path: Path, value: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(value, f, ensure_ascii=False, indent=2, sort_keys=True)
-        f.write("\n")
-
-
-def discover_m0_files(input_dir: Path) -> dict[str, dict[str, Path]]:
-    files: dict[str, dict[str, Path]] = defaultdict(dict)
-    for path in sorted(input_dir.glob("*/*-split.jsonl")):
-        environment = path.parent.name
-        split = path.name.replace("-split.jsonl", "")
-        files[environment][split] = path
-    return dict(files)
-
-
 def tag_record(
     record: Mapping[str, Any],
     *,
@@ -211,75 +121,16 @@ def tag_record(
     row_index: int,
     split: str,
 ) -> JsonDict:
-    """Tag an M0 row with the SWE1 NeMo-Gym env name + mix metadata."""
-    tagged = dict(record)
-    tagged["nemo_gym_env"] = nemo_gym_env
-    tagged["nemo_gym_mix"] = MIX_NAME
-    metadata = dict(tagged.get("metadata") or {})
-    metadata.setdefault("m0_environment", record.get("environment"))
-    metadata["nemo_gym_env"] = nemo_gym_env
-    metadata["nemo_gym_mix"] = MIX_NAME
-    metadata["swe1_row_index"] = row_index
-    metadata["swe1_split"] = split
-    tagged["metadata"] = metadata
-    return tagged
-
-
-def collect_rows(
-    files_by_env: Mapping[str, Mapping[str, Path]],
-    *,
-    env_map: Mapping[str, str],
-    split: str,
-    max_records_per_env: int | None,
-) -> tuple[list[JsonDict], list[JsonDict], dict[str, int]]:
-    rows: list[JsonDict] = []
-    errors: list[JsonDict] = []
-    counts: dict[str, int] = defaultdict(int)
-    for m0_env, nemo_gym_env in sorted(env_map.items()):
-        split_files = files_by_env.get(m0_env)
-        if split_files is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": "M0 has no rows for this environment (not in M0 mix)",
-                }
-            )
-            continue
-        path = split_files.get(split)
-        if path is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": f"missing {split}-split.jsonl",
-                }
-            )
-            continue
-        env_rows = read_jsonl(path)
-        if max_records_per_env is not None:
-            env_rows = env_rows[:max_records_per_env]
-        for row_index, record in enumerate(env_rows):
-            try:
-                tagged = tag_record(
-                    record,
-                    nemo_gym_env=nemo_gym_env,
-                    row_index=row_index,
-                    split=split,
-                )
-            except Exception as exc:  # noqa: BLE001
-                errors.append(
-                    {
-                        "environment": m0_env,
-                        "split": split,
-                        "row_index": row_index,
-                        "error": str(exc),
-                    }
-                )
-                continue
-            rows.append(tagged)
-            counts[m0_env] += 1
-    return rows, errors, dict(sorted(counts.items()))
+    """SWE1 row tagger. No extra row fields beyond the base contract."""
+    return base_tag_record(
+        record,
+        nemo_gym_env=nemo_gym_env,
+        mix_name=MIX_NAME,
+        row_index=row_index,
+        split=split,
+        row_index_key="swe1_row_index",
+        split_key="swe1_split",
+    )
 
 
 def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
@@ -336,21 +187,31 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             f"{coverage['m0_missing'] + coverage['verifier_mismatch'] + coverage['blocked_external']}"
         )
 
-    files_by_env = discover_m0_files(args.m0_input_dir)
+    files_by_env = discover_m0_split_files(args.m0_input_dir)
     if not files_by_env:
         raise ValueError(f"no M0 split files found under {args.m0_input_dir}")
 
-    train_rows, train_errors, train_counts = collect_rows(
+    def _tag(record, m0_env, nemo_gym_env, row_index, split):
+        return tag_record(
+            record,
+            nemo_gym_env=nemo_gym_env,
+            row_index=row_index,
+            split=split,
+        )
+
+    train_rows, train_errors, train_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
         split="train",
         max_records_per_env=args.max_records_per_env,
+        tag_fn=_tag,
     )
-    val_rows, val_errors, val_counts = collect_rows(
+    val_rows, val_errors, val_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
         split="val",
         max_records_per_env=args.max_val_records_per_env,
+        tag_fn=_tag,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

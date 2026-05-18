@@ -70,3 +70,61 @@ watchdog) / Session 3 (cluster smoke + Docker fallback) / Session 4
 (`_bridge_base.py` 抽取) 没启动。下一个 critical-path 候选 (roadmap §5)：
 task018 (M1 RLHF GenRM service)。
 
+## Session 4 - 2026-05-18 - intern_nemontron_review_cc
+
+实现 `_bridge_base.py` 抽取 — RLVR + SWE1 + SWE2 + RLHF 四个 bridge
+module 共享 scaffolding。等到 4 个 module 都摆稳（每个加完 module-
+specific extensions：SWE2 `sif_source` / RLHF `pref_dataset`）之后做这
+个 refactor 才有意义；过早抽会被后续 module 撕。
+
+抽到 `src/nemotron/recipes/super3/milestones/_bridge_base.py`:
+
+- JSONL/JSON I/O helpers (read_jsonl / write_jsonl / write_json)
+- `discover_m0_split_files(input_dir)` (4 个 module 用同一份代码读 M0)
+- Status vocabulary (STATUS_ACTIVE / M0_MISSING / VERIFIER_MISMATCH /
+  BLOCKED_EXTERNAL + `KNOWN_STATUSES` frozenset)
+- `load_env_registry(path, expected_mix, ...)` — 通用 YAML loader：
+  接受单值或集合 (SWE1/2/RLHF single mix；RLVR `{rlvr1, rlvr2, rlvr3}`)；
+  `display_label` 让 module 自定错误措辞；`extra_row_validator` callback
+  接 SWE2 `sif_source` 那种 module-specific 行检查
+- `derive_env_map(registry, mix_name=None)` — 同时支持 single-mix (passes
+  None) 和 multi-mix (RLVR 按 mix 过滤) 两种用法
+- `base_coverage_report(registry, mix_name, filter_to_mix=False)` —
+  通用 counts + per-status 列表
+- `base_tag_record(record, ...)` — 通用 row tagger，`extra_row_fields` /
+  `extra_metadata_fields` / `row_index_key` / `split_key` 让 module 加
+  module-specific tag (SWE2 sif_source、RLHF pref_dataset、各自的
+  swe1_/swe2_/rlvr_/rlhf_ row_index 前缀)
+- `collect_mix_rows(files_by_env, env_map, split, max, tag_fn)` —
+  通用 mix 切片 + 错误收集，`tag_fn` callback 让 module 提供 closure
+
+留给 module:
+- `MIX_NAME` / 注册表路径
+- mix profile builder (3 mixes for RLVR vs 1 for others)
+- `prepare()` 主流程（manifest 字段 + lineage outputs + 第二个 registry：
+  SWE2 SIF、RLHF pref data）
+- module-specific tag wrapping（SWE2 `sif_source` lookup、RLHF
+  `pref_dataset` lookup）
+- module-specific coverage extension（SWE2 `sif_source_breakdown`、
+  RLHF `pref_dataset_breakdown` + `known_pref_candidates`）
+
+行数对比：
+
+| 文件 | Pre | Post | Δ |
+|---|---|---|---|
+| m1_rlvr/prepare_m1_rlvr_jsonl.py | 529 | 341 | -188 |
+| m1_swe1/prepare_m1_swe1_jsonl.py | 451 | 312 | -139 |
+| m1_swe2/prepare_m1_swe2_jsonl.py | 591 | 460 | -131 |
+| m1_rlhf/prepare_m1_rlhf_jsonl.py | 550 | 401 | -149 |
+| _bridge_base.py | n/a | 387 | +387 |
+| **Total** | **2121** | **1901** | **-220** |
+
+测试基线没变 — 129 passed + 2 skipped（task017 Session 1 / task013
+Session 1 时候的同基线）。每个 module 测试文件没改一个字 — refactor 的
+契约就是 "external behavior identical"。`test_m1_agentic_sft.py` pyarrow
+collect-error pre-existing。
+
+Roadmap §1.5 task017 Session 4 ☐ → ✓。task017 整 task 仍 InProgress：
+Session 2 (OpenHands wrapper + SWE-Gym converter + watchdog) / Session
+3 (cluster smoke + Docker fallback) 没启动 — 都需 cluster / Docker。
+

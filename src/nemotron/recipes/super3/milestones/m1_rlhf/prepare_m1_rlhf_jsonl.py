@@ -3,7 +3,7 @@
 # dependencies = ["pyyaml>=6.0"]
 # ///
 
-"""Prepare M1 RLHF JSONL — fourth registry-driven bridge copy.
+"""Prepare M1 RLHF JSONL — fourth registry-driven bridge.
 
 `stage2_rl/stage3_rlhf/config/default.yaml::nemo_gym.config_paths` loads
 two env configs:
@@ -12,22 +12,13 @@ two env configs:
 - ``single_step_tool_use_with_argument_comparison`` (parallel tool-call
   validity check per plan §5.6)
 
-Both are ``blocked_external`` / ``m0_missing`` today. Session 2 lands an
-M0 preference-data converter (HelpSteer-2 / UltraFeedback / orca DPO
-pairs per ``rlhf_pref_data_registry.yaml``) plus a cluster-side GenRM
-model deployment; the bridge flips registry rows to ``active`` with no
-Python edits required.
-
-Module structure mirrors ``m1_swe2/prepare_m1_swe2_jsonl.py``: load env
-registry → derive env_map → coverage_report → tag_record → prepare.
-The RLHF-specific extension is ``pref_dataset_breakdown`` in the
-coverage block — operators see at a glance which preference source is
-backing which env row.
-
-Code duplication note: this is the fourth registry-driven bridge after
-RLVR + SWE1 + SWE2. `_bridge_base.py` extraction (task017 Session 4)
-will generalise the common scaffolding once the per-stage variations
-stop moving.
+Shared scaffolding lives in
+``src/nemotron/recipes/super3/milestones/_bridge_base.py`` (task017
+Session 4). RLHF-specific extensions on top of the base:
+``pref_dataset`` row tag (from active env_registry rows) +
+``pref_dataset_breakdown`` + ``known_pref_candidates`` in the coverage
+block. Today active=0 → ``prepare()`` raises a coverage-aware error
+listing the gap and the candidate registry's known sources.
 """
 
 from __future__ import annotations
@@ -43,6 +34,18 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from nemotron.recipes.super3.milestones._bridge_base import (
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from nemotron.recipes.super3.milestones.lineage import (
         RLHF_ARTIFACT,
         LineageInput,
@@ -51,6 +54,18 @@ try:
     )
 except ModuleNotFoundError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from _bridge_base import (  # type: ignore[no-redef]
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from lineage import (  # type: ignore[no-redef]
         RLHF_ARTIFACT,
         LineageInput,
@@ -70,27 +85,16 @@ MIX_NAME = "rlhf"
 ENV_REGISTRY_PATH = Path(__file__).with_name("rlhf_env_registry.yaml")
 PREF_DATA_REGISTRY_PATH = Path(__file__).with_name("rlhf_pref_data_registry.yaml")
 
-STATUS_ACTIVE = "active"
-STATUS_M0_MISSING = "m0_missing"
-STATUS_VERIFIER_MISMATCH = "verifier_mismatch"
-STATUS_BLOCKED_EXTERNAL = "blocked_external"
-KNOWN_STATUSES = frozenset(
-    {STATUS_ACTIVE, STATUS_M0_MISSING, STATUS_VERIFIER_MISMATCH, STATUS_BLOCKED_EXTERNAL}
-)
 
-
-# --- Preference-data candidate registry -----------------------------------
+# --- Preference-data candidate registry ----------------------------------
 
 
 def load_rlhf_pref_data_registry(path: Path | None = None) -> list[JsonDict]:
-    """Load the preference-data candidate registry.
-
-    Each row points at a HF dataset that could back the RLHF training
-    (HelpSteer-2 / UltraFeedback / Orca DPO pairs / …). The bridge does
-    not consume the registry directly — it surfaces a `known_candidates`
-    list in the coverage block so coverage explains which source still
-    needs an M0 transformer.
-    """
+    """Load the preference-data candidate registry (HelpSteer-2 /
+    UltraFeedback / Orca DPO pairs). The bridge surfaces a
+    ``known_candidates`` list in the coverage block; the registry is
+    not consumed for tagging directly until Session 2 wires an active
+    M0 pref source."""
     import yaml
 
     target = path or PREF_DATA_REGISTRY_PATH
@@ -116,95 +120,35 @@ def pref_candidate_ids(registry: Sequence[Mapping[str, Any]]) -> list[str]:
     return sorted(str(row["id"]) for row in registry)
 
 
-# --- RLHF env registry / mix profile --------------------------------------
+# --- RLHF env registry + mix profile -------------------------------------
 
 
 def load_rlhf_env_registry(path: Path | None = None) -> list[JsonDict]:
-    """Load the RLHF env registry. Same shape as RLVR / SWE1 / SWE2 loaders."""
-    import yaml
-
-    target = path or ENV_REGISTRY_PATH
-    with target.open(encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "envs" not in data:
-        raise ValueError(f"{target}: registry must be a mapping with an 'envs' key")
-    rows = data["envs"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'envs' must be a list")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: envs[{index}] must be a mapping")
-        for required in ("nemo_gym_env", "mix", "status"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: envs[{index}] missing required field {required!r}"
-                )
-        if row["status"] not in KNOWN_STATUSES:
-            raise ValueError(
-                f"{target}: envs[{index}] status {row['status']!r} not in {sorted(KNOWN_STATUSES)}"
-            )
-        if row["mix"] != MIX_NAME:
-            raise ValueError(
-                f"{target}: envs[{index}] mix {row['mix']!r} not in {{{MIX_NAME!r}}} "
-                f"— RLHF registry should only carry rlhf rows"
-            )
-    return rows
-
-
-def derive_env_map(registry: Sequence[Mapping[str, Any]]) -> dict[str, str]:
-    """Pull ``{m0_env_id: nemo_gym_env}`` for the single RLHF mix."""
-    env_map: dict[str, str] = {}
-    for row in registry:
-        if row["status"] != STATUS_ACTIVE:
-            continue
-        m0_env = row.get("m0_env_id")
-        if not m0_env:
-            continue
-        if m0_env in env_map and env_map[m0_env] != row["nemo_gym_env"]:
-            raise ValueError(
-                f"registry has two active mappings for M0 env {m0_env!r}: "
-                f"{env_map[m0_env]} vs {row['nemo_gym_env']}"
-            )
-        env_map[m0_env] = row["nemo_gym_env"]
-    return env_map
+    """Load ``rlhf_env_registry.yaml``."""
+    return load_env_registry(path or ENV_REGISTRY_PATH, expected_mix=MIX_NAME)
 
 
 def coverage_report(
     registry: Sequence[Mapping[str, Any]],
     pref_data_registry: Sequence[Mapping[str, Any]] | None = None,
 ) -> JsonDict:
-    """Per-mix counts + gap lists. RLHF-specific extension:
-    ``pref_dataset_breakdown`` maps each ``pref_dataset_candidate`` named
-    in the env registry to its current status, plus a ``known_candidates``
-    list of all pref sources the candidate registry knows about. Together
-    they answer "which env rows have a pref source already? which pref
-    sources have no env row yet?".
-    """
-    by_status: dict[str, list[str]] = defaultdict(list)
-    by_pref_dataset: dict[str, list[str]] = defaultdict(list)
+    """RLHF coverage report with ``pref_dataset_breakdown`` (per-candidate
+    status histogram derived from env registry rows) + ``known_pref_candidates``
+    (id list from the pref-data registry) on top of the base report."""
+    report = base_coverage_report(registry, mix_name=MIX_NAME)
+    by_pref: dict[str, list[str]] = defaultdict(list)
     for row in registry:
-        by_status[row["status"]].append(row["nemo_gym_env"])
         pref = row.get("pref_dataset_candidate")
         if pref:
-            by_pref_dataset[pref].append(row["status"])
-    pref_dataset_breakdown = {
-        pref: dict(sorted({s: by_pref_dataset[pref].count(s) for s in by_pref_dataset[pref]}.items()))
-        for pref in sorted(by_pref_dataset)
+            by_pref[pref].append(row["status"])
+    report["pref_dataset_breakdown"] = {
+        pref: dict(sorted({s: by_pref[pref].count(s) for s in by_pref[pref]}.items()))
+        for pref in sorted(by_pref)
     }
-    known_candidates: list[str] = []
-    if pref_data_registry is not None:
-        known_candidates = pref_candidate_ids(pref_data_registry)
-    return {
-        "mix": MIX_NAME,
-        "total_target_envs": len(registry),
-        "counts": {status: len(by_status.get(status, [])) for status in sorted(KNOWN_STATUSES)},
-        "active": sorted(by_status.get(STATUS_ACTIVE, [])),
-        "m0_missing": sorted(by_status.get(STATUS_M0_MISSING, [])),
-        "verifier_mismatch": sorted(by_status.get(STATUS_VERIFIER_MISMATCH, [])),
-        "blocked_external": sorted(by_status.get(STATUS_BLOCKED_EXTERNAL, [])),
-        "pref_dataset_breakdown": pref_dataset_breakdown,
-        "known_pref_candidates": known_candidates,
-    }
+    report["known_pref_candidates"] = (
+        pref_candidate_ids(pref_data_registry) if pref_data_registry is not None else []
+    )
+    return report
 
 
 def build_mix_profile(
@@ -233,48 +177,7 @@ except (FileNotFoundError, ImportError):
 RLHF_ENV_MAP: dict[str, str] = RLHF_PROFILE.get("env_map", {})
 
 
-# --- JSONL helpers (parallel to RLVR / SWE1 / SWE2) -----------------------
-
-
-def read_jsonl(path: Path) -> list[JsonDict]:
-    rows: list[JsonDict] = []
-    with path.open(encoding="utf-8") as f:
-        for line_number, line in enumerate(f, start=1):
-            stripped = line.strip()
-            if not stripped:
-                continue
-            try:
-                value = json.loads(stripped)
-            except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{line_number}: invalid JSON: {exc}") from exc
-            if not isinstance(value, dict):
-                raise ValueError(f"{path}:{line_number}: expected JSON object")
-            rows.append(value)
-    return rows
-
-
-def write_jsonl(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        for row in rows:
-            json.dump(row, f, ensure_ascii=False, sort_keys=True)
-            f.write("\n")
-
-
-def write_json(path: Path, value: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(value, f, ensure_ascii=False, indent=2, sort_keys=True)
-        f.write("\n")
-
-
-def discover_m0_files(input_dir: Path) -> dict[str, dict[str, Path]]:
-    files: dict[str, dict[str, Path]] = defaultdict(dict)
-    for path in sorted(input_dir.glob("*/*-split.jsonl")):
-        environment = path.parent.name
-        split = path.name.replace("-split.jsonl", "")
-        files[environment][split] = path
-    return dict(files)
+# --- Row tagging ---------------------------------------------------------
 
 
 def tag_record(
@@ -285,94 +188,33 @@ def tag_record(
     row_index: int,
     split: str,
 ) -> JsonDict:
-    """Tag an M0 row with RLHF NeMo-Gym env name + mix metadata + pref hint."""
-    tagged = dict(record)
-    tagged["nemo_gym_env"] = nemo_gym_env
-    tagged["nemo_gym_mix"] = MIX_NAME
-    if pref_dataset is not None:
-        tagged["pref_dataset"] = pref_dataset
-    metadata = dict(tagged.get("metadata") or {})
-    metadata.setdefault("m0_environment", record.get("environment"))
-    metadata["nemo_gym_env"] = nemo_gym_env
-    metadata["nemo_gym_mix"] = MIX_NAME
-    if pref_dataset is not None:
-        metadata["pref_dataset"] = pref_dataset
-    metadata["rlhf_row_index"] = row_index
-    metadata["rlhf_split"] = split
-    tagged["metadata"] = metadata
-    return tagged
+    """RLHF row tagger. Adds ``pref_dataset`` when an active registry
+    row supplies it — the NeMo-Gym GenRM env routes by env name plus the
+    pref dataset hint for analytics."""
+    extras = {"pref_dataset": pref_dataset} if pref_dataset is not None else None
+    return base_tag_record(
+        record,
+        nemo_gym_env=nemo_gym_env,
+        mix_name=MIX_NAME,
+        row_index=row_index,
+        split=split,
+        extra_row_fields=extras,
+        extra_metadata_fields=extras,
+        row_index_key="rlhf_row_index",
+        split_key="rlhf_split",
+    )
 
 
 def _m0_env_to_pref_dataset(registry: Sequence[Mapping[str, Any]]) -> dict[str, str | None]:
     out: dict[str, str | None] = {}
     for row in registry:
-        if row["status"] != STATUS_ACTIVE:
+        if row["status"] != "active":
             continue
         m0_env = row.get("m0_env_id")
         if not m0_env:
             continue
         out[m0_env] = row.get("pref_dataset_candidate")
     return out
-
-
-def collect_rows(
-    files_by_env: Mapping[str, Mapping[str, Path]],
-    *,
-    env_map: Mapping[str, str],
-    pref_lookup: Mapping[str, str | None],
-    split: str,
-    max_records_per_env: int | None,
-) -> tuple[list[JsonDict], list[JsonDict], dict[str, int]]:
-    rows: list[JsonDict] = []
-    errors: list[JsonDict] = []
-    counts: dict[str, int] = defaultdict(int)
-    for m0_env, nemo_gym_env in sorted(env_map.items()):
-        split_files = files_by_env.get(m0_env)
-        if split_files is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": "M0 has no rows for this environment (not in M0 mix)",
-                }
-            )
-            continue
-        path = split_files.get(split)
-        if path is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": f"missing {split}-split.jsonl",
-                }
-            )
-            continue
-        env_rows = read_jsonl(path)
-        if max_records_per_env is not None:
-            env_rows = env_rows[:max_records_per_env]
-        pref_dataset = pref_lookup.get(m0_env)
-        for row_index, record in enumerate(env_rows):
-            try:
-                tagged = tag_record(
-                    record,
-                    nemo_gym_env=nemo_gym_env,
-                    pref_dataset=pref_dataset,
-                    row_index=row_index,
-                    split=split,
-                )
-            except Exception as exc:  # noqa: BLE001
-                errors.append(
-                    {
-                        "environment": m0_env,
-                        "split": split,
-                        "row_index": row_index,
-                        "error": str(exc),
-                    }
-                )
-                continue
-            rows.append(tagged)
-            counts[m0_env] += 1
-    return rows, errors, dict(sorted(counts.items()))
 
 
 def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
@@ -431,25 +273,34 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             f"Candidate pref data sources: {coverage['known_pref_candidates']}"
         )
 
-    files_by_env = discover_m0_files(args.m0_input_dir)
+    files_by_env = discover_m0_split_files(args.m0_input_dir)
     if not files_by_env:
         raise ValueError(f"no M0 split files found under {args.m0_input_dir}")
 
     pref_lookup = _m0_env_to_pref_dataset(_REGISTRY)
 
-    train_rows, train_errors, train_counts = collect_rows(
+    def _tag(record, m0_env, nemo_gym_env, row_index, split):
+        return tag_record(
+            record,
+            nemo_gym_env=nemo_gym_env,
+            pref_dataset=pref_lookup.get(m0_env),
+            row_index=row_index,
+            split=split,
+        )
+
+    train_rows, train_errors, train_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
-        pref_lookup=pref_lookup,
         split="train",
         max_records_per_env=args.max_records_per_env,
+        tag_fn=_tag,
     )
-    val_rows, val_errors, val_counts = collect_rows(
+    val_rows, val_errors, val_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
-        pref_lookup=pref_lookup,
         split="val",
         max_records_per_env=args.max_val_records_per_env,
+        tag_fn=_tag,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

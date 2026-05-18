@@ -2,6 +2,7 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #40 / e9adcba on 2026-05-18 -->
+<!-- SESSION 4 LANDED: PR pending on 2026-05-18 -->
 
 ## 背景
 
@@ -24,7 +25,7 @@ SIF images per `instance_id`，三个 family：
 | 1 | SIF image mapping registry + SWE2 bridge skeleton (third bridge copy) | yes | ✓ Done (this PR) |
 | 2 | OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog | partial (wrapper 单测 yes，真 Docker 起 no) | Todo |
 | 3 | Cluster smoke launcher + Docker fallback for non-SLURM | no — 需 NemTron cluster + SIF images | Todo |
-| 4 | `_bridge_base.py` 抽取 (RLVR + SWE1 + SWE2 同 pattern) | yes | Todo |
+| 4 | `_bridge_base.py` 抽取 (RLVR + SWE1 + SWE2 + RLHF 同 pattern) | yes | ✓ Done (this PR) |
 
 ## Session 1 目标
 
