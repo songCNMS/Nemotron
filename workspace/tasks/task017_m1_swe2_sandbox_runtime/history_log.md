@@ -128,3 +128,14 @@ Roadmap §1.5 task017 Session 4 ☐ → ✓。task017 整 task 仍 InProgress：
 Session 2 (OpenHands wrapper + SWE-Gym converter + watchdog) / Session
 3 (cluster smoke + Docker fallback) 没启动 — 都需 cluster / Docker。
 
+## Session 5 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 4 PR #46 已 squash-merge 为 `5943e18` 进 main — `_bridge_base.py`
+抽取 + 4 个 prep script refactor + 行数 2121 → 1901 都进了 main。intern
+status 回 Idle (Session 34)。task017 整 task 仍 InProgress：Session 2 /
+Session 3 没启动 — 都需 cluster / Docker。下一个候选：task030 (unified
+data registry — 把 M0/RLHF pref/SWE2 SIF/RLVR env 几个 registry 统一抽
+schema) / task019-020 (M1 eval basket，block on task014 Session 2 真
+RLVR checkpoint) / 之前 task 的 Session 2+ (cluster-only)。
+
+

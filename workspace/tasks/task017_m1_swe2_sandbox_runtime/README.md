@@ -2,7 +2,7 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #40 / e9adcba on 2026-05-18 -->
-<!-- SESSION 4 LANDED: PR pending on 2026-05-18 -->
+<!-- SESSION 4 LANDED: PR #46 / 5943e18 on 2026-05-18 -->
 
 ## 背景
 
