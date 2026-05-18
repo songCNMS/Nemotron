@@ -66,10 +66,33 @@ and writes:
 
 | M0 environment | M1 supervision |
 |---|---|
-| `search_grounded_qa` | User prompt with retrieved passages, assistant short answer |
+| `search_grounded_qa` | User prompt with retrieved passages, assistant emits a grounded template referencing supporting-fact titles (e.g. `"Based on the retrieved passages ([1] Title), the answer is …"`) |
 | `code_execution_python` | User coding prompt, assistant reference Python solution |
-| `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` |
-| `math_reasoning_numeric` | User math prompt, assistant reference reasoning solution |
+| `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` (multi-turn trajectories propagate `tool_call_id` so `tool` turns pair with the originating call) |
+| `math_reasoning_numeric` | User math prompt, assistant emits the normalized numeric answer (GSM8K `####` verifier marker is stripped from any `reference_solution` fallback) |
+
+## Difficulty signal (optional)
+
+When the M0 health-baseline report is available, `prepare_m1_agentic_sft.py`
+tags every SFT row with a `metadata.difficulty_bucket` ∈ `{trivial, hard,
+unknown}` derived from the oracle policy (failing rows → `hard`, passing rows
+→ `trivial`, anything we cannot prove failed → `unknown`). The manifest also
+gets a per-split `difficulty_buckets` summary so curriculum samplers can
+stratify before launching SFT.
+
+```bash
+python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
+  --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
+  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516 \
+  --m0-health-baseline /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25/health_baseline/health_baseline_report.json
+```
+
+When `--m0-health-baseline` is omitted, the script auto-discovers
+`<m0-input-dir>/health_baseline/health_baseline_report.json` — the exact path
+`run_m0_health_baseline.py` writes by default. If the file is unreadable (bad
+JSON, wrong shape, missing fields) `prepare_m1_agentic_sft.py` logs a warning
+and falls back to `difficulty_bucket=unknown` for every row instead of
+silently downgrading the signal.
 
 ### System prompt handling (tool-calling is special)
 

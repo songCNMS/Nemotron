@@ -1,13 +1,13 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task010_m1_post_task009_polish -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 9 |
+| Status | Working |
+| Current Task | task010_m1_post_task009_polish |
+| PR | pending push |
+| Session | 10 |
 
-最近：PR #15 (task009 P3 长尾 + N3) 已 squash-merge 为 `4cb1228`。REVIEW_v0.md 终态 **17 fixed / 1 partial / 2 still open (#8 #9 — design 类) / 2 tracked (task005)**。从 task001 到 task009 共 9 个 PR (#4/#5/#9/#11/#12/#13/#14/#15) 合入 main；测试基线从 v1 时的 32 推到 66 + 2 skip。
+最近：task009 PR #15 squash-merge 后 re-review，无新 P0/P1。开 task010 把 post-task009 5 项小问题 (D1-D5) 与 REVIEW #21 (`compute_train_iters` derived-rows test gap) 一起清掉。测试基线 66 → 67 passed + 5 skipped（新增 3 个 omegaconf gate）。
