@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -60,3 +60,36 @@
 - 主干本次新增内容包括 M1 RLVR/RLHF/SWE bridge、Super3 chat template、sample-level SFT loss/step dispatch、以及相关 tests/workspace task 文档。
 - 切回 PR #23 分支并执行 `git rebase origin/main`，分支已基于最新主干重放，rebase 无冲突。
 - 本轮不改业务代码，仅更新 Session 4 状态记录并推送到 PR #23 分支。
+
+## Session 5 - 2026-05-18 - intern_nemontron_code_reading
+
+- 按“review 代码尤其是修改的代码，debug 并从数据到 m1 训练跑流程任务验证”复查 PR #23 分支与最新 `origin/main` 的 M0/M1/SFT 相关改动。
+- 发现并修复 M1 环境 scope 测试退步：`multi_turn_tool_use` 已纳入 `M1_USE_BY_ENV`，但测试 fixture 没提供 assistant supervision，导致 converter 正确报 empty supervision；已让 fixture 与 `general_tool_calling` 共用合法 tool-call trajectory。
+- 发现并修复 M0 registry 两个失效 HF revision：
+  - `dgslibisey/MuSiQue` 改为当前 main commit `c8f4f8c9465fb69d31a8eae894c3fd509c4ca321`。
+  - `AI-MO/NuminaMath-CoT` 改为当前 main commit `9d8d210c9f6a36c8f3cd84045668c9b7800ef517`。
+- 重新跑 M0 小样本公开数据链路，覆盖 11 个 dataset/env slice：search grounded QA、search multihop QA、MBPP coding、terminal bash、SWE patch lite、Hermes tool calling、Hermes multi-turn tool calling、tool-call repair negative、structured outputs JSON、GSM8K reasoning、NuminaMath competition。
+- M0 health baseline 通过；M1 Agentic SFT 输出 `train_rows=11`、`val_shadow_rows=11`、`errors=0`，blend path 为 `/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/m1_agentic_sft/data_blend_agentic_sft_v0.json`。
+- 用项目规则指定 tokenizer/model `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507` 跑通真实 `nemotron super3 data prep sft -c agentic_v0`：
+  - output path：`/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/packed_agentic_v0_super3/splits`。
+  - metadata：`total_sequences=11`、`total_tokens=9477`、`pack_size=4096`、`num_shards=16`、`tokenizer_uri=file:///mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`。
+  - 读回 parquet：`rows=11`、`loss_tokens=1278`、`empty_loss_rows=0`，schema 为 `input_ids list<int32>`、`loss_mask list<uint8>`、`seq_start_id list<int32>`。
+- 生成 M1 SFT training plan：`/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/m1_train_smoke/plans/session5_smoke/training_manifest.json`，`train_iters=1`、`train_shards=14`、`train_rows=9`。
+- 远端 `NemTron` 环境 debug：
+  - 系统 Python 有 `torch 2.9.1+cu129`、Megatron-Bridge、Transformers，但缺 `cosmos_xenna` / `megatron.energon`。
+  - 新建 `/root/nemotron_session5_venv --system-site-packages`，补 `megatron-energon==7.3.2`、`nvidia-resiliency-ext==0.6.0`、`hydra-core==1.3.2`；`mamba-ssm` / `causal-conv1d` 因无 GitHub wheel 访问且远端无 `nvcc` 未能安装。
+- 修复当前 Megatron-Bridge API drift：
+  - `megatron.bridge.recipes.common._sft_common` 已不存在；`test_train.py` 改为直接构造 tiny SFT `ConfigContainer`，`qwen_local_train.py` 改用当前 Bridge 的 `qwen3_4b_finetune_config`。
+  - `qwen_local_train.py` 原本写入不存在的 `cfg.validation.eval_interval`，改为 `cfg.train.eval_interval`。
+  - `tiny_model.py` fallback 扩展到当前 Bridge 的 `NemotronHModelProvider`，并保留 coverage 降级 warning。
+- 修复当前 Bridge packed SFT 契约差异：
+  - `PackedSequenceSpecs` 只接受单个 `.npy` packed 文件，不能直接读 `super3 data prep sft` 输出的 parquet shard 目录。
+  - `stage1_sft/train.py` 在训练启动时将 packed parquet shards 懒转换为 Bridge 可读的 `.npy` list-of-dicts，并生成 current Bridge builder 会打开的 packed metadata JSON。
+- 修复 smoke 训练调度差异：当前 Bridge `finetune()` 强制要求 `pretrained_checkpoint` 或 `load`；当 `checkpoint.finetune=false` 且无 load/pretrained 时，`run_finetune()` 改走 `pretrain()` loop，以符合随机初始化 smoke 配置语义。
+- 远端 Super/NemotronH tiny smoke 已推进到 Megatron 初始化、tokenizer、模型构造阶段；因缺 `mamba-ssm` 停在 Mamba layer instantiation。由于远端没有 `nvcc`，没有继续用源码编译绕过。
+- 为完成数据到训练主链路验证，改用 Qwen3 4B local SFT 入口跑 1-step M1 smoke：
+  - 命令使用同一份 packed M1 数据、同一 Qwen tokenizer/model，`CUDA_VISIBLE_DEVICES=0`、`global_batch_size=1`、`micro_batch_size=1`、`tensor_model_parallel_size=1`。
+  - 训练完成：`iteration 1/1`，`lm loss=1.237886E+01`，`grad norm=268.659`，`skipped=0`，`nan=0`。
+  - checkpoint 成功保存到 `/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/m1_train_qwen4b_smoke/checkpoints/iter_0000001`。
+  - validation 完成 32 samples：`lm loss=1.214117E+01`，`PPL=1.874315E+05`。
+- 本地目标测试最终通过：`PYTHONPATH=src pytest -q tests/data_prep/test_chat_template_super3.py tests/recipes/super3` 为 `183 passed, 3 skipped`。

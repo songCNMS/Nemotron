@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## 编写规则
 
@@ -67,3 +67,19 @@ packed parquet 的最低验收口径：`splits/{train,valid,test}` 下 parquet s
 ### sample 与 shard 数的 split 行为
 
 `sample=8 num_shards=1` 可快速验证真实 tokenizer 和 packed parquet 写入，但只有 1 个 shard 时 `distribute_shards_to_splits` 会跳过 valid/test split。需要验证 train/valid/test 目录时，保留 `agentic_v0` 默认 `num_shards=16` 并在小 blend 上不传 `sample`。
+
+### M0 registry revision 漂移
+
+HF dataset revision pin 会失效：Session 5 验证时 `dgslibisey/MuSiQue@cf7a59f...` 与 `AI-MO/NuminaMath-CoT@d5fbeac...` 已不在各自 dataset repo。当前可用 main commit 分别是 `c8f4f8c9465fb69d31a8eae894c3fd509c4ca321` 和 `9d8d210c9f6a36c8f3cd84045668c9b7800ef517`。M0 扩量前应先用 HF API 批量校验 registry 里所有 `hf_revision`。
+
+### 当前 Megatron-Bridge 的 packed SFT 输入契约
+
+当前远端 Megatron-Bridge 0.3 的 `PackedSequenceSpecs` 只接受单个 `.npy` packed file；`super3 data prep sft` 产出的 parquet shard 目录不能直接传给 training。Bridge 的 `.npy` 内容与 parquet columns 等价，都是包含 `input_ids`、`loss_mask`、`seq_start_id` 的 list-of-dicts；同时 `FinetuningDatasetBuilder` 会无条件打开 packed metadata path，因此即使 `pad_cu_seqlens=false` 也需要一个 JSON metadata 文件。
+
+### checkpoint.finetune=false 的 smoke 语义
+
+当前 Bridge `finetune()` 会 assert `checkpoint.pretrained_checkpoint` 或 `checkpoint.load` 非空。M1 smoke 配置里 `checkpoint.finetune=false` 表示随机初始化训练入口验证，这类 run 需要调用 `pretrain()` loop 复用同一个 `ConfigContainer` / forward step，而不是调用 `finetune()`。
+
+### NemTron 远端训练环境缺口
+
+`NemTron` 系统 Python 有 `torch 2.9.1+cu129`、Megatron-Bridge、Transformers；缺 `megatron.energon`、`nvidia_resiliency_ext`、`hydra-core` 时可以在 `--system-site-packages` venv 里补。当前节点无 `nvcc`，且 `mamba-ssm` / `causal-conv1d` pip source package 会尝试从 GitHub 拉匹配 wheel；GitHub 超时后无法本地编译。因此 Super/NemotronH tiny smoke 会在 Mamba layer instantiation 阶段失败。若只是验证 M1 packed data 到 training loop，可用 Qwen3 4B local SFT 入口绕过 Mamba 依赖。

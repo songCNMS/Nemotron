@@ -52,6 +52,7 @@ Direct usage:
 
 from __future__ import annotations
 
+import json
 import logging
 import sys
 from collections.abc import Callable
@@ -63,6 +64,7 @@ from megatron.bridge.data.datasets.packed_sequence import PackedSequenceSpecs
 from megatron.bridge.training.config import ConfigContainer, FinetuningDatasetConfig
 from megatron.bridge.training.finetune import finetune
 from megatron.bridge.training.gpt_step import forward_step as _gpt_step_forward_step
+from megatron.bridge.training.pretrain import pretrain
 
 from nemotron.recipes.super3.stage1_sft.step_dispatch import (
     _STEP_FUNCTIONS,
@@ -234,11 +236,131 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
     Returns:
         A FinetuningDatasetConfig instance
     """
+
+    def _bridge_packed_npy_path(path_value: str | None, split_name: str, pack_size: int) -> str | None:
+        """Return a Megatron-Bridge readable packed .npy path.
+
+        The Super3 data-prep CLI emits parquet shards with `input_ids`,
+        `loss_mask`, and `seq_start_id` columns. Megatron-Bridge 0.3's
+        `PackedSequenceSpecs` runtime accepts one `.npy` file containing the
+        same list-of-dicts structure. Convert lazily at train startup so packed
+        artifacts remain portable across Bridge builds.
+        """
+        if not path_value:
+            return None
+
+        path = Path(path_value)
+        if path.suffix == ".npy":
+            return str(path)
+
+        if path.is_file() and path.suffix == ".parquet":
+            parquet_files = [path]
+            output_path = path.with_suffix(".npy")
+        elif path.is_dir():
+            npy_files = sorted(path.glob("*.npy"))
+            if len(npy_files) == 1:
+                return str(npy_files[0])
+            parquet_files = sorted(path.glob("*.parquet"))
+            output_path = path.parent / f"{path.name}_{pack_size}_{split_name}.npy"
+        else:
+            raise FileNotFoundError(f"Packed {split_name} data path does not exist: {path}")
+
+        if not parquet_files:
+            raise FileNotFoundError(f"No parquet files found for packed {split_name} data: {path}")
+
+        newest_parquet_mtime = max(p.stat().st_mtime for p in parquet_files)
+        if output_path.exists() and output_path.stat().st_mtime >= newest_parquet_mtime:
+            return str(output_path)
+
+        import numpy as np
+        import pyarrow.parquet as pq
+
+        rows: list[dict[str, list[int] | list[bool]]] = []
+        for parquet_file in parquet_files:
+            table = pq.read_table(parquet_file, columns=["input_ids", "loss_mask", "seq_start_id"])
+            columns = table.to_pydict()
+            for input_ids, loss_mask, seq_start_id in zip(
+                columns["input_ids"],
+                columns["loss_mask"],
+                columns["seq_start_id"],
+                strict=True,
+            ):
+                rows.append(
+                    {
+                        "input_ids": [int(x) for x in input_ids],
+                        "loss_mask": [bool(x) for x in loss_mask],
+                        "seq_start_id": [int(x) for x in seq_start_id],
+                    }
+                )
+
+        if not rows:
+            raise ValueError(f"Packed {split_name} parquet data produced zero rows: {path}")
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        np.save(output_path, np.array(rows, dtype=object), allow_pickle=True)
+        logger.info(
+            "Converted packed %s parquet shards to Megatron-Bridge npy: %s (%d rows)",
+            split_name,
+            output_path,
+            len(rows),
+        )
+        return str(output_path)
+
+    def _bridge_packed_metadata_path(
+        train_path_value: str | None,
+        val_path_value: str | None,
+        pack_size: int,
+    ) -> str | None:
+        """Create a metadata JSON file expected by current Bridge packed SFT."""
+        packed_paths = [Path(p) for p in (train_path_value, val_path_value) if p]
+        if not packed_paths:
+            return None
+
+        output_path = packed_paths[0].parent / f"packed_{pack_size}_metadata.json"
+        newest_data_mtime = max(p.stat().st_mtime for p in packed_paths)
+        if output_path.exists() and output_path.stat().st_mtime >= newest_data_mtime:
+            return str(output_path)
+
+        import numpy as np
+
+        metadata = []
+        for packed_path in packed_paths:
+            rows = np.load(packed_path, allow_pickle=True)
+            if len(rows) == 0:
+                continue
+
+            sample_counts = []
+            packed_lengths = []
+            max_sequence_length = 0
+            for row in rows:
+                input_ids = row["input_ids"]
+                seq_start_id = list(row["seq_start_id"]) + [len(input_ids)]
+                sample_counts.append(len(seq_start_id) - 1)
+                packed_lengths.append(max(0, len(input_ids) - 1))
+                for start, end in zip(seq_start_id[:-1], seq_start_id[1:], strict=True):
+                    max_sequence_length = max(max_sequence_length, max(0, end - start - 1))
+
+            metadata.append(
+                {
+                    "dataset_max_seqlen": max_sequence_length,
+                    "max_samples_per_bin": max(sample_counts),
+                    "packing_factor": round(sum(sample_counts) / len(sample_counts), 2),
+                    "packing_efficiency": round(sum(packed_lengths) / len(packed_lengths) / pack_size * 100, 2),
+                    "pack_size": pack_size,
+                    "min_packed_seqlen": min(packed_lengths),
+                }
+            )
+
+        output_path.write_text(json.dumps(metadata), encoding="utf-8")
+        logger.info("Wrote Megatron-Bridge packed metadata: %s", output_path)
+        return str(output_path)
+
     # Build PackedSequenceSpecs if provided
     packed_specs = None
     has_validation_data = True  # Track if we have validation data
     if "packed_sequence_specs" in dataset_config:
         specs_dict = dict(dataset_config["packed_sequence_specs"])
+        packed_sequence_size = specs_dict.get("packed_sequence_size", -1)
 
         super3_dir = dataset_config.get("super3_packed_sft_dir")
         if super3_dir:
@@ -260,8 +382,25 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
                     has_validation_data = False
             logger.info(f"Resolved super3_packed_sft_dir: train={specs_dict.get('packed_train_data_path')}, valid={specs_dict.get('packed_val_data_path')}")
 
+        specs_dict["packed_train_data_path"] = _bridge_packed_npy_path(
+            specs_dict.get("packed_train_data_path"),
+            "train",
+            int(packed_sequence_size),
+        )
+        specs_dict["packed_val_data_path"] = _bridge_packed_npy_path(
+            specs_dict.get("packed_val_data_path"),
+            "valid",
+            int(packed_sequence_size),
+        )
+        if specs_dict.get("packed_metadata_path") is None:
+            specs_dict["packed_metadata_path"] = _bridge_packed_metadata_path(
+                specs_dict.get("packed_train_data_path"),
+                specs_dict.get("packed_val_data_path"),
+                int(packed_sequence_size),
+            )
+
         packed_specs = PackedSequenceSpecs(
-            packed_sequence_size=specs_dict.get("packed_sequence_size", -1),
+            packed_sequence_size=packed_sequence_size,
             packed_train_data_path=specs_dict.get("packed_train_data_path"),
             packed_val_data_path=specs_dict.get("packed_val_data_path"),
             packed_metadata_path=specs_dict.get("packed_metadata_path"),
@@ -388,7 +527,15 @@ def run_finetune(
     resolved_forward_step = _load_forward_step(step_function_name)
     logger.info(f"forward_step: {step_function_name} ({resolved_forward_step!r})")
 
-    finetune(config=cfg, forward_step_func=resolved_forward_step)
+    if (
+        getattr(cfg.checkpoint, "finetune", True) is False
+        and cfg.checkpoint.pretrained_checkpoint is None
+        and cfg.checkpoint.load is None
+    ):
+        logger.info("checkpoint.finetune=false with no load checkpoint; running random-init smoke training loop")
+        pretrain(config=cfg, forward_step_func=resolved_forward_step)
+    else:
+        finetune(config=cfg, forward_step_func=resolved_forward_step)
 
     # -------------------------------------------------------------------------
     # POST-TRAINING: Convert final checkpoint to HuggingFace format

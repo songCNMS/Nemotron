@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task005_m1_sft_v0_scope_expansion |
 | PR | https://github.com/songCNMS/Nemotron/pull/23 |
-| Session | 4 |
+| Session | 5 |
 | Branch | intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3 |
-| Latest | 已拉取最新 `origin/main` 到本地 `main`（`3ef7942`），并将 PR #23 分支 rebase 到该主干；本轮仅同步主干与记录状态。 |
+| Latest | Session 5 已完成 M0→M1 Agentic SFT 数据与训练链路验证：修复 2 个失效 HF revision、Bridge packed parquet→npy/metadata 兼容、随机初始化 smoke 调度、Qwen local 入口；远端 H200 上用 Qwen3 4B 跑通 1-step M1 SFT smoke、checkpoint save 和 validation。 |

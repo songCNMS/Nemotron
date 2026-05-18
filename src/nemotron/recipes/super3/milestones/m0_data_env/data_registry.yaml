@@ -41,7 +41,7 @@ datasets:
     hf_config: null
     hf_split: train
     hf_val_split: validation
-    hf_revision: cf7a59f47c11b51c3b5d0a39bc24c54a48d80b0d
+    hf_revision: c8f4f8c9465fb69d31a8eae894c3fd509c4ca321
     source_url: https://huggingface.co/datasets/dgslibisey/MuSiQue
     license: cc-by-4.0
     converter: musique_search
@@ -300,7 +300,7 @@ datasets:
     hf_config: null
     hf_split: train
     hf_val_split: test
-    hf_revision: d5fbeac4a1ad8e3ff32024e29bff4f2b3ab74e7c
+    hf_revision: 9d8d210c9f6a36c8f3cd84045668c9b7800ef517
     source_url: https://huggingface.co/datasets/AI-MO/NuminaMath-CoT
     license: apache-2.0
     converter: numinamath_competition
