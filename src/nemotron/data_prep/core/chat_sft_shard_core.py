@@ -46,9 +46,12 @@ from nemotron.data_prep.packing.spool import (
 )
 
 
+_BUILTIN_TEMPLATES = {"nano3", "super3"}
+
+
 def _apply_chat_template(tokenizer: PreTrainedTokenizerBase, chat_template: str) -> None:
-    if chat_template == "nano3":
-        template_path = Path(__file__).parent.parent / "templates" / "nano3.jinja"
+    if chat_template in _BUILTIN_TEMPLATES:
+        template_path = Path(__file__).parent.parent / "templates" / f"{chat_template}.jinja"
         with open(template_path) as f:
             tokenizer.chat_template = f.read()
     elif Path(chat_template).exists():

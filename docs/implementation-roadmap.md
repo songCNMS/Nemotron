@@ -11,10 +11,12 @@ proposed task ordering to close the gaps.
 Legend: ✓ implemented · ◐ partial · ✗ not started · 📋 tracked under an existing
 workspace task.
 
-State snapshot: PR #18 merged structured output into `main`; task005 adds the
+State snapshot: PR #18 merged structured output into `main`; task005 added the
 remaining terminal basics, short SWE patch supervision, and tool-call repair
-negative slices. REVIEW_v0.md still has 2 design-class items outside task005
-(#8 chat template, #9 two-stage SFT loss).
+negative slices. task056 Session 1 (PR #25) wired NuminaMath + MuSiQue + multi-
+turn Hermes. task012 (this row, see §1.2) shipped `super3.jinja` and switched
+the three data-prep configs to it. REVIEW_v0.md still has 1 design-class item
+outside task005 (#9 two-stage SFT loss).
 
 ---
 
@@ -45,7 +47,7 @@ status `InProgress`).
 
 | # | Plan ref | Status | Suggested task |
 |---|---|---|---|
-| REVIEW #8 | §5.1 chat template | ✗ — `agentic_v0.yaml: chat_template: nano3` reuses the Nano3 template; tool-role loss masking, `<tools>` injection, and system prompt rendering all rely on Nano3 conventions | **task012_super3_chat_template** — port nano3 jinja to a `super3` template; add render-time tests for `system / user / assistant w/ tool_calls / tool turn`; switch `agentic_v0.yaml` |
+| REVIEW #8 | §5.1 chat template | ✓ — task012 shipped `src/nemotron/data_prep/templates/super3.jinja` (verbatim copy of nano3 with a header comment for lineage), taught `_apply_chat_template` to resolve `super3`, and flipped the three data-prep YAMLs in `stage1_sft/config/data_prep/{default,agentic_v0,tiny}.yaml`. Render-time tests cover `system / user / assistant w/ tool_calls / tool turn` plus `tool_call_repair_negative` round-trip. Diverge `super3.jinja` from `nano3.jinja` as Super3-specific behavior is identified. |
 | REVIEW #9 | §5.1 two-stage SFT loss | ✗ — only token-level next-token loss; plan calls for "先 token-level，再 sample-level" | **task013_super3_sft_two_stage_loss** — wire a second optimizer pass; needs Megatron-Bridge hook research first |
 
 ### 1.3 M1 RLVR 1/2/3 — data wiring (highest leverage)
@@ -300,10 +302,9 @@ long-context, multilingual` per plan §3 M3 acceptance.
 
 Critical path to the M1 promotion gate, single-track execution:
 
-1. **task005** *(filed)* — Agentic SFT v0 scope expansion (terminal /
+1. **task005** *(landed)* — Agentic SFT v0 scope expansion (terminal /
    structured / short SWE / negatives).
-2. **task012** — Super3 chat template (unblocks REVIEW #8; needed before any
-   large SFT scale-up).
+2. ~~**task012** — Super3 chat template~~ *(landed; REVIEW #8 closed)*.
 3. **task021** — M1 infra minimum (lineage + telemetry; everything downstream
    depends on this).
 4. **task014** — M1 RLVR data bridge (smoke-run-able from M0 in one day).
@@ -340,9 +341,10 @@ makes sense after M2 ships a working 122B-parity checkpoint.
 
 These are the design calls that can't be made without product / lead input:
 
-- **task012 chat template:** does Super3 ship its own jinja template, or do we
-  formalize that Super3 reuses Nano3? (currently it's a "TODO" comment in
-  `agentic_v0.yaml:37`).
+- ~~**task012 chat template:** does Super3 ship its own jinja template, or do
+  we formalize that Super3 reuses Nano3?~~ — resolved by task012: ships its
+  own (`super3.jinja`); starts as a verbatim copy of `nano3.jinja` and may
+  diverge as Super3-specific behavior surfaces.
 - **task014 RLVR base checkpoint:** are we starting from `super3-sft` artifact
   produced by the existing super3 SFT recipe, or from the new M1 Agentic SFT
   v0 checkpoint? Plan §5 implies the latter — confirm.

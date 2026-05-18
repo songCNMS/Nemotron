@@ -39,7 +39,7 @@ Multilingual.
 
 `905de2d` added `src/nemotron/recipes/super3/milestones/m1_agentic_sft/run_m1_sft_roundtrip_smoke.py`
 — a self-contained CPU-friendly validator that runs the M1 JSONL through the
-Nano3 chat template + a deterministic local tokenizer + sequence packing,
+Super3 chat template + a deterministic local tokenizer + sequence packing,
 writes a packed Parquet shard, and reads it back to check schema and loss
 mask. It's the cheapest gate for "did I break the chat-template render or
 the loss mask?" without booting the full Xenna pipeline. New env work
