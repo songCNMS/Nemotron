@@ -63,3 +63,15 @@ Live coverage（main + 本 PR）：
 Session 2+ 不在本 PR：bridge 这边不需要再改代码，等 task057 / task016 /
 task056 Session 2 / cluster ops 把 m0_missing / verifier_mismatch /
 blocked_external 一行一行翻成 active。Bridge 派生表自动 pickup。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #36 已 squash-merge 为 `f4ed9ae` 进 main — `rlvr_env_registry.yaml`
++ registry-driven `MIX_PROFILES` + manifest coverage 块 + task014 Session 1
+RLVR1 名字 audit/correction 都进了 main。intern status 回 Idle (Session 24)。
+task015 整 task 仍 InProgress：Session 2+ 等 task057 / task056 Session 2 /
+task016 / cluster ops 把 registry 行翻成 active；bridge auto-pickup，不需
+要再改 Python。下一个 critical-path 候选 (roadmap §5)：task016 (M1 SWE1
+pivot data) 或 task013 (two-stage SFT loss) 或 task021 Session 3 (sandbox
+container build)。
+

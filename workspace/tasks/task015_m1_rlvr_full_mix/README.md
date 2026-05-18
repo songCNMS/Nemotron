@@ -1,6 +1,7 @@
 # task015_m1_rlvr_full_mix
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #36 / f4ed9ae on 2026-05-18 -->
 
 ## 背景
 
