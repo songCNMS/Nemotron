@@ -20,6 +20,27 @@ from typing import Any
 
 import yaml
 
+try:
+    from nemotron.recipes.super3.milestones.lineage import (
+        LINEAGE_SCHEMA_VERSION,
+        RAW_DATA_ARTIFACT,
+        LineageInput,
+        LineageOutput,
+        make_record as make_lineage_record,
+    )
+except ModuleNotFoundError:
+    # Allow `python prepare_m0_assets.py` from the module directory (the
+    # script's PEP 723 banner enables that) by reaching for the sibling
+    # lineage module on the import path.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from lineage import (  # type: ignore[no-redef]
+        LINEAGE_SCHEMA_VERSION,
+        RAW_DATA_ARTIFACT,
+        LineageInput,
+        LineageOutput,
+        make_record as make_lineage_record,
+    )
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_REGISTRY_PATH = SCRIPT_DIR / "data_registry.yaml"
 ENV_REGISTRY_PATH = SCRIPT_DIR / "environment_registry.yaml"
@@ -1067,6 +1088,40 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
                 "rows": file_counts[(env_id, split)],
             }
         )
+
+    # task021 Session 2: cross-stage lineage block. M0 is the chain root —
+    # one HF source per registered dataset shows up as a `hf_dataset` input,
+    # and every JSONL split file becomes a `m0_jsonl_split` output. Future
+    # M1 / RL prep stages declare this manifest as a `manifest` input.
+    lineage_inputs = [
+        LineageInput(
+            kind="hf_dataset",
+            ref=spec["hf_dataset"],
+            config=spec.get("hf_config"),
+            split=spec["hf_split"],
+            revision=spec["hf_revision"],
+            notes=spec.get("source_url"),
+        )
+        for spec in specs
+    ]
+    lineage_outputs = [
+        LineageOutput(
+            kind="m0_jsonl_split",
+            ref=str(Path(file_info["path"]).relative_to(output_dir)),
+            rows=file_info["rows"],
+            notes=f"environment={file_info['environment']} split={file_info['split']}",
+        )
+        for file_info in manifest["files"]
+    ]
+    lineage_record = make_lineage_record(
+        stage=f"{manifest['milestone']} data_env_foundation",
+        produced_by="prepare_m0_assets.py",
+        artifact_type=RAW_DATA_ARTIFACT,
+        artifact_name=output_dir.name or "m0_data_env_foundation",
+        inputs=lineage_inputs,
+        outputs=lineage_outputs,
+    )
+    manifest["lineage"] = lineage_record.to_jsonable()
 
     write_json(output_dir / "manifest.json", manifest)
     write_json(output_dir / "dataset_registry.resolved.json", data_registry)

@@ -15,6 +15,23 @@ import sys
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
+
+try:
+    from nemotron.recipes.super3.milestones.lineage import (
+        SFT_DATA_ARTIFACT,
+        LineageInput,
+        LineageOutput,
+        make_record as make_lineage_record,
+    )
+except ModuleNotFoundError:
+    # Fallback for direct-script execution (PEP 723 banner enables that).
+    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1]))
+    from lineage import (  # type: ignore[no-redef]
+        SFT_DATA_ARTIFACT,
+        LineageInput,
+        LineageOutput,
+        make_record as make_lineage_record,
+    )
 from pathlib import Path
 from typing import Any
 
@@ -814,6 +831,55 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         },
         "errors": [*train_errors, *val_errors],
     }
+
+    # task021 Session 2: cross-stage lineage block. M1 declares the M0
+    # manifest as its single upstream manifest input plus the optional
+    # M0 health-baseline as a sibling input; outputs are the SFT train
+    # JSONL, the val_shadow JSONL, and the data-prep blend JSON.
+    lineage_inputs: list[LineageInput] = [
+        LineageInput(
+            kind="manifest",
+            ref=str(args.m0_input_dir / "manifest.json"),
+            notes="M0 RawDataArtifact",
+        ),
+    ]
+    if health_baseline_path is not None:
+        lineage_inputs.append(
+            LineageInput(
+                kind="m0_health_baseline_report",
+                ref=str(health_baseline_path),
+                notes="oracle baseline → difficulty signal",
+            )
+        )
+    lineage_outputs = [
+        LineageOutput(
+            kind="m1_sft_jsonl",
+            ref=str(train_path.relative_to(args.output_dir)),
+            rows=sum(manifest["counts"]["train"].values()),
+            notes="SFT training input",
+        ),
+        LineageOutput(
+            kind="m1_sft_val_shadow_jsonl",
+            ref=str(val_shadow_path.relative_to(args.output_dir)),
+            rows=sum(manifest["counts"]["val_shadow"].values()),
+            notes="held-out shadow file; not used at training time",
+        ),
+        LineageOutput(
+            kind="m1_sft_blend",
+            ref=str(blend_path.relative_to(args.output_dir)),
+            notes="`nemotron super3 data prep sft -c agentic_v0` consumes this",
+        ),
+    ]
+    lineage_record = make_lineage_record(
+        stage=f"{MILESTONE} Agentic SFT v0",
+        produced_by="prepare_m1_agentic_sft.py",
+        artifact_type=SFT_DATA_ARTIFACT,
+        artifact_name=args.output_dir.name or "m1_agentic_sft_v0",
+        inputs=lineage_inputs,
+        outputs=lineage_outputs,
+    )
+    manifest["lineage"] = lineage_record.to_jsonable()
+
     write_json(args.output_dir / "manifest.json", manifest)
     write_report(args.output_dir / "report.md", manifest)
     return manifest

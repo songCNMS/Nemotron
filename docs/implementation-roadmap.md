@@ -157,10 +157,18 @@ Sliced into four Sessions; tracker lives at
   access; unsandbox-runnable.
 - ✗ Session 3: SIF/Docker/Podman sandbox container build script for
   code-exec, Lean, terminal.
-- ✗ Session 2: W&B artifact lineage —
-  `RawDataArtifact → SFTDataArtifact → ModelArtifact-sft → RLVR{1,2,3}` →
-  `SWE{1,2} → RLHF → EvalReport`. Schema + manifest field
-  sandbox-runnable; W&B publish needs runtime credentials.
+- ✓ Session 2: cross-stage lineage schema +
+  `manifest["lineage"]` block emitted by `prepare_m0_assets.py` (root
+  with HF source inputs) and `prepare_m1_agentic_sft.py` (declares the
+  M0 manifest as its upstream input). New
+  `src/nemotron/recipes/super3/milestones/lineage.py` ships
+  `LineageRecord` / `LineageInput` / `LineageOutput` dataclasses +
+  `walk_chain` / `validate_chain` walkers. Plan §10 artifact-type
+  vocabulary (`RawDataArtifact → SFTDataArtifact → ModelArtifact-sft →
+  RLVR{1,2,3} → SWE{1,2} → RLHF → EvalReport`) is enumerated as
+  module constants so the future W&B publish wiring (Session 3+)
+  inherits the type names. Sandbox-runnable; W&B publish still needs
+  runtime credentials.
 - ✓ Session 1: per-env telemetry emitter for the M0 oracle health-
   baseline path. `run_m0_health_baseline.py` now threads each scorer
   through a `time.perf_counter()` wrap and emits per-verifier
@@ -321,9 +329,9 @@ Critical path to the M1 promotion gate, single-track execution:
    structured / short SWE / negatives).
 2. ~~**task012** — Super3 chat template~~ *(landed; REVIEW #8 closed)*.
 3. **task021** — M1 infra minimum (lineage + telemetry; everything downstream
-   depends on this). Session 1 landed (per-env telemetry emitter for the M0
-   oracle baseline); Session 2-4 (lineage, sandbox containers, cluster verify)
-   still to go.
+   depends on this). Sessions 1-2 landed (telemetry emitter + cross-stage
+   lineage schema/wiring); Session 3 (sandbox containers) + Session 4
+   (cluster verify) still to go.
 4. **task014** — M1 RLVR data bridge (smoke-run-able from M0 in one day).
 5. **task015** — M1 RLVR full 21-env mix.
 6. **task016** — M1 SWE1 pivot data.
