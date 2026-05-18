@@ -26,6 +26,13 @@ USED_IN_TAG = "super3_agentic_sft_v0"
 MILESTONE = "M1"
 TOOL_CALLING_SYSTEM_PROMPT = "You are a tool-using assistant. Use the available functions when needed."
 
+# Environments that route through the multi-turn tool-trajectory builder
+# instead of a per-env `assistant_for_*` function. Single-turn and multi-turn
+# Hermes envs share the same converter and supervision path — the difference
+# is M0-side (env config `max_turns`, env_id label) only. Declared up here so
+# `prompt_messages` can reference it before `ASSISTANT_BUILDERS` is built.
+_TOOL_CALLING_ENVIRONMENTS = frozenset({"general_tool_calling", "multi_turn_tool_use"})
+
 JsonDict = dict[str, Any]
 
 
@@ -143,7 +150,7 @@ def _scrub_tool_call_xml(text: str) -> str:
 
 def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDict]:
     messages = base_messages(record)
-    if environment != "general_tool_calling":
+    if environment not in _TOOL_CALLING_ENVIRONMENTS:
         return messages
     cleaned: list[JsonDict] = []
     for message in messages:
@@ -186,11 +193,21 @@ def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
 
 
 def _supporting_fact_titles(record: Mapping[str, Any]) -> list[str]:
+    """Return de-duplicated supporting-passage titles for a search record.
+
+    HotpotQA carries them under ``extra_env_info.supporting_facts.title``
+    (dict shape from the HF loader). MuSiQue carries them under
+    ``extra_env_info.supporting_titles`` (flat list, derived from each
+    paragraph's ``is_supporting`` flag). Both shapes feed the same M1
+    grounded-template builder.
+    """
     extra = record.get("extra_env_info", {}) or {}
+    raw_titles: Any = None
     supporting_facts = extra.get("supporting_facts")
-    if not isinstance(supporting_facts, Mapping):
-        return []
-    raw_titles = supporting_facts.get("title")
+    if isinstance(supporting_facts, Mapping):
+        raw_titles = supporting_facts.get("title")
+    elif isinstance(extra.get("supporting_titles"), list):
+        raw_titles = extra["supporting_titles"]
     if not isinstance(raw_titles, list):
         return []
     seen: list[str] = []
@@ -301,8 +318,18 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
 
 ASSISTANT_BUILDERS = {
     "search_grounded_qa": assistant_for_search,
+    # Multi-hop search reuses the same grounded-template builder; MuSiQue's
+    # supporting_titles drop in via the same `_supporting_fact_titles` path
+    # (we accept both `supporting_facts.title` (HotpotQA) and
+    # `supporting_titles` (MuSiQue) — see `_supporting_fact_titles` below).
+    "search_multihop_qa": assistant_for_search,
     "code_execution_python": assistant_for_code,
     "math_reasoning_numeric": assistant_for_reasoning,
+    # NuminaMath competition math reuses the reasoning builder; the boxed
+    # answer is already extracted into `expected_answer` at M0-prep time so
+    # `assistant_for_reasoning` will prefer it (and the `_strip_gsm8k_marker`
+    # fallback is harmless for non-GSM8K rows).
+    "math_competition_numeric": assistant_for_reasoning,
 }
 
 
@@ -312,9 +339,12 @@ ASSISTANT_BUILDERS = {
 # every record as covering all four areas.
 M1_USE_BY_ENV: dict[str, list[str]] = {
     "search_grounded_qa": ["search pattern"],
+    "search_multihop_qa": ["search pattern", "multi-hop reasoning"],
     "code_execution_python": ["code solution format", "structured output"],
     "general_tool_calling": ["tool call syntax"],
+    "multi_turn_tool_use": ["tool call syntax", "multi-turn tool trace"],
     "math_reasoning_numeric": ["reasoning answer format"],
+    "math_competition_numeric": ["reasoning answer format", "competition math"],
 }
 
 
@@ -479,7 +509,7 @@ def convert_m0_record(
 ) -> JsonDict:
     environment = record.get("environment")
     environment_id = str(environment)
-    if environment_id == "general_tool_calling":
+    if environment_id in _TOOL_CALLING_ENVIRONMENTS:
         supervision_messages = trajectory_for_tool_calling(record)
     else:
         builder = ASSISTANT_BUILDERS.get(environment_id)

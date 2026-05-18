@@ -10,9 +10,12 @@ source revision, reward type, and contamination notes in `data_registry.yaml`.
 | M0 area | HF dataset | Environment | Default rows | License |
 |---|---|---|---:|---|
 | Search | `hotpotqa/hotpot_qa` (`distractor`) [^1] | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
+| Search (multi-hop) | `dgslibisey/MuSiQue` | `search_multihop_qa` | 100 train / 25 val | `cc-by-4.0` |
 | Coding | `google-research-datasets/mbpp` (`full`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
-| General tool calling | `NousResearch/hermes-function-calling-v1` | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
-| Reasoning | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
+| General tool calling (single-turn) | `NousResearch/hermes-function-calling-v1` (`func_calling_singleturn`) | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
+| General tool calling (multi-turn) | `NousResearch/hermes-function-calling-v1` (`func_calling`) | `multi_turn_tool_use` | 100 train / 25 val | `apache-2.0` |
+| Reasoning (grade-school) | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
+| Reasoning (competition) | `AI-MO/NuminaMath-CoT` | `math_competition_numeric` | 100 train / 25 val | `apache-2.0` |
 
 [^1]: `hotpotqa/hotpot_qa` ships a custom Hugging Face loader script that
     `datasets>=2.16` will refuse to execute unless `trust_remote_code: true`
@@ -20,6 +23,11 @@ source revision, reward type, and contamination notes in `data_registry.yaml`.
     pinned `hf_revision` is the only guarantee on which loader code runs.
     Bumping the revision (or accepting a moved revision) effectively
     re-authorizes whatever Python the upstream loader contains.
+
+The seven environments cover plan §7 families: Search/Browser (single-hop +
+multi-hop), Code Generation, Tool Use (single-turn + multi-turn), Math
+(grade-school + competition). Family expansion to Terminal / SQL / Safety /
+Long-Context / Multilingual is tracked under `task057_m0_tier2_expansion`.
 
 ## Run
 

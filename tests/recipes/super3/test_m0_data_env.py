@@ -5,6 +5,7 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     ENV_REGISTRY_PATH,
     cleanup_stale_split_files,
     convert_hermes_conversations,
+    extract_boxed_answer,
     load_yaml,
     normalize_numeric_answer,
     parse_tool_calls,
@@ -14,6 +15,8 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     transform_hermes_function_calling,
     transform_hotpotqa_search,
     transform_mbpp_code_execution,
+    transform_musique_search,
+    transform_numinamath_competition,
     validate_registries,
 )
 
@@ -243,6 +246,95 @@ def test_hermes_converter_captures_multi_turn_trajectory() -> None:
     # Final content surfaces the last assistant turn that wasn't a tool call.
     assert expected["expected_final_content"] == final_answer
     assert expected["expected_turn_count"] == 3
+
+
+def test_extract_boxed_answer_returns_last_boxed() -> None:
+    """NuminaMath solutions can have several `\\boxed{}` for intermediate steps;
+    the final answer is the last match. Bare-text fallback returns ""."""
+    assert extract_boxed_answer("Step 1 \\boxed{a}. Then \\boxed{42}.") == "42"
+    assert extract_boxed_answer("Plain solution without a boxed answer") == ""
+
+
+def test_musique_transform_keeps_supporting_titles_and_aliases() -> None:
+    """task056: MuSiQue layout differs from HotpotQA (flat paragraph_text +
+    is_supporting flag); verify the converter preserves both."""
+    row = {
+        "id": "musique-1",
+        "question": "In which city was the inventor of the assembly line born?",
+        "answer": "Dearborn",
+        "answer_aliases": ["Dearborn, Michigan"],
+        "answerable": True,
+        "paragraphs": [
+            {"idx": 0, "title": "Henry Ford", "paragraph_text": "Henry Ford was born in Dearborn.", "is_supporting": True},
+            {"idx": 1, "title": "Detroit",  "paragraph_text": "Detroit is a city in Michigan.",    "is_supporting": False},
+            {"idx": 2, "title": "Assembly Line", "paragraph_text": "Ford pioneered the assembly line.", "is_supporting": True},
+        ],
+        "question_decomposition": [{"id": 0, "question": "who invented the assembly line"}],
+    }
+
+    record = transform_musique_search(row, _spec("m0_search_musique"))
+
+    assert record["environment"] == "search_multihop_qa"
+    assert record["expected_answer"] == "Dearborn"
+    assert record["extra_env_info"]["supporting_titles"] == ["Henry Ford", "Assembly Line"]
+    assert record["extra_env_info"]["answer_aliases"] == ["Dearborn, Michigan"]
+    # Documents preserve all three paragraphs (incl. distractor) so the policy
+    # has to identify the supporting ones at solve time.
+    assert len(record["extra_env_info"]["context_documents"]) == 3
+    assert record["extra_env_info"]["context_documents"][0]["is_supporting"] is True
+    assert record["extra_env_info"]["context_documents"][1]["is_supporting"] is False
+    # Verifier is shared with HotpotQA; aliases ride in reward_config for any
+    # downstream verifier that consumes them.
+    assert record["reward_config"]["verifier"] == "normalized_exact_or_contains"
+    assert record["reward_config"]["answer_aliases"] == ["Dearborn, Michigan"]
+
+
+def test_numinamath_transform_extracts_boxed_answer() -> None:
+    """task056: NuminaMath-CoT puts the answer in `\\boxed{...}` in solution."""
+    row = {
+        "problem": "What is 6 * 7?",
+        "solution": "We compute 6 * 7 step by step.\nThe answer is \\boxed{42}.",
+        "source": "amc_aime",
+    }
+
+    record = transform_numinamath_competition(row, _spec("m0_math_numinamath"))
+
+    assert record["environment"] == "math_competition_numeric"
+    assert record["expected_answer"] == "42"
+    assert record["extra_env_info"]["boxed_answer"] == "42"
+    assert record["extra_env_info"]["source"] == "amc_aime"
+    assert record["extra_env_info"]["reference_solution"].startswith("We compute")
+    assert record["reward_config"]["verifier"] == "normalized_exact_or_contains"
+
+
+def test_numinamath_transform_handles_missing_boxed() -> None:
+    """Solutions without a \\boxed{...} block fall back to the trailing token
+    (good enough for cn_k12 rows that close with '答案是 X')."""
+    row = {
+        "problem": "Compute the value.",
+        "solution": "It is 7",
+        "source": "cn_k12",
+    }
+
+    record = transform_numinamath_competition(row, _spec("m0_math_numinamath"))
+
+    assert record["expected_answer"] == "7"
+    assert record["extra_env_info"]["boxed_answer"] == ""
+
+
+def test_registry_lists_three_new_environments() -> None:
+    """task056: data registry has 7 datasets covering 4 distinct domains."""
+    registry = load_yaml(DATA_REGISTRY_PATH)
+    ids = {spec["id"] for spec in registry["datasets"]}
+    envs = {spec["environment"] for spec in registry["datasets"]}
+
+    # New Tier-1 envs registered:
+    assert "m0_search_musique" in ids
+    assert "m0_tool_calling_hermes_multi" in ids
+    assert "m0_math_numinamath" in ids
+    assert "search_multihop_qa" in envs
+    assert "multi_turn_tool_use" in envs
+    assert "math_competition_numeric" in envs
 
 
 def test_cleanup_stale_split_files_removes_unselected_dataset_outputs(tmp_path) -> None:
