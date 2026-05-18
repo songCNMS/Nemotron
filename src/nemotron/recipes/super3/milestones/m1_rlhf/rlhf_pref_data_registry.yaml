@@ -1,0 +1,62 @@
+schema_version: 1
+milestone: M1
+description: |
+  Candidate preference-data datasets for the M1 RLHF stage. Each row is
+  a *candidate* — not auto-included. Session 2 (or task030 unified data
+  registry) picks one or more, lands an M0 transformer producing the
+  RLHF JSONL shape (paired completions A/B + preference label + prompt),
+  and flips the relevant ``rlhf_env_registry.yaml`` row to `active`.
+
+  The shape mirrors the M0 ``data_registry.yaml`` rows (hf_dataset,
+  hf_revision, license, contamination notes). Per-row ``pref_pair_field``
+  documents which columns carry the chosen / rejected completions on
+  each upstream — that gets consumed by the future converter.
+
+datasets:
+  - id: helpsteer2
+    hf_dataset: nvidia/HelpSteer2
+    hf_config: null
+    hf_split: train
+    hf_val_split: validation
+    # HelpSteer2 ships a preference variant (`nvidia/HelpSteer2/preference.jsonl`).
+    # Default config carries the rating attributes; preference pairs are
+    # derived by tie-breaking on `helpfulness` + `coherence`. Session 2
+    # converter handles the derivation.
+    hf_revision_pin_required: true
+    source_url: https://huggingface.co/datasets/nvidia/HelpSteer2
+    license: cc-by-4.0
+    pref_pair_field: derived (helpfulness + coherence aggregate)
+    contamination: decontaminate against MT-Bench, HelpSteer1 eval, internal RLHF holdouts
+    notes: |
+      NVIDIA-authored. Used by Nano-3 / Super-3 prior runs. Default
+      candidate for the first RLHF training run.
+
+  - id: ultrafeedback
+    hf_dataset: openbmb/UltraFeedback
+    hf_config: null
+    hf_split: train
+    hf_val_split: null
+    hf_revision_pin_required: true
+    source_url: https://huggingface.co/datasets/openbmb/UltraFeedback
+    license: mit
+    pref_pair_field: completions (per-completion fine-grained ratings; pair derived by aggregated score)
+    contamination: decontaminate against AlpacaEval, MT-Bench, internal RLHF holdouts
+    notes: |
+      Large (64K prompts × 4 completions). Aggregator over four critic
+      LLMs. Useful as a secondary blend source if HelpSteer-2 alone is
+      too narrow.
+
+  - id: distilabel_orca_pairs
+    hf_dataset: argilla/distilabel-intel-orca-dpo-pairs
+    hf_config: null
+    hf_split: train
+    hf_val_split: null
+    hf_revision_pin_required: true
+    source_url: https://huggingface.co/datasets/argilla/distilabel-intel-orca-dpo-pairs
+    license: apache-2.0
+    pref_pair_field: "chosen + rejected (direct pair columns)"
+    contamination: decontaminate against Orca-style reasoning evals
+    notes: |
+      Direct chosen/rejected pair shape — no derivation needed. Smaller
+      (~13K rows) but cheaper to integrate. Backup if HelpSteer-2 license
+      review stalls.
