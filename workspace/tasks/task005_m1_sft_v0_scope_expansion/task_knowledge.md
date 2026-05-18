@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## 编写规则
 
@@ -41,3 +41,13 @@ Hermes `json_mode_singleturn` 与当前 `general_tool_calling` 使用同一个 H
 ### Repair negative 合成细节
 
 `tool_call_repair_negative` 先复用 `transform_hermes_function_calling` 得到 clean `expected_tool_calls`，再按稳定 hash 派生两类负例：截断 `<tool_call>{...}</tool_call>` 形成 malformed call，或构造 `<tool_output>{...}</tool_output>` 形成 hallucinated output。M1 builder 读取 `extra_env_info.repair_target` 并补 deterministic `repair_call_<index>` id，避免 chat template 缺少 `tool_calls[].id`。
+
+### Repair negative 与 Nano3 data-prep 的兼容约束
+
+M1 SFT data-prep 的 validator 会拒绝 raw message content 中含字面 `<tool_call>` 但没有 raw `# Tools` header 的样本；tool schema 通过 `tools` 字段注入时不算 raw header。因此 repair-negative 的 invalid artifact 在 prompt 中必须转义为 `&lt;tool_call&gt;...&lt;/tool_call&gt;`，原始 artifact 只能放在 `extra_env_info.invalid_artifact`。
+
+Nano3 template 的增量切分也不接受 assistant 前连续两个 user turn：第一个 user 的增量渲染会追加 assistant generation prompt，导致 prefix mismatch。repair-negative 应把原始请求和 repair 指令合并成单个 user message。
+
+### CPU round-trip smoke 适用边界
+
+`run_m1_sft_roundtrip_smoke.py` 是 CPU workspace 的前置格式检查：它复用 M1 JSONL contract 和 Nano3 Jinja 模板，用 deterministic local tokenizer 写 packed parquet 并读回 schema/loss-mask。它不能替代完整 `nemotron super3 data prep sft -c agentic_v0`，后者仍需要 `cosmos_xenna`、`transformers` 和真实 tokenizer。
