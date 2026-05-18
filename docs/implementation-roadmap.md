@@ -48,7 +48,7 @@ status `InProgress`).
 | # | Plan ref | Status | Suggested task |
 |---|---|---|---|
 | REVIEW #8 | §5.1 chat template | ✓ — task012 shipped `src/nemotron/data_prep/templates/super3.jinja` (verbatim copy of nano3 with a header comment for lineage), taught `_apply_chat_template` to resolve `super3`, and flipped the three data-prep YAMLs in `stage1_sft/config/data_prep/{default,agentic_v0,tiny}.yaml`. Render-time tests cover `system / user / assistant w/ tool_calls / tool turn` plus `tool_call_repair_negative` round-trip. Diverge `super3.jinja` from `nano3.jinja` as Super3-specific behavior is identified. |
-| REVIEW #9 | §5.1 two-stage SFT loss | ✗ — only token-level next-token loss; plan calls for "先 token-level，再 sample-level" | **task013_super3_sft_two_stage_loss** — wire a second optimizer pass; needs Megatron-Bridge hook research first |
+| REVIEW #9 | §5.1 two-stage SFT loss | ⚠ — Session 1 lands the hook + sample-level loss helper but defaults to ``gpt_step`` so behavior is unchanged today | **task013_super3_sft_two_stage_loss** — Session 1 ✓ (forward_step dispatch + sample-level loss math + adapter skeleton); Session 2 (two-stage driver + stage-a/stage-b YAMLs + cluster verify) still to go |
 
 ### 1.3 M1 RLVR 1/2/3 — data wiring (highest leverage)
 
@@ -431,9 +431,14 @@ Critical path to the M1 promotion gate, single-track execution:
    (end-to-end smoke from SWE2 checkpoint) still to go.
 
 Then in parallel:
-9. **task019** + **task020** — M1 eval basket (can start once task014 has a
-   real checkpoint).
-10. **task030** — unified data registry (saves cleanup work across M2).
+9. **task013** — M1 two-stage SFT loss (plan §5.1 / REVIEW #9). Session 1
+   landed (`step_dispatch._STEP_FUNCTIONS` registry + `sample_level_loss`
+   pure-torch helper + `sample_level_step` adapter; defaults to `gpt_step`
+   so existing configs unchanged); Session 2 (two-stage driver +
+   stage-a/stage-b YAMLs + cluster verify) still to go.
+10. **task019** + **task020** — M1 eval basket (can start once task014 has a
+    real checkpoint).
+11. **task030** — unified data registry (saves cleanup work across M2).
 
 After all M1 tasks land, M2 fanout (task022-038) becomes possible. M3 only
 makes sense after M2 ships a working 122B-parity checkpoint.

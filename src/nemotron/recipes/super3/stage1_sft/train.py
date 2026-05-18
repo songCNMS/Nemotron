@@ -62,7 +62,13 @@ import torch
 from megatron.bridge.data.datasets.packed_sequence import PackedSequenceSpecs
 from megatron.bridge.training.config import ConfigContainer, FinetuningDatasetConfig
 from megatron.bridge.training.finetune import finetune
-from megatron.bridge.training.gpt_step import forward_step
+from megatron.bridge.training.gpt_step import forward_step as _gpt_step_forward_step
+
+from nemotron.recipes.super3.stage1_sft.step_dispatch import (
+    _STEP_FUNCTIONS,
+    _import_attr,
+    _load_forward_step,
+)
 from megatron.bridge.training.utils.omegaconf_utils import (
     apply_overrides,
     create_omegaconf_dict_config,
@@ -92,6 +98,11 @@ logger: logging.Logger = logging.getLogger(__name__)
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "default.yaml"
 
 DEFAULT_RECIPE_TARGET = "megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config"
+
+
+# Backwards-compatible export — call sites outside this module that
+# already imported `forward_step` from here keep working unchanged.
+forward_step = _gpt_step_forward_step
 
 
 def convert_megatron_to_hf(
@@ -369,7 +380,15 @@ def run_finetune(
     if hasattr(cfg.dataset, "packed_sequence_specs") and cfg.dataset.packed_sequence_specs:
         logger.debug(f"packed_sequence_specs.packed_train_data_path = {cfg.dataset.packed_sequence_specs.packed_train_data_path}")
 
-    finetune(config=cfg, forward_step_func=forward_step)
+    # task013: select forward_step via YAML `step_function:` key
+    # (defaults to gpt_step → byte-for-byte identical to pre-task013).
+    step_function_name = (
+        OmegaConf.select(config, "step_function", default=None) or "gpt_step"
+    )
+    resolved_forward_step = _load_forward_step(step_function_name)
+    logger.info(f"forward_step: {step_function_name} ({resolved_forward_step!r})")
+
+    finetune(config=cfg, forward_step_func=resolved_forward_step)
 
     # -------------------------------------------------------------------------
     # POST-TRAINING: Convert final checkpoint to HuggingFace format
