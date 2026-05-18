@@ -1,23 +1,21 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task016_m1_swe1_pivot_data -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 24 |
+| Status | Working |
+| Current Task | task016_m1_swe1_pivot_data |
+| PR | pending push |
+| Session | 25 |
 
-最近：task015 Session 1 (PR #36 `f4ed9ae`) 已 squash-merge 进 main —
-新增 `src/nemotron/recipes/super3/milestones/m1_rlvr/rlvr_env_registry.yaml`
-全量声明 21 NeMo-Gym envs，`prepare_m1_rlvr_jsonl.py::MIX_PROFILES` 改
-registry-driven import-time 派生，manifest 加 coverage 块。**关键 bug fix**：
-task014 Session 1 的 `RLVR1_ENV_MAP` 用了两个 NeMo-Gym 找不到的名字
-(`general_tool_calling` / `search_grounded_qa`)，本 PR rename + 移除并登
-记成 `m0_missing`，避免 task014 Session 2 cluster verify 时 router 失败。
-9 个新 pytest case (9 → 18 task015 总数；sandbox 总数 66 → 75 passed)。
-task015 整 task 仍 InProgress：Session 2+ 等 task057 / task056 Session 2 /
-task016 把 m0_missing / verifier_mismatch / blocked_external 行翻成 active，
-bridge auto-pickup。
+正在做：task016 Session 1 — SWE1 bridge skeleton。新模块
+`src/nemotron/recipes/super3/milestones/m1_swe1/` + `swe1_env_registry.yaml`
+（两行：m0_missing 槽 + verifier_mismatch 给现有 SWE-bench Lite 源）+
+`prepare_m1_swe1_jsonl.py`。Bridge 模式镜像 task015 Session 1 的 registry-
+driven 派生（80% 重复 m1_rlvr 代码；task017 SWE2 落第三版时抽 base）。
+今天 active=0 → `prepare()` raise coverage-aware error；Session 2 落 M0
+SWE pivot 数据 converter + registry 翻 active 之后 bridge 不需 Python 改
+动。13 个新 pytest case，sandbox 测试基线推到 88 passed。Session 2 (SWE-Gym-
+Lite / R2E-Gym converter) + Session 3 (cluster smoke) 不在本 PR。

@@ -1,0 +1,59 @@
+schema_version: 1
+milestone: M1
+description: |
+  Declarative registry for the SWE1 (SWE pivot, single-step tool-comparison)
+  RL stage. `stage2_rl/stage2_swe1/config/default.yaml::nemo_gym.config_paths`
+  loads exactly one env config:
+
+    resources_servers/single_step_tool_use_with_argument_comparison/
+      configs/swe_pivot_single_step_tool_use_with_argument_comparison.yaml
+
+  The verifier name on the NeMo-Gym side is the same family as the RLVR
+  `single_step_tool_use_with_argument_comparison` family — it compares the
+  candidate's emitted first tool call (name + arguments) against the gold
+  pivot tool call for a SWE issue.
+
+  M0 today carries `swe_pivot_patch_supervision` (SWE-bench Lite, gold
+  patch text + tests) with the `patch_diff_match` verifier. That is the
+  *wrong shape* for swe_pivot tool-comparison — `verifier_mismatch`,
+  registered so the gap is visible in coverage but not silently consumed.
+  Session 2 lands a converter (likely SWE-Gym-Lite or R2E-Gym subset)
+  whose output rows fit the single-step tool-comparison shape; that row
+  flips to `active` and the bridge auto-picks it up.
+
+  Statuses match `m1_rlvr/rlvr_env_registry.yaml`:
+    - `active`           : M0 emits rows AND verifier semantics line up.
+    - `m0_missing`       : No M0 source yet. Bridge skips; coverage logs.
+    - `verifier_mismatch`: M0 has data but verifier shapes diverge enough
+                           that the row would give the policy garbage signal.
+    - `blocked_external` : Outside-repo blocker.
+
+envs:
+  - nemo_gym_env: swe_pivot_single_step_tool_use_with_argument_comparison
+    mix: swe1
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: argument_match (single-step SWE pivot)
+    license: unknown
+    status: m0_missing
+    notes: |
+      Reserved slot for the M0 SWE pivot env that task016 Session 2 will
+      add. Candidate sources per roadmap §1.4: SWE-Gym-Lite, R2E-Gym
+      subsets. Conversion needs to extract the "what tool call does the
+      gold trajectory open with?" decision point — non-trivial because
+      SWE-Gym ships full repo issues, not annotated pivot points.
+
+  - nemo_gym_env: swe_pivot_single_step_tool_use_with_argument_comparison
+    mix: swe1
+    m0_env_id: swe_pivot_patch_supervision
+    m0_verifier: patch_diff_match
+    nemo_gym_verifier: argument_match (single-step SWE pivot)
+    license: source-repository-specific
+    status: verifier_mismatch
+    notes: |
+      Existing M0 SWE-bench Lite source. Verifier is `patch_diff_match`
+      (compare emitted unified-diff text to gold patch); the NeMo-Gym
+      target is `argument_match` (compare emitted tool-call args to gold
+      pivot call). Same domain, different reward signal. Opt-in via a
+      future --include-mismatched flag (Session 3+) only after verifier
+      alignment is sorted out on the NeMo-Gym side.

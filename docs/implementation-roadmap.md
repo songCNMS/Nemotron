@@ -112,11 +112,26 @@ cannot launch a verifiable smoke run from M0 assets today.
 seq_len=131K) exists. Missing the data + smoke entry:
 
 **task016_m1_swe1_pivot_data** —
-- Source: SWE-pivot single-step tool-comparison data (plan §5.4); candidates
-  SWE-Gym-Lite, R2E-Gym subsets.
-- Converter into `swe_pivot_single_step_tool_use_with_argument_comparison`
-  env.
-- Smoke launcher: 1-node, 1 prompt/step.
+- ✓ Session 1: SWE1 bridge skeleton, mirrors task014 task015 pattern. New
+  module `src/nemotron/recipes/super3/milestones/m1_swe1/` with
+  `swe1_env_registry.yaml` (single NeMo-Gym target —
+  `swe_pivot_single_step_tool_use_with_argument_comparison` — declared
+  with two rows: one `m0_missing` slot reserved for the future M0
+  source, one `verifier_mismatch` row tracking the existing M0
+  `swe_pivot_patch_supervision` which uses `patch_diff_match` semantics
+  rather than argument-match) and `prepare_m1_swe1_jsonl.py`. Bridge
+  emits `train.jsonl` / `val.jsonl` / `manifest.json` with `coverage`
+  block + `SWE1_ARTIFACT` lineage pointing at the M0 manifest. Calling
+  `prepare()` today raises a coverage-aware error listing the gaps; once
+  Session 2 lands an active M0 SWE pivot env, no Python edits are needed
+  — the bridge auto-picks up via the registry flip. 13 new pytest cases.
+- ☐ Session 2: M0 SWE pivot data converter. Source: SWE-Gym-Lite or
+  R2E-Gym subsets per plan §5.4. Converter extracts the "first gold tool
+  call" decision point from agent trajectories and emits rows shaped for
+  the `argument_match` verifier. Lands an M0 env + registry entry; flips
+  the swe1 registry row to `active`.
+- ☐ Session 3: Smoke launcher (1-node, 1 prompt/step). Block on cluster
+  verify (parallel to task014 Session 2).
 - **Acceptance:** reward-shape verifier returns numeric reward on smoke
   rollouts; per-prompt latency p50/p99 captured.
 
@@ -366,7 +381,10 @@ Critical path to the M1 promotion gate, single-track execution:
    `MIX_PROFILES`, RLVR1 name audit + correction, rlvr2 lit up with 2
    M0-available envs); remaining sessions auto-light as task057 lands M0
    sources.
-6. **task016** — M1 SWE1 pivot data.
+6. **task016** — M1 SWE1 pivot data. Session 1 landed (bridge skeleton +
+   `swe1_env_registry.yaml`; SWE1 currently has no active M0 source —
+   coverage-aware error path); Session 2 (M0 SWE pivot converter from
+   SWE-Gym-Lite / R2E-Gym) + Session 3 (cluster smoke) still to go.
 7. **task017** — M1 SWE2 sandbox runtime.
 8. **task018** — M1 RLHF GenRM service.
 
