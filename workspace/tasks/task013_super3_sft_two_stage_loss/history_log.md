@@ -60,3 +60,18 @@ sample-level   = ((1+2+3)/3 + (10)/1) / 2 = 6.0 (两个 sample 各占 1/2 权重
 
 Session 2 (driver + YAML + cluster verify) 不在本 PR — 需 nvcr
 Megatron-Bridge container 跑真训练。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #44 已 squash-merge 为 `10e1393` 进 main — sample_level_loss
++ sample_level_step + step_dispatch + train.py 接入 + 12 个 pytest case
+都进了 main。intern status 回 Idle (Session 32)。task013 整 task 仍
+InProgress：Session 2 (run_two_stage_finetune driver + stage-a/stage-b
+YAMLs + cluster verify) 没启动 — 需 nvcr Megatron-Bridge container 跑
+真训练。
+
+**里程碑**: roadmap §5 critical-path 9 条全部 Session 1 落地 ✓。下一个
+候选：task017 Session 4 (`_bridge_base.py` 抽取，4 个 bridge module 都摆
+稳) 或 task030 (unified data registry) 或之前 task 的 Session 2+ (大都
+要 cluster)。
+
