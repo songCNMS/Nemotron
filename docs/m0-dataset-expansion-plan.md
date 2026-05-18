@@ -1,14 +1,15 @@
 # M0 Data Foundation — Expansion Plan
 
-Last updated: 2026-05-18
+Last updated: 2026-05-18 (refined against `main` at `905de2d`)
 
 Companion to `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md`
 (plan §3, §6, §7) and `docs/implementation-roadmap.md`. Scopes the remaining
 M0 work needed to give M1+ a complete data foundation. Reflects `main` after
 `task005_m1_sft_v0_scope_expansion` follow-up PRs landed terminal, short SWE
-trace, tool-repair-negative, and structured-output envs.
+trace, tool-repair-negative, and structured-output envs, plus the M1 SFT
+JSONL → packed Parquet round-trip smoke runner.
 
-## 1. State of `main` (`3e37616`)
+## 1. State of `main` (`905de2d`)
 
 Eight M0 environments wired end-to-end (registry + JSONL contract + oracle
 health gate + difficulty signal + M1 SFT supervision builder):
@@ -19,16 +20,27 @@ health gate + difficulty signal + M1 SFT supervision builder):
 | `code_execution_python` | `google-research-datasets/mbpp` full | Code Generation | M0 baseline |
 | `general_tool_calling` | `NousResearch/hermes-function-calling-v1` singleturn | Tool Use | M0 baseline |
 | `math_reasoning_numeric` | `openai/gsm8k` main | Math / Reasoning | M0 baseline |
-| `terminal_basic_shell` | `aelhalili/bash-commands-dataset` | Terminal / Workplace | task005 (PR e2d0bcd / 3e37616) |
-| `swe_pivot_patch_supervision` | `princeton-nlp/SWE-bench_Lite` | SWE | task005 |
-| `tool_call_repair_negative` | derived from Hermes singleturn | Tool Use (negatives) | task005 |
-| `structured_outputs_json` | `NousResearch/hermes-function-calling-v1` json_mode_singleturn | Structured Output | task005 |
+| `terminal_basic_shell` | `aelhalili/bash-commands-dataset` | Terminal / Workplace | task005 (`e2d0bcd` / `3e37616`) |
+| `swe_pivot_patch_supervision` | `princeton-nlp/SWE-bench_Lite` | SWE | task005 (`3e37616`) |
+| `tool_call_repair_negative` | derived from Hermes singleturn (with `escape_tool_markup_for_prompt` so the invalid artifact survives chat-template rendering as quoted text instead of being interpreted as a real tool call) | Tool Use (negatives) | task005 (`3e37616` + `905de2d` refinement) |
+| `structured_outputs_json` | `NousResearch/hermes-function-calling-v1` `json_mode_singleturn` | Structured Output | task005 (`e2d0bcd`) |
 
 That clears 5 of plan §7's 10 family list (Search single-hop, Code, Tool
 Use, Math grade-school, Terminal, SWE pivot, Structured Output) and 4 of
 the v0 capabilities plan §8 names. Notable gaps remain in Math (competition,
 formal), Search (multi-hop), Tool Use (multi-turn), SQL, Safety,
 Long-context, and Multilingual.
+
+### Round-trip smoke runner
+
+`905de2d` added `src/nemotron/recipes/super3/milestones/m1_agentic_sft/run_m1_sft_roundtrip_smoke.py`
+— a self-contained CPU-friendly validator that runs the M1 JSONL through the
+Nano3 chat template + a deterministic local tokenizer + sequence packing,
+writes a packed Parquet shard, and reads it back to check schema and loss
+mask. It's the cheapest gate for "did I break the chat-template render or
+the loss mask?" without booting the full Xenna pipeline. New env work
+(task056 / task057) should clear this smoke for every added env via the
+`--require-environment` flag.
 
 ## 2. Production references uncovered during the original audit
 
@@ -126,7 +138,7 @@ Tracked under task058 (separate small fix PR):
 
 ## 5. Wiring rules — what counts as "wired" at M0
 
-For each new env, the same six-point checklist (matching the eight envs
+For each new env, the same seven-point checklist (matching the eight envs
 currently on main):
 
 1. `data_registry.yaml` entry with `hf_dataset`, `hf_config`,
@@ -145,6 +157,14 @@ currently on main):
    path) in `prepare_m1_agentic_sft.py` so the M1 entry can consume the new
    env; plus an entry in `M1_USE_BY_ENV` so the metadata reflects the
    actual skill the row exercises.
+7. **Round-trip smoke clean** —
+   `python src/nemotron/recipes/super3/milestones/m1_agentic_sft/run_m1_sft_roundtrip_smoke.py --require-environment <new_env_id>`
+   must succeed against the prepare_m1 output. This catches chat-template
+   render breaks, loss-mask drift, and any `<tool_call>` / `<tool_output>`
+   markup that would be eaten by Jinja before the M1 SFT loss sees it
+   (`tool_call_repair_negative` hit this at `905de2d`; the fix was the new
+   `escape_tool_markup_for_prompt` helper, which any future env producing
+   adversarial markup should reuse).
 
 The eight existing envs all follow this pattern and serve as concrete
 references for new env work.
@@ -167,15 +187,17 @@ references for new env work.
    reference proof and verifies non-empty. Real Lean check needs the Lean
    toolchain in the sandbox — that's task017 / task049 territory.
 
-## 7. What this PR delivers vs what remains
+## 7. Delivered vs remaining (as of `main` `905de2d`)
 
 | Artifact | Status |
 |---|---|
-| `docs/m0-dataset-expansion-plan.md` | this file |
+| `docs/m0-dataset-expansion-plan.md` | this file (originally landed via #22 / `60896a7`, refined here against `905de2d`) |
 | `workspace/tasks/task056_m0_tier1_expansion/` | scaffolded; 4 remaining Tier-1 envs to land here |
 | `workspace/tasks/task057_m0_tier2_expansion/` | scaffolded |
 | `workspace/tasks/task058_production_dataset_slug_fixes/` | scaffolded; slug + naming bug fixes deferred to that task |
 | 4 of 8 Tier-1 envs (terminal, SWE-pivot, tool-repair negatives, structured-output) | ✓ — landed independently via task005 on main |
+| `run_m1_sft_roundtrip_smoke.py` validator | ✓ — landed via task005 (`905de2d`); now a required wiring step (§5.7) |
+| `escape_tool_markup_for_prompt` helper for negative-example prompts | ✓ — task005 refinement (`905de2d`); reusable for any future env that emits chat-template-sensitive markup |
 | 4 remaining Tier-1 envs (NuminaMath, MuSiQue, multi-turn Hermes, Lean) | ✗ — task056 Session 1+ |
 | 6 Tier-2 envs (SQL, terminal v2, safety, multilingual, long-context, math-with-tools) | ✗ — task057 |
 | Production slug / subset / contamination fixes | ✗ — task058 |
