@@ -26,3 +26,7 @@
 - 文档：REVIEW_v0.md #8 翻 ✓；`docs/implementation-roadmap.md` §1.2 / §5 critical path / §7.1 open question 一起更新；`m1_agentic_sft/README.md` / `data_prep/README.md` / `m0-dataset-expansion-plan.md` §1.1 把 "Nano3 chat template" → "Super3 chat template"。
 
 测试：sandbox 没 transformers / pyarrow，因此 M1 test 文件 collection 失败、template resolver test pydantic-skip；但 `tests/data_prep/test_chat_template_super3.py` (4 cases — 3 passed + 1 skipped) + `tests/recipes/super3/test_m0_data_env.py` + `test_m0_health_baseline.py` 全过 (46 passed + 1 skipped)。NemTron 上能跑完整 pytest。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+PR #28 已 squash-merge 为 `04681a7`。intern status 回 Idle (Session 16)。task012 结题；REVIEW_v0.md 维度上 #8 翻 ✓ 后剩 1 个 still-open 设计类 (#9 two-stage SFT loss → task013)，其余 critical path 进入 task021 (M1 infra minimum)。

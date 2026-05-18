@@ -1,6 +1,7 @@
 # task012_super3_chat_template
 
 <!-- METADATA:STATUS=Done,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- LANDED: PR #28 / 04681a7 on 2026-05-18 -->
 
 ## 背景
 
