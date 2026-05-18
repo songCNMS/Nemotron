@@ -141,11 +141,26 @@ seq_len=131K) exists. Missing the data + smoke entry:
 Missing the runtime stack:
 
 **task017_m1_swe2_sandbox_runtime** —
-- SIF image mapping registry: `{instance_id} → swebench_sweb.eval.x86_64.{instance_id}.sif`.
-- OpenHands loop integration / wrapper for the agent_max_turns runner.
-- Sandbox health-check, memory watchdog, command blocklist.
-- Smoke launcher: 1 instance, 1 generation, in-process Docker fallback for
-  developers without SLURM.
+- ✓ Session 1: SIF image mapping registry + SWE2 bridge skeleton. New
+  module `src/nemotron/recipes/super3/milestones/m1_swe2/` with
+  `swe2_sif_registry.yaml` (declarative table for the three SIF families
+  per `stage2_swe2/config/default.yaml::container_formatter` — swebench /
+  swegym / r2egym), `resolve_sif_path()` + `validate_sif_exists()` Python
+  helpers (with `instance_id` path-injection guard), `swe2_env_registry.yaml`
+  + `prepare_m1_swe2_jsonl.py` (third copy of the registry-driven bridge
+  pattern). Today active=0 → `prepare()` raises a coverage-aware error;
+  Session 2 lands an M0 SWE2 source and flips a registry row to active.
+  Manifest coverage block extended with `sif_source_breakdown` so coverage
+  explains which container family still needs an M0 source.
+- ☐ Session 2: OpenHands loop wrapper (agent_max_turns runner) + M0 SWE2
+  trace data converter (SWE-Gym-Lite primary candidate, multi-turn agent
+  rollout shape) + sandbox health-check / memory watchdog / command
+  blocklist enforcement.
+- ☐ Session 3: Smoke launcher (1 instance, 1 generation) + in-process
+  Docker fallback for developers without SLURM. Block on cluster + SIF
+  images.
+- ☐ Session 4: `_bridge_base.py` extraction now that RLVR + SWE1 + SWE2
+  all use the same registry-driven bridge pattern (~80% code overlap).
 - **Acceptance:** a single SWE-Bench instance runs end-to-end with binary
   reward; logs of bash / file ops captured in rollout store.
 
@@ -385,7 +400,12 @@ Critical path to the M1 promotion gate, single-track execution:
    `swe1_env_registry.yaml`; SWE1 currently has no active M0 source —
    coverage-aware error path); Session 2 (M0 SWE pivot converter from
    SWE-Gym-Lite / R2E-Gym) + Session 3 (cluster smoke) still to go.
-7. **task017** — M1 SWE2 sandbox runtime.
+7. **task017** — M1 SWE2 sandbox runtime. Session 1 landed (SIF image
+   mapping registry + resolver with path-injection guard; SWE2 bridge
+   skeleton parallel to RLVR / SWE1; coverage-aware error today); Session
+   2 (OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog)
+   / Session 3 (cluster smoke + Docker fallback) / Session 4
+   (`_bridge_base.py` extraction) still to go.
 8. **task018** — M1 RLHF GenRM service.
 
 Then in parallel:

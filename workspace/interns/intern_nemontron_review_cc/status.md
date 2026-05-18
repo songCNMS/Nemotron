@@ -1,22 +1,24 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task017_m1_swe2_sandbox_runtime -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 26 |
+| Status | Working |
+| Current Task | task017_m1_swe2_sandbox_runtime |
+| PR | pending push |
+| Session | 27 |
 
-最近：task016 Session 1 (PR #38 `d04b694`) 已 squash-merge 进 main —
-新模块 `src/nemotron/recipes/super3/milestones/m1_swe1/` + 镜像 task015
-registry-driven 模式的 `swe1_env_registry.yaml` + `prepare_m1_swe1_jsonl.py`。
-今天 SWE1 active=0，`prepare()` raise coverage-aware error；Session 2
-落 M0 SWE pivot converter (SWE-Gym-Lite / R2E-Gym) 翻一行 active 之后
-bridge 自动 pickup。13 个新 pytest case，sandbox 测试基线 75 → 88 passed。
-task016 整 task 仍 InProgress：Session 2 (M0 converter) + Session 3
-(cluster smoke launcher) 待开。下一个 critical-path 候选 (roadmap §5)：
-task017 (M1 SWE2 sandbox runtime / OpenHands loop) 或 task013
-(two-stage SFT loss) 或 task018 (RLHF GenRM service)。
+正在做：task017 Session 1 — SIF image mapping registry + SWE2 bridge
+skeleton。新模块 `src/nemotron/recipes/super3/milestones/m1_swe2/`：
+`swe2_sif_registry.yaml` 声明 3 个 SIF family (swebench/swegym/r2egym) +
+filename_template；`resolve_sif_path` / `validate_sif_exists` + 严格
+`instance_id` 路径注入防护（`^[A-Za-z0-9_\-]+$`）。`swe2_env_registry.yaml`
+单 NeMo-Gym agent `swe_agents` 三行（一 per SIF family），今天全
+m0_missing。`prepare_m1_swe2_jsonl.py` 是第三份 registry-driven bridge
+copy；`coverage_report` 加 SWE2-specific `sif_source_breakdown`，运维一
+眼看出哪个 container family 还差 M0 源。今天 active=0 → coverage-aware
+error。19 个新 pytest case，sandbox 测试基线 88 → 107 passed。Session 2
+(OpenHands wrapper + SWE-Gym trace converter) / 3 (cluster smoke) / 4
+(`_bridge_base.py` 抽取) 不在本 PR。
