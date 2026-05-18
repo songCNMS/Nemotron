@@ -34,3 +34,7 @@ Sandbox 测试: M0 suite (test_m0_data_env + test_m0_health_baseline +
 test_chat_template_super3) 全过；具体计数等 pytest 跑完更新。
 
 Session 2-4 仍未启动；本 task 维持 InProgress。
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #30 已 squash-merge 为 `09c9089` 进 main。intern status 回 Idle (Session 18)。task021 整 task 仍 InProgress：Session 2 (W&B artifact lineage)、Session 3 (sandbox container build)、Session 4 (cluster verify) 都没启动。下一个 critical-path 候选 (roadmap §5)：task021 Session 2 (lineage schema 是 sandbox-friendly) 或 task014 (M1 RLVR data bridge)。
