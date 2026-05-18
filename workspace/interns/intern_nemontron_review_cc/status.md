@@ -1,13 +1,13 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task010_m1_post_task009_polish -->
+<!-- METADATA:STATUS=Working,TASK=task011_implementation_roadmap -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
 | Status | Working |
-| Current Task | task010_m1_post_task009_polish |
+| Current Task | task011_implementation_roadmap |
 | PR | pending push |
-| Session | 10 |
+| Session | 11 |
 
-最近：task009 PR #15 squash-merge 后 re-review，无新 P0/P1。开 task010 把 post-task009 5 项小问题 (D1-D5) 与 REVIEW #21 (`compute_train_iters` derived-rows test gap) 一起清掉。测试基线 66 → 67 passed + 5 skipped（新增 3 个 omegaconf gate）。
+最近：task010 PR #16 已 squash-merge 为 `66d0de6`。开 task011 把 plan ↔ 主干差距系统梳一遍，落成 `docs/implementation-roadmap.md` (360 行，task012–task055 占位)，给后续每个新任务一份起点参考。仅文档变更，测试基线不变 (67 passed + 5 skipped)。
