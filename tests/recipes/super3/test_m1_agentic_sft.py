@@ -89,6 +89,24 @@ def test_convert_code_record_uses_reference_code() -> None:
     assert converted["metadata"]["m0_split"] == "train"
 
 
+def test_convert_structured_output_record_uses_expected_json() -> None:
+    record = _base_record("structured_outputs_json")
+    record["expected_answer"] = '{"city":"Paris","country":"France"}'
+    record["extra_env_info"]["expected_json"] = {"city": "Paris", "country": "France"}
+    record["extra_env_info"]["schema"] = {"type": "object", "required": ["city", "country"]}
+    record["metadata"]["domain"] = "structured_output"
+    record["metadata"]["reward_type"] = "json_value_exact_match"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1] == {
+        "role": "assistant",
+        "content": '{"city": "Paris", "country": "France"}',
+    }
+    assert converted["metadata"]["m1_use"] == ["structured output"]
+    assert converted["metadata"]["m0_environment"] == "structured_outputs_json"
+
+
 def test_convert_tool_record_preserves_tools_and_tool_calls() -> None:
     record = _base_record("general_tool_calling")
     record["responses_create_params"]["input"][0]["content"] = (
@@ -1016,6 +1034,22 @@ def test_m0_use_stage_lineage_defaults_to_empty_when_m0_missing_used_in() -> Non
 
     converted = convert_m0_record(record, split="train")
     assert converted["metadata"]["m0_use_stage"] == []
+
+
+def test_m0_use_stage_lineage_reads_real_m0_use_stage_field() -> None:
+    """Real M0 JSONL rows carry `use_stage`, not `used_in`."""
+    record = _base_record("structured_outputs_json")
+    record["expected_answer"] = '{"city":"Paris"}'
+    record["extra_env_info"]["expected_json"] = {"city": "Paris"}
+    record.pop("used_in", None)
+    record["use_stage"] = ["M0 data_env_foundation", "M1 Agentic SFT v0 structured output"]
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["metadata"]["m0_use_stage"] == [
+        "M0 data_env_foundation",
+        "M1 Agentic SFT v0 structured output",
+    ]
 
 
 def test_prompt_messages_scrubs_demo_tool_call_xml_from_user_content() -> None:

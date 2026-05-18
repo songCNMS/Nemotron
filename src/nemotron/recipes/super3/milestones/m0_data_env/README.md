@@ -2,8 +2,9 @@
 
 This milestone prepares public smoke/eval data for the first multi-environment RL
 baseline. The scope is limited to the M0 plan: search, coding, general tool
-calling, and reasoning. Each dataset is tagged with its milestone usage, license,
-source revision, reward type, and contamination notes in `data_registry.yaml`.
+calling, structured JSON output, and reasoning. Each dataset is tagged with its
+milestone usage, license, source revision, reward type, and contamination notes
+in `data_registry.yaml`.
 
 ## Public Sources
 
@@ -12,6 +13,7 @@ source revision, reward type, and contamination notes in `data_registry.yaml`.
 | Search | `hotpotqa/hotpot_qa` (`distractor`) [^1] | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
 | Coding | `google-research-datasets/mbpp` (`full`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
 | General tool calling | `NousResearch/hermes-function-calling-v1` | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
+| Structured output | `NousResearch/hermes-function-calling-v1` (`json_mode_singleturn`) | `structured_outputs_json` | 100 train / 25 val | `apache-2.0` |
 | Reasoning | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
 
 [^1]: `hotpotqa/hotpot_qa` ships a custom Hugging Face loader script that
@@ -72,6 +74,9 @@ health_baseline/
 │   ├── train-split.jsonl
 │   └── val-split.jsonl
 ├── general_tool_calling/
+│   ├── train-split.jsonl
+│   └── val-split.jsonl
+├── structured_outputs_json/
 │   ├── train-split.jsonl
 │   └── val-split.jsonl
 ├── math_reasoning_numeric/

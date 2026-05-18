@@ -1,6 +1,6 @@
 # task005_m1_sft_v0_scope_expansion
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## 背景
 
@@ -21,7 +21,7 @@
 | tool call syntax | ✓ `general_tool_calling` | NousResearch/hermes-function-calling-v1 (singleturn) |
 | short SWE traces | ✗ | — |
 | terminal basics | ✗ | — |
-| structured output | ✗ | — |
+| structured output | ◐ `structured_outputs_json` | NousResearch/hermes-function-calling-v1 (`json_mode_singleturn`) |
 | malformed tool call 负例 | ✗ | — |
 | hallucinated tool output 负例 | ✗ | — |
 | reasoning（plan 中 RLVR 项，SFT v0 也需要 reasoning 形态范例） | ✓ `math_reasoning_numeric` | openai/gsm8k |

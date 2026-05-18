@@ -89,6 +89,36 @@ environments:
         - responses_create_params.tools
         - extra_env_info.expected_tool_calls
 
+  - id: structured_outputs_json
+    family: structured_output
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: json_value_exact_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted JSON must parse and match the reference JSON structure and values
+    resources:
+      sandbox: none
+      tools:
+        - json_schema_prompt
+      timeout_s: 20
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - json_parse_error
+      - schema_error
+      - exact_value_match
+      - latency_ms
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.schema
+        - extra_env_info.expected_json
+
   - id: math_reasoning_numeric
     family: reasoning
     stage: M0 data_env_foundation
@@ -115,4 +145,3 @@ environments:
         - question
         - expected_answer
         - responses_create_params.input
-

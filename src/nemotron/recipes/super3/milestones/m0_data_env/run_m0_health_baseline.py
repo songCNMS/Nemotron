@@ -114,6 +114,28 @@ def score_numeric(candidate: Any, expected: Any) -> float:
     return 1.0 if normalize_numeric_candidate(candidate) == normalize_numeric_answer(expected) else 0.0
 
 
+def parse_json_strict(value: Any) -> Any:
+    if isinstance(value, str):
+        stripped = value.strip()
+        if not stripped:
+            return MISSING
+        try:
+            return json.loads(stripped)
+        except json.JSONDecodeError:
+            return MISSING
+    if isinstance(value, (Mapping, list)):
+        return value
+    return MISSING
+
+
+def score_json_value(candidate: Any, expected: Any) -> float:
+    parsed_candidate = parse_json_strict(candidate)
+    parsed_expected = parse_json_strict(expected)
+    if parsed_candidate is MISSING or parsed_expected is MISSING:
+        return 0.0
+    return 1.0 if parsed_candidate == parsed_expected else 0.0
+
+
 def score_tool_call(candidate: Any, expected: Any, record: Mapping[str, Any]) -> float:
     if isinstance(candidate, str):
         parsed = parse_json_maybe(candidate, default=candidate)
@@ -190,6 +212,8 @@ def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = 
         return score_text(candidate, expected), {}
     if verifier == "normalized_numeric_exact_match":
         return score_numeric(candidate, expected), {}
+    if verifier == "json_value_exact_match":
+        return score_json_value(candidate, expected), {}
     if verifier == "tool_schema_and_argument_match":
         return score_tool_call(candidate, expected, record), {}
     if verifier == "python_unit_tests":

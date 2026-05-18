@@ -69,6 +69,7 @@ and writes:
 | `search_grounded_qa` | User prompt with retrieved passages, assistant emits a grounded template referencing supporting-fact titles (e.g. `"Based on the retrieved passages ([1] Title), the answer is …"`) |
 | `code_execution_python` | User coding prompt, assistant reference Python solution |
 | `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` (multi-turn trajectories propagate `tool_call_id` so `tool` turns pair with the originating call) |
+| `structured_outputs_json` | User JSON-mode prompt with schema in the system message, assistant emits the reference JSON object |
 | `math_reasoning_numeric` | User math prompt, assistant emits the normalized numeric answer (GSM8K `####` verifier marker is stripped from any `reference_solution` fallback) |
 
 ## Difficulty signal (optional)
@@ -105,4 +106,3 @@ upstream prompt format. The same scrub is applied to user content so demo
 become part of the training prompt. The actual tool schema reaches the model
 through the `tools` field rendered by the chat template, not through inline
 XML in messages.
-
