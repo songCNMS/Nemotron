@@ -1,6 +1,7 @@
 # task021_m1_infra_minimum
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #30 / 09c9089 on 2026-05-18 -->
 
 ## 背景
 
