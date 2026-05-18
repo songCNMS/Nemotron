@@ -1,0 +1,60 @@
+schema_version: 1
+milestone: M1
+description: |
+  Declarative registry of the SWE2 SIF (Singularity Image Format) container
+  filename families. Source of truth: `stage2_rl/stage2_swe2/config/
+  default.yaml::nemo_gym.swe_agents_train.container_formatter`, which is a
+  list of three filename templates the OpenHands agent tries when resolving
+  a container per ``instance_id``.
+
+  Each row pairs a source family with its filename template + sib upstream
+  M0 source candidate. The Python resolver
+  (`prepare_m1_swe2_jsonl.resolve_sif_path`) joins ``sif_dir`` from
+  per-deployment config with the template; the validator
+  (`validate_sif_exists`) checks the resolved path exists on disk before
+  the cluster spends a slot waiting for a missing image.
+
+  Roadmap §1.5 task017 calls this the first acceptance item:
+    "SIF image mapping registry: {instance_id} →
+     swebench_sweb.eval.x86_64.{instance_id}.sif".
+
+sif_sources:
+  - source: swebench
+    filename_template: "swebench_sweb.eval.x86_64.{instance_id}.sif"
+    m0_env_candidate: swe_pivot_patch_supervision
+    upstream_dataset: princeton-nlp/SWE-bench_Lite
+    license: source-repository-specific
+    notes: |
+      Existing M0 source today (verifier_mismatch in m1_swe1 registry; for
+      SWE2 the verifier shape is binary patch-applies + tests-pass, which
+      *does* fit SWE-bench Lite. Pending M0 SWE2 trace data with full agent
+      rollouts to flip swe2 registry row to active.
+
+  - source: swegym
+    filename_template: "swegym_sweb.eval.x86_64.{instance_id}.sif"
+    m0_env_candidate: null
+    upstream_dataset: SWE-Gym/SWE-Gym-Lite
+    license: apache-2.0
+    notes: |
+      Candidate Session 2 source. SWE-Gym ships agent trajectories which
+      match the OpenHands loop shape directly. Container family produced
+      by NVIDIA SWE-Gym container build; Session 3 ops will publish the
+      SIFs.
+
+  - source: r2egym
+    filename_template: "r2egym_{instance_id}.sif"
+    m0_env_candidate: null
+    upstream_dataset: nvidia/Nemotron-SWE-v1 (r2e_gym subset)
+    license: cc-by-4.0
+    notes: |
+      Candidate Session 2 source. R2E-Gym repo-level eval environments.
+      Overlap with SWE-Bench Verified — must filter against eval baskets
+      before training scale-up.
+
+# Per-deployment config that the resolver picks up via `sif_dir` (the
+# leading `${sif_dir}` placeholder in default.yaml). Not pinned here so
+# operators can point at SLURM lustre / Podman local / etc.
+sif_dir_help: |
+  Pass the SIF directory via ``--sif-dir`` (CLI) or the ``sif_dir`` key in
+  ``stage2_swe2/config/default.yaml``. Today both default to placeholders
+  (empty string / ``/path/to/sif``); deployment env sets the real value.

@@ -1,0 +1,66 @@
+schema_version: 1
+milestone: M1
+description: |
+  Declarative registry for the SWE2 (SWE-Bench OpenHands loop) RL stage.
+  `stage2_rl/stage2_swe2/config/default.yaml::nemo_gym.config_paths` loads
+  one server config — the vLLM policy model — and one agent config:
+
+    responses_api_agents/swe_agents/configs/
+      swebench_openhands_training.yaml
+
+  The agent name on the NeMo-Gym side is ``swe_agents`` (with `_train` /
+  `_val` flavor) running the OpenHands loop against an SIF container. The
+  reward signal is binary (patch applies + tests pass).
+
+  Today no M0 SWE2 source exists. Three M0 candidates per SIF family live
+  in ``swe2_sif_registry.yaml``; rows below mark them ``m0_missing`` so
+  the gap surfaces in coverage. Session 2 lands an M0 SWE2 env consuming
+  one of the three families and flips a row to ``active``; the bridge
+  auto-picks it up via the registry — no Python edits required.
+
+  Statuses match the m1_rlvr / m1_swe1 registries:
+    - `active`
+    - `m0_missing`
+    - `verifier_mismatch`
+    - `blocked_external`
+
+envs:
+  - nemo_gym_env: swe_agents
+    mix: swe2
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: openhands_loop (binary patch+tests reward)
+    sif_source: swebench
+    license: source-repository-specific
+    status: m0_missing
+    notes: |
+      M0 candidate: `swe_pivot_patch_supervision` (SWE-bench Lite). The
+      SWE2 verifier is *binary patch-applies + tests-pass*, which SWE-bench
+      Lite supports natively — so unlike the SWE1 entry (`verifier_mismatch`),
+      this is a clean fit once Session 2 wires the agent-rollout columns.
+
+  - nemo_gym_env: swe_agents
+    mix: swe2
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: openhands_loop (binary patch+tests reward)
+    sif_source: swegym
+    license: apache-2.0
+    status: m0_missing
+    notes: |
+      Candidate Session 2 source: SWE-Gym-Lite. Multi-turn agent traces
+      provide natural OpenHands rollout shape; SIF family
+      `swegym_sweb.eval.x86_64.*` published per build.
+
+  - nemo_gym_env: swe_agents
+    mix: swe2
+    m0_env_id: null
+    m0_verifier: null
+    nemo_gym_verifier: openhands_loop (binary patch+tests reward)
+    sif_source: r2egym
+    license: cc-by-4.0
+    status: m0_missing
+    notes: |
+      Candidate Session 2 source: R2E-Gym subset of `nvidia/Nemotron-SWE-v1`.
+      Repo-level evaluation environments; must decontaminate vs SWE-Bench
+      Verified eval basket before training scale-up.
