@@ -22,8 +22,8 @@ on this)"。四个子条目 (plan §10 M1 infra):
 
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
-| 1 | M0 oracle health-baseline 加 per-env telemetry 发射 | yes | InProgress (本 PR) |
-| 2 | W&B artifact lineage 模型 schema + M0 / M1 manifest 加 `lineage` 字段 | partial (schema yes, W&B publish 留 Session 3+) | Todo |
+| 1 | M0 oracle health-baseline 加 per-env telemetry 发射 | yes | ✓ Done (PR #30 `09c9089`) |
+| 2 | cross-stage lineage 模型 schema + M0 / M1 manifest 加 `lineage` 字段 | yes (schema + walker; W&B publish 留 Session 3+) | ✓ Done (this PR) |
 | 3 | Sandbox container 构建脚本 (code-exec、Lean、terminal Dockerfile + CI build) | partial (脚本 yes, push 到 registry 留 ops) | Todo |
 | 4 | NeMo-RL / Ray / vLLM / NeMo-Gym launch path 真集群验证 | no — 需要 cluster + ops | Todo (block on NemTron access) |
 
