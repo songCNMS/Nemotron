@@ -10,11 +10,14 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     parse_tool_calls,
     stale_split_files,
     target_files,
+    transform_bash_command,
     transform_gsm8k_numeric_reasoning,
     transform_hermes_function_calling,
     transform_hermes_json_mode,
+    transform_hermes_tool_call_repair_negative,
     transform_hotpotqa_search,
     transform_mbpp_code_execution,
+    transform_swe_bench_patch,
     validate_registries,
 )
 
@@ -40,6 +43,8 @@ def test_registries_are_consistent() -> None:
         "coding",
         "general_tool_calling",
         "structured_output",
+        "terminal",
+        "software_engineering",
         "reasoning",
     }
     for dataset in data_registry["datasets"]:
@@ -100,6 +105,43 @@ def test_mbpp_transform_keeps_tests_for_reward_environment() -> None:
     assert record["reward_config"]["verifier"] == "python_unit_tests"
     assert record["extra_env_info"]["test_list"] == ["assert square(3) == 9"]
     assert record["metadata"]["source_id"] == "11"
+
+
+def test_bash_command_transform_keeps_prompt_and_expected_command() -> None:
+    row = {
+        "prompt": "Move file x to Downloads",
+        "response": "mv ~/Desktop/x ~/Downloads/",
+    }
+
+    record = transform_bash_command(row, _spec("m0_terminal_bash_commands"))
+
+    assert record["environment"] == "terminal_basic_shell"
+    assert record["expected_answer"] == "mv ~/Desktop/x ~/Downloads/"
+    assert record["extra_env_info"]["expected_command"] == "mv ~/Desktop/x ~/Downloads/"
+    assert record["reward_config"]["verifier"] == "command_substring_match"
+    assert "Return only the command" in record["responses_create_params"]["input"][1]["content"]
+
+
+def test_swe_bench_patch_transform_keeps_issue_and_gold_patch() -> None:
+    row = {
+        "repo": "sqlfluff/sqlfluff",
+        "instance_id": "sqlfluff__sqlfluff-1",
+        "base_commit": "abc123",
+        "environment_setup_commit": "def456",
+        "problem_statement": "Fix the lint message.",
+        "patch": "diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new",
+        "test_patch": "diff --git a/test.py b/test.py\n--- a/test.py\n+++ b/test.py",
+        "FAIL_TO_PASS": "[\"test_x\"]",
+        "PASS_TO_PASS": "[]",
+    }
+
+    record = transform_swe_bench_patch(row, _spec("m0_swe_patch_lite"))
+
+    assert record["environment"] == "swe_pivot_patch_supervision"
+    assert record["metadata"]["source_id"] == "sqlfluff__sqlfluff-1"
+    assert record["extra_env_info"]["repo"] == "sqlfluff/sqlfluff"
+    assert record["extra_env_info"]["gold_patch"].startswith("diff --git")
+    assert record["reward_config"]["verifier"] == "patch_diff_match"
 
 
 def test_data_registry_marks_hotpotqa_trust_remote_code() -> None:
@@ -240,6 +282,41 @@ def test_hermes_json_mode_transform_extracts_structured_answer_and_schema() -> N
     assert record["extra_env_info"]["schema"]["required"] == ["city"]
     assert record["reward_config"]["verifier"] == "json_value_exact_match"
     assert record["responses_create_params"]["input"][-1]["role"] == "user"
+
+
+def test_hermes_tool_call_repair_negative_synthesizes_repair_target() -> None:
+    tool_call = '<tool_call>{"name":"lookup","arguments":{"query":"weather"}}</tool_call>'
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "lookup",
+                "description": "Look up information.",
+                "parameters": {"type": "object", "properties": {"query": {"type": "string"}}},
+            },
+        }
+    ]
+    row = {
+        "id": "tool-repair-1",
+        "conversations": [
+            {"from": "system", "value": "Use tools when useful."},
+            {"from": "human", "value": "What is the weather?"},
+            {"from": "gpt", "value": tool_call},
+        ],
+        "tools": json.dumps(tools),
+        "category": "search",
+        "subcategory": "lookup",
+        "task": "repair lookup",
+    }
+
+    record = transform_hermes_tool_call_repair_negative(row, _spec("m0_tool_call_repair_negative_hermes"))
+
+    assert record["environment"] == "tool_call_repair_negative"
+    assert record["reward_config"]["verifier"] == "negative_recognition"
+    assert record["metadata"]["negative_kind"] in {"malformed_tool_call", "hallucinated_tool_output"}
+    assert record["metadata"]["repair_target"][0]["function"]["name"] == "lookup"
+    assert record["extra_env_info"]["repair_target"][0]["function"]["arguments"] == {"query": "weather"}
+    assert record["responses_create_params"]["tools"][0]["function"]["name"] == "lookup"
 
 
 def test_hermes_converter_captures_multi_turn_trajectory() -> None:

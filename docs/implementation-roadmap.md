@@ -1,6 +1,6 @@
 # Implementation Roadmap — M1 RL → M3 Freeze
 
-Last updated: 2026-05-17
+Last updated: 2026-05-18
 
 Companion to `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md`
 (the plan) and `src/nemotron/recipes/super3/milestones/m1_agentic_sft/REVIEW_v0.md`
@@ -11,10 +11,10 @@ proposed task ordering to close the gaps.
 Legend: ✓ implemented · ◐ partial · ✗ not started · 📋 tracked under an existing
 workspace task.
 
-State snapshot (commits): `66d0de6` on `main` (post-task010 squash-merge),
-counts 67 passing tests + 5 environment-gated skips, REVIEW_v0.md status
-**17 fixed / 1 partial / 2 still-open design-class (#8 chat template, #9 two-
-stage SFT loss) / 2 tracked (task005)**.
+State snapshot: PR #18 merged structured output into `main`; task005 adds the
+remaining terminal basics, short SWE patch supervision, and tool-call repair
+negative slices. REVIEW_v0.md still has 2 design-class items outside task005
+(#8 chat template, #9 two-stage SFT loss).
 
 ---
 
@@ -30,16 +30,16 @@ records. Plan §8 v0 lists six capability targets. Coverage today:
 | tool call syntax | ✓ | — | `general_tool_calling` env, Hermes singleturn |
 | search pattern | ✓ | — | `search_grounded_qa`, grounded template added in PR #13 |
 | structured output | ◐ | env, converter, M1 SFT builder landed for Hermes `json_mode_singleturn`; scale data not regenerated in repo | same license/revision as the tool-calling source |
-| terminal basics | ✗ | env, converter, source | candidate sources: agent-flan / orca-agentinstruct shell subset; license audit needed |
-| short SWE traces | ✗ | env, converter | candidate: SWE-Bench_Lite issue + gold patch (no sandbox at SFT stage) |
-| malformed tool / hallucinated tool output negatives | ✗ | synthesis path | derive from `func_calling_singleturn`; tag `metadata.negative_kind` + `metadata.repair_target` for downstream RL repair |
+| terminal basics | ◐ | env, converter, M1 SFT builder, and lightweight verifier landed; scale data not regenerated in repo | source: `aelhalili/bash-commands-dataset`, license `mit` |
+| short SWE traces | ◐ | env, converter, M1 SFT builder, and patch verifier landed; no sandbox at SFT stage | source: `princeton-nlp/SWE-bench_Lite`, license follows source repos |
+| malformed tool / hallucinated tool output negatives | ◐ | synthetic repair-negative path landed from Hermes singleturn; scale data not regenerated in repo | tags `metadata.negative_kind` + `metadata.repair_target` for downstream RL repair |
 
 The reasoning + code envs are also implemented (`math_reasoning_numeric`,
 `code_execution_python`) — those aren't called out as v0 capabilities but they
 are landed.
 
-Tracked under **task005_m1_sft_v0_scope_expansion** (workspace dir already
-exists, status `Todo`). Ready to assign.
+Tracked under **task005_m1_sft_v0_scope_expansion** (workspace dir exists,
+status `InProgress`).
 
 ### 1.2 Agentic SFT v0 — design-class still-open
 

@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import re
 import sys
@@ -32,6 +33,9 @@ SYSTEM_PROMPTS = {
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
     "structured_outputs_json": "You are a structured-output assistant. Return only valid JSON that matches the schema.",
+    "terminal_basic_shell": "You are a terminal assistant. Return a safe shell command only.",
+    "swe_pivot_patch_supervision": "You are a software engineering assistant. Return a unified diff patch only.",
+    "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
 }
 
@@ -68,7 +72,7 @@ def parse_json_maybe(value: Any, default: Any) -> Any:
 
 
 def source_id(row: Mapping[str, Any]) -> str:
-    for key in ("id", "task_id", "source_file"):
+    for key in ("id", "task_id", "instance_id", "source_file"):
         if row.get(key) is not None:
             return str(row[key])
     return ""
@@ -211,6 +215,77 @@ def transform_mbpp_code_execution(row: Mapping[str, Any], spec: Mapping[str, Any
             "test_imports": imports,
             "test_list": tests,
             "reference_code": row.get("code"),
+        },
+    )
+
+
+def transform_bash_command(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    question = str(row.get("prompt") or row.get("instruction") or "").strip()
+    command = str(row.get("response") or row.get("command") or row.get("input") or "").strip()
+    if not question or not command:
+        raise ValueError("bash command row must contain prompt and response")
+    user_content = (
+        "Write one shell command for the terminal task below. "
+        "Return only the command, without prose or Markdown.\n\n"
+        f"Task:\n{question}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=command,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "command_substring_match",
+            "max_score": 1.0,
+            "match": ["normalized_command_substring"],
+        },
+        extra_env_info={
+            "expected_command": command,
+            "source_prompt": question,
+        },
+    )
+
+
+def transform_swe_bench_patch(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    problem_statement = str(row.get("problem_statement") or "").strip()
+    patch = str(row.get("patch") or "").strip()
+    if not problem_statement or not patch:
+        raise ValueError("SWE-bench row must contain problem_statement and patch")
+    repo = str(row.get("repo") or "").strip()
+    instance_id = str(row.get("instance_id") or "").strip()
+    user_content = (
+        "Produce a minimal unified diff patch that resolves the software issue below.\n\n"
+        f"Repository: {repo}\n"
+        f"Instance: {instance_id}\n\n"
+        f"Issue:\n{problem_statement}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem_statement,
+        expected_answer=patch,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "patch_diff_match",
+            "max_score": 1.0,
+            "match": ["normalized_unified_diff"],
+        },
+        extra_env_info={
+            "repo": repo,
+            "instance_id": instance_id,
+            "base_commit": row.get("base_commit"),
+            "environment_setup_commit": row.get("environment_setup_commit"),
+            "test_patch": row.get("test_patch"),
+            "fail_to_pass": row.get("FAIL_TO_PASS"),
+            "pass_to_pass": row.get("PASS_TO_PASS"),
+            "gold_patch": patch,
         },
     )
 
@@ -470,11 +545,112 @@ def transform_hermes_json_mode(row: Mapping[str, Any], spec: Mapping[str, Any]) 
     )
 
 
+def stable_negative_kind(row: Mapping[str, Any]) -> str:
+    text = source_id(row) or str(row.get("task") or row.get("category") or "")
+    return "malformed_tool_call" if sum(ord(char) for char in text) % 2 == 0 else "hallucinated_tool_output"
+
+
+def tool_call_name_and_arguments(call: Mapping[str, Any]) -> tuple[Any, Any]:
+    function = call.get("function")
+    if isinstance(function, Mapping):
+        return function.get("name"), function.get("arguments", {})
+    return call.get("name"), call.get("arguments", {})
+
+
+def malformed_tool_call_artifact(call: Mapping[str, Any]) -> str:
+    name, arguments = tool_call_name_and_arguments(call)
+    canonical = {
+        "name": name,
+        "arguments": arguments,
+    }
+    broken_json = json.dumps(canonical, ensure_ascii=False)[:-1]
+    return f"<tool_call>{broken_json}</tool_call>"
+
+
+def hallucinated_tool_output_artifact(call: Mapping[str, Any]) -> str:
+    name, _arguments = tool_call_name_and_arguments(call)
+    fake_output = {
+        "tool_name": name or "unknown_tool",
+        "content": "The tool completed successfully, but no valid tool call was made.",
+    }
+    return f"<tool_output>{json.dumps(fake_output, ensure_ascii=False)}</tool_output>"
+
+
+def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    base_spec = dict(spec)
+    base_spec["environment"] = "general_tool_calling"
+    base_spec["reward_type"] = "tool_schema_and_argument_match"
+    base_record = transform_hermes_function_calling(row, base_spec)
+    repair_target = copy.deepcopy(base_record["extra_env_info"].get("expected_tool_calls") or [])
+    if not repair_target:
+        raise ValueError("repair negative requires at least one expected tool call")
+
+    negative_kind = stable_negative_kind(row)
+    first_call = repair_target[0]
+    if negative_kind == "malformed_tool_call":
+        bad_artifact = malformed_tool_call_artifact(first_call)
+        repair_message = "The previous tool call is malformed. I will issue the corrected call."
+    else:
+        bad_artifact = hallucinated_tool_output_artifact(first_call)
+        repair_message = "The previous tool output was hallucinated. I will issue the valid tool call instead."
+
+    base_prompt_messages = [
+        message
+        for message in base_record["responses_create_params"].get("input", [])
+        if isinstance(message, Mapping) and message.get("role") != "system"
+    ]
+    input_messages = [
+        {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+        *base_prompt_messages,
+        {
+            "role": "user",
+            "content": (
+                "A previous assistant produced the invalid tool-use artifact below. "
+                "Identify that it is invalid and repair it using the available tool schema.\n\n"
+                f"Invalid artifact:\n{bad_artifact}"
+            ),
+        },
+    ]
+    expected_answer = {
+        "repair_message": repair_message,
+        "tool_calls": repair_target,
+    }
+    record = make_record(
+        spec=spec,
+        row=row,
+        question=str(base_record.get("question") or ""),
+        expected_answer=expected_answer,
+        input_messages=input_messages,
+        tools=base_record["responses_create_params"].get("tools", []),
+        reward_config={
+            "verifier": "negative_recognition",
+            "max_score": 1.0,
+            "match": ["repair_target_tool_calls"],
+        },
+        extra_env_info={
+            "negative_kind": negative_kind,
+            "invalid_artifact": bad_artifact,
+            "repair_target": repair_target,
+            "expected_assistant_content": repair_message,
+            "source_expected_trajectory": base_record["extra_env_info"].get("expected_trajectory", []),
+            "category": row.get("category"),
+            "subcategory": row.get("subcategory"),
+            "task": row.get("task"),
+        },
+    )
+    record["metadata"]["negative_kind"] = negative_kind
+    record["metadata"]["repair_target"] = repair_target
+    return record
+
+
 CONVERTERS = {
     "hotpotqa_search": transform_hotpotqa_search,
     "mbpp_code_execution": transform_mbpp_code_execution,
+    "bash_command": transform_bash_command,
+    "swe_bench_patch": transform_swe_bench_patch,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
+    "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
     "gsm8k_numeric_reasoning": transform_gsm8k_numeric_reasoning,
 }
 

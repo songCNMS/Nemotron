@@ -107,6 +107,75 @@ def test_convert_structured_output_record_uses_expected_json() -> None:
     assert converted["metadata"]["m0_environment"] == "structured_outputs_json"
 
 
+def test_convert_terminal_record_uses_expected_command() -> None:
+    record = _base_record("terminal_basic_shell")
+    record["expected_answer"] = "mv ~/Desktop/x ~/Downloads/"
+    record["extra_env_info"]["expected_command"] = "mv ~/Desktop/x ~/Downloads/"
+    record["metadata"]["domain"] = "terminal"
+    record["metadata"]["reward_type"] = "command_substring_match"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1] == {
+        "role": "assistant",
+        "content": "mv ~/Desktop/x ~/Downloads/",
+    }
+    assert converted["metadata"]["m1_use"] == ["terminal basics"]
+    assert converted["metadata"]["m0_environment"] == "terminal_basic_shell"
+
+
+def test_convert_swe_patch_record_uses_gold_patch() -> None:
+    patch = "diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new"
+    record = _base_record("swe_pivot_patch_supervision")
+    record["expected_answer"] = patch
+    record["extra_env_info"]["gold_patch"] = patch
+    record["extra_env_info"]["repo"] = "sqlfluff/sqlfluff"
+    record["metadata"]["domain"] = "software_engineering"
+    record["metadata"]["reward_type"] = "patch_diff_match"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1] == {"role": "assistant", "content": patch}
+    assert converted["metadata"]["m1_use"] == ["short SWE traces"]
+    assert converted["metadata"]["m0_environment"] == "swe_pivot_patch_supervision"
+
+
+def test_convert_tool_call_repair_negative_preserves_tools_and_repair_target() -> None:
+    tool_call = {
+        "type": "function",
+        "function": {"name": "lookup", "arguments": {"query": "weather"}},
+    }
+    record = _base_record("tool_call_repair_negative")
+    record["responses_create_params"]["tools"] = [
+        {
+            "type": "function",
+            "function": {
+                "name": "lookup",
+                "description": "Look up information.",
+                "parameters": {"type": "object", "properties": {"query": {"type": "string"}}},
+            },
+        }
+    ]
+    record["expected_answer"] = {"repair_message": "I will repair the call.", "tool_calls": [tool_call]}
+    record["extra_env_info"]["repair_target"] = [tool_call]
+    record["extra_env_info"]["expected_assistant_content"] = "I will repair the call."
+    record["metadata"]["domain"] = "general_tool_calling"
+    record["metadata"]["reward_type"] = "negative_recognition"
+
+    converted = convert_m0_record(record, split="train")
+
+    assistant = converted["messages"][-1]
+    assert assistant["role"] == "assistant"
+    assert assistant["content"] == "I will repair the call."
+    assert assistant["tool_calls"][0]["id"] == "repair_call_0"
+    assert assistant["tool_calls"][0]["function"]["name"] == "lookup"
+    assert converted["tools"][0]["function"]["name"] == "lookup"
+    assert converted["metadata"]["m1_use"] == [
+        "malformed tool call negatives",
+        "hallucinated tool output negatives",
+    ]
+
+
 def test_convert_tool_record_preserves_tools_and_tool_calls() -> None:
     record = _base_record("general_tool_calling")
     record["responses_create_params"]["input"][0]["content"] = (
@@ -837,6 +906,11 @@ def test_m1_use_is_scoped_per_environment() -> None:
             record["extra_env_info"]["expected_trajectory"] = [
                 {"role": "assistant", "content": "ok", "tool_calls": []},
             ]
+        elif env_id == "tool_call_repair_negative":
+            record["extra_env_info"]["repair_target"] = [
+                {"type": "function", "function": {"name": "repair", "arguments": {"x": 1}}},
+            ]
+            record["extra_env_info"]["expected_assistant_content"] = "Repairing the invalid call."
         # search_grounded_qa: _base_record's expected_answer="Answer" suffices
         converted = convert_m0_record(record, split="train")
         assert converted["metadata"]["m1_use"] == expected, (

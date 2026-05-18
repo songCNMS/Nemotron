@@ -1,8 +1,9 @@
 # M0 Data and Environment Foundation
 
 This milestone prepares public smoke/eval data for the first multi-environment RL
-baseline. The scope is limited to the M0 plan: search, coding, general tool
-calling, structured JSON output, and reasoning. Each dataset is tagged with its
+baseline. The scope is limited to the M0 plan: search, coding, terminal basics,
+short SWE patch supervision, general tool calling, tool-call repair negatives,
+structured JSON output, and reasoning. Each dataset is tagged with its
 milestone usage, license, source revision, reward type, and contamination notes
 in `data_registry.yaml`.
 
@@ -12,7 +13,10 @@ in `data_registry.yaml`.
 |---|---|---|---:|---|
 | Search | `hotpotqa/hotpot_qa` (`distractor`) [^1] | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
 | Coding | `google-research-datasets/mbpp` (`full`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
+| Terminal basics | `aelhalili/bash-commands-dataset` | `terminal_basic_shell` | 100 train / 25 val | `mit` |
+| Short SWE traces | `princeton-nlp/SWE-bench_Lite` | `swe_pivot_patch_supervision` | 100 train / 20 val | `source-repository-specific` |
 | General tool calling | `NousResearch/hermes-function-calling-v1` | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
+| Tool repair negatives | `NousResearch/hermes-function-calling-v1` (`func_calling_singleturn`) | `tool_call_repair_negative` | 100 train / 25 val | `apache-2.0` |
 | Structured output | `NousResearch/hermes-function-calling-v1` (`json_mode_singleturn`) | `structured_outputs_json` | 100 train / 25 val | `apache-2.0` |
 | Reasoning | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
 
@@ -74,6 +78,15 @@ health_baseline/
 │   ├── train-split.jsonl
 │   └── val-split.jsonl
 ├── general_tool_calling/
+│   ├── train-split.jsonl
+│   └── val-split.jsonl
+├── terminal_basic_shell/
+│   ├── train-split.jsonl
+│   └── val-split.jsonl
+├── swe_pivot_patch_supervision/
+│   ├── train-split.jsonl
+│   └── val-split.jsonl
+├── tool_call_repair_negative/
 │   ├── train-split.jsonl
 │   └── val-split.jsonl
 ├── structured_outputs_json/

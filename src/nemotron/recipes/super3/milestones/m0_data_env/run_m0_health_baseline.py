@@ -136,6 +136,61 @@ def score_json_value(candidate: Any, expected: Any) -> float:
     return 1.0 if parsed_candidate == parsed_expected else 0.0
 
 
+def normalize_command_text(value: Any) -> str:
+    text = str(value).strip()
+    blocks = re.findall(r"```(?:bash|sh|shell)?\s*(.*?)```", text, flags=re.DOTALL | re.IGNORECASE)
+    if blocks:
+        text = blocks[-1].strip()
+    return WHITESPACE_RE.sub(" ", text).strip()
+
+
+def score_command(candidate: Any, expected: Any) -> float:
+    normalized_candidate = normalize_command_text(candidate)
+    normalized_expected = normalize_command_text(expected)
+    if not normalized_expected:
+        return 0.0
+    if normalized_candidate == normalized_expected:
+        return 1.0
+    return 1.0 if normalized_expected in normalized_candidate else 0.0
+
+
+def normalize_patch_text(value: Any) -> str:
+    return "\n".join(line.rstrip() for line in str(value).strip().splitlines()).strip()
+
+
+def score_patch(candidate: Any, expected: Any) -> float:
+    normalized_candidate = normalize_patch_text(candidate)
+    normalized_expected = normalize_patch_text(expected)
+    if not normalized_expected:
+        return 0.0
+    return 1.0 if normalized_candidate == normalized_expected else 0.0
+
+
+def extract_tool_call_list(value: Any) -> list[Any]:
+    parsed = parse_json_maybe(value, default=value)
+    if isinstance(parsed, list):
+        return parsed
+    if isinstance(parsed, Mapping):
+        for key in ("tool_calls", "repair_target", "expected_tool_calls"):
+            calls = parsed.get(key)
+            if isinstance(calls, list):
+                return calls
+    return []
+
+
+def score_negative_recognition(candidate: Any, expected: Any, record: Mapping[str, Any]) -> float:
+    expected_calls = extract_tool_call_list(record.get("extra_env_info", {}).get("repair_target"))
+    if not expected_calls:
+        expected_calls = extract_tool_call_list(expected)
+    candidate_calls = extract_tool_call_list(candidate)
+    if not expected_calls or not candidate_calls or len(expected_calls) != len(candidate_calls):
+        return 0.0
+    for candidate_call, expected_call in zip(candidate_calls, expected_calls):
+        if canonical_tool_call(candidate_call) != canonical_tool_call(expected_call):
+            return 0.0
+    return 1.0
+
+
 def score_tool_call(candidate: Any, expected: Any, record: Mapping[str, Any]) -> float:
     if isinstance(candidate, str):
         parsed = parse_json_maybe(candidate, default=candidate)
@@ -214,6 +269,12 @@ def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = 
         return score_numeric(candidate, expected), {}
     if verifier == "json_value_exact_match":
         return score_json_value(candidate, expected), {}
+    if verifier == "command_substring_match":
+        return score_command(candidate, expected), {}
+    if verifier == "patch_diff_match":
+        return score_patch(candidate, expected), {}
+    if verifier == "negative_recognition":
+        return score_negative_recognition(candidate, expected, record), {}
     if verifier == "tool_schema_and_argument_match":
         return score_tool_call(candidate, expected, record), {}
     if verifier == "python_unit_tests":
