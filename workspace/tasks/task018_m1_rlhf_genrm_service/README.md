@@ -1,6 +1,7 @@
 # task018_m1_rlhf_genrm_service
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #42 / e758604 on 2026-05-18 -->
 
 ## 背景
 

@@ -57,3 +57,19 @@ Session 2+ 不在本 PR：
 - Session 2 (HelpSteer-2 M0 converter) — 需 HF 下载 + 法务 review
 - Session 3 (GenRM judge model 部署) — 需 cluster + GPUs
 - Session 4 (端到端 smoke from SWE2 checkpoint) — 需上述都到位
+
+## Session 2 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 1 PR #42 已 squash-merge 为 `e758604` 进 main — m1_rlhf 模块 +
+env registry + pref data candidate registry + 4th bridge copy + KL
+invariant pytest + 18 个 pytest case 都进了 main。intern status 回 Idle
+(Session 30)。task018 整 task 仍 InProgress：Session 2 (HelpSteer-2
+converter) / Session 3 (GenRM judge deploy) / Session 4 (端到端 smoke)
+没启动。
+
+里程碑：roadmap §5 critical-path 前 8 条（task005/012/021/014/015/016/017/018）
+全部 Session 1 落地 ✓。下一个候选：task013 (M1 two-stage SFT loss，
+critical-path 唯一没动的) / task019-020 (M1 eval basket) / task017 Session 4
+(`_bridge_base.py` 抽取，4 个 bridge module 都摆稳) / 之前 task 的 Session
+2+。
+
