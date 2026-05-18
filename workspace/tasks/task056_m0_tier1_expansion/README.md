@@ -1,15 +1,15 @@
 # task056_m0_tier1_expansion
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 
 ## 背景
 
-`docs/m0-dataset-expansion-plan.md` 列出 8 个 Tier-1 M0 环境。`task005_m1_sft_v0_scope_expansion` 已合入 4 个 (terminal_basic_shell、swe_pivot_patch_supervision、tool_call_repair_negative、structured_outputs_json)。剩 **4 个** Tier-1 环境等本 task 落地：
+`docs/m0-dataset-expansion-plan.md` 列出 8 个 Tier-1 M0 环境。`task005_m1_sft_v0_scope_expansion` 已合入 4 个 (terminal_basic_shell、swe_pivot_patch_supervision、tool_call_repair_negative、structured_outputs_json)；本 task Session 1 又合入 3 个 (math_competition_numeric、search_multihop_qa、multi_turn_tool_use)。剩 **1 个** Tier-1 环境等本 task Session 2 解锁：
 
-- `math_competition_numeric` ← `AI-MO/NuminaMath-CoT` (Apache-2.0, 859 608 行)
-- `search_multihop_qa` ← `dgslibisey/MuSiQue` (CC-BY-4.0, 24 814 行)
-- `multi_turn_tool_use` ← `NousResearch/hermes-function-calling-v1` `func_calling` config (Apache-2.0)
-- `math_formal_lean` ← `nvidia/Nemotron-Math-Proofs-v1` Lean split (CC-BY-SA-4.0 ⚠)
+- ~~`math_competition_numeric` ← `AI-MO/NuminaMath-CoT` (Apache-2.0, 859 608 行)~~ — Session 1 完成
+- ~~`search_multihop_qa` ← `dgslibisey/MuSiQue` (CC-BY-4.0, 24 814 行)~~ — Session 1 完成
+- ~~`multi_turn_tool_use` ← `NousResearch/hermes-function-calling-v1` `func_calling` config (Apache-2.0)~~ — Session 1 完成
+- `math_formal_lean` ← `nvidia/Nemotron-Math-Proofs-v1` Lean split (CC-BY-SA-4.0 ⚠) — Session 2 (blocked on share-alike clearance)
 
 ## 目标
 

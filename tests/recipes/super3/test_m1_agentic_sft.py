@@ -1256,3 +1256,67 @@ def test_tiny_model_surfaces_super_provider_availability_flag() -> None:
     import nemotron.recipes.super3.tiny_model as tiny_model_module
 
     assert isinstance(tiny_model_module._SUPER_PROVIDER_AVAILABLE, bool)
+
+
+def test_convert_multihop_search_uses_grounded_template_with_musique_titles() -> None:
+    """task056: MuSiQue's `supporting_titles` flat list feeds the grounded SFT
+    template — same builder, different lineage shape than HotpotQA."""
+    record = _base_record("search_multihop_qa")
+    record["expected_answer"] = "Dearborn"
+    record["extra_env_info"]["supporting_titles"] = ["Henry Ford", "Assembly Line"]
+
+    converted = convert_m0_record(record, split="train")
+
+    assistant = converted["messages"][-1]
+    assert assistant["role"] == "assistant"
+    assert "Based on the retrieved passages" in assistant["content"]
+    assert "[1] Henry Ford" in assistant["content"]
+    assert "[2] Assembly Line" in assistant["content"]
+    assert assistant["content"].endswith("the answer is Dearborn.")
+    # M1 use tag reflects the multi-hop env, not the single-hop search env.
+    assert converted["metadata"]["m1_use"] == ["search pattern", "multi-hop reasoning"]
+
+
+def test_convert_competition_math_routes_through_reasoning_builder() -> None:
+    """task056: NuminaMath competition math reuses `assistant_for_reasoning`;
+    expected_answer is the already-extracted `\\boxed{}` content."""
+    record = _base_record("math_competition_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = "Steps... \\boxed{42}"
+    record["extra_env_info"]["source"] = "amc_aime"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1] == {"role": "assistant", "content": "42"}
+    assert converted["metadata"]["m1_use"] == ["reasoning answer format", "competition math"]
+
+
+def test_convert_multi_turn_tool_use_routes_through_trajectory_builder() -> None:
+    """task056: `multi_turn_tool_use` env shares the trajectory builder with
+    `general_tool_calling` (both in `_TOOL_CALLING_ENVIRONMENTS`); system
+    prompt is rewritten and the trajectory is expanded with tool_call_id pairing."""
+    record = _base_record("multi_turn_tool_use")
+    record["responses_create_params"]["input"][0]["content"] = (
+        "You are a function calling AI model.\n<tools>[]</tools>"
+    )
+    record["responses_create_params"]["tools"] = [
+        {"type": "function", "function": {"name": "lookup", "description": "L", "parameters": {"type": "object"}}}
+    ]
+    record["extra_env_info"]["expected_trajectory"] = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}],
+        },
+        {"role": "tool", "content": '{"result":"y"}', "tool_calls": []},
+        {"role": "assistant", "content": "Done.", "tool_calls": []},
+    ]
+
+    converted = convert_m0_record(record, split="train")
+    roles = [message["role"] for message in converted["messages"]]
+
+    # system (rewritten) + user + 3-step assistant/tool/assistant trajectory
+    assert roles == ["system", "user", "assistant", "tool", "assistant"]
+    assert converted["messages"][0] == {"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}
+    assert converted["messages"][3]["tool_call_id"] == "call_0"
+    assert converted["metadata"]["m1_use"] == ["tool call syntax", "multi-turn tool trace"]

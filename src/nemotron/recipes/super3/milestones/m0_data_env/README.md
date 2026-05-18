@@ -1,24 +1,28 @@
 # M0 Data and Environment Foundation
 
 This milestone prepares public smoke/eval data for the first multi-environment RL
-baseline. The scope is limited to the M0 plan: search, coding, terminal basics,
-short SWE patch supervision, general tool calling, tool-call repair negatives,
-structured JSON output, and reasoning. Each dataset is tagged with its
-milestone usage, license, source revision, reward type, and contamination notes
-in `data_registry.yaml`.
+baseline. The scope covers plan §7 families that have public-data fits today:
+search (single-hop + multi-hop), coding, terminal basics, short SWE patch
+supervision, general tool calling (single-turn + multi-turn), tool-call repair
+negatives, structured JSON output, and reasoning (grade-school + competition).
+Each dataset is tagged with its milestone usage, license, source revision,
+reward type, and contamination notes in `data_registry.yaml`.
 
 ## Public Sources
 
 | M0 area | HF dataset | Environment | Default rows | License |
 |---|---|---|---:|---|
-| Search | `hotpotqa/hotpot_qa` (`distractor`) [^1] | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
+| Search (single-hop) | `hotpotqa/hotpot_qa` (`distractor`) [^1] | `search_grounded_qa` | 100 train / 25 val | `cc-by-sa-4.0` |
+| Search (multi-hop) | `dgslibisey/MuSiQue` | `search_multihop_qa` | 100 train / 25 val | `cc-by-4.0` |
 | Coding | `google-research-datasets/mbpp` (`full`) | `code_execution_python` | 100 train / 25 val | `cc-by-4.0` |
 | Terminal basics | `aelhalili/bash-commands-dataset` | `terminal_basic_shell` | 100 train / 25 val | `mit` |
 | Short SWE traces | `princeton-nlp/SWE-bench_Lite` | `swe_pivot_patch_supervision` | 100 train / 20 val | `source-repository-specific` |
-| General tool calling | `NousResearch/hermes-function-calling-v1` | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
+| General tool calling (single-turn) | `NousResearch/hermes-function-calling-v1` (`func_calling_singleturn`) | `general_tool_calling` | 100 train / 25 val | `apache-2.0` |
+| General tool calling (multi-turn) | `NousResearch/hermes-function-calling-v1` (`func_calling`) | `multi_turn_tool_use` | 100 train / 25 val | `apache-2.0` |
 | Tool repair negatives | `NousResearch/hermes-function-calling-v1` (`func_calling_singleturn`) | `tool_call_repair_negative` | 100 train / 25 val | `apache-2.0` |
 | Structured output | `NousResearch/hermes-function-calling-v1` (`json_mode_singleturn`) | `structured_outputs_json` | 100 train / 25 val | `apache-2.0` |
-| Reasoning | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
+| Reasoning (grade-school) | `openai/gsm8k` (`main`) | `math_reasoning_numeric` | 100 train / 25 val | `mit` |
+| Reasoning (competition) | `AI-MO/NuminaMath-CoT` | `math_competition_numeric` | 100 train / 25 val | `apache-2.0` |
 
 [^1]: `hotpotqa/hotpot_qa` ships a custom Hugging Face loader script that
     `datasets>=2.16` will refuse to execute unless `trust_remote_code: true`

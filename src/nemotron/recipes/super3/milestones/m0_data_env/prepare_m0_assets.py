@@ -28,10 +28,20 @@ MISSING_CONFIG = object()
 
 TOOL_CALL_RE = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 
+# Matches the contents of a `\boxed{...}` block. NuminaMath-style competition
+# math problems carry the final answer here. The pattern is intentionally
+# non-greedy and stops at the first unbalanced `}`; deeply nested LaTeX like
+# `\boxed{\frac{a}{b}}` will be truncated. We accept this for M0 smoke — rows
+# that fall through extraction become `manifest.errors`; a balanced-bracket
+# parser is a task057 follow-up.
+BOXED_ANSWER_RE = re.compile(r"\\boxed\{([^{}]*)\}")
+
 SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
+    "search_multihop_qa": "You answer multi-hop questions using the provided retrieved passages. Cite the passages you used.",
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
+    "multi_turn_tool_use": "You are a tool-using assistant. Use the available functions across multiple turns when needed and incorporate tool results into the final answer.",
     "structured_outputs_json": (
         "You are a structured-output assistant. Return only valid JSON that matches the schema."
     ),
@@ -39,6 +49,7 @@ SYSTEM_PROMPTS = {
     "swe_pivot_patch_supervision": "You are a software engineering assistant. Return a unified diff patch only.",
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
+    "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
 }
 
 JsonDict = dict[str, Any]
@@ -57,6 +68,21 @@ def normalize_numeric_answer(text: Any) -> str:
     if "####" in value:
         value = value.rsplit("####", 1)[1].strip()
     return value.replace(",", "").strip()
+
+
+def extract_boxed_answer(text: Any) -> str:
+    """Return the contents of the LAST ``\\boxed{...}`` in *text*, or "" if absent.
+
+    NuminaMath-CoT puts the final answer in a `\\boxed{...}` block at the end
+    of the `solution` field. Several solutions wrap intermediate steps in
+    `\\boxed{}` too — the convention is "last boxed = the answer", so we
+    return the trailing match.
+    """
+    value = str(text)
+    matches = BOXED_ANSWER_RE.findall(value)
+    if not matches:
+        return ""
+    return matches[-1].strip()
 
 
 def parse_json_maybe(value: Any, default: Any) -> Any:
@@ -288,6 +314,122 @@ def transform_swe_bench_patch(row: Mapping[str, Any], spec: Mapping[str, Any]) -
             "fail_to_pass": row.get("FAIL_TO_PASS"),
             "pass_to_pass": row.get("PASS_TO_PASS"),
             "gold_patch": patch,
+        },
+    )
+
+
+def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
+
+    Layout per row:
+      - ``question``: str
+      - ``paragraphs``: list[{idx, title, paragraph_text, is_supporting}]
+      - ``answer``: str, plus ``answer_aliases`` as optional list[str]
+      - ``question_decomposition``: list, ``answerable``: bool
+
+    The shape mirrors HotpotQA's `transform_hotpotqa_search` — verifier is the
+    same (`normalized_exact_or_contains`), and the same documents-in-user-prompt
+    layout is reused. MuSiQue-only fields (decomposition, is_supporting flag,
+    answer aliases) land in `extra_env_info` so M1 SFT supervision + downstream
+    eval can consume them.
+    """
+    question = str(row.get("question", "")).strip()
+    expected_answer = str(row.get("answer", "")).strip()
+
+    raw_paragraphs = row.get("paragraphs") or []
+    documents: list[JsonDict] = []
+    supporting_titles: list[str] = []
+    for paragraph in raw_paragraphs:
+        if not isinstance(paragraph, Mapping):
+            continue
+        title = str(paragraph.get("title", "")).strip()
+        text = str(paragraph.get("paragraph_text", "")).strip()
+        is_supporting = bool(paragraph.get("is_supporting"))
+        documents.append({"title": title, "text": text, "is_supporting": is_supporting})
+        if is_supporting and title:
+            supporting_titles.append(title)
+
+    answer_aliases_raw = row.get("answer_aliases") or []
+    answer_aliases = (
+        [str(alias) for alias in answer_aliases_raw if str(alias).strip()]
+        if isinstance(answer_aliases_raw, list)
+        else []
+    )
+
+    user_content = (
+        "Answer the multi-hop question using only the retrieved passages.\n\n"
+        f"Question: {question}\n\n"
+        f"Retrieved passages:\n{format_documents_for_prompt(documents)}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=expected_answer,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "normalized_exact_or_contains",
+            "max_score": 1.0,
+            "normalization": ["lowercase", "strip_articles", "strip_punctuation", "collapse_whitespace"],
+            "answer_aliases": answer_aliases,
+        },
+        extra_env_info={
+            "context_documents": documents,
+            "supporting_titles": supporting_titles,
+            "answer_aliases": answer_aliases,
+            "question_decomposition": row.get("question_decomposition"),
+            "answerable": row.get("answerable"),
+            "search_query": question,
+        },
+    )
+
+
+def transform_numinamath_competition(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert an `AI-MO/NuminaMath-CoT` row to the M0 JSONL contract.
+
+    Layout per row:
+      - ``problem``: str (the math problem)
+      - ``solution``: str (full CoT, final answer wrapped in ``\\boxed{...}``)
+      - ``source``: str (olympiad / amc / aime / cn_k12 / ...)
+      - ``messages``: list (alternate conversation form, unused at M0)
+
+    The verifier is `normalized_exact_or_contains` rather than the strict
+    `normalized_numeric_exact_match` used by GSM8K — NuminaMath answers can
+    be fractions, intervals, or symbolic expressions where a numeric match
+    is too strict. A stricter math-aware verifier is the right answer here
+    but lives in M1+ once a math-judge service is wired (plan §5.3 names
+    `math_with_judge` for exactly this).
+    """
+    problem = str(row.get("problem", "")).strip()
+    solution = str(row.get("solution", "")).strip()
+    boxed = extract_boxed_answer(solution)
+    if boxed:
+        expected_answer = boxed
+    else:
+        # Fall back to the trailing token of the solution; many cn_k12 rows
+        # don't use \boxed{} and just close with "答案是 X" or similar.
+        expected_answer = solution.split()[-1] if solution else ""
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem,
+        expected_answer=expected_answer,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": problem},
+        ],
+        reward_config={
+            "verifier": "normalized_exact_or_contains",
+            "max_score": 1.0,
+            "normalization": ["lowercase", "strip_punctuation", "collapse_whitespace"],
+        },
+        extra_env_info={
+            "reference_solution": solution,
+            "source": row.get("source"),
+            "boxed_answer": boxed,
         },
     )
 
@@ -658,6 +800,7 @@ def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Map
 
 CONVERTERS = {
     "hotpotqa_search": transform_hotpotqa_search,
+    "musique_search": transform_musique_search,
     "mbpp_code_execution": transform_mbpp_code_execution,
     "bash_command": transform_bash_command,
     "swe_bench_patch": transform_swe_bench_patch,
@@ -665,6 +808,7 @@ CONVERTERS = {
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
     "gsm8k_numeric_reasoning": transform_gsm8k_numeric_reasoning,
+    "numinamath_competition": transform_numinamath_competition,
 }
 
 

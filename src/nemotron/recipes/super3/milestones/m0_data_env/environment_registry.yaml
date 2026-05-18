@@ -31,6 +31,37 @@ environments:
         - expected_answer
         - extra_env_info.context_documents
 
+  - id: search_multihop_qa
+    family: search
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: normalized_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: answer must match the expected short answer (or any answer_aliases entry) after normalization
+    resources:
+      sandbox: none
+      tools:
+        - static_retrieval_context
+      timeout_s: 30
+      max_turns: 4
+      expected_runtime_ms: 800
+    telemetry:
+      - reward
+      - latency_ms
+      - normalized_answer
+      - supporting_doc_count
+      - hop_count
+      - timeout
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.context_documents
+        - extra_env_info.supporting_titles
+
   - id: code_execution_python
     family: coding
     stage: M0 data_env_foundation
@@ -146,6 +177,37 @@ environments:
         - responses_create_params.tools
         - extra_env_info.expected_tool_calls
 
+  - id: multi_turn_tool_use
+    family: general_tool_calling
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: tool_schema_and_argument_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted tool name + JSON arguments must match the reference trajectory across the entire multi-turn run
+    resources:
+      sandbox: none
+      tools:
+        - openai_function_schema
+      timeout_s: 60
+      max_turns: 10
+      expected_runtime_ms: 1500
+    telemetry:
+      - reward
+      - invalid_tool_call
+      - schema_error
+      - argument_match
+      - tool_call_id_pairing_match
+      - turn_count
+      - latency_ms
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - responses_create_params.tools
+        - extra_env_info.expected_tool_calls
+        - extra_env_info.expected_trajectory
+
   - id: tool_call_repair_negative
     family: general_tool_calling
     stage: M0 data_env_foundation
@@ -232,3 +294,33 @@ environments:
         - question
         - expected_answer
         - responses_create_params.input
+
+  - id: math_competition_numeric
+    family: reasoning
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: normalized_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: candidate must include the expected boxed answer after normalization (smoke verifier — production needs a math-judge)
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 800
+    telemetry:
+      - reward
+      - normalized_answer
+      - boxed_answer_extracted
+      - solution_token_count
+      - latency_ms
+      - malformed_final_answer
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - responses_create_params.input
+        - extra_env_info.reference_solution

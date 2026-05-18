@@ -143,7 +143,7 @@ def _scrub_tool_call_xml(text: str) -> str:
 
 def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDict]:
     messages = base_messages(record)
-    if environment != "general_tool_calling":
+    if environment not in _TOOL_CALLING_ENVIRONMENTS:
         return messages
     cleaned: list[JsonDict] = []
     for message in messages:
@@ -154,6 +154,14 @@ def prompt_messages(record: Mapping[str, Any], environment: str) -> list[JsonDic
         else:
             cleaned.append(message)
     return [{"role": "system", "content": TOOL_CALLING_SYSTEM_PROMPT}, *cleaned]
+
+
+# Environments that share the multi-turn tool-trajectory supervision builder
+# instead of a per-env `assistant_for_*` function. Both single-turn and
+# multi-turn Hermes envs route through `trajectory_for_tool_calling` and the
+# tool-calling system-prompt + user-content scrub above. Declared up here so
+# `prompt_messages` can reference it before `ASSISTANT_BUILDERS` is built.
+_TOOL_CALLING_ENVIRONMENTS = frozenset({"general_tool_calling", "multi_turn_tool_use"})
 
 
 def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
@@ -186,11 +194,21 @@ def assistant_for_search(record: Mapping[str, Any]) -> JsonDict:
 
 
 def _supporting_fact_titles(record: Mapping[str, Any]) -> list[str]:
+    """Return de-duplicated supporting-passage titles for a search record.
+
+    HotpotQA carries them under ``extra_env_info.supporting_facts.title``
+    (dict shape from the HF loader). MuSiQue carries them under
+    ``extra_env_info.supporting_titles`` (flat list, derived from each
+    paragraph's ``is_supporting`` flag at M0-prep time). Both shapes feed
+    the same M1 grounded-template builder.
+    """
     extra = record.get("extra_env_info", {}) or {}
+    raw_titles: Any = None
     supporting_facts = extra.get("supporting_facts")
-    if not isinstance(supporting_facts, Mapping):
-        return []
-    raw_titles = supporting_facts.get("title")
+    if isinstance(supporting_facts, Mapping):
+        raw_titles = supporting_facts.get("title")
+    elif isinstance(extra.get("supporting_titles"), list):
+        raw_titles = extra["supporting_titles"]
     if not isinstance(raw_titles, list):
         return []
     seen: list[str] = []
@@ -350,12 +368,20 @@ def trajectory_for_tool_calling(record: Mapping[str, Any]) -> list[JsonDict]:
 
 ASSISTANT_BUILDERS = {
     "search_grounded_qa": assistant_for_search,
+    # MuSiQue's `supporting_titles` flat list also feeds the grounded
+    # search template; `_supporting_fact_titles` accepts both shapes.
+    "search_multihop_qa": assistant_for_search,
     "code_execution_python": assistant_for_code,
     "terminal_basic_shell": assistant_for_terminal,
     "swe_pivot_patch_supervision": assistant_for_swe_patch,
     "structured_outputs_json": assistant_for_structured_output,
     "tool_call_repair_negative": assistant_for_tool_call_repair,
     "math_reasoning_numeric": assistant_for_reasoning,
+    # NuminaMath competition math reuses `assistant_for_reasoning`; the boxed
+    # answer is already extracted into `expected_answer` at M0-prep time so
+    # the reasoning builder will prefer it (and the `_strip_gsm8k_marker`
+    # fallback is harmless for non-GSM8K rows).
+    "math_competition_numeric": assistant_for_reasoning,
 }
 
 
@@ -365,13 +391,16 @@ ASSISTANT_BUILDERS = {
 # every record as covering all four areas.
 M1_USE_BY_ENV: dict[str, list[str]] = {
     "search_grounded_qa": ["search pattern"],
+    "search_multihop_qa": ["search pattern", "multi-hop reasoning"],
     "code_execution_python": ["code solution format", "structured output"],
     "terminal_basic_shell": ["terminal basics"],
     "swe_pivot_patch_supervision": ["short SWE traces"],
     "general_tool_calling": ["tool call syntax"],
+    "multi_turn_tool_use": ["tool call syntax", "multi-turn tool trace"],
     "structured_outputs_json": ["structured output"],
     "tool_call_repair_negative": ["malformed tool call negatives", "hallucinated tool output negatives"],
     "math_reasoning_numeric": ["reasoning answer format"],
+    "math_competition_numeric": ["reasoning answer format", "competition math"],
 }
 
 
@@ -538,7 +567,7 @@ def convert_m0_record(
 ) -> JsonDict:
     environment = record.get("environment")
     environment_id = str(environment)
-    if environment_id == "general_tool_calling":
+    if environment_id in _TOOL_CALLING_ENVIRONMENTS:
         supervision_messages = trajectory_for_tool_calling(record)
     else:
         builder = ASSISTANT_BUILDERS.get(environment_id)
