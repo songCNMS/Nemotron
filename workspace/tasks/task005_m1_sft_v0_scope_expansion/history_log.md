@@ -30,3 +30,4 @@
   - repair-negative 原先连续两个 user turn，会导致 Nano3 增量渲染 mismatch，被改为单个 user turn 合并原始请求与 repair 指令。
 - 小样本验证已跑通：三个新 slice 各生成 `2 train / 1 val`，M0 health baseline `status=pass`，M1 SFT 输出 `6 train / 3 val_shadow`，round-trip packed parquet 输出 `1` 个 row、`3978` tokens、`802` assistant loss tokens。
 - 本地目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3` 为 `84 passed, 2 skipped`；`git diff --check` 通过；`ruff` 在 `/work-agents/.venv` 中不可用。
+- 代码已提交到 PR #21：`intern_nemontron_code_reading/task005_m1_sft_roundtrip_session2`。
