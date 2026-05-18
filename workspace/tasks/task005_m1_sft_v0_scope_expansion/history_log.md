@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -51,3 +51,12 @@
 - `data-designer 0.6.0` 安装时会把 `pyarrow` 降到 `19.0.1`，与当前 `datasets 4.8.5` 的 `pyarrow>=21` 声明冲突；本轮验证后已恢复 `pyarrow 24.0.0`，并确认 `agentic_v0 --dry-run` 仍可编译。
 - 本地目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3` 为 `85 passed, 1 skipped`。
 - 记录更新已提交到 PR #23：`intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3`。
+
+## Session 4 - 2026-05-18 - intern_nemontron_code_reading
+
+- 响应“拉取主干最新代码”，先确认当前分支为 `intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3`、PR #23 仍为 open、工作区无未提交改动。
+- 执行 `git fetch origin --prune`，清理远端已删除的旧 task 分支引用。
+- 切到本地 `main` 并执行 `git pull --ff-only origin main`，本地 `main` 从 `905de2d` fast-forward 到 `3ef7942`。
+- 主干本次新增内容包括 M1 RLVR/RLHF/SWE bridge、Super3 chat template、sample-level SFT loss/step dispatch、以及相关 tests/workspace task 文档。
+- 切回 PR #23 分支并执行 `git rebase origin/main`，分支已基于最新主干重放，rebase 无冲突。
+- 本轮不改业务代码，仅更新 Session 4 状态记录并推送到 PR #23 分支。

@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task005_m1_sft_v0_scope_expansion |
 | PR | https://github.com/songCNMS/Nemotron/pull/23 |
-| Session | 3 |
+| Session | 4 |
 | Branch | intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3 |
-| Latest | PR #21 已合并；已在 cosmos_xenna + transformers 环境运行完整 `nemotron super3 data prep sft -c agentic_v0`，使用项目规则里的本地 Qwen3-4B-Instruct tokenizer 验证真实 packed parquet artifacts。 |
+| Latest | 已拉取最新 `origin/main` 到本地 `main`（`3ef7942`），并将 PR #23 分支 rebase 到该主干；本轮仅同步主干与记录状态。 |
