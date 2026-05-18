@@ -18,3 +18,4 @@
   - `tool_call_repair_negative` 从 Hermes `func_calling_singleturn` 派生 malformed / hallucinated repair negatives，写出 `negative_kind`、`repair_target`、repair message 和 corrected `tool_calls`。
 - 单元测试扩展到 M0 converter、health verifier、M1 supervision builder 三层；本地目标测试为 `83 passed, 2 skipped`。
 - 小样本 smoke 已跑通：三个新 slice 各生成 `2 train / 1 val`，M0 health baseline `status=pass`，M1 SFT 输出 `6 train / 3 val_shadow` 且 `errors=0`。
+- 代码已提交到 PR #19：`intern_nemontron_code_reading/task005_remaining_agentic_sft_v0_envs`。
