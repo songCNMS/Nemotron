@@ -5,7 +5,7 @@
 
 """Prepare M1 SWE2 JSONL + SIF resolver for the OpenHands SWE-Bench loop.
 
-Two pieces in one module:
+Two pieces:
 
 1. **SIF image mapping registry** (roadmap §1.5 task017 first deliverable):
    ``swe2_sif_registry.yaml`` declares the three SIF filename families per
@@ -14,17 +14,16 @@ Two pieces in one module:
    ``sif_dir`` with the template and check the file exists before the
    cluster spends a slot waiting on a missing image.
 
-2. **SWE2 bridge skeleton** (third copy of the bridge — RLVR + SWE1 are
-   the prior two). Reads M0 split files, filters + tags rows for the
-   ``swe_agents`` NeMo-Gym agent, emits ``train.jsonl`` / ``val.jsonl`` /
-   ``manifest.json`` with a ``coverage`` block + a ``SWE2_ARTIFACT``
-   lineage record pointing at the M0 manifest. Today active=0 → ``prepare()``
-   raises a coverage-aware error rather than emitting empty files.
+2. **SWE2 bridge skeleton** using the shared ``_bridge_base`` scaffolding
+   (task017 Session 4 extraction). SWE2-specific extensions on top of the
+   base: ``sif_source`` row tag (from active registry rows) and
+   ``sif_source_breakdown`` in the coverage block (per-family status
+   histogram so coverage shows *which* container family still needs an
+   M0 source).
 
-Code duplication note: ~80% overlap with m1_rlvr + m1_swe1 bridges.
-Extraction to `_bridge_base.py` deserves its own PR after this lands;
-inline-as-third-copy keeps task017 reviewable and avoids reshaping during
-the SWE2 infra build-out.
+Today active=0 → ``prepare()`` raises a coverage-aware error rather than
+emitting empty files. Session 2 lands an M0 SWE pivot env and flips a
+registry row to ``active``.
 """
 
 from __future__ import annotations
@@ -40,12 +39,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# SWE-Bench instance ids are `<org>__<repo>-<number>` (e.g.,
-# `astropy__astropy-12907`). Allow lowercase + digits + `_` + `-` only;
-# anything else risks path-injection into the SIF filename.
-_INSTANCE_ID_RE = re.compile(r"^[A-Za-z0-9_\-]+$")
-
 try:
+    from nemotron.recipes.super3.milestones._bridge_base import (
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from nemotron.recipes.super3.milestones.lineage import (
         SWE2_ARTIFACT,
         LineageInput,
@@ -54,6 +60,18 @@ try:
     )
 except ModuleNotFoundError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from _bridge_base import (  # type: ignore[no-redef]
+        KNOWN_STATUSES,
+        base_coverage_report,
+        base_tag_record,
+        collect_mix_rows,
+        derive_env_map,
+        discover_m0_split_files,
+        load_env_registry,
+        read_jsonl,
+        write_json,
+        write_jsonl,
+    )
     from lineage import (  # type: ignore[no-redef]
         SWE2_ARTIFACT,
         LineageInput,
@@ -73,15 +91,12 @@ MIX_NAME = "swe2"
 ENV_REGISTRY_PATH = Path(__file__).with_name("swe2_env_registry.yaml")
 SIF_REGISTRY_PATH = Path(__file__).with_name("swe2_sif_registry.yaml")
 
-STATUS_ACTIVE = "active"
-STATUS_M0_MISSING = "m0_missing"
-STATUS_VERIFIER_MISMATCH = "verifier_mismatch"
-STATUS_BLOCKED_EXTERNAL = "blocked_external"
-KNOWN_STATUSES = frozenset(
-    {STATUS_ACTIVE, STATUS_M0_MISSING, STATUS_VERIFIER_MISMATCH, STATUS_BLOCKED_EXTERNAL}
-)
-
 KNOWN_SIF_SOURCES = frozenset({"swebench", "swegym", "r2egym"})
+
+# SWE-Bench instance ids are `<org>__<repo>-<number>` (e.g.,
+# `astropy__astropy-12907`). Allow lowercase + digits + `_` + `-` only;
+# anything else risks path-injection into the SIF filename.
+_INSTANCE_ID_RE = re.compile(r"^[A-Za-z0-9_\-]+$")
 
 
 # --- SIF image registry / resolver ---------------------------------------
@@ -150,10 +165,6 @@ def resolve_sif_path(
             f"unknown SIF source {source!r}; known sources: {sorted(templates)}"
         )
     if not instance_id or not _INSTANCE_ID_RE.match(instance_id):
-        # Path-injection guard: instance_ids come from M0 data and end up
-        # interpolated into filesystem paths. SWE-Bench instance ids are
-        # `<org>__<repo>-<number>` (alphanumeric + `_` + `-`) — anything
-        # else risks escaping `sif_dir` (`..`, `/`, `\\`, …).
         raise ValueError(
             f"invalid instance_id {instance_id!r}: must match {_INSTANCE_ID_RE.pattern}"
         )
@@ -169,86 +180,37 @@ def validate_sif_exists(path: Path) -> bool:
 # --- SWE2 env registry / mix profile -------------------------------------
 
 
+def _validate_sif_source_field(row: JsonDict, index: int) -> None:
+    sif_source = row.get("sif_source")
+    if sif_source is not None and sif_source not in KNOWN_SIF_SOURCES:
+        raise ValueError(
+            f"envs[{index}] sif_source {sif_source!r} not in {sorted(KNOWN_SIF_SOURCES)}"
+        )
+
+
 def load_swe2_env_registry(path: Path | None = None) -> list[JsonDict]:
-    """Load the SWE2 env registry. Same shape as RLVR / SWE1 registries."""
-    import yaml
-
-    target = path or ENV_REGISTRY_PATH
-    with target.open(encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "envs" not in data:
-        raise ValueError(f"{target}: registry must be a mapping with an 'envs' key")
-    rows = data["envs"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'envs' must be a list")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: envs[{index}] must be a mapping")
-        for required in ("nemo_gym_env", "mix", "status"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: envs[{index}] missing required field {required!r}"
-                )
-        if row["status"] not in KNOWN_STATUSES:
-            raise ValueError(
-                f"{target}: envs[{index}] status {row['status']!r} not in {sorted(KNOWN_STATUSES)}"
-            )
-        if row["mix"] != MIX_NAME:
-            raise ValueError(
-                f"{target}: envs[{index}] mix {row['mix']!r} not in {{{MIX_NAME!r}}} "
-                f"— SWE2 registry should only carry swe2 rows"
-            )
-        sif_source = row.get("sif_source")
-        if sif_source is not None and sif_source not in KNOWN_SIF_SOURCES:
-            raise ValueError(
-                f"{target}: envs[{index}] sif_source {sif_source!r} "
-                f"not in {sorted(KNOWN_SIF_SOURCES)}"
-            )
-    return rows
-
-
-def derive_env_map(registry: Sequence[Mapping[str, Any]]) -> dict[str, str]:
-    """Pull ``{m0_env_id: nemo_gym_env}`` for the single SWE2 mix."""
-    env_map: dict[str, str] = {}
-    for row in registry:
-        if row["status"] != STATUS_ACTIVE:
-            continue
-        m0_env = row.get("m0_env_id")
-        if not m0_env:
-            continue
-        if m0_env in env_map and env_map[m0_env] != row["nemo_gym_env"]:
-            raise ValueError(
-                f"registry has two active mappings for M0 env {m0_env!r}: "
-                f"{env_map[m0_env]} vs {row['nemo_gym_env']}"
-            )
-        env_map[m0_env] = row["nemo_gym_env"]
-    return env_map
+    """Load ``swe2_env_registry.yaml`` with sif_source validation."""
+    return load_env_registry(
+        path or ENV_REGISTRY_PATH,
+        expected_mix=MIX_NAME,
+        extra_row_validator=_validate_sif_source_field,
+    )
 
 
 def coverage_report(registry: Sequence[Mapping[str, Any]]) -> JsonDict:
-    """Per-mix counts + gap lists. Mirrors SWE1 / RLVR coverage_report."""
-    by_status: dict[str, list[str]] = defaultdict(list)
+    """SWE2 coverage report with the SWE2-specific
+    ``sif_source_breakdown`` extension on top of the base report."""
+    report = base_coverage_report(registry, mix_name=MIX_NAME)
     by_sif_source: dict[str, list[str]] = defaultdict(list)
     for row in registry:
-        by_status[row["status"]].append(row["nemo_gym_env"])
         sif_source = row.get("sif_source")
         if sif_source:
             by_sif_source[sif_source].append(row["status"])
-    return {
-        "mix": MIX_NAME,
-        "total_target_envs": len(registry),
-        "counts": {status: len(by_status.get(status, [])) for status in sorted(KNOWN_STATUSES)},
-        "active": sorted(by_status.get(STATUS_ACTIVE, [])),
-        "m0_missing": sorted(by_status.get(STATUS_M0_MISSING, [])),
-        "verifier_mismatch": sorted(by_status.get(STATUS_VERIFIER_MISMATCH, [])),
-        "blocked_external": sorted(by_status.get(STATUS_BLOCKED_EXTERNAL, [])),
-        # SWE2 extra: count target rows by SIF family so coverage explains
-        # *which* container family still needs an M0 source.
-        "sif_source_breakdown": {
-            source: dict(sorted(defaultdict(int, {s: by_sif_source[source].count(s) for s in by_sif_source[source]}).items()))
-            for source in sorted(by_sif_source)
-        },
+    report["sif_source_breakdown"] = {
+        source: dict(sorted({s: by_sif_source[source].count(s) for s in by_sif_source[source]}.items()))
+        for source in sorted(by_sif_source)
     }
+    return report
 
 
 def build_mix_profile(
@@ -275,48 +237,7 @@ except (FileNotFoundError, ImportError):
 SWE2_ENV_MAP: dict[str, str] = SWE2_PROFILE.get("env_map", {})
 
 
-# --- JSONL helpers (parallel to RLVR / SWE1) ------------------------------
-
-
-def read_jsonl(path: Path) -> list[JsonDict]:
-    rows: list[JsonDict] = []
-    with path.open(encoding="utf-8") as f:
-        for line_number, line in enumerate(f, start=1):
-            stripped = line.strip()
-            if not stripped:
-                continue
-            try:
-                value = json.loads(stripped)
-            except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{line_number}: invalid JSON: {exc}") from exc
-            if not isinstance(value, dict):
-                raise ValueError(f"{path}:{line_number}: expected JSON object")
-            rows.append(value)
-    return rows
-
-
-def write_jsonl(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        for row in rows:
-            json.dump(row, f, ensure_ascii=False, sort_keys=True)
-            f.write("\n")
-
-
-def write_json(path: Path, value: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(value, f, ensure_ascii=False, indent=2, sort_keys=True)
-        f.write("\n")
-
-
-def discover_m0_files(input_dir: Path) -> dict[str, dict[str, Path]]:
-    files: dict[str, dict[str, Path]] = defaultdict(dict)
-    for path in sorted(input_dir.glob("*/*-split.jsonl")):
-        environment = path.parent.name
-        split = path.name.replace("-split.jsonl", "")
-        files[environment][split] = path
-    return dict(files)
+# --- Row tagging ---------------------------------------------------------
 
 
 def tag_record(
@@ -327,95 +248,34 @@ def tag_record(
     row_index: int,
     split: str,
 ) -> JsonDict:
-    """Tag an M0 row with SWE2 NeMo-Gym env name + mix metadata + SIF hint."""
-    tagged = dict(record)
-    tagged["nemo_gym_env"] = nemo_gym_env
-    tagged["nemo_gym_mix"] = MIX_NAME
-    if sif_source is not None:
-        tagged["sif_source"] = sif_source
-    metadata = dict(tagged.get("metadata") or {})
-    metadata.setdefault("m0_environment", record.get("environment"))
-    metadata["nemo_gym_env"] = nemo_gym_env
-    metadata["nemo_gym_mix"] = MIX_NAME
-    if sif_source is not None:
-        metadata["sif_source"] = sif_source
-    metadata["swe2_row_index"] = row_index
-    metadata["swe2_split"] = split
-    tagged["metadata"] = metadata
-    return tagged
+    """SWE2 row tagger. Adds ``sif_source`` extra field (when an active
+    registry row supplies it) so the OpenHands agent knows which
+    container family to try."""
+    extras = {"sif_source": sif_source} if sif_source is not None else None
+    return base_tag_record(
+        record,
+        nemo_gym_env=nemo_gym_env,
+        mix_name=MIX_NAME,
+        row_index=row_index,
+        split=split,
+        extra_row_fields=extras,
+        extra_metadata_fields=extras,
+        row_index_key="swe2_row_index",
+        split_key="swe2_split",
+    )
 
 
 def _m0_env_to_sif_source(registry: Sequence[Mapping[str, Any]]) -> dict[str, str | None]:
     """Build a `{m0_env_id: sif_source}` lookup from active registry rows."""
     out: dict[str, str | None] = {}
     for row in registry:
-        if row["status"] != STATUS_ACTIVE:
+        if row["status"] != "active":
             continue
         m0_env = row.get("m0_env_id")
         if not m0_env:
             continue
         out[m0_env] = row.get("sif_source")
     return out
-
-
-def collect_rows(
-    files_by_env: Mapping[str, Mapping[str, Path]],
-    *,
-    env_map: Mapping[str, str],
-    sif_source_lookup: Mapping[str, str | None],
-    split: str,
-    max_records_per_env: int | None,
-) -> tuple[list[JsonDict], list[JsonDict], dict[str, int]]:
-    rows: list[JsonDict] = []
-    errors: list[JsonDict] = []
-    counts: dict[str, int] = defaultdict(int)
-    for m0_env, nemo_gym_env in sorted(env_map.items()):
-        split_files = files_by_env.get(m0_env)
-        if split_files is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": "M0 has no rows for this environment (not in M0 mix)",
-                }
-            )
-            continue
-        path = split_files.get(split)
-        if path is None:
-            errors.append(
-                {
-                    "environment": m0_env,
-                    "split": split,
-                    "error": f"missing {split}-split.jsonl",
-                }
-            )
-            continue
-        env_rows = read_jsonl(path)
-        if max_records_per_env is not None:
-            env_rows = env_rows[:max_records_per_env]
-        sif_source = sif_source_lookup.get(m0_env)
-        for row_index, record in enumerate(env_rows):
-            try:
-                tagged = tag_record(
-                    record,
-                    nemo_gym_env=nemo_gym_env,
-                    sif_source=sif_source,
-                    row_index=row_index,
-                    split=split,
-                )
-            except Exception as exc:  # noqa: BLE001
-                errors.append(
-                    {
-                        "environment": m0_env,
-                        "split": split,
-                        "row_index": row_index,
-                        "error": str(exc),
-                    }
-                )
-                continue
-            rows.append(tagged)
-            counts[m0_env] += 1
-    return rows, errors, dict(sorted(counts.items()))
 
 
 def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
@@ -472,25 +332,34 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             f"{coverage['m0_missing'] + coverage['verifier_mismatch'] + coverage['blocked_external']}"
         )
 
-    files_by_env = discover_m0_files(args.m0_input_dir)
+    files_by_env = discover_m0_split_files(args.m0_input_dir)
     if not files_by_env:
         raise ValueError(f"no M0 split files found under {args.m0_input_dir}")
 
     sif_source_lookup = _m0_env_to_sif_source(_REGISTRY)
 
-    train_rows, train_errors, train_counts = collect_rows(
+    def _tag(record, m0_env, nemo_gym_env, row_index, split):
+        return tag_record(
+            record,
+            nemo_gym_env=nemo_gym_env,
+            sif_source=sif_source_lookup.get(m0_env),
+            row_index=row_index,
+            split=split,
+        )
+
+    train_rows, train_errors, train_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
-        sif_source_lookup=sif_source_lookup,
         split="train",
         max_records_per_env=args.max_records_per_env,
+        tag_fn=_tag,
     )
-    val_rows, val_errors, val_counts = collect_rows(
+    val_rows, val_errors, val_counts = collect_mix_rows(
         files_by_env,
         env_map=env_map,
-        sif_source_lookup=sif_source_lookup,
         split="val",
         max_records_per_env=args.max_val_records_per_env,
+        tag_fn=_tag,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

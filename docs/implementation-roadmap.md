@@ -159,8 +159,17 @@ Missing the runtime stack:
 - ☐ Session 3: Smoke launcher (1 instance, 1 generation) + in-process
   Docker fallback for developers without SLURM. Block on cluster + SIF
   images.
-- ☐ Session 4: `_bridge_base.py` extraction now that RLVR + SWE1 + SWE2
-  all use the same registry-driven bridge pattern (~80% code overlap).
+- ✓ Session 4: `_bridge_base.py` extracted; RLVR + SWE1 + SWE2 + RLHF
+  all consume it. Shared scaffolding: JSONL/JSON helpers,
+  ``discover_m0_split_files``, status vocabulary, generic
+  ``load_env_registry`` (with module-specific row validator hook),
+  ``derive_env_map``, ``base_coverage_report``, ``base_tag_record``,
+  ``collect_mix_rows``. Per-module-specific bits stay in each
+  ``prepare_m1_*_jsonl.py``: mix name, registry paths, lineage outputs,
+  coverage extension fields (``sif_source_breakdown`` for SWE2,
+  ``pref_dataset_breakdown`` + ``known_pref_candidates`` for RLHF).
+  Net line reduction: 2121 → 1901 across the 4 prep scripts + base
+  (607 lines of duplication folded down to 387 shared).
 - **Acceptance:** a single SWE-Bench instance runs end-to-end with binary
   reward; logs of bash / file ops captured in rollout store.
 
