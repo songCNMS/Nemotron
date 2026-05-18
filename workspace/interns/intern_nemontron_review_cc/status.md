@@ -1,33 +1,23 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task030_unified_data_registry -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 34 |
+| Status | Working |
+| Current Task | task030_unified_data_registry |
+| PR | pending push |
+| Session | 35 |
 
-最近：task017 Session 4 (PR #46 `5943e18`) 已 squash-merge 进 main —
-`_bridge_base.py` 抽取。RLVR + SWE1 + SWE2 + RLHF 四个 registry-driven
-bridge module 共享 scaffolding (JSONL helpers / discover_m0_split_files
-/ status vocabulary / load_env_registry / derive_env_map /
-base_coverage_report / base_tag_record / collect_mix_rows)。零行为变化，
-129 passed + 2 skipped 跟 refactor 前一致。行数 2121 → 1901 (-220 净；
-607 行重复合到 387 行共享 base)。Module-specific 留在各 prep script
-(mix name / prepare 主流程 / SWE2 sif_source / RLHF pref_dataset)。
-
-task017 整 task 仍 InProgress：Session 2 (OpenHands wrapper + SWE-Gym
-converter + watchdog) / Session 3 (cluster smoke + Docker fallback)
-待开 — 都需 cluster / Docker。
-
-下一个候选 (按 sandbox-runnable + leverage 排序):
-
-- **task030** — unified data registry (across-M2 cleanup; 把 M0
-  `data_registry.yaml` + RLHF pref_data registry + SWE2 SIF registry
-  + RLVR env_registry 统一抽 schema)
-- **task019 / task020** — M1 eval basket (block on task014 Session 2
-  真 RLVR checkpoint)
-- 之前 task 的 Session 2+ — 大都要 cluster 或 HF 下载，sandbox 跑不了
+正在做：task030 Session 1 — unified data registry。新模块
+`src/nemotron/recipes/super3/milestones/data_registries/` 含 `schema.py`
+(5 个 registry kind 的 row validator + KNOWN_BRIDGE_STATUSES 跟
+`_bridge_base` 双向独立 + pytest 强制对齐) + `unified_index.yaml` (8
+个 registry 一行 entry) + `unified_index_loader.py` (load + validate
++ 三个 read-only inventory walk: licenses / hf_dataset /
+m0_to_downstream)。决策：不真合并 8 个 yaml — 上面叠一层 schema + 索
+引 + cross-cut audit walk。Module boundaries 保留，registry 真文件
+不动。Live unified index 全过 validation。19 个新 pytest case，sandbox
+测试基线 129 → 148 passed + 2 skipped。Session 2 (eval basket
+registry + schema enforcement at write time) 不在本 PR。
