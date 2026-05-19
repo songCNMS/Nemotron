@@ -2,6 +2,7 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #38 / d04b694 on 2026-05-18 -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-19 (M0 SWE-Gym-Lite → swe_pivot_tool_call converter; lights up SWE1 active row) -->
 
 ## 背景
 
@@ -22,7 +23,7 @@ placeholder — M0 → SWE1 没接起来。
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | SWE1 bridge skeleton: 新模块 `m1_swe1/` + registry-driven `prepare_m1_swe1_jsonl.py`，今天 active=0 → coverage-aware error path | yes | ✓ Done (this PR) |
-| 2 | M0 SWE pivot 数据 converter (SWE-Gym-Lite / R2E-Gym → single-step tool-comparison shape) | partial (sandbox 验 converter 单元；真 HF download 要联网) | Todo |
+| 2 | M0 SWE pivot 数据 converter (SWE-Gym-Lite / R2E-Gym → single-step tool-comparison shape) | partial (sandbox 验 converter 单元；真 HF download 要联网) | ✓ Done sandbox part (this PR); 真 HF download 走集群 |
 | 3 | Cluster smoke launcher | no — 等 NemTron cluster | Todo |
 
 ## Session 1 目标
@@ -62,23 +63,76 @@ NeMo-Gym env**：
 - 依赖 task021 Session 2 落的 `SWE1_ARTIFACT` 常量
 - Session 2 依赖 SWE-Gym-Lite / R2E-Gym HF 下载 (license: apache-2.0 / 待确认)
 
-## Session 2+ 不在本 PR
+## Session 2 目标 (sandbox part)
 
-Session 2 要做的核心：从 SWE-Gym-Lite 或 R2E-Gym 提取 single-step tool-call
-pivot 数据。每行 M0 输出：
+1. **新 M0 environment** `swe_pivot_tool_call`:
+   - `environment_registry.yaml` 加 row (family software_engineering /
+     verifier argument_match / max_turns 1 / sandbox none)
+   - `prepare_m0_assets.SYSTEM_PROMPTS` 加 prompt
 
-- `responses_create_params.input`: SWE issue 的 problem statement
-- `responses_create_params.tools`: 通用工具 schema (view_file, search,
-  edit_file, run_tests, ...)
-- `expected_answer` / `extra_env_info`: gold 首个 tool call (name + args)
-- `reward_config.verifier`: `argument_match`
+2. **新 M0 data row** `m0_swe_pivot_tool_call`:
+   - `data_registry.yaml` 加 row 指 `SWE-Gym/SWE-Gym-Lite`
+     (apache-2.0)，converter=`swe_gym_lite_pivot`
+   - contamination_against [SWE-Bench Lite, SWE-Bench Verified]
+   - hf_revision="TBD" (cluster pass 会 pin)
 
-关键判断：从 SWE-Gym agent trajectory 里抽 **第一个真实有效的 tool call**
-当 ground truth；那些只 view-or-search 的纯探索行为也要标。设计需要先看
-SWE-Gym 数据 shape，再决定具体抽取逻辑。
+3. **新 converter** `transform_swe_gym_lite_pivot`:
+   - 抽取 trajectory 第一个 assistant 的第一个 tool call 当 ground truth
+   - 输出 `expected_answer = {"name": ..., "arguments": <dict>}`
+   - `responses_create_params.tools` = 固定 4 工具 schema
+     (view_file / search / edit_file / run_tests)
+   - `extra_env_info.pivot_type` ∈ {"exploration", "action"}：
+     view/search/grep/ls/find_file 标 exploration，其他标 action
+   - 错误路径：missing problem_statement / messages / no tool_calls /
+     malformed JSON arguments → raise ValueError
 
-Session 3 是真集群 launch — 需要 NemTron cluster + NeMo-Gym
-`single_step_tool_use_with_argument_comparison` server 起来。
+4. **`swe1_env_registry.yaml` 翻面**：
+   - `m0_missing` 那行改成 `m0_env_id: swe_pivot_tool_call, status: active`
+   - 现在 swe1 mix 有 active env，bridge 不再 raise coverage error
+
+5. **修 `test_m1_swe1_data_bridge.py` 两个 today-tests**:
+   - `test_swe1_env_map_empty_today` → `test_swe1_env_map_lights_up_post_task016_session_2`
+   - `test_prepare_raises_coverage_aware_error_today` → 加 monkeypatch
+     把 _REGISTRY 切换到 all-inactive 状态，证明 error path 仍 working
+
+6. **Tests** (`test_swe_gym_lite_pivot.py`, 20 cases):
+   - Module surface 4
+   - Happy path 5: 提取首个 tool call / pivot_type 分类 / tool schema
+     在 responses_create_params / repo+instance_id metadata
+   - First-tool-call selection 2: skip non-assistant / pick first when
+     parallel calls
+   - Arguments normalization 2: dict args / null args
+   - Error surfaces 4: missing problem_statement / missing messages /
+     no tool calls / malformed JSON
+   - Registry integration 3: validate_registries / data_registry row /
+     env_registry row
+
+## Session 2 验收 (sandbox part)
+
+- [x] 新 env `swe_pivot_tool_call` 在 environment_registry.yaml +
+  SYSTEM_PROMPTS
+- [x] 新 data row `m0_swe_pivot_tool_call` in data_registry.yaml 满
+  足所有 schema/audit 约束 (contamination_against / license / hf_revision)
+- [x] 新 converter `transform_swe_gym_lite_pivot` 注册进 CONVERTERS
+- [x] SWE1_ENV_MAP = {"swe_pivot_tool_call": "swe_pivot_single_step_tool_use_with_argument_comparison"}
+- [x] validate_registries 在 live main 跑 clean
+- [x] 三个 audit (schema / revision-pins / contamination) 都 clean
+- [x] 20 个新 pytest case + 修 2 个 swe1 bridge today-tests
+- [x] sandbox 测试基线 421 → 441 passed + 7 skipped
+
+## Session 2 不在本 PR (cluster part)
+
+- 真 HF download `SWE-Gym/SWE-Gym-Lite` 走 NemTron cluster
+- Revision pin (TBD → 真 commit hash)
+- M0 prep 真跑出 swe_pivot_tool_call train/val splits
+- SWE1 bridge 真跑出 RLVR jsonl 接 cluster `nemotron super3 rl swe1`
+
+## Session 3 不在本 PR
+
+Cluster smoke launcher — 需要 NemTron cluster + NeMo-Gym
+`single_step_tool_use_with_argument_comparison` server 起来。Pattern
+跟 task014 Session 2 sandbox part 类似（registry + config + smoke yaml），
+等接到 cluster 再开 PR。
 
 ## 参考文件
 

@@ -31,17 +31,19 @@ description: |
 envs:
   - nemo_gym_env: swe_pivot_single_step_tool_use_with_argument_comparison
     mix: swe1
-    m0_env_id: null
-    m0_verifier: null
+    m0_env_id: swe_pivot_tool_call
+    m0_verifier: argument_match
     nemo_gym_verifier: argument_match (single-step SWE pivot)
-    license: unknown
-    status: m0_missing
+    license: apache-2.0
+    status: active
     notes: |
-      Reserved slot for the M0 SWE pivot env that task016 Session 2 will
-      add. Candidate sources per roadmap §1.4: SWE-Gym-Lite, R2E-Gym
-      subsets. Conversion needs to extract the "what tool call does the
-      gold trajectory open with?" decision point — non-trivial because
-      SWE-Gym ships full repo issues, not annotated pivot points.
+      task016 Session 2 active source. M0 ``swe_pivot_tool_call`` env
+      runs the ``swe_gym_lite_pivot`` converter against
+      SWE-Gym/SWE-Gym-Lite trajectories, extracting the first
+      assistant tool call as ground truth. Verifier on both sides is
+      ``argument_match`` — emitted (name, arguments) must equal the
+      gold pivot call. Pure-exploration pivots are tagged in
+      ``extra_env_info.pivot_type`` for downstream filtering.
 
   - nemo_gym_env: swe_pivot_single_step_tool_use_with_argument_comparison
     mix: swe1

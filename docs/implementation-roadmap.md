@@ -132,11 +132,19 @@ seq_len=131K) exists. Missing the data + smoke entry:
   `prepare()` today raises a coverage-aware error listing the gaps; once
   Session 2 lands an active M0 SWE pivot env, no Python edits are needed
   — the bridge auto-picks up via the registry flip. 13 new pytest cases.
-- ☐ Session 2: M0 SWE pivot data converter. Source: SWE-Gym-Lite or
-  R2E-Gym subsets per plan §5.4. Converter extracts the "first gold tool
-  call" decision point from agent trajectories and emits rows shaped for
-  the `argument_match` verifier. Lands an M0 env + registry entry; flips
-  the swe1 registry row to `active`.
+- ⚠ Session 2 (sandbox part landed; HF download deferred): new M0 env
+  `swe_pivot_tool_call` (verifier `argument_match`, max_turns=1) + new
+  M0 data row `m0_swe_pivot_tool_call` pointing at
+  `SWE-Gym/SWE-Gym-Lite` (apache-2.0, contamination_against [SWE-Bench
+  Lite, SWE-Bench Verified]) + new converter
+  `transform_swe_gym_lite_pivot` that extracts the first assistant
+  tool_call from a SWE-Gym trajectory and tags `pivot_type` as
+  `exploration` vs `action`. SWE1 registry's `m0_missing` row flipped
+  to `active` — `SWE1_ENV_MAP` now maps `swe_pivot_tool_call →
+  swe_pivot_single_step_tool_use_with_argument_comparison`. 20 new
+  pytests + 2 existing today-tests flipped; sandbox baseline 421 →
+  441 passed. Real HF download + revision pin (`hf_revision: TBD` →
+  real commit) deferred to cluster pass.
 - ☐ Session 3: Smoke launcher (1-node, 1 prompt/step). Block on cluster
   verify (parallel to task014 Session 2).
 - **Acceptance:** reward-shape verifier returns numeric reward on smoke
@@ -519,9 +527,12 @@ Critical path to the M1 promotion gate, single-track execution:
    M0-available envs); remaining sessions auto-light as task057 lands M0
    sources.
 6. **task016** — M1 SWE1 pivot data. Session 1 landed (bridge skeleton +
-   `swe1_env_registry.yaml`; SWE1 currently has no active M0 source —
-   coverage-aware error path); Session 2 (M0 SWE pivot converter from
-   SWE-Gym-Lite / R2E-Gym) + Session 3 (cluster smoke) still to go.
+   `swe1_env_registry.yaml`; SWE1 had no active M0 source — coverage-aware
+   error path). Session 2 sandbox part landed (M0 SWE-Gym-Lite →
+   `swe_pivot_tool_call` env + `transform_swe_gym_lite_pivot` converter
+   + SWE1 active row); `SWE1_ENV_MAP` now lights up. Real HF download +
+   revision pin still need cluster pass. Session 3 (cluster smoke) still
+   to go.
 7. **task017** — M1 SWE2 sandbox runtime. Session 1 landed (SIF image
    mapping registry + resolver with path-injection guard; SWE2 bridge
    skeleton parallel to RLVR / SWE1; coverage-aware error today); Session

@@ -158,6 +158,37 @@ datasets:
       patch: patch
       test_patch: test_patch
 
+  - id: m0_swe_pivot_tool_call
+    environment: swe_pivot_tool_call
+    domain: software_engineering
+    hf_dataset: SWE-Gym/SWE-Gym-Lite
+    hf_config: default
+    hf_split: train
+    hf_val_split: validation
+    # TODO(task016 Session 2 cluster pass): pin the revision once a curated
+    # SWE-Gym-Lite snapshot is locked. The dataset is small and stable but
+    # has not yet been pinned in this repo's release-management flow.
+    hf_revision: TBD
+    source_url: https://huggingface.co/datasets/SWE-Gym/SWE-Gym-Lite
+    license: apache-2.0
+    converter: swe_gym_lite_pivot
+    default_train_rows: 200
+    default_val_rows: 40
+    difficulty: repo_issue_pivot
+    reward_type: argument_match
+    contamination: exclude rows whose `repo` overlaps SWE-Bench Verified / SWE-Bench Lite when used for training
+    contamination_against:
+      - SWE-Bench Lite
+      - SWE-Bench Verified
+    use_stage:
+      - M0 data_env_foundation
+      - M1 SWE1 (single-step tool-comparison)
+    fields:
+      id: instance_id
+      repo: repo
+      problem_statement: problem_statement
+      messages: messages
+
   - id: m0_tool_calling_hermes
     environment: general_tool_calling
     domain: general_tool_calling
