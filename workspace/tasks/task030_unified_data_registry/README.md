@@ -2,6 +2,7 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #48 / ec1b271 on 2026-05-18 -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-18 (schema enforcement script + pre-commit hook) -->
 
 ## 背景
 
@@ -36,7 +37,9 @@ boundaries 保留，每个 registry 留在自己的目录；新加一个
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | Schema 层 + unified index + 三个 cross-registry inventory walk | yes | ✓ Done (this PR) |
-| 2 | M1 eval basket registry (task019 / task020 接好后填) + 强制 schema enforcement (e.g., 写 registry 时 commit hook 跑 validation) | partial | Todo |
+| 2 | Schema enforcement at write time (`scripts/validate_data_registries.py` + `.pre-commit-config.yaml` local hook) | yes | ✓ Done (this PR) |
+| 3 | M1 eval basket registry (kind + index row + schema validator) | yes (sandbox) | Todo (block on task019 / task020 给 eval basket 真定义) |
+| 4 | Bridge / M0 module-local loader 接进 schema 层 merge 两层校验逻辑 | yes | Todo (注：当前两层是有意分开 — runtime fail-fast vs audit collect-all；merge 要小心) |
 
 ## Session 1 目标
 

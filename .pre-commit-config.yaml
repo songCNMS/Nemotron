@@ -35,3 +35,23 @@ repos:
         files: '.*\/[^\/]*_[^\/]*\.md$'
         exclude: '^\.github/'
         types: [file]
+
+      # task030 Session 2 — unified data registry schema enforcement.
+      # Runs whenever a registered registry YAML or its index changes;
+      # catches shape drift at commit time before a cluster job hits it.
+      # Two-layer validation by design: bridge runtime loaders fail-fast
+      # on the first issue (so a single broken row aborts prepare);
+      # this hook collects all issues at once for review surface.
+      - id: validate-data-registries
+        name: "validate unified data registry index"
+        language: system
+        entry: |
+          bash -c '
+            PYTHONPATH=src python3 scripts/validate_data_registries.py --quiet
+          '
+        # Trigger on any change to a registry yaml or the unified
+        # index loader / schema itself. The script always validates
+        # the *whole* index (no per-file scoping needed).
+        files: '^(src/nemotron/recipes/super3/milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/nemotron/recipes/super3/milestones/data_registries/.*\.py)$'
+        pass_filenames: false
+        types: [file]
