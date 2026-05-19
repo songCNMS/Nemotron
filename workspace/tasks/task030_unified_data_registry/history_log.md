@@ -197,3 +197,72 @@ task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
 task019/020) 待开。下一个候选: task058 follow-ups (license/contamination
 额外校验加进 schema 层) / task019-020 (M1 eval basket，block on task014
 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
+
+## Session 7 - 2026-05-18 - intern_nemontron_review_cc
+
+实现 Session 5 — share-alike license cascade audit (task058 license/
+contamination 主题 follow-up)。
+
+设计要点：
+
+- 新模块 `data_registries/license_audit.py`:
+  - `SHARE_ALIKE_LICENSE_PREFIXES` — CC-BY-SA / GPL / AGPL / LGPL / ODBL 家族
+  - `is_share_alike(license_str)` — case-insensitive prefix match;
+    支持 None / 整数 / 空字符串 等 defensive 输入
+  - `find_share_alike_sources(index)` — 走 `m0_data_registry` +
+    `pref_data_registry`，返 share-alike row + 元数据
+  - `license_cascade(index)` — 把 share-alike 源串接到 `m0_environment_registry`
+    + `bridge_env_registry` 行，按 `m0_env_id` 索引下游 bridge 行；带
+    `live_chains` 计数 (=`status==active` 的 bridge 行数)，让运维区分
+    live vs latent cascade
+  - `format_cascade_report(cascade)` — 文本渲染 (CLI 消费)
+- `scripts/validate_data_registries.py` 加 `--license-cascade` flag:
+  - 走 audit-only path，**短路** schema validation
+  - 退出 0 即使有 finding (informational，share-alike 不是 wrong，是要
+    可见性 review)
+  - 报告写 stdout (内容)；stderr 留干净
+
+Live audit 今天 finding：
+
+> `m0_search_hotpotqa` (cc-by-sa-4.0, m0_data_registry) — latent: 0 active bridge mapping(s)
+>     hf_dataset='hotpotqa/hotpot_qa'
+>     m0_env_id='search_grounded_qa'
+>     bridge_mappings: (none — no bridge references this M0 env yet)
+
+HotpotQA 是 cc-by-sa-4.0 但 task015 Session 1 audit 删了 `search_grounded_qa`
+的 NeMo-Gym 错名 mapping (rlvr1)，所以现在没 bridge 行 reference
+`search_grounded_qa` 这个 m0_env_id。**Cascade 是 latent — share-alike
+没向任何下游 derived artifact 传**。一旦未来谁把 HotpotQA wire 到 RLVR
+mix，audit 会从 latent 翻 LIVE，提醒重审 §6 Q1 决策。
+
+Tests (`tests/recipes/super3/test_license_audit.py`, 27 cases):
+
+- `is_share_alike` predicate 17 cases (7 share-alike 接受 + 10 permissive /
+  invalid 拒绝) — `cc-by-sa-4.0` / `CC-BY-SA-4.0` / 带空格 / `gpl-3.0` /
+  `AGPL-3.0` / `lgpl-2.1` / `odbl-1.0` 接受；`cc-by-4.0` (非 share-alike)
+  / `apache-2.0` / `mit` / `bsd-3-clause` / `license-pending-legal-review` /
+  `source-repository-specific` / 空串 / None / int 拒绝
+- `find_share_alike_sources` 2 cases — live: 找到 HotpotQA / 拒
+  permissive rows (MBPP / GSM8K / NuminaMath / Hermes)
+- `license_cascade` 2 cases — HotpotQA 是 latent (post-task015 audit
+  搬走了 bridge 引用) / 合成 fixture (active bridge → live_chains=1)
+- `format_cascade_report` 3 cases — empty 输出 clean ✓ marker / 含
+  license + chain count + LIVE marker / latent marker
+- CLI 2 cases — `--license-cascade` exit 0 + 报告写 stdout / 短路
+  validation (不输出 default 的 "all registries clean")
+
+测试基线 233 → 260 passed + 6 skipped (27 new). `test_m1_agentic_sft.py`
+pyarrow collect-error pre-existing。
+
+文档：`docs/m0-dataset-expansion-plan.md` §6 Q1 加段落指向新 CLI flag，
+让 future maintainer 看着 §6 prose 时就知道有 audit 工具配套。
+
+## task030 状态
+
+- Session 1 ✓ (PR #48) — schema layer + index + inventories
+- Session 2 ✓ (PR #57) — CLI validator + pre-commit hook
+- Session 4 ✓ (PR #61) — module-local loader merge
+- Session 5 ✓ (this PR) — share-alike license cascade audit
+- Session 3 ☐ — M1 eval basket registry (block on task019/020)
+
+Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5 ✓。
