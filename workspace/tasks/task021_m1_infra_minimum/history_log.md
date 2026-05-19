@@ -119,3 +119,17 @@ Session 4 (NeMo-RL / Ray / vLLM / NeMo-Gym launch path on real cluster)
 Session 4 不在本 PR。本 PR 也不动 ContainerSandbox runtime shim (那条把
 M0 verifier 的直 subprocess 改成走容器) — 那是 task021 Session 5 或单
 独 PR。
+
+## Session 6 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 3 PR #53 已 squash-merge 为 `d6e5b25` 进 main — sandbox container
+构建基建 + 3 个 Dockerfile + image_resolver + build script + 25 个 pytest
+case + task030 unified index 接入都进了 main。intern status 回 Idle
+(Session 40)。task021 整 task 仍 InProgress：Session 4 (NeMo-RL / Ray /
+vLLM cluster verify — block on NemTron) + Session 5 候选 (ContainerSandbox
+runtime shim 把 M0 verifier 直 subprocess 改成走容器) 没启动。
+
+下一个候选 (sandbox-runnable): task021 Session 5 (ContainerSandbox shim
+单测可用 Mock(subprocess) + 真 image_resolver 路径) / task030 Session 2
+(schema enforcement at write time + module-local loader merge schema 层) /
+task019-020 (M1 eval basket — block on task014 Session 2 真 RLVR checkpoint).
