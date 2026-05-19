@@ -205,3 +205,34 @@ def test_precommit_hook_runs_the_script_under_pythonpath_src() -> None:
     assert "scripts/validate_data_registries.py" in entry
     assert "PYTHONPATH=src" in entry
     assert "--quiet" in entry
+
+
+def test_precommit_config_declares_check_revision_pins_hook() -> None:
+    """task030 Session 6 — the revision-pin gate must be registered as
+    its own pre-commit hook so PRs that add an unpinned m0_data row
+    fail at commit time instead of slipping through to a cluster run."""
+    cfg_path = REPO_ROOT / ".pre-commit-config.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    hook_ids = {
+        hook["id"]
+        for repo in cfg["repos"]
+        if repo.get("repo") == "local"
+        for hook in repo.get("hooks", [])
+    }
+    assert "check-revision-pins" in hook_ids, f"got {hook_ids}"
+
+
+def test_precommit_check_revision_pins_hook_runs_the_audit_flag() -> None:
+    cfg_path = REPO_ROOT / ".pre-commit-config.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    hook = next(
+        h
+        for r in cfg["repos"]
+        if r.get("repo") == "local"
+        for h in r.get("hooks", [])
+        if h["id"] == "check-revision-pins"
+    )
+    entry = hook["entry"]
+    assert "scripts/validate_data_registries.py" in entry
+    assert "PYTHONPATH=src" in entry
+    assert "--check-revision-pins" in entry
