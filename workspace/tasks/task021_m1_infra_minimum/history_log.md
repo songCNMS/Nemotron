@@ -220,3 +220,22 @@ Session 4 (cluster verify) 待 NemTron access。
 保证现有 health-baseline 调用 byte-for-byte 不变。要启用容器路径，operator
 显式跑 `--container-runtime docker` (前提是机器有 Docker daemon + Session 3
 镜像已 build)。
+
+## Session 8 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 5 PR #55 已 squash-merge 为 `43b3612` 进 main — ContainerSandbox
+runtime shim + run_python_unit_tests container_runtime kwarg + CLI
+`--container-runtime` 选项 + 15 个 pytest case 都进了 main。intern
+status 回 Idle (Session 42)。task021 整 task 仍 InProgress：Session 4
+(NeMo-RL / Ray / vLLM cluster verify) 待 NemTron access。
+
+Session 5 关键不变量：**默认 container_runtime=None 保留 in-process
+sys.executable -I byte-for-byte 行为不变**。要启用容器路径，operator
+显式 `--container-runtime docker` (前提是机器有 Docker daemon + Session
+3 镜像已 build)。
+
+下一个候选: task030 Session 2 (schema enforcement at write time +
+module-local loader 接进 schema 层) / task021 Session 6 候选 (RLVR
+rollout default container_runtime 从 None 翻 "docker"，production
+behavior flip 独立 PR) / task019-020 (M1 eval basket，block on task014
+Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
