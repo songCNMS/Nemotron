@@ -1,38 +1,23 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task056_m0_tier1_expansion -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 36 |
+| Status | Working |
+| Current Task | task056_m0_tier1_expansion |
+| PR | pending push |
+| Session | 37 |
 
-最近：task030 Session 1 (PR #48 `ec1b271`) 已 squash-merge 进 main —
-unified data registry schema 层 + 索引。新模块
-`src/nemotron/recipes/super3/milestones/data_registries/` 含 schema.py
-(5 个 kind 的 row validator + KNOWN_BRIDGE_STATUSES 跟 _bridge_base 双
-向独立 + pytest 强制对齐) + unified_index.yaml (8 个 registry 一行
-entry) + unified_index_loader.py (validate + 三个 read-only inventory
-walk: licenses / hf_dataset / m0_to_downstream)。决策：layer 不 merge
-— 8 个 registry 真文件原地不动，schema 层叠在上面。Live unified index
-全过 validation。19 个新 pytest case，sandbox 测试基线 129 → 148
-passed + 2 skipped。
-
-task030 整 task 仍 InProgress：Session 2 (M1 eval basket registry
-等 task019 / task020；schema enforcement at write time；8 个
-module-local loader 接进 schema 层) 待开。
-
-下一个候选 (按 sandbox-runnable + leverage 排序)：
-
-- 之前 task 的 Session 2+ 大都需 cluster / Docker / nvcr container：
-  - **task013 Session 2** — 两阶段 SFT loss driver + cluster verify
-  - **task014 Session 2** — RLVR1 config wiring + smoke launcher
-  - **task016 Session 2** — M0 SWE pivot converter (SWE-Gym / R2E)
-  - **task017 Session 2** — OpenHands wrapper + watchdog
-  - **task018 Session 2** — HelpSteer-2 M0 converter
-- **task019 / task020** — M1 eval basket (block on task014 Session 2 真 RLVR checkpoint；本身设计 sandbox-runnable)
-- **task056 Session 2** — math_formal_lean (法务 share-alike clearance)
-- **task021 Session 3-4** — sandbox container 构建 / cluster verify
+正在做：task056 Session 2 — `math_formal_lean` 的 code path（不含
+data_registry 行）。Source-agnostic transformer (`transform_lean_proof_stub`)
+从 `spec['fields']` 拿列名，将来不管选哪个 source (Nemotron-Math-Proofs /
+mathlib4 extraction / LeanDojo-Bench / Lean-Workbook) Python 都不动。
+新 verifier `lean_proof_stub` (M0 只校验非空；real Lean check task017/049
+territory)。`environment_registry.yaml` 加 row + telemetry contract。
+M1 SFT 加 `assistant_for_lean_proof` + `M1_USE_BY_ENV` entry。
+`docs/m0-dataset-expansion-plan.md` §6 share-alike question 加 5 候选
+source 对比表。13 个新 pytest case，sandbox 测试基线 148 → 161 passed +
+2 skipped。data_registry 行待 product/legal 拍板再开 — 决议后是一次性
+≤ 50 行 yaml PR。

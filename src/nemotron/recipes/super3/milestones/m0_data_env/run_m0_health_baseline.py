@@ -354,6 +354,20 @@ def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = 
             "runtime_error",
             bool(rc is not None and rc != 0) and not diagnostics["timeout"],
         )
+    elif verifier == "lean_proof_stub":
+        # M0 smoke verifier — non-empty proof → 1.0, empty → 0.0. Real
+        # Lean compiler verification (run against mathlib4 + check
+        # `#print axioms`) is task017 / task049 territory and needs the
+        # Lean toolchain inside a sandbox container.
+        candidate_str = str(candidate).strip() if candidate is not None else ""
+        score = 1.0 if candidate_str else 0.0
+        diagnostics = {
+            "nonempty_proof": bool(candidate_str),
+            "proof_length": len(candidate_str),
+            "language": str(
+                record.get("extra_env_info", {}).get("language", "lean4")
+            ),
+        }
     else:
         return 0.0, {"error": f"unsupported verifier: {verifier}"}
 

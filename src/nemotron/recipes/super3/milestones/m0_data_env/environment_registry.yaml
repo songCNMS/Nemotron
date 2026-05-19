@@ -324,3 +324,44 @@ environments:
         - expected_answer
         - responses_create_params.input
         - extra_env_info.reference_solution
+
+  - id: math_formal_lean
+    family: reasoning
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: lean_proof_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: |
+        M0 smoke verifier — candidate is rewarded 1.0 if the emitted proof
+        is non-empty after strip. Real Lean compiler verification (run the
+        proof against mathlib4 + check `#print axioms` is clean) requires
+        the Lean toolchain inside a sandbox container and is task017 /
+        task049 territory.
+    resources:
+      sandbox: lean_toolchain_or_none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 800
+    telemetry:
+      - reward
+      - nonempty_proof
+      - proof_length
+      - language
+      - latency_ms
+    health_check:
+      # No data_registry source pinned yet — math_formal_lean is awaiting
+      # legal/share-alike clearance per docs/m0-dataset-expansion-plan.md §6
+      # Q1. When a source is approved (Nemotron-Math-Proofs-v1 if CC-BY-SA
+      # is cleared, or mathlib4-extraction / LeanDojo-Bench as permissive
+      # alternatives), this row stays as-is; only a data_registry.yaml
+      # entry is added.
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - responses_create_params.input
+        - extra_env_info.statement_only
+        - extra_env_info.reference_proof

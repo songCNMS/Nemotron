@@ -1,6 +1,7 @@
 # task056_m0_tier1_expansion
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-18 — code path only; data_registry row待 §6 share-alike 决议 -->
 
 ## 背景
 
@@ -9,7 +10,7 @@
 - ~~`math_competition_numeric` ← `AI-MO/NuminaMath-CoT` (Apache-2.0, 859 608 行)~~ — Session 1 完成
 - ~~`search_multihop_qa` ← `dgslibisey/MuSiQue` (CC-BY-4.0, 24 814 行)~~ — Session 1 完成
 - ~~`multi_turn_tool_use` ← `NousResearch/hermes-function-calling-v1` `func_calling` config (Apache-2.0)~~ — Session 1 完成
-- `math_formal_lean` ← `nvidia/Nemotron-Math-Proofs-v1` Lean split (CC-BY-SA-4.0 ⚠) — Session 2 (blocked on share-alike clearance)
+- `math_formal_lean` — Session 2 lands the **code path** (transform / verifier / env_registry / M1 SFT builder); `data_registry.yaml` row 暂留 — 待 §6 share-alike 决议从下面几个候选选一个 source (Nemotron-Math-Proofs-v1 / mathlib4 extraction / LeanDojo-Bench / Lean-Workbook)
 
 ## 目标
 

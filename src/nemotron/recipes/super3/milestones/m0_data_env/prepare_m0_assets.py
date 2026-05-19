@@ -71,6 +71,11 @@ SYSTEM_PROMPTS = {
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
     "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
+    "math_formal_lean": (
+        "You are a formal-proof assistant. Read the Lean theorem statement and "
+        "return a complete proof in the same Lean dialect. Do not add prose; "
+        "return only the proof code."
+    ),
 }
 
 JsonDict = dict[str, Any]
@@ -456,6 +461,70 @@ def transform_numinamath_competition(row: Mapping[str, Any], spec: Mapping[str, 
     )
 
 
+def transform_lean_proof_stub(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a Lean theorem-proof row to the M0 JSONL contract.
+
+    Source-agnostic: the upstream column names come from ``spec['fields']``
+    (the same per-spec field-rename pattern HotpotQA / MuSiQue / Hermes
+    use) so once legal/product clears a Lean dataset — whether
+    ``nvidia/Nemotron-Math-Proofs-v1`` (CC-BY-SA-4.0, blocked today),
+    LeanDojo-Bench (MIT), mathlib4 extraction (Apache-2.0), or an
+    internal source — the only change needed is the ``data_registry.yaml``
+    row with the right field mapping.
+
+    Expected logical columns (rename via ``spec['fields']``):
+      - ``statement``: str — the Lean theorem statement to prove
+      - ``proof``: str — the gold Lean proof text
+      - ``theorem_name``: str (optional) — short identifier
+      - ``language``: str (optional) — defaults to "lean4"
+
+    M0 verifier is ``lean_proof_stub``: non-empty proof → reward 1.0.
+    Real Lean compiler verification is task017 / task049 territory and
+    needs the Lean toolchain inside a sandbox container.
+    """
+    fields = spec.get("fields") or {}
+    statement_key = fields.get("statement", "statement")
+    proof_key = fields.get("proof", "proof")
+    name_key = fields.get("theorem_name", "theorem_name")
+    language_key = fields.get("language", "language")
+
+    statement = str(row.get(statement_key) or "").strip()
+    proof = str(row.get(proof_key) or "").strip()
+    if not statement:
+        raise ValueError(
+            f"lean_proof_stub: row missing non-empty {statement_key!r} column"
+        )
+    theorem_name = str(row.get(name_key) or "").strip()
+    language = str(row.get(language_key) or "lean4").strip() or "lean4"
+
+    user_content = (
+        f"Prove the following theorem in {language}. "
+        "Return only the proof body (no Markdown, no prose, no explanation).\n\n"
+        f"Theorem:\n{statement}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=statement,
+        expected_answer=proof,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "lean_proof_stub",
+            "max_score": 1.0,
+            "checks": ["nonempty_after_strip"],
+        },
+        extra_env_info={
+            "theorem_name": theorem_name,
+            "language": language,
+            "statement_only": statement,
+            "reference_proof": proof,
+        },
+    )
+
+
 def transform_gsm8k_numeric_reasoning(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     question = str(row["question"]).strip()
     expected_answer = normalize_numeric_answer(row["answer"])
@@ -831,6 +900,7 @@ CONVERTERS = {
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
     "gsm8k_numeric_reasoning": transform_gsm8k_numeric_reasoning,
     "numinamath_competition": transform_numinamath_competition,
+    "lean_proof_stub": transform_lean_proof_stub,
 }
 
 

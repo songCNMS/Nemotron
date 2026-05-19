@@ -95,11 +95,12 @@ Priority criteria:
 | `swe_pivot_patch_supervision` | `princeton-nlp/SWE-bench_Lite` | source-repo-specific | 100 train / 20 val | `patch_diff_match` | ✓ — landed via task005 |
 | `tool_call_repair_negative` | derived from Hermes singleturn | Apache-2.0 | ≤ 100/env | `negative_recognition` | ✓ — landed via task005 |
 
-Only `math_formal_lean` remains, and it's blocked on the §6 share-alike
-question (CC-BY-SA-4.0 — obligation cascades through any derived artifact).
-Once legal/product clears it, the wiring is a single follow-up PR
-(converter + new `lean_proof_stub` verifier + an `assistant_for_lean_proof`
-M1 supervision builder).
+`math_formal_lean` **code path landed via task056 Session 2** (transformer
++ verifier + env_registry + M1 SFT builder); only the data_registry
+row is still pending the §6 share-alike decision. Once a source is
+approved (Nemotron-Math-Proofs-v1 if CC-BY-SA cleared, mathlib4
+extraction / LeanDojo-Bench / internlm Lean-Workbook as permissive
+alternatives), the wiring is a single one-row PR + re-prep run.
 
 ### Tier 2 — plan-§7 mandated, each has a notable contamination or licensing concern (task057)
 
@@ -178,6 +179,27 @@ references for new env work.
 1. **Share-alike posture:** are CC-BY-SA-4.0 sources (Nemotron Lean proofs,
    BIRD SQL) acceptable? Share-alike obligations cascade through any
    derived artifact (eval reports, distilled SFT data).
+
+   **task056 Session 2** shipped the M0 *code path* for `math_formal_lean`
+   (transform + verifier + env_registry + M1 SFT supervision builder) but
+   *not* a `data_registry.yaml` row — when a source is approved, the
+   wiring is one row + a re-prep run. The transformer (`transform_lean_proof_stub`)
+   is source-agnostic via `spec['fields']` so any candidate works without
+   code changes. Candidates ranked by licensing risk (lowest first):
+
+   | Source | License | Pros | Cons |
+   |---|---|---|---|
+   | mathlib4 extraction (direct from `leanprover-community/mathlib4` HEAD) | Apache-2.0 | Permissive; no share-alike cascade; ground truth quality | Have to write the extractor (parse `.lean` files, extract theorem-proof pairs) |
+   | LeanDojo-Bench / LeanDojo-Bench-Lean4 | MIT (per Yang et al. 2023 release) | Already structured; large; proof state sequences | Pre-extracted from mathlib snapshots — version drift vs current mathlib4 |
+   | MiniF2F / FIMO | various permissive | Standard benchmark target | Small; benchmark contamination risk if used for training |
+   | `nvidia/Nemotron-Math-Proofs-v1` (original target) | CC-BY-SA-4.0 ⚠ | Already curated for super3; familiar to NeMo team | Share-alike cascade through every M1+ artifact |
+   | `internlm/Lean-Workbook` (~57k Lean 4 proofs) | check on HF — likely Apache-2.0 family | Decent size; Lean 4 native | License needs explicit verification at ingest time |
+
+   Recommendation pending legal/product: pick mathlib4 extraction or
+   LeanDojo-Bench if share-alike isn't tolerable; otherwise the
+   original Nemotron source remains fastest. **task056 Session 3**
+   (separate PR after this decision lands) writes the data_registry
+   row + runs `prepare_m0_assets` once.
 2. **Contamination policy:** every M0 source used in M1+ eval must be
    deduped against M0 train + val. Recommend adding a
    `contamination_against` field on each spec; landing the schema bump
@@ -203,6 +225,6 @@ references for new env work.
 | `run_m1_sft_roundtrip_smoke.py` validator | ✓ — landed via task005 (`905de2d`); now a required wiring step (§5.7) |
 | `escape_tool_markup_for_prompt` helper for negative-example prompts | ✓ — task005 refinement (`905de2d`); reusable for any future env that emits chat-template-sensitive markup |
 | 3 Tier-1 envs from task056 Session 1 (NuminaMath, MuSiQue, multi-turn Hermes) | ✓ — task056 Session 1 (`4e95552`) |
-| 1 remaining Tier-1 env (`math_formal_lean`) | ✗ — task056 Session 2, blocked on §6 share-alike clearance |
+| 1 remaining Tier-1 env (`math_formal_lean`) — code path | ✓ — task056 Session 2 (this PR) — transformer + verifier + env_registry + M1 SFT builder all landed; `data_registry.yaml` row still pending §6 share-alike decision |
 | 6 Tier-2 envs (SQL, terminal v2, safety, multilingual, long-context, math-with-tools) | ✗ — task057 |
 | Production slug / subset / contamination fixes | ✗ — task058 |
