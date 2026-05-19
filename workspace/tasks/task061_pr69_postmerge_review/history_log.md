@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -18,3 +18,10 @@
   - `sed`/`rg` check confirms task030 history header is `METADATA:SESSION=12` and the `Session 12` section exists.
   - `PYTHONPATH=src scripts/validate_data_registries.py --quiet` → pass.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/87.
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- User requested the next step after PR #87 was opened.
+- Confirmed PR #87 was `OPEN / CLEAN`, non-draft, and had no failing checks.
+- Updated task061 closeout state before merge: intern status -> Idle, task README -> Completed, task knowledge metadata -> Session 2.
+- Archived the durable task history metadata rule into the personal knowledge base.
