@@ -1,32 +1,32 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task021_m1_infra_minimum -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task021_m1_infra_minimum |
-| PR | pending push |
-| Session | 45 |
+| Status | Idle |
+| Current Task | |
+| PR | N/A |
+| Session | 46 |
 
-正在做：task021 Session 6 — rollout policy guard rail。原 plan 的 "literal
-default flip from None to docker" 在 in-repo 没有 coherent target (M0
-oracle 不需要容器；M1 RLVR rollout 在外部 NeMo-Gym repo)。改用 "guard
-rail" 语义：
+最近：task021 Session 6 (PR #59 `4f651f6`) 已 squash-merge 进 main —
+rollout policy guard rail。新加 `ROLLOUT_POLICY_ORACLE` /
+`ROLLOUT_POLICY_ADVERSARIAL` 常量 + `recommended_container_runtime`
+helper。`run_python_unit_tests` 加 `rollout_policy` kwarg：adversarial +
+container_runtime=None → RuntimeError；oracle (默认) → 字节级保留 Session
+5 in-process 行为。决策记录：原 plan "literal default flip" 在 in-repo
+无 coherent target，改 guard rail 同等安全效果。11 个新 pytest case，
+sandbox 测试基线 215 → 226 passed + 6 skipped。
 
-- `ROLLOUT_POLICY_ORACLE` / `ROLLOUT_POLICY_ADVERSARIAL` 常量 +
-  `recommended_container_runtime(policy)` helper
-- `run_python_unit_tests` 加 `rollout_policy: str = "oracle"` kwarg —
-  adversarial + container_runtime=None → `RuntimeError` 立即报警，防
-  untrusted code silently 跑 host。oracle 默认保持 Session 5 字节级 in-
-  process 行为不变
-- 顺 `score_record` → `score_rows` → `evaluate_policy` → `summarize_baselines`
-  → CLI `--rollout-policy {oracle,adversarial}` 一路串
-- typo → ValueError；adversarial + docker → 跑成功 + diagnostics 加
-  `rollout_policy` 痕迹
+task021 整 task 仍 InProgress：Session 4 (NeMo-RL / Ray / vLLM cluster
+verify — block on NemTron access) 待开。
 
-11 个新 pytest case；sandbox 测试基线 215 → 226 passed + 6 skipped。
-修了 Session 5 的一个 stub (fake_runner 加 `**kwargs`)。
-
-task021 整 task 仍 InProgress：Session 4 (cluster verify) 待 NemTron。
+下一个候选 (sandbox-runnable):
+- **task058 follow-ups** — license/contamination 额外校验加进 schema 层
+  (e.g., share-alike cascade 检测)
+- **task030 Session 4** — Bridge / M0 module-local loader 接进 schema 层
+  (careful refactor，runtime fail-fast 不能 break)
+- **task019 / task020** — M1 eval basket (本身 sandbox-runnable；acceptance
+  要真 RLVR checkpoint)
+- 之前 task 的 Session 2+ — 大都需 cluster / Docker / nvcr container

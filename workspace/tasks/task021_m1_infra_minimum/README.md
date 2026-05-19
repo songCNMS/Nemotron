@@ -5,7 +5,7 @@
 <!-- SESSION 2 LANDED: PR #32 / 62b7774 on 2026-05-18 -->
 <!-- SESSION 3 LANDED: PR #53 / d6e5b25 on 2026-05-18 (sandbox container scaffolds; image build needs Docker daemon) -->
 <!-- SESSION 5 LANDED: PR #55 / 43b3612 on 2026-05-18 (ContainerSandbox runtime shim + verifier wiring; real container runs need Docker daemon) -->
-<!-- SESSION 6 LANDED: PR pending on 2026-05-18 (rollout policy guard rail — adversarial + no container raises) -->
+<!-- SESSION 6 LANDED: PR #59 / 4f651f6 on 2026-05-18 (rollout policy guard rail — adversarial + no container raises) -->
 
 ## 背景
 
