@@ -133,3 +133,90 @@ runtime shim 把 M0 verifier 直 subprocess 改成走容器) 没启动。
 单测可用 Mock(subprocess) + 真 image_resolver 路径) / task030 Session 2
 (schema enforcement at write time + module-local loader merge schema 层) /
 task019-020 (M1 eval basket — block on task014 Session 2 真 RLVR checkpoint).
+
+## Session 7 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 5 实现 — ContainerSandbox runtime shim 把 task021 Session 3 落
+的 sandbox 镜像真接进 M0 verifier 路径。设计：
+
+- **新模块** `src/nemotron/recipes/super3/milestones/sandbox_containers/runtime_shim.py`:
+  - `ContainerSandbox` dataclass — `image` / `runtime` (docker / podman /
+    singularity) / `cpu_limit` / `memory_limit` / `network` / `read_only` /
+    `tmpfs[]` / `workdir_mount`
+  - `build_argv(host_workdir, command)` 纯函数构造完整 argv (docker/podman
+    用同一套 flag dialect — `--rm --network=none --mount bind --workdir
+    --read-only --tmpfs --cpus --memory`；singularity 用 `exec --containall
+    --no-net --bind src:dst:ro --pwd --readonly`)
+  - `run(host_workdir, command, timeout_s)` 调 `subprocess.run` — 唯一的
+    一处副作用，纯 argv 构造跟 subprocess 调用分开方便测试
+  - `sandbox_for_env(env_id, runtime="docker")` 经 `image_resolver.resolve_image_for_env`
+    返 ContainerSandbox 实例 (envs 不需 sandbox 时返 None)
+  - `KNOWN_CONTAINER_RUNTIMES = {"docker", "podman", "singularity"}`
+
+- **`run_m0_health_baseline.run_python_unit_tests` 改造**:
+  - 加 `container_runtime: str | None = None` 关键字参数
+  - `None` (默认) 路径 byte-for-byte 不变 — 还是 `sys.executable -I script`
+    in-process subprocess (M0 oracle 安全，existing tests 不受影响)
+  - `"docker"/"podman"/"singularity"` 路径走 `sandbox_for_env(record["environment"])`
+    + `sandbox.run(host_workdir=tmpdir, command=["python", "-I", "/workspace/<script>"], ...)`
+  - Envs 没注册 sandbox image 时 → 退回 in-process + diagnostics 加
+    `container_fallback: True` (coverage walk 看见 gap)
+  - 容器超时 → `subprocess.TimeoutExpired` 转 diagnostics 带 `container_runtime`
+    标识，operator 知道哪条路径 hang
+  - Diagnostics 在 container path 加 `container_runtime` + `container_fallback`
+    两字段
+
+- **CLI 链路**:
+  - `score_record` 加 `container_runtime` kwarg，转 `run_python_unit_tests`
+  - `score_rows` 加 `container_runtime` kwarg，转 `score_record`
+  - `evaluate_policy` 加 `container_runtime` kwarg，转 `score_rows`
+  - `summarize_baselines` 加 `container_runtime` kwarg，转 `score_rows`
+  - `build_report` 转 `args.container_runtime` 到 `summarize_baselines`；
+    `report["container_runtime"] = args.container_runtime` 留印
+  - `build_parser` 加 `--container-runtime {docker,podman,singularity}` 选项
+    (default None)
+
+- **Lazy import**：`runtime_shim` 模块只在 `container_runtime is not None`
+  时从 `run_python_unit_tests` 内部 import 进来。sandbox CI 跑 default
+  path 不会拽进 runtime_shim (虽然它也只 import stdlib + image_resolver)。
+
+测试 `tests/recipes/super3/test_container_sandbox_shim.py` 15 cases:
+
+- ContainerSandbox 构造 + argv 9：
+  - `KNOWN_CONTAINER_RUNTIMES` shape
+  - 构造拒未知 runtime
+  - docker argv 含 isolation flags (--rm / --network=none / --read-only /
+    --cpus / --memory / mount bind readonly / workdir / tail = image+command)
+  - podman 跟 docker 同 flag dialect (只 argv[0] 不同)
+  - singularity argv 含 exec / --containall / --no-net / --bind src:dst:ro /
+    docker:// URI / tail = command
+  - --read-only 关掉 (read_only=False) 时不 emit
+  - tmpfs 多 path 时每 path 一个 --tmpfs flag
+
+- sandbox_for_env (resolver glue) 3：
+  - 已注册 env (code_execution_python) → ContainerSandbox(image=code_exec:v0.1.0)
+  - 未注册 env (search_grounded_qa) → None
+  - `runtime="podman"` kwarg 透传 (math_formal_lean → lean:v0.1.0 with podman)
+
+- run_python_unit_tests integration 4 (subprocess monkey-patched):
+  - default container_runtime=None → 走 sys.executable -I (regression
+    gate；container_runtime / container_fallback 不出现在 diagnostics)
+  - container_runtime="docker" → argv 走 docker run + image tag +
+    /workspace/<script>；diagnostics 标 container_runtime + container_fallback=False
+  - 未注册 env + container_runtime="docker" → fallback 走 sys.executable +
+    diagnostics 标 container_fallback=True
+  - 容器超时 → diagnostics 含 error=timeout + container_runtime
+
+- score_record plumbing 1: container_runtime 透传到 run_python_unit_tests
+  (mocked runner verifies kwarg arrives)
+
+测试基线 189 → 204 passed + 6 skipped (15 new). `test_m1_agentic_sft.py`
+pyarrow collect-error pre-existing.
+
+Roadmap §1.8 task021 Session 5 新加 + ☐ → ✓。task021 整 task 仍 InProgress：
+Session 4 (cluster verify) 待 NemTron access。
+
+**重要**: 这条改 M0 verifier 生产路径，但默认参数 `container_runtime=None`
+保证现有 health-baseline 调用 byte-for-byte 不变。要启用容器路径，operator
+显式跑 `--container-runtime docker` (前提是机器有 Docker daemon + Session 3
+镜像已 build)。
