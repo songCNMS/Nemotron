@@ -27,11 +27,11 @@ yaml = pytest.importorskip("yaml")
 
 from nemotron.recipes.super3.milestones.data_registries.revision_audit import (  # noqa: E402
     FLOATING_REVISION_REFS,
+    PLACEHOLDER_REVISION_REFS,
     find_unpinned_revisions,
     format_revision_audit_report,
     is_pinned,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT_PATH = REPO_ROOT / "scripts" / "validate_data_registries.py"
@@ -64,6 +64,10 @@ def test_is_pinned_accepts_concrete_references(hf_revision: str) -> None:
         "head",
         "HEAD",
         "latest",
+        "TBD",
+        "todo",
+        "pending",
+        "unknown",
         "",
         "   ",
         None,
@@ -82,6 +86,7 @@ def test_floating_refs_table_covers_known_unsafe_refs() -> None:
     assert "head" in FLOATING_REVISION_REFS
     assert "latest" in FLOATING_REVISION_REFS
     assert "" in FLOATING_REVISION_REFS
+    assert "tbd" in PLACEHOLDER_REVISION_REFS
 
 
 # ---------- find_unpinned_revisions on live registries ----------

@@ -164,11 +164,10 @@ datasets:
     hf_dataset: SWE-Gym/SWE-Gym-Lite
     hf_config: default
     hf_split: train
-    hf_val_split: validation
-    # TODO(task016 Session 2 cluster pass): pin the revision once a curated
-    # SWE-Gym-Lite snapshot is locked. The dataset is small and stable but
-    # has not yet been pinned in this repo's release-management flow.
-    hf_revision: TBD
+    # SWE-Gym-Lite currently ships only a train split. prepare_m0_assets.py
+    # derives val rows as a sequential continuation of train at smoke scale.
+    hf_val_split: null
+    hf_revision: f70b1a29ab120eb0a0ee7a1deb029825e735b2b0
     source_url: https://huggingface.co/datasets/SWE-Gym/SWE-Gym-Lite
     license: apache-2.0
     converter: swe_gym_lite_pivot
@@ -187,7 +186,7 @@ datasets:
       id: instance_id
       repo: repo
       problem_statement: problem_statement
-      messages: messages
+      patch: patch
 
   - id: m0_helpsteer2_pref
     environment: helpsteer2_pref_compare
@@ -196,11 +195,7 @@ datasets:
     hf_config: default
     hf_split: train
     hf_val_split: validation
-    # TODO(task018 Session 2 cluster pass): pin once HelpSteer-2 revision is
-    # locked alongside the GenRM judge service deployment (task018 Session 3).
-    # Pref data + judge service flip the rlhf_env_registry row to active
-    # together.
-    hf_revision: TBD
+    hf_revision: 990b2711a36180dd19d9c94b8627844866f8982a
     source_url: https://huggingface.co/datasets/nvidia/HelpSteer2
     license: cc-by-4.0
     converter: helpsteer2_pref_pair
@@ -217,9 +212,10 @@ datasets:
       - M1 RLHF (GenRM compare)
     fields:
       prompt: prompt
-      response_a: response_a
-      response_b: response_b
-      preference_label: preference_label
+      response: response
+      helpfulness: helpfulness
+      coherence: coherence
+      correctness: correctness
 
   - id: m0_swe2_openhands_trace
     environment: swe2_openhands_trace
@@ -227,11 +223,10 @@ datasets:
     hf_dataset: SWE-Gym/SWE-Gym-Lite
     hf_config: default
     hf_split: train
-    hf_val_split: validation
-    # TODO(task017 Session 2 cluster pass): pin once SWE-Gym-Lite revision is
-    # locked alongside the SWE-Gym SIF container build (same upstream as
-    # m0_swe_pivot_tool_call — both pin together).
-    hf_revision: TBD
+    # SWE-Gym-Lite currently ships only a train split. prepare_m0_assets.py
+    # derives val rows as a sequential continuation of train at smoke scale.
+    hf_val_split: null
+    hf_revision: f70b1a29ab120eb0a0ee7a1deb029825e735b2b0
     source_url: https://huggingface.co/datasets/SWE-Gym/SWE-Gym-Lite
     license: apache-2.0
     converter: swe_gym_openhands_trace
@@ -250,7 +245,6 @@ datasets:
       id: instance_id
       repo: repo
       problem_statement: problem_statement
-      messages: messages
       patch: patch
 
   - id: m0_tool_calling_hermes

@@ -35,7 +35,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-
 JsonDict = dict[str, Any]
 
 
@@ -45,6 +44,11 @@ JsonDict = dict[str, Any]
 # accidentally trip the audit; if a team needs a new floating ref
 # detected, add it here explicitly.
 FLOATING_REVISION_REFS = frozenset({"main", "master", "head", "latest", ""})
+
+# Human placeholders are equally unsafe in production M0 rows: passing
+# revision="TBD" to datasets.load_dataset fails at fetch time, and treating
+# it as pinned lets an unusable registry row pass CI.
+PLACEHOLDER_REVISION_REFS = frozenset({"tbd", "todo", "pending", "unknown"})
 
 
 def is_pinned(hf_revision: Any) -> bool:
@@ -60,7 +64,10 @@ def is_pinned(hf_revision: Any) -> bool:
     normalized = hf_revision.strip().lower()
     if not normalized:
         return False
-    return normalized not in FLOATING_REVISION_REFS
+    return (
+        normalized not in FLOATING_REVISION_REFS
+        and normalized not in PLACEHOLDER_REVISION_REFS
+    )
 
 
 def find_unpinned_revisions(
@@ -173,6 +180,7 @@ def format_revision_audit_report(result: Mapping[str, list]) -> str:
 
 __all__ = [
     "FLOATING_REVISION_REFS",
+    "PLACEHOLDER_REVISION_REFS",
     "find_unpinned_revisions",
     "format_revision_audit_report",
     "is_pinned",

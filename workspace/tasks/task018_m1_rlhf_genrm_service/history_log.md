@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-18 - intern_nemontron_review_cc
 
@@ -72,4 +72,3 @@ converter) / Session 3 (GenRM judge deploy) / Session 4 (端到端 smoke)
 critical-path 唯一没动的) / task019-020 (M1 eval basket) / task017 Session 4
 (`_bridge_base.py` 抽取，4 个 bridge module 都摆稳) / 之前 task 的 Session
 2+。
-

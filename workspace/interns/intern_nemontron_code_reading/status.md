@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task065_continuous_postmerge_review -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Idle |
-| Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/90 |
-| Session | 2 |
-| Branch | intern_nemontron_code_reading/task064_pr72_postmerge_review |
-| Latest | Session 2 closed task064: PR #90 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
+| Status | Working |
+| Current Task | task065_continuous_postmerge_review |
+| PR |  |
+| Session | 1 |
+| Branch | intern_nemontron_code_reading/task065_continuous_postmerge_review |
+| Latest | Reviewed PR #73-#85; fixed real HF schema blockers in SWE-Gym/HelpSteer-2 M0 prep plus stale task history metadata; validation passing locally. |

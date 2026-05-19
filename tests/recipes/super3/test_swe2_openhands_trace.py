@@ -10,8 +10,9 @@ Covers:
   paths fail.
 - Trajectory normalization: tool_call arguments decoded to dict
   regardless of JSON-string vs dict upstream serialization.
-- Error surfaces: missing problem_statement / missing messages / no
-  patch anywhere.
+- Error surfaces: missing problem_statement / no patch anywhere.
+- Patch-only public SWE-Gym-Lite rows synthesize a minimal reference
+  trajectory from the first modified file + gold patch.
 - Registry integration: ``m0_swe2_openhands_trace`` row +
   ``swe2_openhands_trace`` env row + converter wired into CONVERTERS;
   ``validate_registries`` clean.
@@ -41,7 +42,6 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (  
 from nemotron.recipes.super3.milestones.m1_swe2.prepare_m1_swe2_jsonl import (  # noqa: E402
     SWE2_ENV_MAP,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
@@ -257,12 +257,27 @@ def test_transform_raises_when_problem_statement_missing() -> None:
         transform_swe_gym_openhands_trace(row, _spec("m0_swe2_openhands_trace"))
 
 
-def test_transform_raises_when_messages_missing() -> None:
-    with pytest.raises(ValueError, match="messages trajectory"):
-        transform_swe_gym_openhands_trace(
-            {"instance_id": "x", "repo": "r", "problem_statement": "fix"},
-            _spec("m0_swe2_openhands_trace"),
-        )
+def test_transform_synthesizes_reference_trajectory_from_patch_only_swegym_lite_row() -> None:
+    """The pinned public SWE-Gym-Lite snapshot has patch rows but no
+    OpenHands ``messages`` trajectory. The SWE2 converter keeps data
+    prep usable by synthesizing a minimal read-then-submit trajectory."""
+    row = {
+        "instance_id": "owner__repo-42",
+        "repo": "owner/repo",
+        "problem_statement": "Fix the parser.",
+        "patch": _GOLD_PATCH,
+    }
+    record = transform_swe_gym_openhands_trace(row, _spec("m0_swe2_openhands_trace"))
+
+    trajectory = record["extra_env_info"]["reference_trajectory"]
+    assert record["extra_env_info"]["trajectory_source"] == "synthetic_from_gold_patch"
+    assert record["extra_env_info"]["trajectory_turns"] == 2
+    assert trajectory[0]["tool_calls"][0] == {
+        "name": "view_file",
+        "arguments": {"path": "src/parser.py"},
+    }
+    assert trajectory[1]["tool_calls"][0]["name"] == "submit_patch"
+    assert trajectory[1]["tool_calls"][0]["arguments"]["patch"] == record["expected_answer"]
 
 
 def test_transform_raises_when_no_patch_anywhere() -> None:
@@ -292,6 +307,8 @@ def test_data_registry_carries_new_swe2_openhands_trace_row() -> None:
     assert row["environment"] == "swe2_openhands_trace"
     assert row["converter"] == "swe_gym_openhands_trace"
     assert row["hf_dataset"] == "SWE-Gym/SWE-Gym-Lite"
+    assert row["hf_revision"] == "f70b1a29ab120eb0a0ee7a1deb029825e735b2b0"
+    assert row["hf_val_split"] is None
     assert row["reward_type"] == "openhands_loop"
     assert "SWE-Bench Verified" in row["contamination_against"]
 
