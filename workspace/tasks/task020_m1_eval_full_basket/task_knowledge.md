@@ -108,3 +108,65 @@ without needing the CLI yet.
 `tests/recipes/super3/test_m1_agentic_sft.py` 仍因 pyarrow ImportError
 collect-error，pre-existing；非 sandbox 正常跑。运行 sandbox 测试时用
 `--ignore=tests/recipes/super3/test_m1_agentic_sft.py`。
+
+## Promotion gate decision model (Session 2)
+
+Per plan §5.7 + roadmap §1.7 task020 promotion gate text:
+
+> Promotion gate logic: weighted-mean Super3 parity, no key-category
+> regression > 1-2 %, rollback rule on safety / SWE / tool / IF.
+
+### Three-tier severity
+
+| Status | When | Operator action |
+|---|---|---|
+| `promote` | All checks pass | Ship the checkpoint |
+| `hold` | Parity drifts > 2% OR non-rollback category regresses > 2% OR coverage gap (no shared categories) | Re-train / retest with diagnosis |
+| `rollback` | Any rollback-category drops beyond noise (1e-4) | Revert to prior checkpoint |
+
+Severity precedence: rollback > hold > promote (most severe wins).
+Reasons list records *all* triggered conditions, not just the
+tipping one.
+
+### Default thresholds (`promotion_gate.py`)
+
+- `DEFAULT_WEIGHTED_PARITY_THRESHOLD = 0.02` (2% — plan's "1-2%" tight end)
+- `DEFAULT_CATEGORY_REGRESSION_THRESHOLD = 0.02` (2%)
+- `DEFAULT_ROLLBACK_REGRESSION_TOLERANCE = 1e-4` (sampling noise)
+- `DEFAULT_ROLLBACK_CATEGORIES` (frozenset):
+  - `swe_repo_repair`
+  - `tool_use_agentic` / `tool_use_terminal` / `tool_use_function_call` / `tool_use_mcp`
+  - `instruction_following` / `multi_turn_instruction`
+  - `safety` / `safety_jailbreak` / `safety_overrefusal` (forward-compat M2)
+
+### Weighting policy
+
+**Uniform-per-category, uniform-across-categories**. Each category
+gets equal weight regardless of how many benchmarks it contains.
+
+Why not per-benchmark? `reasoning_math_competition` has 2 benchmarks
+(AIME25 + HMMT) but `general_mc` has 1 (MMLU-Pro). Per-benchmark
+uniform would let any category with extra rows dominate parity
+swings. Per-category uniform is stable under future basket extension.
+
+### Missing benchmark handling
+
+- Missing in current run: noted in `benchmarks_missing_in_current`,
+  the category is dropped from parity calc, gate **does NOT auto-hold**
+- Missing in Super3 baseline: noted in `benchmarks_missing_in_super3`,
+  same handling — operator decides
+- No shared categories at all: parity is `None`, gate holds with a
+  specific reason. Prevents silent promote on empty/broken eval JSON.
+
+### Interaction with regression_report.py
+
+`promotion_gate.py` and `regression_report.py` answer different
+questions:
+
+- **regression_report**: how did this run compare to the prior
+  checkpoint? (per-benchmark diff + status: improved / regressed / etc.)
+- **promotion_gate**: is this run good enough to promote vs Super3?
+  (per-category aggregate + parity threshold + rollback rule)
+
+Both can be run on the same eval JSON; they share no code today but
+could share a `current_results` extraction helper in the future.
