@@ -5,7 +5,7 @@
 <!-- SESSION 2 LANDED: PR #57 / 324e062 on 2026-05-18 (schema enforcement script + pre-commit hook) -->
 <!-- SESSION 4 LANDED: PR #61 / 159d81f on 2026-05-18 (bridge / M0 module-local loader merge into schema layer) -->
 <!-- SESSION 5 LANDED: PR #63 / 028f377 on 2026-05-19 (share-alike license cascade audit — task058 license/contamination follow-up) -->
-<!-- SESSION 6 LANDED: PR pending on 2026-05-19 (HuggingFace revision-pin lint — task058 follow-up) -->
+<!-- SESSION 6 LANDED: PR #65 / db8900d on 2026-05-19 (HuggingFace revision-pin lint — task058 follow-up) -->
 
 ## 背景
 
