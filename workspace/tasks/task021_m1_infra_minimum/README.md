@@ -5,6 +5,7 @@
 <!-- SESSION 2 LANDED: PR #32 / 62b7774 on 2026-05-18 -->
 <!-- SESSION 3 LANDED: PR #53 / d6e5b25 on 2026-05-18 (sandbox container scaffolds; image build needs Docker daemon) -->
 <!-- SESSION 5 LANDED: PR #55 / 43b3612 on 2026-05-18 (ContainerSandbox runtime shim + verifier wiring; real container runs need Docker daemon) -->
+<!-- SESSION 6 LANDED: PR pending on 2026-05-18 (rollout policy guard rail — adversarial + no container raises) -->
 
 ## 背景
 
@@ -29,7 +30,8 @@ on this)"。四个子条目 (plan §10 M1 infra):
 | 2 | cross-stage lineage 模型 schema + M0 / M1 manifest 加 `lineage` 字段 | yes (schema + walker; W&B publish 留 Session 3+) | ✓ Done (this PR) |
 | 3 | Sandbox container 构建脚本 (code-exec、Lean、terminal Dockerfile + image_resolver + sandbox_image_registry + build script + unified-index 接入) | partial (Dockerfile + 注册表 + resolver + 构建脚本 sandbox-runnable；真 image build 留 Docker daemon) | ✓ Done (PR #53) |
 | 4 | NeMo-RL / Ray / vLLM / NeMo-Gym launch path 真集群验证 | no — 需要 cluster + ops | Todo (block on NemTron access) |
-| 5 | ContainerSandbox runtime shim 接入 M0 verifier (`run_python_unit_tests` 的容器化路径 + CLI `--container-runtime` 选项 + monkeypatch 单测) | yes (单测用 subprocess monkey-patch；真 docker run 需要 daemon) | ✓ Done (this PR) |
+| 5 | ContainerSandbox runtime shim 接入 M0 verifier (`run_python_unit_tests` 的容器化路径 + CLI `--container-runtime` 选项 + monkeypatch 单测) | yes (单测用 subprocess monkey-patch；真 docker run 需要 daemon) | ✓ Done (PR #55) |
+| 6 | Rollout policy guard rail (`rollout_policy` kwarg + adversarial + 无 container_runtime → RuntimeError) + 文档化 "无字面 default flip — 没 in-repo target" | yes | ✓ Done (this PR) |
 
 ## Session 1 目标
 

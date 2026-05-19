@@ -1,34 +1,32 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task021_m1_infra_minimum -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 44 |
+| Status | Working |
+| Current Task | task021_m1_infra_minimum |
+| PR | pending push |
+| Session | 45 |
 
-最近：task030 Session 2 (PR #57 `324e062`) 已 squash-merge 进 main —
-schema enforcement at write time。新 `scripts/validate_data_registries.py`
-(退出码 0/1/2 区分 clean / drift / infra-broken；`--quiet` / `--paths` /
-`--index-path` flags) + `.pre-commit-config.yaml` local hook
-`validate-data-registries` (trigger on registry YAML / loader / schema /
-script 变动)。设计决策：**不**合并 bridge runtime fail-fast 跟 schema
-collect-all，两层 consumer 不一样。11 个新 pytest case，sandbox 测试
-基线 204 → 215 passed + 6 skipped。
+正在做：task021 Session 6 — rollout policy guard rail。原 plan 的 "literal
+default flip from None to docker" 在 in-repo 没有 coherent target (M0
+oracle 不需要容器；M1 RLVR rollout 在外部 NeMo-Gym repo)。改用 "guard
+rail" 语义：
 
-task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
-task019/020) + Session 4 (Bridge/M0 loader merge into schema layer —
-注意 fail-fast vs collect-all 语义) 待开。
+- `ROLLOUT_POLICY_ORACLE` / `ROLLOUT_POLICY_ADVERSARIAL` 常量 +
+  `recommended_container_runtime(policy)` helper
+- `run_python_unit_tests` 加 `rollout_policy: str = "oracle"` kwarg —
+  adversarial + container_runtime=None → `RuntimeError` 立即报警，防
+  untrusted code silently 跑 host。oracle 默认保持 Session 5 字节级 in-
+  process 行为不变
+- 顺 `score_record` → `score_rows` → `evaluate_policy` → `summarize_baselines`
+  → CLI `--rollout-policy {oracle,adversarial}` 一路串
+- typo → ValueError；adversarial + docker → 跑成功 + diagnostics 加
+  `rollout_policy` 痕迹
 
-下一个候选 (sandbox-runnable + leverage):
-- **task058 follow-ups** — license/contamination 额外校验加进 schema 层
-  (e.g., share-alike cascade 检测，CC-BY-SA 数据流到哪些 derived artifact)
-- **task021 Session 6 候选** — RLVR rollout default `container_runtime`
-  从 `None` 翻 `"docker"` (production behavior flip 独立 PR)
-- **task030 Session 4** — Bridge / M0 module-local loader 接进 schema 层
-  (careful refactor，runtime fail-fast 不能 break)
-- **task019 / task020** — M1 eval basket (block on task014 Session 2 真 RLVR checkpoint)
-- 之前 task 的 Session 2+ — 大都需 cluster / Docker / nvcr container
+11 个新 pytest case；sandbox 测试基线 215 → 226 passed + 6 skipped。
+修了 Session 5 的一个 stub (fake_runner 加 `**kwargs`)。
+
+task021 整 task 仍 InProgress：Session 4 (cluster verify) 待 NemTron。

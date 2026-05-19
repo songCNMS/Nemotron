@@ -234,6 +234,7 @@ def run_python_unit_tests(
     timeout_s: int,
     *,
     container_runtime: str | None = None,
+    rollout_policy: str = "oracle",
 ) -> tuple[float, JsonDict]:
     """Run python unit tests against *candidate*.
 
@@ -250,7 +251,37 @@ def run_python_unit_tests(
     ``sandbox_image_registry.yaml``; envs without a registered image
     fall back to in-process execution with an explicit
     ``container_fallback`` flag in the diagnostics.
+
+    ``rollout_policy`` (task021 Session 6 guard rail) distinguishes
+    oracle from adversarial candidates. When set to ``"adversarial"``
+    AND ``container_runtime is None``, this function raises
+    ``RuntimeError`` rather than silently running untrusted code on
+    the host. Future M1+ RLVR rollouts that forget the container
+    runtime hit this guard immediately. ``"oracle"`` (default) keeps
+    today's in-process behavior unchanged.
     """
+    from nemotron.recipes.super3.milestones.sandbox_containers.runtime_shim import (
+        KNOWN_ROLLOUT_POLICIES,
+        ROLLOUT_POLICY_ADVERSARIAL,
+    )
+
+    if rollout_policy not in KNOWN_ROLLOUT_POLICIES:
+        raise ValueError(
+            f"unknown rollout_policy {rollout_policy!r}; "
+            f"known: {sorted(KNOWN_ROLLOUT_POLICIES)}"
+        )
+    if rollout_policy == ROLLOUT_POLICY_ADVERSARIAL and container_runtime is None:
+        # Guard rail: adversarial candidates must run inside a
+        # container. The shim's in-process fallback for unregistered
+        # envs would silently run untrusted code on the host, which is
+        # the failure mode this guard exists to prevent.
+        raise RuntimeError(
+            "adversarial rollout policy requires an explicit "
+            "container_runtime (docker / podman / singularity). "
+            "Pass `container_runtime='docker'` (or override via the "
+            "CLI flag `--container-runtime`) before scoring untrusted "
+            "candidates."
+        )
     extra = record.get("extra_env_info", {})
     tests = extra.get("test_list") or []
     imports = extra.get("test_imports") or []
@@ -314,6 +345,11 @@ def run_python_unit_tests(
         # and we fall back to in-process. Surface that in diagnostics
         # so coverage walks see the gap.
         diagnostics["container_fallback"] = sandbox is None
+    if rollout_policy != "oracle":
+        # Default oracle policy keeps diagnostics shape unchanged;
+        # adversarial / other policies leave a breadcrumb so audits can
+        # confirm the guard rail actually fired.
+        diagnostics["rollout_policy"] = rollout_policy
     return score, diagnostics
 
 
@@ -323,6 +359,7 @@ def score_record(
     *,
     run_code: bool = True,
     container_runtime: str | None = None,
+    rollout_policy: str = "oracle",
 ) -> tuple[float | None, JsonDict]:
     """Score a row and emit per-verifier telemetry alongside the diagnostic dict.
 
@@ -411,6 +448,7 @@ def score_record(
             record,
             timeout_s=timeout_s,
             container_runtime=container_runtime,
+            rollout_policy=rollout_policy,
         )
         diagnostics = dict(raw)
         diagnostics.setdefault("timeout", diagnostics.get("error") == "timeout")
@@ -469,6 +507,7 @@ def score_rows(
     best_k: int,
     run_code: bool,
     container_runtime: str | None = None,
+    rollout_policy: str = "oracle",
 ) -> list[JsonDict]:
     """Score each row once and return raw per-row results.
 
@@ -491,6 +530,7 @@ def score_rows(
                 record,
                 run_code=run_code,
                 container_runtime=container_runtime,
+                rollout_policy=rollout_policy,
             )
             diagnostics.append(detail)
             if score is None:
@@ -653,6 +693,7 @@ def evaluate_policy(
     best_k: int,
     run_code: bool,
     container_runtime: str | None = None,
+    rollout_policy: str = "oracle",
 ) -> JsonDict:
     """Score and aggregate in one pass. Kept for callers that don't need
     the per-row breakdown (existing tests, direct CLI users).
@@ -663,6 +704,7 @@ def evaluate_policy(
         best_k=best_k,
         run_code=run_code,
         container_runtime=container_runtime,
+        rollout_policy=rollout_policy,
     )
     return aggregate_scored_rows(scored, policy=policy, best_k=best_k)
 
@@ -778,6 +820,7 @@ def summarize_baselines(
     run_code: bool,
     env_specs: Mapping[str, Mapping[str, Any]] | None = None,
     container_runtime: str | None = None,
+    rollout_policy: str = "oracle",
 ) -> JsonDict:
     summary: JsonDict = {"best_k": best_k, "policies": list(policies), "environments": {}}
     for env_id, splits in rows_by_env.items():
@@ -795,6 +838,7 @@ def summarize_baselines(
                     best_k=best_k,
                     run_code=run_code,
                     container_runtime=container_runtime,
+                    rollout_policy=rollout_policy,
                 )
                 scored_cache[(split, policy)] = scored
                 env_summary["splits"][split][policy] = aggregate_scored_rows(
@@ -878,6 +922,7 @@ def build_report(args: argparse.Namespace) -> JsonDict:
         run_code=not args.skip_code_execution,
         env_specs=env_specs,
         container_runtime=args.container_runtime,
+        rollout_policy=args.rollout_policy,
     )
     report = {
         "schema_version": 1,
@@ -887,6 +932,7 @@ def build_report(args: argparse.Namespace) -> JsonDict:
         "environment_registry": str(args.environment_registry),
         "code_execution": not args.skip_code_execution,
         "container_runtime": args.container_runtime,
+        "rollout_policy": args.rollout_policy,
         "requested_rows": requested_rows or {},
         "health": health,
         "baselines": baselines,
@@ -1032,6 +1078,19 @@ def build_parser() -> argparse.ArgumentParser:
             "Image lookup goes through sandbox_image_registry.yaml; envs "
             "without a registered image fall back to in-process with a "
             "`container_fallback=true` flag in diagnostics."
+        ),
+    )
+    parser.add_argument(
+        "--rollout-policy",
+        choices=["oracle", "adversarial"],
+        default="oracle",
+        help=(
+            "Whose candidates the verifier is scoring (task021 Session 6 "
+            "guard rail). Default `oracle` matches M0 health-baseline "
+            "behavior (candidate=expected gold). `adversarial` is for "
+            "future M1+ RLVR rollouts; combined with `--container-runtime "
+            "None` it raises immediately rather than running untrusted "
+            "code on the host."
         ),
     )
     parser.add_argument("--overwrite", action="store_true")

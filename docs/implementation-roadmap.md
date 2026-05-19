@@ -234,6 +234,20 @@ Sliced into four Sessions; tracker lives at
 `workspace/tasks/task021_m1_infra_minimum/README.md`:
 
 **task021_m1_infra_minimum** —
+- ✓ Session 6: rollout-policy guard rail. New
+  `ROLLOUT_POLICY_ORACLE` / `ROLLOUT_POLICY_ADVERSARIAL` constants +
+  `recommended_container_runtime(rollout_policy) -> str | None`
+  helper in `runtime_shim.py`. `run_python_unit_tests` gains a
+  `rollout_policy: str = "oracle"` kwarg threaded through
+  `score_record` → `score_rows` → `evaluate_policy` →
+  `summarize_baselines` → CLI `--rollout-policy {oracle,adversarial}`
+  (default oracle). When `rollout_policy=adversarial` AND
+  `container_runtime is None`, the verifier raises ``RuntimeError``
+  immediately rather than silently running untrusted candidate code
+  on the host. Replaces the original "flip the default to docker"
+  plan because there is no in-repo RLVR rollout caller today — the
+  literal flip had no coherent target. Guard rail covers any future
+  M1+ rollout that forgets the container runtime.
 - ✓ Session 5: ContainerSandbox runtime shim wiring the Session 3
   images into the M0 verifier path. New
   `sandbox_containers/runtime_shim.py` ships `ContainerSandbox`
