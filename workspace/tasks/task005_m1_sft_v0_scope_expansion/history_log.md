@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -93,3 +93,22 @@
   - checkpoint 成功保存到 `/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/m1_train_qwen4b_smoke/checkpoints/iter_0000001`。
   - validation 完成 32 samples：`lm loss=1.214117E+01`，`PPL=1.874315E+05`。
 - 本地目标测试最终通过：`PYTHONPATH=src pytest -q tests/data_prep/test_chat_template_super3.py tests/recipes/super3` 为 `183 passed, 3 skipped`。
+
+## Session 6 - 2026-05-19 - intern_nemontron_code_reading
+
+- 按“合并 pr 并用 qwen 模型跑一遍完整训练，汇报训练前后 eval metrics 的变化”执行 PR #23 合并前最终验证。
+- 复用 Session 5 的真实 `agentic_v0` packed artifact：`/mnt/3fs/data/lei.song/nemotron/task005_session5_flow_20260518T171138Z_fixed/packed_agentic_v0_super3/splits`。
+  - split 读回：`train_rows=9`、`valid_rows=1`、`test_rows=1`，对应本轮完整训练按当前 train split 跑 `train_iters=9`。
+  - tokenizer/model：`/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`。
+  - pretrained checkpoint：`/mnt/3fs/data/lei.song/nemotron/checkpoints/qwen3-4b-instruct-2507-megatron-bridge-20260517a`。
+- 基线 eval 使用 Qwen3 4B pretrained Megatron checkpoint，`train.skip_train=true`、`eval_iters=32`，因当前 Bridge scheduler 要求 `lr_warmup_steps < lr_decay_steps`，最终覆盖 `train.train_iters=1 scheduler.lr_decay_iters=1 scheduler.lr_warmup_iters=0` 后通过。
+  - before metrics：`lm_loss=0.9553678`、`PPL=2.599627`。
+  - log：`/mnt/3fs/data/lei.song/nemotron/task005_session6_qwen_full_20260519T001221Z/logs/eval_before_pretrained_qwen4b_final.log`。
+- 完整训练使用同一数据与 checkpoint，`global_batch_size=1`、`micro_batch_size=1`、`train_iters=9`、`scheduler.lr_decay_iters=9`、`scheduler.lr_warmup_iters=0`，在单卡 H200 上完成 1 个当前训练 split epoch。
+  - 训练结束保存 checkpoint：`/mnt/3fs/data/lei.song/nemotron/task005_session6_qwen_full_20260519T001221Z/checkpoints/iter_0000009`。
+  - 训练结束 eval：`lm_loss=0.9942796`、`PPL=2.702776`。
+  - log：`/mnt/3fs/data/lei.song/nemotron/task005_session6_qwen_full_20260519T001221Z/logs/train_qwen4b_full_1epoch.log`。
+- 从保存后的 checkpoint 重新加载并执行 `skip_train=true eval_iters=32`，复载指标与训练结束 eval 一致：`lm_loss=0.9942796`、`PPL=2.702776`。
+  - log：`/mnt/3fs/data/lei.song/nemotron/task005_session6_qwen_full_20260519T001221Z/logs/eval_after_trained_qwen4b_checkpoint.log`。
+- 本轮训练前后 validation 指标变化：loss `+0.0389118`（约 `+4.07%`），PPL `+0.103149`（约 `+3.97%`）。当前 9-row 微型 SFT split 不作为质量提升结论，只证明 Qwen checkpoint、packed data、training loop、save/load/eval 链路闭环可运行。
+- PR #23 已按 playbook 更新状态记录、推送，并合并至 `main`。

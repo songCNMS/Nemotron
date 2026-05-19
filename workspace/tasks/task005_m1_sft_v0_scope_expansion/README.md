@@ -1,6 +1,6 @@
 # task005_m1_sft_v0_scope_expansion
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## 背景
 
@@ -92,18 +92,25 @@ M0 health gate 已稳定，task003 / task004 把 M1 现有 4 个 env 的 correct
 
 ## 验收标准
 
-- [ ] `data_registry.yaml` / `environment_registry.yaml` 新增 4 个环境，schema 与现有一致，每条带 `hf_revision` / `license` / `contamination`。
-- [ ] `prepare_m0_assets.py` 4 个 converter，对每个 converter 至少 1 个单元测试覆盖核心字段。
-- [ ] `prepare_m1_agentic_sft.py` 对新环境的 supervision 通过 chat template smoke (`agentic_v0.yaml` data prep + 至少 1 个 packed parquet round-trip 单测) —— 避免 task003 修过的 tool_call_id 回归。
-- [ ] `run_m0_health_baseline.py` 把新 verifier 注册到 `score_record`，oracle baseline 在 `--skip-code-execution` 之外都能 pass。
-- [ ] `tests/recipes/super3/test_m0_*.py` / `test_m1_agentic_sft.py` 全绿；新增至少 8 个 case（每环境 prep + SFT supervision 各 1）。
-- [ ] `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §8 中 v0 的 6 项覆盖面，在 `README.md`（M0 + M1）中有对应表格说明。
-- [ ] 末尾的 SFT 数据 blend 在 `prepare_m1_agentic_sft` manifest.counts 中按环境分桶展示。
+- [x] `data_registry.yaml` / `environment_registry.yaml` 新增 4 个环境，schema 与现有一致，每条带 `hf_revision` / `license` / `contamination`。
+- [x] `prepare_m0_assets.py` 4 个 converter，对每个 converter 至少 1 个单元测试覆盖核心字段。
+- [x] `prepare_m1_agentic_sft.py` 对新环境的 supervision 通过 chat template smoke (`agentic_v0.yaml` data prep + 至少 1 个 packed parquet round-trip 单测) —— 避免 task003 修过的 tool_call_id 回归。
+- [x] `run_m0_health_baseline.py` 把新 verifier 注册到 `score_record`，oracle baseline 在 `--skip-code-execution` 之外都能 pass。
+- [x] `tests/recipes/super3/test_m0_*.py` / `test_m1_agentic_sft.py` 全绿；新增至少 8 个 case（每环境 prep + SFT supervision 各 1）。
+- [x] `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md` §8 中 v0 的 6 项覆盖面，在 `README.md`（M0 + M1）中有对应表格说明。
+- [x] 末尾的 SFT 数据 blend 在 `prepare_m1_agentic_sft` manifest.counts 中按环境分桶展示。
 
 ## Session 2 round-trip 进展
 
 - PR #19 merge 后，新增 CPU-friendly `run_m1_sft_roundtrip_smoke.py`，在没有 `cosmos_xenna` / `transformers` 的工作区也能先检查 M1 JSONL → Nano3 chat render → assistant loss mask → packed parquet → read-back schema。
 - repair-negative 数据已改成单个 user turn，并在 prompt 中转义无效 artifact 的 XML 标签，避免 data-prep validator 把负例误判成裸 `<tool_call>` 样本。
+
+## Session 6 final verification
+
+- PR #23 合并前已在远端 `NemTron` 使用项目规则指定的 Qwen3-4B-Instruct-2507 model/tokenizer 和 Megatron checkpoint 跑完整当前 M1 train split：`train_rows=9`、`train_iters=9`、`global_batch_size=1`。
+- eval before：`lm_loss=0.9553678`、`PPL=2.599627`。
+- eval after：`lm_loss=0.9942796`、`PPL=2.702776`，并从保存 checkpoint 复载得到一致结果。
+- 训练 artifact 根目录：`/mnt/3fs/data/lei.song/nemotron/task005_session6_qwen_full_20260519T001221Z`。
 
 ## 参考文件
 

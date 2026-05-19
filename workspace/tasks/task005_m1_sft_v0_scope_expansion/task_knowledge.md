@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## 编写规则
 
@@ -83,3 +83,11 @@ HF dataset revision pin 会失效：Session 5 验证时 `dgslibisey/MuSiQue@cf7a
 ### NemTron 远端训练环境缺口
 
 `NemTron` 系统 Python 有 `torch 2.9.1+cu129`、Megatron-Bridge、Transformers；缺 `megatron.energon`、`nvidia_resiliency_ext`、`hydra-core` 时可以在 `--system-site-packages` venv 里补。当前节点无 `nvcc`，且 `mamba-ssm` / `causal-conv1d` pip source package 会尝试从 GitHub 拉匹配 wheel；GitHub 超时后无法本地编译。因此 Super/NemotronH tiny smoke 会在 Mamba layer instantiation 阶段失败。若只是验证 M1 packed data 到 training loop，可用 Qwen3 4B local SFT 入口绕过 Mamba 依赖。
+
+### Qwen eval-only scheduler 约束
+
+当前 Megatron-Bridge 即使 `train.skip_train=true` 也会构造 optimizer/scheduler。做纯 eval 时不能把 `train.train_iters=0`；最小可用覆盖是 `train.train_iters=1 scheduler.lr_decay_iters=1 scheduler.lr_warmup_iters=0`，否则会触发 `lr_decay_steps > 0` 或 `lr_warmup_steps < lr_decay_steps` 断言。
+
+### 短步数 Qwen SFT 验证口径
+
+Session 6 使用 Qwen3-4B-Instruct-2507 pretrained Megatron checkpoint 对 9-row M1 train split 跑完整 1 epoch 时，`logger.log_interval=10` 会让 9-step 训练没有逐步 loss 行；应以训练结束 validation 和 checkpoint reload eval 作为验收指标。9-row 微型 split 只用于链路闭环验证，不用于判断训练质量改善。
