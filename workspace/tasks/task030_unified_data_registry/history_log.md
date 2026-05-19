@@ -266,3 +266,15 @@ pyarrow collect-error pre-existing。
 - Session 3 ☐ — M1 eval basket registry (block on task019/020)
 
 Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5 ✓。
+
+## Session 8 - 2026-05-19 - intern_nemontron_review_cc
+
+Session 5 PR #63 已 squash-merge 为 `028f377` 进 main —
+`data_registries/license_audit.py` + `--license-cascade` CLI flag + 27 个
+pytest case + docs §6 Q1 cross-link 都进了 main。intern status 回 Idle
+(Session 50)。
+
+task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
+task019/020) 未启动。下一个候选: task058 follow-ups 剩下两条 (revision-
+pin lint + contamination_against 校验) / task019-020 (M1 eval basket，
+block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
