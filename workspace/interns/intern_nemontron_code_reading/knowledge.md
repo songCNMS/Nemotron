@@ -33,3 +33,7 @@ When a task history log appends a later session, advance the `METADATA:SESSION` 
 ### Intern Status Metadata
 
 Idle intern status metadata should keep an explicit empty task field: `METADATA:STATUS=Idle,TASK=`.
+
+### Task File Session Metadata
+
+Every task `history_log.md` and `task_knowledge.md` should carry a `METADATA:SESSION=<latest>` header near the top, matching the latest session recorded in that file.

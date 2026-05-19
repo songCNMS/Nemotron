@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -18,3 +18,10 @@
   - `PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_promotion_gate.py tests/recipes/super3/test_gap_analysis.py` → `52 passed`.
   - `git diff --check` → pass.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/90.
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- User requested the next step after PR #90 was opened.
+- Confirmed PR #90 was `OPEN / CLEAN`, non-draft, and had no failing checks.
+- Updated task064 closeout state before merge: intern status -> Idle, task README -> Completed, task knowledge metadata -> Session 2.
+- Archived the durable task file session metadata rule into the personal knowledge base.
