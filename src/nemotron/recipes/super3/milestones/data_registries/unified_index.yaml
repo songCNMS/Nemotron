@@ -118,3 +118,19 @@ registries:
     consumed_by:
       - image_resolver.py (resolve_image_for_env)
       - build_sandbox_containers.sh (image build loop)
+
+  # M1 eval — promotion gate basket (task019 Session 1)
+  - id: m1_eval_basket
+    kind: eval_basket_registry
+    path: ../m1_eval_basket/m1_eval_basket_registry.yaml
+    summary: |
+      8 benchmark rows for the Super3 M1 promotion gate (MMLU-Pro,
+      AIME25, GPQA, LiveCodeBench, IFBench, MultiChallenge, RULER 256K,
+      TauBench airline). Each row carries the NeMo Evaluator adapter,
+      category, license, and gate_metric. task019 Session 1 source of
+      truth; Session 2 wires `nemotron super3 eval -c m1_basket`
+      against an SFT checkpoint + emits regression_report.md.
+    produced_by: (authored)
+    consumed_by:
+      - regression_report.py (gate_metric lookup for diff)
+      - stage3_eval/config/m1_basket.yaml (NeMo Evaluator selector)

@@ -44,8 +44,8 @@ yaml = pytest.importorskip("yaml")
 
 def test_known_kinds_covers_today_registry_families() -> None:
     """The schema layer must enumerate every registry family the
-    pipeline ships with — adding a new kind (e.g., task019 eval basket)
-    is a one-validator + one-index-row change."""
+    pipeline ships with — adding a new kind is a one-validator +
+    one-index-row change."""
     assert KNOWN_KINDS == frozenset(
         {
             "m0_data_registry",
@@ -54,6 +54,7 @@ def test_known_kinds_covers_today_registry_families() -> None:
             "sif_registry",
             "pref_data_registry",
             "sandbox_image_registry",  # task021 Session 3
+            "eval_basket_registry",    # task019 Session 1
         }
     )
 

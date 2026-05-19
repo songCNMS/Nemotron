@@ -42,7 +42,7 @@ boundaries 保留，每个 registry 留在自己的目录；新加一个
 |---|---|---|---|
 | 1 | Schema 层 + unified index + 三个 cross-registry inventory walk | yes | ✓ Done (this PR) |
 | 2 | Schema enforcement at write time (`scripts/validate_data_registries.py` + `.pre-commit-config.yaml` local hook) | yes | ✓ Done (this PR) |
-| 3 | M1 eval basket registry (kind + index row + schema validator) | yes (sandbox) | Todo (block on task019 / task020 给 eval basket 真定义) |
+| 3 | M1 eval basket registry (kind + index row + schema validator) | yes (sandbox) | ✓ Done — unblocked + landed by task019 Session 1 (eval_basket_registry kind added, m1_eval_basket index entry, all schema integration in one PR) |
 | 4 | Bridge / M0 module-local loader 接进 schema 层 merge 两层校验逻辑 — *单 source of truth* for row shape, fail-fast / collect-all 语义保留 | yes | ✓ Done (PR #61) |
 | 5 | Share-alike license cascade audit (`data_registries/license_audit.py` + `--license-cascade` CLI flag) — task058 license/contamination follow-up; converts §6 Q1 share-alike prose policy into machine-checkable | yes | ✓ Done (PR #63) |
 | 6 | HuggingFace revision-pin lint (`data_registries/revision_audit.py` + `--check-revision-pins` CLI flag + pre-commit hook) — task058 follow-up; m0_data_registry unpinned → blocker exit 1; pref_data_registry candidates → informational exit 0 | yes | ✓ Done (PR #65) |

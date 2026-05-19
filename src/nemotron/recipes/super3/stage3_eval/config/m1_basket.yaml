@@ -1,0 +1,46 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# M1 eval basket config (roadmap §1.7 task019 Session 1).
+#
+# Invokes the NeMo Evaluator with the 8 benchmarks declared in
+# ``src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_basket_registry.yaml``.
+# Pairs with ``config/default.yaml`` — defaults that aren't overridden
+# below come from there. The `defaults: default.yaml` reference mirrors
+# the rlvr2/rlvr3 / swe pattern.
+#
+# Acceptance (task019):
+#   nemotron super3 eval -c m1_basket --run YOUR-CLUSTER
+#   → NeMo Evaluator emits per-task JSONs
+#   → regression_report.py compares against prior checkpoint
+#   → regression_report.md written to artifact dir
+#
+# Session 2 (cluster verify) wires the post-eval regression report
+# generation into the CLI; today this config just selects the eight
+# benchmark adapters.
+
+defaults: default.yaml
+
+# Eight benchmarks per plan §5.7 v0 names. Adapter names match the
+# `adapter` column in m1_eval_basket_registry.yaml so the schema-layer
+# audit stays consistent.
+tasks:
+  - adlr_mmlu_pro
+  - adlr_aime25
+  - adlr_gpqa
+  - adlr_livecodebench
+  - adlr_ifbench
+  - adlr_multichallenge
+  - adlr_ruler_256k
+  - adlr_taubench_airline
+
+# Promotion gate notes (informational; gate is enforced post-eval by
+# regression_report.py + Session 2 promotion script):
+#   - Per-benchmark gate_metric comes from m1_eval_basket_registry.yaml
+#   - Baseline checkpoint resolution: ``run.baseline`` (next session)
+#   - Tolerance: regression_report.DEFAULT_REGRESSION_TOLERANCE (1e-4)

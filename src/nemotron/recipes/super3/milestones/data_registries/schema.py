@@ -119,6 +119,17 @@ _KIND_SCHEMAS: dict[str, dict[str, Any]] = {
         ),
         "expected_top_level": ("description",),
     },
+    "eval_basket_registry": {
+        "rows_key": "benchmarks",
+        "required_row_fields": (
+            "benchmark_id",
+            "adapter",
+            "category",
+            "license",
+            "gate_metric",
+        ),
+        "expected_top_level": ("description",),
+    },
 }
 
 KNOWN_KINDS = frozenset(_KIND_SCHEMAS.keys())

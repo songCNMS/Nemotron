@@ -1,0 +1,101 @@
+schema_version: 1
+milestone: M1
+description: |
+  M1 eval basket — minimum-viable benchmark set for Super3 parity gate
+  (roadmap §1.7 / task019). Eight benchmarks span reasoning + code +
+  instruction + long-context + tool-use, matching plan §5.7 v0 names.
+
+  Each row pairs a benchmark with the NeMo Evaluator adapter that runs
+  it, the metric the promotion gate cares about, and the license
+  posture so task030 Session 5's license cascade audit can absorb the
+  registry. Adding the M2 / M3 baskets is one row append per task020 /
+  task039 / task055.
+
+  Bridge to task030: this YAML is the missing piece task030 Session 3
+  was blocked on. ``data_registries/schema.py`` declares an
+  ``eval_basket_registry`` kind for the rows below, and
+  ``unified_index.yaml`` registers this file.
+
+benchmarks:
+  - benchmark_id: mmlu_pro
+    adapter: nemo_evaluator.mmlu_pro
+    category: reasoning_mc
+    license: mit
+    gate_metric: accuracy
+    notes: |
+      57-subject multi-choice with reasoning emphasis. Promotion gate
+      target is "Super3 parity vs baseline checkpoint" — exact target
+      number lands when the baseline RLVR checkpoint exists (task014
+      Session 2+).
+
+  - benchmark_id: aime25
+    adapter: nemo_evaluator.aime25
+    category: reasoning_math_competition
+    license: cc-by-sa-4.0
+    gate_metric: pass_at_1
+    notes: |
+      AIME 2025. CC-BY-SA-4.0 ⚠ — the license cascade audit
+      (task058 Session 2) tracks this. Eval-time use is not the same
+      as training-time inheritance, but legal review confirmed eval
+      reports against CC-BY-SA sources don't cascade share-alike
+      onto checkpoints.
+
+  - benchmark_id: gpqa
+    adapter: nemo_evaluator.gpqa
+    category: reasoning_graduate_science
+    license: cc-by-4.0
+    gate_metric: accuracy
+    notes: |
+      Graduate-level science multi-choice. Diamond split is the
+      promotion gate; main + extended splits are informational.
+
+  - benchmark_id: livecodebench
+    adapter: nemo_evaluator.livecodebench
+    category: code_competitive_programming
+    license: cc-by-4.0
+    gate_metric: pass_at_1
+    notes: |
+      Time-sliced LeetCode-style problems. The decontamination policy
+      (data_registry contamination_against lists) mentions
+      LiveCodeBench explicitly — coding M0 rows must scrub against
+      this benchmark before any RLVR run.
+
+  - benchmark_id: ifbench
+    adapter: nemo_evaluator.ifbench
+    category: instruction_following
+    license: apache-2.0
+    gate_metric: strict_accuracy
+    notes: |
+      Instruction-following with strict adherence checks. Strict
+      metric is the gate; loose accuracy is informational.
+
+  - benchmark_id: multichallenge
+    adapter: nemo_evaluator.multichallenge
+    category: multi_turn_instruction
+    license: cc-by-4.0
+    gate_metric: judge_accuracy
+    notes: |
+      Multi-turn agent / instruction following. Uses a judge model
+      (NeMo-Gym side, ``nl2bash_judge_model`` deployment per
+      ``stage1_rlvr/config/default.yaml``). Acceptance numbers
+      require the judge service to be live.
+
+  - benchmark_id: ruler_256k
+    adapter: nemo_evaluator.ruler
+    category: long_context
+    license: apache-2.0
+    gate_metric: needle_accuracy
+    notes: |
+      Long-context evaluation at 256K. Adapter passes ``--max-len 262144``;
+      requires checkpoint to support 256K-token sequences (super3 SFT
+      packed_sequence_size already 131K — gate may need extended).
+
+  - benchmark_id: taubench_airline
+    adapter: nemo_evaluator.taubench_airline
+    category: tool_use_agentic
+    license: cc-by-4.0
+    gate_metric: success_rate
+    notes: |
+      Airline-booking agentic tool-use benchmark. Single subset of
+      TauBench; full TauBench set (retail + auto + …) lands via
+      task020.

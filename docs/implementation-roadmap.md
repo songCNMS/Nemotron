@@ -213,10 +213,26 @@ benchmark families spanning ~20 benchmarks. Currently no benchmark adapter is
 wired to NeMo Evaluator.
 
 **task019_m1_eval_basket_v0** — minimum-viable for Super3 parity:
-- NeMo Evaluator launcher wiring.
-- Adapters for MMLU-Pro, AIME25, GPQA, LiveCodeBench, IFBench,
-  MultiChallenge, RULER 256K, TauBench airline.
-- W&B regression report (gain/loss per task vs previous checkpoint).
+- ✓ Session 1: 8-benchmark registry + new `eval_basket_registry`
+  schema kind + `regression_report.py` generator + NeMo Evaluator
+  config skeleton. New module
+  `src/nemotron/recipes/super3/milestones/m1_eval_basket/` ships
+  `m1_eval_basket_registry.yaml` (the 8 plan §5.7 v0 rows — MMLU-Pro,
+  AIME25, GPQA, LiveCodeBench, IFBench, MultiChallenge, RULER 256K,
+  TauBench airline — with adapter + category + license + gate_metric)
+  and `regression_report.py` (pure-stdlib `load_eval_results` /
+  `diff_eval_runs` / `format_regression_report` with 5 status values
+  improved/regressed/unchanged/new/dropped + tolerance edge case).
+  `stage3_eval/config/m1_basket.yaml` selects the 8 adapter task
+  names, inheriting executor/deployment from `default.yaml`. The new
+  `eval_basket_registry` kind is registered in
+  `data_registries/schema.py` and `unified_index.yaml`, which
+  simultaneously closes task030 Session 3. 22 new pytest cases.
+- ☐ Sessions 2-4: cluster verify (`nemotron super3 eval -c m1_basket`
+  against a real SFT checkpoint), W&B regression report publish, per-
+  benchmark adapter shims (each may need its own NeMo Evaluator config
+  file), and the promotion gate logic that reads `regression_report.md`
+  deltas to decide promote / hold.
 - **Acceptance:** `nemotron super3 eval -c m1_basket` runs against an SFT
   checkpoint, produces `regression_report.md`.
 
@@ -492,19 +508,24 @@ Then in parallel:
    pure-torch helper + `sample_level_step` adapter; defaults to `gpt_step`
    so existing configs unchanged); Session 2 (two-stage driver +
    stage-a/stage-b YAMLs + cluster verify) still to go.
-10. **task019** + **task020** — M1 eval basket (can start once task014 has a
-    real checkpoint).
-11. **task030** — unified data registry. Sessions 1+2+4+5+6+7 landed
-    (schema layer + unified index over 9 existing registries + inventory
-    walks + `scripts/validate_data_registries.py` CLI with
+10. **task019** + **task020** — M1 eval basket. task019 Session 1 landed
+    (8-benchmark registry per plan §5.7 v0 + new `eval_basket_registry`
+    schema kind unblocking task030 Session 3 + `regression_report.py`
+    generator + `stage3_eval/config/m1_basket.yaml` NeMo Evaluator
+    config). Sessions 2-4 (cluster verify + W&B publish + per-benchmark
+    adapter configs + promotion gate logic) still to go. task020 (full
+    basket extension) waiting on the M1 v0 numbers.
+11. **task030** — unified data registry. Sessions 1+2+3+4+5+6+7 landed
+    (schema layer + unified index over 10 existing registries +
+    inventory walks + `scripts/validate_data_registries.py` CLI with
     `--license-cascade` + `--check-revision-pins` + `--check-contamination`
     + pre-commit local hooks for all three audits + schema-shape
     validation + module-local loader merge so row shape has a single
     source of truth with `fail_fast=True`/`collect-all` modes preserving
     the runtime-vs-audit split + the full task058 license/contamination
     audit trio: share-alike cascade detection, HF revision-pin lint, and
-    contamination_against semantic check). Session 3 (M1 eval basket
-    registry; blocked on task019/020) still to go.
+    contamination_against semantic check + M1 eval basket registry
+    kind/index unblocked by task019 Session 1). task030 fully landed.
 
 After all M1 tasks land, M2 fanout (task022-038) becomes possible. M3 only
 makes sense after M2 ships a working 122B-parity checkpoint.

@@ -1,33 +1,29 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task019_m1_eval_basket_v0 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 54 |
+| Status | Working |
+| Current Task | task019_m1_eval_basket_v0 |
+| PR | pending push |
+| Session | 55 |
 
-最近：task030 Session 7 (PR #68 `653df7e`) 已 squash-merge 进 main —
-`contamination_against` semantic audit。完成 task058 license/contamination
-follow-up trio (Session 5 share-alike cascade / Session 6 HF revision-pin
-lint / Session 7 contamination semantic check 三件套到齐)。
+正在做：task019 Session 1 — M1 eval basket scaffold。新模块
+`m1_eval_basket/` 含 8-benchmark `m1_eval_basket_registry.yaml` (per
+plan §5.7 v0) + `regression_report.py` (load_eval_results / diff_eval_runs
+5-status / format_regression_report) + `stage3_eval/config/m1_basket.yaml`
+NeMo Evaluator config。新 `eval_basket_registry` schema kind 注册进
+`data_registries/schema.py` + `unified_index.yaml`，**task030 Session 3
+auto-unblock & complete** (之前 6 session closeout 一直挂着的 block 解了)。
+22 个新 pytest case；sandbox 测试基线 335 → 357 passed + 7 skipped。
 
-新模块 `data_registries/contamination_audit.py` (`SENTINEL_PHRASES` +
-`is_placeholder_entry` predicate + `find_weak_contamination` 双 bucket +
-`format_contamination_report`) + CLI `--check-contamination` + pre-commit
-`check-contamination` hook。Live audit 今天 clean。39 个新 pytest case，
-sandbox 测试基线 293 → 335 passed + 7 skipped (含并发 task059 / intern
-code_reading 测试)。
+task019 整 task 仍 InProgress：Sessions 2-4 (cluster verify + W&B publish +
+per-benchmark adapter + promotion gate logic) 待开 — 大都需 cluster /
+真 SFT checkpoint。
 
-task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
-task019/020) 待开。
-
+**里程碑**: task030 整 task 这条线全部 Sessions (1+2+3+4+5+6+7) 落地。
 下一个候选 (sandbox-runnable):
-- **task019 / task020** — M1 eval basket 设计 (本身 sandbox-runnable；
-  acceptance 要真 RLVR checkpoint 但 scaffold 可以先落)
-- **task059** — 已 merge 进 main 的 PR #51 postmerge review (新 task scaffold)；
-  可以接手看 review 还剩什么
-- 之前 task 的 Session 2+ — 大都需 cluster / Docker / nvcr container
+- task020 — M1 eval basket full extension (HMMT / HLE / SciCode 等等)
+- 之前 task 的 Session 2+ — 大都需 cluster
