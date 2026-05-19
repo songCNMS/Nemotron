@@ -1,6 +1,6 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
