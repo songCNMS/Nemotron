@@ -3,7 +3,7 @@
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #30 / 09c9089 on 2026-05-18 -->
 <!-- SESSION 2 LANDED: PR #32 / 62b7774 on 2026-05-18 -->
-<!-- SESSION 3 LANDED: PR pending on 2026-05-18 (sandbox container scaffolds; image build needs Docker daemon) -->
+<!-- SESSION 3 LANDED: PR #53 / d6e5b25 on 2026-05-18 (sandbox container scaffolds; image build needs Docker daemon) -->
 
 ## 背景
 
