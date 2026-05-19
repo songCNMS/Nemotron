@@ -375,13 +375,23 @@ def test_hf_dataset_inventory_enumerates_data_registries() -> None:
 def test_hf_dataset_inventory_carries_revision_pin_status() -> None:
     """M0 production datasets are pinned to a hf_revision; pref data
     candidates carry hf_revision_pin_required since the actual revision
-    isn't pinned until Session 2 of task018 picks one and ingests it."""
+    isn't pinned until Session 2 of task018 picks one and ingests it.
+
+    Post-task018-Session-2 ``nvidia/HelpSteer2`` appears in *two*
+    registries — the m0_data row (revision pinned per cluster pass) and
+    the pref_data candidate row (still carries the
+    ``hf_revision_pin_required: true`` flag). The test asserts the
+    pref-candidate flag holds on whichever entry carries it."""
     inventory = hf_dataset_inventory()
     gsm8k_entry = inventory["openai/gsm8k"][0]
     assert gsm8k_entry["hf_revision"], "gsm8k should be revision-pinned"
 
-    helpsteer = inventory["nvidia/HelpSteer2"][0]
-    assert helpsteer.get("hf_revision_pin_required") is True
+    helpsteer_pref_entries = [
+        e for e in inventory["nvidia/HelpSteer2"]
+        if e["kind"] == "pref_data_registry"
+    ]
+    assert helpsteer_pref_entries, "pref_data_registry entry for HelpSteer2 missing"
+    assert helpsteer_pref_entries[0].get("hf_revision_pin_required") is True
 
 
 def test_m0_to_downstream_cross_walk_shows_active_paths() -> None:

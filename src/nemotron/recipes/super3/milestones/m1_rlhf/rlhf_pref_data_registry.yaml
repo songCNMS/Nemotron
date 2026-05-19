@@ -27,9 +27,17 @@ datasets:
     license: cc-by-4.0
     pref_pair_field: derived (helpfulness + coherence aggregate)
     contamination: decontaminate against MT-Bench, HelpSteer1 eval, internal RLHF holdouts
+    # task018 Session 2 — M0 converter `transform_helpsteer2_pref` landed
+    # alongside data_registry row `m0_helpsteer2_pref`. The rlhf_env_registry
+    # `genrm_compare` row stays `blocked_external` until task018 Session 3
+    # deploys the GenRM judge service; both blockers must clear before
+    # the row flips to `active`.
+    m0_landed: true
+    m0_data_row: m0_helpsteer2_pref
     notes: |
       NVIDIA-authored. Used by Nano-3 / Super-3 prior runs. Default
-      candidate for the first RLHF training run.
+      candidate for the first RLHF training run. task018 Session 2 landed
+      the M0 converter side; cluster Session 3 lands the judge service.
 
   - id: ultrafeedback
     hf_dataset: openbmb/UltraFeedback

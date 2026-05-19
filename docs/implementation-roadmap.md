@@ -219,10 +219,21 @@ exists. Missing the judge service + preference data:
   reads `default.yaml` and asserts plan §5.6 KL trio
   (`reference_policy_kl_penalty == 1e-4`, `kl_type == "k3"`,
   `use_kl_in_reward == false`) — regression gate before any cluster run.
-- ☐ Session 2: M0 RLHF data converter for the picked preference source
-  (default candidate: HelpSteer-2). Lands an M0 env + transformer
-  producing `chosen/rejected` pairs + tool-call validity pairing
-  harness. Flips the relevant `rlhf_env_registry.yaml` row to `active`.
+- ⚠ Session 2 (sandbox part landed; tool-call pairing harness + HF
+  download deferred): new M0 env `helpsteer2_pref_compare` (verifier
+  `genrm_compare`) + new M0 data row `m0_helpsteer2_pref` pointing at
+  `nvidia/HelpSteer2` (cc-by-4.0, contamination_against [MT-Bench,
+  HelpSteer1]) + new converter `transform_helpsteer2_pref` handling
+  both HelpSteer-2 flavors (explicit `preference_label` and aggregate
+  `helpfulness`+`coherence`+`correctness` derivation, with tie
+  fallback and explicit-label precedence). RLHF pref-data
+  registry's helpsteer2 row marked `m0_landed: true`. The env
+  registry's `genrm_compare` row deliberately stays `blocked_external`
+  — the GenRM judge service (Session 3 cluster ops) is the other
+  blocker; row flips to `active` only when *both* blockers clear. 20
+  new pytests; sandbox baseline 474 → 494 passed. Tool-call validity
+  pairing harness deferred to a follow-up (cross-product strategy
+  needs design to avoid combinatorial blow-up).
 - ☐ Session 3: GenRM judge model deployment (cluster ops — separate
   inference service running `nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`
   at router_dp_size=8 / TP=8). Blocked external.
@@ -553,9 +564,13 @@ Critical path to the M1 promotion gate, single-track execution:
    to go.
 8. **task018** — M1 RLHF GenRM service. Session 1 landed (RLHF bridge
    skeleton with two-env registry + preference-data candidate registry
-   + KL invariant pytest reading `default.yaml`); Session 2 (HelpSteer-2
-   M0 converter) / Session 3 (GenRM judge model deployment) / Session 4
-   (end-to-end smoke from SWE2 checkpoint) still to go.
+   + KL invariant pytest reading `default.yaml`). Session 2 sandbox
+   part landed (new M0 env `helpsteer2_pref_compare` + converter
+   `transform_helpsteer2_pref` handling both HelpSteer-2 flavors; RLHF
+   pref-data registry's helpsteer2 row marked `m0_landed: true`; env
+   registry's `genrm_compare` stays `blocked_external` pending Session
+   3 judge service). Session 3 (GenRM judge model deployment) / Session
+   4 (end-to-end smoke from SWE2 checkpoint) still to go.
 
 Then in parallel:
 9. **task013** — M1 two-stage SFT loss (plan §5.1 / REVIEW #9). Session 1

@@ -71,6 +71,7 @@ def test_registries_are_consistent() -> None:
         "terminal",
         "software_engineering",
         "reasoning",
+        "rlhf_preference",  # task018 Session 2 — HelpSteer-2 → genrm_compare
     }
     for dataset in data_registry["datasets"]:
         assert dataset["license"]

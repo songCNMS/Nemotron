@@ -178,6 +178,35 @@ environments:
         - expected_answer
         - extra_env_info.gold_tool_call
 
+  - id: helpsteer2_pref_compare
+    family: rlhf_preference
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: genrm_compare
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: GenRM judge compares the policy's completion vs the candidate identified by preference_label
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 2000
+    telemetry:
+      - reward
+      - preference_label_match
+      - judge_confidence
+      - latency_ms
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.completion_a
+        - extra_env_info.completion_b
+        - extra_env_info.preference_label
+
   - id: swe2_openhands_trace
     family: software_engineering
     stage: M0 data_env_foundation

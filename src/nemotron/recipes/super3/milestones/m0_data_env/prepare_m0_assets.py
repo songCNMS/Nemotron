@@ -79,6 +79,11 @@ SYSTEM_PROMPTS = {
         "until the issue is resolved. Reward is binary: the final patch must "
         "apply cleanly AND the test suite must pass."
     ),
+    "helpsteer2_pref_compare": (
+        "You are a helpful, accurate assistant. Respond to the user's prompt. "
+        "A preference judge will compare your reply against another candidate "
+        "to score helpfulness, coherence, and correctness."
+    ),
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
     "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
@@ -795,6 +800,133 @@ def transform_swe_gym_openhands_trace(
     )
 
 
+# HelpSteer-2 attributes the aggregate label derivation considers.
+# Per HelpSteer-2 paper: helpfulness + coherence dominate preference
+# at scale; correctness can flip the call when the helpfulness gap is
+# small. Verbosity and complexity intentionally NOT used — those should
+# not directly drive preference (downstream RLHF will reward concise
+# over verbose given equal helpfulness, but the *training pair* label
+# should reflect preference on substance not length).
+_HELPSTEER2_AGGREGATE_ATTRS: tuple[str, ...] = (
+    "helpfulness",
+    "coherence",
+    "correctness",
+)
+
+
+def _helpsteer2_aggregate_score(side: str, row: Mapping[str, Any]) -> float | None:
+    """Aggregate per-side rating attributes into one preference score.
+
+    *side* is "a" or "b"; we read ``helpfulness_<side>`` etc. Returns
+    None if every attribute is missing on that side — the caller falls
+    back to the explicit preference_label path.
+    """
+    found_any = False
+    total = 0.0
+    for attr in _HELPSTEER2_AGGREGATE_ATTRS:
+        value = row.get(f"{attr}_{side}")
+        if value is None:
+            continue
+        try:
+            total += float(value)
+        except (TypeError, ValueError):
+            continue
+        found_any = True
+    return total if found_any else None
+
+
+def transform_helpsteer2_pref(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one HelpSteer-2 preference row into the GenRM compare shape.
+
+    HelpSteer-2 ships in two flavors:
+
+    1. **Explicit-pair** rows carry ``response_a`` + ``response_b`` plus a
+       ``preference_label`` ("A" or "B").
+    2. **Attribute-derived** rows carry the same paired responses plus
+       per-side rating attributes (``helpfulness_a``, ``coherence_a``,
+       ``correctness_a``, mirrored ``_b``). Preference label is derived
+       by aggregating those three attributes per side; tie → defaults to
+       "A" (stable ordering; the operator can post-filter ties).
+
+    Output shape per plan §5.6 RLHF acceptance:
+
+    - ``responses_create_params.input``: [system, user(prompt)]
+    - ``extra_env_info.completion_a`` / ``completion_b``: the two
+      candidate completions the policy is being judged against
+    - ``extra_env_info.preference_label``: "A" or "B"
+    - ``expected_answer``: matches ``preference_label`` so existing
+      verifier wiring (which reads ``expected_answer``) just works
+    - ``reward_config.verifier``: ``genrm_compare``
+    """
+    prompt = str(row.get("prompt") or "").strip()
+    if not prompt:
+        raise ValueError("HelpSteer-2 row missing prompt")
+
+    response_a = str(row.get("response_a") or row.get("chosen") or "").strip()
+    response_b = str(row.get("response_b") or row.get("rejected") or "").strip()
+    if not response_a or not response_b:
+        raise ValueError(
+            "HelpSteer-2 row missing one or both responses "
+            "(expected response_a/response_b or chosen/rejected)"
+        )
+
+    explicit_label_raw = row.get("preference_label")
+    if explicit_label_raw is not None:
+        explicit_label = str(explicit_label_raw).strip().upper()
+        if explicit_label not in ("A", "B"):
+            raise ValueError(
+                f"HelpSteer-2 preference_label must be 'A' or 'B', got "
+                f"{explicit_label_raw!r}"
+            )
+        preference_label = explicit_label
+        derivation = "explicit_label"
+    else:
+        score_a = _helpsteer2_aggregate_score("a", row)
+        score_b = _helpsteer2_aggregate_score("b", row)
+        if score_a is None and score_b is None:
+            raise ValueError(
+                "HelpSteer-2 row has neither preference_label nor "
+                "rating attributes (helpfulness/coherence/correctness)"
+            )
+        # Treat one-sided missing data as "the side with data is the
+        # preferred side" — preserves signal rather than dropping rows.
+        if score_a is None:
+            preference_label = "B"
+        elif score_b is None:
+            preference_label = "A"
+        elif score_a > score_b:
+            preference_label = "A"
+        elif score_b > score_a:
+            preference_label = "B"
+        else:
+            # Tie — default to A (stable ordering). Operators can
+            # post-filter tied rows via metadata.
+            preference_label = "A"
+        derivation = "aggregate_score"
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=prompt,
+        expected_answer=preference_label,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": prompt},
+        ],
+        reward_config={
+            "verifier": "genrm_compare",
+            "max_score": 1.0,
+            "match": ["preference_label"],
+        },
+        extra_env_info={
+            "completion_a": response_a,
+            "completion_b": response_b,
+            "preference_label": preference_label,
+            "label_derivation": derivation,
+        },
+    )
+
+
 def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
 
@@ -1347,6 +1479,7 @@ CONVERTERS = {
     "swe_bench_patch": transform_swe_bench_patch,
     "swe_gym_lite_pivot": transform_swe_gym_lite_pivot,
     "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
+    "helpsteer2_pref_pair": transform_helpsteer2_pref,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
