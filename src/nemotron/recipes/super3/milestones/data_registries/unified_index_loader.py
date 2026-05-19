@@ -262,6 +262,7 @@ _ROWS_KEY_BY_KIND = {
     "sif_registry": "sif_sources",
     "pref_data_registry": "datasets",
     "sandbox_image_registry": "images",
+    "eval_basket_registry": "benchmarks",
 }
 
 
@@ -281,6 +282,8 @@ def _row_identity(row: Mapping[str, Any], kind: str) -> str:
         return str(row.get("source", "<no-source>"))
     if kind == "sandbox_image_registry":
         return str(row.get("image_id", "<no-image-id>"))
+    if kind == "eval_basket_registry":
+        return str(row.get("benchmark_id", "<no-benchmark-id>"))
     return "<unknown-kind>"
 
 
