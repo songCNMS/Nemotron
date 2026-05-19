@@ -170,3 +170,52 @@ questions:
 
 Both can be run on the same eval JSON; they share no code today but
 could share a `current_results` extraction helper in the future.
+
+## Gap analysis model (Session 4)
+
+Per roadmap §1.7 task020 "Per-category gap analysis tooling". Built
+as complementary to Session 2 — promotion_gate gives binary go/no-go,
+gap_analysis gives prescriptive ranking of *what to focus on next*.
+
+### Module trio (regression_report / promotion_gate / gap_analysis)
+
+| Module | Question | Output |
+|---|---|---|
+| regression_report | "did this run improve vs prior checkpoint?" | per-benchmark deltas (improved / regressed / unchanged / new / dropped) |
+| promotion_gate | "is this run good enough to promote vs Super3?" | three-tier decision (promote / hold / rollback) + reasons |
+| gap_analysis | "where should the next training run focus?" | ranked category gaps + per-benchmark drill-down |
+
+Same input shape (`current_results` dict + `super3_baseline` dict
++ `registry_rows`) — operator can pipe one eval JSON into all three.
+
+### Sorting policy
+
+- **Categories**: ascending by gap (most negative first), then
+  uncomputable gaps (None) at the end, by category name for stability
+- **Benchmarks within category**: same — ascending by gap, None last
+
+Rationale: operator opens the report wanting to know what to fix; the
+worst-affected items go at the top so attention lands on actionable
+findings first.
+
+### Drill-down policy
+
+Only categories below threshold get a per-benchmark drill-down
+section. A clean run (every category within threshold) gets a clean
+report (no noisy per-benchmark tables for healthy categories). This
+keeps the report signal-dense — the absence of a drill-down section
+*means* the run is clean.
+
+### Missing-benchmark handling
+
+- Per-benchmark: gap = None when either side is missing
+- Per-category mean: average over benchmarks that have data on that
+  side (partial coverage doesn't drag the mean toward zero)
+- count_categories_below_threshold: skips None gaps — no data ≠ behind
+
+### Default threshold
+
+`DEFAULT_GAP_THRESHOLD = 0.02` matches Session 2's
+`DEFAULT_CATEGORY_REGRESSION_THRESHOLD` so "behind" in the gap report
+aligns with "in regression" in the gate report — both flag the same
+categories under default settings.

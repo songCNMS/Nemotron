@@ -2,7 +2,8 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #72 / deec7b7 on 2026-05-19 (11-row full basket extension + m1_full_basket.yaml config) -->
-<!-- SESSION 2 LANDED: PR pending on 2026-05-19 (promotion gate logic — weighted-mean parity + per-category regression + rollback rule) -->
+<!-- SESSION 2 LANDED: PR #74 / 33b51e7 on 2026-05-19 (promotion gate logic — weighted-mean parity + per-category regression + rollback rule) -->
+<!-- SESSION 4 LANDED: PR pending on 2026-05-19 (per-category gap analysis tooling — ranked category gap + per-benchmark drill-down) -->
 
 ## 背景
 
@@ -20,9 +21,9 @@
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | 11-row full basket extension + `stage3_eval/config/m1_full_basket.yaml` 选 19 个 tasks | yes | ✓ Done (PR #72) |
-| 2 | Promotion gate logic — weighted-mean Super3 parity + per-category regression > 1-2 % threshold + rollback rule (safety / SWE / tool / IF) | yes | ✓ Done (this PR) |
+| 2 | Promotion gate logic — weighted-mean Super3 parity + per-category regression > 1-2 % threshold + rollback rule (safety / SWE / tool / IF) | yes | ✓ Done (PR #74) |
 | 3 | CLI wiring `nemotron super3 eval -c m1_full_basket` 真跑 + W&B publish | no — cluster + checkpoint | Todo |
-| 4 | Per-category gap analysis tooling (跟 plan §5.7 weighted parity 对齐) | yes (depends Session 2) | Todo |
+| 4 | Per-category gap analysis tooling (跟 plan §5.7 weighted parity 对齐) | yes (depends Session 2) | ✓ Done (this PR) |
 
 ## Session 1 目标
 
@@ -75,6 +76,47 @@
 - [x] Rollback tolerance 吸收浮点噪声
 - [x] `format_gate_report` markdown output
 - [x] 21 个 pytest case；sandbox 测试基线 371 → 392 passed + 7 skipped
+
+## Session 4 目标
+
+- `m1_eval_basket/gap_analysis.py` 新模块:
+  - `BenchmarkGap` dataclass: benchmark_id / current / super3 / gap
+  - `CategoryGap` dataclass: category / current_mean / super3_mean /
+    gap / benchmark_gaps (sorted per-benchmark)
+  - `analyze_gaps(current, super3, registry_rows)` 返回 worst-first
+    ranking
+  - `count_categories_below_threshold(gaps, *, threshold)` 计数
+    actionable categories
+  - `format_gap_analysis(gaps, *, threshold)` markdown:
+    - Ranked category table (worst-first)
+    - Drill-down section for categories below threshold (per-benchmark
+      contributions, worst-first)
+- 17 个 pytest case in `test_gap_analysis.py`
+
+## Session 4 验收
+
+- [x] 新 `gap_analysis.py` 模块 + 1 const + 2 dataclass + 3 function
+- [x] `analyze_gaps` 排序 worst-first; uncomputable gaps 排末尾
+- [x] Per-benchmark drill-down 排序 worst-first within category
+- [x] Missing benchmarks 不挂掉 analyze；mean 计算排除 missing 一侧
+- [x] `format_gap_analysis` headline / table / drill-down 分段输出
+- [x] Drill-down 仅在有 below-threshold categories 时出现 (clean run
+  报告 clean)
+- [x] 17 个 pytest case；sandbox 测试基线 392 → 409 passed + 7 skipped
+
+## 模块互补关系
+
+- `regression_report.py` — "did this run improve vs prior checkpoint?"
+  (per-benchmark deltas + 5 status: improved / regressed / unchanged /
+  new / dropped)
+- `promotion_gate.py` — "is this run good enough to promote?"
+  (per-category aggregate + 三档 binary 决策 + rollback rule)
+- `gap_analysis.py` — "where should next training run focus?"
+  (prescriptive ranking + per-benchmark drill-down vs Super3)
+
+三个模块同样的输入 shape (`current_results` dict + `super3_baseline`
+dict + `registry_rows`)，operator 跑一份 eval JSON 出三份 report，
+回答三个不同的问题。
 
 ## 依赖
 
