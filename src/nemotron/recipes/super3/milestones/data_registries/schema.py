@@ -134,21 +134,48 @@ KNOWN_BRIDGE_STATUSES = frozenset(
 )
 
 
-def validate_top_level(data: Any, *, kind: str) -> None:
-    """Validate the top-level dict shape of a registry YAML."""
+def validate_top_level(
+    data: Any,
+    *,
+    kind: str,
+    source_path: Any = None,
+    strict: bool = True,
+) -> None:
+    """Validate the top-level dict shape of a registry YAML.
+
+    Two consumer modes match the row-validator split (Session 1 / Session 4):
+
+    - **Audit mode** (default, ``strict=True``): require
+      ``schema_version`` + ``milestone`` top-level fields. Used by
+      ``unified_index_loader`` so registries declare their version /
+      milestone for cross-cut discovery.
+    - **Runtime mode** (``strict=False``): only require the kind's
+      ``rows_key`` is present + is a list. Used by bridge / M0
+      module-local loaders that hard-code the kind and only need the
+      data rows — schema_version / milestone are documentation, not
+      runtime contract.
+
+    When *source_path* is provided, the YAML path prefixes every error
+    message so the offending file is obvious in stack traces.
+    """
+    prefix = f"{source_path}: " if source_path is not None else ""
     if not isinstance(data, dict):
-        raise ValueError(f"{kind} registry must be a YAML mapping at top level")
-    for field in _TOP_LEVEL_REQUIRED:
-        if field not in data:
-            raise ValueError(f"{kind} registry missing top-level {field!r}")
+        raise ValueError(f"{prefix}{kind} registry must be a YAML mapping at top level")
+    if strict:
+        for field in _TOP_LEVEL_REQUIRED:
+            if field not in data:
+                raise ValueError(f"{prefix}{kind} registry missing top-level {field!r}")
     schema = _KIND_SCHEMAS.get(kind)
     if schema is None:
-        raise ValueError(f"unknown registry kind {kind!r}; known: {sorted(KNOWN_KINDS)}")
+        raise ValueError(f"{prefix}unknown registry kind {kind!r}; known: {sorted(KNOWN_KINDS)}")
     rows_key = schema["rows_key"]
     if rows_key not in data:
-        raise ValueError(f"{kind} registry missing rows key {rows_key!r}")
+        raise ValueError(f"{prefix}{kind} registry missing rows key {rows_key!r}")
     if not isinstance(data[rows_key], list):
-        raise ValueError(f"{kind} registry: {rows_key!r} must be a list, got {type(data[rows_key]).__name__}")
+        raise ValueError(
+            f"{prefix}{kind} registry: {rows_key!r} must be a list, "
+            f"got {type(data[rows_key]).__name__}"
+        )
 
 
 def validate_rows(
@@ -156,33 +183,59 @@ def validate_rows(
     *,
     kind: str,
     extra_validators: Iterable[Any] = (),
+    fail_fast: bool = False,
+    source_path: Any = None,
 ) -> list[str]:
     """Validate each row against its kind's schema.
 
-    Returns a list of human-readable issue strings. Empty list = clean.
-    Callers decide whether to raise on non-empty (CLI mode) or surface
-    as warnings (manifest mode).
+    Two consumer modes by design (task030 Session 1 + Session 4 decision):
+
+    - **Audit mode** (default, ``fail_fast=False``): collect every issue
+      and return as a list. Empty list = clean. Used by
+      ``unified_index_loader.validate_unified_index`` so a single
+      validation pass surfaces every problem at once.
+    - **Runtime mode** (``fail_fast=True``): raise ``ValueError`` on
+      first issue with the file path prefixed. Used by bridge / M0
+      module-local loaders so a single bad row aborts the prepare step
+      immediately rather than emitting partial bad data.
+
+    The shape definitions (``required_row_fields``, ``rows_key``) are
+    the *same* in both modes — Session 4 merge of bridge / M0 loaders
+    into the schema layer means adding a field to the contract is a
+    one-edit change here, not a two-edit (schema + each module).
 
     *extra_validators* is a sequence of ``callable(row, index) -> str | None``
     — returning a non-empty string flags an issue, returning None passes.
-    Used by ``bridge_env_registry`` to check status vocabulary against
-    the expected_mixes field declared in the unified index.
+    Used by ``bridge_env_registry`` for status + per-mix validators.
     """
     schema = _KIND_SCHEMAS[kind]
-    rows = data[schema["rows_key"]]
+    rows_key = schema["rows_key"]
+    rows = data[rows_key]
     required = schema["required_row_fields"]
+
+    # Issue format mirrors the format runtime loaders already emit:
+    # `envs[0] missing required field 'status'`. Unified loader (audit)
+    # prefixes with the registry id; runtime loader (fail-fast) prefixes
+    # with the YAML path via *source_path*.
     issues: list[str] = []
+
+    def _record(issue_body: str) -> None:
+        if fail_fast:
+            prefix = f"{source_path}: " if source_path is not None else ""
+            raise ValueError(f"{prefix}{issue_body}")
+        issues.append(issue_body)
+
     for index, row in enumerate(rows):
         if not isinstance(row, dict):
-            issues.append(f"{kind}/{index}: row must be a mapping")
+            _record(f"{rows_key}[{index}] row must be a mapping")
             continue
         for field in required:
             if field not in row:
-                issues.append(f"{kind}/{index}: missing required field {field!r}")
+                _record(f"{rows_key}[{index}] missing required field {field!r}")
         for validator in extra_validators:
             verdict = validator(row, index)
             if verdict:
-                issues.append(f"{kind}/{index}: {verdict}")
+                _record(f"{rows_key}[{index}] {verdict}")
     return issues
 
 

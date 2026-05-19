@@ -128,3 +128,60 @@ refactor) 没启动。
 schema 层) / task021 Session 6 候选 (RLVR rollout default container_runtime
 翻 docker) / task030 Session 4 (loader merge) / task019-020 (M1 eval basket，
 block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
+
+## Session 5 - 2026-05-18 - intern_nemontron_review_cc
+
+实现 Session 4 — bridge / M0 module-local loader 接进 schema 层。Session 1
++ Session 2 closeout 时反复强调"两层 fail-fast vs collect-all 不要合并"，
+Session 4 在重新审视这条决策时找到了正确的合并粒度：
+
+**合并 row-shape *definitions*，不合并 aggregation *behavior***。
+
+具体：
+
+- `data_registries/schema.py::validate_rows` 加 `fail_fast=False` 参数：
+  - `True` → 第一个 issue 就 raise `ValueError` (runtime semantics)
+  - `False` (default) → 收集所有 issues 返 list (audit semantics)
+  - 两个 mode 跑同一套 `required_row_fields` 检查 — 这就是单 source of truth
+- `schema.validate_rows` 加 `source_path=None` 参数：runtime loader 传文
+  件路径，error message 前缀就是 yaml path (matches pre-Session-4 格式)
+- `schema.validate_top_level` 加 `strict=True` 参数：
+  - `True` (audit, default) → 要 `schema_version` + `milestone` + rows_key
+  - `False` (runtime) → 只要 rows_key (documentation 字段对 runtime 不影响)
+- Error message 格式统一成 `f"<rows_key>[<index>] missing required field 'X'"`
+  (跟 runtime loader 原来的格式一致)
+
+四个 runtime loader 都 refactor 成"thin wrapper":
+
+| Loader | 删的行数 | 留的 module-specific 逻辑 |
+|---|---|---|
+| `_bridge_base.load_env_registry` | ~30 行内联校验 | mix-set membership + display_label 包成 `extra_validators` closure |
+| `m1_swe2.load_swe2_sif_registry` | ~30 行内联校验 | sif_source 词汇 + filename_template `{instance_id}` 格式 closure |
+| `m1_rlhf.load_rlhf_pref_data_registry` | ~20 行内联校验 | (无 module-specific 检查；schema 的 required_row_fields 全覆盖) |
+| `sandbox_containers.image_resolver.load_sandbox_image_registry` | ~30 行内联校验 | target_envs 非空 + image_id 唯一 cross-row check |
+
+**关键不变量**: 测试基线 226 → 226 + 7 个新 schema API surface tests =
+233 passed + 6 skipped. 没动任何模块测试文件 — 226 + 不动 + 7 新。
+Refactor 契约 "external behavior identical" 守住。
+
+新加 7 个测试 (test_unified_data_registry.py):
+- `test_validate_rows_fail_fast_raises_on_first_issue` (catch regression
+  where fail_fast 被绕过 collect-all)
+- `test_validate_rows_fail_fast_with_source_path_includes_path_prefix`
+- `test_validate_rows_collect_all_still_returns_full_issue_list` (audit
+  mode 仍 collect 完整 list)
+- `test_validate_top_level_strict_requires_schema_version_and_milestone`
+- `test_validate_top_level_runtime_mode_skips_documentation_fields`
+- `test_validate_top_level_runtime_mode_still_requires_rows_key`
+- `test_known_bridge_statuses_still_double_aligned_after_session_4`
+  (drift detection between schema.KNOWN_BRIDGE_STATUSES vs
+  _bridge_base.KNOWN_STATUSES — 两层独立声明但 pytest 强对齐)
+
+## task030 状态
+
+- Session 1 ✓ (PR #48 `ec1b271`) — schema 层 + 索引 + inventory walks
+- Session 2 ✓ (PR #57 `324e062`) — CLI validator + pre-commit hook
+- Session 4 ✓ (this PR) — module-local loader merge into schema layer
+- Session 3 ☐ — M1 eval basket registry (block on task019/020)
+
+Roadmap §3 W1 row + §5 critical-path #11 task030 状态更新 Sessions 1+2+4 ✓。

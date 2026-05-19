@@ -103,37 +103,50 @@ _INSTANCE_ID_RE = re.compile(r"^[A-Za-z0-9_\-]+$")
 
 
 def load_swe2_sif_registry(path: Path | None = None) -> list[JsonDict]:
-    """Load the SIF filename-template registry."""
+    """Load the SIF filename-template registry.
+
+    task030 Session 4: row shape delegated to
+    ``data_registries.schema.validate_rows`` (with ``fail_fast=True``).
+    SWE2-specific source-vocabulary + filename-template format checks
+    stay inline as ``extra_validators`` closures.
+    """
     import yaml
+
+    from nemotron.recipes.super3.milestones.data_registries.schema import (
+        validate_rows,
+        validate_top_level,
+    )
 
     target = path or SIF_REGISTRY_PATH
     with target.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "sif_sources" not in data:
-        raise ValueError(f"{target}: SIF registry must declare a 'sif_sources' list")
-    rows = data["sif_sources"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'sif_sources' must be a list")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: sif_sources[{index}] must be a mapping")
-        for required in ("source", "filename_template"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: sif_sources[{index}] missing required field {required!r}"
-                )
-        if row["source"] not in KNOWN_SIF_SOURCES:
-            raise ValueError(
-                f"{target}: sif_sources[{index}] source {row['source']!r} "
-                f"not in {sorted(KNOWN_SIF_SOURCES)} "
-                f"(extend KNOWN_SIF_SOURCES if a new family is added)"
+    validate_top_level(data, kind="sif_registry", source_path=target, strict=False)
+
+    def _source_validator(row: JsonDict, index: int) -> str | None:
+        source = row.get("source")
+        if source is not None and source not in KNOWN_SIF_SOURCES:
+            return (
+                f"source {source!r} not in {sorted(KNOWN_SIF_SOURCES)} "
+                "(extend KNOWN_SIF_SOURCES if a new family is added)"
             )
-        if "{instance_id}" not in row["filename_template"]:
-            raise ValueError(
-                f"{target}: sif_sources[{index}] filename_template "
-                f"{row['filename_template']!r} must contain '{{instance_id}}'"
+        return None
+
+    def _template_validator(row: JsonDict, index: int) -> str | None:
+        template = row.get("filename_template")
+        if template is not None and "{instance_id}" not in template:
+            return (
+                f"filename_template {template!r} must contain '{{instance_id}}'"
             )
-    return rows
+        return None
+
+    validate_rows(
+        data,
+        kind="sif_registry",
+        fail_fast=True,
+        source_path=target,
+        extra_validators=[_source_validator, _template_validator],
+    )
+    return data["sif_sources"]
 
 
 def _sif_template_map(registry: Sequence[Mapping[str, Any]]) -> dict[str, str]:

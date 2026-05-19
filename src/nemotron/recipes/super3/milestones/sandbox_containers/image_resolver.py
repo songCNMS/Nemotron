@@ -33,41 +33,56 @@ REGISTRY_PATH = Path(__file__).with_name("sandbox_image_registry.yaml")
 def load_sandbox_image_registry(path: Path | None = None) -> list[JsonDict]:
     """Load ``sandbox_image_registry.yaml`` rows.
 
-    Each row must carry: ``image_id``, ``version_tag``,
-    ``dockerfile_path``, ``target_envs`` (list). Optional but
-    documented: ``base_image``, ``runtime_recommendations``, ``notes``.
+    task030 Session 4: row shape delegated to
+    ``data_registries.schema.validate_rows`` (fail_fast=True). Two
+    module-specific checks stay inline as ``extra_validators``:
+
+    - ``target_envs`` must be a non-empty list (schema-level
+      "field present" check would accept an empty list)
+    - ``image_id`` must be unique across rows (cross-row check; not
+      expressible as a per-row schema rule)
     """
     import yaml
+
+    from nemotron.recipes.super3.milestones.data_registries.schema import (
+        validate_rows,
+        validate_top_level,
+    )
 
     target = path or REGISTRY_PATH
     with target.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "images" not in data:
-        raise ValueError(
-            f"{target}: sandbox image registry must declare an 'images' list"
-        )
-    rows = data["images"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'images' must be a list")
+    validate_top_level(
+        data, kind="sandbox_image_registry", source_path=target, strict=False
+    )
+
     seen_ids: set[str] = set()
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: images[{index}] must be a mapping")
-        for required in ("image_id", "version_tag", "dockerfile_path", "target_envs"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: images[{index}] missing required field {required!r}"
-                )
-        if not isinstance(row["target_envs"], list) or not row["target_envs"]:
-            raise ValueError(
-                f"{target}: images[{index}] target_envs must be a non-empty list"
-            )
-        if row["image_id"] in seen_ids:
-            raise ValueError(
-                f"{target}: duplicate image_id {row['image_id']!r}"
-            )
-        seen_ids.add(row["image_id"])
-    return rows
+
+    def _target_envs_validator(row: JsonDict, index: int) -> str | None:
+        target_envs = row.get("target_envs")
+        if target_envs is not None and (
+            not isinstance(target_envs, list) or not target_envs
+        ):
+            return "target_envs must be a non-empty list"
+        return None
+
+    def _unique_image_id_validator(row: JsonDict, index: int) -> str | None:
+        image_id = row.get("image_id")
+        if not image_id:
+            return None
+        if image_id in seen_ids:
+            return f"duplicate image_id {image_id!r}"
+        seen_ids.add(image_id)
+        return None
+
+    validate_rows(
+        data,
+        kind="sandbox_image_registry",
+        fail_fast=True,
+        source_path=target,
+        extra_validators=[_target_envs_validator, _unique_image_id_validator],
+    )
+    return data["images"]
 
 
 def resolve_dockerfile_path(
