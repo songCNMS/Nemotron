@@ -29,7 +29,9 @@ current `main` and fixes any concrete regressions in a single follow-up PR.
 - [x] Bugs found during review are patched in this task branch.
 - [x] Targeted tests cover the patched behavior.
 - [x] `tests/recipes/super3` passes or any unrelated failure is documented.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task059_pr51_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task059_pr51_postmerge_review`.
+
+PR: https://github.com/songCNMS/Nemotron/pull/67
 
 ## Review Finding
 

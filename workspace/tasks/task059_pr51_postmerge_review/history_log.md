@@ -17,3 +17,4 @@
   - `PYTHONPATH=src scripts/validate_data_registries.py --check-revision-pins` → pass.
   - `PYTHONPATH=src pytest -q tests/recipes/super3` → `349 passed, 5 skipped`.
   - `NEMOTRON_RUN_LIVE_HF_TESTS=1 PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py -k "live_hf or resolves_on_hf"` → `2 passed, 29 deselected`.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/67.
