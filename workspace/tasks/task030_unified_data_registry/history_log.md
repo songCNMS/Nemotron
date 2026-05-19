@@ -436,3 +436,19 @@ task058 license/contamination 主题 follow-up trio (Sessions 5+6+7) 完整
 落地。任务 030 还剩 Session 3 (eval basket) — 仍 block on task019/020。
 
 Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5+6+7 ✓.
+
+## Session 12 - 2026-05-19 - intern_nemontron_review_cc
+
+Session 7 PR #68 已 squash-merge 为 `653df7e` 进 main — contamination_audit
+模块 + CLI 旗 + pre-commit hook + 39 个 pytest case 都进了 main。
+intern status 回 Idle (Session 54)。
+
+并发 task059 / intern_code_reading 也合进 main；test baseline 335
+passed + 7 skipped (332 + 3 来自他们的并发测试)。
+
+task030 整 task 仍 InProgress：Session 3 (eval basket — block on
+task019/020) 未启动。下一个候选: task019/020 (M1 eval basket，本身
+sandbox-runnable scaffold) / task059 已 merge 后续 review / 之前 task
+的 Session 2+。
+
+**task058 license/contamination follow-up trio (Sessions 5+6+7) 落地完成**。
