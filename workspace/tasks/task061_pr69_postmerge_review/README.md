@@ -21,7 +21,9 @@ against current `main` and fixes any concrete issue found in one follow-up PR.
 - [x] PR #69 touched files are reviewed.
 - [x] Concrete metadata drift found during review is fixed.
 - [x] Focused validation confirms the fixed metadata.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task061_pr69_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task061_pr69_postmerge_review`.
+
+PR: https://github.com/songCNMS/Nemotron/pull/87
 
 ## Review Finding
 
@@ -31,3 +33,10 @@ header still declared `<!-- METADATA:SESSION=1 -->`. That makes machine-readable
 task metadata stale even though the human-readable log is current.
 
 This task updates the metadata header to `SESSION=12`.
+
+## Verification
+
+- `git diff --check` → pass.
+- `sed`/`rg` check confirms task030 history header is `METADATA:SESSION=12`
+  and the `Session 12` section exists.
+- `PYTHONPATH=src scripts/validate_data_registries.py --quiet` → pass.
