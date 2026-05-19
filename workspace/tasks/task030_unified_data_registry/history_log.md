@@ -360,3 +360,15 @@ Tests (`test_revision_audit.py`, 31 cases):
 - Session 3 ☐ — M1 eval basket registry (block on task019/020)
 
 Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5+6 ✓。
+
+## Session 10 - 2026-05-19 - intern_nemontron_review_cc
+
+Session 6 PR #65 已 squash-merge 为 `db8900d` 进 main —
+`data_registries/revision_audit.py` + `--check-revision-pins` CLI flag
++ pre-commit `check-revision-pins` hook + 33 个 pytest case 都进了 main。
+intern status 回 Idle (Session 52)。
+
+task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
+task019/020) 未启动。下一个候选: task058 follow-ups 剩下一条
+(contamination_against semantic 校验) / task019-020 (M1 eval basket，
+block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
