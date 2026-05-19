@@ -972,7 +972,7 @@ def test_m1_use_is_scoped_per_environment() -> None:
             record["extra_env_info"]["reference_solution"] = "42"
         elif env_id == "code_execution_python":
             record["extra_env_info"]["reference_code"] = "def f():\n    return 1"
-        elif env_id == "general_tool_calling":
+        elif env_id in {"general_tool_calling", "multi_turn_tool_use"}:
             record["extra_env_info"]["expected_trajectory"] = [
                 {"role": "assistant", "content": "ok", "tool_calls": []},
             ]

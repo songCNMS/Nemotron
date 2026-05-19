@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=6 -->
 
 ## 编写规则
 
@@ -51,3 +51,43 @@ Nano3 template 的增量切分也不接受 assistant 前连续两个 user turn�
 ### CPU round-trip smoke 适用边界
 
 `run_m1_sft_roundtrip_smoke.py` 是 CPU workspace 的前置格式检查：它复用 M1 JSONL contract 和 Nano3 Jinja 模板，用 deterministic local tokenizer 写 packed parquet 并读回 schema/loss-mask。它不能替代完整 `nemotron super3 data prep sft -c agentic_v0`，后者仍需要 `cosmos_xenna`、`transformers` 和真实 tokenizer。
+
+### 完整 agentic_v0 data-prep 的本地依赖缺口
+
+CPU venv 至少需要 `cosmos_xenna`、`transformers`、`ray[default]==2.49.2`、`pydantic-settings` 和 `nemo-run` 才能从 `python -m nemotron super3 data prep sft -c agentic_v0` 走到真实 data-prep。当前根 CLI 会 eager-register `nemotron data sdg long-document`，因此即使只跑 `super3`，缺少 `data_designer` 时也会在 CLI import 阶段失败；安装 `data-designer` 后可通过根 CLI 编译。
+
+`data-designer 0.6.0` 的 metadata 要求 `pyarrow<20`，而当前 `datasets 4.8.5` 要求 `pyarrow>=21`。若只是为了让根 CLI import，可以安装 `data-designer` 后再恢复 `pyarrow>=21`；Session 3 验证过 `pyarrow 24.0.0` 下 `agentic_v0 --dry-run` 仍可编译。
+
+### 真实 tokenizer packed artifact 验证口径
+
+项目规则给出的本地调试 tokenizer/model 路径是 `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`。用它覆盖 `tokenizer.model` 后，完整小 blend 的 artifact metadata 应显示 `tokenizer_uri=file:///mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`。
+
+packed parquet 的最低验收口径：`splits/{train,valid,test}` 下 parquet symlink 可解析到 `runs/.../datasets/.../*.parquet`；schema 包含 `input_ids: list<int32>`、`loss_mask: list<uint8>`、`seq_start_id: list<int32>`；总 row 数与 metadata `total_sequences` 一致；`sum(loss_mask) > 0` 且没有 empty-loss row。
+
+### sample 与 shard 数的 split 行为
+
+`sample=8 num_shards=1` 可快速验证真实 tokenizer 和 packed parquet 写入，但只有 1 个 shard 时 `distribute_shards_to_splits` 会跳过 valid/test split。需要验证 train/valid/test 目录时，保留 `agentic_v0` 默认 `num_shards=16` 并在小 blend 上不传 `sample`。
+
+### M0 registry revision 漂移
+
+HF dataset revision pin 会失效：Session 5 验证时 `dgslibisey/MuSiQue@cf7a59f...` 与 `AI-MO/NuminaMath-CoT@d5fbeac...` 已不在各自 dataset repo。当前可用 main commit 分别是 `c8f4f8c9465fb69d31a8eae894c3fd509c4ca321` 和 `9d8d210c9f6a36c8f3cd84045668c9b7800ef517`。M0 扩量前应先用 HF API 批量校验 registry 里所有 `hf_revision`。
+
+### 当前 Megatron-Bridge 的 packed SFT 输入契约
+
+当前远端 Megatron-Bridge 0.3 的 `PackedSequenceSpecs` 只接受单个 `.npy` packed file；`super3 data prep sft` 产出的 parquet shard 目录不能直接传给 training。Bridge 的 `.npy` 内容与 parquet columns 等价，都是包含 `input_ids`、`loss_mask`、`seq_start_id` 的 list-of-dicts；同时 `FinetuningDatasetBuilder` 会无条件打开 packed metadata path，因此即使 `pad_cu_seqlens=false` 也需要一个 JSON metadata 文件。
+
+### checkpoint.finetune=false 的 smoke 语义
+
+当前 Bridge `finetune()` 会 assert `checkpoint.pretrained_checkpoint` 或 `checkpoint.load` 非空。M1 smoke 配置里 `checkpoint.finetune=false` 表示随机初始化训练入口验证，这类 run 需要调用 `pretrain()` loop 复用同一个 `ConfigContainer` / forward step，而不是调用 `finetune()`。
+
+### NemTron 远端训练环境缺口
+
+`NemTron` 系统 Python 有 `torch 2.9.1+cu129`、Megatron-Bridge、Transformers；缺 `megatron.energon`、`nvidia_resiliency_ext`、`hydra-core` 时可以在 `--system-site-packages` venv 里补。当前节点无 `nvcc`，且 `mamba-ssm` / `causal-conv1d` pip source package 会尝试从 GitHub 拉匹配 wheel；GitHub 超时后无法本地编译。因此 Super/NemotronH tiny smoke 会在 Mamba layer instantiation 阶段失败。若只是验证 M1 packed data 到 training loop，可用 Qwen3 4B local SFT 入口绕过 Mamba 依赖。
+
+### Qwen eval-only scheduler 约束
+
+当前 Megatron-Bridge 即使 `train.skip_train=true` 也会构造 optimizer/scheduler。做纯 eval 时不能把 `train.train_iters=0`；最小可用覆盖是 `train.train_iters=1 scheduler.lr_decay_iters=1 scheduler.lr_warmup_iters=0`，否则会触发 `lr_decay_steps > 0` 或 `lr_warmup_steps < lr_decay_steps` 断言。
+
+### 短步数 Qwen SFT 验证口径
+
+Session 6 使用 Qwen3-4B-Instruct-2507 pretrained Megatron checkpoint 对 9-row M1 train split 跑完整 1 epoch 时，`logger.log_interval=10` 会让 9-step 训练没有逐步 loss 行；应以训练结束 validation 和 checkpoint reload eval 作为验收指标。9-row 微型 split 只用于链路闭环验证，不用于判断训练质量改善。

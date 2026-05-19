@@ -40,18 +40,24 @@ def resolve_qwen_hf_model() -> str:
 def _qwen_local_recipe_builder(config: DictConfig) -> "ConfigContainer":
     """Build a Qwen3 4B SFT config from a local HF model directory."""
     import torch
-    from megatron.bridge import AutoBridge
-    from megatron.bridge.recipes.common import _sft_common
+    from megatron.bridge.recipes.qwen.qwen3 import qwen3_4b_finetune_config
     from megatron.bridge.training.config import ConfigContainer  # noqa: F401
 
     hf_model = resolve_qwen_hf_model()
-    cfg = _sft_common()
-    cfg.model = AutoBridge.from_hf_pretrained(hf_model, trust_remote_code=True).to_megatron_provider(
-        load_weights=False
+    seq_length = int(OmegaConf.select(config, "dataset.seq_length", default=4096))
+    cfg = qwen3_4b_finetune_config(
+        hf_path=hf_model,
+        peft=None,
+        packed_sequence=True,
+        seq_length=seq_length,
+        train_iters=int(OmegaConf.select(config, "train.train_iters", default=1000)),
+        global_batch_size=int(OmegaConf.select(config, "train.global_batch_size", default=4)),
+        micro_batch_size=int(OmegaConf.select(config, "train.micro_batch_size", default=1)),
+        eval_interval=int(OmegaConf.select(config, "train.eval_interval", default=100)),
+        save_interval=int(OmegaConf.select(config, "checkpoint.save_interval", default=100)),
     )
     cfg.tokenizer.tokenizer_model = OmegaConf.select(config, "tokenizer.tokenizer_model", default=hf_model)
 
-    seq_length = int(OmegaConf.select(config, "dataset.seq_length", default=4096))
     cfg.model.seq_length = seq_length
     cfg.model.tensor_model_parallel_size = 2
     cfg.model.pipeline_model_parallel_size = 1
@@ -61,7 +67,7 @@ def _qwen_local_recipe_builder(config: DictConfig) -> "ConfigContainer":
     cfg.model.context_parallel_size = 1
     cfg.model.sequence_parallel = False
 
-    cfg.validation.eval_interval = int(OmegaConf.select(config, "validation.eval_interval", default=100))
+    cfg.train.eval_interval = int(OmegaConf.select(config, "train.eval_interval", default=100))
     cfg.train.manual_gc = False
     cfg.train.manual_gc_interval = 0
 

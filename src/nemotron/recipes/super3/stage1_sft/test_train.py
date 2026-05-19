@@ -58,8 +58,17 @@ import logging
 import sys
 from pathlib import Path
 
-from megatron.bridge.recipes.common import _sft_common
-from megatron.bridge.training.config import ConfigContainer
+from megatron.bridge.recipes.utils.optimizer_utils import distributed_fused_adam_with_cosine_annealing
+from megatron.bridge.training.config import (
+    CheckpointConfig,
+    ConfigContainer,
+    FinetuningDatasetConfig,
+    LoggerConfig,
+    RNGConfig,
+    TokenizerConfig,
+    TrainingConfig,
+)
+from megatron.core.distributed import DistributedDataParallelConfig
 from omegaconf import DictConfig, OmegaConf
 
 from nemotron.kit.train_script import parse_config_and_overrides
@@ -80,20 +89,55 @@ def _tiny_recipe_builder(config: DictConfig) -> ConfigContainer:  # noqa: ARG001
     Uses full-parameter SFT (no LoRA) with packed sequences, matching the
     production Super3 SFT recipe but at tiny scale.
     """
-    # Start from Megatron-Bridge's SFT common template instead of the production
-    # Super3 recipe. The production recipe resolves the full HF config at build
-    # time, while this test path must stay offline and tiny.
-    cfg = _sft_common()
-
-    # Swap in the tiny model with single-node parallelism
     seq_length = OmegaConf.select(config, "dataset.seq_length", default=4096)
-    cfg.model = make_tiny_super3_model(seq_length=int(seq_length))
 
-    # Disable TP comm overlap (meaningless at TP=1)
+    opt_cfg, scheduler_cfg = distributed_fused_adam_with_cosine_annealing(
+        lr_warmup_iters=0,
+        lr_decay_iters=1,
+        max_lr=1e-5,
+        min_lr=0.0,
+    )
+    opt_cfg.use_distributed_optimizer = False
+
+    cfg = ConfigContainer(
+        train=TrainingConfig(
+            train_iters=1,
+            eval_interval=1,
+            eval_iters=1,
+            global_batch_size=1,
+            micro_batch_size=1,
+        ),
+        model=make_tiny_super3_model(seq_length=int(seq_length)),
+        optimizer=opt_cfg,
+        scheduler=scheduler_cfg,
+        ddp=DistributedDataParallelConfig(
+            check_for_nan_in_grad=True,
+            use_distributed_optimizer=False,
+        ),
+        dataset=FinetuningDatasetConfig(
+            seq_length=int(seq_length),
+            dataloader_type="batch",
+            do_validation=False,
+            do_test=False,
+        ),
+        logger=LoggerConfig(log_interval=1, log_timers_to_tensorboard=True),
+        tokenizer=TokenizerConfig(
+            tokenizer_type="HuggingFaceTokenizer",
+            tokenizer_model="nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+        ),
+        checkpoint=CheckpointConfig(
+            save_interval=1,
+            save=None,
+            load=None,
+            ckpt_format="torch_dist",
+            fully_parallel_save=True,
+        ),
+        rng=RNGConfig(seed=5678),
+        mixed_precision="bf16_mixed",
+    )
+
+    # Disable TP comm overlap (meaningless at TP=1).
     cfg.comm_overlap = None
-
-    # Use standard bf16 precision
-    cfg.mixed_precision = "bf16_mixed"
 
     return cfg
 
