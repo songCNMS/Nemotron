@@ -44,8 +44,8 @@ JsonDict = dict[str, Any]
 
 # Substring matches (case-insensitive) that mark a placeholder entry.
 # Lower-case + bare phrase form so "TBD" / "tbd" / "TBD review" all
-# match. The set is closed — add new sentinels here explicitly so a
-# real eval name like "Pending-Eval-2026" doesn't trigger false positives.
+# match. The set is closed and matching is delimiter-aware, so a real
+# eval name like "Pending-Eval-2026" doesn't trigger false positives.
 SENTINEL_PHRASES = frozenset(
     {
         "tbd",
@@ -64,16 +64,24 @@ SENTINEL_PHRASES = frozenset(
 def is_placeholder_entry(entry: Any) -> bool:
     """True iff *entry* looks like an unfilled placeholder.
 
-    Substring match (case-insensitive) against ``SENTINEL_PHRASES``.
-    Non-string inputs return False — those are caught as blockers by
-    the type check, not as placeholders.
+    Delimiter-aware prefix match (case-insensitive) against
+    ``SENTINEL_PHRASES``. We accept exact sentinels plus forms like
+    ``"TBD: AIME"`` or ``"FIXME later"``, while avoiding substring
+    false positives such as ``"Pending-Eval-2026"``. Non-string
+    inputs return False — those are caught as blockers by the type
+    check, not as placeholders.
     """
     if not isinstance(entry, str):
         return False
     normalized = entry.strip().lower()
     if not normalized:
         return False
-    return any(phrase in normalized for phrase in SENTINEL_PHRASES)
+    for phrase in SENTINEL_PHRASES:
+        if normalized == phrase:
+            return True
+        if normalized.startswith(f"{phrase} ") or normalized.startswith(f"{phrase}:"):
+            return True
+    return False
 
 
 def _classify_row(row: Mapping[str, Any]) -> tuple[list[str], list[str]]:

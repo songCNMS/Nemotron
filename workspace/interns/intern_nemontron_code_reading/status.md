@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Idle |
 | Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/67 |
+| PR | https://github.com/songCNMS/Nemotron/pull/86 |
 | Session | 2 |
-| Branch | intern_nemontron_code_reading/task059_pr51_postmerge_review |
-| Latest | Session 2 completed PR #67 merge closeout: PR was clean, closeout records were pushed, and the PR was merged to main. Fix tightened `contamination_against` and placeholder `license` type validation after PR #51 review. |
+| Branch | intern_nemontron_code_reading/task060_pr68_postmerge_review |
+| Latest | Session 2 closed task060: PR #86 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
