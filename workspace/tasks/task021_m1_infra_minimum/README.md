@@ -3,6 +3,7 @@
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #30 / 09c9089 on 2026-05-18 -->
 <!-- SESSION 2 LANDED: PR #32 / 62b7774 on 2026-05-18 -->
+<!-- SESSION 3 LANDED: PR pending on 2026-05-18 (sandbox container scaffolds; image build needs Docker daemon) -->
 
 ## 背景
 
@@ -25,7 +26,7 @@ on this)"。四个子条目 (plan §10 M1 infra):
 |---|---|---|---|
 | 1 | M0 oracle health-baseline 加 per-env telemetry 发射 | yes | ✓ Done (PR #30 `09c9089`) |
 | 2 | cross-stage lineage 模型 schema + M0 / M1 manifest 加 `lineage` 字段 | yes (schema + walker; W&B publish 留 Session 3+) | ✓ Done (this PR) |
-| 3 | Sandbox container 构建脚本 (code-exec、Lean、terminal Dockerfile + CI build) | partial (脚本 yes, push 到 registry 留 ops) | Todo |
+| 3 | Sandbox container 构建脚本 (code-exec、Lean、terminal Dockerfile + image_resolver + sandbox_image_registry + build script + unified-index 接入) | partial (Dockerfile + 注册表 + resolver + 构建脚本 sandbox-runnable；真 image build 留 Docker daemon) | ✓ Done (this PR) |
 | 4 | NeMo-RL / Ray / vLLM / NeMo-Gym launch path 真集群验证 | no — 需要 cluster + ops | Todo (block on NemTron access) |
 
 ## Session 1 目标

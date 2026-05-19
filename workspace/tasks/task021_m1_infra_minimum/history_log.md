@@ -67,3 +67,55 @@ Session 1 PR #30 已 squash-merge 为 `09c9089` 进 main。intern status 回 Idl
 
 Session 3 PR #32 已 squash-merge 为 `62b7774` 进 main — cross-stage lineage schema (`lineage.py`) + M0/M1 manifest emission + 8 个新 pytest case 都进了 main。intern status 回 Idle (Session 20)。task021 整 task 仍 InProgress：Session 3 (sandbox container build：code-exec / Lean / terminal Dockerfile) 和 Session 4 (NeMo-RL / Ray / vLLM 真集群验证) 都没启动；Session 4 仍 block 在 NemTron cluster access 上。下一个 critical-path 候选 (roadmap §5)：task014 (M1 RLVR data bridge) 或 task015 (RLVR 21-env mix)。
 
+
+## Session 5 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 3 实现 — sandbox container 构建基建 (roadmap §1.8 task021 第 3
+个子条目)。落地 5 个 sandbox-runnable 产物：
+
+- 3 个 Dockerfiles 在新模块 `src/nemotron/recipes/super3/milestones/sandbox_containers/`:
+  - `code_exec.Dockerfile` (python:3.12-slim + pytest，UID 1000，pip
+    purged 后)
+  - `lean.Dockerfile` (debian:bookworm-slim + elan v3.1.1 + Lean 4
+    stable，apt curl purge after install，UID 1000)
+  - `terminal.Dockerfile` (alpine:3.20 + bash + coreutils + findutils +
+    grep + sed + gawk，UID 1000)
+- `sandbox_image_registry.yaml` 注册表：`image_id` → `dockerfile_path` /
+  `target_envs[]` / `version_tag` / `base_image` / `runtime_recommendations` /
+  `notes`。3 行: code_exec → `[code_execution_python]`, lean →
+  `[math_formal_lean]`, terminal → `[terminal_basic_shell]` (terminal_pivot
+  等 task057 落 M0 之后加进去)。
+- `image_resolver.py`：`load_sandbox_image_registry` / `resolve_image_for_env`
+  / `image_tag` / `resolve_dockerfile_path` / `validate_dockerfile_exists` /
+  `envs_covered_by_registry` 一套 helper，sandbox-runnable。
+- `build_sandbox_containers.sh`：包装 docker / podman / singularity build，
+  读 YAML 注册表（inline python yaml）逐 image 构建。支持 `--runtime` /
+  `--only <id>` / `--dry-run` / `--help` 四个 flag。
+- 接入 task030 Session 1 unified registry：
+  - `data_registries/schema.py` 加 `sandbox_image_registry` kind +
+    KNOWN_KINDS 从 5 → 6
+  - `unified_index.yaml` 加一行 `m1_sandbox_images` entry
+  - `unified_index_loader._ROWS_KEY_BY_KIND` + `_row_identity` 加分支
+
+测试 `tests/recipes/super3/test_sandbox_containers.py` 25 cases:
+
+- Registry shape 5：load + path + dup id 拒 + 缺字段拒 + target_envs 空 拒
+- Dockerfile on-disk 2：每行 path 真存在 + image_tag 格式
+- Per-env 3：known envs 返正确 tag / unsandboxed envs 返 None / envs_covered_by_registry
+- Dockerfile content lint × 3 file = 9：FROM 在头 + USER 非 root + 无
+  `:latest` / 无未 pin branch URL
+- Build script 3：可执行 + 正确 shebang + 引用 registry yaml
+- Cross-registry (unified index 接入) 3：unified_index 含 m1_sandbox_images
+  / live validation clean / KNOWN_KINDS 含 sandbox_image_registry
+
+测试基线 164 → 189 passed + 6 skipped (25 new). 修了 task030 的
+test_unified_data_registry.py `test_known_kinds_covers_today_registry_families`
+里硬编码的 5-kind set，加上 `sandbox_image_registry` 第 6 个。
+
+Roadmap §1.8 task021 Session 3 ☐ → ✓。task021 整 task 仍 InProgress：
+Session 4 (NeMo-RL / Ray / vLLM / NeMo-Gym launch path on real cluster)
+没启动 — 需 NemTron cluster access。
+
+Session 4 不在本 PR。本 PR 也不动 ContainerSandbox runtime shim (那条把
+M0 verifier 的直 subprocess 改成走容器) — 那是 task021 Session 5 或单
+独 PR。

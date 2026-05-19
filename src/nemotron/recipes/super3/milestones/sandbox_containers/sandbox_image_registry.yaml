@@ -1,0 +1,74 @@
+schema_version: 1
+milestone: M1
+description: |
+  Sandbox container image registry (roadmap §1.8 task021 Session 3).
+  Three Dockerfiles co-located with this YAML pair an `image_id` with
+  the M0 environments that need that runtime to run safely:
+
+    - `code_exec`  → `code_execution_python` env's `python_unit_tests`
+                     verifier (today runs `sys.executable` directly on
+                     the host; isolation needed for adversarial RLVR)
+    - `lean`       → `math_formal_lean` env's real Lean compiler
+                     verification (task017 / task049 target; today's
+                     M0 `lean_proof_stub` verifier does not call it)
+    - `terminal`   → `terminal_basic_shell` + future `terminal_pivot`
+                     env's bash command execution
+
+  `image_resolver.py::resolve_image_for_env(env_id)` reads this file
+  to map an M0 env id back to its sandbox image. The
+  `build_sandbox_containers.sh` script reads it to build each image
+  via `docker build` / `podman build` / `singularity build`.
+
+  Adding a new sandbox runtime (e.g., SQL sandbox for task057's
+  `sql_text_to_query`) is a one-row addition here + a new Dockerfile.
+
+images:
+  - image_id: code_exec
+    version_tag: v0.1.0
+    dockerfile_path: code_exec.Dockerfile
+    target_envs:
+      - code_execution_python
+    base_image: python:3.12-slim
+    runtime_recommendations:
+      - "--network=none"
+      - "--read-only"
+      - "--tmpfs /tmp"
+      - "--memory=512m"
+      - "--cpus=1"
+    notes: |
+      Wraps Python 3.12-slim + pytest. UID 1000 non-root. Caller is
+      responsible for `--network=none` / read-only mount / memory caps
+      at run time. Image alone does not enforce isolation; ContainerSandbox
+      shim (task021 Session 4) wires runtime flags.
+
+  - image_id: lean
+    version_tag: v0.1.0
+    dockerfile_path: lean.Dockerfile
+    target_envs:
+      - math_formal_lean
+    base_image: debian:bookworm-slim
+    runtime_recommendations:
+      - "--network=none"
+      - "--memory=4g"   # mathlib4 compilation is memory-hungry
+      - "--cpus=4"
+    notes: |
+      elan v3.1.1 + Lean 4 stable. mathlib4 NOT pre-cached (~7 GB at
+      HEAD); ops layer a derived image or volume mount for projects
+      that need it. UID 1000 non-root.
+
+  - image_id: terminal
+    version_tag: v0.1.0
+    dockerfile_path: terminal.Dockerfile
+    target_envs:
+      - terminal_basic_shell
+      # terminal_pivot will be added once it ships in M0 (task057).
+    base_image: alpine:3.20
+    runtime_recommendations:
+      - "--network=none"
+      - "--read-only"
+      - "--tmpfs /tmp"
+      - "--memory=256m"
+      - "--cpus=1"
+    notes: |
+      bash + coreutils + findutils + grep + sed + gawk. Alpine for size
+      (~10 MB). UID 1000 non-root.

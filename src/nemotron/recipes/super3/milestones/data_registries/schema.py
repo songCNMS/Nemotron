@@ -8,26 +8,31 @@
 
 """Per-kind schema validators for the unified data registry index.
 
-Plan §6 W1 / task030 Session 1. The Super3 pipeline today has 8
+Plan §6 W1 / task030 Session 1. The Super3 pipeline today has 9
 distinct registry YAML files spread across ``m0_data_env/``,
-``m1_rlvr/``, ``m1_swe1/``, ``m1_swe2/``, and ``m1_rlhf/``. Each one is
-authored by hand and consumed by its own module's loader. This file
-declares the *shape* each kind must hold so a single validation pass
-can catch drift before a cluster run wastes a slot.
+``m1_rlvr/``, ``m1_swe1/``, ``m1_swe2/``, ``m1_rlhf/``, and
+``sandbox_containers/``. Each one is authored by hand and consumed by
+its own module's loader. This file declares the *shape* each kind
+must hold so a single validation pass can catch drift before a
+cluster run wastes a slot.
 
-Five registry kinds are recognised today:
+Six registry kinds are recognised today:
 
 - ``m0_data_registry`` — `m0_data_env/data_registry.yaml` — 11 HF
   datasets backing M0 envs (hf_revision pin + license + contamination
   posture).
 - ``m0_environment_registry`` — `m0_data_env/environment_registry.yaml`
-  — 11 reward env definitions with verifier + telemetry + health-check.
-- ``bridge_env_registry`` — `m1_*/[stage]_env_registry.yaml` — M0 →
+  — 12 reward env definitions with verifier + telemetry + health-check
+  (math_formal_lean landed Session 2 of task056).
+- ``bridge_env_registry`` — `m1_*/[stage]_env_registry.yaml`` — M0 →
   NeMo-Gym mappings per RL stage (RLVR / SWE1 / SWE2 / RLHF).
 - ``sif_registry`` — `m1_swe2/swe2_sif_registry.yaml` — SIF filename
   templates for the OpenHands SWE-Bench loop.
 - ``pref_data_registry`` — `m1_rlhf/rlhf_pref_data_registry.yaml` —
   preference-data candidate sources (HelpSteer-2 / UltraFeedback / …).
+- ``sandbox_image_registry`` —
+  `sandbox_containers/sandbox_image_registry.yaml` — code-exec / Lean /
+  terminal Dockerfiles + per-env routing (task021 Session 3).
 
 Adding a new kind (e.g., the future M1 eval basket from task019) is a
 one-validator addition here + one row in ``unified_index.yaml``.
@@ -101,6 +106,16 @@ _KIND_SCHEMAS: dict[str, dict[str, Any]] = {
             "id",
             "hf_dataset",
             "license",
+        ),
+        "expected_top_level": ("description",),
+    },
+    "sandbox_image_registry": {
+        "rows_key": "images",
+        "required_row_fields": (
+            "image_id",
+            "version_tag",
+            "dockerfile_path",
+            "target_envs",
         ),
         "expected_top_level": ("description",),
     },
