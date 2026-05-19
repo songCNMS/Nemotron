@@ -85,3 +85,34 @@ test_math_formal_lean.py 直接验证不走那条 module-level pyarrow import �
 
 task056 整 task 仍 InProgress：唯一剩的是 data_registry 行 — 等 product/
 legal review。决议后的 wiring 是一次性 PR (任一候选 source 都 ≤ 50 行 yaml)。
+
+## Session 5 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 2 PR #50 已 squash-merge 为 `2951cac` 进 main — `math_formal_lean`
+的 source-agnostic code path + §6 5 候选 source 对比表都进了 main。
+
+**合并后 sandbox regression 修复 (本 closeout PR 一并合)**：
+
+task058 (production_dataset_slug_fixes) 并发 merge 进 main，引入两个交叉
+issue:
+
+1. `base_metadata` 加了必填字段 `contamination_against`。我 Session 2 的
+   transform_lean_proof_stub 通过 `make_record(spec=...) → base_metadata`
+   走，sandbox 测试 `_spec()` helper 没 declare 这个字段 → 3 tests 失败
+   (`test_transform_lean_proof_stub_with_default_columns` /
+   `test_transform_lean_proof_stub_respects_fields_remap` /
+   `test_transform_lean_proof_stub_defaults_language_to_lean4`)。
+   修：`_spec()` 加 `"contamination_against": ["minif2f", "mathlib4_test"]`。
+
+2. test_m0_data_env.py 顶层 `from nemotron.data_prep.utils.hf_placeholder import
+   ...` 拽进 pydantic (via `nemotron.data_prep.blend`)。sandbox 没 pydantic
+   → 整个 test_m0_data_env 文件 collection 失败 (~25 个老 case 全跑不了)。
+   修：把 hf_placeholder import 改为 lazy 进 2 个用到它的 test 函数体内 +
+   `pytest.importorskip("pydantic")` 让 sandbox skip 而 NemTron 跑。
+
+Sandbox 测试基线恢复并提升：161 + 2 skipped (pre-merge) → 164 + 6 skipped
+(post-fix；task058 + task056 Session 2 一起加了 ~24 个 case；新增 4 个
+sandbox-gated skip = 2 pydantic + 2 网络)。
+
+task056 整 task 仍 InProgress：data_registry.yaml 待 §6 决议。intern
+status 回 Idle (Session 38)。

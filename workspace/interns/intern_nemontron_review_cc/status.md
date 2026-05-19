@@ -1,23 +1,39 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task056_m0_tier1_expansion -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task056_m0_tier1_expansion |
-| PR | pending push |
-| Session | 37 |
+| Status | Idle |
+| Current Task | |
+| PR | N/A |
+| Session | 38 |
 
-正在做：task056 Session 2 — `math_formal_lean` 的 code path（不含
-data_registry 行）。Source-agnostic transformer (`transform_lean_proof_stub`)
-从 `spec['fields']` 拿列名，将来不管选哪个 source (Nemotron-Math-Proofs /
-mathlib4 extraction / LeanDojo-Bench / Lean-Workbook) Python 都不动。
-新 verifier `lean_proof_stub` (M0 只校验非空；real Lean check task017/049
-territory)。`environment_registry.yaml` 加 row + telemetry contract。
-M1 SFT 加 `assistant_for_lean_proof` + `M1_USE_BY_ENV` entry。
-`docs/m0-dataset-expansion-plan.md` §6 share-alike question 加 5 候选
-source 对比表。13 个新 pytest case，sandbox 测试基线 148 → 161 passed +
-2 skipped。data_registry 行待 product/legal 拍板再开 — 决议后是一次性
-≤ 50 行 yaml PR。
+最近：task056 Session 2 (PR #50 `2951cac`) 已 squash-merge 进 main —
+`math_formal_lean` 的 source-agnostic code path 落地（transformer +
+verifier + env_registry + M1 SFT builder + 5 候选 source 对比表）。
+data_registry 行待 §6 share-alike 决议。13 个新 pytest case。
+
+**合并后修复**: task058 (production_dataset_slug_fixes) 并发 merge 进
+main 同步加了 `contamination_against` 必填字段 + 加了 hf_placeholder
+license-lint 测试，导致两个 sandbox regression:
+1. 我的 Lean 测试 `_spec()` 缺 `contamination_against` → 3 tests 失败
+2. test_m0_data_env.py 顶层 import `hf_placeholder` 拽进 pydantic →
+   整文件 collection 失败 (sandbox 没 pydantic)
+
+修复 (本 closeout PR 一并合)：
+- test_math_formal_lean `_spec()` helper 加 `contamination_against: ["minif2f", "mathlib4_test"]`
+- test_m0_data_env hf_placeholder import 改为 lazy 进两个用到它的 test 函数内 + 加 `pytest.importorskip("pydantic")` 让 sandbox 跳但 NemTron 跑
+
+测试基线 sandbox: **164 passed + 6 skipped** (4 sandbox-gated: 2 pydantic +
+2 网络相关; 2 torch-gated 老的). task058 + task056 Session 2 一起算
+~24 个新 case 进 main。
+
+task056 整 task 仍 InProgress：data_registry.yaml 待 §6 决议。
+
+下一个候选 (sandbox-runnable + leverage):
+- task021 Session 3 — sandbox container 构建脚本 (code-exec / Lean / terminal Dockerfile)
+- task030 Session 2 — eval basket registry kind (block on task019 / task020)
+- task019 / task020 — M1 eval basket (本身设计 sandbox-runnable，但 acceptance 要真 RLVR checkpoint)
+- task013 / 014 / 016 / 017 / 018 各自的 Session 2+ — 大都需要 cluster / nvcr container

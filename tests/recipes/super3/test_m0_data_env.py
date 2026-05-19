@@ -4,12 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from nemotron.data_prep.utils.hf_placeholder import (
-    NANO3_TARGET_DATASETS,
-    SUPER3_TARGET_DATASETS,
-    UNKNOWN_PENDING_LEGAL_REVIEW,
-    validate_target_dataset_licenses,
-)
+# task058 added the hf_placeholder license-lint suite, which pulls
+# pydantic in via `nemotron.data_prep.blend`. Sandbox CI doesn't have
+# pydantic — gate the lint imports lazily inside the two tests that use
+# them so the rest of the M0 data-env suite (~25 cases) still collects
+# cleanly here. The lint tests skip in sandbox and run on NemTron.
 from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     DATA_REGISTRY_PATH,
     ENV_REGISTRY_PATH,
@@ -131,6 +130,14 @@ def test_super3_sft_competitive_subset_names_resolve_on_hf_when_network_availabl
 
 
 def test_hf_placeholder_targets_have_explicit_license_posture() -> None:
+    pytest.importorskip("pydantic")  # task058 imports pull pydantic via blend.py
+    from nemotron.data_prep.utils.hf_placeholder import (
+        NANO3_TARGET_DATASETS,
+        SUPER3_TARGET_DATASETS,
+        UNKNOWN_PENDING_LEGAL_REVIEW,
+        validate_target_dataset_licenses,
+    )
+
     validate_target_dataset_licenses(NANO3_TARGET_DATASETS)
     validate_target_dataset_licenses(SUPER3_TARGET_DATASETS)
 
@@ -142,6 +149,11 @@ def test_hf_placeholder_targets_have_explicit_license_posture() -> None:
 
 
 def test_hf_placeholder_target_license_lint_rejects_missing_license() -> None:
+    pytest.importorskip("pydantic")
+    from nemotron.data_prep.utils.hf_placeholder import (
+        validate_target_dataset_licenses,
+    )
+
     with pytest.raises(ValueError, match="missing license"):
         validate_target_dataset_licenses({"bad_target": {"hf_dataset": "example/missing-license"}})
 
