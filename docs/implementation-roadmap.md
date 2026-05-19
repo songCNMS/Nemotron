@@ -69,10 +69,17 @@ cannot launch a verifiable smoke run from M0 assets today.
   `train.jsonl` / `val.jsonl` / `manifest.json` consumable by the existing
   `SplitJsonlDataArtifact` shape; lineage block emits `RLVR1` artifact with
   the M0 manifest as the upstream `manifest` input.
-- ☐ Session 2: Smoke launcher — `nemotron super3 rl rlvr1 -c smoke` with
-  `nodes=1, gpus_per_node=1, prompts_per_step=1, max_generations=2`; flip
-  `stage1_rlvr/config/data_prep/rlvr1.yaml` from the `/lustre/...` placeholder
-  to the M0-derived artifact.
+- ⚠ Session 2 (sandbox part landed; cluster part deferred): bridge
+  extended to emit a `combined.jsonl` (train+val concat, val rows last
+  so the downstream `split_local_jsonl(val_holdout=N)` re-split is
+  idempotent), `stage1_rlvr/config/data_prep/rlvr1.yaml` flipped from
+  the `/lustre/.../yifuw/...` internal path to
+  `${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr1/combined.jsonl`,
+  and a new `stage1_rlvr/config/smoke.yaml` (2 nodes / 8 prompts/step /
+  4 train batch / max_num_steps=10 / val_at_end=true). 12 new pytests;
+  sandbox baseline 409 → 421 passed. Real `nemotron super3 rl rlvr1 -c
+  smoke` launch (Ray + vLLM + NeMo-Gym services) still requires cluster
+  access.
 - **Acceptance:** end-to-end smoke run completes; reward telemetry emitted per
   env; W&B lineage `M0 → SFT artifact → RLVR1 artifact` lit up.
 
@@ -502,8 +509,10 @@ Critical path to the M1 promotion gate, single-track execution:
    (cluster verify) still to go.
 4. **task014** — M1 RLVR data bridge (smoke-run-able from M0 in one day).
    Session 1 landed (M0 → RLVR1 JSONL bridge `prepare_m1_rlvr_jsonl.py` +
-   NeMo-Gym env map + lineage); Session 2 (RLVR1 config wiring + smoke
-   launcher) still to go.
+   NeMo-Gym env map + lineage). Session 2 sandbox part landed (bridge
+   combined.jsonl + `data_prep/rlvr1.yaml` flipped off the internal
+   /lustre path + `stage1_rlvr/config/smoke.yaml`); real cluster launch
+   (Ray + vLLM + NeMo-Gym services) still to go.
 5. **task015** — M1 RLVR full 21-env mix. Session 1 landed (declarative
    `rlvr_env_registry.yaml` for all 21 NeMo-Gym envs, registry-driven
    `MIX_PROFILES`, RLVR1 name audit + correction, rlvr2 lit up with 2
