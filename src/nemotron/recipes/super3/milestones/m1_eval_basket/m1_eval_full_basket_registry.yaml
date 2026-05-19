@@ -1,0 +1,140 @@
+schema_version: 1
+milestone: M1
+description: |
+  M1 eval basket — full extension beyond v0 (roadmap §1.7 task020 / plan
+  §5.7). Eleven additional benchmarks layered on top of the v0 eight
+  (``m1_eval_basket_registry.yaml``). Combined the 19 rows cover plan
+  §5.7's M1 acceptance basket: General + Reasoning + Coding + Agentic +
+  SWE + Chat/IF + Long-context + Multilingual.
+
+  Same row shape as the v0 registry — uses the existing
+  ``eval_basket_registry`` schema kind (no schema change needed).
+  ``unified_index.yaml`` registers this file alongside the v0 file so
+  both feed the same license/contamination audits and the combined
+  ``stage3_eval/config/m1_full_basket.yaml`` NeMo Evaluator config.
+
+  v0 + full split rationale: v0 is the minimum signal needed to gate
+  M1 → M2 promotion; full is the breadth needed for the plan §5.7
+  weighted-parity decision against Super3. Session 2 will add promotion
+  gate logic that consumes both registries.
+
+benchmarks:
+  - benchmark_id: hmmt
+    adapter: nemo_evaluator.hmmt
+    category: reasoning_math_competition
+    license: cc-by-sa-4.0
+    gate_metric: pass_at_1
+    notes: |
+      Harvard-MIT Math Tournament. Companion to AIME25; share-alike
+      license is informational at eval time (task058 license cascade
+      audit picks this up — same eval-vs-training distinction as
+      AIME25). Pairs with AIME25 in the reasoning_math_competition
+      category for weighted-mean parity.
+
+  - benchmark_id: hle
+    adapter: nemo_evaluator.hle
+    category: reasoning_extreme_difficulty
+    license: cc-by-4.0
+    gate_metric: accuracy
+    notes: |
+      Humanity's Last Exam — frontier-difficulty reasoning across
+      subjects. Plan §5.7 lists HLE under "Reasoning". Expected to be
+      near-floor at M1; the gate target is "above-floor and
+      monotone-improving vs prior checkpoint" rather than absolute
+      threshold. Plan §1 also references HLE in the M2 acceptance.
+
+  - benchmark_id: scicode
+    adapter: nemo_evaluator.scicode
+    category: code_scientific
+    license: apache-2.0
+    gate_metric: pass_at_1
+    notes: |
+      Scientific code generation (numpy / scipy / domain libs).
+      Complements LiveCodeBench's competitive-programming focus with
+      domain-specific scientific computing.
+
+  - benchmark_id: terminalbench
+    adapter: nemo_evaluator.terminalbench
+    category: tool_use_terminal
+    license: apache-2.0
+    gate_metric: success_rate
+    notes: |
+      Shell/terminal agent benchmark. Needs sandbox container
+      (task021 Session 3 / ContainerSandbox shim ``code_exec`` image)
+      to run real bash commands during eval. Adapter passes the
+      sandbox handle through.
+
+  - benchmark_id: swe_bench_verified
+    adapter: nemo_evaluator.swe_bench_verified
+    category: swe_repo_repair
+    license: cc-by-4.0
+    gate_metric: resolution_rate
+    notes: |
+      Verified subset of SWE-Bench (human-curated). Promotion gate
+      target is resolution_rate (% of issues resolved with passing
+      tests). Multi-harness extension (OpenHands / OpenCode / Codex
+      formats per task017) ships separately.
+
+  - benchmark_id: aa_lcr
+    adapter: nemo_evaluator.aa_lcr
+    category: long_context_qa
+    license: cc-by-4.0
+    gate_metric: accuracy
+    notes: |
+      AA-LCR long-context retrieval and reasoning. Complements
+      RULER's synthetic needle-in-haystack with realistic
+      long-document QA. Same 256K sequence-length requirement as
+      RULER 256K (see v0 registry's ruler_256k row).
+
+  - benchmark_id: mmlu_prox
+    adapter: nemo_evaluator.mmlu_prox
+    category: multilingual_reasoning
+    license: mit
+    gate_metric: accuracy
+    notes: |
+      MMLU-Pro extended to multilingual coverage. Pairs with v0
+      MMLU-Pro for the multilingual_reasoning weighted-parity
+      sub-score per plan §5.7. Adapter selects the multilingual
+      splits (en + 13 others per upstream).
+
+  - benchmark_id: wmt24pp
+    adapter: nemo_evaluator.wmt24pp
+    category: multilingual_translation
+    license: cc-by-4.0
+    gate_metric: bleu
+    notes: |
+      WMT24++ multilingual translation. Gate metric is corpus BLEU
+      (sacrebleu default config). chrF and COMET are informational
+      side-channels (NeMo Evaluator reports all three).
+
+  - benchmark_id: bfcl
+    adapter: nemo_evaluator.bfcl
+    category: tool_use_function_call
+    license: apache-2.0
+    gate_metric: accuracy
+    notes: |
+      Berkeley Function Calling Leaderboard. Simple + multiple +
+      parallel + parallel-multiple function-call categories.
+      Promotion gate is the weighted overall accuracy across
+      categories per BFCL's own scoring rubric.
+
+  - benchmark_id: mcp_mark
+    adapter: nemo_evaluator.mcp_mark
+    category: tool_use_mcp
+    license: apache-2.0
+    gate_metric: success_rate
+    notes: |
+      MCP-Mark — Model Context Protocol agentic tool-use benchmark.
+      Requires MCP server fleet to be reachable during eval; adapter
+      will skip subsets whose servers are unhealthy and log the skip.
+
+  - benchmark_id: tool_decathlon
+    adapter: nemo_evaluator.tool_decathlon
+    category: tool_use_agentic
+    license: cc-by-4.0
+    gate_metric: weighted_score
+    notes: |
+      Ten-tool agentic benchmark spanning calendar / search /
+      filesystem / code-exec / browser etc. Pairs with TauBench
+      airline (v0) for the tool_use_agentic weighted-parity
+      sub-score per plan §5.7.
