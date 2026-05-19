@@ -64,3 +64,52 @@ module-local loader merge) 未启动。
 runnable 候选：task019/020 (eval basket — 但 block on task014 Session 2
 真 RLVR checkpoint)。
 
+
+## Session 3 - 2026-05-18 - intern_nemontron_review_cc
+
+实现 schema enforcement at write time。Session 1 落了 validator + 索引 +
+inventory；Session 2 把 validator 包成 CLI + pre-commit hook，operators
+不显式调用 `validate_unified_index()` 也能在 commit 时拦下 shape drift。
+
+新增产物：
+
+- **`scripts/validate_data_registries.py`** — CLI 包 `validate_unified_index()`，
+  退出码:
+  - 0 = 全部 registry clean
+  - 1 = shape drift (issues 走 stderr，registry id 走 stdout via --paths)
+  - 2 = validator 本身坏 (missing index / import 失败)
+  - Flags: `--quiet` (pre-commit 静默 clean) / `--paths` (stdout 只列
+    offending registry id，方便 pipe) / `--index-path` (测试用，可改默认
+    路径)
+
+- **`.pre-commit-config.yaml` local hook**：
+  - `id: validate-data-registries`
+  - `entry: bash -c 'PYTHONPATH=src python3 scripts/validate_data_registries.py --quiet'`
+  - `files: ^(src/.../milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/.../data_registries/.*\.py)$`
+    — trigger on registry YAML / loader / schema / script 变动
+  - `pass_filenames: false`（script 总 validate 整个索引；per-file 没意义）
+
+设计决策：**不**合并 bridge runtime loaders 跟 schema 校验层。`_bridge_base.load_env_registry`
+fail-fast 在第一个 issue raise，prepare step 立刻 abort；schema 层
+`validate_rows` 收集 *所有* issues 给 PR review。两个 consumer 不一样 —
+merge 会破坏 fail-fast，runtime 跑废 partial data。在 script docstring +
+README 明确写出。
+
+测试 `tests/recipes/super3/test_validate_data_registries_cli.py` 11 cases:
+
+- Script file shape 2: 存在 + 可执行 + python shebang
+- Clean-main 2: 整 index clean 时 exit 0 / `--quiet` 不出 stdout
+- Broken-index 3 (subprocess 跑真 CLI):
+  - 缺 status 字段 → exit 1 + stderr 含 issue 数 + missing required field
+  - `--paths` → stdout 一行一 registry id；stderr 无 verbose dump
+  - 不存在 index 文件 → exit 2 (区分 CI infra 坏 vs schema drift)
+- In-process main() 2: 同 subprocess 但作为 import 测，快反馈给 Python caller
+- Pre-commit config 2: yaml 解析 + local hooks 含 validate-data-registries
+  id + entry 引 PYTHONPATH=src + scripts 路径 + --quiet
+
+测试基线 204 → 215 passed + 6 skipped (11 new). `test_m1_agentic_sft.py`
+pyarrow collect-error pre-existing。
+
+Session 2 不在本 PR 的两个 carry-over:
+- M1 eval basket registry (Session 3 候选；block task019/020)
+- Bridge / M0 loader 接 schema 层 (Session 4 候选；注意 fail-fast 语义)
