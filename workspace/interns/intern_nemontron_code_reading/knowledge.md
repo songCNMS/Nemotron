@@ -25,3 +25,7 @@ Placeholder sentinel detection for contamination audits should use exact or deli
 ### Task History Session Metadata
 
 When a task history log appends a later session, advance the `METADATA:SESSION` header to the latest session number so machine-readable task state does not lag behind the human-readable log.
+
+### Eval Result Loader Contract
+
+`load_eval_results()` should reject malformed NeMo Evaluator JSON before `diff_eval_runs()` sees it; top-level `tasks` must be a mapping, not merely a present key.

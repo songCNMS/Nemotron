@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Working,TASK=task062_pr70_postmerge_review -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Working |
-| Current Task | task062_pr70_postmerge_review |
+| Status | Idle |
+| Current Task |  |
 | PR | https://github.com/songCNMS/Nemotron/pull/88 |
-| Session | 1 |
+| Session | 2 |
 | Branch | intern_nemontron_code_reading/task062_pr70_postmerge_review |
-| Latest | Session 1 reviewed PR #70, fixed `load_eval_results()` so malformed non-dict `tasks` JSON is rejected at load time, verified eval basket tests plus registry validation, and opened PR #88. |
+| Latest | Session 2 closed task062: PR #88 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
