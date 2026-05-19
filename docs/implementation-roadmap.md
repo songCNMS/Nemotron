@@ -234,6 +234,21 @@ Sliced into four Sessions; tracker lives at
 `workspace/tasks/task021_m1_infra_minimum/README.md`:
 
 **task021_m1_infra_minimum** —
+- ✓ Session 5: ContainerSandbox runtime shim wiring the Session 3
+  images into the M0 verifier path. New
+  `sandbox_containers/runtime_shim.py` ships `ContainerSandbox`
+  dataclass + `build_argv` (docker / podman dialect + singularity exec
+  dialect with `--containall --no-net --bind src:dst:ro`) + `run` +
+  `sandbox_for_env(env_id, runtime)`. `run_python_unit_tests` gains a
+  `container_runtime: str | None = None` kwarg threaded through
+  `score_record` → `score_rows` → `evaluate_policy` →
+  `summarize_baselines` → CLI `--container-runtime {docker,podman,singularity}`.
+  Default `None` keeps existing in-process `sys.executable -I`
+  behavior (regression-tested). When set, candidates run inside the
+  registered sandbox image (env without a registered image →
+  in-process fallback + `container_fallback=True` in diagnostics).
+  15 new pytest cases monkey-patch subprocess; real container runs
+  need a Docker daemon (Session 4 cluster verify or local dev).
 - ✗ Session 4: verify NeMo-RL / Ray / vLLM / NeMo-Gym launch path on a
   real cluster (currently all configs are paper-only). Needs NemTron
   access; unsandbox-runnable.

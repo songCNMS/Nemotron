@@ -228,7 +228,29 @@ def extract_code(candidate: Any) -> str:
     return blocks[-1].strip() if blocks else code
 
 
-def run_python_unit_tests(candidate: Any, record: Mapping[str, Any], timeout_s: int) -> tuple[float, JsonDict]:
+def run_python_unit_tests(
+    candidate: Any,
+    record: Mapping[str, Any],
+    timeout_s: int,
+    *,
+    container_runtime: str | None = None,
+) -> tuple[float, JsonDict]:
+    """Run python unit tests against *candidate*.
+
+    When ``container_runtime`` is None (the default), candidate code
+    runs in-process via ``sys.executable -I`` — unchanged from the M0
+    oracle baseline path. Safe for the oracle policy (candidate ==
+    expected gold patch).
+
+    When ``container_runtime`` is one of ``docker`` / ``podman`` /
+    ``singularity``, candidate code runs inside the env's registered
+    sandbox image via ``ContainerSandbox`` (task021 Session 3 +
+    Session 5). This is the path adversarial M1+ RLVR rollouts should
+    take. ``record["environment"]`` is used to look up the image via
+    ``sandbox_image_registry.yaml``; envs without a registered image
+    fall back to in-process execution with an explicit
+    ``container_fallback`` flag in the diagnostics.
+    """
     extra = record.get("extra_env_info", {})
     tests = extra.get("test_list") or []
     imports = extra.get("test_imports") or []
@@ -242,26 +264,66 @@ def run_python_unit_tests(candidate: Any, record: Mapping[str, Any], timeout_s: 
     with tempfile.TemporaryDirectory(prefix="m0-code-smoke-") as tmpdir:
         script_path = Path(tmpdir) / "candidate_test.py"
         script_path.write_text(script, encoding="utf-8")
-        try:
-            result = subprocess.run(
-                [sys.executable, "-I", str(script_path)],
-                cwd=tmpdir,
-                capture_output=True,
-                text=True,
-                timeout=timeout_s,
-                check=False,
+        sandbox = None
+        if container_runtime is not None:
+            # Lazy import keeps the runtime_shim module out of the
+            # health-baseline import graph when no container runtime
+            # is requested (sandbox CI doesn't have docker).
+            from nemotron.recipes.super3.milestones.sandbox_containers.runtime_shim import (
+                sandbox_for_env,
             )
+
+            sandbox = sandbox_for_env(
+                record.get("environment", ""),
+                runtime=container_runtime,
+            )
+
+        try:
+            if sandbox is None:
+                result = subprocess.run(
+                    [sys.executable, "-I", str(script_path)],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_s,
+                    check=False,
+                )
+            else:
+                result = sandbox.run(
+                    host_workdir=Path(tmpdir),
+                    command=["python", "-I", f"{sandbox.workdir_mount}/{script_path.name}"],
+                    timeout_s=timeout_s,
+                )
         except subprocess.TimeoutExpired as exc:
-            return 0.0, {"error": "timeout", "timeout_s": timeout_s, "stdout": exc.stdout, "stderr": exc.stderr}
+            return 0.0, {
+                "error": "timeout",
+                "timeout_s": timeout_s,
+                "stdout": exc.stdout,
+                "stderr": exc.stderr,
+                "container_runtime": container_runtime,
+            }
     score = 1.0 if result.returncode == 0 else 0.0
-    return score, {
+    diagnostics: JsonDict = {
         "returncode": result.returncode,
         "stdout_tail": result.stdout[-1000:],
         "stderr_tail": result.stderr[-1000:],
     }
+    if container_runtime is not None:
+        diagnostics["container_runtime"] = container_runtime
+        # When an env has no registered image, the shim returns None
+        # and we fall back to in-process. Surface that in diagnostics
+        # so coverage walks see the gap.
+        diagnostics["container_fallback"] = sandbox is None
+    return score, diagnostics
 
 
-def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = True) -> tuple[float | None, JsonDict]:
+def score_record(
+    candidate: Any,
+    record: Mapping[str, Any],
+    *,
+    run_code: bool = True,
+    container_runtime: str | None = None,
+) -> tuple[float | None, JsonDict]:
     """Score a row and emit per-verifier telemetry alongside the diagnostic dict.
 
     Telemetry names align with the `telemetry:` list each env declares in
@@ -344,7 +406,12 @@ def score_record(candidate: Any, record: Mapping[str, Any], *, run_code: bool = 
         }
     elif verifier == "python_unit_tests":
         timeout_s = int(record.get("reward_config", {}).get("timeout_s", 30))
-        score, raw = run_python_unit_tests(candidate, record, timeout_s=timeout_s)
+        score, raw = run_python_unit_tests(
+            candidate,
+            record,
+            timeout_s=timeout_s,
+            container_runtime=container_runtime,
+        )
         diagnostics = dict(raw)
         diagnostics.setdefault("timeout", diagnostics.get("error") == "timeout")
         # `returncode != 0` covers both syntax errors and assertion failures
@@ -401,12 +468,17 @@ def score_rows(
     policy: str,
     best_k: int,
     run_code: bool,
+    container_runtime: str | None = None,
 ) -> list[JsonDict]:
     """Score each row once and return raw per-row results.
 
     Pulled out of `evaluate_policy` so that aggregate metrics can be derived from
     the same per-row scores as the split metrics, instead of re-invoking the
     verifier (and, for python_unit_tests, re-spawning subprocesses).
+
+    ``container_runtime`` (task021 Session 5) plumbs the container
+    isolation choice down to ``run_python_unit_tests``. None keeps the
+    pre-task021-Session-5 in-process behavior.
     """
     out: list[JsonDict] = []
     for index, record in enumerate(rows):
@@ -414,7 +486,12 @@ def score_rows(
         scores: list[float] = []
         diagnostics: list[JsonDict] = []
         for candidate in candidates[: max(best_k, 1)]:
-            score, detail = score_record(candidate, record, run_code=run_code)
+            score, detail = score_record(
+                candidate,
+                record,
+                run_code=run_code,
+                container_runtime=container_runtime,
+            )
             diagnostics.append(detail)
             if score is None:
                 continue
@@ -575,11 +652,18 @@ def evaluate_policy(
     policy: str,
     best_k: int,
     run_code: bool,
+    container_runtime: str | None = None,
 ) -> JsonDict:
     """Score and aggregate in one pass. Kept for callers that don't need
     the per-row breakdown (existing tests, direct CLI users).
     """
-    scored = score_rows(rows, policy=policy, best_k=best_k, run_code=run_code)
+    scored = score_rows(
+        rows,
+        policy=policy,
+        best_k=best_k,
+        run_code=run_code,
+        container_runtime=container_runtime,
+    )
     return aggregate_scored_rows(scored, policy=policy, best_k=best_k)
 
 
@@ -693,6 +777,7 @@ def summarize_baselines(
     best_k: int,
     run_code: bool,
     env_specs: Mapping[str, Mapping[str, Any]] | None = None,
+    container_runtime: str | None = None,
 ) -> JsonDict:
     summary: JsonDict = {"best_k": best_k, "policies": list(policies), "environments": {}}
     for env_id, splits in rows_by_env.items():
@@ -704,7 +789,13 @@ def summarize_baselines(
         for split, rows in sorted(splits.items()):
             env_summary["splits"][split] = {}
             for policy in policies:
-                scored = score_rows(rows, policy=policy, best_k=best_k, run_code=run_code)
+                scored = score_rows(
+                    rows,
+                    policy=policy,
+                    best_k=best_k,
+                    run_code=run_code,
+                    container_runtime=container_runtime,
+                )
                 scored_cache[(split, policy)] = scored
                 env_summary["splits"][split][policy] = aggregate_scored_rows(
                     scored, policy=policy, best_k=best_k
@@ -786,6 +877,7 @@ def build_report(args: argparse.Namespace) -> JsonDict:
         best_k=args.best_k,
         run_code=not args.skip_code_execution,
         env_specs=env_specs,
+        container_runtime=args.container_runtime,
     )
     report = {
         "schema_version": 1,
@@ -794,6 +886,7 @@ def build_report(args: argparse.Namespace) -> JsonDict:
         "input_dir": str(args.input_dir),
         "environment_registry": str(args.environment_registry),
         "code_execution": not args.skip_code_execution,
+        "container_runtime": args.container_runtime,
         "requested_rows": requested_rows or {},
         "health": health,
         "baselines": baselines,
@@ -929,6 +1022,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--policy", action="append", choices=["oracle", "empty", "oracle_then_empty"])
     parser.add_argument("--best-k", type=int, default=2)
     parser.add_argument("--skip-code-execution", action="store_true")
+    parser.add_argument(
+        "--container-runtime",
+        choices=["docker", "podman", "singularity"],
+        default=None,
+        help=(
+            "Run `python_unit_tests` verifier inside a sandbox container "
+            "(task021 Session 5). Default None keeps in-process execution. "
+            "Image lookup goes through sandbox_image_registry.yaml; envs "
+            "without a registered image fall back to in-process with a "
+            "`container_fallback=true` flag in diagnostics."
+        ),
+    )
     parser.add_argument("--overwrite", action="store_true")
     return parser
 
