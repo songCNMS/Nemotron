@@ -1,6 +1,6 @@
 # task_knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## 编写规则
 
@@ -34,3 +34,7 @@ Session 1 已把当前 11 个 M0 dataset row 全部补上 `contamination_against
 ### Skywork placeholder license posture
 
 2026-05-19 查 `Skywork/Skywork-OR1-RL-Data@1cdedc52e0e2db85fdf252f9be682e63a5a38c33`，HF card metadata 没有 license 字段。当前代码只能标 `unknown_pending_legal_review`，并用 license lint 防止 future target config 漏填；创建上游 discussion 需要带权限 HF 账号，本环境没有 `HF_TOKEN`。
+
+### Live HF regression gate
+
+Live HF lookup 不放在默认 unit suite；默认测试只做静态 slug/subset 回归，真实 `dataset_info()` 校验用 `NEMOTRON_RUN_LIVE_HF_TESTS=1` 显式开启。这样 PR CI 不依赖网络，但 daily/manual run 仍能捕捉 404 或 repo rename。

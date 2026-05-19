@@ -1,6 +1,6 @@
 # task058_production_dataset_slug_fixes
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## 背景
 
@@ -57,6 +57,12 @@ Session 1 重新查验 live HF：`nvidia/Nemotron-Competitive-Programming-v1` �
 - F3 已为 DAPO/Skywork placeholder target config 增加 `license` posture，并在 `HFPlaceholderResolver.create()` 前做 license lint。
 - F4 已在 M0 registry、unified registry schema、M0 metadata/manifest 和测试中接入 `contamination_against`。
 - Target tests：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py tests/recipes/super3/test_unified_data_registry.py` → `48 passed`。
+
+## Session 2 closeout
+
+- PR review 指出 live HF lookup 不应默认跑在普通 unit suite；已改为 `NEMOTRON_RUN_LIVE_HF_TESTS=1` 显式 opt-in。
+- 默认目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py tests/recipes/super3/test_unified_data_registry.py` → `46 passed, 2 skipped`。
+- Live HF opt-in 测试：`NEMOTRON_RUN_LIVE_HF_TESTS=1 PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py -k "live_hf or resolves_on_hf"` → `2 passed, 27 deselected`。
 
 ## 依赖
 

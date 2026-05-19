@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -40,6 +41,11 @@ SFT_RAW_BLEND_PATH = (
 RL_RAW_BLEND_PATH = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
 OLD_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-3-Super-RL-Training-Blends"
 LIVE_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-RL-Super-Training-Blends"
+
+
+def _require_live_hf_tests() -> None:
+    if os.environ.get("NEMOTRON_RUN_LIVE_HF_TESTS") != "1":
+        pytest.skip("set NEMOTRON_RUN_LIVE_HF_TESTS=1 to run live HF checks")
 
 
 def _spec(dataset_id: str) -> dict:
@@ -92,13 +98,10 @@ def test_super3_rl_blend_uses_live_hf_slug_and_docs_drop_old_slug() -> None:
 
 
 def test_super3_rl_blend_slug_resolves_on_hf_when_network_available() -> None:
+    _require_live_hf_tests()
     hub = pytest.importorskip("huggingface_hub")
 
-    try:
-        info = hub.dataset_info(LIVE_SUPER3_RL_BLEND_SLUG)
-    except Exception as exc:  # pragma: no cover - depends on HF availability
-        pytest.skip(f"HF dataset_info unavailable: {exc}")
-
+    info = hub.dataset_info(LIVE_SUPER3_RL_BLEND_SLUG)
     assert info.id == LIVE_SUPER3_RL_BLEND_SLUG
 
 
@@ -118,13 +121,10 @@ def test_super3_sft_competitive_subset_names_match_live_file_stems() -> None:
 
 
 def test_super3_sft_competitive_subset_names_resolve_on_hf_when_network_available() -> None:
+    _require_live_hf_tests()
     hub = pytest.importorskip("huggingface_hub")
 
-    try:
-        info = hub.dataset_info("nvidia/Nemotron-Competitive-Programming-v1")
-    except Exception as exc:  # pragma: no cover - depends on HF availability
-        pytest.skip(f"HF dataset_info unavailable: {exc}")
-
+    info = hub.dataset_info("nvidia/Nemotron-Competitive-Programming-v1")
     siblings = {sibling.rfilename for sibling in info.siblings}
     assert "data/competitive_coding_cpp.part_00.jsonl" in siblings
     assert "data/infinibyte.part_00.jsonl" in siblings

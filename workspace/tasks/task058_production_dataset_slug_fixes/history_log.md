@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -18,3 +18,13 @@
 - 目标测试通过：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py tests/recipes/super3/test_unified_data_registry.py` → `48 passed`。
 - 完整 Super3 目标测试通过：`PYTHONPATH=src pytest -q tests/recipes/super3` → `205 passed, 3 skipped`。
 - 代码已提交并推送到 PR #51：`https://github.com/songCNMS/Nemotron/pull/51`。
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- 按“执行下一步”进入 PR #51 closeout：读取 merge playbook，确认 PR #51 `OPEN / CLEAN`，无人工阻塞 review。
+- 处理 Copilot review 中的有效低置信问题：live HF lookup 原先放在默认 unit suite，网络/HF 波动时会 skip 或干扰 CI；已改为 `NEMOTRON_RUN_LIVE_HF_TESTS=1` 显式 opt-in。
+- 保留默认静态回归：旧 Super3 RL slug 不再出现在 code/docs，SFT competitive subset 名保持 live dot stem。
+- 验证：
+  - 默认目标测试：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py tests/recipes/super3/test_unified_data_registry.py` → `46 passed, 2 skipped`。
+  - Live HF opt-in：`NEMOTRON_RUN_LIVE_HF_TESTS=1 PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py -k "live_hf or resolves_on_hf"` → `2 passed, 27 deselected`。
+- 按 playbook 将 intern 状态置为 Idle、任务 README 状态置为 Completed，准备合并 PR #51。
