@@ -22,4 +22,4 @@ fixing any concrete issue found in one follow-up PR.
 - [x] PR #73 through PR #85 touched files are reviewed.
 - [x] Any concrete bugs found are fixed on this branch.
 - [x] Focused validation covers the fix.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task065_continuous_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task065_continuous_postmerge_review`: https://github.com/songCNMS/Nemotron/pull/91

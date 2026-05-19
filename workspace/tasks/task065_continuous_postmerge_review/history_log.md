@@ -23,3 +23,4 @@
   - `python scripts/validate_data_registries.py --check-revision-pins` → zero blockers, three informational pref candidates.
   - Real HF streaming smoke for `m0_swe_pivot_tool_call`, `m0_swe2_openhands_trace`, `m0_helpsteer2_pref` with 2/1 train/val each → success, no manifest errors.
   - Combined PR-scope tests: promotion gate, gap analysis, RLVR1 smoke wiring, SWE1/SWE2 bridges, sandbox watchdog, unified registry, M0 data env, SWE converters, HelpSteer-2 converter, revision audit → 249 passed, 2 skipped.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/91
