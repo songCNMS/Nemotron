@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task058_production_dataset_slug_fixes -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Idle |
-| Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/23 |
-| Session | 6 |
-| Branch | intern_nemontron_code_reading/task005_full_agentic_v0_dataprep_session3 |
-| Latest | Session 6 完成 PR #23 合并前最终验证：复用 M1 packed agentic_v0 数据，用 Qwen3-4B-Instruct-2507 Megatron checkpoint 跑完 9-step/1-epoch 训练、checkpoint 复载 eval；验证指标从 loss=0.9553678/PPL=2.599627 变为 loss=0.9942796/PPL=2.702776。PR #23 按 playbook 合并至 main。 |
+| Status | Working |
+| Current Task | task058_production_dataset_slug_fixes |
+| PR | https://github.com/songCNMS/Nemotron/pull/51 |
+| Session | 1 |
+| Branch | intern_nemontron_code_reading/task058_production_dataset_slug_fixes |
+| Latest | Session 1 接手 task058 并提交 PR #51：修复 Super3 RL live HF slug、placeholder license posture/lint、M0 contamination_against schema/metadata/manifest，并用 HF live sibling 测试固化 competitive programming dot stem。验证 `tests/recipes/super3` 为 205 passed, 3 skipped。 |

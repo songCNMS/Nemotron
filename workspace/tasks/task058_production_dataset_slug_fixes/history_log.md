@@ -16,3 +16,5 @@
 - F3：给 DAPO/Skywork placeholder target config 增加 `license` 字段；DAPO 为 `apache-2.0`，Skywork 为 `unknown_pending_legal_review`；新增 `validate_target_dataset_licenses()` 并在 resolver 创建前执行。当前环境没有 `HF_TOKEN`，无法代表项目创建上游 HF discussion。
 - F4：为当前 11 个 M0 dataset registry row 添加 `contamination_against`，并让 `validate_registries()`、M0 record metadata、manifest、unified registry schema 都消费该字段。
 - 目标测试通过：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py tests/recipes/super3/test_unified_data_registry.py` → `48 passed`。
+- 完整 Super3 目标测试通过：`PYTHONPATH=src pytest -q tests/recipes/super3` → `205 passed, 3 skipped`。
+- 代码已提交并推送到 PR #51：`https://github.com/songCNMS/Nemotron/pull/51`。
