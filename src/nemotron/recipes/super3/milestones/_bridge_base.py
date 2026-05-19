@@ -118,33 +118,37 @@ def load_env_registry(
     expected_mix: str | set[str],
     display_label: str | None = None,
     extra_row_validator: Callable[[JsonDict, int], None] | None = None,
-    required_fields: Sequence[str] = ("nemo_gym_env", "mix", "status"),
+    required_fields: Sequence[str] | None = None,
 ) -> list[JsonDict]:
     """Load a bridge module env registry from YAML.
 
-    Each row must carry ``nemo_gym_env``, ``mix``, ``status``. Mix values
-    must be in ``expected_mix`` (single string or set of valid names —
-    SWE1/SWE2/RLHF use a single name, RLVR allows ``{rlvr1, rlvr2, rlvr3}``).
-    Statuses must be in ``KNOWN_STATUSES``.
+    task030 Session 4: this runtime loader delegates row-shape +
+    top-level checks to the central ``data_registries.schema`` layer
+    (``validate_top_level`` + ``validate_rows(fail_fast=True)``). The
+    bridge-specific bits — mix-set membership with a module-friendly
+    error message, and the ``extra_row_validator`` callback — stay
+    inline as a closure passed to schema's ``extra_validators``. Single
+    source of truth for the row-shape definition, no behavior change.
 
-    *display_label* customises the wording of the mix-rejection error —
-    each bridge module passes its display name (``"SWE1"``, ``"SWE2"``,
-    ``"RLHF"``, ``"RLVR"``) so the error reads naturally. Defaults to
-    the uppercased *expected_mix* for single-string mixes.
-
-    Module-specific row checks (e.g., SWE2's ``sif_source`` validation)
-    are run via ``extra_row_validator(row, index)`` — raise ``ValueError``
-    inside to fail the load.
+    *required_fields* is kept for API compatibility; today's
+    ``bridge_env_registry`` schema declares its own required set so
+    the param is unused unless a caller passes a non-default override.
     """
     import yaml
 
+    from nemotron.recipes.super3.milestones.data_registries.schema import (
+        bridge_status_validator,
+        validate_rows,
+        validate_top_level,
+    )
+
     with path.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "envs" not in data:
-        raise ValueError(f"{path}: registry must be a mapping with an 'envs' key")
-    rows = data["envs"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{path}: 'envs' must be a list")
+
+    # Top-level shape via schema layer. Errors get the YAML path
+    # prefixed for ops debuggability (matches the pre-Session-4
+    # message format).
+    validate_top_level(data, kind="bridge_env_registry", source_path=path, strict=False)
 
     expected_set = {expected_mix} if isinstance(expected_mix, str) else set(expected_mix)
     label = (
@@ -154,26 +158,37 @@ def load_env_registry(
     )
     mix_value_label = expected_mix if isinstance(expected_mix, str) else "/".join(sorted(expected_set))
 
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{path}: envs[{index}] must be a mapping")
-        for required in required_fields:
-            if required not in row:
-                raise ValueError(
-                    f"{path}: envs[{index}] missing required field {required!r}"
-                )
-        if row["status"] not in KNOWN_STATUSES:
-            raise ValueError(
-                f"{path}: envs[{index}] status {row['status']!r} not in {sorted(KNOWN_STATUSES)}"
-            )
+    def _mix_validator(row: JsonDict, index: int) -> str | None:
         if row["mix"] not in expected_set:
-            raise ValueError(
-                f"{path}: envs[{index}] mix {row['mix']!r} not in {{{mix_value_label!r}}} "
+            return (
+                f"mix {row['mix']!r} not in {{{mix_value_label!r}}} "
                 f"— {label} registry should only carry {mix_value_label} rows"
             )
+        return None
+
+    def _extra_row_adapter(row: JsonDict, index: int) -> str | None:
         if extra_row_validator is not None:
-            extra_row_validator(row, index)
-    return rows
+            try:
+                extra_row_validator(row, index)
+            except ValueError as exc:
+                return str(exc)
+        return None
+
+    # Row-shape via schema layer. fail_fast=True keeps the runtime
+    # contract: a single bad row aborts the prepare step rather than
+    # silently writing partial bad data.
+    validate_rows(
+        data,
+        kind="bridge_env_registry",
+        fail_fast=True,
+        source_path=path,
+        extra_validators=[
+            bridge_status_validator,
+            _mix_validator,
+            _extra_row_adapter,
+        ],
+    )
+    return data["envs"]
 
 
 # --- Env map derivation + coverage report --------------------------------

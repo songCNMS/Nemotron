@@ -91,29 +91,32 @@ PREF_DATA_REGISTRY_PATH = Path(__file__).with_name("rlhf_pref_data_registry.yaml
 
 def load_rlhf_pref_data_registry(path: Path | None = None) -> list[JsonDict]:
     """Load the preference-data candidate registry (HelpSteer-2 /
-    UltraFeedback / Orca DPO pairs). The bridge surfaces a
-    ``known_candidates`` list in the coverage block; the registry is
-    not consumed for tagging directly until Session 2 wires an active
-    M0 pref source."""
+    UltraFeedback / Orca DPO pairs).
+
+    task030 Session 4: row shape delegated to
+    ``data_registries.schema.validate_rows`` (fail_fast=True). The
+    pref-data registry has no module-specific row checks today;
+    schema-layer ``required_row_fields`` covers id / hf_dataset /
+    license enforcement.
+    """
     import yaml
+
+    from nemotron.recipes.super3.milestones.data_registries.schema import (
+        validate_rows,
+        validate_top_level,
+    )
 
     target = path or PREF_DATA_REGISTRY_PATH
     with target.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    if not isinstance(data, dict) or "datasets" not in data:
-        raise ValueError(f"{target}: pref-data registry must declare a 'datasets' list")
-    rows = data["datasets"]
-    if not isinstance(rows, list):
-        raise ValueError(f"{target}: 'datasets' must be a list")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ValueError(f"{target}: datasets[{index}] must be a mapping")
-        for required in ("id", "hf_dataset", "license"):
-            if required not in row:
-                raise ValueError(
-                    f"{target}: datasets[{index}] missing required field {required!r}"
-                )
-    return rows
+    validate_top_level(data, kind="pref_data_registry", source_path=target, strict=False)
+    validate_rows(
+        data,
+        kind="pref_data_registry",
+        fail_fast=True,
+        source_path=target,
+    )
+    return data["datasets"]
 
 
 def pref_candidate_ids(registry: Sequence[Mapping[str, Any]]) -> list[str]:

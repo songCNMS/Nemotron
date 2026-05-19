@@ -110,6 +110,100 @@ def test_bridge_mix_validator_catches_wrong_mix() -> None:
     assert validator({"mix": "rlhf"}, 0) is None
 
 
+# ---------- task030 Session 4: schema API surfaces (fail_fast + strict) ----------
+
+
+def test_validate_rows_fail_fast_raises_on_first_issue() -> None:
+    """Runtime loaders consume schema via ``fail_fast=True`` — a single
+    bad row aborts immediately instead of writing partial bad data.
+    Catches the regression where validate_rows accidentally falls back
+    to collect-all under fail_fast=True."""
+    data = {
+        "schema_version": 1,
+        "milestone": "M1",
+        "envs": [
+            {"nemo_gym_env": "x", "mix": "rlhf", "status": "active"},  # clean
+            {"nemo_gym_env": "y", "mix": "rlhf"},  # missing status
+            {"nemo_gym_env": "z", "mix": "rlhf"},  # missing status — should never be reached
+        ],
+    }
+    with pytest.raises(ValueError, match=r"envs\[1\] missing required field 'status'"):
+        validate_rows(data, kind="bridge_env_registry", fail_fast=True)
+
+
+def test_validate_rows_fail_fast_with_source_path_includes_path_prefix() -> None:
+    """Runtime loaders pass ``source_path`` so error messages name the
+    offending YAML — operators can grep for the path in logs."""
+    data = {
+        "schema_version": 1,
+        "milestone": "M1",
+        "envs": [{"nemo_gym_env": "y", "mix": "rlhf"}],  # missing status
+    }
+    with pytest.raises(
+        ValueError, match=r"/path/to/registry\.yaml: envs\[0\] missing required field 'status'"
+    ):
+        validate_rows(
+            data,
+            kind="bridge_env_registry",
+            fail_fast=True,
+            source_path="/path/to/registry.yaml",
+        )
+
+
+def test_validate_rows_collect_all_still_returns_full_issue_list() -> None:
+    """Audit mode (default) collects every issue. Catches a regression
+    where a future change accidentally short-circuits."""
+    data = {
+        "schema_version": 1,
+        "milestone": "M1",
+        "envs": [
+            {"nemo_gym_env": "y", "mix": "rlhf"},  # missing status
+            {"nemo_gym_env": "z", "mix": "rlhf"},  # missing status
+        ],
+    }
+    issues = validate_rows(data, kind="bridge_env_registry")
+    assert len(issues) == 2
+    assert all("missing required field 'status'" in issue for issue in issues)
+
+
+def test_validate_top_level_strict_requires_schema_version_and_milestone() -> None:
+    """Audit mode (default ``strict=True``) enforces top-level
+    schema_version + milestone for unified-index discovery."""
+    bad = {"envs": []}  # missing both schema_version and milestone
+    with pytest.raises(ValueError, match=r"missing top-level 'schema_version'"):
+        validate_top_level(bad, kind="bridge_env_registry")
+
+
+def test_validate_top_level_runtime_mode_skips_documentation_fields() -> None:
+    """Runtime loaders pass ``strict=False`` because schema_version /
+    milestone are documentation, not runtime contract. Only the
+    rows_key must be present."""
+    runtime_minimal = {"envs": []}  # no schema_version / milestone
+    # Should not raise — strict=False skips those checks.
+    validate_top_level(runtime_minimal, kind="bridge_env_registry", strict=False)
+
+
+def test_validate_top_level_runtime_mode_still_requires_rows_key() -> None:
+    """Even in lenient (strict=False) mode, the rows_key remains
+    mandatory — bridges can't operate on a registry that doesn't have
+    the data list."""
+    bad = {}  # missing envs key
+    with pytest.raises(ValueError, match=r"missing rows key 'envs'"):
+        validate_top_level(bad, kind="bridge_env_registry", strict=False)
+
+
+def test_known_bridge_statuses_still_double_aligned_after_session_4() -> None:
+    """Session 4 merge keeps the bridge runtime and schema layer
+    *aligned* on KNOWN_STATUSES — schema's `KNOWN_BRIDGE_STATUSES`
+    and bridge_base's `KNOWN_STATUSES` must stay in sync (drift
+    detected by this test rather than at runtime)."""
+    from nemotron.recipes.super3.milestones._bridge_base import (
+        KNOWN_STATUSES as BRIDGE_KNOWN_STATUSES,
+    )
+
+    assert KNOWN_BRIDGE_STATUSES == BRIDGE_KNOWN_STATUSES
+
+
 # ---------- unified_index.yaml shape ----------
 
 
