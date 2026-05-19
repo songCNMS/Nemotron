@@ -22,7 +22,9 @@ any concrete bugs found in one follow-up PR.
 - [x] Any concrete bugs found are fixed on this branch.
 - [x] Targeted tests cover the fix.
 - [x] `tests/recipes/super3` passes or unrelated failures are documented.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task060_pr68_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task060_pr68_postmerge_review`.
+
+PR: https://github.com/songCNMS/Nemotron/pull/86
 
 ## Review Finding
 

@@ -16,3 +16,5 @@
   - `PYTHONPATH=src scripts/validate_data_registries.py --check-contamination` → pass.
   - `PYTHONPATH=src scripts/validate_data_registries.py --quiet` → pass.
   - `PYTHONPATH=src pytest -q tests/recipes/super3` → `548 passed, 5 skipped`.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/86.
+- Corrected the PR body through the GitHub API after a double-quoted `gh pr create --body` command allowed shell backtick substitution.
