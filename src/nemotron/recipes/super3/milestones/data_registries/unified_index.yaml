@@ -134,3 +134,19 @@ registries:
     consumed_by:
       - regression_report.py (gate_metric lookup for diff)
       - stage3_eval/config/m1_basket.yaml (NeMo Evaluator selector)
+
+  # M1 eval — full basket extension (task020 Session 1)
+  - id: m1_eval_full_basket
+    kind: eval_basket_registry
+    path: ../m1_eval_basket/m1_eval_full_basket_registry.yaml
+    summary: |
+      11 additional benchmark rows extending the v0 basket to plan
+      §5.7's full M1 acceptance set (HMMT, HLE, SciCode, TerminalBench,
+      SWE-Bench Verified, AA-LCR, MMLU-ProX, WMT24++, BFCL, MCP-Mark,
+      Tool Decathlon). Same `eval_basket_registry` shape — combined
+      with v0 these 19 rows feed `stage3_eval/config/m1_full_basket.yaml`
+      and the task020 Session 2 promotion gate weighted-parity decision.
+    produced_by: (authored)
+    consumed_by:
+      - regression_report.py (gate_metric lookup for combined diff)
+      - stage3_eval/config/m1_full_basket.yaml (combined NeMo Evaluator selector)

@@ -1,0 +1,260 @@
+"""Tests for the M1 eval *full* basket extension (task020 Session 1).
+
+Covers:
+
+- ``m1_eval_full_basket_registry.yaml`` shape — 11 additional benchmark
+  rows per roadmap §1.7 task020 / plan §5.7 acceptance basket, each
+  with the same schema fields as the v0 registry
+- No benchmark_id overlap between v0 and full registries
+- Same ``eval_basket_registry`` kind reused; unified index registers
+  ``m1_eval_full_basket`` and live validate stays clean
+- Combined ``stage3_eval/config/m1_full_basket.yaml`` selects all 19
+  benchmarks; every config task name has a matching registry row
+- ``regression_report.diff_eval_runs`` works on the combined gate-metric
+  lookup (no source changes needed — function already accepts an
+  arbitrary map)
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+
+yaml = pytest.importorskip("yaml")
+
+
+from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
+    diff_eval_runs,
+)
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+V0_REGISTRY_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_basket_registry.yaml"
+)
+FULL_REGISTRY_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_full_basket_registry.yaml"
+)
+FULL_BASKET_CONFIG_PATH = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket.yaml"
+)
+
+
+EXPECTED_FULL_IDS = {
+    "hmmt",
+    "hle",
+    "scicode",
+    "terminalbench",
+    "swe_bench_verified",
+    "aa_lcr",
+    "mmlu_prox",
+    "wmt24pp",
+    "bfcl",
+    "mcp_mark",
+    "tool_decathlon",
+}
+
+EXPECTED_V0_IDS = {
+    "mmlu_pro",
+    "aime25",
+    "gpqa",
+    "livecodebench",
+    "ifbench",
+    "multichallenge",
+    "ruler_256k",
+    "taubench_airline",
+}
+
+
+def _load_rows(path: Path) -> list[dict]:
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    return data["benchmarks"]
+
+
+# ---------- Registry shape ----------
+
+
+def test_full_registry_loads_with_eleven_benchmark_rows() -> None:
+    """Roadmap §1.7 task020 lists exactly 11 extension benchmarks;
+    drift in either direction surfaces here."""
+    data = yaml.safe_load(FULL_REGISTRY_PATH.read_text(encoding="utf-8"))
+    assert data["schema_version"] == 1
+    assert data["milestone"] == "M1"
+    rows = data["benchmarks"]
+    assert len(rows) == 11, f"expected 11 rows, got {len(rows)}"
+    ids = {row["benchmark_id"] for row in rows}
+    assert ids == EXPECTED_FULL_IDS
+
+
+def test_every_full_basket_row_has_required_schema_fields() -> None:
+    required = ("benchmark_id", "adapter", "category", "license", "gate_metric")
+    for row in _load_rows(FULL_REGISTRY_PATH):
+        for field in required:
+            assert field in row, f"row {row.get('benchmark_id')} missing {field}"
+
+
+def test_hmmt_row_flags_cc_by_sa_license() -> None:
+    """HMMT mirrors AIME25's share-alike posture; task058 license
+    cascade audit relies on this row staying CC-BY-SA-4.0 so the
+    informational eval-time signal stays consistent."""
+    row = next(r for r in _load_rows(FULL_REGISTRY_PATH) if r["benchmark_id"] == "hmmt")
+    assert row["license"] == "cc-by-sa-4.0"
+
+
+def test_full_basket_adapter_names_match_benchmark_ids() -> None:
+    """Adapter convention is ``nemo_evaluator.<benchmark_id>`` so the
+    schema-layer audit can cross-walk config selectors and registry
+    rows without ambiguity. Lock the convention for the full extension."""
+    for row in _load_rows(FULL_REGISTRY_PATH):
+        bid = row["benchmark_id"]
+        assert row["adapter"] == f"nemo_evaluator.{bid}", (
+            f"row {bid} adapter does not match nemo_evaluator.{bid}"
+        )
+
+
+# ---------- No overlap with v0 ----------
+
+
+def test_full_basket_does_not_redefine_any_v0_benchmark() -> None:
+    """Each benchmark_id should live in exactly one registry; otherwise
+    the combined gate-metric lookup needs conflict resolution."""
+    v0_ids = {r["benchmark_id"] for r in _load_rows(V0_REGISTRY_PATH)}
+    full_ids = {r["benchmark_id"] for r in _load_rows(FULL_REGISTRY_PATH)}
+    overlap = v0_ids & full_ids
+    assert not overlap, f"benchmark_id overlap between v0 and full: {overlap}"
+
+
+def test_combined_basket_covers_plan_5_7_acceptance_set() -> None:
+    """Sanity-check that v0 + full = 19 distinct benchmarks per plan §5.7."""
+    v0_ids = {r["benchmark_id"] for r in _load_rows(V0_REGISTRY_PATH)}
+    full_ids = {r["benchmark_id"] for r in _load_rows(FULL_REGISTRY_PATH)}
+    combined = v0_ids | full_ids
+    assert combined == EXPECTED_V0_IDS | EXPECTED_FULL_IDS
+    assert len(combined) == 19
+
+
+# ---------- Schema integration ----------
+
+
+def test_full_basket_registered_in_unified_index() -> None:
+    from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
+        load_unified_index,
+    )
+    rows = load_unified_index()
+    full_basket_rows = [r for r in rows if r.get("id") == "m1_eval_full_basket"]
+    assert full_basket_rows, "unified_index.yaml missing m1_eval_full_basket entry"
+    assert full_basket_rows[0]["kind"] == "eval_basket_registry"
+
+
+def test_live_unified_index_validates_clean_after_full_basket_addition() -> None:
+    """Adding the full basket file + index row must not break the
+    unified validation pass (uses the same eval_basket_registry kind
+    introduced by task019 Session 1, so no schema change needed)."""
+    from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
+        validate_unified_index,
+    )
+    issues = validate_unified_index()
+    assert issues == [], (
+        "live unified index has issues after m1_eval_full_basket addition:\n"
+        + "\n".join(issues)
+    )
+
+
+def test_full_basket_uses_existing_eval_basket_registry_kind() -> None:
+    """task020 Session 1 explicitly reuses task019's schema kind — no
+    new KNOWN_KINDS entry expected. Lock that to catch accidental
+    expansion."""
+    from nemotron.recipes.super3.milestones.data_registries.schema import (
+        KNOWN_KINDS,
+    )
+    assert "eval_basket_registry" in KNOWN_KINDS
+    assert len(KNOWN_KINDS) == 7, (
+        f"KNOWN_KINDS grew unexpectedly to {len(KNOWN_KINDS)} "
+        f"({sorted(KNOWN_KINDS)}); task020 Session 1 should reuse the "
+        "task019 kind, not add a new one"
+    )
+
+
+# ---------- m1_full_basket.yaml ----------
+
+
+def test_full_basket_config_is_valid_yaml() -> None:
+    data = yaml.safe_load(FULL_BASKET_CONFIG_PATH.read_text(encoding="utf-8"))
+    assert data["defaults"] == "default.yaml"
+    assert isinstance(data["tasks"], list)
+
+
+def test_full_basket_config_selects_all_nineteen_tasks() -> None:
+    data = yaml.safe_load(FULL_BASKET_CONFIG_PATH.read_text(encoding="utf-8"))
+    tasks = data["tasks"]
+    assert len(tasks) == 19, f"expected 19 task entries, got {len(tasks)}"
+
+
+def test_full_basket_config_task_names_match_registry_benchmark_ids() -> None:
+    """The convention is ``adlr_<benchmark_id>`` for every task; if the
+    config picks a name that isn't in either registry the cross-walk
+    breaks and the regression report will silently skip that task."""
+    data = yaml.safe_load(FULL_BASKET_CONFIG_PATH.read_text(encoding="utf-8"))
+    tasks = set(data["tasks"])
+    combined_ids = (
+        {r["benchmark_id"] for r in _load_rows(V0_REGISTRY_PATH)}
+        | {r["benchmark_id"] for r in _load_rows(FULL_REGISTRY_PATH)}
+    )
+    expected = {f"adlr_{bid}" for bid in combined_ids}
+    assert tasks == expected, (
+        f"config / registry drift — missing in config: {expected - tasks}, "
+        f"extra in config: {tasks - expected}"
+    )
+
+
+# ---------- regression_report works on combined gate map ----------
+
+
+def _combined_gate_map() -> dict[str, str]:
+    """Merge v0 + full registries the way task020 Session 2 CLI will."""
+    out: dict[str, str] = {}
+    for path in (V0_REGISTRY_PATH, FULL_REGISTRY_PATH):
+        for row in _load_rows(path):
+            out[row["benchmark_id"]] = row["gate_metric"]
+    return out
+
+
+def test_combined_gate_map_drives_diff_across_both_registries() -> None:
+    """Spot-check that diff_eval_runs treats v0 and full rows
+    interchangeably under a single merged lookup — covers the Session 2
+    CLI's combined-basket plumbing without needing the CLI itself."""
+    gate_map = _combined_gate_map()
+    assert "mmlu_pro" in gate_map and "hmmt" in gate_map
+    current = {
+        "tasks": {
+            "mmlu_pro": {"metrics": {"accuracy": 0.66}},
+            "hmmt": {"metrics": {"pass_at_1": 0.18}},
+            "bfcl": {"metrics": {"accuracy": 0.71}},
+        }
+    }
+    baseline = {
+        "tasks": {
+            "mmlu_pro": {"metrics": {"accuracy": 0.62}},
+            "hmmt": {"metrics": {"pass_at_1": 0.20}},
+            "bfcl": {"metrics": {"accuracy": 0.71}},
+        }
+    }
+    deltas = diff_eval_runs(current, baseline, gate_metric_by_id=gate_map)
+    statuses = {d.benchmark_id: d.status for d in deltas}
+    assert statuses == {
+        "mmlu_pro": "improved",
+        "hmmt": "regressed",
+        "bfcl": "unchanged",
+    }
+
+
+def test_combined_gate_map_metric_lookup_matches_registry_for_full_rows() -> None:
+    """Every full-basket row's gate_metric must appear under its
+    benchmark_id in the merged map — protects against silent rename
+    drift between yaml and the in-memory dict."""
+    gate_map = _combined_gate_map()
+    for row in _load_rows(FULL_REGISTRY_PATH):
+        assert gate_map[row["benchmark_id"]] == row["gate_metric"]

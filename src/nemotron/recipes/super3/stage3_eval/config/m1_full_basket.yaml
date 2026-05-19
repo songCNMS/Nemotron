@@ -1,0 +1,80 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# M1 eval *full* basket config (roadmap §1.7 task020 Session 1).
+#
+# Selects all 19 benchmarks across both registries:
+#   - 8 v0 rows from ``m1_eval_basket_registry.yaml`` (task019 Session 1)
+#   - 11 full extension rows from ``m1_eval_full_basket_registry.yaml``
+#     (task020 Session 1, this PR)
+#
+# Per plan §5.7's M1 acceptance basket: General + Reasoning + Coding +
+# Agentic + SWE + Chat/IF + Long-context + Multilingual.
+#
+# Pairs with ``config/default.yaml`` — defaults that aren't overridden
+# below come from there. Same `defaults: default.yaml` pattern as
+# ``m1_basket.yaml`` (v0).
+#
+# Acceptance (task020):
+#   nemotron super3 eval -c m1_full_basket --run YOUR-CLUSTER
+#   → NeMo Evaluator emits per-task JSONs across all 19 benchmarks
+#   → Session 2 promotion gate logic consumes the combined results
+#     for the weighted-parity Super3 decision
+#
+# Session 2 (promotion gate) wires:
+#   - weighted-mean Super3 parity per plan §5.7
+#   - per-category regression threshold (1-2 %)
+#   - rollback rule on safety / SWE / tool / IF regressions
+
+defaults: default.yaml
+
+# Nineteen benchmarks (v0 + full). Adapter names match the `adapter`
+# column in m1_eval_*_basket_registry.yaml so the schema-layer audit
+# stays consistent. Order groups by category for readability.
+tasks:
+  # General + Reasoning (v0 + full)
+  - adlr_mmlu_pro
+  - adlr_aime25
+  - adlr_hmmt
+  - adlr_gpqa
+  - adlr_hle
+
+  # Coding (v0 + full)
+  - adlr_livecodebench
+  - adlr_scicode
+
+  # Chat / Instruction following (v0)
+  - adlr_ifbench
+  - adlr_multichallenge
+
+  # Long context (v0 + full)
+  - adlr_ruler_256k
+  - adlr_aa_lcr
+
+  # Agentic / Tool use (v0 + full)
+  - adlr_taubench_airline
+  - adlr_terminalbench
+  - adlr_bfcl
+  - adlr_mcp_mark
+  - adlr_tool_decathlon
+
+  # SWE (full)
+  - adlr_swe_bench_verified
+
+  # Multilingual (full)
+  - adlr_mmlu_prox
+  - adlr_wmt24pp
+
+# Promotion gate notes (informational; gate is enforced post-eval by
+# regression_report.py + Session 2 promotion script):
+#   - Per-benchmark gate_metric comes from the two registry YAMLs
+#   - Baseline checkpoint resolution: ``run.baseline`` (Session 3)
+#   - Tolerance: regression_report.DEFAULT_REGRESSION_TOLERANCE (1e-4)
+#   - Weighted parity: per-category weighted-mean vs Super3 (Session 2)
+#   - Rollback categories: safety / SWE / tool_use / instruction_following
+#     (Session 2)

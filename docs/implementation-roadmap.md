@@ -242,6 +242,15 @@ wired to NeMo Evaluator.
 - Promotion gate logic: weighted-mean Super3 parity, no key-category
   regression > 1-2 %, rollback rule on safety / SWE / tool / IF (per plan
   §5.7 promotion gate).
+- ✓ Session 1: 11-row full extension registry (`m1_eval_full_basket_registry.yaml`)
+  reusing the `eval_basket_registry` schema kind, `unified_index.yaml`
+  entry, and `stage3_eval/config/m1_full_basket.yaml` selecting all
+  19 v0+full benchmarks. KNOWN_KINDS unchanged at 7 (no new kind needed
+  — same shape as v0). 14 new pytests; sandbox baseline 357 → 371 passed.
+- ☐ Sessions 2-4: promotion gate logic (weighted-mean parity +
+  per-category regression > 1-2% + rollback rule), cluster verify
+  (`nemotron super3 eval -c m1_full_basket` against real SFT checkpoint
+  with W&B publish), per-category gap analysis tooling.
 
 ### 1.8 M1 infra — required before scaling
 
@@ -512,9 +521,12 @@ Then in parallel:
     (8-benchmark registry per plan §5.7 v0 + new `eval_basket_registry`
     schema kind unblocking task030 Session 3 + `regression_report.py`
     generator + `stage3_eval/config/m1_basket.yaml` NeMo Evaluator
-    config). Sessions 2-4 (cluster verify + W&B publish + per-benchmark
-    adapter configs + promotion gate logic) still to go. task020 (full
-    basket extension) waiting on the M1 v0 numbers.
+    config). task020 Session 1 landed (11-row full extension reusing
+    the same schema kind + `m1_full_basket.yaml` selecting all 19
+    v0+full benchmarks). task019 Sessions 2-4 (cluster verify + W&B
+    publish + per-benchmark adapter configs + promotion gate logic) and
+    task020 Sessions 2-4 (promotion gate weighted-parity logic +
+    cluster verify + gap analysis) still to go.
 11. **task030** — unified data registry. Sessions 1+2+3+4+5+6+7 landed
     (schema layer + unified index over 10 existing registries +
     inventory walks + `scripts/validate_data_registries.py` CLI with

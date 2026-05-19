@@ -1,31 +1,25 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task020_m1_eval_full_basket -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 56 |
+| Status | Working |
+| Current Task | task020_m1_eval_full_basket |
+| PR | pending push |
+| Session | 57 |
 
-刚做完：task019 Session 1 — M1 eval basket scaffold (PR #70 / b744333,
-merged 2026-05-19)。新模块 `m1_eval_basket/` 含 8-benchmark
-`m1_eval_basket_registry.yaml` (per plan §5.7 v0) + `regression_report.py`
-(load_eval_results / diff_eval_runs 5-status / format_regression_report) +
-`stage3_eval/config/m1_basket.yaml` NeMo Evaluator config。新
-`eval_basket_registry` schema kind 注册进 `data_registries/schema.py` +
-`unified_index.yaml`，**task030 Session 3 auto-unblock & complete**
-(之前 6 session closeout 一直挂着的 block 解了 — task030 整 task
-Sessions 1+2+3+4+5+6+7 全部落地)。22 个新 pytest case；sandbox
-测试基线 335 → 357 passed + 7 skipped。
+正在做：task020 Session 1 — M1 eval basket full extension。把 v0 8
+benchmark 扩到 plan §5.7 全 19 个。新 file
+`m1_eval_basket/m1_eval_full_basket_registry.yaml` 11 rows (HMMT /
+HLE / SciCode / TerminalBench / SWE-Bench Verified / AA-LCR /
+MMLU-ProX / WMT24++ / BFCL / MCP-Mark / Tool Decathlon) **复用 task019
+加的 `eval_basket_registry` schema kind — 不动 KNOWN_KINDS**。
+`unified_index.yaml` 加 `m1_eval_full_basket` entry，
+`stage3_eval/config/m1_full_basket.yaml` 选 19 个 task (v0 + full)。
+14 个新 pytest case；sandbox 测试基线 357 → 371 passed + 7 skipped。
 
-task019 整 task 仍 InProgress：Sessions 2-4 (cluster verify + W&B publish +
-per-benchmark adapter + promotion gate logic) 待开 — 大都需 cluster /
-真 SFT checkpoint。
-
-**里程碑**: task030 整 task 这条线全部 Sessions (1+2+3+4+5+6+7) 落地。
-下一个候选 (sandbox-runnable):
-- task020 — M1 eval basket full extension (HMMT / HLE / SciCode 等等)
-- 之前 task 的 Session 2+ — 大都需 cluster
+task020 整 task 仍 InProgress：Sessions 2-4 (promotion gate weighted-parity
+logic + cluster verify + gap analysis) 待开；Session 2 sandbox-runnable，
+Session 3 需 cluster。
