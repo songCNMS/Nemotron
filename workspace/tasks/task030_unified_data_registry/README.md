@@ -4,6 +4,7 @@
 <!-- SESSION 1 LANDED: PR #48 / ec1b271 on 2026-05-18 -->
 <!-- SESSION 2 LANDED: PR #57 / 324e062 on 2026-05-18 (schema enforcement script + pre-commit hook) -->
 <!-- SESSION 4 LANDED: PR #61 / 159d81f on 2026-05-18 (bridge / M0 module-local loader merge into schema layer) -->
+<!-- SESSION 5 LANDED: PR pending on 2026-05-18 (share-alike license cascade audit — task058 license/contamination follow-up) -->
 
 ## 背景
 
@@ -40,7 +41,8 @@ boundaries 保留，每个 registry 留在自己的目录；新加一个
 | 1 | Schema 层 + unified index + 三个 cross-registry inventory walk | yes | ✓ Done (this PR) |
 | 2 | Schema enforcement at write time (`scripts/validate_data_registries.py` + `.pre-commit-config.yaml` local hook) | yes | ✓ Done (this PR) |
 | 3 | M1 eval basket registry (kind + index row + schema validator) | yes (sandbox) | Todo (block on task019 / task020 给 eval basket 真定义) |
-| 4 | Bridge / M0 module-local loader 接进 schema 层 merge 两层校验逻辑 — *单 source of truth* for row shape, fail-fast / collect-all 语义保留 | yes | ✓ Done (this PR) |
+| 4 | Bridge / M0 module-local loader 接进 schema 层 merge 两层校验逻辑 — *单 source of truth* for row shape, fail-fast / collect-all 语义保留 | yes | ✓ Done (PR #61) |
+| 5 | Share-alike license cascade audit (`data_registries/license_audit.py` + `--license-cascade` CLI flag) — task058 license/contamination follow-up; converts §6 Q1 share-alike prose policy into machine-checkable | yes | ✓ Done (this PR) |
 
 ## Session 1 目标
 

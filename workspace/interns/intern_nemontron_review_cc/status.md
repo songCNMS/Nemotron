@@ -1,32 +1,29 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task030_unified_data_registry -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 48 |
+| Status | Working |
+| Current Task | task030_unified_data_registry |
+| PR | pending push |
+| Session | 49 |
 
-最近：task030 Session 4 (PR #61 `159d81f`) 已 squash-merge 进 main —
-bridge / M0 module-local loader merge into schema layer。重审 Session 1
-/ Session 2 closeout 反复强调的"两层不要合并"决策后找到正确合并粒度：
-**合并 row-shape definitions (single source of truth)，不合并
-aggregation behavior (fail_fast runtime vs collect-all audit)**。
-`schema.validate_rows` 加 `fail_fast=False` + `source_path` 参数；
-`validate_top_level` 加 `strict=True`。4 个 runtime loader refactor 成
-thin wrapper 委派到 schema，module-specific 检查包成 `extra_validators`
-closure。零外部行为变化，226 原测试不动，新加 7 个 schema API surface
-test。Sandbox 测试基线 226 → 233 passed + 6 skipped。
+正在做：task030 Session 5 — share-alike license cascade audit (task058
+license/contamination 主题 follow-up)。把 `docs/m0-dataset-expansion-plan.md`
+§6 Q1 的 share-alike prose policy 翻成机器可查 audit。
 
-task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
-task019/020) 待开。
+- 新模块 `data_registries/license_audit.py` 含 `SHARE_ALIKE_LICENSE_PREFIXES`
+  (cc-by-sa / gpl / agpl / lgpl / odbl) + `is_share_alike` predicate +
+  `find_share_alike_sources` + `license_cascade` (带 `live_chains` 计数
+  区分 live vs latent) + `format_cascade_report` 文本渲染
+- `scripts/validate_data_registries.py` 加 `--license-cascade` flag：
+  audit-only mode，短路 schema validation，exit 0 即使有 finding (informational)
 
-下一个候选 (sandbox-runnable):
-- **task058 follow-ups** — license/contamination 额外校验加进 schema 层
-  (e.g., share-alike cascade 检测，CC-BY-SA 数据流到哪些 derived artifact)
-- **task019 / task020** — M1 eval basket (本身 sandbox-runnable；acceptance
-  要真 RLVR checkpoint)
-- 之前 task 的 Session 2+ — 大都需 cluster / Docker / nvcr container
+Live audit finding: HotpotQA (cc-by-sa-4.0) 是 latent — task015 删了
+`search_grounded_qa` NeMo-Gym 错名 mapping，没 bridge 行 reference 该
+m0_env。一旦未来 wire 上，audit 翻 LIVE 提醒重审 §6 Q1。
+
+27 个新 pytest case；sandbox 测试基线 233 → 260 passed + 6 skipped。
+`docs/m0-dataset-expansion-plan.md` §6 Q1 加段落指向新 CLI flag。

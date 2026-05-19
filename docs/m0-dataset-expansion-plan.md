@@ -200,6 +200,19 @@ references for new env work.
    original Nemotron source remains fastest. **task056 Session 3**
    (separate PR after this decision lands) writes the data_registry
    row + runs `prepare_m0_assets` once.
+
+   **task058 Session 2** ships the audit that makes this policy
+   machine-checkable. Run
+   ``PYTHONPATH=src python3 scripts/validate_data_registries.py --license-cascade``
+   to enumerate every share-alike source currently in the unified
+   registry plus the chain of downstream bridge mappings (live vs
+   latent) that inherit the obligation. The report flags
+   ``hotpotqa/hot_qa`` (cc-by-sa-4.0) today; its cascade is *latent*
+   (no active bridge mapping references the M0 env) because task015's
+   audit removed the misnamed ``search_grounded_qa`` NeMo-Gym entry.
+   Wiring HotpotQA through any future bridge mapping will flip the
+   cascade to *live* and the report will say so — that's the signal
+   to revisit this §6 decision.
 2. **Contamination policy:** every M0 source used in M1+ eval must be
    deduped against M0 train + val. Recommend adding a
    `contamination_against` field on each spec; landing the schema bump

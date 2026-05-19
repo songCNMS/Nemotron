@@ -65,6 +65,17 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Override the default unified_index.yaml location. Mostly useful for tests.",
     )
+    parser.add_argument(
+        "--license-cascade",
+        action="store_true",
+        help=(
+            "Print the share-alike license cascade audit (task058 Session 2). "
+            "Walks the unified index for CC-BY-SA-* / GPL / etc. data sources "
+            "and traces each one through the bridge env_registry to find which "
+            "downstream RL mix rows inherit the share-alike obligation. "
+            "Informational only (exit 0 even with findings)."
+        ),
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -77,6 +88,25 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 2
+
+    # Audit-only modes short-circuit the validate path. Return code is
+    # 0 even if findings exist — these are informational, not blocking.
+    if args.license_cascade:
+        try:
+            from nemotron.recipes.super3.milestones.data_registries.license_audit import (
+                format_cascade_report,
+                license_cascade,
+            )
+            cascade = license_cascade(args.index_path)
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"validate_data_registries: license-cascade audit raised: {exc}",
+                file=sys.stderr,
+            )
+            return 2
+        # Always emit to stdout — audit reports are content, not noise.
+        sys.stdout.write(format_cascade_report(cascade))
+        return 0
 
     try:
         issues = validate_unified_index(args.index_path)
