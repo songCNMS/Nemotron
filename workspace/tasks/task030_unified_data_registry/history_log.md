@@ -113,3 +113,18 @@ pyarrow collect-error pre-existing。
 Session 2 不在本 PR 的两个 carry-over:
 - M1 eval basket registry (Session 3 候选；block task019/020)
 - Bridge / M0 loader 接 schema 层 (Session 4 候选；注意 fail-fast 语义)
+
+## Session 4 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 2 PR #57 已 squash-merge 为 `324e062` 进 main —
+`scripts/validate_data_registries.py` CLI + `.pre-commit-config.yaml`
+local hook + 11 个 pytest case + 设计决策 (不合并 bridge fail-fast 跟
+schema collect-all) 都进了 main。intern status 回 Idle (Session 44)。
+task030 整 task 仍 InProgress: Session 3 (M1 eval basket — block on
+task019/020) + Session 4 (loader merge into schema layer — careful
+refactor) 没启动。
+
+下一个候选: task058 follow-ups (license/contamination 额外校验加进
+schema 层) / task021 Session 6 候选 (RLVR rollout default container_runtime
+翻 docker) / task030 Session 4 (loader merge) / task019-020 (M1 eval basket，
+block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
