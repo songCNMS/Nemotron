@@ -1,5 +1,7 @@
 # task020 - history_log
 
+<!-- METADATA:SESSION=4 -->
+
 ## Session 1 — 2026-05-19 — eval basket full extension (11 rows)
 
 ### Scope

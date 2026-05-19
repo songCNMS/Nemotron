@@ -3,7 +3,7 @@
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #72 / deec7b7 on 2026-05-19 (11-row full basket extension + m1_full_basket.yaml config) -->
 <!-- SESSION 2 LANDED: PR #74 / 33b51e7 on 2026-05-19 (promotion gate logic — weighted-mean parity + per-category regression + rollback rule) -->
-<!-- SESSION 4 LANDED: PR pending on 2026-05-19 (per-category gap analysis tooling — ranked category gap + per-benchmark drill-down) -->
+<!-- SESSION 4 LANDED: PR #76 / 44c5ec8 on 2026-05-19 (per-category gap analysis tooling — ranked category gap + per-benchmark drill-down) -->
 
 ## 背景
 

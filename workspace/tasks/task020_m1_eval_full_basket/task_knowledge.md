@@ -1,5 +1,7 @@
 # task020 - task_knowledge
 
+<!-- METADATA:SESSION=4 -->
+
 ## Plan §5.7 acceptance basket (v0 + full)
 
 19 benchmarks split across categories per plan §5.7 / roadmap §1.7:
