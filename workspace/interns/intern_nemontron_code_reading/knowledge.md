@@ -17,3 +17,7 @@ Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such 
 ### M0 Contamination Metadata Validation
 
 `contamination_against` is a `list[str]` contract. Enforce it both in M0 runtime registry validation and unified-index schema validation so malformed rows fail before metadata/manifests are emitted.
+
+### Contamination Audit Sentinel Matching
+
+Placeholder sentinel detection for contamination audits should use exact or delimiter-aware prefix matching, not arbitrary substring matching. `TBD: AIME` should count as a placeholder note, while real hyphenated eval names such as `Pending-Eval-2026` or `TBD-Eval-2026` should not be flagged.

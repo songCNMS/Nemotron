@@ -1,6 +1,6 @@
 # task060_pr68_postmerge_review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 

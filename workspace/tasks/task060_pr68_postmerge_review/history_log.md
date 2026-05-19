@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -18,3 +18,10 @@
   - `PYTHONPATH=src pytest -q tests/recipes/super3` → `548 passed, 5 skipped`.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/86.
 - Corrected the PR body through the GitHub API after a double-quoted `gh pr create --body` command allowed shell backtick substitution.
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- User requested the next step after PR #86 was opened.
+- Confirmed PR #86 was `OPEN / CLEAN`, non-draft, and had no failing checks.
+- Updated task060 closeout state before merge: intern status → Idle, task README → Completed, task knowledge metadata → Session 2.
+- Archived the durable contamination-audit sentinel rule into the personal knowledge base.

@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Working,TASK=task060_pr68_postmerge_review -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Working |
-| Current Task | task060_pr68_postmerge_review |
+| Status | Idle |
+| Current Task |  |
 | PR | https://github.com/songCNMS/Nemotron/pull/86 |
-| Session | 1 |
+| Session | 2 |
 | Branch | intern_nemontron_code_reading/task060_pr68_postmerge_review |
-| Latest | Session 1 reviewed PR #68 (`contamination_against` semantic audit), fixed a false-positive placeholder sentinel match, opened PR #86, and verified full `tests/recipes/super3` passes with 548 passed, 5 skipped. |
+| Latest | Session 2 closed task060: PR #86 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
