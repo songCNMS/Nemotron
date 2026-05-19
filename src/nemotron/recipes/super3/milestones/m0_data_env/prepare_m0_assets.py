@@ -953,8 +953,11 @@ def validate_registries(data_registry: Mapping[str, Any], env_registry: Mapping[
             raise ValueError(f"{spec['id']} references unknown environment {spec['environment']}")
         if spec["converter"] not in CONVERTERS:
             raise ValueError(f"{spec['id']} references unknown converter {spec['converter']}")
-        if not isinstance(spec.get("contamination_against"), list):
+        contamination_against = spec.get("contamination_against")
+        if not isinstance(contamination_against, list):
             raise ValueError(f"{spec['id']} contamination_against must be a list")
+        if any(not isinstance(item, str) or not item.strip() for item in contamination_against):
+            raise ValueError(f"{spec['id']} contamination_against entries must be non-empty strings")
         if spec.get("milestone", data_registry.get("milestone")) != data_registry.get("milestone"):
             raise ValueError(f"{spec['id']} milestone must match registry milestone")
 

@@ -89,9 +89,9 @@ TARGET_DATASETS = NANO3_TARGET_DATASETS
 def validate_target_dataset_licenses(target_datasets: dict[str, dict[str, Any]]) -> None:
     """Validate placeholder source configs carry explicit license posture."""
     for name, cfg in target_datasets.items():
-        license_name = str(cfg.get("license") or "").strip()
-        if not license_name:
-            raise ValueError(f"placeholder target {name} is missing license")
+        license_name = cfg.get("license")
+        if not isinstance(license_name, str) or not license_name.strip():
+            raise ValueError(f"placeholder target {name} is missing string license")
 
 
 @dataclass

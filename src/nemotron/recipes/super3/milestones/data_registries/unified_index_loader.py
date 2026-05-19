@@ -35,6 +35,7 @@ from nemotron.recipes.super3.milestones.data_registries.schema import (
     KNOWN_KINDS,
     bridge_mix_validator_factory,
     bridge_status_validator,
+    m0_contamination_against_validator,
     validate_rows,
     validate_top_level,
 )
@@ -130,6 +131,8 @@ def validate_unified_index(
             issues.append(f"{entry['id']}: {exc}")
             continue
         extra_validators = []
+        if entry["kind"] == "m0_data_registry":
+            extra_validators.append(m0_contamination_against_validator)
         if entry["kind"] == "bridge_env_registry":
             extra_validators.append(bridge_status_validator)
             if "expected_mixes" in entry:

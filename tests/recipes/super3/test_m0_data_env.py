@@ -154,8 +154,18 @@ def test_hf_placeholder_target_license_lint_rejects_missing_license() -> None:
         validate_target_dataset_licenses,
     )
 
-    with pytest.raises(ValueError, match="missing license"):
+    with pytest.raises(ValueError, match="missing string license"):
         validate_target_dataset_licenses({"bad_target": {"hf_dataset": "example/missing-license"}})
+
+
+def test_hf_placeholder_target_license_lint_rejects_non_string_license() -> None:
+    pytest.importorskip("pydantic")
+    from nemotron.data_prep.utils.hf_placeholder import (
+        validate_target_dataset_licenses,
+    )
+
+    with pytest.raises(ValueError, match="missing string license"):
+        validate_target_dataset_licenses({"bad_target": {"hf_dataset": "example/list-license", "license": ["mit"]}})
 
 
 def test_data_registry_declares_contamination_against_lists() -> None:
@@ -165,6 +175,15 @@ def test_data_registry_declares_contamination_against_lists() -> None:
     assert all(isinstance(dataset.get("contamination_against"), list) for dataset in by_id.values())
     assert "GSM8K test" in by_id["m0_math_numinamath"]["contamination_against"]
     assert "SWE-Bench Verified" in by_id["m0_swe_patch_lite"]["contamination_against"]
+
+
+def test_data_registry_rejects_non_string_contamination_targets() -> None:
+    data_registry = load_yaml(DATA_REGISTRY_PATH)
+    env_registry = load_yaml(ENV_REGISTRY_PATH)
+    data_registry["datasets"][0]["contamination_against"] = ["valid target", 123]
+
+    with pytest.raises(ValueError, match="contamination_against entries must be non-empty strings"):
+        validate_registries(data_registry, env_registry)
 
 
 def test_gsm8k_transform_normalizes_final_answer() -> None:

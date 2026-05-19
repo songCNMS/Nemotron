@@ -13,3 +13,7 @@ For M1 Agentic SFT on `NemTron`, use `/root/nemotron_session5_venv/bin/python` w
 ### Live HF checks in PR tests
 
 Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such as `NEMOTRON_RUN_LIVE_HF_TESTS=1`; default PR tests should assert static slugs/subsets and avoid network-dependent skip/fail behavior.
+
+### M0 Contamination Metadata Validation
+
+`contamination_against` is a `list[str]` contract. Enforce it both in M0 runtime registry validation and unified-index schema validation so malformed rows fail before metadata/manifests are emitted.

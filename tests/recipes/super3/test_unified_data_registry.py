@@ -21,6 +21,7 @@ from nemotron.recipes.super3.milestones.data_registries.schema import (
     KNOWN_KINDS,
     bridge_mix_validator_factory,
     bridge_status_validator,
+    m0_contamination_against_validator,
     validate_rows,
     validate_top_level,
 )
@@ -108,6 +109,17 @@ def test_bridge_mix_validator_catches_wrong_mix() -> None:
     issue = validator({"mix": "rlvr1"}, 0)
     assert issue is not None and "expected_mixes" in issue
     assert validator({"mix": "rlhf"}, 0) is None
+
+
+def test_m0_contamination_against_validator_enforces_list_of_strings() -> None:
+    assert m0_contamination_against_validator({"contamination_against": []}, 0) is None
+    assert m0_contamination_against_validator({"contamination_against": ["GSM8K test"]}, 0) is None
+    assert "must be a list" in (
+        m0_contamination_against_validator({"contamination_against": "GSM8K test"}, 0) or ""
+    )
+    assert "non-empty strings" in (
+        m0_contamination_against_validator({"contamination_against": ["GSM8K test", ""]}, 0) or ""
+    )
 
 
 # ---------- task030 Session 4: schema API surfaces (fail_fast + strict) ----------
@@ -265,6 +277,45 @@ registries:
     )
     with pytest.raises(ValueError, match="not in"):
         load_unified_index(bad)
+
+
+def test_unified_index_rejects_non_string_contamination_targets(tmp_path: Path) -> None:
+    data_registry = tmp_path / "data_registry.yaml"
+    data_registry.write_text(
+        """schema_version: 1
+milestone: M0
+description: synthetic invalid M0 data registry
+datasets:
+  - id: bad_contamination
+    environment: stub_env
+    hf_dataset: stub/dataset
+    hf_split: train
+    hf_revision: deadbeef
+    license: mit
+    contamination_against:
+      - valid target
+      - 123
+    converter: stub
+    use_stage:
+      - M0 data_env_foundation
+""",
+        encoding="utf-8",
+    )
+    index = tmp_path / "unified_index.yaml"
+    index.write_text(
+        f"""schema_version: 1
+milestone: M0
+registries:
+  - id: m0_data_bad
+    kind: m0_data_registry
+    path: {data_registry.name}
+    summary: bad contamination target fixture
+""",
+        encoding="utf-8",
+    )
+
+    issues = validate_unified_index(index)
+    assert any("contamination_against entries must be non-empty strings" in issue for issue in issues)
 
 
 # ---------- Live validation: every registry on main passes ----------
