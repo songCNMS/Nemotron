@@ -103,3 +103,18 @@ registries:
       task018 Session 1 source of truth; Session 2 picks one to land in M0.
     produced_by: (authored)
     consumed_by: [prepare_m1_rlhf_jsonl.py]
+
+  # M1 infra — sandbox containers (task021 Session 3)
+  - id: m1_sandbox_images
+    kind: sandbox_image_registry
+    path: ../sandbox_containers/sandbox_image_registry.yaml
+    summary: |
+      3 sandbox container images (code_exec / lean / terminal) with
+      per-env routing. Pairs each Dockerfile with the M0 envs whose
+      verifier needs that runtime to run safely. task021 Session 3
+      source of truth; Session 4 wires the ContainerSandbox shim into
+      the M0 verifier path.
+    produced_by: (authored)
+    consumed_by:
+      - image_resolver.py (resolve_image_for_env)
+      - build_sandbox_containers.sh (image build loop)

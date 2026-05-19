@@ -52,6 +52,7 @@ def test_known_kinds_covers_today_registry_families() -> None:
             "bridge_env_registry",
             "sif_registry",
             "pref_data_registry",
+            "sandbox_image_registry",  # task021 Session 3
         }
     )
 

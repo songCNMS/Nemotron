@@ -237,8 +237,26 @@ Sliced into four Sessions; tracker lives at
 - ✗ Session 4: verify NeMo-RL / Ray / vLLM / NeMo-Gym launch path on a
   real cluster (currently all configs are paper-only). Needs NemTron
   access; unsandbox-runnable.
-- ✗ Session 3: SIF/Docker/Podman sandbox container build script for
-  code-exec, Lean, terminal.
+- ✓ Session 3: SIF/Docker/Podman sandbox container build script for
+  code-exec, Lean, terminal. New module
+  `src/nemotron/recipes/super3/milestones/sandbox_containers/` ships
+  three Dockerfiles (`code_exec.Dockerfile` python:3.12-slim + pytest;
+  `lean.Dockerfile` debian + elan v3.1.1 + Lean 4 stable;
+  `terminal.Dockerfile` alpine + bash + coreutils + findutils + grep +
+  sed + gawk — all UID 1000 non-root), a declarative
+  `sandbox_image_registry.yaml` pairing each `image_id` with its
+  Dockerfile + target M0 envs + runtime recommendations
+  (`--network=none`, `--memory=...`), `image_resolver.py`
+  (`load_sandbox_image_registry` / `resolve_image_for_env(env_id)` /
+  `image_tag` / `envs_covered_by_registry`), and
+  `build_sandbox_containers.sh` (docker / podman / singularity runtime
+  switch; reads the registry; supports `--only <id>` / `--dry-run`).
+  Unified index (task030 Session 1) picks up the new
+  `sandbox_image_registry` kind via a one-row addition. Actually
+  building the images needs a Docker daemon and stays Session 5
+  territory (or local dev workstation); ContainerSandbox runtime shim
+  (wiring container execution into `python_unit_tests` verifier)
+  likewise.
 - ✓ Session 2: cross-stage lineage schema +
   `manifest["lineage"]` block emitted by `prepare_m0_assets.py` (root
   with HF source inputs) and `prepare_m1_agentic_sft.py` (declares the

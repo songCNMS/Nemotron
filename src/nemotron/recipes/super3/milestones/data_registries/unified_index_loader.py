@@ -258,6 +258,7 @@ _ROWS_KEY_BY_KIND = {
     "bridge_env_registry": "envs",
     "sif_registry": "sif_sources",
     "pref_data_registry": "datasets",
+    "sandbox_image_registry": "images",
 }
 
 
@@ -275,6 +276,8 @@ def _row_identity(row: Mapping[str, Any], kind: str) -> str:
         return f"{row.get('nemo_gym_env', '<no-env>')}@{row.get('mix', '?')}"
     if kind == "sif_registry":
         return str(row.get("source", "<no-source>"))
+    if kind == "sandbox_image_registry":
+        return str(row.get("image_id", "<no-image-id>"))
     return "<unknown-kind>"
 
 
