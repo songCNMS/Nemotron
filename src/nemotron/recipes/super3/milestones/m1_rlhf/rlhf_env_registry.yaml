@@ -36,12 +36,14 @@ envs:
     license: cc-by-4.0
     status: blocked_external
     notes: |
-      Blocked twofold: (1) needs M0 RLHF prompt set + paired preference
-      labels (task018 Session 2 lands the HelpSteer-2 / UltraFeedback
-      converter); (2) GenRM judge model server
-      (`nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`, router_dp_size=8,
-      TP=8) deployment is cluster-ops work. Both can land independently;
-      whichever finishes second flips the row to `active`.
+      Blocked twofold: (1) M0 RLHF prompt set + paired preference labels
+      — task018 Session 2 landed (see `m0_helpsteer2_pref` data row +
+      `transform_helpsteer2_pref` converter); (2) GenRM judge model
+      server (`nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`,
+      router_dp_size=8, TP=8) deployment — cluster-ops work in task018
+      Session 3. Stays `blocked_external` until Session 3 lands; row
+      flips to `active` then. Data-side blocker cleared; cluster
+      blocker remains.
 
   - nemo_gym_env: single_step_tool_use_with_argument_comparison
     mix: rlhf

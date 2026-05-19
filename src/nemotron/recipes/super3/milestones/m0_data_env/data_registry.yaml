@@ -189,6 +189,38 @@ datasets:
       problem_statement: problem_statement
       messages: messages
 
+  - id: m0_helpsteer2_pref
+    environment: helpsteer2_pref_compare
+    domain: rlhf_preference
+    hf_dataset: nvidia/HelpSteer2
+    hf_config: default
+    hf_split: train
+    hf_val_split: validation
+    # TODO(task018 Session 2 cluster pass): pin once HelpSteer-2 revision is
+    # locked alongside the GenRM judge service deployment (task018 Session 3).
+    # Pref data + judge service flip the rlhf_env_registry row to active
+    # together.
+    hf_revision: TBD
+    source_url: https://huggingface.co/datasets/nvidia/HelpSteer2
+    license: cc-by-4.0
+    converter: helpsteer2_pref_pair
+    default_train_rows: 500
+    default_val_rows: 100
+    difficulty: pref_pair_rating
+    reward_type: genrm_compare
+    contamination: decontaminate against MT-Bench / HelpSteer1 eval / internal RLHF holdouts before training
+    contamination_against:
+      - MT-Bench
+      - HelpSteer1
+    use_stage:
+      - M0 data_env_foundation
+      - M1 RLHF (GenRM compare)
+    fields:
+      prompt: prompt
+      response_a: response_a
+      response_b: response_b
+      preference_label: preference_label
+
   - id: m0_swe2_openhands_trace
     environment: swe2_openhands_trace
     domain: software_engineering
