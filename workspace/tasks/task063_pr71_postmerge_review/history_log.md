@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -15,3 +15,10 @@
   - `rg "METADATA:STATUS=Idle -->" workspace/interns` → no matches.
   - `git diff --check` → pass.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/89.
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- User requested continuation after PR #89 was opened.
+- Confirmed PR #89 was `OPEN / CLEAN`, non-draft, and had no failing checks.
+- Updated task063 closeout state before merge: intern status -> Idle, task README -> Completed, task knowledge metadata -> Session 2.
+- Archived the durable idle status metadata rule into the personal knowledge base.
