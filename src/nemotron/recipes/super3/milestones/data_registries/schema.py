@@ -18,7 +18,8 @@ can catch drift before a cluster run wastes a slot.
 Five registry kinds are recognised today:
 
 - ``m0_data_registry`` — `m0_data_env/data_registry.yaml` — 11 HF
-  datasets backing M0 envs (hf_revision pin + license + contamination).
+  datasets backing M0 envs (hf_revision pin + license + contamination
+  posture).
 - ``m0_environment_registry`` — `m0_data_env/environment_registry.yaml`
   — 11 reward env definitions with verifier + telemetry + health-check.
 - ``bridge_env_registry`` — `m1_*/[stage]_env_registry.yaml` — M0 →
@@ -58,6 +59,7 @@ _KIND_SCHEMAS: dict[str, dict[str, Any]] = {
             "hf_split",
             "hf_revision",
             "license",
+            "contamination_against",
             "converter",
             "use_stage",
         ),

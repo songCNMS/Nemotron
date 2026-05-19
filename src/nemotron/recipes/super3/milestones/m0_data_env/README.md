@@ -6,7 +6,8 @@ search (single-hop + multi-hop), coding, terminal basics, short SWE patch
 supervision, general tool calling (single-turn + multi-turn), tool-call repair
 negatives, structured JSON output, and reasoning (grade-school + competition).
 Each dataset is tagged with its milestone usage, license, source revision,
-reward type, and contamination notes in `data_registry.yaml`.
+reward type, contamination notes, and explicit `contamination_against` targets
+in `data_registry.yaml`.
 
 ## Public Sources
 

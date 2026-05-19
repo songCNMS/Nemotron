@@ -140,6 +140,7 @@ def base_metadata(spec: Mapping[str, Any], row: Mapping[str, Any]) -> JsonDict:
         "difficulty": spec.get("difficulty"),
         "reward_type": spec["reward_type"],
         "contamination": spec["contamination"],
+        "contamination_against": list(spec["contamination_against"]),
         "data_stage": spec["milestone"],
         "use_stage": list(spec["use_stage"]),
     }
@@ -882,6 +883,8 @@ def validate_registries(data_registry: Mapping[str, Any], env_registry: Mapping[
             raise ValueError(f"{spec['id']} references unknown environment {spec['environment']}")
         if spec["converter"] not in CONVERTERS:
             raise ValueError(f"{spec['id']} references unknown converter {spec['converter']}")
+        if not isinstance(spec.get("contamination_against"), list):
+            raise ValueError(f"{spec['id']} contamination_against must be a list")
         if spec.get("milestone", data_registry.get("milestone")) != data_registry.get("milestone"):
             raise ValueError(f"{spec['id']} milestone must match registry milestone")
 
@@ -1062,6 +1065,7 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
                 "hf_revision": spec["hf_revision"],
                 "source_url": spec["source_url"],
                 "license": spec["license"],
+                "contamination_against": spec["contamination_against"],
                 "use_stage": spec["use_stage"],
                 "train_rows": split_counts["train"],
                 "val_rows": split_counts["val"],

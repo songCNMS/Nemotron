@@ -4,7 +4,7 @@ run:
 
 # Config for RL data preparation with HuggingFace placeholder resolution
 #
-# Processes nvidia/Nemotron-3-Super-RL-Training-Blends and resolves
+# Processes nvidia/Nemotron-RL-Super-Training-Blends and resolves
 # placeholder entries by fetching from external datasets (DAPO, Skywork).
 #
 # Placeholder records have an `_hf_placeholder` field containing row indices and
