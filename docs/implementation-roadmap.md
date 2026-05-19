@@ -247,10 +247,16 @@ wired to NeMo Evaluator.
   entry, and `stage3_eval/config/m1_full_basket.yaml` selecting all
   19 v0+full benchmarks. KNOWN_KINDS unchanged at 7 (no new kind needed
   — same shape as v0). 14 new pytests; sandbox baseline 357 → 371 passed.
-- ☐ Sessions 2-4: promotion gate logic (weighted-mean parity +
-  per-category regression > 1-2% + rollback rule), cluster verify
-  (`nemotron super3 eval -c m1_full_basket` against real SFT checkpoint
-  with W&B publish), per-category gap analysis tooling.
+- ✓ Session 2: promotion gate logic (`promotion_gate.py`) — three-tier
+  severity (promote / hold / rollback), weighted-mean parity vs Super3
+  (uniform-per-category), per-category regression threshold, and a
+  rollback rule that fires on any drop in critical categories (SWE /
+  tool_use_* / instruction_following / multi_turn_instruction + forward-
+  compat safety_*). Default thresholds at the tight end of plan §5.7's
+  "1-2%" range (2%). 21 new pytests; sandbox baseline 371 → 392 passed.
+- ☐ Sessions 3-4: cluster verify (`nemotron super3 eval -c m1_full_basket`
+  against real SFT checkpoint with W&B publish + real Super3 baseline
+  numbers), per-category gap analysis tooling layered on Session 2.
 
 ### 1.8 M1 infra — required before scaling
 
@@ -523,10 +529,14 @@ Then in parallel:
     generator + `stage3_eval/config/m1_basket.yaml` NeMo Evaluator
     config). task020 Session 1 landed (11-row full extension reusing
     the same schema kind + `m1_full_basket.yaml` selecting all 19
-    v0+full benchmarks). task019 Sessions 2-4 (cluster verify + W&B
-    publish + per-benchmark adapter configs + promotion gate logic) and
-    task020 Sessions 2-4 (promotion gate weighted-parity logic +
-    cluster verify + gap analysis) still to go.
+    v0+full benchmarks). task020 Session 2 landed (`promotion_gate.py`
+    — three-tier promote/hold/rollback severity, weighted-mean parity
+    vs Super3, per-category regression threshold, rollback rule on
+    SWE/tool/IF + forward-compat safety_*). task019 Sessions 2-3
+    (cluster verify + W&B publish + per-benchmark adapter configs) and
+    task020 Sessions 3-4 (cluster verify + per-category gap analysis)
+    still to go. task019 Session 4 (promotion gate logic) is satisfied
+    by task020 Session 2 above.
 11. **task030** — unified data registry. Sessions 1+2+3+4+5+6+7 landed
     (schema layer + unified index over 10 existing registries +
     inventory walks + `scripts/validate_data_registries.py` CLI with

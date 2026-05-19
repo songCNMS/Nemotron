@@ -77,3 +77,103 @@ basket 从 v0 8 个扩到 plan §5.7 全 19 个。复用 task019 Session 1 的
 
 task020 Session 1 复用 task019 加的 schema kind，本 PR 不动 task030
 任何东西。task030 已经全部 Sessions 落地。
+
+
+## Session 2 — 2026-05-19 — promotion gate logic
+
+### Scope
+
+Plan §5.7 / roadmap §1.7 task020 promotion gate logic — weighted-mean
+Super3 parity + per-category regression threshold + rollback rule
+(safety / SWE / tool / IF)。Sandbox-runnable，所有 input 是 dict，
+output 是 dataclass + markdown report。
+
+### Done
+
+1. 新 module `m1_eval_basket/promotion_gate.py`:
+   - 4 个 default constants:
+     - `DEFAULT_WEIGHTED_PARITY_THRESHOLD = 0.02` (2%)
+     - `DEFAULT_CATEGORY_REGRESSION_THRESHOLD = 0.02` (2%)
+     - `DEFAULT_ROLLBACK_REGRESSION_TOLERANCE = 1e-4`
+     - `DEFAULT_ROLLBACK_CATEGORIES` frozenset (swe / tool_use_*  /
+       instruction_following / multi_turn_instruction / safety_*)
+   - `GATE_STATUSES = ("promote", "hold", "rollback")`
+   - `PromotionDecision` frozen dataclass + `to_jsonable()`
+   - `evaluate_promotion_gate(current, super3, registry_rows, *, thresholds, rollback_categories)`:
+     - Group benchmarks by category，calculate per-category mean (skip
+       categories where either side lacks all benchmarks)
+     - Weighted parity = mean of per-category deltas (uniform across
+       categories — 防 benchmark count gaming)
+     - 三档严重度：rollback (任何 rollback-category 跌过 noise) > hold
+       (非 rollback category 跌过 threshold 或 parity 超 threshold) >
+       promote
+     - Reasons list 记录每条触发条件，operator 能看到所有 findings
+   - `format_gate_report(decision)` markdown:
+     - Headline status with ✓ / ⚠ / ✗ markers
+     - Weighted parity + reasons + per-category Δ table
+     - Missing-benchmarks section 仅在 non-empty 时出现
+
+2. 21 个 pytest case in `test_promotion_gate.py`:
+   - Constants 3: status tuple / default thresholds / rollback categories cover swe/tool/if
+   - Promote 2: exact match / within parity threshold
+   - Hold 3: overall parity drift / non-rollback category regression
+     (general_mc) / 净正 drift > threshold
+   - Rollback 5: SWE / IF / tool_use / precedence over hold /
+     tolerance absorbs noise
+   - Weighting 1: uniform per-category not per-benchmark (TOY_ROWS 有
+     2 个 reasoning_math rows，确认不被 over-weight)
+   - Missing 2: missing-in-current 不阻塞 / no shared categories → hold
+   - Formatting 3: promote / rollback with reasons / missing-benchmark
+     section
+   - Integration 2: live 19-row basket happy promote / full-basket SWE
+     row regression triggers rollback
+
+### Test counts
+
+- 21 new tests; sandbox 测试基线 **371 → 392 passed + 7 skipped** (21 new)
+
+### Decisions
+
+- **三档严重度 vs 二档 (promote / no-promote)** — plan §5.7 显式分 hold
+  vs rollback，rollback 不只是 "fail gate" 而是 "revert to prior
+  checkpoint"。Separating them lets the operator know whether a hold
+  is recoverable (re-train + retest) or whether the run was actively
+  worse than the prior baseline (must roll back)
+- **Default 2% threshold (tight end of plan's "1-2%")** — 2% 比 1%
+  宽容，但 plan 显式提 1-2% range；选 2% 让正常的 sampling noise 不至
+  于触发 hold。Operator 可以收紧到 1% 走更严格 gate
+- **Uniform-per-category weighting** — plan §5.7 没显式说，但 "weighted
+  mean" 在多种解读里，per-benchmark uniform 会被 reasoning_math 这种
+  2-benchmark category over-weight。Uniform-per-category 更 stable，
+  且未来 basket 扩展时不会改变 category 的相对权重
+- **Forward-compatible safety categories in rollback set** — M1 没有
+  safety benchmark，但 plan §5.7 显式 list safety 在 rollback 条件
+  里。提前把 `safety` / `safety_jailbreak` / `safety_overrefusal` 加
+  进 DEFAULT_ROLLBACK_CATEGORIES，M2 加 safety rows 时自动走 rollback
+  path 而不需要改 gate 代码
+- **Rollback tolerance 1e-4 same as regression_report** — eval runs
+  aren't bit-exact；这个 noise band 是 SAMPLING_TOLERANCE 的一部分。
+  跟 `regression_report.DEFAULT_REGRESSION_TOLERANCE` 对齐
+- **Missing benchmarks don't auto-block** — 让 operator 看到 coverage
+  gap (在 reasons 里 + missing 列表)，但不自动 hold；运行者可以选
+  跑部分 basket (e.g., 只跑 v0 8 个) 而不被 gate 拒绝
+
+### Deferred
+
+- Session 3 (cluster verify) — `nemotron super3 eval -c m1_full_basket`
+  真跑 + W&B publish；需 cluster + 真 SFT checkpoint + 真 Super3 baseline
+- Session 4 (per-category gap analysis tooling) — layer on top of
+  Session 2，给 per-category weighted parity 报告 + 历史 trend
+  visualization。Sandbox-runnable 但需要 Session 3 真数据来做有意义的
+  调试
+
+### task019 互动
+
+task019 Session 4 acceptance ("promotion gate logic — read
+regression_report deltas, decide promote/hold per plan §5.7") 跟
+task020 Session 2 完全重叠。本 PR 提供的 `promotion_gate.py` 是
+task019 Session 4 的实现 — 数据层 (task019 v0 + task020 full) +
+gate logic (task020 Session 2) 一起完成 plan §5.7 acceptance。
+
+不显式 close task019 Session 4 — task019 整 task 还有 Session 2/3
+(cluster verify + per-benchmark adapter)，等那些落地后再统一 closeout。
