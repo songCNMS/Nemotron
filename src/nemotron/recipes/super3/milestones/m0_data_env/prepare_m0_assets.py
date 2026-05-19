@@ -68,6 +68,11 @@ SYSTEM_PROMPTS = {
     ),
     "terminal_basic_shell": "You are a terminal assistant. Return a safe shell command only.",
     "swe_pivot_patch_supervision": "You are a software engineering assistant. Return a unified diff patch only.",
+    "swe_pivot_tool_call": (
+        "You are a software engineering agent. Decide the single next tool "
+        "call that makes the most progress on the issue. Return one tool "
+        "call from the provided schema; do not narrate."
+    ),
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
     "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
@@ -341,6 +346,204 @@ def transform_swe_bench_patch(row: Mapping[str, Any], spec: Mapping[str, Any]) -
             "fail_to_pass": row.get("FAIL_TO_PASS"),
             "pass_to_pass": row.get("PASS_TO_PASS"),
             "gold_patch": patch,
+        },
+    )
+
+
+# SWE pivot tool-call schema (task016 Session 2). Matches the
+# `single_step_tool_use_with_argument_comparison` NeMo-Gym env's
+# expectation for a generic SWE agent's first tool call. Kept small so
+# the policy can learn the pivot decision rather than memorize the tool
+# universe; richer tool sets (refactor, run_linter, ...) belong to M2.
+SWE_PIVOT_TOOLS: list[JsonDict] = [
+    {
+        "type": "function",
+        "function": {
+            "name": "view_file",
+            "description": "Show the contents of a file at the given repo-relative path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Repo-relative file path"},
+                },
+                "required": ["path"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search",
+            "description": "Search the repo for a literal string or pattern.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"},
+                    "path": {"type": "string", "description": "Optional directory to scope the search"},
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "edit_file",
+            "description": "Apply an edit to a file by replacing a span of text.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "old_text": {"type": "string"},
+                    "new_text": {"type": "string"},
+                },
+                "required": ["path", "old_text", "new_text"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "run_tests",
+            "description": "Run the project's test suite, optionally scoped to a specific path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Optional path filter (file or test id)"},
+                },
+            },
+        },
+    },
+]
+
+
+# Tool names that are "exploration" (read-only) rather than "action"
+# (state-changing). Exploration pivots are still emitted but tagged so
+# downstream filters can choose between (a) training on exploration as a
+# valid first move and (b) keeping only action pivots. Per task016 README:
+# "那些只 view-or-search 的纯探索行为也要标".
+SWE_PIVOT_EXPLORATION_TOOLS: frozenset[str] = frozenset({
+    "view_file",
+    "search",
+    "search_dir",
+    "find_file",
+    "grep",
+    "ls",
+})
+
+
+def _first_assistant_tool_call(messages: Sequence[Mapping[str, Any]]) -> Mapping[str, Any]:
+    """Return the first assistant message's first tool_call dict.
+
+    Raises ``ValueError`` if no assistant message in *messages* carries a
+    non-empty ``tool_calls`` list. The first hit wins so the converter
+    captures *the pivot decision*, not whatever the trajectory ended on.
+    """
+    for message in messages:
+        if not isinstance(message, Mapping):
+            continue
+        if message.get("role") != "assistant":
+            continue
+        tool_calls = message.get("tool_calls") or []
+        if not isinstance(tool_calls, list) or not tool_calls:
+            continue
+        first_call = tool_calls[0]
+        if isinstance(first_call, Mapping):
+            return first_call
+    raise ValueError("SWE-Gym trajectory has no assistant message with tool_calls")
+
+
+def transform_swe_gym_lite_pivot(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one SWE-Gym-Lite trajectory into the SWE pivot tool-call shape.
+
+    SWE-Gym-Lite ships agent trajectories per issue. We extract the
+    *first* tool call the agent emits — that's the "pivot" decision the
+    policy is being asked to learn. ``argument_match`` on the NeMo-Gym
+    side compares the candidate's emitted first tool call against this
+    gold call (name + arguments).
+
+    The row's tool-call payload is normalized to ``{"name": ...,
+    "arguments": <dict>}`` regardless of whether the upstream stores
+    arguments as a JSON string (OpenAI agents convention) or a dict
+    directly.
+
+    Pure-exploration pivots (view_file / search / grep / ...) are not
+    skipped — they're tagged in ``extra_env_info.pivot_type`` so the
+    operator can filter at training time without re-running the
+    converter.
+    """
+    problem_statement = str(row.get("problem_statement") or "").strip()
+    if not problem_statement:
+        raise ValueError("SWE-Gym row missing problem_statement")
+    messages = row.get("messages")
+    if not isinstance(messages, list) or not messages:
+        raise ValueError("SWE-Gym row missing messages trajectory")
+
+    first_call = _first_assistant_tool_call(messages)
+
+    function = first_call.get("function")
+    if not isinstance(function, Mapping):
+        raise ValueError("SWE-Gym tool_call missing 'function' object")
+    tool_name = str(function.get("name") or "").strip()
+    if not tool_name:
+        raise ValueError("SWE-Gym tool_call missing function name")
+
+    raw_arguments = function.get("arguments")
+    if isinstance(raw_arguments, Mapping):
+        arguments: JsonDict = dict(raw_arguments)
+    elif isinstance(raw_arguments, str):
+        try:
+            parsed = json.loads(raw_arguments)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"SWE-Gym tool_call {tool_name!r} has malformed JSON arguments: {exc}"
+            ) from exc
+        if not isinstance(parsed, dict):
+            raise ValueError(
+                f"SWE-Gym tool_call {tool_name!r} arguments must decode to an object"
+            )
+        arguments = parsed
+    elif raw_arguments is None:
+        arguments = {}
+    else:
+        raise ValueError(
+            f"SWE-Gym tool_call {tool_name!r} arguments must be a JSON string or object"
+        )
+
+    repo = str(row.get("repo") or "").strip()
+    instance_id = str(row.get("instance_id") or "").strip()
+    pivot_type = "exploration" if tool_name in SWE_PIVOT_EXPLORATION_TOOLS else "action"
+
+    gold_tool_call = {"name": tool_name, "arguments": arguments}
+
+    user_content = (
+        "Decide the next single tool call that best advances the issue "
+        "below. Use only the provided tool schema.\n\n"
+        f"Repository: {repo or '<unspecified>'}\n"
+        f"Instance: {instance_id or '<unspecified>'}\n\n"
+        f"Issue:\n{problem_statement}"
+    )
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem_statement,
+        expected_answer=gold_tool_call,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        tools=SWE_PIVOT_TOOLS,
+        reward_config={
+            "verifier": "argument_match",
+            "max_score": 1.0,
+            "match": ["name", "arguments"],
+        },
+        extra_env_info={
+            "repo": repo,
+            "instance_id": instance_id,
+            "gold_tool_call": gold_tool_call,
+            "pivot_type": pivot_type,
         },
     )
 
@@ -895,6 +1098,7 @@ CONVERTERS = {
     "mbpp_code_execution": transform_mbpp_code_execution,
     "bash_command": transform_bash_command,
     "swe_bench_patch": transform_swe_bench_patch,
+    "swe_gym_lite_pivot": transform_swe_gym_lite_pivot,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,

@@ -188,11 +188,15 @@ def test_swe1_profile_uses_correct_artifact() -> None:
     assert MIX_NAME == "swe1"
 
 
-def test_swe1_env_map_empty_today() -> None:
-    """Today's main has no active swe1 rows — both registry entries are
-    m0_missing or verifier_mismatch. The bridge must reflect that
-    honestly rather than silently emit empty JSONL files."""
-    assert SWE1_ENV_MAP == {}
+def test_swe1_env_map_lights_up_post_task016_session_2() -> None:
+    """task016 Session 2 (M0 SWE-Gym-Lite → swe_pivot_tool_call) lit up
+    the swe1 active row. The bridge now maps the M0 env to the NeMo-Gym
+    single-step tool-comparison env. Previously asserted-empty
+    (test_swe1_env_map_empty_today) — flipped to lock the active state
+    so a future regression that removes the active row gets caught."""
+    assert SWE1_ENV_MAP == {
+        "swe_pivot_tool_call": "swe_pivot_single_step_tool_use_with_argument_comparison",
+    }
 
 
 # ---------- tag_record ----------
@@ -221,9 +225,36 @@ def test_tag_record_preserves_m0_payload_and_adds_swe1_tags() -> None:
 # ---------- prepare() error and happy paths ----------
 
 
-def test_prepare_raises_coverage_aware_error_today(tmp_path: Path) -> None:
-    """Today's main has no active swe1 rows → prepare() must surface a
-    clear gap report instead of emitting empty files."""
+def test_prepare_raises_coverage_aware_error_when_no_active_rows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Pre-task016-Session-2 main had no active swe1 rows and prepare()
+    surfaced the gap. Post-Session-2 there *is* an active row, so this
+    test pins the error path itself by monkey-patching to an all-inactive
+    registry — the coverage-aware error must keep working for future
+    regressions where someone removes the last active row."""
+    from nemotron.recipes.super3.milestones.m1_swe1 import prepare_m1_swe1_jsonl
+
+    monkeypatch.setattr(
+        prepare_m1_swe1_jsonl,
+        "_REGISTRY",
+        [
+            {
+                "nemo_gym_env": "swe_pivot_single_step_tool_use_with_argument_comparison",
+                "mix": "swe1",
+                "m0_env_id": None,
+                "status": "m0_missing",
+                "license": "unknown",
+            }
+        ],
+    )
+    monkeypatch.setattr(prepare_m1_swe1_jsonl, "SWE1_ENV_MAP", {})
+    monkeypatch.setattr(
+        prepare_m1_swe1_jsonl,
+        "SWE1_PROFILE",
+        {**prepare_m1_swe1_jsonl.SWE1_PROFILE, "env_map": {}},
+    )
+
     env_rows = {"swe_pivot_patch_supervision": {"train": [], "val": []}}
     m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
     out_dir = tmp_path / "swe1_out"
