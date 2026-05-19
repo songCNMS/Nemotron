@@ -278,3 +278,85 @@ task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
 task019/020) 未启动。下一个候选: task058 follow-ups 剩下两条 (revision-
 pin lint + contamination_against 校验) / task019-020 (M1 eval basket，
 block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
+
+## Session 9 - 2026-05-19 - intern_nemontron_review_cc
+
+实现 Session 6 — HuggingFace revision-pin lint (task058 license/
+contamination 主题 follow-up，配 Session 5 share-alike audit)。
+
+设计要点：
+
+- 新模块 `data_registries/revision_audit.py`:
+  - `FLOATING_REVISION_REFS = frozenset({"main", "master", "head",
+    "latest", ""})` — HF 在 fetch time 解析的 refs，不是真 pin
+  - `is_pinned(hf_revision)` predicate — case-insensitive；defensive
+    against None / 非 string
+  - `find_unpinned_revisions(index)` → `{"blockers": [...],
+    "informational": [...]}`:
+    - blockers: `m0_data_registry` 行 unpinned (字段缺 / floating ref)
+      — 这些是 actively-used，drift 会传到下游
+    - informational: `pref_data_registry` 行声明 `hf_revision_pin_required:
+      true` 但没 `hf_revision` 字段 — 那些是 *候选* (HelpSteer-2 /
+      UltraFeedback / Orca DPO pairs)，task018 Session 2 才选一个 pin
+  - `format_revision_audit_report(result)` — 文本渲染
+- `scripts/validate_data_registries.py` 加 `--check-revision-pins` flag:
+  - Audit-only mode (短路 schema validation)
+  - **Exit 1 if any blocker** (CI gate) / Exit 0 if only informational
+  - 报告 stdout (always)；blockers 数 summary stderr
+
+- `.pre-commit-config.yaml` 加 `check-revision-pins` local hook (并行
+  Session 2 的 `validate-data-registries`)：
+
+```yaml
+- id: check-revision-pins
+  language: system
+  entry: bash -c 'PYTHONPATH=src python3 scripts/validate_data_registries.py --check-revision-pins >/dev/null'
+  files: ^(src/.../milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/.../data_registries/.*\.py)$
+  pass_filenames: false
+```
+
+PR 改 m0_data_registry 加 unpinned 行的话 commit 就 fail，不等 cluster
+run 跑废。
+
+Live audit 今天 (clean main):
+
+```
+revision-pin audit: 3 informational — pref_data_registry candidate(s) pending task018 Session 2 pin
+
+- helpsteer2 (m1_rlhf_pref_data) hf_dataset='nvidia/HelpSteer2' hf_revision=None
+- ultrafeedback (m1_rlhf_pref_data) hf_dataset='openbmb/UltraFeedback' hf_revision=None
+- distilabel_orca_pairs (m1_rlhf_pref_data) hf_dataset='argilla/distilabel-intel-orca-dpo-pairs' hf_revision=None
+
+(no blockers — informational findings do not fail CI)
+```
+
+Tests (`test_revision_audit.py`, 31 cases):
+
+- `is_pinned` predicate 17：5 concrete refs 接受 (HotpotQA / MBPP live
+  SHAs / 短 SHA / tag-style v1.0.0 / release-2026) + 12 floating /
+  invalid 拒绝 (main/MAIN/Main/master/head/HEAD/latest/空串/3 空格/None/42)
+- `FLOATING_REVISION_REFS` table sanity check
+- `find_unpinned_revisions` live: zero blockers + 3 informational (3
+  pref candidates) — adding unpinned m0 row will trip this
+- `find_unpinned_revisions` 3 synthetic broken (missing field / 4
+  floating refs / pref row 不 declare pin_required 不 flag)
+- `format_revision_audit_report` 3 (clean ✓ marker / blocker
+  highlight / informational only "no blockers")
+- CLI 3 (clean exit 0 / broken fixture exit 1 + stderr summary / 短路
+  validation)
+
+加 2 个 `.pre-commit-config.yaml` 配置测试 (parallel Session 2 模式)。
+
+测试基线 260 → 293 passed + 6 skipped (33 new — 31 audit + 2 hook).
+`test_m1_agentic_sft.py` pyarrow collect-error pre-existing.
+
+## task030 状态
+
+- Session 1 ✓ (PR #48) — schema layer + index + inventories
+- Session 2 ✓ (PR #57) — CLI validator + pre-commit hook
+- Session 4 ✓ (PR #61) — module-local loader merge
+- Session 5 ✓ (PR #63) — share-alike license cascade audit
+- Session 6 ✓ (this PR) — HuggingFace revision-pin lint
+- Session 3 ☐ — M1 eval basket registry (block on task019/020)
+
+Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5+6 ✓。

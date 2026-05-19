@@ -76,6 +76,19 @@ def main(argv: list[str] | None = None) -> int:
             "Informational only (exit 0 even with findings)."
         ),
     )
+    parser.add_argument(
+        "--check-revision-pins",
+        action="store_true",
+        help=(
+            "Audit HuggingFace `hf_revision` pins on production data rows "
+            "(task030 Session 6, task058 follow-up). Two categories: "
+            "BLOCKERS = m0_data_registry rows whose hf_revision is missing "
+            "or a floating ref (main/master/head/latest) → exit 1; "
+            "informational = pref_data_registry candidate rows with "
+            "hf_revision_pin_required:true awaiting task018 Session 2 pin "
+            "→ exit 0."
+        ),
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -106,6 +119,29 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         # Always emit to stdout — audit reports are content, not noise.
         sys.stdout.write(format_cascade_report(cascade))
+        return 0
+
+    if args.check_revision_pins:
+        try:
+            from nemotron.recipes.super3.milestones.data_registries.revision_audit import (
+                find_unpinned_revisions,
+                format_revision_audit_report,
+            )
+            audit = find_unpinned_revisions(args.index_path)
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"validate_data_registries: revision-pin audit raised: {exc}",
+                file=sys.stderr,
+            )
+            return 2
+        sys.stdout.write(format_revision_audit_report(audit))
+        if audit.get("blockers"):
+            print(
+                f"validate_data_registries: {len(audit['blockers'])} unpinned "
+                "production data row(s) — fix or pin a hf_revision SHA",
+                file=sys.stderr,
+            )
+            return 1
         return 0
 
     try:

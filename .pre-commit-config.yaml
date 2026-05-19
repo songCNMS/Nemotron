@@ -55,3 +55,18 @@ repos:
         files: '^(src/nemotron/recipes/super3/milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/nemotron/recipes/super3/milestones/data_registries/.*\.py)$'
         pass_filenames: false
         types: [file]
+
+      # task030 Session 6 / task058 follow-up — HF revision-pin gate.
+      # Exits 1 if any m0_data_registry row has an unpinned hf_revision
+      # (missing or floating ref like main/master/head/latest); informational
+      # findings on pref_data_registry candidates are tolerated.
+      - id: check-revision-pins
+        name: "check HuggingFace revision pins on production data rows"
+        language: system
+        entry: |
+          bash -c '
+            PYTHONPATH=src python3 scripts/validate_data_registries.py --check-revision-pins >/dev/null
+          '
+        files: '^(src/nemotron/recipes/super3/milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/nemotron/recipes/super3/milestones/data_registries/.*\.py)$'
+        pass_filenames: false
+        types: [file]

@@ -494,14 +494,16 @@ Then in parallel:
    stage-a/stage-b YAMLs + cluster verify) still to go.
 10. **task019** + **task020** — M1 eval basket (can start once task014 has a
     real checkpoint).
-11. **task030** — unified data registry. Sessions 1+2+4+5 landed (schema
-    layer + unified index over 9 existing registries + inventory walks
-    + `scripts/validate_data_registries.py` CLI with `--license-cascade`
-    + pre-commit local hook + module-local loader merge so row shape
-    has a single source of truth, with `fail_fast=True`/`collect-all`
-    modes preserving the runtime-vs-audit split + share-alike license
-    cascade audit converting §6 Q1 prose into machine-checkable). Session
-    3 (M1 eval basket registry; blocked on task019/020) still to go.
+11. **task030** — unified data registry. Sessions 1+2+4+5+6 landed
+    (schema layer + unified index over 9 existing registries + inventory
+    walks + `scripts/validate_data_registries.py` CLI with
+    `--license-cascade` + `--check-revision-pins` + pre-commit local
+    hooks for both schema-shape validation and revision-pin gating +
+    module-local loader merge so row shape has a single source of truth
+    with `fail_fast=True`/`collect-all` modes preserving the
+    runtime-vs-audit split + share-alike license cascade audit + HF
+    revision-pin lint). Session 3 (M1 eval basket registry; blocked on
+    task019/020) still to go.
 
 After all M1 tasks land, M2 fanout (task022-038) becomes possible. M3 only
 makes sense after M2 ships a working 122B-parity checkpoint.
