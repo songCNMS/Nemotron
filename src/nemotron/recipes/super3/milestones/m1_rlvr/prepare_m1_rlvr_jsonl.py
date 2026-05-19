@@ -243,6 +243,15 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     write_jsonl(train_path, train_rows)
     write_jsonl(val_path, val_rows)
 
+    # Also emit a combined jsonl (train rows first, val rows last) so
+    # the existing ``stage2_rl/_data_prep_base.split_local_jsonl``
+    # consumer can re-split at the same boundary idempotently. This is
+    # the path ``data_prep/rlvr1.yaml`` ``input_path`` points at after
+    # task014 Session 2; the pre-split train/val files remain for
+    # downstream consumers that prefer them directly. (task014 Session 2)
+    combined_path = args.output_dir / "combined.jsonl"
+    write_jsonl(combined_path, [*train_rows, *val_rows])
+
     manifest: JsonDict = {
         "schema_version": 1,
         "milestone": MILESTONE,
@@ -254,6 +263,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "output_dir": str(args.output_dir),
         "train_path": str(train_path),
         "val_path": str(val_path),
+        "combined_path": str(combined_path),
         "env_map": dict(env_map),
         "counts": {
             "train": train_counts,
@@ -282,6 +292,15 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             ref=str(val_path.relative_to(args.output_dir)),
             rows=sum(val_counts.values()),
             notes=f"NemoGymDataset val input for {args.mix}",
+        ),
+        LineageOutput(
+            kind="m1_rlvr_combined_jsonl",
+            ref=str(combined_path.relative_to(args.output_dir)),
+            rows=sum(train_counts.values()) + sum(val_counts.values()),
+            notes=(
+                f"Combined train+val jsonl for {args.mix} — input to "
+                "stage2_rl/_data_prep_base.split_local_jsonl"
+            ),
         ),
     ]
     lineage_record = make_lineage_record(

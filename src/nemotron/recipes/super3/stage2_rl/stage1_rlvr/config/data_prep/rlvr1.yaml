@@ -2,23 +2,56 @@ run:
   env:
     container: anyscale/ray:2.49.2-py312
 
-# RLVR Stage 1.1 data preparation
+# RLVR Stage 1.1 data preparation (post-task014 Session 2 wiring).
 #
-# Resolves HF placeholders (DAPO-Math-17k, Skywork-OR1-RL-Data) and
-# splits into train/val (last 100 rows → val).
+# `input_path` now points at the M0-derived combined.jsonl produced by
+# the task014 Session 1 bridge (`prepare_m1_rlvr_jsonl.py --mix rlvr1`).
+# The bridge writes train.jsonl + val.jsonl + **combined.jsonl** (train
+# rows first, val rows last) plus a manifest.json with lineage back to
+# the M0 manifest.
+#
+# Upstream pipeline:
+#   1. Run M0 prep: `nemotron super3 data prep m0 -c default`
+#      → writes M0 splits + manifest under $NEMO_RUN_DIR/output/super3/m0
+#   2. Run RLVR bridge: `python -m nemotron.recipes.super3.milestones.m1_rlvr.prepare_m1_rlvr_jsonl \
+#                          --m0-input-dir $NEMO_RUN_DIR/output/super3/m0 \
+#                          --output-dir $NEMO_RUN_DIR/output/super3/m1_rlvr/rlvr1 \
+#                          --mix rlvr1`
+#      → writes combined.jsonl + train/val.jsonl + manifest.json
+#   3. Run this data_prep: `nemotron super3 data prep rl rlvr -c rlvr1`
+#      → re-splits combined.jsonl into train/val (idempotent because
+#        bridge already put val rows at the end and val_holdout below
+#        matches the bridge's val count)
 #
 # Usage:
 #   nemotron super3 data prep rl rlvr -c rlvr1
 #   nemotron super3 data prep rl rlvr -c rlvr1 sample=1000
+#
+# Override input_path if you ran the bridge to a different output dir:
+#   nemotron super3 data prep rl rlvr -c rlvr1 input_path=/path/to/combined.jsonl
 
-# Path to source JSONL file
-# TODO: Update to hf:// path once nvidia/Nemotron-RL-Super-Training-Blends is published
-input_path: /lustre/fs1/portfolios/coreai/projects/coreai_dlalgo_nemorl/users/yifuw/code/nano-v3-data/super_data/release/rlvr1.jsonl
+# M0-derived combined jsonl from the task014 bridge. Templated against
+# NEMO_RUN_DIR so the path resolves wherever the operator runs the
+# pipeline; falls back to the current directory if NEMO_RUN_DIR isn't set
+# (useful in sandbox / dry-run flows).
+input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr1/combined.jsonl
 
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/rlvr1
 
-# Number of rows to hold out for validation (from end of file)
+# Number of rows to hold out for validation (from end of file).
+#
+# The bridge places val rows at the end of combined.jsonl, so for the
+# re-split to land on the same train/val boundary as the bridge, this
+# must match the bridge's actual val row count for the rlvr1 mix.
+# Inspect the bridge's manifest.json:
+#   jq '.counts.val | values | add' .../m1_rlvr/rlvr1/manifest.json
+# and override at the CLI:
+#   nemotron super3 data prep rl rlvr -c rlvr1 val_holdout=<N>
+#
+# 100 is a placeholder safe default — large enough that small-scale
+# bridge runs land val rows inside the holdout; the operator overrides
+# for production runs.
 val_holdout: 100
 
 # Limit rows per dataset for quick tests (null = no limit)
