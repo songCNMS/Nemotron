@@ -14,3 +14,4 @@
   - `PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_basket.py tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_unified_data_registry.py` → `65 passed`.
   - `PYTHONPATH=src scripts/validate_data_registries.py --quiet` → pass.
   - `git diff --check` → pass.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/88.
