@@ -26,7 +26,9 @@ def _spec(*, environment: str = "math_formal_lean", fields: dict | None = None) 
     """Minimal spec for transform_lean_proof_stub. The real
     data_registry row will have many more fields, but the transformer
     only consults ``environment``, ``fields``, ``milestone``,
-    ``use_stage``, and the metadata fields ``make_record`` needs."""
+    ``use_stage``, and the metadata fields ``make_record`` /
+    ``base_metadata`` need (including ``contamination_against`` per
+    task058's data_registry schema bump)."""
     return {
         "environment": environment,
         "milestone": "M0",
@@ -40,6 +42,7 @@ def _spec(*, environment: str = "math_formal_lean", fields: dict | None = None) 
         "difficulty": "research",
         "reward_type": "lean_proof_stub",
         "contamination": "decontaminate against MiniF2F / mathlib4 eval",
+        "contamination_against": ["minif2f", "mathlib4_test"],
         "use_stage": ["M0 data_env_foundation"],
         "fields": fields or {},
     }

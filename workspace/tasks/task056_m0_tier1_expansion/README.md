@@ -1,7 +1,7 @@
 # task056_m0_tier1_expansion
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
-<!-- SESSION 2 LANDED: PR pending on 2026-05-18 — code path only; data_registry row待 §6 share-alike 决议 -->
+<!-- SESSION 2 LANDED: PR #50 / 2951cac on 2026-05-18 — code path only; data_registry row待 §6 share-alike 决议 -->
 
 ## 背景
 
