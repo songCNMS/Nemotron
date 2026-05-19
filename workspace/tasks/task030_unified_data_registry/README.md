@@ -3,7 +3,7 @@
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #48 / ec1b271 on 2026-05-18 -->
 <!-- SESSION 2 LANDED: PR #57 / 324e062 on 2026-05-18 (schema enforcement script + pre-commit hook) -->
-<!-- SESSION 4 LANDED: PR pending on 2026-05-18 (bridge / M0 module-local loader merge into schema layer) -->
+<!-- SESSION 4 LANDED: PR #61 / 159d81f on 2026-05-18 (bridge / M0 module-local loader merge into schema layer) -->
 
 ## 背景
 
