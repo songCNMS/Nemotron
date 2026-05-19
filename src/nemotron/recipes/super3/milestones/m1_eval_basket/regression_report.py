@@ -90,7 +90,7 @@ def load_eval_results(path: Path | str) -> JsonDict:
     target = Path(path)
     with target.open(encoding="utf-8") as f:
         data = json.load(f)
-    if not isinstance(data, dict) or "tasks" not in data:
+    if not isinstance(data, dict) or not isinstance(data.get("tasks"), dict):
         raise ValueError(
             f"{target}: NeMo Evaluator JSON must declare a 'tasks' dict at top level"
         )
