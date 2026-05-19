@@ -70,3 +70,19 @@ repos:
         files: '^(src/nemotron/recipes/super3/milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/nemotron/recipes/super3/milestones/data_registries/.*\.py)$'
         pass_filenames: false
         types: [file]
+
+      # task030 Session 7 / task058 follow-up — contamination_against
+      # semantic gate. Exits 1 if any m0_data_registry row has a broken
+      # contamination_against field (empty list, non-list, non-string /
+      # empty-string entries); placeholder-only rows (["TBD"] etc.)
+      # surface as informational and don't fail CI.
+      - id: check-contamination
+        name: "check contamination_against fields on production data rows"
+        language: system
+        entry: |
+          bash -c '
+            PYTHONPATH=src python3 scripts/validate_data_registries.py --check-contamination >/dev/null
+          '
+        files: '^(src/nemotron/recipes/super3/milestones/.*\.(yaml|yml)|scripts/validate_data_registries\.py|src/nemotron/recipes/super3/milestones/data_registries/.*\.py)$'
+        pass_filenames: false
+        types: [file]
