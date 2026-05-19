@@ -29,3 +29,7 @@ When a task history log appends a later session, advance the `METADATA:SESSION` 
 ### Eval Result Loader Contract
 
 `load_eval_results()` should reject malformed NeMo Evaluator JSON before `diff_eval_runs()` sees it; top-level `tasks` must be a mapping, not merely a present key.
+
+### Intern Status Metadata
+
+Idle intern status metadata should keep an explicit empty task field: `METADATA:STATUS=Idle,TASK=`.
