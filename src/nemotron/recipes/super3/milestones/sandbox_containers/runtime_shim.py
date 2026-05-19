@@ -50,6 +50,43 @@ from typing import Any
 KNOWN_CONTAINER_RUNTIMES = frozenset({"docker", "podman", "singularity"})
 
 
+# Rollout policy distinguishes who produced the candidate the verifier
+# is about to score. ``ORACLE`` candidates come from the gold answer
+# (M0 health-baseline), the empty-string sentinel, or any other source
+# the operator already trusts; isolation is unnecessary. ``ADVERSARIAL``
+# candidates come from a policy model under training and may contain
+# arbitrary code — those must run in a container.
+#
+# task021 Session 6 wires this policy through the verifier path so
+# any future M1+ RLVR rollout that forgets ``container_runtime`` gets
+# a loud RuntimeError instead of silently falling back to in-process
+# (which would let untrusted code run on the host). The guard rail
+# replaces the speculative "flip the default to docker" plan because
+# there is no in-repo RLVR rollout caller today — the literal flip
+# would have no coherent target.
+ROLLOUT_POLICY_ORACLE = "oracle"
+ROLLOUT_POLICY_ADVERSARIAL = "adversarial"
+KNOWN_ROLLOUT_POLICIES = frozenset(
+    {ROLLOUT_POLICY_ORACLE, ROLLOUT_POLICY_ADVERSARIAL}
+)
+
+
+def recommended_container_runtime(rollout_policy: str) -> str | None:
+    """Return the container runtime an operator *should* use given the
+    rollout policy.
+
+    Oracle policy → None (in-process is fine). Adversarial policy →
+    ``"docker"`` (operators can override to podman / singularity via
+    the CLI flag; the recommendation is the canonical default).
+    """
+    if rollout_policy not in KNOWN_ROLLOUT_POLICIES:
+        raise ValueError(
+            f"unknown rollout policy {rollout_policy!r}; "
+            f"known: {sorted(KNOWN_ROLLOUT_POLICIES)}"
+        )
+    return "docker" if rollout_policy == ROLLOUT_POLICY_ADVERSARIAL else None
+
+
 @dataclass(frozen=True)
 class ContainerSandbox:
     """Run a command inside an isolated container.
@@ -179,5 +216,9 @@ def sandbox_for_env(
 __all__ = [
     "ContainerSandbox",
     "KNOWN_CONTAINER_RUNTIMES",
+    "KNOWN_ROLLOUT_POLICIES",
+    "ROLLOUT_POLICY_ADVERSARIAL",
+    "ROLLOUT_POLICY_ORACLE",
+    "recommended_container_runtime",
     "sandbox_for_env",
 ]

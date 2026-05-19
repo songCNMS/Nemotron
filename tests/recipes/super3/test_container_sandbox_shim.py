@@ -330,7 +330,10 @@ def test_score_record_plumbs_container_runtime_into_run_python_unit_tests(monkey
 
     captured: dict[str, Any] = {}
 
-    def fake_runner(candidate, record, timeout_s, *, container_runtime=None):
+    def fake_runner(candidate, record, timeout_s, *, container_runtime=None, **kwargs):
+        # task021 Session 6 added a `rollout_policy` kwarg on the
+        # runner. Accept it transparently so this Session 5 test stays
+        # focused on the `container_runtime` thread.
         captured["container_runtime"] = container_runtime
         return 1.0, {"returncode": 0}
 

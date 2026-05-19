@@ -239,3 +239,55 @@ module-local loader 接进 schema 层) / task021 Session 6 候选 (RLVR
 rollout default container_runtime 从 None 翻 "docker"，production
 behavior flip 独立 PR) / task019-020 (M1 eval basket，block on task014
 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
+
+## Session 9 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 6 — rollout policy guard rail。最初 closeout 写 "RLVR rollout
+default container_runtime 从 None 翻 'docker'"，审计后发现 in-repo 没有
+对应 caller (M0 health-baseline 是 oracle 路径 — 不需要容器；M1 RLVR
+rollout 真实在 NeMo-Gym 外部 repo)。字面"翻 default"没有 coherent target。
+
+改实现的语义同等版本：
+
+- 新加 `ROLLOUT_POLICY_ORACLE` / `ROLLOUT_POLICY_ADVERSARIAL` 常量 +
+  `KNOWN_ROLLOUT_POLICIES` frozenset (in `sandbox_containers/runtime_shim.py`)
+- `recommended_container_runtime(rollout_policy)` helper: oracle → None /
+  adversarial → "docker"
+- `run_python_unit_tests` 加 `rollout_policy: str = "oracle"` kwarg:
+  - typo → `ValueError("unknown rollout_policy")`
+  - adversarial + container_runtime is None → `RuntimeError("adversarial
+    rollout policy requires explicit container_runtime ...")` — **关键
+    guard 防止 untrusted code silently 跑 host**
+  - rollout_policy != "oracle" 时 diagnostics 加 `rollout_policy` 痕迹
+  - oracle (默认) → 跟 Session 5 的 in-process 路径完全等价 (regression
+    test 验)
+- `score_record` / `score_rows` / `evaluate_policy` / `summarize_baselines`
+  / `build_report` 全 thread 这个 kwarg；CLI 加 `--rollout-policy
+  {oracle,adversarial}` (默认 oracle)
+- report 里写出 `report["rollout_policy"]` 留印
+
+修了 Session 5 的一个 stub: `test_score_record_plumbs_container_runtime_into_run_python_unit_tests`
+的 fake_runner 加 `**kwargs` 接收 Session 6 新加的 `rollout_policy`，让
+Session 5 测试 focus 在 container_runtime threading 上 (Session 6 自己
+的 plumbing 测试在 test_rollout_policy_guard.py)。
+
+测试 `tests/recipes/super3/test_rollout_policy_guard.py` 11 cases:
+
+- 常量 + recommended_runtime 5: KNOWN_ROLLOUT_POLICIES shape / 字面 oracle
+  + adversarial / oracle→None / adversarial→docker / 未知 raise
+- 守卫 4: adversarial + None → RuntimeError ⚠ / adversarial + docker → 跑
+  + diagnostics 含 rollout_policy / **oracle 默认保持 sys.executable -I
+  字节级同 behavior (regression gate)** / typo raise ValueError
+- Plumbing 2: score_record 透传 rollout_policy / score_rows 透传
+
+测试基线 215 → 226 passed + 6 skipped (11 new).
+`test_m1_agentic_sft.py` pyarrow collect-error pre-existing.
+
+task021 整 task 仍 InProgress：Session 4 (cluster verify) 待 NemTron access。
+
+**关键决策记录**：原 plan 的 "literal default flip" 在 in-repo 没有
+target — M0 health-baseline 是 oracle (不需要容器)，M1 RLVR rollout 在
+外部 repo。Session 6 改用 "guard rail" 语义实现：未来任何 in-repo M1+
+rollout caller 拿 `rollout_policy="adversarial"` 但忘了 container_runtime，
+verifier 入口直接 raise，防止 unsafe path 被走通。这是同等效果但 actually
+runnable in-repo 的方案。
