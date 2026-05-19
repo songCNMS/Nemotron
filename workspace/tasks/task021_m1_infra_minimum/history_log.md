@@ -291,3 +291,18 @@ target — M0 health-baseline 是 oracle (不需要容器)，M1 RLVR rollout 在
 rollout caller 拿 `rollout_policy="adversarial"` 但忘了 container_runtime，
 verifier 入口直接 raise，防止 unsafe path 被走通。这是同等效果但 actually
 runnable in-repo 的方案。
+
+## Session 10 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 6 PR #59 已 squash-merge 为 `4f651f6` 进 main — rollout policy
+guard rail (ROLLOUT_POLICY_ORACLE / ADVERSARIAL 常量 +
+recommended_container_runtime helper + run_python_unit_tests
+rollout_policy kwarg + 一路串通 score_record / score_rows /
+evaluate_policy / summarize_baselines / CLI + 11 个 pytest case) 都进了
+main。intern status 回 Idle (Session 46)。task021 整 task 仍 InProgress：
+Session 4 (cluster verify) 待 NemTron access。
+
+下一个候选: task058 follow-ups (share-alike cascade detection / 更多
+license/contamination 校验) / task030 Session 4 (loader merge into
+schema layer — careful) / task019-020 (eval basket，block on task014
+Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
