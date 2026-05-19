@@ -68,22 +68,14 @@ def test_placeholder_predicate_catches_sentinels(entry: str) -> None:
         "AIME-25",
         "SWE-Bench Lite",
         "Pending-Eval-2026",  # contains "pending" but as part of a real name — must NOT match
+        "TBD-Eval-2026",  # hyphenated eval name, not an unfilled placeholder note
         "",
         None,
         42,
     ],
 )
 def test_placeholder_predicate_does_not_flag_real_evals(entry) -> None:
-    # "Pending-Eval-2026" intentionally contains "pending"; the audit
-    # currently uses substring match so it WOULD be flagged. Verify the
-    # behavior we actually implement: substring match catches it.
-    if entry == "Pending-Eval-2026":
-        assert is_placeholder_entry(entry), (
-            "current implementation uses substring match; "
-            "if changed to whole-word, update this test"
-        )
-    else:
-        assert not is_placeholder_entry(entry)
+    assert not is_placeholder_entry(entry)
 
 
 def test_sentinel_phrases_carries_canonical_set() -> None:
