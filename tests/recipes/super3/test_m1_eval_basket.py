@@ -151,6 +151,13 @@ def test_load_eval_results_rejects_missing_tasks_key(tmp_path: Path) -> None:
         load_eval_results(bad)
 
 
+def test_load_eval_results_rejects_non_mapping_tasks(tmp_path: Path) -> None:
+    bad = tmp_path / "bad.json"
+    bad.write_text(json.dumps({"model": {}, "tasks": []}), encoding="utf-8")
+    with pytest.raises(ValueError, match="'tasks' dict"):
+        load_eval_results(bad)
+
+
 # ---------- diff_eval_runs ----------
 
 
