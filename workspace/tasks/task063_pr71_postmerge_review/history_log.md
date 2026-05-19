@@ -14,3 +14,4 @@
   - `rg "METADATA:STATUS=Idle,TASK=" workspace/interns/intern_nemontron_review_cc/status.md` → pass.
   - `rg "METADATA:STATUS=Idle -->" workspace/interns` → no matches.
   - `git diff --check` → pass.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/89.

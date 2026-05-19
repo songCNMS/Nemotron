@@ -22,7 +22,9 @@ concrete issue found in one follow-up PR.
 - [x] PR #71 touched files are reviewed.
 - [x] Any concrete bugs found are fixed on this branch.
 - [x] Focused validation confirms the fixed metadata.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task063_pr71_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task063_pr71_postmerge_review`.
+
+PR: https://github.com/songCNMS/Nemotron/pull/89
 
 ## Review Finding
 
