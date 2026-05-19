@@ -17,3 +17,4 @@
   - `PYTHONPATH=src scripts/validate_data_registries.py --quiet` → pass.
   - `PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_promotion_gate.py tests/recipes/super3/test_gap_analysis.py` → `52 passed`.
   - `git diff --check` → pass.
+- Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/90.

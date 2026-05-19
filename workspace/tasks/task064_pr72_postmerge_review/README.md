@@ -23,7 +23,9 @@ one follow-up PR.
 - [x] Any concrete bugs found are fixed on this branch.
 - [x] Targeted checks cover the fix.
 - [x] Registry validation passes.
-- [ ] Follow-up PR is opened from `intern_nemontron_code_reading/task064_pr72_postmerge_review`.
+- [x] Follow-up PR is opened from `intern_nemontron_code_reading/task064_pr72_postmerge_review`.
+
+PR: https://github.com/songCNMS/Nemotron/pull/90
 
 ## Review Finding
 
