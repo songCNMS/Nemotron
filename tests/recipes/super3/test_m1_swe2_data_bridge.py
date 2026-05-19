@@ -268,10 +268,13 @@ def test_swe2_profile_uses_correct_artifact() -> None:
     assert MIX_NAME == "swe2"
 
 
-def test_swe2_env_map_empty_today() -> None:
-    """Today's main has no active swe2 rows; all three SIF families are
-    `m0_missing` pending Session 2 M0 trace data."""
-    assert SWE2_ENV_MAP == {}
+def test_swe2_env_map_lights_up_post_task017_session_2() -> None:
+    """task017 Session 2 (M0 SWE-Gym → swe2_openhands_trace) lit up the
+    swe2 active row for the `swegym` SIF family. The bridge now maps
+    the M0 env to the NeMo-Gym ``swe_agents`` env. Previously asserted-
+    empty (test_swe2_env_map_empty_today) — flipped to lock the active
+    state so a future regression that removes the active row gets caught."""
+    assert SWE2_ENV_MAP == {"swe2_openhands_trace": "swe_agents"}
 
 
 # ---------- tag_record ----------
@@ -300,7 +303,35 @@ def test_tag_record_preserves_m0_payload_and_adds_swe2_tags() -> None:
 # ---------- prepare() ----------
 
 
-def test_prepare_raises_coverage_aware_error_today(tmp_path: Path) -> None:
+def test_prepare_raises_coverage_aware_error_when_no_active_rows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Post-task017-Session-2 main has an active swe2 row, so pin the
+    error path by monkey-patching to an all-inactive registry — the
+    coverage-aware error must keep working as a regression guard."""
+    from nemotron.recipes.super3.milestones.m1_swe2 import prepare_m1_swe2_jsonl
+
+    monkeypatch.setattr(
+        prepare_m1_swe2_jsonl,
+        "_REGISTRY",
+        [
+            {
+                "nemo_gym_env": "swe_agents",
+                "mix": "swe2",
+                "m0_env_id": None,
+                "sif_source": "swebench",
+                "status": "m0_missing",
+                "license": "unknown",
+            }
+        ],
+    )
+    monkeypatch.setattr(prepare_m1_swe2_jsonl, "SWE2_ENV_MAP", {})
+    monkeypatch.setattr(
+        prepare_m1_swe2_jsonl,
+        "SWE2_PROFILE",
+        {**prepare_m1_swe2_jsonl.SWE2_PROFILE, "env_map": {}},
+    )
+
     env_rows = {"swe_pivot_patch_supervision": {"train": [], "val": []}}
     m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
     out_dir = tmp_path / "swe2_out"

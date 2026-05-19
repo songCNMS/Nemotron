@@ -1,0 +1,60 @@
+# Default SWE2 sandbox watchdog policy (task017 Session 2).
+#
+# The OpenHands loop drives arbitrary shell commands inside the SIF
+# container. This policy is the *first* line of defense: commands here
+# never reach subprocess.run regardless of whether the SIF launcher's
+# own constraints would also catch them. Treat both layers as
+# defense-in-depth — the SIF launcher provides isolation, this policy
+# provides authorization.
+#
+# `network_policy: deny` — the OpenHands rollout runs against the
+# already-cloned repo inside the SIF; no fresh egress should be
+# necessary. Operators with a legitimate need (e.g., calling out to a
+# judge service) override per-run.
+
+network_policy: deny
+
+cpu_limit: 4
+memory_limit_mb: 8192
+
+command_blocklist:
+  # Destructive root operations
+  - "rm -rf /"
+  - "rm -rf /*"
+  - "rm -rf /etc"
+  - "rm -rf /home"
+  - "rm -rf /usr"
+  - "rm -rf /var"
+  - "rm -rf ~"
+
+  # Privilege escalation
+  - "sudo"
+  - "su"
+  - "su -"
+
+  # Network egress not expected under deny policy
+  - "curl"
+  - "wget"
+  - "nc"
+  - "ncat"
+  - "ssh"
+  - "scp"
+
+  # Package installation (would require network + persist beyond run)
+  - "apt-get install"
+  - "apt install"
+  - "pip install"
+  - "yum install"
+
+  # Filesystem manipulation outside the work tree
+  - "mkfs"
+  - "fdisk"
+  - "mount"
+  - "umount"
+
+notes:
+  - Operators may relax this policy per-run via a watchdog policy override.
+  - The blocklist matches by argv-token prefix; `rm -rf /` does NOT match
+    `rm -rf /workspace/build` since the prefixes differ at token 3.
+  - A blocked command raises SandboxPolicyViolation at the watchdog layer
+    before subprocess.run is invoked.

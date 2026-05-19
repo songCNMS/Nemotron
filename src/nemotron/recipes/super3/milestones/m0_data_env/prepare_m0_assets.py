@@ -73,6 +73,12 @@ SYSTEM_PROMPTS = {
         "call that makes the most progress on the issue. Return one tool "
         "call from the provided schema; do not narrate."
     ),
+    "swe2_openhands_trace": (
+        "You are a software engineering agent running in a SWE-Bench sandbox. "
+        "Use the OpenHands tool loop to read, edit, and test the repository "
+        "until the issue is resolved. Reward is binary: the final patch must "
+        "apply cleanly AND the test suite must pass."
+    ),
     "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
     "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
@@ -544,6 +550,247 @@ def transform_swe_gym_lite_pivot(row: Mapping[str, Any], spec: Mapping[str, Any]
             "instance_id": instance_id,
             "gold_tool_call": gold_tool_call,
             "pivot_type": pivot_type,
+        },
+    )
+
+
+# SWE2 OpenHands rollout tool schema (task017 Session 2). Larger than
+# the SWE1 pivot tool set because the SWE2 verifier rewards a *full
+# rollout* (binary patch+tests pass), not a single first call — the
+# agent needs to read, edit, and verify. Tools mirror the OpenHands
+# default action set.
+SWE2_OPENHANDS_TOOLS: list[JsonDict] = [
+    {
+        "type": "function",
+        "function": {
+            "name": "view_file",
+            "description": "Show the contents of a file at the given repo-relative path.",
+            "parameters": {
+                "type": "object",
+                "properties": {"path": {"type": "string"}},
+                "required": ["path"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search",
+            "description": "Search the repo for a literal string or pattern.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"},
+                    "path": {"type": "string"},
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "edit_file",
+            "description": "Apply an edit to a file by replacing a span of text.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "old_text": {"type": "string"},
+                    "new_text": {"type": "string"},
+                },
+                "required": ["path", "old_text", "new_text"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "run_shell",
+            "description": "Run a shell command in the sandboxed working directory.",
+            "parameters": {
+                "type": "object",
+                "properties": {"command": {"type": "string"}},
+                "required": ["command"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "run_tests",
+            "description": "Run the project's test suite, optionally scoped.",
+            "parameters": {
+                "type": "object",
+                "properties": {"path": {"type": "string"}},
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "submit_patch",
+            "description": "Submit the final unified diff that resolves the issue.",
+            "parameters": {
+                "type": "object",
+                "properties": {"patch": {"type": "string"}},
+                "required": ["patch"],
+            },
+        },
+    },
+]
+
+
+def _normalize_trajectory_message(message: Mapping[str, Any]) -> JsonDict:
+    """Strip OpenAI-tool-call argument JSON to dict form, drop unknown keys.
+
+    Keeps the trajectory shape minimal and stable so the policy isn't
+    learning artifacts of one upstream's serialization choices.
+    """
+    role = str(message.get("role") or "").strip() or "user"
+    out: JsonDict = {"role": role}
+    if "content" in message and message["content"] is not None:
+        out["content"] = message["content"]
+    tool_calls_raw = message.get("tool_calls")
+    if isinstance(tool_calls_raw, list) and tool_calls_raw:
+        normalized: list[JsonDict] = []
+        for call in tool_calls_raw:
+            if not isinstance(call, Mapping):
+                continue
+            function = call.get("function")
+            if not isinstance(function, Mapping):
+                continue
+            name = str(function.get("name") or "").strip()
+            if not name:
+                continue
+            raw_args = function.get("arguments")
+            if isinstance(raw_args, Mapping):
+                args: JsonDict = dict(raw_args)
+            elif isinstance(raw_args, str):
+                try:
+                    parsed = json.loads(raw_args)
+                except json.JSONDecodeError:
+                    parsed = {}
+                args = parsed if isinstance(parsed, dict) else {}
+            else:
+                args = {}
+            normalized.append({"name": name, "arguments": args})
+        if normalized:
+            out["tool_calls"] = normalized
+    tool_call_id = message.get("tool_call_id")
+    if tool_call_id:
+        out["tool_call_id"] = str(tool_call_id)
+    return out
+
+
+def transform_swe_gym_openhands_trace(
+    row: Mapping[str, Any], spec: Mapping[str, Any]
+) -> JsonDict:
+    """Convert one SWE-Gym-Lite agent trajectory into the SWE2 OpenHands shape.
+
+    Unlike ``transform_swe_gym_lite_pivot`` (task016 Session 2), which
+    keeps only the first tool call as ground truth, this converter
+    preserves the *whole trajectory* — the SWE2 verifier (``openhands_loop``)
+    rewards the binary patch+tests outcome of a full agent rollout, so
+    the policy needs the entire reference trajectory available at
+    training time (for behavioral cloning, distillation, or reward
+    shaping during exploration).
+
+    Gold answer is the unified-diff patch the trajectory produces — read
+    from a top-level ``patch`` / ``gold_patch`` field if present, else
+    pulled from the last ``submit_patch`` tool call in the trajectory.
+    Raises ``ValueError`` if no patch can be located — without ground
+    truth the reward signal degenerates.
+
+    ``extra_env_info.sif_source`` defaults to ``swegym`` (the SIF family
+    that ships SWE-Gym containers). Operators with R2E-Gym sources
+    override via spec override or a downstream re-tag.
+    """
+    problem_statement = str(row.get("problem_statement") or "").strip()
+    if not problem_statement:
+        raise ValueError("SWE-Gym row missing problem_statement")
+    messages = row.get("messages")
+    if not isinstance(messages, list) or not messages:
+        raise ValueError("SWE-Gym row missing messages trajectory")
+
+    gold_patch_raw = row.get("gold_patch") or row.get("patch")
+    if not gold_patch_raw:
+        # Fallback: scan trajectory for a `submit_patch` tool call
+        for message in messages:
+            if not isinstance(message, Mapping):
+                continue
+            if message.get("role") != "assistant":
+                continue
+            for call in message.get("tool_calls") or []:
+                if not isinstance(call, Mapping):
+                    continue
+                function = call.get("function") or {}
+                if not isinstance(function, Mapping):
+                    continue
+                if function.get("name") != "submit_patch":
+                    continue
+                raw_args = function.get("arguments")
+                args = raw_args
+                if isinstance(raw_args, str):
+                    try:
+                        args = json.loads(raw_args)
+                    except json.JSONDecodeError:
+                        args = None
+                if isinstance(args, Mapping):
+                    candidate = args.get("patch")
+                    if candidate:
+                        gold_patch_raw = candidate
+                        break
+            if gold_patch_raw:
+                break
+    if not gold_patch_raw:
+        raise ValueError(
+            "SWE-Gym row has no gold patch — checked top-level patch / "
+            "gold_patch and trajectory submit_patch calls"
+        )
+    gold_patch = str(gold_patch_raw).strip()
+
+    repo = str(row.get("repo") or "").strip()
+    instance_id = str(row.get("instance_id") or "").strip()
+    sif_source = str(row.get("sif_source") or "swegym").strip() or "swegym"
+
+    reference_trajectory = [
+        _normalize_trajectory_message(message)
+        for message in messages
+        if isinstance(message, Mapping)
+    ]
+
+    user_content = (
+        "Resolve the software issue below using the OpenHands agent "
+        "loop. Submit your final unified-diff patch via "
+        "`submit_patch` only when the test suite passes.\n\n"
+        f"Repository: {repo or '<unspecified>'}\n"
+        f"Instance: {instance_id or '<unspecified>'}\n\n"
+        f"Issue:\n{problem_statement}"
+    )
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem_statement,
+        expected_answer=gold_patch,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        tools=SWE2_OPENHANDS_TOOLS,
+        reward_config={
+            "verifier": "openhands_loop",
+            "max_score": 1.0,
+            "match": ["patch_applies", "tests_pass"],
+        },
+        extra_env_info={
+            "repo": repo,
+            "instance_id": instance_id,
+            "sif_source": sif_source,
+            "gold_patch": gold_patch,
+            "reference_trajectory": reference_trajectory,
+            "trajectory_turns": len(reference_trajectory),
         },
     )
 
@@ -1099,6 +1346,7 @@ CONVERTERS = {
     "bash_command": transform_bash_command,
     "swe_bench_patch": transform_swe_bench_patch,
     "swe_gym_lite_pivot": transform_swe_gym_lite_pivot,
+    "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,

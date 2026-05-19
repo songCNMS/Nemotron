@@ -41,16 +41,19 @@ envs:
 
   - nemo_gym_env: swe_agents
     mix: swe2
-    m0_env_id: null
-    m0_verifier: null
+    m0_env_id: swe2_openhands_trace
+    m0_verifier: openhands_loop
     nemo_gym_verifier: openhands_loop (binary patch+tests reward)
     sif_source: swegym
     license: apache-2.0
-    status: m0_missing
+    status: active
     notes: |
-      Candidate Session 2 source: SWE-Gym-Lite. Multi-turn agent traces
-      provide natural OpenHands rollout shape; SIF family
-      `swegym_sweb.eval.x86_64.*` published per build.
+      task017 Session 2 active source. M0 ``swe2_openhands_trace`` env
+      runs the ``swe_gym_openhands_trace`` converter against
+      SWE-Gym-Lite trajectories, preserving the full reference
+      trajectory and extracting the gold patch as ``expected_answer``.
+      Reward is binary openhands_loop (patch applies + tests pass)
+      computed at training time by the OpenHands gym + SIF container.
 
   - nemo_gym_env: swe_agents
     mix: swe2

@@ -3,6 +3,7 @@
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #40 / e9adcba on 2026-05-18 -->
 <!-- SESSION 4 LANDED: PR #46 / 5943e18 on 2026-05-18 -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-19 (M0 SWE-Gym → swe2_openhands_trace converter + sandbox watchdog policy; OpenHands wrapper deferred) -->
 
 ## 背景
 
@@ -23,7 +24,7 @@ SIF images per `instance_id`，三个 family：
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | SIF image mapping registry + SWE2 bridge skeleton (third bridge copy) | yes | ✓ Done (this PR) |
-| 2 | OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog | partial (wrapper 单测 yes，真 Docker 起 no) | Todo |
+| 2 | OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog | partial (wrapper 单测 yes，真 Docker 起 no) | ⚠ Sandbox part (converter + watchdog) ✓ (this PR); OpenHands wrapper deferred to follow-up session |
 | 3 | Cluster smoke launcher + Docker fallback for non-SLURM | no — 需 NemTron cluster + SIF images | Todo |
 | 4 | `_bridge_base.py` 抽取 (RLVR + SWE1 + SWE2 + RLHF 同 pattern) | yes | ✓ Done (this PR) |
 
@@ -72,24 +73,90 @@ SIF images per `instance_id`，三个 family：
 - Session 3 依赖 NemTron cluster + 真 SIF images
 - Session 4 跟 task014 / task015 / task016 / task017 三个 bridge 模块同步抽 base
 
-## Session 2+ 不在本 PR
+## Session 2 (sandbox part) — landed in this PR
 
-Session 2 核心：OpenHands loop wrapper + M0 SWE2 trace converter +
-sandbox watchdog/blocklist。M0 SWE2 trace 走 SWE-Gym-Lite agent
-trajectory（多轮 agent rollout shape 跟 OpenHands 天然吻合），按 SIF
-family `swegym` 登记。Sandbox watchdog 包含 memory_limit_mb / cpu_limit
-/ network_policy / command_blocklist YAML 配置 + Python enforce 层
-（subprocess 包一层）。
+1. **新 M0 env + data row** (`swe2_openhands_trace`):
+   - `environment_registry.yaml` 加 env: family software_engineering /
+     verifier `openhands_loop` (binary patch+tests) / max_turns 200 /
+     sandbox sif (训练时由 OpenHands gym 在 SIF container 里 enforce)
+   - `data_registry.yaml` 加 row 指 `SWE-Gym/SWE-Gym-Lite` (apache-2.0,
+     contamination_against [SWE-Bench Lite, SWE-Bench Verified])
+   - `prepare_m0_assets.SYSTEM_PROMPTS` 加对应 prompt
+
+2. **新 converter** `transform_swe_gym_openhands_trace`:
+   - 跟 task016 Session 2 (SWE1 first-tool-call) **互补**：本 converter
+     保留**整个 trajectory**，因为 SWE2 verifier 奖励 full rollout 的
+     patch+tests 结果不是单步决策
+   - 6-tool schema：view_file / search / edit_file / **run_shell** /
+     run_tests / **submit_patch** (比 SWE1 4-tool 更丰富，agent 要能
+     真正运行 + 提交 patch)
+   - Gold patch 解析：top-level `patch` / `gold_patch` → fallback 扫
+     trajectory 找 `submit_patch` 调用 → 都没有 raise ValueError
+   - `extra_env_info.reference_trajectory` 携带 normalize 后的整段
+     messages (tool_calls arguments 全 decode 成 dict)
+   - `extra_env_info.sif_source` 默认 `swegym`，可被 row-level 字段
+     覆盖 (R2E-Gym 等 mixed-family 场景)
+
+3. **SWE2 registry 翻面**：`swegym` 行 status `m0_missing` → `active`，
+   `m0_env_id: swe2_openhands_trace`；`SWE2_ENV_MAP = {"swe2_openhands_trace":
+   "swe_agents"}`；bridge 不再 raise coverage error
+
+4. **新 sandbox watchdog** (`m1_swe2/sandbox_watchdog.py`):
+   - `WatchdogPolicy` frozen dataclass: command_blocklist / network_policy
+     (deny / allow_internal / allow) / cpu_limit / memory_limit_mb / notes
+   - `load_watchdog_policy(path)` YAML loader + validator
+   - `is_command_blocked(policy, argv)` **token-level prefix match** —
+     `rm -rf /` 不会假阳性匹配 `rm -rf /workspace/build`
+   - `enforce_subprocess(policy, argv, **kw)` 包 subprocess.run，
+     blocked argv 抛 `SandboxPolicyViolation`
+   - Default policy YAML `sandbox_watchdog_default.yaml`:
+     network=deny / cpu=4 / mem=8GB / blocklist 含 rm -rf / sudo /
+     curl / wget / apt install 等
+
+5. **修 2 个 SWE2 bridge today-tests** (parallel task016 Session 2 pattern)
+
+6. **Tests** (33 new + 2 modified)：
+   - `test_swe2_openhands_trace.py` 16: module surface 3 / happy path 6 /
+     patch fallback 1 / error surfaces 3 / registry integration 3 /
+     SWE2_ENV_MAP lights up
+   - `test_sandbox_watchdog.py` 15: dataclass surface 2 / load 6 /
+     is_command_blocked 5 / enforce_subprocess 2 / default policy 1
+   - `test_m1_swe2_data_bridge.py` 2 today-tests flipped
+
+## Session 2 验收 (sandbox part)
+
+- [x] M0 env + data row 通过 schema / contamination / revision-pin
+  audit
+- [x] Converter 全 trajectory 保留 + 6-tool schema + patch 多源解析
+- [x] SWE2_ENV_MAP 不再空；coverage 报告 swegym=active
+- [x] Watchdog policy load + token-prefix match + subprocess enforce
+- [x] 33 个新 + 2 个修改 pytest case；sandbox 测试基线 441 → 474 passed
+  + 7 skipped
+
+## OpenHands wrapper 延后
+
+README Session 2 列了 OpenHands wrapper、converter、watchdog 三件事。
+本 PR 落了后两件。**OpenHands wrapper 延后**理由：repo 现在没有跟
+OpenHands 库的真集成 (只有 stage2_swe2/config 里引用 NeMo-Gym 起的
+swe_agents service)；写一个没真 backing 的 wrapper 是接口投机，多半接
+错。等真 OpenHands 集成的 PR 落到时（plan §10 cluster work）再开
+follow-up session 完成 wrapper。
+
+## Session 2+ 不在本 PR (cluster part)
+
+- 真 HF download `SWE-Gym/SWE-Gym-Lite` 走 NemTron cluster
+- Revision pin (TBD → 真 commit hash)
+- OpenHands wrapper (真集成等 plan §10 cluster work)
+- 真 SIF container 起 → OpenHands rollout → patch+tests 验证
 
 Session 3 是真 launch — 需要 NemTron cluster + SIF images 推到 lustre。
 Docker fallback path 让本地 dev workstation 不用 SLURM 也能 smoke 单
 instance。
 
-Session 4 是 cleanup：RLVR + SWE1 + SWE2 三个 bridge module 80% 代码重
-复，抽 `_bridge_base.py`。具体 API：`BridgeProfile` dataclass 拆出 mix
-profile shape；`load_registry` / `derive_env_map` / `coverage_report`
-泛型化（registry path + mix name 参数）；`prepare` 留 module-specific
-hook（如 SWE2 的 sif_source tagging）。
+Session 4 已落地 (PR #46 / 5943e18) — `_bridge_base.py` 把 RLVR / SWE1
+/ SWE2 / RLHF 四个 bridge 80% 重复代码抽出来 (load_env_registry /
+derive_env_map / coverage_report / collect_mix_rows / discover_m0_split_files
+/ tag_record helpers)。
 
 ## 参考文件
 

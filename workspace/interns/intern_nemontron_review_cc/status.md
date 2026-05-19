@@ -1,42 +1,38 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task017_m1_swe2_sandbox_runtime -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 66 |
+| Status | Working |
+| Current Task | task017_m1_swe2_sandbox_runtime |
+| PR | pending push |
+| Session | 67 |
 
-刚做完：task016 Session 2 sandbox part — M0 SWE-Gym-Lite → SWE pivot
-tool-call converter (PR #80 / 7c3c717, merged 2026-05-19)。3 大件：
+正在做：task017 Session 2 (sandbox part) — M0 SWE-Gym → SWE2 OpenHands
+trace converter + sandbox watchdog policy。3 大件 (OpenHands wrapper 延后)：
 
-1. **新 M0 env + data row** (`swe_pivot_tool_call`)：verifier
-   `argument_match`，SWE-Gym/SWE-Gym-Lite 来源，apache-2.0
-2. **新 converter** `transform_swe_gym_lite_pivot`：抽 trajectory 第一
-   个 assistant tool call 当 ground truth；`extra_env_info.pivot_type` ∈
-   {exploration, action}；纯 exploration pivot 仍 emit 但 tag
-3. **SWE1 registry 翻面**：`m0_missing` → `active`，`SWE1_ENV_MAP`
-   = `{"swe_pivot_tool_call": "swe_pivot_single_step_..."}`；
-   bridge 不再 raise coverage error
+1. **新 M0 env + data row** (`swe2_openhands_trace`)：verifier
+   `openhands_loop`，sandbox=sif，max_turns=200；SWE-Gym/SWE-Gym-Lite
+   来源 apache-2.0
+2. **新 converter** `transform_swe_gym_openhands_trace`：保留**整个
+   trajectory** (跟 task016 Session 2 first-tool-call 互补)；gold patch
+   多源解析 (top-level / submit_patch 调用)；6-tool schema (含
+   run_shell + submit_patch)
+3. **SWE2 registry 翻面**：`swegym` 行 m0_missing → active；
+   `SWE2_ENV_MAP = {"swe2_openhands_trace": "swe_agents"}`
+4. **新 sandbox watchdog** `m1_swe2/sandbox_watchdog.py`：WatchdogPolicy
+   dataclass + token-prefix command_blocklist + network_policy enum +
+   subprocess enforcer；默认 policy YAML 阻止 rm -rf / / sudo / curl
 
-20 个新 pytest case + 修 2 个 swe1 bridge today-tests；sandbox 测试
-基线 421 → 441 passed + 7 skipped。三个 data-registry audit 全 clean。
+33 个新 + 2 个修改 pytest case；sandbox 测试基线 441 → 474 passed +
+7 skipped。三个 data-registry audit 全 clean。
 
-task016 整 task：Session 1 ✓ + Session 2 sandbox 部分 ✓；真 HF
-download + revision pin + cluster smoke (Session 3) 仍待。
+**OpenHands wrapper 延后**理由：repo 没有跟 OpenHands 库的真集成
+(只有 NeMo-Gym swe_agents service)；写没真 backing 的 wrapper 是接口
+投机。等真 OpenHands 集成 PR (plan §10 cluster work) 落到再开 follow-up。
 
-**M1 converter layer 进展**:
-- task014 Session 1+2 sandbox ✓ (RLVR1 bridge + smoke wiring)
-- task015 Session 1 ✓ (21-env registry)
-- task016 Session 1+2 sandbox ✓ (SWE1 bridge + SWE-Gym pivot converter)
-- task017 Session 1 ✓ (SWE2 bridge skeleton) — Session 2 待
-- task018 Session 1 ✓ (RLHF bridge skeleton) — Session 2 待
-
-下一候选 (sandbox-runnable):
-- **task017 Session 2** — OpenHands loop wrapper + SWE2 trace converter
-  (wrapper unit tests；真 Docker run skipped)
-- **task018 Session 2** — HelpSteer-2 / UltraFeedback converter unit tests
-- 之前 task 的 Session 2+ — 大都需 cluster
+task017 整 task：Session 1 ✓ + Session 4 ✓ + Session 2 sandbox 部分 ✓
+(converter + watchdog) + Session 2 OpenHands wrapper part 延后 +
+Session 3 (cluster smoke + Docker fallback) 仍待。
