@@ -185,3 +185,15 @@ Refactor 契约 "external behavior identical" 守住。
 - Session 3 ☐ — M1 eval basket registry (block on task019/020)
 
 Roadmap §3 W1 row + §5 critical-path #11 task030 状态更新 Sessions 1+2+4 ✓。
+
+## Session 6 - 2026-05-18 - intern_nemontron_review_cc
+
+Session 4 PR #61 已 squash-merge 为 `159d81f` 进 main — schema.validate_rows
+加 fail_fast + source_path / validate_top_level 加 strict / 4 个 runtime
+loader refactor 成 thin wrapper + 7 个新 pytest case 都进了 main。intern
+status 回 Idle (Session 48)。
+
+task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
+task019/020) 待开。下一个候选: task058 follow-ups (license/contamination
+额外校验加进 schema 层) / task019-020 (M1 eval basket，block on task014
+Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
