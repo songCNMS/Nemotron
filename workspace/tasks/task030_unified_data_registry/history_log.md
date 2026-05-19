@@ -372,3 +372,67 @@ task030 整 task 仍 InProgress：Session 3 (M1 eval basket — block on
 task019/020) 未启动。下一个候选: task058 follow-ups 剩下一条
 (contamination_against semantic 校验) / task019-020 (M1 eval basket，
 block on task014 Session 2 真 RLVR checkpoint) / 之前 task 的 Session 2+。
+
+## Session 11 - 2026-05-19 - intern_nemontron_review_cc
+
+实现 Session 7 — `contamination_against` semantic audit (task058
+license/contamination 主题三部曲第三条；完成 license / revision-pin /
+contamination 全套)。
+
+设计要点：
+
+- 新模块 `data_registries/contamination_audit.py`:
+  - `SENTINEL_PHRASES` frozenset (tbd / todo / to-do / pending / manual
+    review / fixme / xxx / n/a / none)
+  - `is_placeholder_entry(entry)` substring 匹配 (case-insensitive)
+  - `_classify_row(row)` 把单行的 contamination_against 分类成 (blocker_reasons,
+    informational_reasons)，注：blocker takes precedence — 一行同时
+    triggered 两个 bucket 时 informational 跳过（避免同行双重 report）
+  - `find_weak_contamination(index)` → `{"blockers": [...],
+    "informational": [...]}`:
+    - **blockers**: 空列表 / 非列表值 / 非字符串 entries / 空字符串
+      entries
+    - **informational**: 全列表项都是 placeholder sentinel
+- `--check-contamination` CLI flag (parallel `--license-cascade` /
+  `--check-revision-pins`):
+  - exit 1 on any blocker，exit 0 on informational only
+- `.pre-commit-config.yaml` 加 `check-contamination` local hook 配
+  Session 2/6 hooks 一起跑
+
+Live audit 今天 (clean):
+
+```
+contamination audit: every m0_data_registry row has a real contamination_against list ✓
+```
+
+Tests (`test_contamination_audit.py`, 39 cases):
+
+- predicate 23: 12 sentinel 接受 + 11 real-eval/None/int 拒绝 (注意
+  `Pending-Eval-2026` 因 substring match 也会被 flag — test 显式记录
+  这条 trade-off，方便将来如果改成 whole-word match 时更新)
+- `SENTINEL_PHRASES` table sanity
+- Live walk 1 case: clean
+- 6 个 synthetic broken / informational fixtures: empty list / 非
+  list / 空字符串 entry / placeholder-only → informational / mixed
+  real+TBD → clean / pref_data_registry rows skipped
+- format report 3 (clean / blocker / informational only)
+- CLI 3 (clean / broken exit 1 + stderr / 短路 validation)
+- precommit config 2
+
+测试基线 293 → 332 passed + 6 skipped (39 new). `test_m1_agentic_sft.py`
+pyarrow collect-error pre-existing.
+
+## task030 状态
+
+- Session 1 ✓ (PR #48) — schema layer + index + inventories
+- Session 2 ✓ (PR #57) — CLI validator + pre-commit hook
+- Session 4 ✓ (PR #61) — module-local loader merge
+- Session 5 ✓ (PR #63) — share-alike license cascade audit
+- Session 6 ✓ (PR #65) — HF revision-pin lint
+- **Session 7 ✓ (this PR) — contamination_against semantic audit**
+- Session 3 ☐ — M1 eval basket registry (block on task019/020)
+
+task058 license/contamination 主题 follow-up trio (Sessions 5+6+7) 完整
+落地。任务 030 还剩 Session 3 (eval basket) — 仍 block on task019/020。
+
+Roadmap §3 W1 row + §5 critical-path #11 状态更新 Sessions 1+2+4+5+6+7 ✓.

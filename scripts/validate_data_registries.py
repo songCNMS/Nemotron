@@ -89,6 +89,17 @@ def main(argv: list[str] | None = None) -> int:
             "→ exit 0."
         ),
     )
+    parser.add_argument(
+        "--check-contamination",
+        action="store_true",
+        help=(
+            "Audit contamination_against fields on m0_data_registry rows "
+            "(task030 Session 7, task058 follow-up). BLOCKERS = empty list "
+            "/ non-list / non-string entries / empty-string entries → exit 1. "
+            "Informational = rows where every entry is a placeholder "
+            "(TBD/TODO/pending/etc.) → exit 0."
+        ),
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -139,6 +150,29 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"validate_data_registries: {len(audit['blockers'])} unpinned "
                 "production data row(s) — fix or pin a hf_revision SHA",
+                file=sys.stderr,
+            )
+            return 1
+        return 0
+
+    if args.check_contamination:
+        try:
+            from nemotron.recipes.super3.milestones.data_registries.contamination_audit import (
+                find_weak_contamination,
+                format_contamination_report,
+            )
+            audit = find_weak_contamination(args.index_path)
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"validate_data_registries: contamination audit raised: {exc}",
+                file=sys.stderr,
+            )
+            return 2
+        sys.stdout.write(format_contamination_report(audit))
+        if audit.get("blockers"):
+            print(
+                f"validate_data_registries: {len(audit['blockers'])} broken "
+                "contamination_against field(s) — fix the listed rows",
                 file=sys.stderr,
             )
             return 1
