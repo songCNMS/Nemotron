@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task061_pr69_postmerge_review -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Idle |
-| Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/86 |
-| Session | 2 |
-| Branch | intern_nemontron_code_reading/task060_pr68_postmerge_review |
-| Latest | Session 2 closed task060: PR #86 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
+| Status | Working |
+| Current Task | task061_pr69_postmerge_review |
+| PR |  |
+| Session | 1 |
+| Branch | intern_nemontron_code_reading/task061_pr69_postmerge_review |
+| Latest | Session 1 started PR #69 post-merge review and found task030 history metadata stale after Session 12 was appended. |
