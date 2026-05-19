@@ -254,9 +254,17 @@ wired to NeMo Evaluator.
   tool_use_* / instruction_following / multi_turn_instruction + forward-
   compat safety_*). Default thresholds at the tight end of plan §5.7's
   "1-2%" range (2%). 21 new pytests; sandbox baseline 371 → 392 passed.
-- ☐ Sessions 3-4: cluster verify (`nemotron super3 eval -c m1_full_basket`
+- ✓ Session 4: per-category gap analysis tooling (`gap_analysis.py`) —
+  ranked category gaps (worst-first) with per-benchmark drill-down for
+  below-threshold categories. Complements Session 2: gate gives binary
+  go/no-go, gap analysis gives prescriptive "what to focus on next"
+  ranking. Same input shape as `regression_report.py` /
+  `promotion_gate.py` so the three modules form a complete analysis
+  trio off one eval JSON. 17 new pytests; sandbox baseline 392 → 409
+  passed.
+- ☐ Session 3: cluster verify (`nemotron super3 eval -c m1_full_basket`
   against real SFT checkpoint with W&B publish + real Super3 baseline
-  numbers), per-category gap analysis tooling layered on Session 2.
+  numbers).
 
 ### 1.8 M1 infra — required before scaling
 
@@ -532,11 +540,14 @@ Then in parallel:
     v0+full benchmarks). task020 Session 2 landed (`promotion_gate.py`
     — three-tier promote/hold/rollback severity, weighted-mean parity
     vs Super3, per-category regression threshold, rollback rule on
-    SWE/tool/IF + forward-compat safety_*). task019 Sessions 2-3
+    SWE/tool/IF + forward-compat safety_*). task020 Session 4 landed
+    (`gap_analysis.py` — prescriptive per-category gap ranking with
+    per-benchmark drill-down; complements the gate's binary decision).
+    All M1 eval basket sandbox work is now done — task019 Sessions 2-3
     (cluster verify + W&B publish + per-benchmark adapter configs) and
-    task020 Sessions 3-4 (cluster verify + per-category gap analysis)
-    still to go. task019 Session 4 (promotion gate logic) is satisfied
-    by task020 Session 2 above.
+    task020 Session 3 (cluster verify) need real cluster + checkpoint
+    access. task019 Session 4 (promotion gate logic) is satisfied by
+    task020 Session 2.
 11. **task030** — unified data registry. Sessions 1+2+3+4+5+6+7 landed
     (schema layer + unified index over 10 existing registries +
     inventory walks + `scripts/validate_data_registries.py` CLI with

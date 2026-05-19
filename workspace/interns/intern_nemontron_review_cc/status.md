@@ -1,42 +1,39 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task020_m1_eval_full_basket -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 60 |
+| Status | Working |
+| Current Task | task020_m1_eval_full_basket |
+| PR | pending push |
+| Session | 61 |
 
-刚做完：task020 Session 2 — 促进门 (promotion gate) 逻辑 (PR #74 /
-33b51e7, merged 2026-05-19)。新 module `m1_eval_basket/promotion_gate.py`:
+正在做：task020 Session 4 — per-category gap analysis tooling。跟
+Session 2 promotion_gate 互补：gate 给 binary 决策，gap_analysis 给
+prescriptive ranking 告诉 operator "下一轮训练 focus 哪里"。新 module
+`m1_eval_basket/gap_analysis.py`:
 
-- 三档严重度 `PromotionDecision`: promote / hold / rollback
-  (rollback > hold > promote)
-- Default thresholds 2% (plan §5.7 "1-2%" tight end)，rollback
-  tolerance 1e-4
-- Default rollback categories: swe_repo_repair + 全部 tool_use_* +
-  instruction_following + multi_turn_instruction + safety_* (forward-
-  compat M2)
-- Weighting：uniform-per-category, uniform-across-categories
-- Missing benchmarks 不挂掉 gate 但 surface 给 operator
-- `format_gate_report()` markdown 输出
+- `BenchmarkGap` / `CategoryGap` frozen dataclass
+- `analyze_gaps(current, super3, registry_rows)` — worst-first ranking,
+  per-benchmark drill-down 排序 worst-first within category
+- `count_categories_below_threshold(gaps, *, threshold)` summary helper
+- `format_gap_analysis(gaps, *, threshold)` markdown:
+  - Ranked category table (status: behind / on par / ahead / no data)
+  - Drill-down section ONLY for below-threshold categories (clean run =
+    clean report)
+- Missing benchmarks: gap=None when 一侧 missing；category mean 排除
+  missing (partial coverage 不被零拖下)
+- Default threshold 0.02 matches Session 2 promotion_gate so "behind"
+  跟 "in regression" 对齐
 
-21 个新 pytest case；sandbox 测试基线 371 → 392 passed + 7 skipped。
+17 个新 pytest case；sandbox 测试基线 392 → 409 passed + 7 skipped。
 
-**M1 eval basket plan §5.7 acceptance 全 sandbox 部分落地**:
-- task019 Session 1 ✓ (8-row v0 registry + schema kind + regression_report.py)
-- task020 Session 1 ✓ (11-row full extension + combined config)
-- task020 Session 2 ✓ (promotion gate logic)
-- 接下来只剩 cluster verify (task019 S2-3 + task020 S3) — 都需 cluster
-  + 真 SFT checkpoint + 真 Super3 baseline numbers
-- task019 Session 4 acceptance (promotion gate) 由 task020 Session 2 提供
+task020 整 task：Sessions 1+2+4 ✓，Session 3 (cluster verify) 仍待 —
+需 cluster + 真 SFT checkpoint + 真 Super3 baseline。
 
-下一候选 (sandbox-runnable):
-- **task020 Session 4** — per-category gap analysis tooling，layer on
-  top of Session 2。Sandbox-runnable，但 plot 真数据需要 Session 3
-  cluster 跑完
-- task014 / 016 / 017 / 018 各自 Session 2 (converter 单测，sandbox 部分)
-- 之前 task 的 Session 2+ — 大都需 cluster
+**M1 eval basket 全 sandbox 部分 100% 落地** (analysis layer 三件套):
+- `regression_report.py` (vs prior checkpoint) — task019 Session 1
+- `promotion_gate.py` (vs Super3, binary 决策) — task020 Session 2
+- `gap_analysis.py` (vs Super3, prescriptive ranking) — task020 Session 4

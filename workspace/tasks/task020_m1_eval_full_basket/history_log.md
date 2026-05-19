@@ -177,3 +177,102 @@ gate logic (task020 Session 2) 一起完成 plan §5.7 acceptance。
 
 不显式 close task019 Session 4 — task019 整 task 还有 Session 2/3
 (cluster verify + per-benchmark adapter)，等那些落地后再统一 closeout。
+
+
+## Session 4 — 2026-05-19 — per-category gap analysis tooling
+
+### Scope
+
+Roadmap §1.7 task020 Session 4 — per-category gap analysis tooling。
+跟 Session 2 promotion_gate 互补：promotion_gate 给 binary 决策，
+gap_analysis 给 prescriptive ranking 告诉 operator "下一轮训练 focus
+哪里"。Sandbox-runnable，跟 Session 2 同样 input shape。
+
+### Done
+
+1. 新 module `m1_eval_basket/gap_analysis.py`:
+   - `DEFAULT_GAP_THRESHOLD = 0.02` (matches Session 2 / plan §5.7
+     "1-2 %" tight end so "behind" in gap_analysis 跟 "in regression"
+     in promotion_gate 对齐)
+   - `BenchmarkGap` frozen dataclass: benchmark_id / current /
+     super3 / gap (gap = current - super3 or None when 一侧 missing)
+   - `CategoryGap` frozen dataclass: category / current_mean /
+     super3_mean / gap / benchmark_gaps (sorted worst-first)
+   - `analyze_gaps(current, super3, registry_rows)`:
+     - Group benchmarks by category
+     - Per-category mean excludes missing benchmarks (partial coverage
+       不被零拖下)
+     - Per-benchmark drill-down sorted by gap ascending
+     - Categories sorted: computable gaps first (worst gap first)，
+       uncomputable gaps (None) last for stability
+   - `count_categories_below_threshold(gaps, *, threshold)` — summary
+     line helper; skips uncomputable gaps (没数据不算 "behind")
+   - `format_gap_analysis(gaps, *, threshold)` markdown:
+     - Headline + summary line (X categories more than Y% behind)
+     - Ranked category table with status column (behind / on par /
+       ahead / no data)
+     - Drill-down section ONLY for below-threshold categories
+       (clean runs don't get noisy drill-down)
+
+2. 17 个 pytest case in `test_gap_analysis.py`:
+   - Dataclass surface 2: threshold default / BenchmarkGap optional values
+   - Single-category 3: per-category gap rows / two-benchmark mean math /
+     per-benchmark drill-down sorted worst-first
+   - Multi-category ranking 2: worst-gap-first / uncomputable gaps to end
+   - Missing benchmarks 2: gap=None when 一侧 missing / mean excludes missing
+   - count_categories_below_threshold 2: only computable gaps counted /
+     respects custom threshold
+   - format_gap_analysis 4: summary+table / drill-down for behind /
+     empty input / no drill-down when all on par
+   - Live integration 2: 19-row basket happy on par / worst-category-first
+     for full-basket regression
+
+### Test counts
+
+- 17 new tests; sandbox 测试基线 **392 → 409 passed + 7 skipped** (17 new)
+
+### Decisions
+
+- **不跟 promotion_gate 共代码** — 模块边界清晰：promotion_gate 给
+  binary 决策，gap_analysis 给 ranking + drill-down。两个都做 category
+  grouping 但目的不同；强行抽公共 helper 是 premature abstraction，
+  尤其因为 promotion_gate 的 category grouping 输出是
+  `dict[category, list[bid]]` 而 gap_analysis 需要 per-benchmark drill-
+  down 保留 score。
+- **Worst-first sorting (gap ASCENDING)** — operator workflow 是 "我
+  现在看 report，先解决最痛的"，所以 most negative gap 在最上面。
+  promotion_gate 的 `format_gate_report` 用 category_deltas dict 的
+  字母序 (稳定 diff)，但 gap_analysis 是给 *人* 看的，priority order
+  更有意义
+- **Drill-down only for below-threshold categories** — 一份健康的 run
+  应该出健康的 report。把所有 19 个 category 都做 drill-down 会让
+  报告吵；只 surface 真正需要关注的让 report 是 actionable signal。
+  内部测试 `test_format_gap_analysis_omits_drill_down_when_all_on_par`
+  lock 这个 behavior
+- **`count_categories_below_threshold` 是 public helper** — 操作员
+  pipeline 可能想直接拿这个 count 做 alerting，不需要 parse markdown。
+  把它 export 出来比 inline 在 format 函数里好
+- **Uncomputable gaps don't count as "behind"** — 一个 category 没数
+  据 ≠ "需要 focus"；它是 "需要先确认 eval 跑全了"。所以
+  count_categories_below_threshold 跳过 None gap，但 markdown 报告
+  仍然 surface 它 (status="no data") 给 operator 看见
+
+### Deferred
+
+- Session 3 (cluster verify) 仍是 task020 最后一个 todo — `nemotron
+  super3 eval -c m1_full_basket` 真跑 + W&B publish + 真 Super3 baseline
+  numbers。需 cluster + 真 SFT checkpoint
+- task019 Session 2/3 (cluster-side wiring + per-benchmark adapter
+  configs)
+
+### task019 / task020 互动
+
+- task019 Session 4 (promotion gate logic) — 由 task020 Session 2 提供
+- task020 Session 4 (gap analysis) — 本 PR
+- task019 / task020 现在 sandbox 部分都落地：
+  - 数据层：task019 Session 1 (v0 8 rows + eval_basket_registry schema
+    kind) + task020 Session 1 (full 11 rows + combined config)
+  - Analysis layer：regression_report (vs prior) + promotion_gate
+    (gate decision) + gap_analysis (prescriptive ranking)
+- 剩下 cluster-side wiring 一份 PR 把三个模块接到 `nemotron super3
+  eval` CLI，等 cluster access
