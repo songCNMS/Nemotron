@@ -1,38 +1,42 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task020_m1_eval_full_basket -->
+<!-- METADATA:STATUS=Idle -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task020_m1_eval_full_basket |
-| PR | pending push |
-| Session | 59 |
+| Status | Idle |
+| Current Task | - |
+| PR | - |
+| Session | 60 |
 
-正在做：task020 Session 2 — 促进门 (promotion gate) 逻辑。Plan §5.7 /
-roadmap §1.7 task020 显式提的：weighted-mean Super3 parity +
-no-category-regression > 1-2% + rollback rule on safety / SWE / tool /
-IF。新 module `m1_eval_basket/promotion_gate.py`:
+刚做完：task020 Session 2 — 促进门 (promotion gate) 逻辑 (PR #74 /
+33b51e7, merged 2026-05-19)。新 module `m1_eval_basket/promotion_gate.py`:
 
 - 三档严重度 `PromotionDecision`: promote / hold / rollback
   (rollback > hold > promote)
-- Default thresholds 2% (plan "1-2%" tight end), rollback tolerance 1e-4
+- Default thresholds 2% (plan §5.7 "1-2%" tight end)，rollback
+  tolerance 1e-4
 - Default rollback categories: swe_repo_repair + 全部 tool_use_* +
   instruction_following + multi_turn_instruction + safety_* (forward-
   compat M2)
-- Weighting：uniform-per-category, uniform-across-categories (防
-  benchmark count gaming)
-- Missing benchmarks 不挂掉 gate 但记录在 reasons + missing 列表
+- Weighting：uniform-per-category, uniform-across-categories
+- Missing benchmarks 不挂掉 gate 但 surface 给 operator
 - `format_gate_report()` markdown 输出
 
 21 个新 pytest case；sandbox 测试基线 371 → 392 passed + 7 skipped。
 
-task020 整 task 仍 InProgress：Sessions 3-4 待开。Session 3 (cluster
-verify) 需 cluster + 真 SFT checkpoint + 真 Super3 baseline，Session
-4 (per-category gap analysis) sandbox-runnable 但需要 Session 3 真数
-据来调试有意义。
+**M1 eval basket plan §5.7 acceptance 全 sandbox 部分落地**:
+- task019 Session 1 ✓ (8-row v0 registry + schema kind + regression_report.py)
+- task020 Session 1 ✓ (11-row full extension + combined config)
+- task020 Session 2 ✓ (promotion gate logic)
+- 接下来只剩 cluster verify (task019 S2-3 + task020 S3) — 都需 cluster
+  + 真 SFT checkpoint + 真 Super3 baseline numbers
+- task019 Session 4 acceptance (promotion gate) 由 task020 Session 2 提供
 
-task019 Session 4 acceptance (promotion gate logic) 由 task020 Session
-2 提供 — 数据层 (task019 v0 + task020 full) + gate logic (task020
-Session 2) 一起完成 plan §5.7 acceptance。
+下一候选 (sandbox-runnable):
+- **task020 Session 4** — per-category gap analysis tooling，layer on
+  top of Session 2。Sandbox-runnable，但 plot 真数据需要 Session 3
+  cluster 跑完
+- task014 / 016 / 017 / 018 各自 Session 2 (converter 单测，sandbox 部分)
+- 之前 task 的 Session 2+ — 大都需 cluster
