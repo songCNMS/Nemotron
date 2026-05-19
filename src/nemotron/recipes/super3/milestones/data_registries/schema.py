@@ -271,6 +271,23 @@ def bridge_mix_validator_factory(expected_mixes: Sequence[str]):
     return _validator
 
 
+def m0_contamination_against_validator(row: JsonDict, index: int) -> str | None:
+    """Validate M0 ``contamination_against`` carries ``list[str]``.
+
+    Presence is already enforced by the required-field schema. This validator
+    tightens the contract from "field exists" to the documented data shape.
+    Empty lists are allowed and mean "audited, no known overlap".
+    """
+    value = row.get("contamination_against")
+    if value is None:
+        return None
+    if not isinstance(value, list):
+        return "contamination_against must be a list"
+    if any(not isinstance(item, str) or not item.strip() for item in value):
+        return "contamination_against entries must be non-empty strings"
+    return None
+
+
 __all__ = [
     "KNOWN_KINDS",
     "KNOWN_BRIDGE_STATUSES",
@@ -278,4 +295,5 @@ __all__ = [
     "validate_rows",
     "bridge_status_validator",
     "bridge_mix_validator_factory",
+    "m0_contamination_against_validator",
 ]
