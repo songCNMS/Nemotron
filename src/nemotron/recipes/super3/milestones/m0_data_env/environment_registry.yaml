@@ -177,6 +177,43 @@ environments:
         - question
         - expected_answer
         - extra_env_info.gold_tool_call
+
+  - id: swe2_openhands_trace
+    family: software_engineering
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: openhands_loop
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted patch must apply AND test suite must pass in the SIF sandbox (binary reward)
+    resources:
+      sandbox: sif
+      tools:
+        - view_file
+        - search
+        - edit_file
+        - run_shell
+        - run_tests
+        - submit_patch
+      timeout_s: 3600
+      max_turns: 200
+      expected_runtime_ms: 600000
+    telemetry:
+      - reward
+      - patch_applies
+      - tests_pass
+      - trajectory_turns
+      - latency_ms
+      - sandbox_violations
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.gold_patch
+        - extra_env_info.reference_trajectory
+        - extra_env_info.sif_source
         - expected_answer
         - extra_env_info.repo
         - extra_env_info.gold_patch

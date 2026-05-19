@@ -167,10 +167,21 @@ Missing the runtime stack:
   Session 2 lands an M0 SWE2 source and flips a registry row to active.
   Manifest coverage block extended with `sif_source_breakdown` so coverage
   explains which container family still needs an M0 source.
-- ☐ Session 2: OpenHands loop wrapper (agent_max_turns runner) + M0 SWE2
-  trace data converter (SWE-Gym-Lite primary candidate, multi-turn agent
-  rollout shape) + sandbox health-check / memory watchdog / command
-  blocklist enforcement.
+- ⚠ Session 2 (sandbox part landed; OpenHands wrapper deferred + HF
+  download cluster-side): new M0 env `swe2_openhands_trace` (verifier
+  `openhands_loop`, max_turns=200, sandbox=sif) + new converter
+  `transform_swe_gym_openhands_trace` that preserves the full reference
+  trajectory (unlike SWE1's first-tool-call pivot) and extracts the
+  gold patch from top-level fields or trajectory `submit_patch` calls.
+  SWE2 registry's `swegym` row flipped to `active` — `SWE2_ENV_MAP`
+  lights up. New `m1_swe2/sandbox_watchdog.py` with `WatchdogPolicy`
+  dataclass, token-prefix command_blocklist, network_policy enum, and
+  subprocess enforcer (`SandboxPolicyViolation`); default policy YAML
+  blocks `rm -rf /` / `sudo` / `curl` / external network. 33 new pytests
+  + 2 today-tests flipped; sandbox baseline 441 → 474 passed. OpenHands
+  loop wrapper deferred — without real library integration in this repo
+  it's interface speculation; lifted to a follow-up session once the
+  integration target is concrete.
 - ☐ Session 3: Smoke launcher (1 instance, 1 generation) + in-process
   Docker fallback for developers without SLURM. Block on cluster + SIF
   images.
@@ -535,10 +546,11 @@ Critical path to the M1 promotion gate, single-track execution:
    to go.
 7. **task017** — M1 SWE2 sandbox runtime. Session 1 landed (SIF image
    mapping registry + resolver with path-injection guard; SWE2 bridge
-   skeleton parallel to RLVR / SWE1; coverage-aware error today); Session
-   2 (OpenHands loop wrapper + M0 SWE2 trace converter + sandbox watchdog)
-   / Session 3 (cluster smoke + Docker fallback) / Session 4
-   (`_bridge_base.py` extraction) still to go.
+   skeleton parallel to RLVR / SWE1). Session 2 sandbox part landed
+   (M0 swe2_openhands_trace converter + sandbox_watchdog policy
+   module). Session 4 landed (`_bridge_base.py` extraction). Session 3
+   (cluster smoke + Docker fallback) and OpenHands loop wrapper still
+   to go.
 8. **task018** — M1 RLHF GenRM service. Session 1 landed (RLHF bridge
    skeleton with two-env registry + preference-data candidate registry
    + KL invariant pytest reading `default.yaml`); Session 2 (HelpSteer-2
