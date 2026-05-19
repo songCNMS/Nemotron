@@ -15,7 +15,7 @@
 """HuggingFace placeholder resolution for RL datasets.
 
 The nvidia/Nemotron-3-Nano-RL-Training-Blend and
-nvidia/Nemotron-3-Super-RL-Training-Blends datasets contain placeholder entries
+nvidia/Nemotron-RL-Super-Training-Blends datasets contain placeholder entries
 for external datasets (DAPO, Skywork). These placeholders have an `_hf_placeholder`
 field containing row indices and question templates that need to be resolved by
 fetching the actual data from HuggingFace.
@@ -38,6 +38,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration for placeholder datasets that need resolution
 # Maps dataset names (as they appear in the blend) to their HF source info
+UNKNOWN_PENDING_LEGAL_REVIEW = "unknown_pending_legal_review"
 
 # Nano3 target datasets
 # Reference: https://huggingface.co/datasets/nvidia/Nemotron-3-Nano-RL-Training-Blend/blob/main/create_nanov3_jsonl.py
@@ -48,6 +49,7 @@ NANO3_TARGET_DATASETS: dict[str, dict[str, Any]] = {
         "question_path": ["prompt", 0, "content"],
         "answer_path": ["reward_model", "ground_truth"],
         "template_type": "dapo",
+        "license": "apache-2.0",
     },
     "nano_v3_sft_profiled_skywork_no_omni": {
         "hf_dataset": "Skywork/Skywork-OR1-RL-Data",
@@ -55,11 +57,12 @@ NANO3_TARGET_DATASETS: dict[str, dict[str, Any]] = {
         "question_path": ["prompt", 0, "content"],
         "answer_path": ["reward_model", "ground_truth"],
         "template_type": "skywork",
+        "license": UNKNOWN_PENDING_LEGAL_REVIEW,
     },
 }
 
 # Super3 target datasets
-# Reference: https://huggingface.co/datasets/nvidia/Nemotron-3-Super-RL-Training-Blends
+# Reference: https://huggingface.co/datasets/nvidia/Nemotron-RL-Super-Training-Blends
 SUPER3_TARGET_DATASETS: dict[str, dict[str, Any]] = {
     "super_v3_lcsft_step1000_dapo17k": {
         "hf_dataset": "BytedTsinghua-SIA/DAPO-Math-17k",
@@ -67,6 +70,7 @@ SUPER3_TARGET_DATASETS: dict[str, dict[str, Any]] = {
         "question_path": ["prompt", 0, "content"],
         "answer_path": ["reward_model", "ground_truth"],
         "template_type": "dapo",
+        "license": "apache-2.0",
     },
     "super_v3_lcsft_step1000_skyworks": {
         "hf_dataset": "Skywork/Skywork-OR1-RL-Data",
@@ -74,11 +78,20 @@ SUPER3_TARGET_DATASETS: dict[str, dict[str, Any]] = {
         "question_path": ["prompt", 0, "content"],
         "answer_path": ["reward_model", "ground_truth"],
         "template_type": "skywork",
+        "license": UNKNOWN_PENDING_LEGAL_REVIEW,
     },
 }
 
 # Backward compatibility alias
 TARGET_DATASETS = NANO3_TARGET_DATASETS
+
+
+def validate_target_dataset_licenses(target_datasets: dict[str, dict[str, Any]]) -> None:
+    """Validate placeholder source configs carry explicit license posture."""
+    for name, cfg in target_datasets.items():
+        license_name = str(cfg.get("license") or "").strip()
+        if not license_name:
+            raise ValueError(f"placeholder target {name} is missing license")
 
 
 @dataclass
@@ -90,6 +103,7 @@ class PlaceholderConfig:
     question_path: list[str | int]
     answer_path: list[str | int]
     template_type: str  # "dapo" or "skywork"
+    license: str = UNKNOWN_PENDING_LEGAL_REVIEW
 
 
 def get_nested_value(record: dict, path: list[str | int]) -> Any:
@@ -249,6 +263,7 @@ class HFPlaceholderResolver:
 
         if target_datasets is None:
             target_datasets = TARGET_DATASETS
+        validate_target_dataset_licenses(target_datasets)
 
         tables: dict[str, pa.Table] = {}
         configs: dict[str, PlaceholderConfig] = {}
@@ -260,6 +275,7 @@ class HFPlaceholderResolver:
                 question_path=cfg["question_path"],
                 answer_path=cfg["answer_path"],
                 template_type=cfg["template_type"],
+                license=cfg["license"],
             )
             configs[name] = config
 
@@ -452,8 +468,10 @@ __all__ = [
     "NANO3_TARGET_DATASETS",
     "SUPER3_TARGET_DATASETS",
     "TARGET_DATASETS",
+    "UNKNOWN_PENDING_LEGAL_REVIEW",
     "PlaceholderConfig",
     "HFPlaceholderResolver",
+    "validate_target_dataset_licenses",
     "get_nested_value",
     "strip_dapo_prompt",
     "restore_dapo_question",

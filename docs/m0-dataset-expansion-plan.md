@@ -55,9 +55,9 @@ clean license + revision pin and a published structure):
 - `nvidia/Nemotron-Instruction-Following-Chat-v1` — `chat_if`,
   `structured_outputs` subsets (ODC-BY-1.0 / CC-BY-4.0; 431 K).
 - `nvidia/Nemotron-Competitive-Programming-v1` — cpp / python / infinibyte
-  (CC-BY-4.0; 3.9 M). Repo subset names use `_part00` not `.part_00` —
-  `data_blend_raw.json` reference will fail until the dot vs underscore
-  mismatch is fixed (task058).
+  (CC-BY-4.0; 3.9 M). Live repo files currently use dot stems such as
+  `data/competitive_coding_cpp.part_00.jsonl`; task058 added a regression
+  test so future subset-name changes are caught before data prep.
 - `nvidia/Nemotron-SWE-v1` — `r2e_gym` (CC-BY-4.0; 51 K). Possible overlap
   with SWE-Bench Verified; needs filter before SWE eval.
 - `nvidia/Nemotron-Math-Proofs-v1` — Lean split (CC-BY-SA-4.0 ⚠;
@@ -66,9 +66,8 @@ clean license + revision pin and a published structure):
   (316 K). CC-BY-4.0 + Apache-2.0.
 - `nvidia/Nemotron-RL-Super-Training-Blends` — RLVR1 (139 K) / RLVR2
   (156 K) / RLVR3 (107 K) / SWE1 (51 K) / SWE2 (1.4 K) / RLHF (25 K).
-  **Current code refers to `Nemotron-3-Super-RL-Training-Blends` (with a
-  `-3-`) — that slug 404s; the live repo dropped the `-3-`.** Tracked by
-  task058.
+  The live repo dropped the historical `-3-` slug; task058 updates code and
+  docs to use the published slug.
 - `BytedTsinghua-SIA/DAPO-Math-17k` (Apache-2.0; 1.79 M). **No benchmark
   scrub documented** — any M1 RLVR using it should add a MATH / AIME / GSM8K
   decontamination pass.
@@ -129,12 +128,12 @@ M1 supervision builder).
 
 Tracked under task058 (separate small fix PR):
 
-1. **HF slug fix:** `stage2_rl/data_prep.py` and `_data_prep_base.py` point
-   at `nvidia/Nemotron-3-Super-RL-Training-Blends`. The live repo is
-   `nvidia/Nemotron-RL-Super-Training-Blends`. Current path 404s.
-2. **Subset naming:** `stage1_sft/config/data_prep/data_blend_raw.json` uses
-   `competitive_coding_cpp.part_00` (dot); the HF repo uses `_part00`
-   (underscore, no dot). Loader will fail.
+1. **HF slug fix:** `stage2_rl/data_prep.py` docs and data-prep comments now
+   point at the live `nvidia/Nemotron-RL-Super-Training-Blends` slug.
+2. **Subset naming:** `stage1_sft/config/data_prep/data_blend_raw.json`
+   keeps the live HF dot stems (`competitive_coding_cpp.part_00`,
+   `infinibyte.part_00`) and has a regression test against the published file
+   names.
 3. **Skywork-OR1-RL-Data missing license** on the HF card — flag for legal
    review before any commercial RL run.
 4. **DAPO-Math-17k contamination:** no benchmark scrub documented. Add
@@ -148,7 +147,7 @@ currently on main):
 
 1. `data_registry.yaml` entry with `hf_dataset`, `hf_config`,
    `hf_revision`, `hf_split`, optional `hf_val_split`, `license`, `domain`,
-   `reward_type`, `contamination`, `use_stage`.
+   `reward_type`, `contamination`, `contamination_against`, `use_stage`.
 2. `environment_registry.yaml` entry with reward verifier, range, semantics,
    resource budget, telemetry list, health-check `min_rows_per_split` and
    `required_fields`.

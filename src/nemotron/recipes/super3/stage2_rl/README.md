@@ -14,7 +14,7 @@ Each sub-stage takes the output checkpoint of the previous one as input.
 
 | Component | Description |
 |-----------|-------------|
-| `data_prep.py` | Downloads `nvidia/Nemotron-3-Super-RL-Training-Blends`, resolves HF placeholders, produces 6 blends |
+| `data_prep.py` | Downloads `nvidia/Nemotron-RL-Super-Training-Blends`, resolves HF placeholders, produces 6 blends |
 | `train.py` | Runs GRPO training using NeMo-RL with Ray |
 | `config/` | Per-stage configuration files |
 
@@ -74,7 +74,7 @@ python train.py --config config/stage1_rlvr.yaml \
 
 ## Data Preparation
 
-The `data_prep.py` script downloads `nvidia/Nemotron-3-Super-RL-Training-Blends` from HuggingFace, resolves placeholder records, and produces 6 data blends.
+The `data_prep.py` script downloads `nvidia/Nemotron-RL-Super-Training-Blends` from HuggingFace, resolves placeholder records, and produces 6 data blends.
 
 ### Placeholder Resolution
 

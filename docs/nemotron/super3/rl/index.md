@@ -136,7 +136,7 @@ cd RL
 
 ```bash
 # Download RL data blends (rlvr1, rlvr2, rlvr3, swe1, swe2, rlhf)
-uvx --from huggingface-hub hf download nvidia/Nemotron-3-Super-RL-Training-Blends \
+uvx --from huggingface-hub hf download nvidia/Nemotron-RL-Super-Training-Blends \
     --repo-type dataset --local-dir=data_with_placeholders
 
 # Fill in placeholders in data blends
@@ -205,7 +205,7 @@ See [RLVR](rlvr.md), [SWE-RL](swe.md), and [RLHF](rlhf.md) for complete launch c
 
 ### Data Preparation
 
-The `data_prep.py` script downloads `nvidia/Nemotron-3-Super-RL-Training-Blends` from HuggingFace, resolves placeholder entries, and produces 6 data blends. See [Data Preparation](data-prep.md) for details.
+The `data_prep.py` script downloads `nvidia/Nemotron-RL-Super-Training-Blends` from HuggingFace, resolves placeholder entries, and produces 6 data blends. See [Data Preparation](data-prep.md) for details.
 
 ---
 

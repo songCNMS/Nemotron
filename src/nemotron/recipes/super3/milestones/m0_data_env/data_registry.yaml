@@ -21,6 +21,9 @@ datasets:
     difficulty: mixed
     reward_type: normalized_exact_or_contains
     contamination: decontaminate against held-out QA and search eval baskets before training scale-up
+    contamination_against:
+      - HotpotQA validation
+      - search eval baskets
     use_stage:
       - M0 data_env_foundation
       - M1 RLVR search/browser retrieval smoke
@@ -50,6 +53,9 @@ datasets:
     difficulty: multi_hop_2_to_4_hops
     reward_type: normalized_exact_or_contains
     contamination: decontaminate against MuSiQue eval and held-out multi-hop QA baskets
+    contamination_against:
+      - MuSiQue validation
+      - multi-hop QA eval baskets
     use_stage:
       - M0 data_env_foundation
       - M1 RLVR multi-hop search smoke
@@ -77,6 +83,11 @@ datasets:
     difficulty: intro_python
     reward_type: python_unit_tests
     contamination: decontaminate against LiveCodeBench, HumanEval, MBPP eval, and internal coding evals
+    contamination_against:
+      - LiveCodeBench
+      - HumanEval
+      - MBPP validation
+      - internal coding evals
     use_stage:
       - M0 data_env_foundation
       - M1 RLVR code execution smoke
@@ -103,6 +114,9 @@ datasets:
     difficulty: basic_shell
     reward_type: command_substring_match
     contamination: decontaminate against TerminalBench and held-out shell command evals
+    contamination_against:
+      - TerminalBench
+      - held-out shell command evals
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 terminal basics
@@ -128,6 +142,9 @@ datasets:
     difficulty: repo_issue_patch
     reward_type: patch_diff_match
     contamination: exclude from SWE-Bench Lite and SWE-Bench Verified eval baskets when used for training
+    contamination_against:
+      - SWE-Bench Lite
+      - SWE-Bench Verified
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 short SWE traces
@@ -167,6 +184,11 @@ datasets:
     difficulty: mixed
     reward_type: tool_schema_and_argument_match
     contamination: decontaminate against BFCL, TauBench, tool-use heldouts, and internal tool schemas
+    contamination_against:
+      - BFCL
+      - TauBench
+      - tool-use heldouts
+      - internal tool schemas
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 tool syntax
@@ -200,6 +222,10 @@ datasets:
     difficulty: multi_turn_tool_use
     reward_type: tool_schema_and_argument_match
     contamination: decontaminate against BFCL multi-turn, TauBench, and internal tool schemas
+    contamination_against:
+      - BFCL multi-turn
+      - TauBench
+      - internal tool schemas
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 multi-turn tool trace
@@ -227,6 +253,11 @@ datasets:
     difficulty: mixed
     reward_type: negative_recognition
     contamination: decontaminate against BFCL, TauBench, tool repair heldouts, and internal tool schemas
+    contamination_against:
+      - BFCL
+      - TauBench
+      - tool repair heldouts
+      - internal tool schemas
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 tool repair negatives
@@ -257,6 +288,11 @@ datasets:
     difficulty: mixed
     reward_type: json_value_exact_match
     contamination: decontaminate against structured-output, JSON-mode, BFCL, and tool-use heldouts
+    contamination_against:
+      - structured-output heldouts
+      - JSON-mode heldouts
+      - BFCL
+      - tool-use heldouts
     use_stage:
       - M0 data_env_foundation
       - M1 Agentic SFT v0 structured output
@@ -285,6 +321,9 @@ datasets:
     difficulty: grade_school_math
     reward_type: normalized_numeric_exact_match
     contamination: decontaminate against GSM8K eval and broader math benchmark baskets
+    contamination_against:
+      - GSM8K test
+      - math benchmark baskets
     use_stage:
       - M0 data_env_foundation
       - M1 RLVR math/reasoning smoke
@@ -312,6 +351,14 @@ datasets:
     # Decontamination is non-negotiable for any M1+ eval using the
     # corresponding benchmarks; M0 smoke uses it only for wiring verification.
     contamination: decontaminate against MATH, AIME-24/25, AMC, AMC-10/12, HMMT, GSM8K eval baskets
+    contamination_against:
+      - MATH
+      - AIME-24
+      - AIME-25
+      - AMC
+      - AMC-10/12
+      - HMMT
+      - GSM8K test
     use_stage:
       - M0 data_env_foundation
       - M1 RLVR competition math smoke

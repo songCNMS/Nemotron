@@ -1,6 +1,6 @@
 # RL Data Preparation
 
-Data preparation for the RL pipeline downloads `nvidia/Nemotron-3-Super-RL-Training-Blends` from HuggingFace, resolves placeholder entries by fetching from external datasets (DAPO, Skywork), and produces 6 data blends with train/val splits.
+Data preparation for the RL pipeline downloads `nvidia/Nemotron-RL-Super-Training-Blends` from HuggingFace, resolves placeholder entries by fetching from external datasets (DAPO, Skywork), and produces 6 data blends with train/val splits.
 
 ---
 
@@ -26,7 +26,7 @@ flowchart LR
 
 | Stage | What Happens |
 |-------|--------------|
-| **HuggingFace Dataset** | Download `nvidia/Nemotron-3-Super-RL-Training-Blends` (6 blend files) |
+| **HuggingFace Dataset** | Download `nvidia/Nemotron-RL-Super-Training-Blends` (6 blend files) |
 | **Placeholder Resolution** | Resolve `_hf_placeholder` records by fetching from external datasets (DAPO, Skywork) and applying template restoration |
 | **JSONL Format** | Convert to JSONL with `question`, `expected_answer`, and `responses_create_params` fields |
 | **Train/Val Split** | Last 100 rows held out for validation per blend |
@@ -40,7 +40,7 @@ The simplest way to prepare data is using the upstream script directly:
 
 ```bash
 # Download RL data blends
-uvx --from huggingface-hub hf download nvidia/Nemotron-3-Super-RL-Training-Blends \
+uvx --from huggingface-hub hf download nvidia/Nemotron-RL-Super-Training-Blends \
     --repo-type dataset --local-dir=data_with_placeholders
 
 # Fill in placeholders

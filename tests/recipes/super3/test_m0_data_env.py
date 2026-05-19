@@ -1,5 +1,14 @@
 import json
+from pathlib import Path
 
+import pytest
+
+from nemotron.data_prep.utils.hf_placeholder import (
+    NANO3_TARGET_DATASETS,
+    SUPER3_TARGET_DATASETS,
+    UNKNOWN_PENDING_LEGAL_REVIEW,
+    validate_target_dataset_licenses,
+)
 from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     DATA_REGISTRY_PATH,
     ENV_REGISTRY_PATH,
@@ -23,6 +32,14 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     transform_swe_bench_patch,
     validate_registries,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SFT_RAW_BLEND_PATH = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json"
+)
+RL_RAW_BLEND_PATH = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
+OLD_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-3-Super-RL-Training-Blends"
+LIVE_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-RL-Super-Training-Blends"
 
 
 def _spec(dataset_id: str) -> dict:
@@ -53,7 +70,89 @@ def test_registries_are_consistent() -> None:
     for dataset in data_registry["datasets"]:
         assert dataset["license"]
         assert dataset["hf_revision"]
+        assert isinstance(dataset.get("contamination_against"), list)
         assert dataset["use_stage"][0] == "M0 data_env_foundation"
+
+
+def test_super3_rl_blend_uses_live_hf_slug_and_docs_drop_old_slug() -> None:
+    blend = json.loads(RL_RAW_BLEND_PATH.read_text())
+
+    assert blend["datasets"][0]["path"] == f"hf://{LIVE_SUPER3_RL_BLEND_SLUG}"
+
+    checked_paths = [
+        REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/data_prep.py",
+        REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/README.md",
+        REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/data_prep/default.yaml",
+        REPO_ROOT / "src/nemotron/data_prep/utils/hf_placeholder.py",
+        REPO_ROOT / "docs/nemotron/super3/rl/index.md",
+        REPO_ROOT / "docs/nemotron/super3/rl/data-prep.md",
+    ]
+    for path in checked_paths:
+        assert OLD_SUPER3_RL_BLEND_SLUG not in path.read_text()
+
+
+def test_super3_rl_blend_slug_resolves_on_hf_when_network_available() -> None:
+    hub = pytest.importorskip("huggingface_hub")
+
+    try:
+        info = hub.dataset_info(LIVE_SUPER3_RL_BLEND_SLUG)
+    except Exception as exc:  # pragma: no cover - depends on HF availability
+        pytest.skip(f"HF dataset_info unavailable: {exc}")
+
+    assert info.id == LIVE_SUPER3_RL_BLEND_SLUG
+
+
+def test_super3_sft_competitive_subset_names_match_live_file_stems() -> None:
+    blend = json.loads(SFT_RAW_BLEND_PATH.read_text())
+    subsets = {dataset["name"]: dataset.get("subset") for dataset in blend["datasets"]}
+
+    expected = {
+        "competitive-cpp-00": "competitive_coding_cpp.part_00",
+        "competitive-cpp-01": "competitive_coding_cpp.part_01",
+        "competitive-python-00": "competitive_coding_python.part_00",
+        "competitive-python-01": "competitive_coding_python.part_01",
+        "infinibyte-00": "infinibyte.part_00",
+        "infinibyte-01": "infinibyte.part_01",
+    }
+    assert {name: subsets[name] for name in expected} == expected
+
+
+def test_super3_sft_competitive_subset_names_resolve_on_hf_when_network_available() -> None:
+    hub = pytest.importorskip("huggingface_hub")
+
+    try:
+        info = hub.dataset_info("nvidia/Nemotron-Competitive-Programming-v1")
+    except Exception as exc:  # pragma: no cover - depends on HF availability
+        pytest.skip(f"HF dataset_info unavailable: {exc}")
+
+    siblings = {sibling.rfilename for sibling in info.siblings}
+    assert "data/competitive_coding_cpp.part_00.jsonl" in siblings
+    assert "data/infinibyte.part_00.jsonl" in siblings
+
+
+def test_hf_placeholder_targets_have_explicit_license_posture() -> None:
+    validate_target_dataset_licenses(NANO3_TARGET_DATASETS)
+    validate_target_dataset_licenses(SUPER3_TARGET_DATASETS)
+
+    for target_datasets in (NANO3_TARGET_DATASETS, SUPER3_TARGET_DATASETS):
+        for name, cfg in target_datasets.items():
+            assert cfg["license"]
+            if "skywork" in name:
+                assert cfg["license"] == UNKNOWN_PENDING_LEGAL_REVIEW
+
+
+def test_hf_placeholder_target_license_lint_rejects_missing_license() -> None:
+    with pytest.raises(ValueError, match="missing license"):
+        validate_target_dataset_licenses({"bad_target": {"hf_dataset": "example/missing-license"}})
+
+
+def test_data_registry_declares_contamination_against_lists() -> None:
+    registry = load_yaml(DATA_REGISTRY_PATH)
+    by_id = {dataset["id"]: dataset for dataset in registry["datasets"]}
+
+    assert all(isinstance(dataset.get("contamination_against"), list) for dataset in by_id.values())
+    assert "GSM8K test" in by_id["m0_math_numinamath"]["contamination_against"]
+    assert "SWE-Bench Verified" in by_id["m0_swe_patch_lite"]["contamination_against"]
 
 
 def test_gsm8k_transform_normalizes_final_answer() -> None:

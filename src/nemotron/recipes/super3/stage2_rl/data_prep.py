@@ -40,7 +40,7 @@
 
 """Data preparation for Super3 RL stage.
 
-Processes the nvidia/Nemotron-3-Super-RL-Training-Blends dataset and resolves
+Processes the nvidia/Nemotron-RL-Super-Training-Blends dataset and resolves
 placeholder entries that reference external HuggingFace datasets (DAPO, Skywork).
 
 Placeholder records have an `_hf_placeholder` field containing row indices and
@@ -129,7 +129,7 @@ RAY = True  # Uses cosmos-xenna pipeline (requires Ray runtime)
 class RLDataPrepConfig:
     """RL data preparation config with HuggingFace placeholder resolution.
 
-    Processes nvidia/Nemotron-3-Super-RL-Training-Blends and resolves placeholder
+    Processes nvidia/Nemotron-RL-Super-Training-Blends and resolves placeholder
     entries by fetching from external datasets (DAPO, Skywork).
 
     Outputs JSONL with resolved records containing:

@@ -1,5 +1,7 @@
 {
   "_comment": "Super3 SFT blend. Weights approximate internal training ratios by sample count from the tech report pie chart (7M total samples). The open-sourced data covers ~48% of the internal blend. Missing categories are documented below — add your own data at the indicated weights. Weights are unnormalized; the pipeline normalizes at runtime.",
+  "_comment_competitive_programming_subset_names": "nvidia/Nemotron-Competitive-Programming-v1 live files currently use dot stems such as data/competitive_coding_cpp.part_00.jsonl and data/infinibyte.part_00.jsonl; keep the subset names aligned with those file stems.",
+  "_comment_missing_category_weights": "The missing-category entries below document the approximate unpublished blend mass and are intentionally not normalized with the open-source dataset weights.",
   "_missing_categories": {
     "science": {"weight": 12.8, "description": "Science QA and reasoning (STEM subjects)."},
     "math": {"weight": 9.9, "description": "Math reasoning and problem solving (SFT-specific, not pretrain math)."},
