@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -18,3 +18,11 @@
   - `PYTHONPATH=src pytest -q tests/recipes/super3` → `349 passed, 5 skipped`.
   - `NEMOTRON_RUN_LIVE_HF_TESTS=1 PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py -k "live_hf or resolves_on_hf"` → `2 passed, 29 deselected`.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/67.
+
+## Session 2 - 2026-05-19 - intern_nemontron_code_reading
+
+- User requested merge of PR #67.
+- Confirmed PR #67 was `OPEN / CLEAN` and had no blocking review state.
+- Updated closeout state on the task branch: intern status → Idle, task README → Completed, task knowledge metadata → Session 2.
+- Pushed closeout commit to PR #67 before merge.
+- Merged PR #67 to `main` with squash merge and verified merged state.

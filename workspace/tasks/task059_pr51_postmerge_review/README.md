@@ -1,6 +1,6 @@
 # task059_pr51_postmerge_review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 
@@ -51,3 +51,8 @@ registry validation plus unified-index validation.
 - `PYTHONPATH=src scripts/validate_data_registries.py --check-revision-pins` → pass.
 - `PYTHONPATH=src pytest -q tests/recipes/super3` → `349 passed, 5 skipped`.
 - `NEMOTRON_RUN_LIVE_HF_TESTS=1 PYTHONPATH=src pytest -q tests/recipes/super3/test_m0_data_env.py -k "live_hf or resolves_on_hf"` → `2 passed, 29 deselected`.
+
+## Session 2 Closeout
+
+- PR #67 was confirmed clean and merged to `main`.
+- Task status closed as Completed.
