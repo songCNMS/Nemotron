@@ -663,7 +663,7 @@ and cluster-bound work is queued waiting for NemTron access.
 |---|---|---|---|
 | ~~**task013**~~ | ~~2a~~ | ~~Two-stage finetune driver + stage-a/stage-b YAML chain~~ — **landed 2026-05-19** | ✓ done |
 | ~~**task040**~~ | ~~1~~ | ~~W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample`~~ — **landed 2026-05-19** | ✓ done |
-| **task040** | 2 | Wire curriculum sampler into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in `--curriculum-policy` CLI flag | ✓ |
+| ~~**task040**~~ | ~~2~~ | ~~Wire curriculum sampler into `prepare_m1_agentic_sft.py` via opt-in `--curriculum-policy` CLI flag~~ — **landed 2026-05-20** (train-only; default `as_is` is back-compat passthrough; `--curriculum-pass-rates-json` opt-in) | ✓ done |
 | ~~**task070**~~ | ~~1~~ | ~~OpenHands wrapper Protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry~~ — **landed 2026-05-19** | ✓ done |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | ~~**task057**~~ | ~~1~~ | ~~M0 tier2 — `multilingual_instruct` env + Aya converter + `multilingual_exact_or_contains` verifier (Unicode NFC + casefold, preserves CJK punctuation)~~ — **landed 2026-05-19**; data_registry row deferred to Session 1.5 pending Aya commit pin | ✓ done |
