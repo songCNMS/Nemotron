@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 1
 
@@ -121,3 +121,16 @@
 - SciCode 指标：`problems_pass@1=0.0`，`steps_pass@1=0.1666666667`；response stats 为 `count=19`、`successful_count=5`、`status_codes.200=5`、`status_codes.400=14`、`avg_latency_ms=825.31`。
 - SciCode 的 400 响应来自当前 endpoint `max_model_len=4096`：后续 step prompt 加上 `max_new_tokens=2048` 后超过 context limit，部分请求报 6033/6081 tokens total 或 input 4104/4287/4375/4716 tokens。
 - 本轮结束清理临时 SSH tunnel；`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 12G 可用。
+
+## Session 13
+
+- 用户要求按 `m1_full_basket_launcher_available` 顺序把所有 mapped eval benchmarks 做 non-dry eval；重新建立 `vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` tunnel，并确认 endpoint 仍服务 `task071-qwen3-4b-agentic-sft-iter0000122-hf`、`max_model_len=4096`。
+- `lm-evaluation-harness.mmlu_pro` 1-sample-per-category non-dry 完成：`docker_exit=0`，14 个 MMLU-Pro category 各 1 条，group exact_match `0.0`，`successful_responses=14/14`，`avg_latency_ms=834.27`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_mmlu_pro1`。
+- `nemo_skills.ns_hmmt_feb2025` 1-sample non-dry 完成：镜像名需用 `nvcr.io/nvidia/eval-factory/nemo-skills:26.03`，`docker_exit=0`，`symbolic_correct=100.0`，`num_entries=1`，`successful_responses=1/1`，`avg_latency_ms=8411.62`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_hmmt1`。
+- `ruler.ruler-256k-chat` 使用 `nvcr.io/nvidia/eval-factory/long-context-eval:26.03` 进入真实 256k 数据准备和请求阶段，但当前 4096-token endpoint 对长上下文请求全部返回 400；手动清理占满磁盘的容器后命令退出 `docker_exit=137`，metrics 为 `count=300`、`successful_count=0`、`status_codes.400=300`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_ruler1`。
+- `AA-LCR.aa_lcr` 1-sample non-dry 进入真实请求，但首条样本输入约 `101423` tokens，超过 4096 context；`docker_exit=1`，metrics 为 `count=30`、`successful_count=0`、`status_codes.400=30`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_aa_lcr1`。
+- `tau2_bench.tau2_bench_airline` 1 task / 1 trial / 5 max steps non-dry 进入真实 agent 请求，但首步输入 `4827` tokens 超过 4096 context；`docker_exit=1`，metrics 为 `count=3`、`successful_count=0`、`status_codes.400=3`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_tau2_airline1`。
+- `bfcl.bfclv3` `task=all` 初次失败于 executable category 缺少外部 API credential；补 dummy `GEOCODE_API_KEY`、`RAPID_API_KEY`、`OMDB_API_KEY`、`EXCHANGERATE_API_KEY` 后重新跑，生成阶段成功发出 1 个模型请求，评估阶段卡在 executable ground-truth 外部 API 响应结构，`docker_exit=1`，metrics 为 `count=1`、`successful_count=1`、`status_codes.200=1`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_bfclv3_all1_dummykeys`。
+- `lm-evaluation-harness.mmlu_prox_chat` non-dry 进入多语言数据下载和请求，`limit_samples=1` 仍展开为 196 个 language/category 请求；第 44 个请求输入 `4563` tokens 超过 4096 context 后失败，`docker_exit=1`，metrics 为 `count=45`、`successful_count=43`、`status_codes.200=43`、`status_codes.400=2`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_mmlu_prox1`。
+- `nemo_skills.ns_wmt24pp` 1-sample non-dry 成功：`docker_exit=0`，BLEU `64.31870218238025`，`successful_responses=1/1`，`avg_prompt_tokens=51`，`avg_completion_tokens=38`，`avg_latency_ms=711.0`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_wmt24pp1`。
+- 至此 `m1_full_basket_launcher_available` 14 个 mapped benchmarks 均已按配置顺序做过 non-dry attempt：AIME/GPQA/ifbench/HLE/LiveCodeBench/SciCode 的结果沿用 Sessions 7-12，本轮补齐 mmlu_pro、HMMT、RULER、AA-LCR、tau2、BFCL、MMLU-ProX、WMT24++；阻塞集中在 gated dataset、vm4vpn 内存/磁盘、external executable credentials 和当前 4096-token context limit。
