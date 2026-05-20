@@ -178,6 +178,34 @@ environments:
         - expected_answer
         - extra_env_info.gold_tool_call
 
+  - id: multilingual_instruct
+    family: multilingual
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: multilingual_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted response normalized per Unicode + lowercase must exact-or-contains the gold target
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 10
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - exact_match
+      - contains_match
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.language
+
   - id: helpsteer2_pref_compare
     family: rlhf_preference
     stage: M0 data_env_foundation

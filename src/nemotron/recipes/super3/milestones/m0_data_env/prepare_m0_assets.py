@@ -93,6 +93,11 @@ SYSTEM_PROMPTS = {
         "A preference judge will compare your reply against another candidate "
         "to score helpfulness, coherence, and correctness."
     ),
+    "multilingual_instruct": (
+        "You are a helpful assistant. Respond in the same language as the "
+        "user. Match the meaning of the target reference closely; small "
+        "wording differences are fine."
+    ),
     "tool_call_repair_negative": (
         "You repair malformed or hallucinated tool-use attempts using the provided schema."
     ),
@@ -1056,6 +1061,100 @@ def transform_helpsteer2_pref(row: Mapping[str, Any], spec: Mapping[str, Any]) -
     )
 
 
+# Aya dataset (CohereLabs/aya_dataset) language subset for plan §7
+# multilingual coverage: de / es / fr / it / ja / zh. M0 smoke filter
+# pulls only these 6 codes; full 65-language set is M2 task027 scope.
+AYA_TARGET_LANGUAGES: frozenset[str] = frozenset({
+    "Standard Arabic",   # used by Aya for ar — kept for forward compat
+    "German",
+    "Spanish",
+    "French",
+    "Italian",
+    "Japanese",
+    "Chinese",
+    "Simplified Chinese",
+    "Traditional Chinese",
+})
+
+# Per-language ISO codes the converter accepts on the language_code
+# column (Aya sometimes stamps language as a full name, sometimes as
+# ISO; converter normalizes via either field).
+AYA_TARGET_LANGUAGE_CODES: frozenset[str] = frozenset({
+    "de", "es", "fr", "it", "ja", "zh", "zh-Hans", "zh-Hant", "zh-CN", "zh-TW",
+})
+
+
+def _aya_language_in_scope(row: Mapping[str, Any]) -> bool:
+    """True if *row*'s language is one of the M0 smoke 6.
+
+    Aya rows carry both ``language`` (full English name like "German")
+    and ``language_code`` (ISO). Accept either since upstream snapshots
+    have shipped both conventions.
+    """
+    language = str(row.get("language") or "").strip()
+    code = str(row.get("language_code") or "").strip()
+    if language in AYA_TARGET_LANGUAGES:
+        return True
+    if code in AYA_TARGET_LANGUAGE_CODES:
+        return True
+    return False
+
+
+def transform_aya_multilingual(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one Aya (CohereLabs/aya_dataset) row to the M0 contract.
+
+    Aya is human-written instruction/response pairs across ~65
+    languages. M0 smoke restricts to 6 languages (de / es / fr / it /
+    ja / zh) — rows outside the set raise ``ValueError`` so the prep
+    pipeline's row-level error counter surfaces them rather than
+    silently emitting.
+
+    Required input fields:
+
+    - ``inputs`` (or ``instruction``): user prompt
+    - ``targets`` (or ``response``): gold reference response
+    - ``language`` / ``language_code``: at least one must resolve to a
+      language in scope
+
+    Output shape uses the multilingual_exact_or_contains verifier
+    (defined in ``run_m0_health_baseline.py``) which normalizes case
+    and whitespace per Unicode and then runs the same exact-or-contains
+    check as the English HotpotQA / MuSiQue paths.
+    """
+    if not _aya_language_in_scope(row):
+        raise ValueError(
+            "Aya row language outside M0 smoke scope (de/es/fr/it/ja/zh)"
+        )
+    instruction = str(row.get("inputs") or row.get("instruction") or "").strip()
+    if not instruction:
+        raise ValueError("Aya row missing 'inputs' / 'instruction'")
+    target = str(row.get("targets") or row.get("response") or "").strip()
+    if not target:
+        raise ValueError("Aya row missing 'targets' / 'response'")
+    language = str(row.get("language") or "").strip() or None
+    language_code = str(row.get("language_code") or "").strip() or None
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=instruction,
+        expected_answer=target,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": instruction},
+        ],
+        reward_config={
+            "verifier": "multilingual_exact_or_contains",
+            "max_score": 1.0,
+            "match": ["normalized_unicode_text"],
+        },
+        extra_env_info={
+            "language": language,
+            "language_code": language_code,
+        },
+    )
+
+
 def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
 
@@ -1609,6 +1708,7 @@ CONVERTERS = {
     "swe_gym_lite_pivot": transform_swe_gym_lite_pivot,
     "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
     "helpsteer2_pref_pair": transform_helpsteer2_pref,
+    "aya_multilingual": transform_aya_multilingual,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
