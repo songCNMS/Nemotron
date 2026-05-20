@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Notes
 
@@ -35,3 +35,7 @@
 - GPQA access fact: after the Hugging Face dataset access approval, the user-provided token works as a transient env var for `Idavidrein/gpqa`; direct `load_dataset("Idavidrein/gpqa", "gpqa_diamond", split="train[:1]")` succeeds inside `nvcr.io/nvidia/eval-factory/simple-evals:26.03`.
 - GPQA non-dry smoke fact: on `vm4vpn`, `gpqa_diamond` with `limit_samples=1`, `n_samples=1`, `max_new_tokens=2048`, and the endpoint tunnel completed with `docker_exit=0`, `score=0.0`, `successful_responses=1/1`, `avg_prompt_tokens=153`, `avg_completion_tokens=370`, `avg_total_tokens=523`, and `avg_latency_ms=1786.24`; artifacts are under `vm4vpn:/tmp/task071_vpn_eval_gpqa`.
 - GPQA scale-up fact: on `vm4vpn`, `gpqa_diamond` with `limit_samples=10`, `n_samples=1`, `parallelism=1`, `max_new_tokens=2048`, and request/response body logging disabled completed with `docker_exit=0`, `score=0.3`, `successful_responses=10/10`, `avg_prompt_tokens=234.5`, `avg_completion_tokens=336.9`, `avg_total_tokens=571.4`, and `avg_latency_ms=1992.3`; artifacts are under `vm4vpn:/tmp/task071_vpn_eval_gpqa10`.
+- HLE runtime fact: `hle.hle` uses `nvcr.io/nvidia/eval-factory/hle:26.03` and loads `cais/hle`; this dataset is gated on Hugging Face, and the current token does not grant access, so the task fails before any model request.
+- LiveCodeBench runtime fact: `livecodebench.codegeneration_release_latest` uses `nvcr.io/nvidia/eval-factory/livecodebench:26.03`; on `vm4vpn`, even `limit_samples=1`, `n_samples=1`, `num_process_evaluate=1`, and `cache_batch_size=1` still download/build multi-GB release JSONLs before filtering, then the harness is OOM-killed with exit 137 before any model request.
+- SciCode non-dry fact: on `vm4vpn`, `scicode.scicode` with `limit_samples=1`, `n_samples=1`, `parallelism=1`, `max_new_tokens=2048`, and endpoint tunnel completed with `docker_exit=0`, `problems_pass@1=0.0`, `steps_pass@1=0.1666666667`, `response_count=19`, `successful_count=5`, `status_codes.200=5`, and `status_codes.400=14`; artifacts are under `vm4vpn:/tmp/task071_vpn_eval_scicode1`.
+- SciCode context fact: the current Qwen SFT endpoint serves with `max_model_len=4096`; SciCode later-step prompts can exceed this limit directly or exceed it after adding `max_new_tokens=2048`, so a more valid SciCode run needs a longer-context deployment or lower max generation tokens plus prompt filtering.

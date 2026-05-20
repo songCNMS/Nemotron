@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 1
 
@@ -111,3 +111,13 @@
 - GPQA 10-sample 结果：`docker_exit=0`，`score=0.3`，`stddev=0.4582575695`，`stderr=0.1527525232`，`successful_responses=10/10`。
 - Response stats：`avg_prompt_tokens=234.5`，`avg_completion_tokens=336.9`，`avg_total_tokens=571.4`，`avg_latency_ms=1992.3`，`max_latency_ms=2360.88`，`finish_reason.stop=10`。
 - Artifacts 写在 `vm4vpn:/tmp/task071_vpn_eval_gpqa10`；本轮结束清理临时 SSH tunnel，`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 16G 可用。
+
+## Session 12
+
+- 用户要求切到 `m1_full_basket_launcher_available` 中下一个已映射 task 做 non-dry；按配置顺序从 `simple_evals.gpqa_diamond` 后继续。
+- 尝试 `hle.hle` 1-sample non-dry：镜像 `nvcr.io/nvidia/eval-factory/hle:26.03` 启动成功，但 `cais/hle` 是 Hugging Face gated dataset，当前 token 无访问权限；失败发生在 dataset load 阶段，`total_responses=0`。
+- 顺延尝试 `livecodebench.codegeneration_release_latest` 1-sample non-dry：镜像启动成功，但 `release_latest` 即使带 `--first_n 1` 仍会下载并构建多份大 JSONL，进程在生成 dataset split 时被 OOM kill，退出码 137，未请求模型。
+- 继续顺延到 `scicode.scicode` 1-sample non-dry：镜像 `nvcr.io/nvidia/eval-factory/scicode:26.03` 运行成功，`docker_exit=0`，产出 `/tmp/task071_vpn_eval_scicode1/results.yml` 和 `/tmp/task071_vpn_eval_scicode1/eval_factory_metrics.json`。
+- SciCode 指标：`problems_pass@1=0.0`，`steps_pass@1=0.1666666667`；response stats 为 `count=19`、`successful_count=5`、`status_codes.200=5`、`status_codes.400=14`、`avg_latency_ms=825.31`。
+- SciCode 的 400 响应来自当前 endpoint `max_model_len=4096`：后续 step prompt 加上 `max_new_tokens=2048` 后超过 context limit，部分请求报 6033/6081 tokens total 或 input 4104/4287/4375/4716 tokens。
+- 本轮结束清理临时 SSH tunnel；`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 12G 可用。
