@@ -98,6 +98,12 @@ SYSTEM_PROMPTS = {
         "user. Match the meaning of the target reference closely; small "
         "wording differences are fine."
     ),
+    "long_context_qa_smoke": (
+        "You are a long-context reading-comprehension assistant. Read "
+        "the document carefully and answer the user's question grounded "
+        "in the document's content. Quote or paraphrase the relevant "
+        "passage; do not invent facts."
+    ),
     "tool_call_repair_negative": (
         "You repair malformed or hallucinated tool-use attempts using the provided schema."
     ),
@@ -1155,6 +1161,87 @@ def transform_aya_multilingual(row: Mapping[str, Any], spec: Mapping[str, Any]) 
     )
 
 
+# LongAlpaca / long-context QA M0 smoke caps (task057 Session 2).
+#
+# LongAlpaca-12k carries documents spanning ~16K to ~100K characters
+# (rough est. ~4-25K tokens). M0 smoke caps doc length to keep the
+# oracle baseline tractable; rows above the cap are dropped (not
+# truncated — truncation changes the QA answer span semantics, so
+# silent truncation would corrupt the eval). True long-context (256K
+# to 1M+) is M2 task028 / task037 scope.
+LONGALPACA_MAX_DOC_CHARS: int = 32_000  # ~8K tokens; M0 smoke ceiling
+
+
+def _approx_token_count(text: str) -> int:
+    """Rough char-based token estimate (~4 chars/token for English).
+
+    Used only for telemetry (`doc_token_estimate` field). Not for
+    truncation decisions — those use exact char counts.
+    """
+    return max(1, len(text) // 4)
+
+
+def transform_longalpaca_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one LongAlpaca-12k row to the M0 long_context_qa_smoke contract.
+
+    LongAlpaca-12k is Alpaca-format with optional long ``input`` field:
+
+    - ``instruction``: the question (e.g., "What does the document say about X?")
+    - ``input``: the long document the question is grounded in (16K-100K chars)
+    - ``output``: the gold reference answer
+
+    Rows missing ``input`` are dropped (this env requires a document
+    context; question-only Alpaca rows don't belong in long-context QA).
+    Rows whose ``input`` exceeds ``LONGALPACA_MAX_DOC_CHARS`` are also
+    dropped — truncation would change answer-span semantics.
+
+    Output uses the ``long_context_qa_stub`` verifier (M0 oracle stub
+    delegating to contains-match; real long-context verifier is M2
+    task028 territory).
+    """
+    instruction = str(row.get("instruction") or "").strip()
+    if not instruction:
+        raise ValueError("LongAlpaca row missing 'instruction'")
+    output = str(row.get("output") or "").strip()
+    if not output:
+        raise ValueError("LongAlpaca row missing 'output'")
+    document = str(row.get("input") or "").strip()
+    if not document:
+        raise ValueError("LongAlpaca row missing 'input' (long document required)")
+    if len(document) > LONGALPACA_MAX_DOC_CHARS:
+        raise ValueError(
+            f"LongAlpaca row exceeds M0 smoke cap "
+            f"({len(document)} > {LONGALPACA_MAX_DOC_CHARS} chars); "
+            "real long-context support is M2 task028 / task037"
+        )
+
+    user_content = (
+        f"Document:\n{document}\n\n"
+        f"Question: {instruction}"
+    )
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=instruction,
+        expected_answer=output,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "long_context_qa_stub",
+            "max_score": 1.0,
+            "match": ["normalized_contains"],
+        },
+        extra_env_info={
+            "doc_length_chars": len(document),
+            "doc_token_estimate": _approx_token_count(document),
+            "question": instruction,
+        },
+    )
+
+
 def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
 
@@ -1709,6 +1796,7 @@ CONVERTERS = {
     "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
     "helpsteer2_pref_pair": transform_helpsteer2_pref,
     "aya_multilingual": transform_aya_multilingual,
+    "longalpaca_qa": transform_longalpaca_qa,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,

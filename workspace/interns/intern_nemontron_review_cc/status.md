@@ -1,71 +1,81 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task057_m0_tier2_expansion -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 92 |
+| Status | Working |
+| Current Task | task057_m0_tier2_expansion |
+| PR | pending push |
+| Session | 93 |
 
-刚做完：task040 Session 2 — wire curriculum sampler into
-prepare_m1_agentic_sft (PR #116 / 168406c, merged 2026-05-20).
+正在做：task057 Session 2 — `long_context_qa_smoke` env via
+`THUDM/LongAlpaca-12k`. Second of 6 tier-2 M0 envs; follows Session 1's
+multilingual_instruct pattern.
 
-- 4 new CLI flags on `prepare_m1_agentic_sft.py`:
-  `--curriculum-policy {as_is,easy_first,hard_first,shuffle}` /
-  `--curriculum-seed` / `--curriculum-pass-rates-json` /
-  `--curriculum-solved-threshold`
-- New `_apply_curriculum_to_train(train_rows, *, policy, seed,
-  pass_rates_path, solved_threshold)` helper — drop-then-reorder;
-  val rows NEVER reordered (shadow-eval stability)
-- Manifest gains `curriculum` audit block (locked 7-key shape)
-- Default `as_is` policy = byte-for-byte back-compat passthrough
-- 13 个新 pytest case; sandbox 测试基线 662 → 675 passed + 7 skipped
-- Documented divergence from scaffold: M0 prep NOT wired because
-  `difficulty_bucket` is populated by the M1 converter (task008), not
-  M0 prep — M0 has no meaningful bucket to sample on
+## What's in this PR
 
-## task040 整 task 进展
+### 新 M0 env `long_context_qa_smoke`
 
-- Session 1 ✓ (PR #99) — sampler primitives
-- Session 2 ✓ (PR #116) — wired into M1 agentic SFT
-- Session 3 ☐ — numeric pass-rate filter via task032 rollout store
-  (M2 dependency)
-- Session 4 ☐ — per-env curriculum policy YAML
+- `environment_registry.yaml` 加 env: family `long_context` / verifier
+  `long_context_qa_stub` / max_turns 1 / sandbox none
+- Required field `extra_env_info.doc_length_chars` for telemetry
+- `prepare_m0_assets.SYSTEM_PROMPTS` 加 prompt ("long-context
+  reading-comprehension assistant; quote or paraphrase passage")
 
-## 本轮 sprint 累积 (PR #94 起算)
+### 新 converter `transform_longalpaca_qa`
 
-12 substantive PRs + 11 closeouts:
+LongAlpaca-12k is Alpaca-format with optional `input` field carrying
+the long document. Converter:
 
-| PR | 内容 | sandbox baseline |
-|---|---|---|
-| #94 | Roadmap refresh + 4 gap-task scaffolds | 502 |
-| #95 | task067 → task070 rename | 506 |
-| #97 | task013 Session 2a (two-stage SFT driver) | 520 |
-| #99 | task040 Session 1 (curriculum sampler) | 543 |
-| #101 | task070 Session 1 (OpenHands wrapper) | 559 |
-| #104 | task069 Session 1 (W&B publisher + CLI) | 577 |
-| #106 | task069 Session 2 (publisher wiring) | 592 |
-| #108 | task057 Session 1 (multilingual_instruct) | 620 |
-| #110 | task068 Session 1 (design doc) | 620 |
-| #112 | task068 Session 2 (converter) | 651 |
-| #114 | task068 Session 3 (CLI + env flip) | 662 |
-| #116 | task040 Session 2 (curriculum wiring) | 675 |
+- Requires `instruction` + `output` + `input` (long doc) — this env
+  is long-context QA; question-only rows go elsewhere
+- **`LONGALPACA_MAX_DOC_CHARS = 32_000`** smoke cap (~8K tokens).
+  Rows above cap → ValueError (truncation would change answer-span
+  semantics). Real 256K-1M long-context is M2 task028 / task037.
+- Builds user message embedding `Document:\n{doc}\n\nQuestion: {q}`
+- `extra_env_info.doc_length_chars` + `doc_token_estimate` telemetry
 
-Sandbox baseline 502 → 675 passed (173 new tests across the sprint).
+### 新 verifier `long_context_qa_stub`
 
-## 下一候选 (sandbox-runnable per roadmap §5b)
+- Wired into `score_record` in `run_m0_health_baseline.py`
+- M0 oracle stub: delegates to `score_text` (same contains-match as
+  `normalized_exact_or_contains`)
+- "stub" suffix signals that span-aware / judge-graded verifier is
+  M2 task028 / task037 territory; M0 baseline just needs oracle
+  passthrough
+- Diagnostics: `normalized_answer` + `contains_match`
 
-- task057 Sessions 2-6 — 5 more tier-2 M0 envs (long_context_qa_smoke /
-  sql_text_to_query / terminal-tier2 / safety_reasoning_smoke /
-  math_with_tools)
-- 已没 sandbox-runnable single-shot picks 剩；下面都需 cluster
+### data_registry row 故意延后
 
-Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
-task014 Session 2 cluster / task016 Session 3 / task017 Session 3 /
-task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
-task021 Session 4 / task040 Sessions 3-4 (待 task032 M2) / task057
-Session 1.5 (HF SHA) / task068 Session 4 / task069 Session 3 /
-task070 Sessions 2-3。
+`m0_longalpaca_qa` data_registry row deferred to Session 2.5 (same
+pattern as Session 1's multilingual row deferral) — needs HF access
+to pin a real LongAlpaca commit SHA via `HfApi().dataset_info`. Locked-
+in test asserts the row is NOT in registry yet.
+
+### Tests (`test_longalpaca_qa.py`, 17 cases)
+
+- Module surface 3: SYSTEM_PROMPTS / CONVERTERS / MAX_DOC_CHARS = 32K
+- Happy path 3: emits record / embeds doc in user msg / doc_length
+  telemetry
+- M0 smoke cap 2: rejects > cap / accepts exactly at cap (strict >)
+- Error surfaces 4: missing instruction / missing output / missing doc /
+  empty doc
+- score_record dispatch 2: long_context_qa_stub wired / no-match diagnostics
+- Registry integration 3: validate_registries clean / env_registry row
+  shape / data_registry row NOT yet present (deferral lock)
+
+Sandbox 测试基线 675 → **692 passed + 7 skipped** (17 new).
+
+## task057 状态
+
+- Session 1 ✓ (PR #108) — multilingual_instruct env (Aya)
+- Session 1.5 ☐ — pin Aya SHA + add data_registry row
+- Session 2 ✓ (this PR) — long_context_qa_smoke env (LongAlpaca-12k)
+- Session 2.5 ☐ — pin LongAlpaca SHA + add data_registry row
+- Sessions 3-6 ☐ — 4 envs left: sql_text_to_query / terminal-tier2 /
+  safety_reasoning_smoke / math_with_tools
+
+Roadmap §5b 更新 — task057 S2 ✓; S3 (sql_text_to_query) added as next
+sandbox candidate.

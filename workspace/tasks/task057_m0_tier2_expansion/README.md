@@ -1,7 +1,8 @@
 # task057_m0_tier2_expansion
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
-<!-- SESSION 1 LANDED: PR pending on 2026-05-19 (multilingual_instruct env via CohereLabs/aya_dataset; one of 6 tier-2 envs) -->
+<!-- SESSION 1 LANDED: PR #108 / d5d215c on 2026-05-19 (multilingual_instruct env via CohereLabs/aya_dataset) -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-20 (long_context_qa_smoke env via THUDM/LongAlpaca-12k; 17 tests) -->
 
 ## 背景
 
@@ -23,7 +24,7 @@ adapt。
 | Session | Env | HF source | Status |
 |---|---|---|---|
 | 1 | `multilingual_instruct` | `CohereLabs/aya_dataset` | ✓ Done (this PR) |
-| 2 | `long_context_qa_smoke` | `THUDM/LongAlpaca-12k` | Todo |
+| 2 | `long_context_qa_smoke` | `THUDM/LongAlpaca-12k` | ✓ Done (this PR) |
 | 3 | `sql_text_to_query` | `birdsql/bird_mini_dev` + `bird-bench/bird` | Todo (needs SQL verifier scaffold) |
 | 4 | `terminal_basic_shell` (tier-2 extension) | `epinnock/intercode-nl2bash-curated` | Todo |
 | 5 | `safety_reasoning_smoke` | `nvidia/Nemotron-Content-Safety-Reasoning-Dataset` | Todo (schema verification first) |
