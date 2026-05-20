@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Notes
 
@@ -34,3 +34,4 @@
 - ifbench non-dry smoke fact: on `vm4vpn`, `ifbench.ifbench` with `limit_samples=1`, `max_new_tokens=2048`, endpoint tunnel, `setuptools<81`, and `OPENAI_API_KEY=dummy` completed with `stage.exit=0`, `successful_responses=1/1`, and all strict/loose count metrics at `0.0`.
 - GPQA access fact: after the Hugging Face dataset access approval, the user-provided token works as a transient env var for `Idavidrein/gpqa`; direct `load_dataset("Idavidrein/gpqa", "gpqa_diamond", split="train[:1]")` succeeds inside `nvcr.io/nvidia/eval-factory/simple-evals:26.03`.
 - GPQA non-dry smoke fact: on `vm4vpn`, `gpqa_diamond` with `limit_samples=1`, `n_samples=1`, `max_new_tokens=2048`, and the endpoint tunnel completed with `docker_exit=0`, `score=0.0`, `successful_responses=1/1`, `avg_prompt_tokens=153`, `avg_completion_tokens=370`, `avg_total_tokens=523`, and `avg_latency_ms=1786.24`; artifacts are under `vm4vpn:/tmp/task071_vpn_eval_gpqa`.
+- GPQA scale-up fact: on `vm4vpn`, `gpqa_diamond` with `limit_samples=10`, `n_samples=1`, `parallelism=1`, `max_new_tokens=2048`, and request/response body logging disabled completed with `docker_exit=0`, `score=0.3`, `successful_responses=10/10`, `avg_prompt_tokens=234.5`, `avg_completion_tokens=336.9`, `avg_total_tokens=571.4`, and `avg_latency_ms=1992.3`; artifacts are under `vm4vpn:/tmp/task071_vpn_eval_gpqa10`.

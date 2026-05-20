@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 1
 
@@ -102,3 +102,12 @@
 - 运行 `gpqa_diamond` 1-sample non-dry smoke：`simple-evals:26.03` 成功下载 GPQA diamond，完成 1 次模型请求并写出 `/tmp/task071_vpn_eval_gpqa/results.yml` 与 `/tmp/task071_vpn_eval_gpqa/eval_factory_metrics.json`。
 - GPQA smoke 结果：`docker_exit=0`，`score=0.0`，`successful_responses=1/1`，`avg_prompt_tokens=153`，`avg_completion_tokens=370`，`avg_total_tokens=523`，`avg_latency_ms=1786.24`。
 - 远端清理检查：`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 16G 可用。
+
+## Session 11
+
+- 按“进行下一步”执行 GPQA 小批量放大：从 1-sample smoke 扩到 `limit_samples=10` 的 `gpqa_diamond` non-dry run。
+- 重新建立 `vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` tunnel，并通过 Docker host network 验证 endpoint 返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`、`max_model_len=4096`。
+- 运行配置保持 `max_new_tokens=2048`、`parallelism=1`、`n_samples=1`，并关闭 request/response body logging 以减少评测日志和 artifacts 体积。
+- GPQA 10-sample 结果：`docker_exit=0`，`score=0.3`，`stddev=0.4582575695`，`stderr=0.1527525232`，`successful_responses=10/10`。
+- Response stats：`avg_prompt_tokens=234.5`，`avg_completion_tokens=336.9`，`avg_total_tokens=571.4`，`avg_latency_ms=1992.3`，`max_latency_ms=2360.88`，`finish_reason.stop=10`。
+- Artifacts 写在 `vm4vpn:/tmp/task071_vpn_eval_gpqa10`；本轮结束清理临时 SSH tunnel，`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 16G 可用。
