@@ -1,6 +1,6 @@
 # task067_m1_agentic_qwen_scaleup
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 

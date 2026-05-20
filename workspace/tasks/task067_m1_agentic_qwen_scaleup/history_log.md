@@ -1,6 +1,6 @@
 # task067_m1_agentic_qwen_scaleup - history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1
 
@@ -12,3 +12,8 @@
 - 修复远端 tmux launch 中 `TRAIN_ITERS` 只在 ssh shell 里定义的问题，生成脚本会 `export TRAIN_ITERS` 供 tmux 新 session 使用。
 - 验证：ruff passed；`pytest -q tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py` → 54 passed, 1 skipped；`m1_basket` eval dry-run passed。
 - 生成 planner smoke：`/work-agents/intern_nemontron_code_reading/outputs/task067_plan_smoke`，参数为 train=10 / val=3 per dataset、pack/seq length 512、8 shards、eval config `m1_basket`。
+
+## Session 2
+
+- 复验 PR #93：ruff passed；`pytest -q tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py` → 54 passed, 1 skipped；`m1_basket` eval dry-run passed。
+- 按 playbook 在分支上将 task067 README 标记为 Completed，将 intern status 切回 Idle，并准备合并 PR #93。

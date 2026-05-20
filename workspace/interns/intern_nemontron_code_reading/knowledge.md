@@ -1,6 +1,6 @@
 # intern_nemontron_code_reading - personal knowledge base
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ---
 
@@ -53,3 +53,7 @@ Every task `history_log.md` and `task_knowledge.md` should carry a `METADATA:SES
 Pinned `SWE-Gym/SWE-Gym-Lite` revision `f70b1a29ab120eb0a0ee7a1deb029825e735b2b0` has only a `train` split and patch-style rows (`problem_statement`, `patch`, tests), not `messages` trajectories.
 
 Pinned `nvidia/HelpSteer2` revision `990b2711a36180dd19d9c94b8627844866f8982a` default config has scalar response-rating rows (`prompt`, `response`, `helpfulness`, `coherence`, `correctness`, `complexity`, `verbosity`); adjacent same-prompt rows can be paired for GenRM comparison data.
+
+### Task067 Qwen M1 Agentic SFT scale-up planner
+
+For Qwen M1 Agentic SFT scale-up, keep packed data prep local when NemTron lacks `cosmos_xenna`, sync the packed artifacts to NemTron, derive `TRAIN_ITERS` from `training_manifest.json`, and `export TRAIN_ITERS` before starting tmux so the training child shell expands `train.train_iters` correctly.
