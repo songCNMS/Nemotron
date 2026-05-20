@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Notes
 
@@ -33,3 +33,4 @@
 - ifbench runtime fact: the harness also needs an `OPENAI_API_KEY` value for LangChain/OpenAI client initialization even when it calls the local NeMo adapter; `OPENAI_API_KEY=dummy` is sufficient with the current adapter path.
 - ifbench non-dry smoke fact: on `vm4vpn`, `ifbench.ifbench` with `limit_samples=1`, `max_new_tokens=2048`, endpoint tunnel, `setuptools<81`, and `OPENAI_API_KEY=dummy` completed with `stage.exit=0`, `successful_responses=1/1`, and all strict/loose count metrics at `0.0`.
 - GPQA access fact: `gpqa_diamond` in `simple-evals:26.03` loads `Idavidrein/gpqa`, which is gated on Hugging Face; the available injected HF token is non-empty but does not grant access in this environment, so GPQA fails before any model request.
+- GPQA token retry fact: the user-provided HF token was passed only as a transient env var; even with `HF_TOKEN`, `HUGGING_FACE_HUB_TOKEN`, `HUGGINGFACE_HUB_TOKEN`, and `HF_HUB_TOKEN` set, direct `load_dataset("Idavidrein/gpqa", "gpqa_diamond", split="train[:1]")` still fails with gated dataset access required.

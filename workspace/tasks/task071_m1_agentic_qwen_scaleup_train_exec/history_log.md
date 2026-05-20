@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 1
 
@@ -85,3 +85,11 @@
 - ifbench 成功完成：`stage.exit=0`，`successful_responses=1/1`，`avg_latency_ms=3124.77`，strict/loose prompt-level 与 instruction-level 均为 `0.0`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval/evaluations/20260520_173914-319a71866969dc8a/ifbench.ifbench.0/artifacts`。
 - 尝试 `gpqa_diamond` 1-sample smoke，复用 AIME dry-run 注入的非空 `HF_TOKEN` 后仍失败于 `Dataset 'Idavidrein/gpqa' is a gated dataset on the Hub. You must be authenticated to access it.`，未打到模型 endpoint。
 - 本轮结束时清理 eval 容器；`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 16G 可用。
+
+## Session 9
+
+- 用户提供新的 HF token 后，按要求重跑 `gpqa_diamond` 1-sample non-dry smoke。
+- 重新建立 `vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` tunnel，并确认 NemTron SGLang endpoint 返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`、`max_model_len=4096`。
+- 使用新 token 作为临时环境变量运行 `simple-evals:26.03` 的 `gpqa_diamond`；eval 仍在 `load_dataset("Idavidrein/gpqa", "gpqa_diamond")` 阶段失败，错误为 gated dataset 需在 HF dataset 页面申请 access，`total_responses=0`。
+- 追加最小 dataset probe：在同一容器中同时设置 `HF_TOKEN`、`HUGGING_FACE_HUB_TOKEN`、`HUGGINGFACE_HUB_TOKEN`、`HF_HUB_TOKEN`，直接加载 `Idavidrein/gpqa` 仍返回 gated dataset access failure。
+- 本轮未产生 GPQA benchmark metrics；临时 SSH tunnel 已清理，`vm4vpn` 上仅保留原有 `chromium` 容器。

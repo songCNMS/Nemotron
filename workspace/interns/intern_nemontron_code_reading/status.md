@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 8 |
+| Session | 9 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Extended vpn deployment.type=none eval smoke: ifbench completed with stage exit 0 and 1/1 successful endpoint response; gpqa_diamond is blocked by gated HF dataset access. |
+| Latest | Reran gpqa_diamond with the user-provided HF token; direct dataset probe and eval both still fail on gated Idavidrein/gpqa access before any model request. |
