@@ -2,9 +2,11 @@
 
 Last updated: 2026-05-19 (roadmap refinement pass — task013 Session 2
 split into 2a/2b; task017 Session 2 OpenHands wrapper deferral lifted
-to task067; task018 Session 2 tool-call pairing deferral lifted to
-task068; task021 Session 7 W&B publish lifted to task069; task040 W1
-difficulty curriculum sampler scaffolded.)
+to **task070** [renamed from task067 after ID collision with
+`task067_m1_agentic_qwen_scaleup` landed on main concurrently];
+task018 Session 2 tool-call pairing deferral lifted to task068;
+task021 Session 7 W&B publish lifted to task069; task040 W1 difficulty
+curriculum sampler scaffolded.)
 
 Companion to `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md`
 (the plan) and `src/nemotron/recipes/super3/milestones/m1_agentic_sft/REVIEW_v0.md`
@@ -26,7 +28,7 @@ and rollout-policy guard rail are landed and tested (sandbox baseline
 **Cluster-bound M1 work remaining**: see §5 "Cluster work queue" —
 real launches (Ray + vLLM + NeMo-Gym), HF downloads at full scale,
 GenRM judge service deployment, end-to-end RLHF smoke, W&B artifact
-publishing (task069), OpenHands library integration (task067),
+publishing (task069), OpenHands library integration (task070),
 RLHF tool-call pairing harness (task068), task013 Session 2b cluster
 verify.
 
@@ -660,7 +662,7 @@ and cluster-bound work is queued waiting for NemTron access.
 | **task040** | 1 | W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample` | ✓ |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
-| **task067** | 1 | OpenHands loop wrapper protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry | ✓ |
+| **task070** | 1 | OpenHands loop wrapper protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry | ✓ |
 | **task068** | 1 | RLHF tool-call pairing harness — design doc + reference paired-row shape | ✓ |
 | **task069** | 1 | W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI) | ✓ |
 
@@ -678,7 +680,7 @@ and cluster-bound work is queued waiting for NemTron access.
 | task020 | 3 | NeMo Evaluator cluster run on full 19-benchmark basket |
 | task021 | 4 | NeMo-RL / Ray / vLLM / NeMo-Gym launch path on real cluster |
 | task056 | 2 (cluster) | Lean verifier runtime container build |
-| task067 | 2-3 | Real OpenHands library install + SIF integration + cluster smoke |
+| task070 | 2-3 | Real OpenHands library install + SIF integration + cluster smoke |
 | task069 | 2-3 | Real W&B credentials + end-to-end pipeline run |
 
 ### M2/M3 task scaffolds (not yet created)
