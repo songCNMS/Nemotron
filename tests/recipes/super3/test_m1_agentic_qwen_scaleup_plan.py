@@ -77,6 +77,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert 'Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup' in remote_script
     assert "dataset.packed_sequence_specs.packed_sequence_size=512" in remote_script
     assert "CUDA_VISIBLE_DEVICES=0,1" in remote_script
+    assert "train.global_batch_size=2" in remote_script
 
     assert "super3 eval -c m1_full_basket --dry-run" in eval_script
     assert "deployment.checkpoint_path=" in eval_script
