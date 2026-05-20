@@ -5,7 +5,8 @@
 <!-- SESSION 2 LANDED: PR #118 / 3ca0b32 on 2026-05-20 (long_context_qa_smoke env via THUDM/LongAlpaca-12k; 17 tests) -->
 <!-- SESSION 3 LANDED: PR #120 / 8e1e7fe on 2026-05-20 (sql_text_to_query env via BIRD-SQL; 29 tests) -->
 <!-- SESSION 4 LANDED: PR #122 / 7730b8f on 2026-05-20 (terminal-tier2 via intercode-nl2bash; reuses existing env; quote normalization enhancement; 26 tests) -->
-<!-- SESSION 5 LANDED: PR pending on 2026-05-20 (safety_reasoning_smoke env via Nemotron-Content-Safety-Reasoning; 37 tests) -->
+<!-- SESSION 5 LANDED: PR #124 / 5c2c695 on 2026-05-20 (safety_reasoning_smoke env via Nemotron-Content-Safety-Reasoning; 37 tests) -->
+<!-- SESSION 6 LANDED: PR pending on 2026-05-20 (math_with_tools env via MathLLMs/MathCodeInstruct; 45 tests; data_registry row deferred for SHA pin + NuminaMath dedup index) -->
 
 ## 背景
 
@@ -31,7 +32,7 @@ adapt。
 | 3 | `sql_text_to_query` | `birdsql/bird_mini_dev` + `bird-bench/bird` | ✓ Done (this PR) |
 | 4 | `terminal_basic_shell` (tier-2 extension) | `epinnock/intercode-nl2bash-curated` | ✓ Done (this PR) |
 | 5 | `safety_reasoning_smoke` | `nvidia/Nemotron-Content-Safety-Reasoning-Dataset` | ✓ Done (this PR; data_registry row deferred for schema verification) |
-| 6 | `math_with_tools` | `MathLLMs/MathCodeInstruct` | Todo (NuminaMath dedup) |
+| 6 | `math_with_tools` | `MathLLMs/MathCodeInstruct` | ✓ Done (this PR; data_registry row deferred for SHA pin + NuminaMath dedup index) |
 
 ## 目标 (整 task)
 
