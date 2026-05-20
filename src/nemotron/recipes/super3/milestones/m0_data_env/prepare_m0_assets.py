@@ -60,6 +60,15 @@ TOOL_CALL_RE = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 # parser is a task057 follow-up.
 BOXED_ANSWER_RE = re.compile(r"\\boxed\{([^{}]*)\}")
 
+# Matches both fenced markdown code blocks (```python ... ```) and the
+# `<python>...</python>` tag form that MathCodeInstruct uses. Used by
+# `transform_mathcode_instruct` (task057 Session 6) to detect whether
+# the gold solution actually has a tool-use step.
+PYTHON_CODE_BLOCK_RE = re.compile(
+    r"```python\s*\n.*?```|<python>.*?</python>",
+    re.DOTALL | re.IGNORECASE,
+)
+
 SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
     "search_multihop_qa": (
@@ -114,6 +123,12 @@ SYSTEM_PROMPTS = {
         "decide whether to ALLOW or BLOCK the response. State your "
         "verdict clearly (one of ALLOW / BLOCK / ESCALATE), then "
         "briefly explain the reasoning."
+    ),
+    "math_with_tools": (
+        "You are a careful math-reasoning assistant with access to a "
+        "Python interpreter. When a calculation benefits from code, "
+        "show it inside ```python ... ``` (or <python>...</python>) "
+        "and incorporate the result. Put the final answer in \\boxed{}."
     ),
     "tool_call_repair_negative": (
         "You repair malformed or hallucinated tool-use attempts using the provided schema."
@@ -1575,6 +1590,112 @@ def transform_nemotron_safety_reasoning(
     )
 
 
+def count_python_code_blocks(text: Any) -> int:
+    """Return the number of Python code blocks (fenced or `<python>`-tagged)
+    found in *text*. Used by `transform_mathcode_instruct` (task057
+    Session 6) to attest the gold solution actually contains a tool-use
+    step; the M0 health gate later asserts the same on candidate output.
+    """
+    if text is None:
+        return 0
+    return len(PYTHON_CODE_BLOCK_RE.findall(str(text)))
+
+
+def is_numinamath_source_id(source_id: str, numinamath_index: Iterable[str]) -> bool:
+    """Return True iff *source_id* appears in *numinamath_index*.
+
+    task057 Session 6 NuminaMath dedup hook: MathCodeInstruct shares
+    several seed problems with NuminaMath; per task README the policy is
+    "重的全部移到 math_with_tools (因为它的代码块更有信息)" — i.e. drop
+    NuminaMath rows whose source_id is present in MathCodeInstruct.
+
+    Index construction is Session 6.5 territory (needs the actual SHA-
+    pinned NuminaMath snapshot to enumerate source_ids); this helper is
+    the pure-function building block that the future bridge will call.
+    """
+    if not source_id:
+        return False
+    return source_id in set(numinamath_index)
+
+
+def transform_mathcode_instruct(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one MathLLMs/MathCodeInstruct row to the M0 math_with_tools contract.
+
+    Layout per row (alias-tolerant — upstream snapshots vary by minor
+    revision):
+      - **problem** column: ``problem`` / ``question`` / ``instruction`` / ``input``
+      - **solution** column: ``solution`` / ``response`` / ``output`` / ``answer``
+
+    Solutions are CoT with embedded Python code (``<python>...</python>``
+    or ` ```python ... ``` `) culminating in a ``\\boxed{...}`` answer.
+    We preserve the full solution text in ``extra_env_info.reference_solution``
+    so SFT supervision keeps the tool-use trace verbatim, and surface
+    ``has_code_block`` / ``code_block_count`` for the health gate to
+    verify rows actually carry a code-block.
+
+    M0 verifier is ``math_with_tools_match`` — extracts the candidate's
+    last ``\\boxed{...}`` and compares against gold after normalization.
+    Real Python-execution + math-judge scoring is M1 task011 territory;
+    the "_match" suffix signals this is the oracle stub.
+    """
+    problem = (
+        row.get("problem")
+        or row.get("question")
+        or row.get("instruction")
+        or row.get("input")
+    )
+    if not isinstance(problem, str) or not problem.strip():
+        raise ValueError(
+            "MathCodeInstruct row missing problem "
+            "(checked problem / question / instruction / input)"
+        )
+    problem = problem.strip()
+
+    solution_raw = (
+        row.get("solution")
+        or row.get("response")
+        or row.get("output")
+        or row.get("answer")
+    )
+    if not isinstance(solution_raw, str) or not solution_raw.strip():
+        raise ValueError(
+            "MathCodeInstruct row missing solution "
+            "(checked solution / response / output / answer)"
+        )
+    solution = solution_raw.strip()
+
+    boxed = extract_boxed_answer(solution)
+    if not boxed:
+        raise ValueError(
+            "MathCodeInstruct row missing \\boxed{...} final answer in solution"
+        )
+
+    code_block_count = count_python_code_blocks(solution)
+    has_code_block = code_block_count > 0
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem,
+        expected_answer=boxed,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": problem},
+        ],
+        reward_config={
+            "verifier": "math_with_tools_match",
+            "max_score": 1.0,
+            "normalization": ["lowercase", "strip_punctuation", "collapse_whitespace"],
+        },
+        extra_env_info={
+            "reference_solution": solution,
+            "has_code_block": has_code_block,
+            "code_block_count": code_block_count,
+            "boxed_answer": boxed,
+        },
+    )
+
+
 def _extract_safety_prompt(row: Mapping[str, Any]) -> str:
     """Pull the user prompt out of a Safety row.
 
@@ -2156,6 +2277,7 @@ CONVERTERS = {
     "bird_sql": transform_bird_sql,
     "intercode_nl2bash": transform_intercode_nl2bash,
     "nemotron_safety_reasoning": transform_nemotron_safety_reasoning,
+    "mathcode_instruct": transform_mathcode_instruct,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,

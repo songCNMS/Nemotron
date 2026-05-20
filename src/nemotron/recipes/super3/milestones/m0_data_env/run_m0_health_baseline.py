@@ -481,6 +481,37 @@ def score_record(
             "normalized_sql": normalize_sql(candidate),
             "sql_match": bool(score == 1.0),
         }
+    elif verifier == "math_with_tools_match":
+        # task057 Session 6 — math_with_tools env (MathCodeInstruct
+        # source). M0 oracle stub: extract the candidate's LAST
+        # `\boxed{...}` block, normalize (lowercase + whitespace-
+        # collapsed + strip_punctuation per `score_text`), and contains-
+        # match against the gold boxed answer. If no `\boxed{...}` is
+        # present in the candidate, fall back to whole-candidate
+        # contains-match (so oracle still passes for trailing-token
+        # solutions that drop the box). Real Python-execution + math-
+        # judge scoring is M1 task011 territory; the "_match" suffix
+        # signals this M0 stub intent.
+        from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
+            count_python_code_blocks,
+            extract_boxed_answer,
+        )
+        candidate_str = str(candidate or "")
+        candidate_boxed = extract_boxed_answer(candidate_str)
+        if candidate_boxed:
+            score = score_text(candidate_boxed, expected)
+            boxed_answer_extracted = True
+        else:
+            score = score_text(candidate_str, expected)
+            boxed_answer_extracted = False
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(
+                candidate_boxed if candidate_boxed else candidate_str
+            ),
+            "boxed_answer_extracted": boxed_answer_extracted,
+            "has_code_block_in_candidate": count_python_code_blocks(candidate_str) > 0,
+            "malformed_final_answer": not boxed_answer_extracted,
+        }
     elif verifier == "safety_judge_stub":
         # task057 Session 5 — safety_reasoning_smoke env. M0 oracle
         # baseline uses case-insensitive contains-match on the

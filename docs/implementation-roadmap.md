@@ -17,13 +17,16 @@ proposed task ordering to close the gaps.
 Legend: ✓ implemented · ◐ partial · ✗ not started · 📋 tracked under an existing
 workspace task.
 
-## Current state snapshot (2026-05-19)
+## Current state snapshot (2026-05-20)
 
 **Sandbox-runnable M1 layer**: complete across task013-021 + task030
 (see §5). All M0 → M1 bridges, data converters, schema layer, audits,
 eval basket data+gate+gap-analysis, sandbox container scaffolding,
-and rollout-policy guard rail are landed and tested (sandbox baseline
-494 passed + 7 skipped).
+and rollout-policy guard rail are landed and tested. task057 tier-2
+M0 expansion sessions 1-6 all landed (sandbox baseline 829 passed
++ 7 skipped); remaining task057 work is per-env data_registry row
+additions (Sessions 1.5/2.5/3.5/4.5/5.5/6.5) which need HF SHA pins
+and are cluster-bound.
 
 **Cluster-bound M1 work remaining**: see §5 "Cluster work queue" —
 real launches (Ray + vLLM + NeMo-Gym), HF downloads at full scale,
@@ -671,8 +674,9 @@ and cluster-bound work is queued waiting for NemTron access.
 | ~~**task057**~~ | ~~3~~ | ~~M0 tier2 — `sql_text_to_query` env via BIRD-SQL~~ — **landed 2026-05-20** (env + bird_sql converter + sql_execution_match verifier with SQL normalization; data_registry row deferred pending BIRD commit SHA pin + mini_dev contamination split) | ✓ done |
 | ~~**task057**~~ | ~~4~~ | ~~M0 tier2 — terminal_basic_shell tier-2 extension via intercode-nl2bash-curated~~ — **landed 2026-05-20** (new transform_intercode_nl2bash converter reusing existing env; 200-char smoke cap; double-to-single quote normalization in normalize_command_text; data_registry row deferred pending HF SHA pin) | ✓ done |
 | ~~**task057**~~ | ~~5~~ | ~~M0 tier2 — safety_reasoning_smoke env via Nemotron-Safety~~ — **landed 2026-05-20** (env + nemotron_safety_reasoning converter with permissive field aliases + safety_judge_stub verifier; data_registry row deferred pending schema verification per README warning + commit SHA) | ✓ done |
-| **task057** | 6 | M0 tier2 — `math_with_tools` env via `MathLLMs/MathCodeInstruct` | ✓ |
+| ~~**task057**~~ | ~~6~~ | ~~M0 tier2 — `math_with_tools` env via `MathLLMs/MathCodeInstruct`~~ — **landed 2026-05-20** (env + transform_mathcode_instruct converter preserving code blocks + math_with_tools_match verifier with `\boxed{}` extraction + is_numinamath_source_id dedup helper; data_registry row deferred pending SHA pin + NuminaMath source_id index for cross-dataset dedup) | ✓ done |
 | **task057** | 1.5 | M0 tier2 — pin Aya commit SHA + add `m0_multilingual_aya` row to data_registry | partial (needs HF access) |
+| **task057** | 6.5 | M0 tier2 — pin MathCodeInstruct commit SHA + build NuminaMath source_id index + add `m0_math_with_tools` row to data_registry (dedup heavy rows) | partial (needs HF access) |
 | **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | ~~**task068**~~ | ~~1~~ | ~~RLHF tool-call pairing harness — design doc + reference paired-row shape~~ — **landed 2026-05-19** (`task068_design.md`: keyword+template relevance filter / function-name gold-call match / K=1 sampling / decontam vs BFCL+TauBench+MCP-Mark+HelpSteer1; expected corpus 7K → ~1,200 paired rows after 83% drop) | ✓ done |
 | ~~**task068**~~ | ~~2~~ | ~~RLHF tool-call pairing harness — implement `transform_rlhf_toolcall_pairing` converter per Session 1 design~~ — **landed 2026-05-19** | ✓ done |

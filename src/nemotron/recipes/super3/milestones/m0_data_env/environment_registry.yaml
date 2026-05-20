@@ -563,6 +563,42 @@ environments:
         - responses_create_params.input
         - extra_env_info.reference_solution
 
+  - id: math_with_tools
+    family: reasoning
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: math_with_tools_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: |
+        M0 oracle stub — extracts the candidate's last `\boxed{...}` and
+        compares against gold after lowercase + whitespace-collapsed
+        normalization. Falls back to whole-candidate contains-match when
+        no `\boxed{...}` is present. Real Python-execution + math-judge
+        scoring is M1 task011 territory; the `_match` suffix signals
+        the M0 stub intent.
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 1500
+    telemetry:
+      - reward
+      - normalized_answer
+      - boxed_answer_extracted
+      - has_code_block_in_candidate
+      - latency_ms
+      - malformed_final_answer
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.reference_solution
+        - extra_env_info.has_code_block
+
   - id: math_formal_lean
     family: reasoning
     stage: M0 data_env_foundation
