@@ -416,7 +416,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--valid-ratio", type=float, default=0.02)
     parser.add_argument("--test-ratio", type=float, default=0.0)
     parser.add_argument("--epochs", type=float, default=1.0)
-    parser.add_argument("--global-batch-size", type=int, default=1)
+    parser.add_argument("--global-batch-size", type=int, default=2)
     parser.add_argument("--micro-batch-size", type=int, default=1)
     parser.add_argument("--save-interval", type=int, default=20)
     parser.add_argument("--remote-root", type=Path, default=DEFAULT_REMOTE_ROOT)

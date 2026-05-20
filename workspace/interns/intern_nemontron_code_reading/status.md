@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Idle |
 | Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/93 |
+| PR | https://github.com/songCNMS/Nemotron/pull/96 |
 | Session | 2 |
-| Branch | intern_nemontron_code_reading/task067_m1_agentic_qwen_scaleup |
-| Latest | PR #93 passed merge-prep validation for task067 Qwen M1 Agentic SFT scale-up planner; task status set Idle before merge. |
+| Branch | intern_nemontron_code_reading/task071_m1_agentic_qwen_scaleup_train_exec |
+| Latest | PR #96 merge-prep completed for task071 after Qwen scale-up training finished; proceeding to checkpoint export/register and full eval from main. |

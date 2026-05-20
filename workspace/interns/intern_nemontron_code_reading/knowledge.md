@@ -1,6 +1,6 @@
 # intern_nemontron_code_reading - personal knowledge base
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ---
 
@@ -57,3 +57,7 @@ Pinned `nvidia/HelpSteer2` revision `990b2711a36180dd19d9c94b8627844866f8982a` d
 ### Task067 Qwen M1 Agentic SFT scale-up planner
 
 For Qwen M1 Agentic SFT scale-up, keep packed data prep local when NemTron lacks `cosmos_xenna`, sync the packed artifacts to NemTron, derive `TRAIN_ITERS` from `training_manifest.json`, and `export TRAIN_ITERS` before starting tmux so the training child shell expands `train.train_iters` correctly.
+
+### Task071 Qwen M1 Agentic SFT formal run
+
+The first formal scale-up run used 11 M0 slices with train=100/val=25 per dataset, produced 944,050 packed tokens and 122 train iterations at global batch size 2, and completed on NemTron GPUs 0/1 with final validation loss `2.835580E-01` and PPL `1.327846E+00`; keep `global_batch_size=2` for `nproc_per_node=2` because the planner rejects 1.
