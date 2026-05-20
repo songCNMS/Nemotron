@@ -666,7 +666,9 @@ and cluster-bound work is queued waiting for NemTron access.
 | **task040** | 2 | Wire curriculum sampler into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in `--curriculum-policy` CLI flag | ✓ |
 | ~~**task070**~~ | ~~1~~ | ~~OpenHands wrapper Protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry~~ — **landed 2026-05-19** | ✓ done |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
-| **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
+| ~~**task057**~~ | ~~1~~ | ~~M0 tier2 — `multilingual_instruct` env + Aya converter + `multilingual_exact_or_contains` verifier (Unicode NFC + casefold, preserves CJK punctuation)~~ — **landed 2026-05-19**; data_registry row deferred to Session 1.5 pending Aya commit pin | ✓ done |
+| **task057** | 2 | M0 tier2 — `long_context_qa_smoke` env via `THUDM/LongAlpaca-12k` | ✓ |
+| **task057** | 1.5 | M0 tier2 — pin Aya commit SHA + add `m0_multilingual_aya` row to data_registry | partial (needs HF access) |
 | **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | **task068** | 1 | RLHF tool-call pairing harness — design doc + reference paired-row shape | ✓ |
 | ~~**task069**~~ | ~~1~~ | ~~W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI)~~ — **landed 2026-05-19** | ✓ done |

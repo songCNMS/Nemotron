@@ -1,55 +1,91 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task057_m0_tier2_expansion -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 82 |
+| Status | Working |
+| Current Task | task057_m0_tier2_expansion |
+| PR | pending push |
+| Session | 83 |
 
-刚做完：task069 Session 2 — `maybe_publish_lineage_from_manifest` helper
-+ wired into all 6 `prepare_*.py` bridges (PR #106 / ad61d20, merged
-2026-05-19).
+正在做：task057 Session 1 — M0 tier2 expansion 第一个 env
+(`multilingual_instruct` via `CohereLabs/aya_dataset`). 整 task 拆 6
+sessions (一 session 一 env)；这是 Session 1。
 
-- `lineage_publisher.py` 加 `_AUTO` sentinel + `_resolve_wandb_run` +
-  `maybe_publish_lineage_from_manifest` helper (failure-tolerant)
-- 6 个 bridges (M0 / M1 agentic SFT / RLVR / SWE1 / SWE2 / RLHF) main()
-  全 wired — sandbox no-op，cluster + active wandb.run → 真 publish
-- 15 个新 pytest case 含 critical safety: publisher crash 不 crash prep
-- Sandbox 测试基线 577 → 592 passed + 7 skipped
+## What's in this PR
 
-## task069 整 task 进展
+### 整 task scaffold 拆 sessions
 
-- Session 1 ✓ (PR #104) — publisher module + CLI + dry-run + test doubles
-- Session 2 ✓ (PR #106) — helper + 6 bridges wired
-- Session 3 ☐ — Cluster verify with real W&B credentials in a
-  multi-stage pipeline run
+`workspace/tasks/task057_m0_tier2_expansion/README.md` 加 sessions
+table — 6 envs (multilingual / long_context / sql / terminal / safety /
+math_with_tools) 各自 session。Session 1 落 `multilingual_instruct`
+作为 baseline pattern (源最干净，无 contamination overlap)；后续 5 个
+按这个 pattern adapt。
 
-## 本轮 sprint summary (PR #94 起算)
+### 新 M0 env `multilingual_instruct`
 
-| PR | 内容 | sandbox baseline |
-|---|---|---|
-| #94 | Roadmap refresh + 4 gap-task scaffolds | 502 → 502 |
-| #95 | task067 → task070 rename | 506 → 506 |
-| #97 | task013 Session 2a (two-stage SFT driver) | 506 → 520 |
-| #99 | task040 Session 1 (curriculum sampler) | 520 → 543 |
-| #101 | task070 Session 1 (OpenHands wrapper) | 543 → 559 |
-| #104 | task069 Session 1 (W&B publisher) | 559 → 577 |
-| #106 | task069 Session 2 (publisher wiring) | 577 → 592 |
+- `environment_registry.yaml` 加 env: family `multilingual` / verifier
+  `multilingual_exact_or_contains` / max_turns 1 / sandbox none /
+  required field `extra_env_info.language`
+- `prepare_m0_assets.SYSTEM_PROMPTS` 加 prompt
 
-共 86 new tests / 7 substantive PRs since roadmap refresh.
+### 新 converter `transform_aya_multilingual`
 
-## 下一候选 (sandbox-runnable per roadmap §5b)
+- 支持 `inputs/targets` (Aya 默认) + `instruction/response` (snapshot 别名)
+- Language-scope filter：`AYA_TARGET_LANGUAGES` (full names: German /
+  Spanish / French / Italian / Japanese / Chinese 含 zh-Hans/Hant) +
+  `AYA_TARGET_LANGUAGE_CODES` (ISO: de/es/fr/it/ja/zh +ariants)
+- 接受 `language` (full name) 或 `language_code` (ISO) 任一字段
+- Out-of-scope 语言 → ValueError (M0 smoke 6 lang only；65-lang full
+  set 留 M2 task027)
+- Output: `extra_env_info.language` + `extra_env_info.language_code`
 
-- task040 Session 2 — wire sampler into prepare_m0_assets.py /
-  prepare_m1_agentic_sft.py via `--curriculum-policy` CLI flag
-- task057 Session 1 — M0 tier2 expansion (lights up RLVR2/RLVR3 active)
-- task068 Session 1 — RLHF tool-call pairing harness design doc
+### 新 verifier `multilingual_exact_or_contains`
 
-Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
-task014 Session 2 cluster / task016 Session 3 / task017 Session 3 /
-task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
-task021 Session 4 / task069 Session 3 / task070 Sessions 2-3。
+- `normalize_multilingual_text` — Unicode NFC + `str.casefold()` (handles
+  German ß / Turkish İ / decomposed-vs-composed)
+- **DOES NOT strip punctuation** (CJK meaning depends on it)
+- **DOES NOT strip articles** (English-only assumption broken for
+  German "die" / "der")
+- `score_multilingual_text` — exact-or-contains over normalized text
+- `score_record` dispatch wired with `exact_match` + `contains_match` +
+  `normalized_answer` diagnostics
+
+### data_registry row 故意延后
+
+`m0_multilingual_aya` data_registry row deferred to Session 1.5 — adding
+the row requires pinning a real Aya commit SHA via HF API (`HfApi().dataset_info`)
+which needs network + HF access this PR doesn't have. Audit pre-commit
+hook would reject any unpinned/TBD revision (task065 ✓ closed that gap).
+
+Schema documented in YAML comment so the future PR adding the row
+just copies it. A locked-in test verifies the row is NOT in the
+registry yet — catches accidental re-add without real pin.
+
+### Tests (`test_aya_multilingual.py`, 28 cases)
+
+- Module surface 3: SYSTEM_PROMPTS / CONVERTERS / target language sets
+- Happy path 9: 6 languages × parametric + alternate aliases + only
+  `language_code`
+- Language scope 2: out-of-scope rejected / no signal rejected
+- Error surfaces 2: missing inputs / missing targets
+- normalize_multilingual_text 4: German ß casefold / NFC compose /
+  CJK punctuation preserved / English articles NOT stripped
+- score_multilingual_text 4: exact / contains / no match / empty expected
+- score_record dispatch 2: dispatches multilingual verifier / no-match
+  emits correct diagnostics
+- Registry integration 2: validate_registries clean / env_registry row
+  shape
+- Row deferral lock 1: data_registry does NOT yet contain m0_multilingual_aya
+
+Sandbox 测试基线 592 → **620 passed + 7 skipped** (28 new)。三个
+data-registry audit 全 clean。
+
+## task057 状态
+
+- Session 1 ✓ (this PR) — multilingual_instruct env + converter + verifier
+- Session 1.5 ☐ — pin Aya SHA + add data_registry row (needs HF access)
+- Sessions 2-6 ☐ — 其余 5 envs (long_context_qa_smoke / sql_text_to_query /
+  terminal_basic_shell tier-2 / safety_reasoning_smoke / math_with_tools)

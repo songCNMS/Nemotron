@@ -74,6 +74,38 @@ def normalize_text_answer(value: Any) -> str:
     return WHITESPACE_RE.sub(" ", text).strip()
 
 
+def normalize_multilingual_text(value: Any) -> str:
+    """Multilingual-aware text normalizer (task057 Session 1).
+
+    Differs from :func:`normalize_text_answer`:
+
+    - ``str.casefold()`` instead of ``.lower()`` so language-specific
+      case folding works (German ß → ss, Turkish dotless İ → i, etc.)
+    - Unicode NFC normalization so composed vs decomposed code points
+      compare equal (é written as one code point vs e + combining
+      accent)
+    - **Does NOT strip punctuation** — some languages (notably Chinese
+      / Japanese) rely on punctuation for meaning, and articles
+      ("the" / "a" / "an") are English-only
+    - Whitespace collapsed to single space, leading / trailing
+      stripped — same as the English path
+    """
+    import unicodedata
+    text = unicodedata.normalize("NFC", str(value)).casefold()
+    return WHITESPACE_RE.sub(" ", text).strip()
+
+
+def score_multilingual_text(candidate: Any, expected: Any) -> float:
+    """Exact-or-contains scoring on Unicode-normalised text."""
+    normalized_candidate = normalize_multilingual_text(candidate)
+    normalized_expected = normalize_multilingual_text(expected)
+    if not normalized_expected:
+        return 0.0
+    if normalized_candidate == normalized_expected:
+        return 1.0
+    return 1.0 if normalized_expected in normalized_candidate else 0.0
+
+
 def normalize_numeric_candidate(value: Any) -> str:
     text = normalize_numeric_answer(value)
     matches = NUMBER_RE.findall(text)
@@ -387,6 +419,22 @@ def score_record(
         score = score_text(candidate, expected)
         diagnostics = {
             "normalized_answer": normalize_text_answer(candidate),
+        }
+    elif verifier == "multilingual_exact_or_contains":
+        # task057 Session 1 — Aya / multilingual envs. Unicode-aware
+        # normalization (NFC + casefold; keeps punctuation since CJK
+        # depends on it).
+        score = score_multilingual_text(candidate, expected)
+        normalized_candidate = normalize_multilingual_text(candidate)
+        normalized_expected = normalize_multilingual_text(expected)
+        diagnostics = {
+            "normalized_answer": normalized_candidate,
+            "exact_match": bool(
+                normalized_expected and normalized_candidate == normalized_expected
+            ),
+            "contains_match": bool(
+                normalized_expected and normalized_expected in normalized_candidate
+            ),
         }
     elif verifier == "normalized_numeric_exact_match":
         normalized_candidate = normalize_numeric_candidate(candidate)

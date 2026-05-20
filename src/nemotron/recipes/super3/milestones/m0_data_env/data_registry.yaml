@@ -188,6 +188,29 @@ datasets:
       problem_statement: problem_statement
       patch: patch
 
+  # task057 Session 1: m0_multilingual_aya data row is intentionally
+  # NOT added in this session. The env (multilingual_instruct) is
+  # defined in environment_registry.yaml + the `aya_multilingual`
+  # converter is registered in prepare_m0_assets.py — both are
+  # exercised by tests using a synthetic spec. Adding the production
+  # data_registry row requires pinning a real Aya commit SHA, which
+  # needs HF access this PR doesn't have. Lift the data_registry row
+  # in task057 Session 1.5 once the revision is verified against the
+  # live HF source.
+  #
+  # When adding the row, the schema is:
+  #   id: m0_multilingual_aya
+  #   environment: multilingual_instruct
+  #   domain: multilingual
+  #   hf_dataset: CohereLabs/aya_dataset
+  #   hf_split: train; hf_val_split: test
+  #   hf_revision: <real SHA from `huggingface_hub.HfApi().dataset_info`>
+  #   license: apache-2.0
+  #   converter: aya_multilingual
+  #   reward_type: multilingual_exact_or_contains
+  #   contamination_against: [MMLU-ProX, WMT24++]
+  #   fields: id/inputs/targets/language/language_code
+
   - id: m0_helpsteer2_pref
     environment: helpsteer2_pref_compare
     domain: rlhf_preference
