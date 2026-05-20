@@ -1,13 +1,13 @@
 # intern_nemontron_code_reading - status
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task067_m1_agentic_qwen_scaleup -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemontron_code_reading |
-| Status | Idle |
-| Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/92 |
-| Session | 3 |
-| Branch | intern_nemontron_code_reading/task066_m1_agentic_qwen_flow |
-| Latest | task066 PR #92 merge requested; task marked Idle after NemTron Qwen3 4B 13/13 training validation and pre-merge completion update. |
+| Status | Working |
+| Current Task | task067_m1_agentic_qwen_scaleup |
+| PR |  |
+| Session | 1 |
+| Branch | intern_nemontron_code_reading/task067_m1_agentic_qwen_scaleup |
+| Latest | Implemented task067 Qwen M1 Agentic SFT scale-up planner with tests, eval dry-run validation, and refreshed smoke plan outputs. |
