@@ -671,7 +671,8 @@ and cluster-bound work is queued waiting for NemTron access.
 | **task057** | 1.5 | M0 tier2 — pin Aya commit SHA + add `m0_multilingual_aya` row to data_registry | partial (needs HF access) |
 | **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | ~~**task068**~~ | ~~1~~ | ~~RLHF tool-call pairing harness — design doc + reference paired-row shape~~ — **landed 2026-05-19** (`task068_design.md`: keyword+template relevance filter / function-name gold-call match / K=1 sampling / decontam vs BFCL+TauBench+MCP-Mark+HelpSteer1; expected corpus 7K → ~1,200 paired rows after 83% drop) | ✓ done |
-| **task068** | 2 | RLHF tool-call pairing harness — implement `transform_rlhf_toolcall_pairing` converter per Session 1 design | ✓ |
+| ~~**task068**~~ | ~~2~~ | ~~RLHF tool-call pairing harness — implement `transform_rlhf_toolcall_pairing` converter per Session 1 design~~ — **landed 2026-05-19** | ✓ done |
+| **task068** | 3 | Flip RLHF env registry's tool-call row to active; bridge picks it up; M0 prep generates the paired data | ✓ |
 | ~~**task069**~~ | ~~1~~ | ~~W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI)~~ — **landed 2026-05-19** | ✓ done |
 | ~~**task069**~~ | ~~2~~ | ~~Wire `lineage_publisher.publish()` into every `prepare_*.py` so each bridge auto-publishes after writing manifest.json~~ — **landed 2026-05-19** | ✓ done |
 
