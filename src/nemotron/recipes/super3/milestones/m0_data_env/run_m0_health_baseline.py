@@ -436,6 +436,18 @@ def score_record(
                 normalized_expected and normalized_expected in normalized_candidate
             ),
         }
+    elif verifier == "long_context_qa_stub":
+        # task057 Session 2 — long_context_qa_smoke env (LongAlpaca-12k
+        # source). M0 oracle baseline stub: delegates to the same
+        # contains-match logic as `normalized_exact_or_contains`. The
+        # "stub" suffix signals that a richer verifier (span-aware,
+        # judge-graded) is M2 task028 / task037 territory; today's
+        # M0 baseline just needs the oracle to pass through.
+        score = score_text(candidate, expected)
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(candidate),
+            "contains_match": bool(score == 1.0),
+        }
     elif verifier == "normalized_numeric_exact_match":
         normalized_candidate = normalize_numeric_candidate(candidate)
         score = score_numeric(candidate, expected)
