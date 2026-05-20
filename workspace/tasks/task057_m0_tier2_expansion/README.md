@@ -4,7 +4,8 @@
 <!-- SESSION 1 LANDED: PR #108 / d5d215c on 2026-05-19 (multilingual_instruct env via CohereLabs/aya_dataset) -->
 <!-- SESSION 2 LANDED: PR #118 / 3ca0b32 on 2026-05-20 (long_context_qa_smoke env via THUDM/LongAlpaca-12k; 17 tests) -->
 <!-- SESSION 3 LANDED: PR #120 / 8e1e7fe on 2026-05-20 (sql_text_to_query env via BIRD-SQL; 29 tests) -->
-<!-- SESSION 4 LANDED: PR pending on 2026-05-20 (terminal-tier2 via intercode-nl2bash; reuses existing env; quote normalization enhancement; 26 tests) -->
+<!-- SESSION 4 LANDED: PR #122 / 7730b8f on 2026-05-20 (terminal-tier2 via intercode-nl2bash; reuses existing env; quote normalization enhancement; 26 tests) -->
+<!-- SESSION 5 LANDED: PR pending on 2026-05-20 (safety_reasoning_smoke env via Nemotron-Content-Safety-Reasoning; 37 tests) -->
 
 ## 背景
 
@@ -29,7 +30,7 @@ adapt。
 | 2 | `long_context_qa_smoke` | `THUDM/LongAlpaca-12k` | ✓ Done (this PR) |
 | 3 | `sql_text_to_query` | `birdsql/bird_mini_dev` + `bird-bench/bird` | ✓ Done (this PR) |
 | 4 | `terminal_basic_shell` (tier-2 extension) | `epinnock/intercode-nl2bash-curated` | ✓ Done (this PR) |
-| 5 | `safety_reasoning_smoke` | `nvidia/Nemotron-Content-Safety-Reasoning-Dataset` | Todo (schema verification first) |
+| 5 | `safety_reasoning_smoke` | `nvidia/Nemotron-Content-Safety-Reasoning-Dataset` | ✓ Done (this PR; data_registry row deferred for schema verification) |
 | 6 | `math_with_tools` | `MathLLMs/MathCodeInstruct` | Todo (NuminaMath dedup) |
 
 ## 目标 (整 task)

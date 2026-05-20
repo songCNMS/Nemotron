@@ -178,6 +178,33 @@ environments:
         - expected_answer
         - extra_env_info.gold_tool_call
 
+  - id: safety_reasoning_smoke
+    family: safety
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: safety_judge_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: M0 oracle baseline uses case-insensitive contains-match on the canonical verdict (allow / block / escalate); real judge-model scoring is M2 task029 territory
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 15
+      max_turns: 1
+      expected_runtime_ms: 1000
+    telemetry:
+      - reward
+      - verdict_match
+      - latency_ms
+      - malformed_verdict
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.verdict
+
   - id: sql_text_to_query
     family: structured_query
     stage: M0 data_env_foundation

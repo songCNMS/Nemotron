@@ -1,59 +1,87 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task057_m0_tier2_expansion -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 98 |
+| Status | Working |
+| Current Task | task057_m0_tier2_expansion |
+| PR | pending push |
+| Session | 99 |
 
-刚做完：task057 Session 4 — terminal-tier2 via intercode-nl2bash +
-quote normalization enhancement (PR #122 / 7730b8f, merged 2026-05-20).
+正在做：task057 Session 5 — `safety_reasoning_smoke` env via
+`nvidia/Nemotron-Content-Safety-Reasoning-Dataset`. Fifth of 6 tier-2
+M0 envs.
 
-- 新 converter `transform_intercode_nl2bash` extends existing
-  `terminal_basic_shell` env (no new env or verifier needed)
-- 200-char smoke cap; field aliases (nl/instruction/prompt + cmd/bash/
-  command/response); `source_dataset_kind` tier-1/tier-2 stratification
-- `normalize_command_text` 加 double → single quote canonicalization
-  (back-compat preserved)
-- 26 个新 pytest case; sandbox 测试基线 721 → 747 passed + 7 skipped
-- Data_registry row 故意延后 to Session 4.5 (HF SHA pin)
+## What's in this PR
 
-## task057 整 task 进展
+### 新 M0 env `safety_reasoning_smoke`
 
-- Session 1 ✓ (PR #108) — multilingual_instruct
-- Session 2 ✓ (PR #118) — long_context_qa_smoke
-- Session 3 ✓ (PR #120) — sql_text_to_query
-- Session 4 ✓ (PR #122) — terminal-tier2 (intercode-nl2bash)
-- Sessions 1.5/2.5/3.5/4.5 ☐ — HF SHA pins
-- Sessions 5-6 ☐ — safety_reasoning_smoke / math_with_tools
+- `environment_registry.yaml` 加 env: family `safety` / verifier
+  `safety_judge_stub` / max_turns 1 / sandbox none
+- Required field `extra_env_info.verdict` for telemetry
+- `SYSTEM_PROMPTS`: "content-safety analyst; verdict ALLOW/BLOCK/ESCALATE"
 
-## 本轮 sprint 累积 (PR #94 起算)
+### 新 converter `transform_nemotron_safety_reasoning`
 
-15 substantive PRs + 15 closeouts:
+Permissive field-alias support per README's warning that the dataset
+viewer has schema errors:
 
-| PR | 内容 | sandbox baseline |
-|---|---|---|
-| #94-#106 | (roadmap refresh + 7 substantive sessions) | 502 → 592 |
-| #108 | task057 Session 1 (multilingual) | 620 |
-| #110-#114 | task068 Sessions 1+2+3 | 662 |
-| #116 | task040 Session 2 (curriculum wiring) | 675 |
-| #118 | task057 Session 2 (long_context_qa_smoke) | 692 |
-| #120 | task057 Session 3 (sql_text_to_query) | 721 |
-| #122 | task057 Session 4 (terminal-tier2) | 747 |
+- **prompt** column: prompt / input / question / messages
+  (chat-style list — picks last user message)
+- **verdict** column: verdict / label / safety / classification / decision
+- **reasoning** column: reasoning / explanation / rationale
+- **category** column: category / risk_category / policy
 
-Sandbox baseline 502 → 747 passed (245 new tests across the sprint).
+Verdict canonicalization via `SAFETY_VERDICT_ALIASES` map:
+- allow / safe / pass / ok → "allow"
+- block / unsafe / refuse / reject / deny → "block"
+- escalate / review / maybe → "escalate"
 
-## 下一候选 (sandbox-runnable per roadmap §5b)
+Rows with missing/unrecognized verdict → ValueError (data-quality
+guard). Aliases are case-insensitive after `.strip().lower()`.
 
-task057 Sessions 5-6 (2 remaining tier-2 envs):
-- Session 5: safety_reasoning_smoke
-  (`nvidia/Nemotron-Content-Safety-Reasoning-Dataset`; needs schema
-  verification first per README — dataset viewer errors)
-- Session 6: math_with_tools (`MathLLMs/MathCodeInstruct`; needs
-  NuminaMath dedup)
+### 新 verifier `safety_judge_stub`
 
-Cluster-bound queue unchanged.
+- Wired into `score_record` dispatch
+- M0 oracle baseline: case-insensitive contains-match on the canonical
+  verdict in candidate output
+- "judge_stub" suffix signals that real judge-model scoring is M2
+  task029 (safety) territory
+- Diagnostics: `expected_verdict` + `verdict_match`
+
+### data_registry row 故意延后
+
+`m0_safety_reasoning_smoke` data_registry row deferred to Session 5.5.
+Two pin-blockers:
+1. Real Nemotron-Safety commit SHA via HF API
+2. **Schema verification** — README explicitly warns the upstream
+   dataset viewer reports schema errors; need to inspect real rows
+   before locking the row schema
+
+### Tests (`test_nemotron_safety_reasoning.py`, 37 cases)
+
+- Module surface 4: SYSTEM_PROMPTS / CONVERTERS / canonical verdict
+  set / common aliases
+- _canonicalize_safety_verdict 4: case-insensitive / strips whitespace /
+  None for empty / None for unrecognized
+- Happy path per verdict 5 (parametric × 3 + reasoning + category)
+- Optional-field handling 1
+- Alias resilience 13 (parametric: 3 prompt-keys + 5 verdict-keys +
+  3 reasoning-keys + messages-list format + 3 synonym verdicts)
+- Error surfaces 3: missing prompt / unrecognized verdict / missing verdict
+- safety_judge_stub verifier 4: dispatches / no-match / case-insensitive /
+  empty expected returns zero
+- Registry integration 3: validate_registries / env_registry shape /
+  data_registry row deferral lock
+
+Sandbox 测试基线 747 → **784 passed + 7 skipped** (37 new).
+
+## task057 状态
+
+- Sessions 1+2+3+4+5 ✓
+- Sessions 1.5/2.5/3.5/4.5/5.5 ☐ — HF SHA pins (5.5 also needs schema verification)
+- Session 6 ☐ — math_with_tools (`MathLLMs/MathCodeInstruct`)
+
+Roadmap §5b 更新.
