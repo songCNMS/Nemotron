@@ -351,6 +351,96 @@ def transform_bash_command(row: Mapping[str, Any], spec: Mapping[str, Any]) -> J
     )
 
 
+# M0 smoke cap on bash command length (task057 Session 4).
+# intercode-nl2bash includes some 500+ char commands that hurt eval
+# more than they teach the model. Cap matches the README's
+# documented limit; rows above the cap are dropped (not truncated —
+# truncation would change the shell semantics).
+INTERCODE_NL2BASH_MAX_CMD_CHARS: int = 200
+
+
+def transform_intercode_nl2bash(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one intercode-nl2bash-curated row to terminal_basic_shell shape.
+
+    Tier-2 source for the existing terminal_basic_shell env (task057
+    Session 4). intercode-nl2bash rows ship instruction + gold bash
+    command pairs; row schema varies by snapshot:
+
+    - ``nl`` / ``instruction`` / ``prompt``: natural-language task
+    - ``cmd`` / ``bash`` / ``command`` / ``response``: gold shell command
+
+    Compared to tier-1 ``transform_bash_command``, this converter:
+    1. Accepts the intercode-native ``nl`` + ``cmd`` aliases
+    2. Caps command length at ``INTERCODE_NL2BASH_MAX_CMD_CHARS`` (rows
+       above the cap are rejected — README's documented limit; the
+       intercode corpus has long-tail nightmare commands not useful
+       for M0 smoke)
+    3. Tags the converter origin in ``extra_env_info.source_dataset_kind``
+       so downstream stratification can split tier-1 vs tier-2 data
+
+    Output uses the same env (terminal_basic_shell) + verifier
+    (command_substring_match) as tier-1; no new env or verifier
+    needed.
+    """
+    question = str(
+        row.get("nl")
+        or row.get("instruction")
+        or row.get("prompt")
+        or ""
+    ).strip()
+    if not question:
+        raise ValueError(
+            "intercode-nl2bash row missing instruction "
+            "(checked nl / instruction / prompt)"
+        )
+    command = str(
+        row.get("cmd")
+        or row.get("bash")
+        or row.get("command")
+        or row.get("response")
+        or ""
+    ).strip()
+    if not command:
+        raise ValueError(
+            "intercode-nl2bash row missing gold command "
+            "(checked cmd / bash / command / response)"
+        )
+    if len(command) > INTERCODE_NL2BASH_MAX_CMD_CHARS:
+        raise ValueError(
+            f"intercode-nl2bash row gold command exceeds M0 smoke cap "
+            f"({len(command)} > {INTERCODE_NL2BASH_MAX_CMD_CHARS} chars); "
+            "drop the nightmare row rather than truncate (shell semantics "
+            "change under truncation)"
+        )
+
+    user_content = (
+        "Write one shell command for the terminal task below. "
+        "Return only the command, without prose or Markdown.\n\n"
+        f"Task:\n{question}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=command,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "command_substring_match",
+            "max_score": 1.0,
+            "match": ["normalized_command"],
+        },
+        extra_env_info={
+            "expected_command": command,
+            "source_prompt": question,
+            "source_dataset_kind": "intercode_nl2bash_tier2",
+            "cmd_length_chars": len(command),
+        },
+    )
+
+
 def transform_swe_bench_patch(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     problem_statement = str(row.get("problem_statement") or "").strip()
     patch = str(row.get("patch") or "").strip()
@@ -1917,6 +2007,7 @@ CONVERTERS = {
     "aya_multilingual": transform_aya_multilingual,
     "longalpaca_qa": transform_longalpaca_qa,
     "bird_sql": transform_bird_sql,
+    "intercode_nl2bash": transform_intercode_nl2bash,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,

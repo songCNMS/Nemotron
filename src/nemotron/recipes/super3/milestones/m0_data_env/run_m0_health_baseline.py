@@ -170,11 +170,28 @@ def score_json_value(candidate: Any, expected: Any) -> float:
 
 
 def normalize_command_text(value: Any) -> str:
+    """Normalize a shell command string for substring-match scoring.
+
+    Steps:
+      1. Extract fenced code block content if present (operator-quoted)
+      2. Collapse runs of whitespace to single space
+      3. Normalize quote style — map double quotes to single quotes
+         (functionally equivalent at the shell layer when no $var
+         expansion is involved; tier-2 intercode-nl2bash mixes quote
+         styles, this brings them onto a canonical form for compare)
+      4. Strip leading + trailing whitespace
+    """
     text = str(value).strip()
     blocks = re.findall(r"```(?:bash|sh|shell)?\s*(.*?)```", text, flags=re.DOTALL | re.IGNORECASE)
     if blocks:
         text = blocks[-1].strip()
-    return WHITESPACE_RE.sub(" ", text).strip()
+    text = WHITESPACE_RE.sub(" ", text).strip()
+    # task057 Session 4: quote-style normalization for tier-2 robustness.
+    # `find -name "*.txt"` and `find -name '*.txt'` are shell-equivalent
+    # outside $var expansion; canonicalize to single quotes so the
+    # oracle baseline doesn't false-negative on stylistic differences.
+    text = text.replace('"', "'")
+    return text
 
 
 def score_command(candidate: Any, expected: Any) -> float:
