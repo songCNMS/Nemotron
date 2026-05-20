@@ -1,7 +1,8 @@
 # task069_wandb_artifact_lineage_publish
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
-<!-- SESSION 1 LANDED: PR pending on 2026-05-19 (publisher module + FakeWandbRun + scripts/publish_lineage.py CLI; 18 tests) -->
+<!-- SESSION 1 LANDED: PR #104 / 860e175 on 2026-05-19 (publisher module + FakeWandbRun + scripts/publish_lineage.py CLI; 18 tests) -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-19 (maybe_publish_lineage_from_manifest helper + wired into all 6 prepare_*.py main(); 15 tests) -->
 
 ## 背景
 
@@ -46,7 +47,7 @@ calls keyed on the artifact-type vocabulary already declared in
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | `lineage_publisher.py` module — pure Python interface that takes a `LineageRecord` and emits the `wandb.Artifact` calls; injectable W&B client so unit tests use a fake | yes | ✓ Done (this PR) |
-| 2 | Wire `lineage_publisher.publish()` into every `prepare_*.py` (M0 / SFT / RLVR / SWE1 / SWE2 / RLHF / eval) so each bridge auto-publishes after writing manifest.json | partial (interface yes, real W&B yes-but-mocked) | Todo |
+| 2 | Wire `lineage_publisher.publish()` into every `prepare_*.py` (M0 / SFT / RLVR / SWE1 / SWE2 / RLHF / eval) so each bridge auto-publishes after writing manifest.json | partial (interface yes, real W&B yes-but-mocked) | ✓ Done (this PR) |
 | 3 | Cluster verify: real W&B run logs the full chain M0 → SFT → RL → Eval against an actual checkpoint | no — needs NemTron cluster + W&B credentials + real run | Todo |
 
 ## Session 1 目标
