@@ -1,4 +1,4 @@
-# task067_openhands_loop_wrapper
+# task070_openhands_loop_wrapper
 
 <!-- METADATA:STATUS=Todo,ASSIGNEE=unassigned -->
 
@@ -75,7 +75,7 @@ upstream OpenHands library, adding Nemotron-specific concerns:
 - [ ] Bounded rollout (max_turns + timeout)
 - [ ] Failure modes produce reward 0, not exception
 - [ ] ≥ 15 个 pytest case
-- [ ] Roadmap §1.5 task017 entry references task067 status
+- [ ] Roadmap §1.5 task017 entry references task070 status
 
 ## 依赖
 

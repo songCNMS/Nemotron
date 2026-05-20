@@ -39,7 +39,7 @@ gaps and 3 task READMEs that needed Session 2 split refinement.
 - **task040_w1_curriculum_sampler** — W1 difficulty curriculum sampler
   (was cited in roadmap §4 but never had a workspace dir; 4 sessions
   declared, Session 1 sandbox-runnable)
-- **task067_openhands_loop_wrapper** — lifted from task017 Session 2
+- **task070_openhands_loop_wrapper** — lifted from task017 Session 2
   OpenHands wrapper deferral (3 sessions, Session 1 sandbox-runnable
   with Protocol + FakeOpenHandsLoop stub)
 - **task068_rlhf_toolcall_pairing_harness** — lifted from task018
@@ -55,7 +55,8 @@ gaps and 3 task READMEs that needed Session 2 split refinement.
   chain) + 2b (cluster verify) so the sandbox-runnable part has a
   visible pick-point
 - **task017** README: OpenHands wrapper deferral now explicitly points
-  at task067 as the formal owner
+  at task070 as the formal owner (renamed from task067 after collision
+  with `task067_m1_agentic_qwen_scaleup` from intern_nemontron_code_reading)
 - **task018** README: tool-call pairing harness deferral now explicitly
   points at task068 as the formal owner
 - **task021** README: Session 7 W&B publish row added pointing at
