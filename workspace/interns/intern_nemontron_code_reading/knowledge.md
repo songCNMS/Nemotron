@@ -1,6 +1,6 @@
 # intern_nemontron_code_reading - personal knowledge base
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ---
 
@@ -37,3 +37,11 @@ Idle intern status metadata should keep an explicit empty task field: `METADATA:
 ### Task File Session Metadata
 
 Every task `history_log.md` and `task_knowledge.md` should carry a `METADATA:SESSION=<latest>` header near the top, matching the latest session recorded in that file.
+
+### Task065 HF Data Registry Review
+
+`revision_audit.is_pinned()` must reject human placeholders such as `TBD`; otherwise M0 production registry rows can pass CI but fail `datasets.load_dataset(..., revision="TBD")` at runtime.
+
+Pinned `SWE-Gym/SWE-Gym-Lite` revision `f70b1a29ab120eb0a0ee7a1deb029825e735b2b0` has only a `train` split and patch-style rows (`problem_statement`, `patch`, tests), not `messages` trajectories.
+
+Pinned `nvidia/HelpSteer2` revision `990b2711a36180dd19d9c94b8627844866f8982a` default config has scalar response-rating rows (`prompt`, `response`, `helpfulness`, `coherence`, `correctness`, `complexity`, `verbosity`); adjacent same-prompt rows can be paired for GenRM comparison data.

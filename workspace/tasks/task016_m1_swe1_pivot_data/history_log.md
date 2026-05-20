@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-18 - intern_nemontron_review_cc
 
@@ -48,4 +48,3 @@ registry + bridge + 13 个 pytest case 都进了 main。intern status 回 Idle
 converter) + Session 3 (cluster smoke launcher) 没启动。下一个 critical-
 path 候选 (roadmap §5)：task017 (M1 SWE2 sandbox runtime) 或 task013
 (two-stage SFT loss) 或 task018 (RLHF GenRM service)。
-

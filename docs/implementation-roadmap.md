@@ -132,19 +132,21 @@ seq_len=131K) exists. Missing the data + smoke entry:
   `prepare()` today raises a coverage-aware error listing the gaps; once
   Session 2 lands an active M0 SWE pivot env, no Python edits are needed
   — the bridge auto-picks up via the registry flip. 13 new pytest cases.
-- ⚠ Session 2 (sandbox part landed; HF download deferred): new M0 env
+- ⚠ Session 2 (sandbox part landed; small HF streaming smoke verified):
   `swe_pivot_tool_call` (verifier `argument_match`, max_turns=1) + new
   M0 data row `m0_swe_pivot_tool_call` pointing at
   `SWE-Gym/SWE-Gym-Lite` (apache-2.0, contamination_against [SWE-Bench
   Lite, SWE-Bench Verified]) + new converter
   `transform_swe_gym_lite_pivot` that extracts the first assistant
-  tool_call from a SWE-Gym trajectory and tags `pivot_type` as
-  `exploration` vs `action`. SWE1 registry's `m0_missing` row flipped
+  tool_call when trajectories exist, or synthesizes a `view_file` pivot
+  from patch-only public SWE-Gym-Lite rows. SWE1 registry's `m0_missing` row flipped
   to `active` — `SWE1_ENV_MAP` now maps `swe_pivot_tool_call →
   swe_pivot_single_step_tool_use_with_argument_comparison`. 20 new
   pytests + 2 existing today-tests flipped; sandbox baseline 421 →
-  441 passed. Real HF download + revision pin (`hf_revision: TBD` →
-  real commit) deferred to cluster pass.
+  441 passed. Review follow-up pinned `hf_revision` to
+  `f70b1a29ab120eb0a0ee7a1deb029825e735b2b0` and verified small real HF
+  prep with an additional real-schema fallback test; full-scale prep
+  remains a cluster task.
 - ☐ Session 3: Smoke launcher (1-node, 1 prompt/step). Block on cluster
   verify (parallel to task014 Session 2).
 - **Acceptance:** reward-shape verifier returns numeric reward on smoke
@@ -219,20 +221,21 @@ exists. Missing the judge service + preference data:
   reads `default.yaml` and asserts plan §5.6 KL trio
   (`reference_policy_kl_penalty == 1e-4`, `kl_type == "k3"`,
   `use_kl_in_reward == false`) — regression gate before any cluster run.
-- ⚠ Session 2 (sandbox part landed; tool-call pairing harness + HF
-  download deferred): new M0 env `helpsteer2_pref_compare` (verifier
+- ⚠ Session 2 (sandbox part landed; tool-call pairing harness deferred;
+  small HF streaming smoke verified): new M0 env `helpsteer2_pref_compare` (verifier
   `genrm_compare`) + new M0 data row `m0_helpsteer2_pref` pointing at
   `nvidia/HelpSteer2` (cc-by-4.0, contamination_against [MT-Bench,
   HelpSteer1]) + new converter `transform_helpsteer2_pref` handling
-  both HelpSteer-2 flavors (explicit `preference_label` and aggregate
-  `helpfulness`+`coherence`+`correctness` derivation, with tie
-  fallback and explicit-label precedence). RLHF pref-data
+  explicit/derived pair rows plus the public scalar-rating schema via
+  adjacent same-prompt pairing (`helpfulness`+`coherence`+`correctness`
+  derivation, with tie fallback and explicit-label precedence). RLHF pref-data
   registry's helpsteer2 row marked `m0_landed: true`. The env
   registry's `genrm_compare` row deliberately stays `blocked_external`
   — the GenRM judge service (Session 3 cluster ops) is the other
   blocker; row flips to `active` only when *both* blockers clear. 20
-  new pytests; sandbox baseline 474 → 494 passed. Tool-call validity
-  pairing harness deferred to a follow-up (cross-product strategy
+  20 new pytests; sandbox baseline 474 → 494 passed. Review follow-up pinned
+  `hf_revision` to `990b2711a36180dd19d9c94b8627844866f8982a` and verified
+  small real HF prep with an additional scalar-row pairing test. Tool-call validity pairing harness deferred to a follow-up (cross-product strategy
   needs design to avoid combinatorial blow-up).
 - ☐ Session 3: GenRM judge model deployment (cluster ops — separate
   inference service running `nvidia/Qwen3-Nemotron-235B-A22B-GenRM-2603`
@@ -552,8 +555,8 @@ Critical path to the M1 promotion gate, single-track execution:
    `swe1_env_registry.yaml`; SWE1 had no active M0 source — coverage-aware
    error path). Session 2 sandbox part landed (M0 SWE-Gym-Lite →
    `swe_pivot_tool_call` env + `transform_swe_gym_lite_pivot` converter
-   + SWE1 active row); `SWE1_ENV_MAP` now lights up. Real HF download +
-   revision pin still need cluster pass. Session 3 (cluster smoke) still
+   + SWE1 active row); `SWE1_ENV_MAP` now lights up. Revision is pinned
+   and small real HF prep is verified; full-scale prep + Session 3 (cluster smoke) still
    to go.
 7. **task017** — M1 SWE2 sandbox runtime. Session 1 landed (SIF image
    mapping registry + resolver with path-injection guard; SWE2 bridge

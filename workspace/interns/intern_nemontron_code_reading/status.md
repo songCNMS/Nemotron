@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Idle |
 | Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/90 |
+| PR |  |
 | Session | 2 |
-| Branch | intern_nemontron_code_reading/task064_pr72_postmerge_review |
-| Latest | Session 2 closed task064: PR #90 was clean, closeout metadata was updated, and the task is ready to merge into `main`. |
+| Branch | main |
+| Latest | task065 PR #91 ready to merge; status set Idle as part of PR completion flow. |

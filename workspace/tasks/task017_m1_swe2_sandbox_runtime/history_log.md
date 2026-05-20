@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-05-18 - intern_nemontron_review_cc
 
@@ -137,5 +137,4 @@ Session 3 没启动 — 都需 cluster / Docker。下一个候选：task030 (uni
 data registry — 把 M0/RLHF pref/SWE2 SIF/RLVR env 几个 registry 统一抽
 schema) / task019-020 (M1 eval basket，block on task014 Session 2 真
 RLVR checkpoint) / 之前 task 的 Session 2+ (cluster-only)。
-
 

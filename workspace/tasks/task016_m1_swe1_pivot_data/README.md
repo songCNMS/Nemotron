@@ -23,7 +23,7 @@ placeholder — M0 → SWE1 没接起来。
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | SWE1 bridge skeleton: 新模块 `m1_swe1/` + registry-driven `prepare_m1_swe1_jsonl.py`，今天 active=0 → coverage-aware error path | yes | ✓ Done (this PR) |
-| 2 | M0 SWE pivot 数据 converter (SWE-Gym-Lite / R2E-Gym → single-step tool-comparison shape) | partial (sandbox 验 converter 单元；真 HF download 要联网) | ✓ Done sandbox part (this PR); 真 HF download 走集群 |
+| 2 | M0 SWE pivot 数据 converter (SWE-Gym-Lite / R2E-Gym → single-step tool-comparison shape) | partial (sandbox 验 converter 单元；small HF streaming smoke 已跑通；全量扩量走集群) | ✓ Done sandbox part + review follow-up real-schema fix |
 | 3 | Cluster smoke launcher | no — 等 NemTron cluster | Todo |
 
 ## Session 1 目标
@@ -59,7 +59,7 @@ NeMo-Gym env**：
 
 ## 依赖
 
-- 不依赖 cluster / W&B / HF
+- 不依赖 cluster / W&B；small HF streaming smoke 已在 review follow-up 跑通
 - 依赖 task021 Session 2 落的 `SWE1_ARTIFACT` 常量
 - Session 2 依赖 SWE-Gym-Lite / R2E-Gym HF 下载 (license: apache-2.0 / 待确认)
 
@@ -74,17 +74,19 @@ NeMo-Gym env**：
    - `data_registry.yaml` 加 row 指 `SWE-Gym/SWE-Gym-Lite`
      (apache-2.0)，converter=`swe_gym_lite_pivot`
    - contamination_against [SWE-Bench Lite, SWE-Bench Verified]
-   - hf_revision="TBD" (cluster pass 会 pin)
+   - hf_revision=`f70b1a29ab120eb0a0ee7a1deb029825e735b2b0`
+   - SWE-Gym-Lite 只有 `train` split；val 在 smoke scale 从 train 顺序续取
 
 3. **新 converter** `transform_swe_gym_lite_pivot`:
-   - 抽取 trajectory 第一个 assistant 的第一个 tool call 当 ground truth
+   - 有 trajectory 时抽取第一个 assistant tool call；public patch-only row
+     则从 gold patch 第一个修改文件合成 `view_file` pivot
    - 输出 `expected_answer = {"name": ..., "arguments": <dict>}`
    - `responses_create_params.tools` = 固定 4 工具 schema
      (view_file / search / edit_file / run_tests)
    - `extra_env_info.pivot_type` ∈ {"exploration", "action"}：
      view/search/grep/ls/find_file 标 exploration，其他标 action
-   - 错误路径：missing problem_statement / messages / no tool_calls /
-     malformed JSON arguments → raise ValueError
+   - 错误路径：missing problem_statement / 无 messages 且无 patch fallback /
+     no tool_calls / malformed JSON arguments → raise ValueError
 
 4. **`swe1_env_registry.yaml` 翻面**：
    - `m0_missing` 那行改成 `m0_env_id: swe_pivot_tool_call, status: active`
@@ -95,7 +97,7 @@ NeMo-Gym env**：
    - `test_prepare_raises_coverage_aware_error_today` → 加 monkeypatch
      把 _REGISTRY 切换到 all-inactive 状态，证明 error path 仍 working
 
-6. **Tests** (`test_swe_gym_lite_pivot.py`, 20 cases):
+6. **Tests** (`test_swe_gym_lite_pivot.py`, 21 cases):
    - Module surface 4
    - Happy path 5: 提取首个 tool call / pivot_type 分类 / tool schema
      在 responses_create_params / repo+instance_id metadata
@@ -117,15 +119,13 @@ NeMo-Gym env**：
 - [x] SWE1_ENV_MAP = {"swe_pivot_tool_call": "swe_pivot_single_step_tool_use_with_argument_comparison"}
 - [x] validate_registries 在 live main 跑 clean
 - [x] 三个 audit (schema / revision-pins / contamination) 都 clean
-- [x] 20 个新 pytest case + 修 2 个 swe1 bridge today-tests
+- [x] 20 个原 PR pytest case + review follow-up 1 个 real-schema fallback case + 修 2 个 swe1 bridge today-tests
 - [x] sandbox 测试基线 421 → 441 passed + 7 skipped
 
 ## Session 2 不在本 PR (cluster part)
 
-- 真 HF download `SWE-Gym/SWE-Gym-Lite` 走 NemTron cluster
-- Revision pin (TBD → 真 commit hash)
-- M0 prep 真跑出 swe_pivot_tool_call train/val splits
-- SWE1 bridge 真跑出 RLVR jsonl 接 cluster `nemotron super3 rl swe1`
+- 全量 HF data prep 走 NemTron cluster 扩量
+- SWE1 bridge 真跑出 SWE1 jsonl 接 cluster `nemotron super3 rl swe1`
 
 ## Session 3 不在本 PR
 

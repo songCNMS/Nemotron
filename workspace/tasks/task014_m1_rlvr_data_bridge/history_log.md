@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-05-18 - intern_nemontron_review_cc
 
@@ -137,4 +137,3 @@ NeMo-Gym 服务起来) 仍走集群，本 PR 不碰。
 task014 整 task：Session 1 ✓ + Session 2 sandbox 部分 ✓ (this PR)。
 Cluster 真 launch 仍待 — 这是任何 task014/015/016/017/018 真 RL 跑都
 需要的，等接到 NemTron cluster。
-

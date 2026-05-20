@@ -27,7 +27,7 @@ acceptance 的硬指标，要有 pytest gate 防 regression。
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | RLHF bridge skeleton + pref-data candidate registry + KL invariant pytest | yes | ✓ Done (this PR) |
-| 2 | M0 HelpSteer-2 (or UltraFeedback) converter — chosen/rejected pairs + tool-call pairing | partial (converter 单测 yes，真 HF 下载受限) | ✓ Done sandbox part (this PR); tool-call pairing harness deferred; 真 HF download 走集群 |
+| 2 | M0 HelpSteer-2 (or UltraFeedback) converter — chosen/rejected pairs + public scalar-row pairing + tool-call pairing | partial (converter 单测 yes；small HF streaming smoke 已跑通；全量扩量走集群) | ✓ Done sandbox part + review follow-up real-schema fix; tool-call pairing harness deferred |
 | 3 | GenRM judge model 部署 (cluster ops — Qwen3-Nemotron-235B-A22B-GenRM-2603 起 inference 服务) | no — 需 cluster + GPUs | Todo |
 | 4 | 端到端 RLHF smoke run from SWE2 checkpoint，验 KL penalty + tool-call validity | no — 需 cluster + judge service + SWE2 checkpoint | Todo |
 
@@ -92,6 +92,7 @@ registry + plan-conformance pytest。
      verifier `genrm_compare` / max_turns 1 / sandbox none
    - `data_registry.yaml` 加 row 指 `nvidia/HelpSteer2` (cc-by-4.0,
      contamination_against [MT-Bench, HelpSteer1])
+   - hf_revision=`990b2711a36180dd19d9c94b8627844866f8982a`
    - `prepare_m0_assets.SYSTEM_PROMPTS` 加 prompt
 
 2. **新 converter** `transform_helpsteer2_pref`:
@@ -102,6 +103,8 @@ registry + plan-conformance pytest。
        rating attrs (`helpfulness_a/b`, `coherence_a/b`,
        `correctness_a/b`) → 聚合 (verbosity/complexity 故意不用) → label
    - Aliases 支持: `chosen`/`rejected` 当 `response_a`/`response_b`
+   - Public HelpSteer-2 scalar rows (`prompt`/`response`/rating attrs)
+     由 streaming adapter 先把相邻同 prompt rows 配成 A/B pair
    - **Explicit label 优先于 attribute-derived** (人工标注是 authoritative)
    - **One-sided missing attrs** → 有数据的一侧赢 (保 signal 不丢 row)
    - **Tie** → default "A" (stable ordering，operator 可通过
@@ -134,7 +137,7 @@ registry + plan-conformance pytest。
    harness 是独立工作 (需要先思考 cross-product 策略避免组合爆炸)，留到
    后续 session
 
-6. **Tests** (`test_helpsteer2_pref.py`, 20 cases):
+6. **Tests** (`test_helpsteer2_pref.py`, 21 cases):
    - Module surface 2: SYSTEM_PROMPTS / CONVERTERS
    - Explicit-pair 4: A label / B label / lowercase / chosen+rejected aliases
    - Attribute-derived 5: A wins / B wins / tied → A / explicit overrides
@@ -154,12 +157,11 @@ registry + plan-conformance pytest。
 - [x] RLHF pref_data registry 的 helpsteer2 row 现在带 `m0_landed: true`
 - [x] RLHF env registry 的 `genrm_compare` 仍 `blocked_external` (Session
   3 judge service is the other blocker)
-- [x] 20 个 pytest case；sandbox 测试基线 474 → 494 passed + 7 skipped
+- [x] 20 个原 PR pytest case + review follow-up 1 个 scalar-row pairing case；原 PR sandbox 测试基线 474 → 494 passed + 7 skipped
 
 ## Session 2+ 不在本 PR (cluster part + deferred bits)
 
-- 真 HF download `nvidia/HelpSteer2` 走 NemTron cluster
-- Revision pin (TBD → 真 commit hash)
+- 全量 HF data prep 走 NemTron cluster 扩量
 - Tool-call pairing harness (HelpSteer-2 × hermes tool-call cross-product)
   — 留到 follow-up
 - task018 Session 3：GenRM judge model server 部署 (cluster ops；

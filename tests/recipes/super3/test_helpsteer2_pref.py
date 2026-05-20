@@ -8,6 +8,8 @@ Covers:
   ``correctness`` per side).
 - Alternate column conventions: ``chosen``/``rejected`` as aliases for
   ``response_a``/``response_b``.
+- Public HelpSteer-2 scalar-rating rows are paired by adjacent prompt
+  before entering the pair converter.
 - Edge cases: tied scores fall back to "A"; one-sided missing attributes
   pick the side with data; explicit_label takes precedence over
   attribute-derived.
@@ -36,11 +38,11 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (  
     DATA_REGISTRY_PATH,
     ENV_REGISTRY_PATH,
     SYSTEM_PROMPTS,
+    iter_helpsteer2_preference_pairs,
     load_yaml,
     transform_helpsteer2_pref,
     validate_registries,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RLHF_ENV_REGISTRY_PATH = (
@@ -212,6 +214,43 @@ def test_transform_one_sided_missing_attributes_picks_present_side() -> None:
     assert record["expected_answer"] == "A"
 
 
+def test_iter_helpsteer2_preference_pairs_converts_public_scalar_rows() -> None:
+    """The pinned public HelpSteer-2 default config stores one response
+    and scalar ratings per row. Adjacent rows with the same prompt must
+    become one pair so prepare_m0_assets can emit GenRM comparison data."""
+    scalar_rows = [
+        {
+            "prompt": "c#",
+            "response": "C# is a programming language.",
+            "helpfulness": 3,
+            "coherence": 4,
+            "correctness": 4,
+            "complexity": 2,
+            "verbosity": 1,
+        },
+        {
+            "prompt": "c#",
+            "response": "C# is a modern object-oriented programming language.",
+            "helpfulness": 4,
+            "coherence": 4,
+            "correctness": 4,
+            "complexity": 2,
+            "verbosity": 3,
+        },
+    ]
+
+    pairs = list(iter_helpsteer2_preference_pairs(scalar_rows))
+    assert len(pairs) == 1
+    assert pairs[0]["response_a"].startswith("C# is a programming")
+    assert pairs[0]["response_b"].startswith("C# is a modern")
+    assert pairs[0]["helpfulness_a"] == 3
+    assert pairs[0]["helpfulness_b"] == 4
+
+    record = transform_helpsteer2_pref(pairs[0], _spec("m0_helpsteer2_pref"))
+    assert record["expected_answer"] == "B"
+    assert record["extra_env_info"]["label_derivation"] == "aggregate_score"
+
+
 # ---------- Error surfaces ----------
 
 
@@ -265,6 +304,8 @@ def test_data_registry_carries_new_m0_helpsteer2_pref_row() -> None:
     assert row["environment"] == "helpsteer2_pref_compare"
     assert row["converter"] == "helpsteer2_pref_pair"
     assert row["hf_dataset"] == "nvidia/HelpSteer2"
+    assert row["hf_revision"] == "990b2711a36180dd19d9c94b8627844866f8982a"
+    assert row["fields"]["response"] == "response"
     assert row["license"] == "cc-by-4.0"
     assert row["reward_type"] == "genrm_compare"
     assert "MT-Bench" in row["contamination_against"]

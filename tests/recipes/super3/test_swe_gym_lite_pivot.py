@@ -13,6 +13,8 @@ Covers:
   to a real dict on the output side.
 - Error surfaces: missing problem_statement / missing messages / no
   tool calls in trajectory / malformed JSON arguments.
+- Patch-only public SWE-Gym-Lite rows synthesize a read-only first
+  pivot from the first modified file in the gold patch.
 - Registry integration: ``m0_swe_pivot_tool_call`` row + new
   ``swe_pivot_tool_call`` env row both validate; converter is wired
   into ``CONVERTERS``.
@@ -181,6 +183,33 @@ def test_transform_carries_repo_and_instance_id_into_extra_env_info() -> None:
     assert record["extra_env_info"]["instance_id"] == "myrepo__issue-1"
 
 
+def test_transform_synthesizes_view_file_pivot_from_patch_only_swegym_lite_row() -> None:
+    """The pinned public SWE-Gym-Lite snapshot is patch-only (no
+    ``messages`` trajectory). Data prep must still emit a usable SWE1
+    pivot row instead of erroring every source row."""
+    row = {
+        "instance_id": "owner__repo-42",
+        "repo": "owner/repo",
+        "problem_statement": "Fix the parser.",
+        "patch": (
+            "diff --git a/src/parser.py b/src/parser.py\n"
+            "--- a/src/parser.py\n"
+            "+++ b/src/parser.py\n"
+            "@@ -1 +1 @@\n"
+            "-old\n"
+            "+new\n"
+        ),
+    }
+    record = transform_swe_gym_lite_pivot(row, _spec("m0_swe_pivot_tool_call"))
+
+    assert record["expected_answer"] == {
+        "name": "view_file",
+        "arguments": {"path": "src/parser.py"},
+    }
+    assert record["extra_env_info"]["pivot_type"] == "exploration"
+    assert record["extra_env_info"]["pivot_source"] == "synthetic_from_gold_patch"
+
+
 # ---------- First-tool-call selection ----------
 
 
@@ -300,7 +329,7 @@ def test_transform_raises_when_problem_statement_missing() -> None:
 
 def test_transform_raises_when_messages_field_missing() -> None:
     row = {"instance_id": "x", "repo": "r", "problem_statement": "fix"}
-    with pytest.raises(ValueError, match="messages trajectory"):
+    with pytest.raises(ValueError, match="messages trajectory and patch fallback"):
         transform_swe_gym_lite_pivot(row, _spec("m0_swe_pivot_tool_call"))
 
 
@@ -347,6 +376,8 @@ def test_data_registry_carries_new_swe_pivot_tool_call_row() -> None:
     assert row["environment"] == "swe_pivot_tool_call"
     assert row["converter"] == "swe_gym_lite_pivot"
     assert row["hf_dataset"] == "SWE-Gym/SWE-Gym-Lite"
+    assert row["hf_revision"] == "f70b1a29ab120eb0a0ee7a1deb029825e735b2b0"
+    assert row["hf_val_split"] is None
     assert row["reward_type"] == "argument_match"
     assert "SWE-Bench Lite" in row["contamination_against"]
 

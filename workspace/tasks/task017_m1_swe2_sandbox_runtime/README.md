@@ -69,7 +69,7 @@ SIF images per `instance_id`，三个 family：
 
 - 不依赖 cluster / Docker / SIF images / W&B
 - 依赖 task021 Session 2 落的 `SWE2_ARTIFACT` 常量
-- Session 2 依赖 OpenHands 库 + SWE-Gym-Lite HF 下载
+- Session 2 依赖 OpenHands 库；small SWE-Gym-Lite HF streaming smoke 已在 review follow-up 跑通
 - Session 3 依赖 NemTron cluster + 真 SIF images
 - Session 4 跟 task014 / task015 / task016 / task017 三个 bridge 模块同步抽 base
 
@@ -81,6 +81,8 @@ SIF images per `instance_id`，三个 family：
      sandbox sif (训练时由 OpenHands gym 在 SIF container 里 enforce)
    - `data_registry.yaml` 加 row 指 `SWE-Gym/SWE-Gym-Lite` (apache-2.0,
      contamination_against [SWE-Bench Lite, SWE-Bench Verified])
+   - hf_revision=`f70b1a29ab120eb0a0ee7a1deb029825e735b2b0`；SWE-Gym-Lite
+     只有 `train` split，val 在 smoke scale 从 train 顺序续取
    - `prepare_m0_assets.SYSTEM_PROMPTS` 加对应 prompt
 
 2. **新 converter** `transform_swe_gym_openhands_trace`:
@@ -93,7 +95,8 @@ SIF images per `instance_id`，三个 family：
    - Gold patch 解析：top-level `patch` / `gold_patch` → fallback 扫
      trajectory 找 `submit_patch` 调用 → 都没有 raise ValueError
    - `extra_env_info.reference_trajectory` 携带 normalize 后的整段
-     messages (tool_calls arguments 全 decode 成 dict)
+     messages (tool_calls arguments 全 decode 成 dict)；public patch-only
+     row 则合成 read-then-submit minimal trajectory
    - `extra_env_info.sif_source` 默认 `swegym`，可被 row-level 字段
      覆盖 (R2E-Gym 等 mixed-family 场景)
 
@@ -144,8 +147,7 @@ follow-up session 完成 wrapper。
 
 ## Session 2+ 不在本 PR (cluster part)
 
-- 真 HF download `SWE-Gym/SWE-Gym-Lite` 走 NemTron cluster
-- Revision pin (TBD → 真 commit hash)
+- 全量 HF data prep 走 NemTron cluster 扩量
 - OpenHands wrapper (真集成等 plan §10 cluster work)
 - 真 SIF container 起 → OpenHands rollout → patch+tests 验证
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import re
 import sys
@@ -22,10 +23,11 @@ import yaml
 
 try:
     from nemotron.recipes.super3.milestones.lineage import (
-        LINEAGE_SCHEMA_VERSION,
         RAW_DATA_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from nemotron.recipes.super3.milestones.lineage import (
         make_record as make_lineage_record,
     )
 except ModuleNotFoundError:
@@ -34,10 +36,11 @@ except ModuleNotFoundError:
     # lineage module on the import path.
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from lineage import (  # type: ignore[no-redef]
-        LINEAGE_SCHEMA_VERSION,
         RAW_DATA_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from lineage import (
         make_record as make_lineage_record,
     )
 
@@ -59,10 +62,16 @@ BOXED_ANSWER_RE = re.compile(r"\\boxed\{([^{}]*)\}")
 
 SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
-    "search_multihop_qa": "You answer multi-hop questions using the provided retrieved passages. Cite the passages you used.",
+    "search_multihop_qa": (
+        "You answer multi-hop questions using the provided retrieved passages. "
+        "Cite the passages you used."
+    ),
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
-    "multi_turn_tool_use": "You are a tool-using assistant. Use the available functions across multiple turns when needed and incorporate tool results into the final answer.",
+    "multi_turn_tool_use": (
+        "You are a tool-using assistant. Use the available functions across "
+        "multiple turns when needed and incorporate tool results into the final answer."
+    ),
     "structured_outputs_json": (
         "You are a structured-output assistant. Return only valid JSON that matches the schema."
     ),
@@ -84,9 +93,14 @@ SYSTEM_PROMPTS = {
         "A preference judge will compare your reply against another candidate "
         "to score helpfulness, coherence, and correctness."
     ),
-    "tool_call_repair_negative": "You repair malformed or hallucinated tool-use attempts using the provided schema.",
+    "tool_call_repair_negative": (
+        "You repair malformed or hallucinated tool-use attempts using the provided schema."
+    ),
     "math_reasoning_numeric": "You are a careful reasoning assistant. Return the final numeric answer clearly.",
-    "math_competition_numeric": "You are a careful reasoning assistant. Solve the competition math problem step by step and put the final answer in \\boxed{}.",
+    "math_competition_numeric": (
+        "You are a careful reasoning assistant. Solve the competition math problem "
+        "step by step and put the final answer in \\boxed{}."
+    ),
     "math_formal_lean": (
         "You are a formal-proof assistant. Read the Lean theorem statement and "
         "return a complete proof in the same Lean dialect. Do not add prose; "
@@ -464,6 +478,26 @@ def _first_assistant_tool_call(messages: Sequence[Mapping[str, Any]]) -> Mapping
     raise ValueError("SWE-Gym trajectory has no assistant message with tool_calls")
 
 
+def _first_patch_file_path(patch: str) -> str:
+    """Return the first modified target path from a unified diff."""
+    for line in str(patch).splitlines():
+        if line.startswith("diff --git "):
+            parts = line.split()
+            if len(parts) >= 4:
+                candidate = parts[3]
+                if candidate.startswith("b/"):
+                    candidate = candidate[2:]
+                if candidate and candidate != "/dev/null":
+                    return candidate
+        if line.startswith("+++ "):
+            candidate = line[4:].strip()
+            if candidate.startswith("b/"):
+                candidate = candidate[2:]
+            if candidate and candidate != "/dev/null":
+                return candidate
+    return ""
+
+
 def transform_swe_gym_lite_pivot(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert one SWE-Gym-Lite trajectory into the SWE pivot tool-call shape.
 
@@ -487,39 +521,48 @@ def transform_swe_gym_lite_pivot(row: Mapping[str, Any], spec: Mapping[str, Any]
     if not problem_statement:
         raise ValueError("SWE-Gym row missing problem_statement")
     messages = row.get("messages")
-    if not isinstance(messages, list) or not messages:
-        raise ValueError("SWE-Gym row missing messages trajectory")
+    if isinstance(messages, list) and messages:
+        first_call = _first_assistant_tool_call(messages)
 
-    first_call = _first_assistant_tool_call(messages)
+        function = first_call.get("function")
+        if not isinstance(function, Mapping):
+            raise ValueError("SWE-Gym tool_call missing 'function' object")
+        tool_name = str(function.get("name") or "").strip()
+        if not tool_name:
+            raise ValueError("SWE-Gym tool_call missing function name")
 
-    function = first_call.get("function")
-    if not isinstance(function, Mapping):
-        raise ValueError("SWE-Gym tool_call missing 'function' object")
-    tool_name = str(function.get("name") or "").strip()
-    if not tool_name:
-        raise ValueError("SWE-Gym tool_call missing function name")
-
-    raw_arguments = function.get("arguments")
-    if isinstance(raw_arguments, Mapping):
-        arguments: JsonDict = dict(raw_arguments)
-    elif isinstance(raw_arguments, str):
-        try:
-            parsed = json.loads(raw_arguments)
-        except json.JSONDecodeError as exc:
+        raw_arguments = function.get("arguments")
+        if isinstance(raw_arguments, Mapping):
+            arguments: JsonDict = dict(raw_arguments)
+        elif isinstance(raw_arguments, str):
+            try:
+                parsed = json.loads(raw_arguments)
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    f"SWE-Gym tool_call {tool_name!r} has malformed JSON arguments: {exc}"
+                ) from exc
+            if not isinstance(parsed, dict):
+                raise ValueError(
+                    f"SWE-Gym tool_call {tool_name!r} arguments must decode to an object"
+                )
+            arguments = parsed
+        elif raw_arguments is None:
+            arguments = {}
+        else:
             raise ValueError(
-                f"SWE-Gym tool_call {tool_name!r} has malformed JSON arguments: {exc}"
-            ) from exc
-        if not isinstance(parsed, dict):
-            raise ValueError(
-                f"SWE-Gym tool_call {tool_name!r} arguments must decode to an object"
+                f"SWE-Gym tool_call {tool_name!r} arguments must be a JSON string or object"
             )
-        arguments = parsed
-    elif raw_arguments is None:
-        arguments = {}
+        pivot_source = "trajectory_first_tool_call"
     else:
-        raise ValueError(
-            f"SWE-Gym tool_call {tool_name!r} arguments must be a JSON string or object"
-        )
+        patch = str(row.get("patch") or row.get("gold_patch") or "").strip()
+        if not patch:
+            raise ValueError("SWE-Gym row missing messages trajectory and patch fallback")
+        first_path = _first_patch_file_path(patch)
+        if not first_path:
+            raise ValueError("SWE-Gym patch fallback could not determine modified file")
+        tool_name = "view_file"
+        arguments = {"path": first_path}
+        pivot_source = "synthetic_from_gold_patch"
 
     repo = str(row.get("repo") or "").strip()
     instance_id = str(row.get("instance_id") or "").strip()
@@ -555,6 +598,7 @@ def transform_swe_gym_lite_pivot(row: Mapping[str, Any], spec: Mapping[str, Any]
             "instance_id": instance_id,
             "gold_tool_call": gold_tool_call,
             "pivot_type": pivot_type,
+            "pivot_source": pivot_source,
         },
     )
 
@@ -714,12 +758,11 @@ def transform_swe_gym_openhands_trace(
     problem_statement = str(row.get("problem_statement") or "").strip()
     if not problem_statement:
         raise ValueError("SWE-Gym row missing problem_statement")
-    messages = row.get("messages")
-    if not isinstance(messages, list) or not messages:
-        raise ValueError("SWE-Gym row missing messages trajectory")
+    messages_raw = row.get("messages")
+    messages = messages_raw if isinstance(messages_raw, list) and messages_raw else []
 
     gold_patch_raw = row.get("gold_patch") or row.get("patch")
-    if not gold_patch_raw:
+    if not gold_patch_raw and messages:
         # Fallback: scan trajectory for a `submit_patch` tool call
         for message in messages:
             if not isinstance(message, Mapping):
@@ -759,11 +802,37 @@ def transform_swe_gym_openhands_trace(
     instance_id = str(row.get("instance_id") or "").strip()
     sif_source = str(row.get("sif_source") or "swegym").strip() or "swegym"
 
-    reference_trajectory = [
-        _normalize_trajectory_message(message)
-        for message in messages
-        if isinstance(message, Mapping)
-    ]
+    if messages:
+        reference_trajectory = [
+            _normalize_trajectory_message(message)
+            for message in messages
+            if isinstance(message, Mapping)
+        ]
+        trajectory_source = "upstream_messages"
+    else:
+        first_path = _first_patch_file_path(gold_patch)
+        if not first_path:
+            raise ValueError(
+                "SWE-Gym row missing messages trajectory and patch fallback "
+                "could not determine modified file"
+            )
+        reference_trajectory = [
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {"name": "view_file", "arguments": {"path": first_path}},
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {"name": "submit_patch", "arguments": {"patch": gold_patch}},
+                ],
+            },
+        ]
+        trajectory_source = "synthetic_from_gold_patch"
 
     user_content = (
         "Resolve the software issue below using the OpenHands agent "
@@ -796,6 +865,7 @@ def transform_swe_gym_openhands_trace(
             "gold_patch": gold_patch,
             "reference_trajectory": reference_trajectory,
             "trajectory_turns": len(reference_trajectory),
+            "trajectory_source": trajectory_source,
         },
     )
 
@@ -833,6 +903,65 @@ def _helpsteer2_aggregate_score(side: str, row: Mapping[str, Any]) -> float | No
             continue
         found_any = True
     return total if found_any else None
+
+
+def _is_helpsteer2_scalar_row(row: Mapping[str, Any]) -> bool:
+    """Return True for the public HelpSteer-2 scalar-rating row shape."""
+    return (
+        "response" in row
+        and not any(key in row for key in ("response_a", "response_b", "chosen", "rejected"))
+    )
+
+
+def _make_helpsteer2_pair_row(row_a: Mapping[str, Any], row_b: Mapping[str, Any]) -> JsonDict:
+    prompt = str(row_a.get("prompt") or "").strip()
+    response_a = str(row_a.get("response") or "").strip()
+    response_b = str(row_b.get("response") or "").strip()
+    digest = hashlib.sha1(
+        f"{prompt}\0{response_a}\0{response_b}".encode()
+    ).hexdigest()[:16]
+    pair: JsonDict = {
+        "id": f"helpsteer2_pair_{digest}",
+        "prompt": prompt,
+        "response_a": response_a,
+        "response_b": response_b,
+        "source_ids": [source_id(row_a), source_id(row_b)],
+    }
+    for attr in ("helpfulness", "coherence", "correctness", "complexity", "verbosity"):
+        pair[f"{attr}_a"] = row_a.get(attr)
+        pair[f"{attr}_b"] = row_b.get(attr)
+    return pair
+
+
+def iter_helpsteer2_preference_pairs(
+    rows: Iterable[Mapping[str, Any]],
+) -> Iterator[Mapping[str, Any]]:
+    """Yield pairwise rows from HelpSteer-2's public scalar-rating data.
+
+    The HF dataset's default config stores one response per row with
+    scalar helpfulness/coherence/correctness ratings. In the pinned
+    snapshot, responses for the same prompt are adjacent pairs. The
+    converter consumes pair rows, so this streaming adapter buffers the
+    first scalar row for a prompt and yields a synthetic
+    ``response_a``/``response_b`` pair when the mate arrives. Already
+    paired rows pass through unchanged for synthetic tests and future
+    snapshots.
+    """
+    pending_by_prompt: dict[str, Mapping[str, Any]] = {}
+    for row in rows:
+        if not _is_helpsteer2_scalar_row(row):
+            yield row
+            continue
+        prompt = str(row.get("prompt") or "").strip()
+        response = str(row.get("response") or "").strip()
+        if not prompt or not response:
+            yield row
+            continue
+        first = pending_by_prompt.pop(prompt, None)
+        if first is None:
+            pending_by_prompt[prompt] = row
+            continue
+        yield _make_helpsteer2_pair_row(first, row)
 
 
 def transform_helpsteer2_pref(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
@@ -1671,14 +1800,15 @@ def prepare_assets(args: argparse.Namespace) -> JsonDict:
             sources = [("shared", spec["hf_split"], spec.get("hf_config"), train_target + val_target)]
 
         for source_mode, hf_split, hf_config, source_target in sources:
-            for raw_index, row in enumerate(
-                iter_hf_rows(
-                    spec,
-                    streaming=not args.non_streaming,
-                    split=hf_split,
-                    config=hf_config,
-                )
-            ):
+            row_iter: Iterable[Mapping[str, Any]] = iter_hf_rows(
+                spec,
+                streaming=not args.non_streaming,
+                split=hf_split,
+                config=hf_config,
+            )
+            if spec["converter"] == "helpsteer2_pref_pair":
+                row_iter = iter_helpsteer2_preference_pairs(row_iter)
+            for raw_index, row in enumerate(row_iter):
                 if source_mode == "shared":
                     if split_counts["train"] >= train_target and split_counts["val"] >= val_target:
                         break
@@ -1815,10 +1945,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
     for dataset in manifest["datasets"]:
         use_stage = "<br>".join(dataset["use_stage"])
         lines.append(
-            (
-                f"| {dataset['id']} | {dataset['environment']} | {dataset['train_rows']} | "
-                f"{dataset['val_rows']} | {dataset['license']} | {use_stage} |"
-            )
+            f"| {dataset['id']} | {dataset['environment']} | {dataset['train_rows']} | "
+            f"{dataset['val_rows']} | {dataset['license']} | {use_stage} |"
         )
     lines.extend(["", "## Files", ""])
     for file_info in manifest["files"]:
