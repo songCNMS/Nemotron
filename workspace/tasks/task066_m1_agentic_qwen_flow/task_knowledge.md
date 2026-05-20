@@ -1,6 +1,6 @@
 # task066_m1_agentic_qwen_flow - task_knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Notes
 
@@ -11,3 +11,4 @@
 - `NemTron` 适合跑真实 Qwen SFT：8x H200，`/root/nemotron_session5_venv` 有 `torch` 和 `megatron.bridge`，但缺 `cosmos_xenna`，所以 M0/M1 packed data prep 仍更适合在本地 `/work-agents/.venv` 完成后同步 artifacts。
 - `run_finetune()` 的 dataset 构建路径会直接读取脚本 OmegaConf 的 `dataset` section；CLI overrides 若只应用到 Megatron ConfigContainer，会导致 dataset seq length / packed sequence size 保持 YAML 默认值。
 - Qwen local train uses TP=2 in `qwen_local_train.py`; launch with `python -m torch.distributed.run --nproc_per_node=2` and `CUDA_VISIBLE_DEVICES=0,1`.
+- 正式放大训练可复用 task066 Session 2 命令结构：先扩大 M0/M1 数据和 Qwen tokenizer packed shards，再用 planner 根据 packed train rows 计算 `train_iters`，最后在 NemTron 用 Qwen3 4B TP=2 启动训练。

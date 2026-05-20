@@ -1,6 +1,6 @@
 # task066_m1_agentic_qwen_flow - history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1
 
@@ -27,3 +27,10 @@
 - 远端最终命令使用 GPUs 0/1、TP=2、Qwen3 4B local HF model、Qwen Bridge checkpoint、Qwen packed data，完成 13/13 train iterations。
 - 远端最终结果：final validation loss `3.309570E-01`，PPL `1.392300E+00`，checkpoint saved at `/work-agents/intern_nemontron_code_reading/outputs/task066_qwen_sft/checkpoints/iter_0000013`，latest checkpoint iteration `13`。
 - 远端日志：`/work-agents/intern_nemontron_code_reading/outputs/task066_qwen_sft/session2_qwen_train.log`。失败重试日志保留为 `session2_qwen_train_seq_mismatch.log` 和 `session2_qwen_train_struct_override.log`。
+
+## Session 3
+
+- 用户要求合并 PR #92，并在合并后基于同一命令扩大 `train_iters`、数据规模和 eval basket 到正式训练配置。
+- Merge 前检查：PR #92 state `OPEN`，mergeable `MERGEABLE`，mergeStateStatus `CLEAN`，无 status checks 阻塞。
+- 按 Working playbook 完成任务收尾状态：intern status 置 Idle，task README metadata 置 Completed，task knowledge metadata 推进到 Session 3。
+- 合并后正式训练放大入口建议复用 Session 2 的 NemTron 启动方式：保留 Qwen3 4B local HF model + Bridge checkpoint + TP=2，把 M0/M1 数据量、packed shards、`train_iters` 和 eval basket registry 扩到正式目标后重新 planner/launch。

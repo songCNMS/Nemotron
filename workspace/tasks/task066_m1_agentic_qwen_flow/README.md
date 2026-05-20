@@ -1,6 +1,6 @@
 # task066_m1_agentic_qwen_flow
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 
