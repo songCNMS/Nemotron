@@ -17,3 +17,10 @@
 
 - 主管要求合并 PR #96，并基于 `iter_0000122` 做 checkpoint export/register，再启动 `m1_full_basket` 非 dry-run 评测获取真实 benchmark metrics。
 - merge 前确认 PR #96 open 且 mergeable；按 playbook 将 task071 README 标记 Completed，将 intern status 切回 Idle，并准备合并。
+- 已 squash merge PR #96 到 `main`，merge commit `8336c3e74e42eb805aacbeee5be67d0cb57cdf77`，mergedAt `2026-05-20T02:52:49Z`。
+- 在 NemTron 上用 Megatron-Bridge `AutoBridge.export_ckpt` 将 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/checkpoints/iter_0000122` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/hf_export_iter_0000122`。
+- HF export 完成并写出 3 个 `safetensors` shard、`config.json`、`tokenizer.json` 等文件；导出日志在 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/logs/export_iter_0000122_hf.log`。
+- 已将导出模型注册到 manifest artifact：`task071-qwen3-4b-agentic-sft-iter0000122-hf:v1`，manifest root 为 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/artifacts`。
+- 按 project rule 将最新 main 代码同步到 NemTron `/root/Nemotron_task071_eval`，并在 `/root/nemotron_session5_venv` 安装 `nemo-evaluator-launcher==0.2.5`。
+- 已在 NemTron 启动 SGLang endpoint：tmux session `task071_sglang_eval`，URL `http://127.0.0.1:30000/v1/chat/completions`，model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`；smoke request 返回 `ready`。
+- 已对 `m1_full_basket` 做非 dry-run 提交尝试；未产出 benchmark metrics，原因是当前 19 个 `adlr_*` task name 均无法在 `nemo-evaluator-launcher` 421-task mapping 中解析，且 NemTron 无 Docker/Slurm，local executor 非 dry-run 报 `Docker is not installed or not in PATH`。
