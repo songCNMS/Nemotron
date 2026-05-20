@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Working |
 | Current Task | task067_m1_agentic_qwen_scaleup |
-| PR |  |
+| PR | https://github.com/songCNMS/Nemotron/pull/93 |
 | Session | 1 |
 | Branch | intern_nemontron_code_reading/task067_m1_agentic_qwen_scaleup |
-| Latest | Implemented task067 Qwen M1 Agentic SFT scale-up planner with tests, eval dry-run validation, and refreshed smoke plan outputs. |
+| Latest | Opened PR #93 for task067 Qwen M1 Agentic SFT scale-up planner after ruff, pytest, eval dry-run, and smoke plan validation. |
