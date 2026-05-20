@@ -104,6 +104,11 @@ SYSTEM_PROMPTS = {
         "in the document's content. Quote or paraphrase the relevant "
         "passage; do not invent facts."
     ),
+    "sql_text_to_query": (
+        "You are a text-to-SQL assistant. Given a natural-language "
+        "question about a database schema, emit a single valid SQL "
+        "query that answers it. Return ONLY the SQL — no commentary."
+    ),
     "tool_call_repair_negative": (
         "You repair malformed or hallucinated tool-use attempts using the provided schema."
     ),
@@ -1242,6 +1247,120 @@ def transform_longalpaca_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> 
     )
 
 
+# BIRD SQL normalization helpers (task057 Session 3).
+
+# SQL is whitespace-insensitive and keywords are case-insensitive. The
+# M0 oracle baseline uses normalized string match (NOT real execution
+# — execution requires a database sandbox; that's task024 / M2 BIRD
+# extension territory). Normalization:
+#   - Lowercase all tokens
+#   - Collapse runs of whitespace to single space
+#   - Strip leading/trailing whitespace + trailing semicolon
+#   - Remove surrounding backticks / quotes around identifiers (BIRD
+#     mixes conventions across schemas)
+_SQL_BACKTICK_RE = re.compile(r"`")
+_SQL_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def normalize_sql(value: Any) -> str:
+    """Normalize a SQL string for string-match scoring."""
+    text = str(value or "").lower().strip()
+    text = _SQL_BACKTICK_RE.sub("", text)
+    text = _SQL_WHITESPACE_RE.sub(" ", text)
+    if text.endswith(";"):
+        text = text[:-1].rstrip()
+    return text
+
+
+def score_sql_execution_match(candidate: Any, expected: Any) -> float:
+    """Oracle stub for the BIRD SQL env.
+
+    M0 baseline uses normalized SQL string match. The "execution" in
+    the verifier name signals INTENT (task024 / M2 BIRD will execute
+    against a real database sandbox); today's M0 oracle simply
+    compares normalized SQL.
+    """
+    norm_candidate = normalize_sql(candidate)
+    norm_expected = normalize_sql(expected)
+    if not norm_expected:
+        return 0.0
+    if norm_candidate == norm_expected:
+        return 1.0
+    return 1.0 if norm_expected in norm_candidate else 0.0
+
+
+def transform_bird_sql(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one BIRD SQL row to the M0 sql_text_to_query contract.
+
+    BIRD rows (from `bird-bench/bird` train + `birdsql/bird_mini_dev`)
+    typically carry:
+
+    - ``question_id``: integer id (used for source_id)
+    - ``db_id``: schema name (one of BIRD's 7 schemas)
+    - ``question``: natural-language question
+    - ``evidence``: optional hint text the model is allowed to use
+    - ``SQL`` or ``query`` or ``sql``: gold SQL query
+    - ``difficulty``: easy / medium / hard
+
+    Output uses ``sql_execution_match`` verifier (M0 oracle stub
+    delegates to normalized SQL string match; real execution is M2
+    task024 territory once a DB sandbox lands).
+
+    Cross-schema generalization is BIRD's central evaluation property,
+    so ``db_id`` is preserved in ``extra_env_info`` for downstream
+    per-schema stratification.
+    """
+    question = str(row.get("question") or "").strip()
+    if not question:
+        raise ValueError("BIRD row missing 'question'")
+    # BIRD ships gold SQL under different keys per snapshot
+    gold_sql = (
+        row.get("SQL") or row.get("sql") or row.get("query") or row.get("gold_sql")
+    )
+    gold_sql = str(gold_sql or "").strip()
+    if not gold_sql:
+        raise ValueError(
+            "BIRD row missing gold SQL (checked SQL / sql / query / gold_sql)"
+        )
+    db_id = str(row.get("db_id") or "").strip()
+    if not db_id:
+        raise ValueError("BIRD row missing 'db_id' (schema name required for grounding)")
+    evidence = str(row.get("evidence") or "").strip()
+    difficulty = str(row.get("difficulty") or "").strip() or None
+
+    # User-turn content embeds the schema name + question + evidence
+    # (if present). The schema itself is not included verbatim — BIRD
+    # schemas are large; the model is expected to know the schema by
+    # name during training (oracle pass-through) and to query DB
+    # introspection at runtime in production.
+    user_parts = [f"Database: {db_id}", f"Question: {question}"]
+    if evidence:
+        user_parts.append(f"Evidence: {evidence}")
+    user_content = "\n\n".join(user_parts)
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=gold_sql,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "sql_execution_match",
+            "max_score": 1.0,
+            "match": ["normalized_sql"],
+        },
+        extra_env_info={
+            "db_id": db_id,
+            "question_id": row.get("question_id"),
+            "difficulty": difficulty,
+            "has_evidence": bool(evidence),
+        },
+    )
+
+
 def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
 
@@ -1797,6 +1916,7 @@ CONVERTERS = {
     "helpsteer2_pref_pair": transform_helpsteer2_pref,
     "aya_multilingual": transform_aya_multilingual,
     "longalpaca_qa": transform_longalpaca_qa,
+    "bird_sql": transform_bird_sql,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
