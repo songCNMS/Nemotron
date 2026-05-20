@@ -1,66 +1,94 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task068_rlhf_toolcall_pairing_harness -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 86 |
+| Status | Working |
+| Current Task | task068_rlhf_toolcall_pairing_harness |
+| PR | pending push |
+| Session | 87 |
 
-刚做完：task068 Session 1 — RLHF tool-call pairing harness design doc
-(PR #110 / 40a0faa, merged 2026-05-19).
+正在做：task068 Session 2 — implement `transform_rlhf_toolcall_pairing`
+converter per Session 1 design doc (PR #110).
 
-- `task068_design.md` (~440 lines) captures 4 strategy decisions:
-  - **Relevance filter**: keyword + Hermes template match (~30% pass)
-  - **Gold-call sourcing**: function-name match heuristic + arg tiebreak
-  - **Sampling cap K=1**: one pair per HelpSteer-2 prompt
-  - **Decontamination**: BFCL / TauBench airline / MCP-Mark / HelpSteer1
-- Corpus estimate: 7K HelpSteer-2 train → ~1,200 paired rows (83% drop)
-- 4 worked examples + reference output-row JSON + Session 2 converter
-  interface contract + 3 open questions for product alignment
-- No code (design-only); sandbox baseline unchanged at 620 passed +
-  7 skipped
+## What's in this PR
 
-## task068 整 task
+### 新 module `m0_data_env/rlhf_toolcall_pairing.py`
+
+Pure-Python stream converter implementing Session 1's 4-filter design:
+
+- `RELEVANCE_KEYWORDS` — 16 keywords ("look up", "find me", "compute",
+  "translate", "weather", "near", etc.)
+- `default_relevance_filter(prompt)` — case-insensitive keyword match
+- `default_gold_call_finder(prompt, hermes_corpus)`:
+  - Function-name match heuristic (name + underscored variants +
+    trailing fragment)
+  - Required-arg tiebreak: prefer the Hermes row whose arg names
+    also appear in the prompt
+  - Deterministic — sorted stable
+- `_extract_function_call(hermes_row)` handles two Hermes formats:
+  newer (`expected_answer.tool_calls[0].function`) + older direct
+  `{name, arguments}`
+- `is_contaminated(prompt, eval_prompt_set)`:
+  - Tier 1: exact normalized prompt match (lowercase + punctuation-stripped)
+  - Tier 2: any 5-gram overlap (catches paraphrases sharing verbatim
+    phrasing)
+- `build_eval_prompt_set(eval_prompts)` helper for callers to assemble
+  the eval-prompt 5-gram set
+- `transform_rlhf_toolcall_pairing(helpsteer2_rows, *, hermes_corpus,
+  eval_prompt_set, relevance_filter, gold_call_finder)`:
+  - Stream-yields paired rows in NeMo-Gym
+    `single_step_tool_use_with_argument_comparison` shape
+  - Filter order: relevance → gold-call match → contamination (3 drop
+    points)
+  - Output: argument_match verifier; tool schema attached from Hermes
+    row or synthesized minimally if missing
+  - Both filter functions injectable for operator customization
+- `PAIRED_CONTAMINATION_AGAINST` = (BFCL, TauBench airline, MCP-Mark,
+  HelpSteer1) — every output row carries these so task030 Session 7's
+  contamination_audit module can audit downstream consumers
+
+### Tests (`test_rlhf_toolcall_pairing.py`, 31 cases)
+
+- Constants 2: PAIRED_CONTAMINATION_AGAINST tuple / RELEVANCE_KEYWORDS
+  covers design-doc primitives
+- Relevance filter 3: keyword match / no match / case-insensitive
+- _extract_function_call 3: newer `tool_calls` format / older direct /
+  None for missing
+- Gold-call finder 5: function-name match / required-arg tiebreak /
+  underscore handling / no-match → None / skips malformed rows
+- Contamination 5: exact normalized / 5-gram overlap / clean passes /
+  empty eval-set / empty prompt
+- build_eval_prompt_set 1: normalized + 5-grams included
+- Orchestrator 11: clean match yields row / drops by relevance / drops
+  by no match / drops by contamination / yields-after-all-filters /
+  skips empty prompts / source IDs propagated / tool schema attached /
+  synthesizes minimal schema when missing / custom relevance filter
+  injection / custom gold-call finder injection / match_strategy
+  metadata lock
+
+Sandbox 测试基线 620 → **651 passed + 7 skipped** (31 new)。
+
+## 跟 Session 1 design doc 对齐
+
+Session 2 实现严格按 Session 1 design 写：
+
+- ✓ Relevance filter: keyword heuristic (Hermes template match left as
+  Session 3+ hook; design doc said "leave as a hook")
+- ✓ Gold-call sourcing: function-name match + required-arg tiebreak
+- ✓ K=1 (one row per HelpSteer-2 prompt via stream)
+- ✓ Decontamination: exact + 5-gram check; eval-prompt set built via
+  `build_eval_prompt_set`
+- ✓ Output row shape matches design doc reference JSON
+
+## task068 状态
 
 - Session 1 ✓ (PR #110) — design doc
-- Session 2 ☐ — implement `transform_rlhf_toolcall_pairing` converter
-- Session 3 ☐ — flip RLHF env registry tool-call row to active
+- Session 2 ✓ (this PR) — converter implementation
+- Session 3 ☐ — flip RLHF env registry's tool-call row to active; wire
+  CLI dispatch path that calls this converter
 - Session 4 ☐ — cluster smoke (needs task018 Session 3 judge service)
 
-## 本轮 sprint 累积 (PR #94 起算)
-
-9 substantive PRs + 7 closeouts:
-
-| PR | 内容 | sandbox baseline |
-|---|---|---|
-| #94 | Roadmap refresh + 4 gap-task scaffolds | 502 |
-| #95 | task067 → task070 rename | 506 |
-| #97 | task013 Session 2a (two-stage SFT driver) | 520 |
-| #99 | task040 Session 1 (curriculum sampler) | 543 |
-| #101 | task070 Session 1 (OpenHands wrapper) | 559 |
-| #104 | task069 Session 1 (W&B publisher + CLI) | 577 |
-| #106 | task069 Session 2 (publisher wiring) | 592 |
-| #108 | task057 Session 1 (multilingual_instruct) | 620 |
-| #110 | task068 Session 1 (design doc) | 620 |
-
-Sandbox baseline 502 → 620 passed (118 new tests across sandbox-runnable
-work; PR #110 doc-only so no test delta).
-
-## 下一候选 (sandbox-runnable per roadmap §5b)
-
-- task040 Session 2 — wire sampler into prepare_m0_assets.py /
-  prepare_m1_agentic_sft.py via `--curriculum-policy` CLI flag
-- task057 Session 2 — long_context_qa_smoke env via `THUDM/LongAlpaca-12k`
-- task068 Session 2 — implement `transform_rlhf_toolcall_pairing`
-  converter per Session 1's design doc (natural follow-on)
-- task069 Session 2 都已完成；其他 task069 Session 3 / cluster work
-
-Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
-task014 Session 2 cluster / task016 Session 3 / task017 Session 3 /
-task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
-task021 Session 4 / task057 Session 1.5 (HF SHA) / task068 Session 4 /
-task069 Session 3 / task070 Sessions 2-3。
+Roadmap §5b 更新.
