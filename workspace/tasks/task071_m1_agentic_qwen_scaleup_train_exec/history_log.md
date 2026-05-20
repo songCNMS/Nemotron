@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1
 
@@ -55,3 +55,13 @@
 - Docker 权限探测：默认 `dockerd` 启动失败在 `docker0` bridge network 权限；`--bridge=none --iptables=false --storage-driver=vfs` 可以启动 daemon，但实际 `docker run` 失败于只读 cgroup 或 sandbox 权限，不能运行 eval-factory client container。
 - 在 NemTron 上生成 `deployment.type=none` dry-run 脚本验证 launcher 形态：必须设置顶层 `target.api_endpoint.url/model_id/type`；脚本仍执行 `docker run nvcr.io/nvidia/eval-factory/...`，且默认不加 `--network host`。
 - 结论：当前 CPU/vpn node 网络可达模型 endpoint，但不能作为 non-dry eval launcher；要使用它需要一个可运行 Docker/container executor 的 CPU job 环境，或改用 Slurm/Lepton 等可执行 eval-factory containers 的 executor。
+
+## Session 6
+
+- 用户要求重新尝试 `deployment.type=none` 的 CPU/vpn launcher 路径。
+- `vpn` alias 现在可解析到 `89.208.244.190`，临时 known_hosts 连接成功，主机为 `vm4vpn`、用户 `leisong`。
+- `vm4vpn` Docker client 存在，但当前用户不在 `docker` 组，`/var/run/docker.sock` 为 `root:docker`，`sudo -n docker info` 需要密码；没有可直接运行 eval-factory container 的权限。
+- `vm4vpn` 不能访问 NemTron endpoint：到 `10.100.14.21:30000`、`10.100.15.21:30000`、`10.100.192.16:30000` 的 TCP 检查均失败；`ssh NemTron` 在 `vm4vpn` 上也不可解析，直连 `root@10.100.14.21` 超时。
+- `vm4vpn` Python 环境无 `nemo_evaluator_launcher`，且系统 Python 无 pip；即使补包，Docker 权限和网络路由仍是硬阻塞。
+- 重新尝试当前 CPU node 的私有 `dockerd`：`--bridge=none --iptables=false --storage-driver=vfs --default-cgroupns-mode=host` 可以启动 daemon，但 `docker run --network host` 仍失败 `failed to create default sandbox: operation not permitted`。
+- 本轮未启动真实 benchmark eval，未产出 metrics；结论保持：现有 `vpn` 与当前 CPU node 都不能作为 non-dry eval launcher，除非提供 Docker 组权限/免密 sudo/可用 Slurm 或 Lepton，并确保 launcher host 能访问 NemTron endpoint。

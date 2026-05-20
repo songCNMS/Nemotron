@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Notes
 
@@ -22,3 +22,5 @@
 - CPU/vpn eval launcher check: current CPU node `lg-cmc-b7r201-a01u17-cpu-000006` can reach NemTron SGLang at `http://10.100.14.21:30000/v1/models`, but cannot run launcher non-dry eval today because Docker daemon is absent and manual `dockerd` can only start with `--bridge=none`, after which `docker run` fails on read-only cgroup / sandbox permission.
 - `deployment.type=none` launcher config fact: NeMo Evaluator Launcher 0.2.5 expects top-level `target.api_endpoint.url`, `target.api_endpoint.model_id`, and `target.api_endpoint.type`; setting only `evaluation.nemo_evaluator_config.target.api_endpoint` is insufficient.
 - `deployment.type=none` script fact: local executor still uses `docker run nvcr.io/nvidia/eval-factory/<task>:26.03` for eval clients, so a CPU node must have a working Docker/container runtime even when model serving is external.
+- Retry fact: `vpn` resolves to `vm4vpn` (`89.208.244.190`) as user `leisong`; it has Docker client but no socket permission (`leisong` not in docker group, sudo requires password), cannot reach `10.100.14.21:30000`, and has no `nemo_evaluator_launcher` or pip in system Python.
+- Current CPU node retry fact: private `dockerd` with bridge disabled and host cgroup namespace can start, but `docker run --network host` still fails with `failed to create default sandbox: operation not permitted`, so eval-factory client containers still cannot run there.

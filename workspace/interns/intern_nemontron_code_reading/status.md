@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 5 |
+| Session | 6 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Checked the CPU/vpn node path for deployment.type=none: it can reach the NemTron SGLang endpoint, but current container privileges/Docker executor are insufficient for non-dry eval launcher jobs. |
+| Latest | Retried deployment.type=none launcher path: vpn now connects as vm4vpn but lacks Docker permission and 10.100.* routing; current CPU node still cannot run Docker containers due sandbox/cgroup limits. |
