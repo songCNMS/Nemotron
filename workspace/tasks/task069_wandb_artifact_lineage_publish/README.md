@@ -1,6 +1,7 @@
 # task069_wandb_artifact_lineage_publish
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE=unassigned -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR pending on 2026-05-19 (publisher module + FakeWandbRun + scripts/publish_lineage.py CLI; 18 tests) -->
 
 ## 背景
 
@@ -44,7 +45,7 @@ calls keyed on the artifact-type vocabulary already declared in
 
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
-| 1 | `lineage_publisher.py` module — pure Python interface that takes a `LineageRecord` and emits the `wandb.Artifact` calls; injectable W&B client so unit tests use a fake | yes | Todo |
+| 1 | `lineage_publisher.py` module — pure Python interface that takes a `LineageRecord` and emits the `wandb.Artifact` calls; injectable W&B client so unit tests use a fake | yes | ✓ Done (this PR) |
 | 2 | Wire `lineage_publisher.publish()` into every `prepare_*.py` (M0 / SFT / RLVR / SWE1 / SWE2 / RLHF / eval) so each bridge auto-publishes after writing manifest.json | partial (interface yes, real W&B yes-but-mocked) | Todo |
 | 3 | Cluster verify: real W&B run logs the full chain M0 → SFT → RL → Eval against an actual checkpoint | no — needs NemTron cluster + W&B credentials + real run | Todo |
 
@@ -53,7 +54,7 @@ calls keyed on the artifact-type vocabulary already declared in
 Standalone publisher module that the existing bridges can call without
 deep integration:
 
-1. **`m1_infra/lineage_publisher.py`** new module:
+1. **`milestones/lineage_publisher.py`** new module:
    - `WandbArtifactPublisher` class with `__init__(wandb_run=None)` —
      accepts an injected W&B run object (or `None` for dry-run mode)
    - `publish(record: LineageRecord) -> None` — translates the record
@@ -72,13 +73,18 @@ deep integration:
 
 ## Session 1 验收
 
-- [ ] `lineage_publisher.py` 新模块 + `WandbArtifactPublisher` class +
-  `FakeWandbRun` test double + dry-run mode
-- [ ] `scripts/publish_lineage.py` reads manifest.json + publishes
-- [ ] ≥ 12 个 pytest case (no real W&B import needed in sandbox; use
-  `pytest.importorskip("wandb")` for any test that needs the real
-  module; otherwise mock)
-- [ ] Roadmap §1.8 task021 entry references task069 as Session 7
+- [x] `milestones/lineage_publisher.py` 新模块 (sibling to `lineage.py`;
+  scaffold originally said `m1_infra/` but that package doesn't exist —
+  sibling placement keeps the schema/publish relationship explicit) +
+  `WandbArtifactPublisher` class + `FakeWandbRun` + `FakeArtifact` test
+  doubles + dry-run mode (no `wandb_run` provided → no-op)
+- [x] `scripts/publish_lineage.py` reads manifest.json + extracts lineage
+  block + calls publisher; exit codes 0 (ok) / 1 (no manifest) / 2 (no
+  lineage block) / 3 (wandb missing on real publish)
+- [x] **18 个 pytest case** (vs ≥12 acceptance); no real wandb import
+  needed
+- [x] Roadmap §1.8 task021 entry references task069 as Session 7
+  (linkage made in the 2026-05-19 refresh PR #94)
 
 ## 依赖
 
