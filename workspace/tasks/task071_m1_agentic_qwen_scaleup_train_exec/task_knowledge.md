@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Notes
 
@@ -47,3 +47,4 @@
 - BFCL runtime fact: `bfcl.bfclv3` with `task=all` needs `GEOCODE_API_KEY`, `RAPID_API_KEY`, `OMDB_API_KEY`, and `EXCHANGERATE_API_KEY` for executable categories; dummy values allow generation to start, but executable scoring can still fail against external APIs. The dummy-key non-dry attempt produced one successful model request and then failed during executable expected-output scoring.
 - MMLU-ProX runtime fact: `lm-evaluation-harness.mmlu_prox_chat` with `limit_samples=1` still expands to 196 language/category requests; on the current 4096-token endpoint it reached 43 successful responses, then failed on a 4563-token input. A valid full score needs a longer-context endpoint or task/prompt changes that preserve benchmark meaning.
 - WMT24++ non-dry fact: `nemo_skills.ns_wmt24pp` with `limit_samples=1`, `parallelism=1`, and `max_new_tokens=512` completed with `docker_exit=0`, BLEU `64.31870218238025`, `successful_responses=1/1`, `avg_prompt_tokens=51`, `avg_completion_tokens=38`, and artifacts under `vm4vpn:/tmp/task071_vpn_eval_wmt24pp1`.
+- Main sync fact: Session 14 merged `origin/main` at `9f26f42` into `intern_nemontron_code_reading/task071_eval_register_results` without conflicts; no task071 eval runtime assumptions changed during this sync.

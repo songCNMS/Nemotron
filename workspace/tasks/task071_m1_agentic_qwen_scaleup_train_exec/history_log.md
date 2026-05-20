@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 1
 
@@ -134,3 +134,9 @@
 - `lm-evaluation-harness.mmlu_prox_chat` non-dry 进入多语言数据下载和请求，`limit_samples=1` 仍展开为 196 个 language/category 请求；第 44 个请求输入 `4563` tokens 超过 4096 context 后失败，`docker_exit=1`，metrics 为 `count=45`、`successful_count=43`、`status_codes.200=43`、`status_codes.400=2`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_mmlu_prox1`。
 - `nemo_skills.ns_wmt24pp` 1-sample non-dry 成功：`docker_exit=0`，BLEU `64.31870218238025`，`successful_responses=1/1`，`avg_prompt_tokens=51`，`avg_completion_tokens=38`，`avg_latency_ms=711.0`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_wmt24pp1`。
 - 至此 `m1_full_basket_launcher_available` 14 个 mapped benchmarks 均已按配置顺序做过 non-dry attempt：AIME/GPQA/ifbench/HLE/LiveCodeBench/SciCode 的结果沿用 Sessions 7-12，本轮补齐 mmlu_pro、HMMT、RULER、AA-LCR、tau2、BFCL、MMLU-ProX、WMT24++；阻塞集中在 gated dataset、vm4vpn 内存/磁盘、external executable credentials 和当前 4096-token context limit。
+
+## Session 14
+
+- 按用户要求拉取主干最新代码：在当前 PR 分支 `intern_nemontron_code_reading/task071_eval_register_results` 上执行 `git fetch origin main`，将 `origin/main` 从 `6270724` 更新到 `9f26f42`。
+- 已通过 `git merge --no-edit origin/main` 将最新 main 合入当前分支，合并过程无冲突；新增主干内容包含 M0/M1 数据与 lineage 相关 scripts、milestone modules 和测试。
+- 本轮未启动新的训练或评测任务；工作重点是保持 PR #102 分支与最新主干同步，并更新 Session 14 workspace 记录。
