@@ -1,53 +1,73 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=roadmap_refresh_and_gap_tasks -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 70 |
+| Status | Working |
+| Current Task | (cross-cutting) roadmap refresh + gap-task scaffolding |
+| PR | pending push |
+| Session | 71 |
 
-刚做完：task018 Session 2 sandbox part — M0 HelpSteer-2 → genrm_compare
-converter (PR #84 / cfbb002, merged 2026-05-19)。3 大件:
+正在做：roadmap refinement pass + new task scaffolds。User asked for a
+top-level review of codebase + plan + roadmap, with refined task
+statuses AND new tasks where gaps exist.
 
-1. **新 M0 env + data row** (`helpsteer2_pref_compare`)：family
-   `rlhf_preference`，verifier `genrm_compare`；`nvidia/HelpSteer2`
-   (cc-by-4.0, contamination_against [MT-Bench, HelpSteer1])
-2. **新 converter** `transform_helpsteer2_pref`：两种 HelpSteer-2 flavor
-   都支持 (explicit-pair + attribute-derived)；tie → "A"；explicit 优先
-3. **RLHF registries 更新**：pref_data helpsteer2 行加 `m0_landed: true`；
-   env_registry `genrm_compare` **故意保持** `blocked_external` (judge
-   service 仍是 blocker)
+**Synthesis source**: Explore agent inventoried workspace tasks +
+pipeline modules + plan-vs-repo coverage gap; identified 4 untracked
+gaps and 3 task READMEs that needed Session 2 split refinement.
 
-20 个新 + 2 个修改 pytest case；sandbox 测试基线 474 → 494 passed +
-7 skipped。三个 data-registry audit 全 clean。
+## Changes in this PR
 
-## M1 converter layer (sandbox) 全部落地 🎉
+### Roadmap refresh (`docs/implementation-roadmap.md`)
 
-本 session 完成最后一块 sandbox-runnable converter 工作：
+- Last-updated bumped to 2026-05-19 with summary of changes
+- New "Current state snapshot (2026-05-19)" section at top:
+  - Sandbox-runnable M1 layer complete; baseline 502 passed
+  - Cluster-bound queue called out
+  - **Recent learnings** subsection capturing task065 lessons
+    (TBD revision, SWE-Gym real shape, HelpSteer-2 scalar rows)
+- New §5b "Cluster vs sandbox work queue" section: explicit table of
+  what's sandbox-pickable next vs what's cluster-blocked, with M2/M3
+  task scaffolds explicitly deferred
+- §4 cross-cutting task040 flipped from "cited not scaffolded" to
+  "Session 0 ✓ scaffolded"
 
-- ✓ task014 (RLVR1 bridge + smoke wiring + combined.jsonl)
-- ✓ task015 (21-env registry)
-- ✓ task016 (SWE1 bridge + SWE-Gym first-tool-call pivot converter)
-- ✓ task017 (SWE2 bridge + OpenHands trace converter + sandbox watchdog)
-- ✓ task018 (RLHF bridge + HelpSteer-2 preference converter)
+### 4 new task scaffolds (workspace/tasks/)
 
-剩下全都是 cluster-side 工作:
-- task014 真 launch (Ray + vLLM + NeMo-Gym services)
-- task016/017/018 真 HF download + revision pin
-- task017 OpenHands wrapper (等真 library 集成)
-- task017 Session 3 (cluster smoke + Docker fallback)
-- task018 Session 3 (GenRM judge service deployment)
-- task018 Session 4 (端到端 RLHF smoke from SWE2 checkpoint)
-- task018 tool-call pairing harness (follow-up)
-- task013 Session 2 (两阶段 SFT driver — 需 CUDA)
-- task019 Sessions 2-3 / task020 Session 3 (M1 eval cluster verify)
-- task021 Session 4 (cluster verify)
+- **task040_w1_curriculum_sampler** — W1 difficulty curriculum sampler
+  (was cited in roadmap §4 but never had a workspace dir; 4 sessions
+  declared, Session 1 sandbox-runnable)
+- **task067_openhands_loop_wrapper** — lifted from task017 Session 2
+  OpenHands wrapper deferral (3 sessions, Session 1 sandbox-runnable
+  with Protocol + FakeOpenHandsLoop stub)
+- **task068_rlhf_toolcall_pairing_harness** — lifted from task018
+  Session 2 tool-call pairing deferral (4 sessions, Session 1
+  design-first; addresses naïve cross-product 200M-pair blow-up)
+- **task069_wandb_artifact_lineage_publish** — lifted from task021
+  Session 2 W&B publish deferral (3 sessions, Session 1 sandbox-
+  runnable with injectable W&B run + FakeWandbRun double)
 
-下一候选 (sandbox-runnable):
-- task021 Session 1 review 或 task013 Session 1 review (没单独 sandbox session)
-- 找其他 plan/roadmap-listed sandbox gap
-- 等用户接到 cluster 后启动 cluster sessions
+### Existing task README refinements
+
+- **task013** README: Session 2 split into 2a (sandbox driver + YAML
+  chain) + 2b (cluster verify) so the sandbox-runnable part has a
+  visible pick-point
+- **task017** README: OpenHands wrapper deferral now explicitly points
+  at task067 as the formal owner
+- **task018** README: tool-call pairing harness deferral now explicitly
+  points at task068 as the formal owner
+- **task021** README: Session 7 W&B publish row added pointing at
+  task069
+
+## 不动
+
+- M2/M3 task scaffolds deliberately NOT created — earlier scaffolding
+  without execution context risks scope drift; create when M1 freezes
+- Code changes (no new modules); this is a planning-only refresh
+- Cluster-side documentation; updates only reflect what landed
+  pre-2026-05-19
+
+Sandbox 测试基线 502 passed + 7 skipped (no change — no code edits)。
+三个 data-registry audit 全 clean。

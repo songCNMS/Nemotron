@@ -1,6 +1,10 @@
 # Implementation Roadmap — M1 RL → M3 Freeze
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19 (roadmap refinement pass — task013 Session 2
+split into 2a/2b; task017 Session 2 OpenHands wrapper deferral lifted
+to task067; task018 Session 2 tool-call pairing deferral lifted to
+task068; task021 Session 7 W&B publish lifted to task069; task040 W1
+difficulty curriculum sampler scaffolded.)
 
 Companion to `docs/multi-environment-rl-post-training-plan.zh.text-agentic-only.md`
 (the plan) and `src/nemotron/recipes/super3/milestones/m1_agentic_sft/REVIEW_v0.md`
@@ -11,12 +15,40 @@ proposed task ordering to close the gaps.
 Legend: ✓ implemented · ◐ partial · ✗ not started · 📋 tracked under an existing
 workspace task.
 
-State snapshot: PR #18 merged structured output into `main`; task005 added the
-remaining terminal basics, short SWE patch supervision, and tool-call repair
-negative slices. task056 Session 1 (PR #25) wired NuminaMath + MuSiQue + multi-
-turn Hermes. task012 (this row, see §1.2) shipped `super3.jinja` and switched
-the three data-prep configs to it. REVIEW_v0.md still has 1 design-class item
-outside task005 (#9 two-stage SFT loss).
+## Current state snapshot (2026-05-19)
+
+**Sandbox-runnable M1 layer**: complete across task013-021 + task030
+(see §5). All M0 → M1 bridges, data converters, schema layer, audits,
+eval basket data+gate+gap-analysis, sandbox container scaffolding,
+and rollout-policy guard rail are landed and tested (sandbox baseline
+494 passed + 7 skipped).
+
+**Cluster-bound M1 work remaining**: see §5 "Cluster work queue" —
+real launches (Ray + vLLM + NeMo-Gym), HF downloads at full scale,
+GenRM judge service deployment, end-to-end RLHF smoke, W&B artifact
+publishing (task069), OpenHands library integration (task067),
+RLHF tool-call pairing harness (task068), task013 Session 2b cluster
+verify.
+
+**Recent learnings** (from task065 post-merge review):
+- M0 data row `hf_revision: TBD` was silently passing the audit before
+  task065 added `tbd` to FLOATING_REVISION_REFS — going forward, new
+  M0 rows must use a real commit hash or `null` (null is caught as
+  blocker; never TBD).
+- SWE-Gym-Lite real shape is SWE-Bench-style (instance_id / repo /
+  problem_statement / patch), NOT agent trajectories — converters now
+  fall back to synthetic single-turn trajectories when `messages` is
+  missing.
+- HelpSteer-2 default config is scalar rating rows, not paired —
+  `iter_helpsteer2_preference_pairs()` streaming adapter buffers
+  adjacent same-prompt scalar rows. Never assume HF schema without
+  verifying.
+
+Earlier state: PR #18 merged structured output into `main`; task005
+added terminal basics, short SWE patch supervision, and tool-call repair
+negatives. task056 Session 1 (PR #25) wired NuminaMath + MuSiQue + multi-
+turn Hermes. task012 shipped `super3.jinja`. REVIEW_v0.md still has 1
+design-class item outside task005 (#9 two-stage SFT loss).
 
 ---
 
@@ -522,7 +554,7 @@ long-context, multilingual` per plan §3 M3 acceptance.
 | Workflow | Plan ref | Gap | Suggested task |
 |---|---|---|---|
 | W1 unified data registry across SFT + RL + Eval | §6 | Sessions 1-2 + 4 ⚠ — schema layer + unified index over 9 existing registry YAMLs (M0 data + M0 env + 4 bridge env + SIF + pref data + sandbox image) + cross-registry inventory walks + write-time enforcement via pre-commit hook (`scripts/validate_data_registries.py`) + **single source of truth for row shape** via runtime loader delegation into schema (`fail_fast=True` mode raises on first issue; audit `collect-all` mode unchanged). Eval basket registry still missing — plugs into the same index when task019 lands. | **task030_unified_data_registry** — Session 1 ✓ (schema + index + inventories) + Session 2 ✓ (CLI validator + pre-commit local hook) + Session 4 ✓ (module-local loader merge into schema; row-shape single source of truth); Session 3 (eval basket; blocked on task019/020) still to go |
-| W1 difficulty curriculum sampler | §6 | task008 added bucket metadata; sampler not wired | **task040_curriculum_sampler** — depends on task008 (bucket metadata) + task032 (rollout store) |
+| W1 difficulty curriculum sampler | §6 | task008 added bucket metadata; sampler not wired | **task040_w1_curriculum_sampler** — scaffold created 2026-05-19. Sessions 1-4 declared; Session 1 (`bucket_rows` / `filter_solved` / `weighted_sample`) sandbox-runnable, depends only on task008 bucket metadata (already landed). Session 3 numeric pass-rate filter depends on task032 (M2). |
 | W1 failure rollout → SFT repair pipeline | §6 | ✗ | folded into task031 / task047 |
 | W2 env telemetry emitter | §7 | env_registry lists names; emitter missing | folded into task021 + task037 |
 | W2 per-env held-out shadow split | §7 | ✗ | folded into task036 |
@@ -612,6 +644,51 @@ Then in parallel:
 
 After all M1 tasks land, M2 fanout (task022-038) becomes possible. M3 only
 makes sense after M2 ships a working 122B-parity checkpoint.
+
+---
+
+## 5b. Cluster vs sandbox work queue (2026-05-19 refinement)
+
+The M1 critical path has bifurcated: sandbox work is largely complete,
+and cluster-bound work is queued waiting for NemTron access.
+
+### Sandbox-runnable next picks (no cluster needed)
+
+| Task | Session | Scope | Pickable now? |
+|---|---|---|---|
+| **task013** | 2a | Two-stage finetune driver + stage-a/stage-b YAML chain (test against injected fake `finetune` so no real GPU needed) | ✓ |
+| **task040** | 1 | W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample` | ✓ |
+| **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
+| **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
+| **task067** | 1 | OpenHands loop wrapper protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry | ✓ |
+| **task068** | 1 | RLHF tool-call pairing harness — design doc + reference paired-row shape | ✓ |
+| **task069** | 1 | W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI) | ✓ |
+
+### Cluster-bound queue (waiting on NemTron access)
+
+| Task | Session | Blocker |
+|---|---|---|
+| task013 | 2b | CUDA + nvcr Megatron-Bridge container |
+| task014 | 2 (cluster) | Ray + vLLM + NeMo-Gym services |
+| task016 | 3 | NemTron cluster + SIF image + checkpoint |
+| task017 | 3 | NemTron cluster + SIF image + checkpoint |
+| task018 | 3 | GenRM judge service (Qwen3-Nemotron-235B-A22B-GenRM-2603, router_dp_size=8, TP=8) |
+| task018 | 4 | End-to-end RLHF from SWE2 checkpoint (depends task017 Session 3 + task018 Session 3) |
+| task019 | 2-3 | NeMo Evaluator cluster run + W&B publish |
+| task020 | 3 | NeMo Evaluator cluster run on full 19-benchmark basket |
+| task021 | 4 | NeMo-RL / Ray / vLLM / NeMo-Gym launch path on real cluster |
+| task056 | 2 (cluster) | Lean verifier runtime container build |
+| task067 | 2-3 | Real OpenHands library install + SIF integration + cluster smoke |
+| task069 | 2-3 | Real W&B credentials + end-to-end pipeline run |
+
+### M2/M3 task scaffolds (not yet created)
+
+Tasks **022-029** (M2 env expansion), **031** (Agentic SFT v1), **032-037**
+(M2 infra), **038-039** (M2 RL + eval), **041-046** (M3 envs),
+**047-055** (M3 SFT/RL/infra/eval) are referenced in §2-§3 but have no
+workspace directories yet. Create scaffolds when M1 freezes and M2
+kickoff is imminent — earlier scaffolding without execution context
+risks scope drift.
 
 ---
 
