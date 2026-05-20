@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 1
 
@@ -140,3 +140,10 @@
 - 按用户要求拉取主干最新代码：在当前 PR 分支 `intern_nemontron_code_reading/task071_eval_register_results` 上执行 `git fetch origin main`，将 `origin/main` 从 `6270724` 更新到 `9f26f42`。
 - 已通过 `git merge --no-edit origin/main` 将最新 main 合入当前分支，合并过程无冲突；新增主干内容包含 M0/M1 数据与 lineage 相关 scripts、milestone modules 和测试。
 - 本轮未启动新的训练或评测任务；工作重点是保持 PR #102 分支与最新主干同步，并更新 Session 14 workspace 记录。
+
+## Session 15
+
+- 按“继续下一步”从 PR #102 的剩余缺口切入：此前 14 个 `m1_full_basket_launcher_available` benchmark 的 non-dry attempt 只记录在人工日志里，缺少机器可校验的结果 manifest。
+- 新增 `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml`，登记 task071 iter_0000122 导出模型、launcher 版本、vm4vpn + endpoint tunnel 执行形态、14 个 benchmark 的 attempt 状态、指标、artifacts 和阻塞原因。
+- 在 `tests/recipes/super3/test_m1_eval_full_basket.py` 增加结果 manifest 校验：要求结果顺序覆盖 `m1_full_basket_launcher_available.yaml` 的全部 14 个 launcher task，要求 benchmark/source_basket 与 mapping 对齐，要求 scored 与 blocked/partial 状态显式，并检查不写入 HF token。
+- 验证：`PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> 22 passed；`/work-agents/.venv/bin/ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed；`git diff --check` passed。

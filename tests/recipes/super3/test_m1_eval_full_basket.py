@@ -17,6 +17,7 @@ Covers:
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -53,6 +54,10 @@ LAUNCHER_AVAILABLE_CONFIG_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml"
 )
+TASK071_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml"
+)
 
 
 EXPECTED_FULL_IDS = {
@@ -88,6 +93,8 @@ EXPECTED_LAUNCHER_MISSING_IDS = {
     "tool_decathlon",
 }
 
+EXPECTED_NON_DRY_STATUSES = {"scored", "blocked", "partial"}
+
 
 def _load_rows(path: Path) -> list[dict]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -97,6 +104,10 @@ def _load_rows(path: Path) -> list[dict]:
 def _load_launcher_rows() -> list[dict]:
     data = yaml.safe_load(LAUNCHER_MAPPING_PATH.read_text(encoding="utf-8"))
     return data["tasks"]
+
+
+def _load_task071_non_dry_results() -> dict:
+    return yaml.safe_load(TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
 
 
 # ---------- Registry shape ----------
@@ -266,6 +277,65 @@ def test_launcher_available_config_uses_only_verified_available_tasks() -> None:
     tasks = set(data["tasks"])
     assert tasks == expected
     assert len(tasks) == 14
+
+
+def test_task071_non_dry_results_cover_launcher_available_config() -> None:
+    """The task071 run manifest is useful only if it covers every
+    launcher task we selected for the runnable full-basket subset."""
+    config = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+    result_manifest = _load_task071_non_dry_results()
+
+    config_tasks = config["tasks"]
+    result_tasks = [row["launcher_task"] for row in result_manifest["results"]]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["launcher"]["config"] == "m1_full_basket_launcher_available"
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is True
+    assert result_tasks == config_tasks
+    assert result_manifest["summary"]["attempted_tasks"] == len(config_tasks)
+
+
+def test_task071_non_dry_results_match_launcher_mapping_ids() -> None:
+    mapping_by_task = {
+        row["launcher_task"]: row
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    result_manifest = _load_task071_non_dry_results()
+
+    for row in result_manifest["results"]:
+        mapping_row = mapping_by_task[row["launcher_task"]]
+        assert row["benchmark_id"] == mapping_row["benchmark_id"]
+        assert row["source_basket"] == mapping_row["source_basket"]
+
+
+def test_task071_non_dry_results_make_scored_and_blocked_states_explicit() -> None:
+    result_manifest = _load_task071_non_dry_results()
+    rows = result_manifest["results"]
+
+    statuses = [row["attempt_status"] for row in rows]
+    assert set(statuses) <= EXPECTED_NON_DRY_STATUSES
+    assert statuses.count("scored") == result_manifest["summary"]["scored_tasks"]
+    assert len([s for s in statuses if s != "scored"]) == result_manifest["summary"][
+        "blocked_or_partial_tasks"
+    ]
+
+    for row in rows:
+        if row["attempt_status"] == "scored":
+            assert row["docker_exit"] == 0
+            assert row["artifacts"].startswith("vm4vpn:")
+            assert row["observed_metrics"]
+            assert row["response_stats"]["successful_responses"] > 0
+        else:
+            assert row["blocker"]["type"]
+            assert row["response_stats"]["total_responses"] >= 0
+
+
+def test_task071_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
 
 
 def test_launcher_available_config_expands_into_evaluator_schema() -> None:

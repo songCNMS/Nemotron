@@ -1,0 +1,283 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Task071 non-dry eval sweep record.
+#
+# This is not a benchmark registry. It is a run manifest for the first
+# executable pass over the launcher-available M1 full basket using the
+# exported Qwen3 4B M1 Agentic SFT checkpoint from iter_0000122.
+
+schema_version: 1
+milestone: M1
+run_id: task071_qwen3_4b_agentic_sft_iter0000122_m1_full_basket_non_dry
+recorded_at_utc: "2026-05-20T20:05:00Z"
+
+model:
+  artifact: task071-qwen3-4b-agentic-sft-iter0000122-hf:v1
+  endpoint_model_id: task071-qwen3-4b-agentic-sft-iter0000122-hf
+  checkpoint_path: /work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/checkpoints/iter_0000122
+  hf_export_path: /work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/hf_export_iter_0000122
+  endpoint_max_model_len: 4096
+
+launcher:
+  config: m1_full_basket_launcher_available
+  launcher: nemo-evaluator-launcher
+  launcher_version: "0.2.5"
+  eval_factory_image_tag: "26.03"
+  deployment_type: none
+  evaluator_host: vm4vpn
+  endpoint_access: "ssh remote forward vm4vpn:127.0.0.1:13000 -> NemTron 10.100.14.21:30000"
+  endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+
+run_scope:
+  non_dry: true
+  task_order_source: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml
+  all_available_tasks_attempted: true
+  request_body_logging: disabled_for_larger_runs
+
+summary:
+  attempted_tasks: 14
+  scored_tasks: 7
+  blocked_or_partial_tasks: 7
+  primary_blockers:
+    - gated_dataset
+    - launcher_host_memory_or_disk
+    - endpoint_context_window
+    - external_executable_credentials
+
+results:
+  - benchmark_id: mmlu_pro
+    launcher_task: lm-evaluation-harness.mmlu_pro
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample per category, 14 requests total
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_mmlu_pro1
+    observed_metrics:
+      group_exact_match: 0.0
+    response_stats:
+      successful_responses: 14
+      total_responses: 14
+      avg_prompt_tokens: 1319.57
+      avg_completion_tokens: 32.0
+      avg_latency_ms: 834.27
+
+  - benchmark_id: aime25
+    launcher_task: simple_evals.AIME_2025
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample with 10 repeats
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_aime/evaluations/20260520_174300-8a645eca228ad5d3/simple_evals.AIME_2025.0/artifacts
+    observed_metrics:
+      score: 1.0
+    response_stats:
+      successful_responses: 10
+      total_responses: 10
+      avg_latency_ms: 3341.95
+
+  - benchmark_id: hmmt
+    launcher_task: nemo_skills.ns_hmmt_feb2025
+    attempt_status: scored
+    source_basket: full
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_hmmt1
+    observed_metrics:
+      symbolic_correct_percent: 100.0
+      num_entries: 1
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_latency_ms: 8411.62
+
+  - benchmark_id: gpqa
+    launcher_task: simple_evals.gpqa_diamond
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 10 samples
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_gpqa10
+    observed_metrics:
+      score: 0.3
+      stddev: 0.4582575695
+      stderr: 0.1527525232
+    response_stats:
+      successful_responses: 10
+      total_responses: 10
+      avg_prompt_tokens: 234.5
+      avg_completion_tokens: 336.9
+      avg_total_tokens: 571.4
+      avg_latency_ms: 1992.3
+
+  - benchmark_id: hle
+    launcher_task: hle.hle
+    attempt_status: blocked
+    source_basket: full
+    sample_scope: 1 sample requested
+    docker_exit: 1
+    blocker:
+      type: gated_dataset
+      detail: Current Hugging Face token did not have access to cais/hle, so the run failed before model requests.
+    response_stats:
+      total_responses: 0
+
+  - benchmark_id: livecodebench
+    launcher_task: livecodebench.codegeneration_release_latest
+    attempt_status: blocked
+    source_basket: v0
+    sample_scope: 1 sample requested
+    docker_exit: 137
+    blocker:
+      type: launcher_host_memory_or_disk
+      detail: release_latest data build was OOM-killed on vm4vpn before model requests.
+    response_stats:
+      total_responses: 0
+
+  - benchmark_id: scicode
+    launcher_task: scicode.scicode
+    attempt_status: scored
+    source_basket: full
+    sample_scope: 1 problem
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_scicode1
+    observed_metrics:
+      problems_pass_at_1: 0.0
+      steps_pass_at_1: 0.1666666667
+    response_stats:
+      successful_responses: 5
+      total_responses: 19
+      status_codes:
+        "200": 5
+        "400": 14
+      avg_latency_ms: 825.31
+    caveat: Some later-step prompts exceeded the 4096-token endpoint context after max_new_tokens was added.
+
+  - benchmark_id: ifbench
+    launcher_task: ifbench.ifbench
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval/evaluations/20260520_173914-319a71866969dc8a/ifbench.ifbench.0/artifacts
+    observed_metrics:
+      prompt_level_strict_accuracy: 0.0
+      prompt_level_loose_accuracy: 0.0
+      instruction_level_strict_accuracy: 0.0
+      instruction_level_loose_accuracy: 0.0
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_latency_ms: 3124.77
+
+  - benchmark_id: ruler_256k
+    launcher_task: ruler.ruler-256k-chat
+    attempt_status: blocked
+    source_basket: v0
+    sample_scope: 256k chat task
+    docker_exit: 137
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_ruler1
+    blocker:
+      type: endpoint_context_window
+      detail: Current endpoint max_model_len is 4096; all 256k-context requests returned 400 before useful generation.
+    response_stats:
+      successful_responses: 0
+      total_responses: 300
+      status_codes:
+        "400": 300
+      avg_latency_ms: 1255.88
+
+  - benchmark_id: aa_lcr
+    launcher_task: AA-LCR.aa_lcr
+    attempt_status: blocked
+    source_basket: full
+    sample_scope: 1 sample
+    docker_exit: 1
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_aa_lcr1
+    blocker:
+      type: endpoint_context_window
+      detail: First sample was about 101423 input tokens, above the 4096-token endpoint context.
+    response_stats:
+      successful_responses: 0
+      total_responses: 30
+      status_codes:
+        "400": 30
+      avg_latency_ms: 1243.65
+
+  - benchmark_id: taubench_airline
+    launcher_task: tau2_bench.tau2_bench_airline
+    attempt_status: blocked
+    source_basket: v0
+    sample_scope: 1 task, 1 trial, 5 max steps
+    docker_exit: 1
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_tau2_airline1
+    blocker:
+      type: endpoint_context_window
+      detail: First agent input was 4827 tokens, above the 4096-token endpoint context.
+    response_stats:
+      successful_responses: 0
+      total_responses: 3
+      status_codes:
+        "400": 3
+      avg_latency_ms: 707.63
+
+  - benchmark_id: bfcl
+    launcher_task: bfcl.bfclv3
+    attempt_status: partial
+    source_basket: full
+    sample_scope: task=all, dummy external API credentials
+    docker_exit: 1
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_bfclv3_all1_dummykeys
+    blocker:
+      type: external_executable_credentials
+      detail: Generation made one successful model request, then executable scoring failed against dummy external API responses.
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      status_codes:
+        "200": 1
+      avg_prompt_tokens: 508
+      avg_completion_tokens: 26
+      avg_total_tokens: 534
+      avg_latency_ms: 484.25
+
+  - benchmark_id: mmlu_prox
+    launcher_task: lm-evaluation-harness.mmlu_prox_chat
+    attempt_status: partial
+    source_basket: full
+    sample_scope: limit_samples=1, expanded to language/category requests
+    docker_exit: 1
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_mmlu_prox1
+    blocker:
+      type: endpoint_context_window
+      detail: Run reached 43 successful responses, then failed on an input of 4563 tokens.
+    response_stats:
+      successful_responses: 43
+      total_responses: 45
+      status_codes:
+        "200": 43
+        "400": 2
+      avg_prompt_tokens: 1842.97
+      avg_completion_tokens: 17.67
+      avg_latency_ms: 791.9
+
+  - benchmark_id: wmt24pp
+    launcher_task: nemo_skills.ns_wmt24pp
+    attempt_status: scored
+    source_basket: full
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_wmt24pp1
+    observed_metrics:
+      bleu: 64.31870218238025
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_prompt_tokens: 51
+      avg_completion_tokens: 38
+      avg_latency_ms: 711.0
