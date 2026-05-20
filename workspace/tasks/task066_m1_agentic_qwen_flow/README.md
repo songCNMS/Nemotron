@@ -17,6 +17,7 @@
 - [x] 相关 Python 测试通过。
 - [x] Qwen 模型路径、checkpoint 路径和完整 pipeline 命令有实际执行记录。
 - [x] 若无法完成真实 Qwen 4B 训练，必须给出具体环境阻塞，而不是只停在代码检查。
+- [x] Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/92
 
 ## Results
 

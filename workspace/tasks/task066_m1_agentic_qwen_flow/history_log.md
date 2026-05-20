@@ -14,3 +14,4 @@
 - Qwen tokenizer packed data prep：本地 Qwen3 4B tokenizer 路径 `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`，4 shards，total_sequences=22，total_tokens=7,665，train rows=13，valid rows=4。
 - Training planner：本地 Bridge checkpoint `/mnt/3fs/data/lei.song/nemotron/checkpoints/qwen3-4b-instruct-2507-megatron-bridge-20260517a`，生成 `run_m1_agentic_sft.sh`，推导 `train_iters=13`。
 - Qwen local training entry 实际启动尝试失败：`ModuleNotFoundError: No module named 'torch'`。当前 `/work-agents/.venv` 同时缺 `megatron.bridge`，`nvidia-smi` 不可用，无法在本机继续真实 Qwen 4B finetune。
+- PR opened: https://github.com/songCNMS/Nemotron/pull/92
