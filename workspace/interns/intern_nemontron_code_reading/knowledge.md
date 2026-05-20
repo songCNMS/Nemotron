@@ -14,6 +14,10 @@ For M1 Agentic SFT on `NemTron`, use `/root/nemotron_session5_venv/bin/python` w
 
 On 2026-05-20 in this workspace, `/root/nemotron_session5_venv/bin/python` no longer exists. `/work-agents/.venv` can run M0/M1 Agentic SFT data prep and Qwen tokenizer packed artifacts because it has `datasets`, `transformers`, `pyarrow`, and `cosmos_xenna`; it cannot launch Qwen SFT because it lacks `torch` and `megatron.bridge`, and the host has no visible NVIDIA GPU.
 
+### Task066 NemTron Qwen SFT run
+
+NemTron host `lg-cmc-b7r202-e09u26-h200-000459` has 8x H200 and `/root/nemotron_session5_venv` with `torch`/`megatron.bridge`, but no `cosmos_xenna`. For task066 Session 2, sync code/artifacts via `tar | ssh tar` because GitHub 443 was unreachable from NemTron. Final Qwen3 4B M1 Agentic SFT smoke used GPUs 0/1, TP=2, 13 iterations, final validation loss `3.309570E-01`, PPL `1.392300E+00`, and saved checkpoint `/work-agents/intern_nemontron_code_reading/outputs/task066_qwen_sft/checkpoints/iter_0000013`.
+
 ### Live HF checks in PR tests
 
 Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such as `NEMOTRON_RUN_LIVE_HF_TESTS=1`; default PR tests should assert static slugs/subsets and avoid network-dependent skip/fail behavior.

@@ -17,6 +17,7 @@
 - [x] 相关 Python 测试通过。
 - [x] Qwen 模型路径、checkpoint 路径和完整 pipeline 命令有实际执行记录。
 - [x] 若无法完成真实 Qwen 4B 训练，必须给出具体环境阻塞，而不是只停在代码检查。
+- [x] NemTron remote Qwen3 4B training smoke completed.
 - [x] Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/92
 
 ## Results
@@ -26,4 +27,5 @@
 - Lightweight roundtrip smoke: pass, 22 records tokenized, 17 packed rows.
 - Qwen tokenizer packed data prep: pass with local model `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`, 4 shards, 7,665 tokens.
 - Training planner: pass, train=13 rows / valid=4 rows, derived `train_iters=13`.
-- Qwen training entry: blocked by runtime, `/work-agents/.venv` lacks `torch` and `megatron.bridge`; host also has no visible NVIDIA GPU.
+- Local Qwen training entry: blocked by runtime, `/work-agents/.venv` lacks `torch` and `megatron.bridge`; host also has no visible NVIDIA GPU.
+- NemTron Qwen training: pass on GPUs 0/1 with TP=2, 13/13 iterations, final validation loss `3.309570E-01`, PPL `1.392300E+00`, checkpoint at `/work-agents/intern_nemontron_code_reading/outputs/task066_qwen_sft/checkpoints/iter_0000013`.

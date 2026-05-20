@@ -455,6 +455,17 @@ def run_finetune(
         cli_overrides: Optional Hydra-style command-line overrides.
     """
     config = load_omegaconf_yaml(config_path)
+    script_config_overrides = []
+    for override in cli_overrides or []:
+        override_key = override.split("=", 1)[0].lstrip("+~")
+        if override_key.startswith(("dataset.", "tokenizer.")):
+            script_config_overrides.append(override)
+    if script_config_overrides:
+        # Apply launch-time overrides to the script config before recipe and
+        # dataset construction. The Megatron ConfigContainer merge below covers
+        # model/train/checkpoint fields, but dataset/tokenizer construction
+        # reads from the OmegaConf script config directly.
+        config = parse_hydra_overrides(config, script_config_overrides)
 
     # -------------------------------------------------------------------------
     # ARTIFACT TRACKING
