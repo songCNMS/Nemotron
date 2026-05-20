@@ -664,9 +664,10 @@ and cluster-bound work is queued waiting for NemTron access.
 | ~~**task013**~~ | ~~2a~~ | ~~Two-stage finetune driver + stage-a/stage-b YAML chain~~ — **landed 2026-05-19** | ✓ done |
 | ~~**task040**~~ | ~~1~~ | ~~W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample`~~ — **landed 2026-05-19** | ✓ done |
 | **task040** | 2 | Wire curriculum sampler into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in `--curriculum-policy` CLI flag | ✓ |
+| ~~**task070**~~ | ~~1~~ | ~~OpenHands wrapper Protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry~~ — **landed 2026-05-19** | ✓ done |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
-| **task070** | 1 | OpenHands loop wrapper protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry | ✓ |
+| **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | **task068** | 1 | RLHF tool-call pairing harness — design doc + reference paired-row shape | ✓ |
 | **task069** | 1 | W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI) | ✓ |
 

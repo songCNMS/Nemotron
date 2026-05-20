@@ -1,6 +1,7 @@
 # task070_openhands_loop_wrapper
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE=unassigned -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR pending on 2026-05-19 (Protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry; 16 tests) -->
 
 ## 背景
 
@@ -44,7 +45,7 @@ upstream OpenHands library, adding Nemotron-specific concerns:
 
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
-| 1 | Interface contract + fake-OpenHands stub for unit tests — `OpenHandsLoop` protocol + `FakeOpenHandsLoop` implementing it deterministically; sandbox watchdog + telemetry wiring tested against the fake | yes | Todo |
+| 1 | Interface contract + fake-OpenHands stub for unit tests — `OpenHandsLoop` protocol + `FakeOpenHandsLoop` implementing it deterministically; sandbox watchdog + telemetry wiring tested against the fake | yes | ✓ Done (this PR) |
 | 2 | Real OpenHands library integration — `OpenHandsLoopAdapter` implementing the protocol against the upstream library; depends on the OpenHands python package being available in the SIF container | partial (interface yes, real run no) | Todo |
 | 3 | Cluster smoke: `nemotron super3 rl swe2 -c smoke` runs 1 SWE-Bench Verified instance end-to-end with the wrapper | no — needs NemTron cluster + SIF image + checkpoint | Todo |
 
@@ -68,14 +69,23 @@ upstream OpenHands library, adding Nemotron-specific concerns:
 
 ## Session 1 验收
 
-- [ ] `m1_swe2/openhands_loop.py` 新模块 (Protocol + FakeOpenHandsLoop +
-  RolloutResult dataclass)
-- [ ] Wrapper threads watchdog policy through shell commands
-- [ ] Per-turn telemetry shape matches task021 Session 1 contract
-- [ ] Bounded rollout (max_turns + timeout)
-- [ ] Failure modes produce reward 0, not exception
-- [ ] ≥ 15 个 pytest case
-- [ ] Roadmap §1.5 task017 entry references task070 status
+- [x] `m1_swe2/openhands_loop.py` 新模块: `Instance` / `TurnRecord` /
+  `RolloutResult` frozen dataclasses + `OpenHandsLoop` Protocol +
+  `FakeOpenHandsLoop` test stub + `aggregate_turn_telemetry` helper +
+  `VALID_TERMINAL_REASONS` enum (8 reasons + unknown)
+- [x] Wrapper threads watchdog policy through `run_shell` / `run_tests`
+  (view_file / search / edit_file 不过 shell — locked in dedicated test)
+- [x] Per-turn telemetry shape matches task021 Session 1 contract
+  (latency_ms + tool_name + argument_dict + observation_length_chars)
+- [x] Bounded rollout: turn budget exceeded → terminal=turn_budget;
+  timeout exceeded → terminal=timeout (tested with injected clock)
+- [x] Failure modes produce reward 0 + terminal_reason, never raise
+  (container_crash path validated; policy_violation path validated)
+- [x] **16 个 pytest case** (vs ≥ 15 acceptance)
+- [x] aggregate_turn_telemetry rolls up per-turn records into task021
+  shape (numeric → min/mean/max, counts → int, tool_name_counts → dict)
+
+Sandbox 测试基线 543 → 559 passed + 7 skipped (16 new)。
 
 ## 依赖
 
