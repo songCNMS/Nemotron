@@ -670,7 +670,7 @@ and cluster-bound work is queued waiting for NemTron access.
 | **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | **task068** | 1 | RLHF tool-call pairing harness — design doc + reference paired-row shape | ✓ |
 | ~~**task069**~~ | ~~1~~ | ~~W&B artifact lineage publisher (publisher module + dry-run + scripts/publish_lineage.py CLI)~~ — **landed 2026-05-19** | ✓ done |
-| **task069** | 2 | Wire `lineage_publisher.publish()` into every `prepare_*.py` so each bridge auto-publishes after writing manifest.json | partial |
+| ~~**task069**~~ | ~~2~~ | ~~Wire `lineage_publisher.publish()` into every `prepare_*.py` so each bridge auto-publishes after writing manifest.json~~ — **landed 2026-05-19** | ✓ done |
 
 ### Cluster-bound queue (waiting on NemTron access)
 

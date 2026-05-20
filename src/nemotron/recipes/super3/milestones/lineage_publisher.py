@@ -273,6 +273,89 @@ class FakeWandbRun:
         self.log_artifact_calls.append(artifact)
 
 
+# ---------- Auto-detect helper (task069 Session 2) ----------
+
+
+# Sentinel for "look up the active wandb.run lazily" — distinct from
+# None (which forces dry-run). Calling sites pass _AUTO so the helper
+# can decide based on import availability + run state.
+class _AutoDetect:
+    pass
+
+
+_AUTO: _AutoDetect = _AutoDetect()
+
+
+def _resolve_wandb_run(wandb_run: Any) -> Any:
+    """Resolve the ``wandb_run`` argument to a real run or None.
+
+    - Explicit None → None (forces dry-run)
+    - Explicit object → returned as-is
+    - ``_AUTO`` sentinel → lazy-import wandb and read ``wandb.run``;
+      returns None if wandb isn't installed or no run is active. This
+      keeps sandbox / dry-run code paths importable without wandb.
+    """
+    if not isinstance(wandb_run, _AutoDetect):
+        return wandb_run
+    try:
+        import wandb  # local import — sandbox without wandb shouldn't fail
+    except ImportError:
+        return None
+    return getattr(wandb, "run", None)
+
+
+def maybe_publish_lineage_from_manifest(
+    manifest_path: Path | str,
+    *,
+    file_root: Path | str | None = None,
+    wandb_run: Any = _AUTO,
+    upstream_artifact_resolver: UpstreamResolver | None = None,
+    artifact_factory: Callable[..., Any] | None = None,
+) -> PublishResult | None:
+    """Read a manifest.json + publish its lineage block to W&B.
+
+    Designed as the **one-line integration** every ``prepare_*.py``
+    main() calls after writing its manifest.json. Failure-tolerant by
+    design: any exception (missing manifest, missing lineage block,
+    wandb error) is swallowed and the function returns None — a
+    publishing failure must NEVER fail the underlying prep.
+
+    Sandbox behavior:
+    - No wandb installed → dry-run via no wandb.run available
+    - wandb installed but no active run → dry-run
+
+    Production behavior:
+    - Active wandb run → real publish via that run
+
+    Returns the ``PublishResult`` so callers (CLI, tests) can inspect
+    what happened. None on any exception path.
+    """
+    try:
+        target = Path(manifest_path)
+        if not target.is_file():
+            return None
+        with target.open(encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, dict):
+            return None
+        lineage_block = data.get("lineage")
+        if not isinstance(lineage_block, dict):
+            return None
+        record = LineageRecord.from_jsonable(lineage_block)
+        run = _resolve_wandb_run(wandb_run)
+        publisher = WandbArtifactPublisher(
+            wandb_run=run, artifact_factory=artifact_factory
+        )
+        resolved_root = Path(file_root) if file_root is not None else target.parent
+        return publisher.publish(
+            record,
+            file_root=resolved_root,
+            upstream_artifact_resolver=upstream_artifact_resolver,
+        )
+    except Exception:  # noqa: BLE001 — publishing must never crash prep
+        return None
+
+
 __all__ = [
     "FakeArtifact",
     "FakeWandbRun",
@@ -280,4 +363,5 @@ __all__ = [
     "UpstreamResolver",
     "WandbArtifactPublisher",
     "default_upstream_resolver",
+    "maybe_publish_lineage_from_manifest",
 ]

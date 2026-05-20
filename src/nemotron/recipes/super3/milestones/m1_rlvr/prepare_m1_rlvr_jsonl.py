@@ -340,6 +340,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001 - CLI should render concise failures.
         print(f"prepare_m1_rlvr_jsonl.py: error: {exc}", file=sys.stderr)
         return 1
+    # task069 Session 2: publish lineage to W&B if a run is active.
+    # Auto-detects wandb.run; no-ops in sandbox / when wandb isn't installed.
+    # Failure-tolerant — publishing never fails the prep.
+    try:
+        from nemotron.recipes.super3.milestones.lineage_publisher import (
+            maybe_publish_lineage_from_manifest,
+        )
+        maybe_publish_lineage_from_manifest(args.output_dir / "manifest.json")
+    except Exception:  # noqa: BLE001
+        pass
     print(
         json.dumps(
             {
