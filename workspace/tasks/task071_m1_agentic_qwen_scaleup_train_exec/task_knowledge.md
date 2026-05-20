@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Notes
 
@@ -19,3 +19,6 @@
 - Eval CLI fact: `load_stage3_eval_config` expands compact basket configs into full `evaluation.tasks`, and `normalize_evaluator_launcher_config` removes old `execution.env_vars` plus sets `execution.mode=sequential` for local generic deployment compatibility with `nemo-evaluator-launcher==0.2.5`.
 - Remote dry-run fact: with dummy `HF_TOKEN`/W&B env vars, `run_eval(..., dry_run=True)` on NemTron generated scripts for 14 tasks under `/root/Nemotron_task071_eval/.nemotron/evaluations/20260520_113845-f0c3d45f10b2f225`, invocation id `f0c3d45f10b2f225`.
 - Non-dry eval resource fact: with the repo default `deployment.type=generic`, launcher non-dry runs a model-serving Docker container with GPU access, so GPU is required on the deployment side; with `deployment.type=none` and a pre-existing SGLang/OpenAI endpoint, the evaluator host can be CPU-only as long as it has Docker/Slurm/Lepton to run eval containers and the endpoint's GPU stays available.
+- CPU/vpn eval launcher check: current CPU node `lg-cmc-b7r201-a01u17-cpu-000006` can reach NemTron SGLang at `http://10.100.14.21:30000/v1/models`, but cannot run launcher non-dry eval today because Docker daemon is absent and manual `dockerd` can only start with `--bridge=none`, after which `docker run` fails on read-only cgroup / sandbox permission.
+- `deployment.type=none` launcher config fact: NeMo Evaluator Launcher 0.2.5 expects top-level `target.api_endpoint.url`, `target.api_endpoint.model_id`, and `target.api_endpoint.type`; setting only `evaluation.nemo_evaluator_config.target.api_endpoint` is insufficient.
+- `deployment.type=none` script fact: local executor still uses `docker run nvcr.io/nvidia/eval-factory/<task>:26.03` for eval clients, so a CPU node must have a working Docker/container runtime even when model serving is external.

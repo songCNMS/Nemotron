@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1
 
@@ -45,3 +45,13 @@
 - 结论：当前默认 `deployment.type=generic` + local executor 会在 non-dry eval 中启动模型服务 Docker，并使用 `docker run --gpus all`，因此模型服务侧需要 GPU；eval client/harness 容器本身主要是 CPU/IO/网络负载。
 - 如果改为 `deployment.type=none` 并指向已经运行的 OpenAI-compatible endpoint（例如现有 SGLang endpoint），eval launcher 所在节点可以不分配 GPU，但外部 endpoint 仍必须由 GPU 支撑并在评测期间保持可用。
 - 对 task071 当前 NemTron 状态的判断：GPU0 上的 SGLang endpoint 已经承担模型推理，真正阻塞 non-dry eval 的不是 GPU，而是缺 Docker/Slurm/Lepton 这类可执行 eval-factory containers 的 executor。
+
+## Session 5
+
+- 按用户要求检查 `deployment.type=none` 下，`vpn`/CPU node 是否能作为 eval launcher。
+- 直接 `ssh vpn` 失败：本地 SSH config 没有 `vpn` alias；当前工作节点为 CPU node `lg-cmc-b7r201-a01u17-cpu-000006`，符合用户描述的 CPU launcher 候选环境。
+- 网络检查通过：CPU node 可以访问 NemTron SGLang endpoint，`curl http://10.100.14.21:30000/v1/models` 和 `http://10.100.15.21:30000/v1/models` 均返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`。
+- 工具检查：CPU node 有 Docker client 和 `dockerd` 二进制，但没有运行中的 Docker daemon；没有 `sbatch`/`srun`、`singularity`/`apptainer`/`enroot`/`nerdctl`/`lepton` CLI；本地 `/work-agents/.venv` 也未安装 `nemo_evaluator_launcher`。
+- Docker 权限探测：默认 `dockerd` 启动失败在 `docker0` bridge network 权限；`--bridge=none --iptables=false --storage-driver=vfs` 可以启动 daemon，但实际 `docker run` 失败于只读 cgroup 或 sandbox 权限，不能运行 eval-factory client container。
+- 在 NemTron 上生成 `deployment.type=none` dry-run 脚本验证 launcher 形态：必须设置顶层 `target.api_endpoint.url/model_id/type`；脚本仍执行 `docker run nvcr.io/nvidia/eval-factory/...`，且默认不加 `--network host`。
+- 结论：当前 CPU/vpn node 网络可达模型 endpoint，但不能作为 non-dry eval launcher；要使用它需要一个可运行 Docker/container executor 的 CPU job 环境，或改用 Slurm/Lepton 等可执行 eval-factory containers 的 executor。

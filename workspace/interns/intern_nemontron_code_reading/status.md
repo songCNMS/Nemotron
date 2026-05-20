@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 4 |
+| Session | 5 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Clarified non-dry eval GPU needs: default local generic deployment starts model-serving containers with GPU, while deployment.type=none can run eval harness on CPU if an external GPU-backed endpoint is already live. |
+| Latest | Checked the CPU/vpn node path for deployment.type=none: it can reach the NemTron SGLang endpoint, but current container privileges/Docker executor are insufficient for non-dry eval launcher jobs. |
