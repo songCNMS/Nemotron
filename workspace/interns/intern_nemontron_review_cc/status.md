@@ -1,76 +1,47 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task013_super3_sft_two_stage_loss -->
+<!-- METADATA:STATUS=Idle -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task013_super3_sft_two_stage_loss |
-| PR | pending push |
-| Session | 73 |
+| Status | Idle |
+| Current Task | - |
+| PR | - |
+| Session | 74 |
 
-正在做：task013 Session 2a — two-stage finetune driver + stage-a/b YAML
-chain (sandbox part of Session 2; Session 2b cluster verify deferred to
-real nvcr Megatron-Bridge container).
+刚做完：task013 Session 2a — two-stage finetune driver + stage-a/b YAML
+chain (PR #97 / 2f63ceb, merged 2026-05-19)。
 
-## What's in this PR
+- 新 module `stage1_sft/two_stage_finetune.py`: `run_two_stage_finetune`
+  driver with injectable `finetune_fn` (DI pattern from task017 Session
+  2 watchdog); `StageInvocation` + `TwoStageResult` dataclasses
+- 新 `stage_a_default.yaml` (token-level / gpt_step) +
+  `stage_b_default.yaml` (sample-level / placeholder
+  `pretrained_checkpoint` driver overrides)
+- 14 个新 pytest case；sandbox 测试基线 506 → 520 passed + 7 skipped
 
-### `stage1_sft/two_stage_finetune.py` 新模块
+task013 整 task：Session 1 ✓ + Session 2a ✓；Session 2b (cluster verify
+in nvcr Megatron-Bridge container) 仍待。
 
-- `StageInvocation` frozen dataclass：stage / config_path /
-  step_function / cli_overrides / expected_checkpoint_save
-- `TwoStageResult` frozen dataclass：stage_a_checkpoint_save +
-  stage_b_checkpoint_save + tuple of two StageInvocations
-- `run_two_stage_finetune(stage_a_config_path, stage_b_config_path, *, finetune_fn=None, recipe_builder=None, cli_overrides=None)`:
-  - Reads Stage A YAML，assert `step_function` resolves to `gpt_step`
-    (or absent → default gpt_step)；reads `checkpoint.save`
-  - Reads Stage B YAML，assert `step_function` is
-    `super3_sample_level_step`；reads `checkpoint.save`
-  - Lazy-imports `train.run_finetune` + `train._default_recipe_builder`
-    only when `finetune_fn` / `recipe_builder` are not injected (keeps
-    sandbox import light)
-  - Invokes finetune_fn twice：Stage A 用 operator overrides；Stage B
-    用 operator overrides + `checkpoint.pretrained_checkpoint=<stage_a save>`
-  - Tags 各自 `task013 / stage-{a,b} / {token,sample}-level` 给 W&B
-    dashboard filter
+## 本轮 (PRs #94 #95 #97) 收尾
 
-### `stage1_sft/config/stage_a_default.yaml` 新
+PR #94 — roadmap 全面 refresh + 4 个 gap-task 脚手架 (task040 / task067 /
+task068 / task069)。
+PR #95 — task067 ID collision 修复 → task070_openhands_loop_wrapper
+(intern_nemontron_code_reading 同时落 task067_m1_agentic_qwen_scaleup)。
+PR #97 — task013 Session 2a 实施 (sandbox driver + YAMLs)。
 
-- Mirrors default.yaml；explicit `step_function: gpt_step`；
-  `checkpoint.save: /nemo_run/super3-sft-stage-a-model`（distinct from
-  Stage B path）；`convert_to_hf.enabled: false`（Stage A intermediate）
+下一候选 (sandbox-runnable per roadmap §5b)：
+- task040 Session 1 — W1 curriculum sampler (bucket_rows / filter_solved /
+  weighted_sample)
+- task057 Session 1 — M0 tier2 expansion (lights up RLVR2/RLVR3 active)
+- task068 Session 1 — RLHF tool-call pairing harness design doc
+- task069 Session 1 — W&B lineage publisher (injectable W&B run +
+  FakeWandbRun double + scripts/publish_lineage.py CLI)
+- task070 Session 1 — OpenHands wrapper Protocol + FakeOpenHandsLoop stub
 
-### `stage1_sft/config/stage_b_default.yaml` 新
-
-- `step_function: super3_sample_level_step`；
-  `checkpoint.pretrained_checkpoint: TWO_STAGE_DRIVER_OVERRIDES_THIS`
-  placeholder；`checkpoint.save: /nemo_run/super3-sft-stage-b-model`；
-  `convert_to_hf.enabled: true`（Stage B final）；`train_iters: 800`
-  (vs Stage A 1700 — sample-level loss tighter convergence)
-
-### Tests (`test_two_stage_finetune.py`, 14 cases)
-
-- Driver dispatch 6: 调用两次 / 路径正确 / Stage A → B checkpoint
-  override 接好 / Stage A 不被 override / operator overrides 流到两边 /
-  tags 各自正确
-- Result shape 1: TwoStageResult 字段 + 2 invocations
-- step_function 验证 3: Stage A 拒 sample-level / Stage B 拒 gpt_step /
-  Stage A 缺 step_function 默认 gpt_step pass
-- Error surfaces 2: missing YAML / missing checkpoint.save
-- Shipped defaults 3: stage_a_default 满足 driver preconditions /
-  stage_b_default uses sample-level step / end-to-end against shipped
-  configs
-
-Sandbox 测试基线 506 → **520 passed + 7 skipped** (14 new)。
-
-## task013 状态
-
-- Session 1 ✓ (PR #44 / 10e1393) — dispatch + math
-- Session 2a ✓ (this PR) — driver + YAMLs
-- Session 2b ☐ — cluster verify in nvcr Megatron-Bridge container
-
-下一候选 (sandbox-runnable per roadmap §5b)：task040 Session 1 (W1
-curriculum sampler) / task057 Session 1 (M0 tier2) / task068 Session 1
-(RLHF tool-call pairing design) / task069 Session 1 (W&B publisher) /
-task070 Session 1 (OpenHands wrapper protocol + fake)。
+Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
+task014 Session 2 cluster part / task016 Session 3 / task017 Session 3 /
+task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
+task021 Session 4。
