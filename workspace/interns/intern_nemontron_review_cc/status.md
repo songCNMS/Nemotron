@@ -1,79 +1,60 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task069_wandb_artifact_lineage_publish -->
+<!-- METADATA:STATUS=Idle -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task069_wandb_artifact_lineage_publish |
-| PR | pending push |
-| Session | 79 |
+| Status | Idle |
+| Current Task | - |
+| PR | - |
+| Session | 80 |
 
-正在做：task069 Session 1 — W&B artifact lineage publisher。Plan §10
-M1 infra deliverable lifted from task021 Session 2 deferral. Session 2
-landed the lineage *schema*; this PR lands the *publish* side.
+刚做完：task069 Session 1 — W&B artifact lineage publisher + CLI
+(PR #104 / 860e175, merged 2026-05-19).
 
-## What's in this PR
+- 新 module `milestones/lineage_publisher.py` (sibling to `lineage.py`):
+  - `WandbArtifactPublisher(wandb_run=None, *, artifact_factory=None)` —
+    injectable W&B run + artifact factory; dry-run mode when wandb_run=None
+  - `default_upstream_resolver`: manifest → upstream artifact_name;
+    checkpoint → basename heuristic; hf_dataset/unknown → None
+  - `PublishResult` dataclass surfaces dry_run / artifact_name+type /
+    upstream_resolved+unresolved / outputs_attached+missing
+  - `FakeWandbRun` + `FakeArtifact` test doubles (no wandb import needed)
+- 新 CLI `scripts/publish_lineage.py` — exit codes 0/1/2/3; dry-run
+  needs no wandb install; live publish lazy-imports
+- 18 个新 pytest case; sandbox 测试基线 559 → 577 passed + 7 skipped
+- Closes M1 infra W&B publish gap deferred since task021 Session 2
 
-### 新 module `milestones/lineage_publisher.py`
+## 本轮 PRs 收尾 (Roadmap refresh sprint complete)
 
-Placed sibling to `lineage.py` (scaffold originally said `m1_infra/`
-but no such package exists; sibling keeps schema/publish relationship
-explicit).
+- PR #94 — roadmap refresh + 4 gap-task scaffolds
+- PR #95 — task067 → task070 rename (ID collision)
+- PR #97 — task013 Session 2a (two-stage SFT driver + YAMLs)
+- PR #99 — task040 Session 1 (W1 curriculum sampler)
+- PR #101 — task070 Session 1 (OpenHands wrapper Protocol + fake)
+- PR #104 — task069 Session 1 (W&B lineage publisher + CLI)
 
-- `WandbArtifactPublisher(wandb_run=None, *, artifact_factory=None)`：
-  - `wandb_run=None` → **dry-run** mode (publish 仍返回 PublishResult
-    describing what *would* have happened)
-  - `artifact_factory` injectable → tests pass `_toy_artifact_factory`
-    so no real wandb import needed
-  - `publish(record, *, file_root=None, upstream_artifact_resolver=None)`
-- `default_upstream_resolver` handles:
-  - `manifest` input → reads upstream manifest's lineage block, returns
-    `<artifact_name>:latest`
-  - `checkpoint` input → `<basename>:latest` heuristic
-  - `hf_dataset` / unknown → None (no W&B equivalent)
-- `PublishResult` dataclass：dry_run / artifact_name / artifact_type /
-  upstream_resolved+unresolved / outputs_attached+missing
-- Test doubles (sandbox-runnable, no wandb import):
-  - `FakeWandbRun` captures `use_artifact` + `log_artifact` calls
-  - `FakeArtifact` captures `add_file` + `metadata` mutations
-
-### `scripts/publish_lineage.py` CLI
-
-Reads `manifest.json`, extracts lineage block, calls publisher. Exit
-codes:
-- 0: publish OK (or dry-run clean)
-- 1: manifest missing
-- 2: lineage block missing / malformed
-- 3: real publish requested but wandb unavailable
-
-Dry-run path doesn't require wandb installed — useful for CI /
-planning. Live publish path lazy-imports wandb so the CLI stays
-testable in sandbox.
-
-### Tests (`test_lineage_publisher.py`, 18 cases)
-
-- Dry-run 2: returns PublishResult / still resolves upstream + outputs
-- Live mode 5: logs artifact / use_artifact for resolvable inputs /
-  skips for unresolvable / each output → add_file / outputs_missing
-  surfaced / absolute paths used as-is
-- default_upstream_resolver 4: manifest / missing manifest / hf_dataset
-  → None / checkpoint heuristic
-- Custom resolver 1: overrides default
-- Test doubles 2: FakeArtifact captures add_file / FakeWandbRun
-  captures in order
-- CLI 3: dry-run roundtrip / missing manifest exit 1 / missing lineage
-  block exit 2
-
-Sandbox 测试基线 559 → **577 passed + 7 skipped** (18 new)。
+Sandbox 测试基线 progression: 506 → 520 → 543 → 559 → 577 passed
+(共 4 sandbox sessions + roadmap refresh = 71 new tests across the sprint).
 
 ## task069 状态
 
-- Session 1 ✓ (this PR) — publisher + CLI + test doubles + dry-run
-- Session 2 ☐ — wire publisher into every `prepare_*.py` (M0 / SFT /
-  RLVR / SWE1 / SWE2 / RLHF / eval) so each bridge auto-publishes
-  after writing manifest.json
+- Session 1 ✓ (this PR)
+- Session 2 ☐ — wire `lineage_publisher.publish()` into every
+  `prepare_*.py` (M0 / SFT / RLVR / SWE1 / SWE2 / RLHF / eval)
 - Session 3 ☐ — Cluster verify with real W&B credentials
 
-Roadmap §5b sandbox queue + §1.8 task021 entry 更新。
+## 下一候选 (sandbox-runnable per roadmap §5b)
+
+- task040 Session 2 — wire sampler into prepare_m0_assets.py /
+  prepare_m1_agentic_sft.py via `--curriculum-policy` CLI flag
+- task057 Session 1 — M0 tier2 expansion (lights up RLVR2/RLVR3 active)
+- task068 Session 1 — RLHF tool-call pairing harness design doc
+- task069 Session 2 — wire publisher into every prepare_*.py (natural
+  follow-on)
+
+Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
+task014 Session 2 cluster part / task016 Session 3 / task017 Session 3 /
+task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
+task021 Session 4 / task069 Session 3 / task070 Sessions 2-3。
