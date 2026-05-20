@@ -1,0 +1,68 @@
+# Stage A of the two-stage SFT loss schedule (task013 Session 2a).
+#
+# Plan §5.1: "first token-level, then sample-level". This config is
+# Stage A — token-level loss, identical training math to the current
+# default.yaml. The only delta from default.yaml is:
+#   - explicit `step_function: gpt_step` (was implicit default)
+#   - `checkpoint.save` points to a stage-A-distinct path so Stage B
+#     can pick it up without a name collision
+#
+# Run via:
+#   nemotron super3 sft -c stage_a_default
+# OR through the two-stage driver:
+#   from nemotron.recipes.super3.stage1_sft.two_stage_finetune import run_two_stage_finetune
+#   run_two_stage_finetune("config/stage_a_default.yaml", "config/stage_b_default.yaml")
+#
+# Both invocations need CUDA + nvcr Megatron-Bridge container; sandbox
+# only validates YAML shape + driver dispatch.
+
+run:
+  data: super3-sft-data:latest
+  model: super3-pretrain-model:latest
+  env:
+    container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
+
+# task013 Session 1: explicit step_function (defaults to gpt_step if
+# absent, but the two-stage driver requires it set explicitly here so
+# misconfiguration is caught early).
+step_function: gpt_step
+
+recipe:
+  _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
+  packed_sequence: true
+  peft: null
+
+dataset:
+  super3_packed_sft_dir: ${art:data,path}
+  seq_length: ${art:data,pack_size}
+  packed_sequence_specs:
+    packed_sequence_size: ${art:data,pack_size}
+
+train:
+  train_iters: 1700
+  global_batch_size: 4
+
+model:
+  seq_length: ${art:data,pack_size}
+
+scheduler:
+  lr_warmup_iters: 4
+
+logger:
+  log_interval: 10
+  wandb_project: ${run.wandb.project}
+  wandb_entity: ${run.wandb.entity}
+  wandb_exp_name: super3-sft-stage-a
+
+checkpoint:
+  # Stage A's distinct output path so Stage B can pick it up by reading
+  # this YAML's `checkpoint.save` field. The two-stage driver passes
+  # this path to Stage B via `checkpoint.pretrained_checkpoint=...`
+  # Hydra-style CLI override.
+  save: /nemo_run/super3-sft-stage-a-model
+  save_interval: 20
+  pretrained_checkpoint: ${art:model,path}
+  finetune: true
+
+convert_to_hf:
+  enabled: false  # Stage A is an intermediate checkpoint; HF conversion happens after Stage B.

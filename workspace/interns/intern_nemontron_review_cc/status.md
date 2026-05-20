@@ -1,74 +1,76 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=roadmap_refresh_and_gap_tasks -->
+<!-- METADATA:STATUS=Working,TASK=task013_super3_sft_two_stage_loss -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
 | Status | Working |
-| Current Task | (cross-cutting) roadmap refresh + gap-task scaffolding |
+| Current Task | task013_super3_sft_two_stage_loss |
 | PR | pending push |
-| Session | 71 |
+| Session | 73 |
 
-正在做：roadmap refinement pass + new task scaffolds。User asked for a
-top-level review of codebase + plan + roadmap, with refined task
-statuses AND new tasks where gaps exist.
+正在做：task013 Session 2a — two-stage finetune driver + stage-a/b YAML
+chain (sandbox part of Session 2; Session 2b cluster verify deferred to
+real nvcr Megatron-Bridge container).
 
-**Synthesis source**: Explore agent inventoried workspace tasks +
-pipeline modules + plan-vs-repo coverage gap; identified 4 untracked
-gaps and 3 task READMEs that needed Session 2 split refinement.
+## What's in this PR
 
-## Changes in this PR
+### `stage1_sft/two_stage_finetune.py` 新模块
 
-### Roadmap refresh (`docs/implementation-roadmap.md`)
+- `StageInvocation` frozen dataclass：stage / config_path /
+  step_function / cli_overrides / expected_checkpoint_save
+- `TwoStageResult` frozen dataclass：stage_a_checkpoint_save +
+  stage_b_checkpoint_save + tuple of two StageInvocations
+- `run_two_stage_finetune(stage_a_config_path, stage_b_config_path, *, finetune_fn=None, recipe_builder=None, cli_overrides=None)`:
+  - Reads Stage A YAML，assert `step_function` resolves to `gpt_step`
+    (or absent → default gpt_step)；reads `checkpoint.save`
+  - Reads Stage B YAML，assert `step_function` is
+    `super3_sample_level_step`；reads `checkpoint.save`
+  - Lazy-imports `train.run_finetune` + `train._default_recipe_builder`
+    only when `finetune_fn` / `recipe_builder` are not injected (keeps
+    sandbox import light)
+  - Invokes finetune_fn twice：Stage A 用 operator overrides；Stage B
+    用 operator overrides + `checkpoint.pretrained_checkpoint=<stage_a save>`
+  - Tags 各自 `task013 / stage-{a,b} / {token,sample}-level` 给 W&B
+    dashboard filter
 
-- Last-updated bumped to 2026-05-19 with summary of changes
-- New "Current state snapshot (2026-05-19)" section at top:
-  - Sandbox-runnable M1 layer complete; baseline 502 passed
-  - Cluster-bound queue called out
-  - **Recent learnings** subsection capturing task065 lessons
-    (TBD revision, SWE-Gym real shape, HelpSteer-2 scalar rows)
-- New §5b "Cluster vs sandbox work queue" section: explicit table of
-  what's sandbox-pickable next vs what's cluster-blocked, with M2/M3
-  task scaffolds explicitly deferred
-- §4 cross-cutting task040 flipped from "cited not scaffolded" to
-  "Session 0 ✓ scaffolded"
+### `stage1_sft/config/stage_a_default.yaml` 新
 
-### 4 new task scaffolds (workspace/tasks/)
+- Mirrors default.yaml；explicit `step_function: gpt_step`；
+  `checkpoint.save: /nemo_run/super3-sft-stage-a-model`（distinct from
+  Stage B path）；`convert_to_hf.enabled: false`（Stage A intermediate）
 
-- **task040_w1_curriculum_sampler** — W1 difficulty curriculum sampler
-  (was cited in roadmap §4 but never had a workspace dir; 4 sessions
-  declared, Session 1 sandbox-runnable)
-- **task070_openhands_loop_wrapper** — lifted from task017 Session 2
-  OpenHands wrapper deferral (3 sessions, Session 1 sandbox-runnable
-  with Protocol + FakeOpenHandsLoop stub)
-- **task068_rlhf_toolcall_pairing_harness** — lifted from task018
-  Session 2 tool-call pairing deferral (4 sessions, Session 1
-  design-first; addresses naïve cross-product 200M-pair blow-up)
-- **task069_wandb_artifact_lineage_publish** — lifted from task021
-  Session 2 W&B publish deferral (3 sessions, Session 1 sandbox-
-  runnable with injectable W&B run + FakeWandbRun double)
+### `stage1_sft/config/stage_b_default.yaml` 新
 
-### Existing task README refinements
+- `step_function: super3_sample_level_step`；
+  `checkpoint.pretrained_checkpoint: TWO_STAGE_DRIVER_OVERRIDES_THIS`
+  placeholder；`checkpoint.save: /nemo_run/super3-sft-stage-b-model`；
+  `convert_to_hf.enabled: true`（Stage B final）；`train_iters: 800`
+  (vs Stage A 1700 — sample-level loss tighter convergence)
 
-- **task013** README: Session 2 split into 2a (sandbox driver + YAML
-  chain) + 2b (cluster verify) so the sandbox-runnable part has a
-  visible pick-point
-- **task017** README: OpenHands wrapper deferral now explicitly points
-  at task070 as the formal owner (renamed from task067 after collision
-  with `task067_m1_agentic_qwen_scaleup` from intern_nemontron_code_reading)
-- **task018** README: tool-call pairing harness deferral now explicitly
-  points at task068 as the formal owner
-- **task021** README: Session 7 W&B publish row added pointing at
-  task069
+### Tests (`test_two_stage_finetune.py`, 14 cases)
 
-## 不动
+- Driver dispatch 6: 调用两次 / 路径正确 / Stage A → B checkpoint
+  override 接好 / Stage A 不被 override / operator overrides 流到两边 /
+  tags 各自正确
+- Result shape 1: TwoStageResult 字段 + 2 invocations
+- step_function 验证 3: Stage A 拒 sample-level / Stage B 拒 gpt_step /
+  Stage A 缺 step_function 默认 gpt_step pass
+- Error surfaces 2: missing YAML / missing checkpoint.save
+- Shipped defaults 3: stage_a_default 满足 driver preconditions /
+  stage_b_default uses sample-level step / end-to-end against shipped
+  configs
 
-- M2/M3 task scaffolds deliberately NOT created — earlier scaffolding
-  without execution context risks scope drift; create when M1 freezes
-- Code changes (no new modules); this is a planning-only refresh
-- Cluster-side documentation; updates only reflect what landed
-  pre-2026-05-19
+Sandbox 测试基线 506 → **520 passed + 7 skipped** (14 new)。
 
-Sandbox 测试基线 502 passed + 7 skipped (no change — no code edits)。
-三个 data-registry audit 全 clean。
+## task013 状态
+
+- Session 1 ✓ (PR #44 / 10e1393) — dispatch + math
+- Session 2a ✓ (this PR) — driver + YAMLs
+- Session 2b ☐ — cluster verify in nvcr Megatron-Bridge container
+
+下一候选 (sandbox-runnable per roadmap §5b)：task040 Session 1 (W1
+curriculum sampler) / task057 Session 1 (M0 tier2) / task068 Session 1
+(RLHF tool-call pairing design) / task069 Session 1 (W&B publisher) /
+task070 Session 1 (OpenHands wrapper protocol + fake)。

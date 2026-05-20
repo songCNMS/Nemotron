@@ -2,6 +2,7 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #44 / 10e1393 on 2026-05-18 -->
+<!-- SESSION 2a LANDED: PR pending on 2026-05-19 (two-stage driver + stage-a/stage-b YAMLs; sandbox-runnable) -->
 
 ## 背景
 
@@ -19,7 +20,7 @@ unmasked token 上算 mean — 长 assistant turn 占主导，每个样本的有
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | `forward_step` dispatch (`_STEP_FUNCTIONS` 像 omni3) + `sample_level_loss` 纯 torch helper + `sample_level_step` adapter | yes (math + dispatch；adapter cluster verify 等 Session 2b) | ✓ Done (PR #44) |
-| 2a | 两阶段 driver (`run_two_stage_finetune`) + stage-a/stage-b YAML 链 — sandbox 验 driver 派发 + YAML 加载 + stage A checkpoint path resolution | yes | Todo |
+| 2a | 两阶段 driver (`run_two_stage_finetune`) + stage-a/stage-b YAML 链 — sandbox 验 driver 派发 + YAML 加载 + stage A checkpoint path resolution | yes | ✓ Done (this PR) |
 | 2b | Cluster verify (真训 stage A → stage B) | no — 需 CUDA + nvcr Megatron-Bridge container | Todo |
 
 ## Session 1 目标
