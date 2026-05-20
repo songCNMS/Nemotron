@@ -295,7 +295,11 @@ def transform_rlhf_toolcall_pairing(
         tool_schema = _extract_tool_schema(gold_hermes, gold_call["name"])
 
         yield {
-            "environment": "single_step_tool_use_with_argument_comparison",
+            # M0 env name — the M1 RLHF bridge maps this to the NeMo-Gym
+            # env `single_step_tool_use_with_argument_comparison` at
+            # tag-record time. Direct emission of the NeMo-Gym name
+            # would skip the bridge's coverage/status reporting.
+            "environment": "rlhf_toolcall_paired",
             "milestone": "M0",
             "use_stage": [
                 "M0 data_env_foundation",

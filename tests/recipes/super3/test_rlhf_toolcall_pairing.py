@@ -276,7 +276,11 @@ def test_orchestrator_emits_paired_row_for_clean_match() -> None:
     )
     assert len(rows) == 1
     row = rows[0]
-    assert row["environment"] == "single_step_tool_use_with_argument_comparison"
+    # task068 Session 3: converter now emits the M0 env name; the
+    # M1 RLHF bridge maps it to the NeMo-Gym
+    # `single_step_tool_use_with_argument_comparison` env at tag-record
+    # time.
+    assert row["environment"] == "rlhf_toolcall_paired"
     assert row["reward_config"]["verifier"] == "argument_match"
     assert row["expected_answer"]["name"] == "get_weather"
     assert row["expected_answer"]["arguments"] == {"location": "Tokyo"}

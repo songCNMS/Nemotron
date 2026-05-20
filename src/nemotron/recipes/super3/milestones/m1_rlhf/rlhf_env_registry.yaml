@@ -47,19 +47,24 @@ envs:
 
   - nemo_gym_env: single_step_tool_use_with_argument_comparison
     mix: rlhf
-    m0_env_id: null
-    m0_verifier: null
+    m0_env_id: rlhf_toolcall_paired
+    m0_verifier: argument_match
     nemo_gym_verifier: argument_match (RLHF parallel validity check)
     pref_dataset_candidate: null
     license: apache-2.0
-    status: m0_missing
+    status: active
     notes: |
-      Same env name RLVR1 (rlvr1 mix) maps `general_tool_calling` →
-      `single_step_tool_use_with_argument_comparison` for; RLHF wires
-      the same env as a *parallel validity check* during preference
-      optimisation per plan §5.6. Today we cannot just route the rlvr1
-      Hermes singleturn rows here because RLHF wants tool-call rows that
-      are paired with the preference prompts (so the schema check runs
-      on the same prompts the GenRM judge sees). M0 SFT supervision
-      already has compatible tool-call data, but the pairing harness
-      needs design — Session 2 territory.
+      task068 Session 3 active source. M0 ``rlhf_toolcall_paired`` env
+      runs the ``transform_rlhf_toolcall_pairing`` stream converter
+      (task068 Session 2 ✓) against HelpSteer-2 prompts × Hermes
+      function-calling rows, pairing each preference prompt with a
+      Hermes gold tool call via function-name + arg-overlap heuristics.
+
+      The converter is in `m0_data_env/rlhf_toolcall_pairing.py`; the
+      stream CLI is `scripts/prepare_rlhf_toolcall_pairing.py`.
+      Verifier alignment: M0 emits argument_match shape, NeMo-Gym side
+      also runs argument_match — clean cross-walk.
+
+      Plan §5.6: this parallel env enforces tool-call validity during
+      RLHF preference optimization so the policy doesn't drift
+      eloquent-but-tool-incompetent under GenRM judge pressure.
