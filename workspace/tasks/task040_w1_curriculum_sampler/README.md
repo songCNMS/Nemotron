@@ -1,6 +1,8 @@
 # task040_w1_curriculum_sampler
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE=unassigned -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #99 / a090453 on 2026-05-19 (bucket_rows / filter_solved / weighted_sample + 23 tests) -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-20 (wired into prepare_m1_agentic_sft.py via --curriculum-policy CLI flag; 13 tests) -->
 
 ## 背景
 
@@ -24,8 +26,8 @@ domain)，但下游 SFT/RL data prep 完全没用这个字段 — 数据按原�
 
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
-| 1 | `m0_data_env/difficulty_sampler.py` 实现 — `bucket_rows(rows, *, policy)` + `filter_solved(rows, pass_rate_threshold)` + `weighted_sample(rows, weights)` | yes | Todo |
-| 2 | Wire into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in CLI flag `--curriculum-policy {default,easy_first,hard_first,drop_solved}` | yes | Todo |
+| 1 | `m0_data_env/difficulty_sampler.py` 实现 — `bucket_rows(rows, *, policy)` + `filter_solved(rows, pass_rate_threshold)` + `weighted_sample(rows, weights)` | yes | ✓ Done (this PR) |
+| 2 | Wire into `prepare_m1_agentic_sft.py` via opt-in CLI flags (`--curriculum-policy` / `--curriculum-seed` / `--curriculum-pass-rates-json` / `--curriculum-solved-threshold`); train-only (val skipped for shadow-eval reproducibility) | yes | ✓ Done (this PR) |
 | 3 | Integrate with task032 rollout store pass-rate (M2 dependency) for `filter_solved` real data; until then operator supplies a static pass-rate JSON | partial (depends task032) | Todo |
 | 4 | Per-env curriculum config: `m0_data_env/curriculum_policies.yaml` declares per-env policy + threshold defaults | yes | Todo |
 
@@ -51,13 +53,20 @@ domain)，但下游 SFT/RL data prep 完全没用这个字段 — 数据按原�
 
 ## Session 1 验收
 
-- [ ] 新模块 `m0_data_env/difficulty_sampler.py` + tests
-- [ ] `BUCKET_ORDERINGS` covers every M0 env's `difficulty` field
-- [ ] `bucket_rows` 四 policy 各自 sanity-tested
-- [ ] `filter_solved` 处理 missing pass_rate (treat as 0.0 / keep)
-- [ ] `weighted_sample` deterministic given fixed seed
-- [ ] ≥ 12 个 pytest case
-- [ ] Roadmap §4 cross-cutting row updated with Session 1 ✓
+- [x] 新模块 `m0_data_env/difficulty_sampler.py` + tests
+- [x] `BUCKET_ORDER` covers task008's 3-bucket vocabulary
+  (`trivial` / `unknown` / `hard`) — schema simpler than initial scaffold
+  spec; one shared ordering instead of per-domain BUCKET_ORDERINGS
+- [x] `bucket_rows` 4 policy (easy_first / hard_first / shuffle /
+  as_is) 各自 sanity-tested
+- [x] `filter_solved` 处理 missing pass_rate (keep), exact-threshold
+  (keep), > threshold (drop), row_id resolution preference (m0_source_id
+  > source_id > id > instance_id)
+- [x] `weighted_sample` deterministic given fixed seed, replace +
+  no-replace modes, zero-weight handling, negative-weight rejection
+- [x] **23 个 pytest case** (vs ≥12 acceptance)
+- [x] Roadmap §4 cross-cutting row + §5b sandbox queue updated with
+  Session 1 ✓
 
 ## 依赖
 

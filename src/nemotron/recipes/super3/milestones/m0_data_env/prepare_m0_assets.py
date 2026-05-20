@@ -60,6 +60,15 @@ TOOL_CALL_RE = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 # parser is a task057 follow-up.
 BOXED_ANSWER_RE = re.compile(r"\\boxed\{([^{}]*)\}")
 
+# Matches both fenced markdown code blocks (```python ... ```) and the
+# `<python>...</python>` tag form that MathCodeInstruct uses. Used by
+# `transform_mathcode_instruct` (task057 Session 6) to detect whether
+# the gold solution actually has a tool-use step.
+PYTHON_CODE_BLOCK_RE = re.compile(
+    r"```python\s*\n.*?```|<python>.*?</python>",
+    re.DOTALL | re.IGNORECASE,
+)
+
 SYSTEM_PROMPTS = {
     "search_grounded_qa": "You answer questions using the provided retrieved passages.",
     "search_multihop_qa": (
@@ -92,6 +101,34 @@ SYSTEM_PROMPTS = {
         "You are a helpful, accurate assistant. Respond to the user's prompt. "
         "A preference judge will compare your reply against another candidate "
         "to score helpfulness, coherence, and correctness."
+    ),
+    "multilingual_instruct": (
+        "You are a helpful assistant. Respond in the same language as the "
+        "user. Match the meaning of the target reference closely; small "
+        "wording differences are fine."
+    ),
+    "long_context_qa_smoke": (
+        "You are a long-context reading-comprehension assistant. Read "
+        "the document carefully and answer the user's question grounded "
+        "in the document's content. Quote or paraphrase the relevant "
+        "passage; do not invent facts."
+    ),
+    "sql_text_to_query": (
+        "You are a text-to-SQL assistant. Given a natural-language "
+        "question about a database schema, emit a single valid SQL "
+        "query that answers it. Return ONLY the SQL — no commentary."
+    ),
+    "safety_reasoning_smoke": (
+        "You are a content-safety analyst. Read the user prompt and "
+        "decide whether to ALLOW or BLOCK the response. State your "
+        "verdict clearly (one of ALLOW / BLOCK / ESCALATE), then "
+        "briefly explain the reasoning."
+    ),
+    "math_with_tools": (
+        "You are a careful math-reasoning assistant with access to a "
+        "Python interpreter. When a calculation benefits from code, "
+        "show it inside ```python ... ``` (or <python>...</python>) "
+        "and incorporate the result. Put the final answer in \\boxed{}."
     ),
     "tool_call_repair_negative": (
         "You repair malformed or hallucinated tool-use attempts using the provided schema."
@@ -331,6 +368,96 @@ def transform_bash_command(row: Mapping[str, Any], spec: Mapping[str, Any]) -> J
         extra_env_info={
             "expected_command": command,
             "source_prompt": question,
+        },
+    )
+
+
+# M0 smoke cap on bash command length (task057 Session 4).
+# intercode-nl2bash includes some 500+ char commands that hurt eval
+# more than they teach the model. Cap matches the README's
+# documented limit; rows above the cap are dropped (not truncated —
+# truncation would change the shell semantics).
+INTERCODE_NL2BASH_MAX_CMD_CHARS: int = 200
+
+
+def transform_intercode_nl2bash(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one intercode-nl2bash-curated row to terminal_basic_shell shape.
+
+    Tier-2 source for the existing terminal_basic_shell env (task057
+    Session 4). intercode-nl2bash rows ship instruction + gold bash
+    command pairs; row schema varies by snapshot:
+
+    - ``nl`` / ``instruction`` / ``prompt``: natural-language task
+    - ``cmd`` / ``bash`` / ``command`` / ``response``: gold shell command
+
+    Compared to tier-1 ``transform_bash_command``, this converter:
+    1. Accepts the intercode-native ``nl`` + ``cmd`` aliases
+    2. Caps command length at ``INTERCODE_NL2BASH_MAX_CMD_CHARS`` (rows
+       above the cap are rejected — README's documented limit; the
+       intercode corpus has long-tail nightmare commands not useful
+       for M0 smoke)
+    3. Tags the converter origin in ``extra_env_info.source_dataset_kind``
+       so downstream stratification can split tier-1 vs tier-2 data
+
+    Output uses the same env (terminal_basic_shell) + verifier
+    (command_substring_match) as tier-1; no new env or verifier
+    needed.
+    """
+    question = str(
+        row.get("nl")
+        or row.get("instruction")
+        or row.get("prompt")
+        or ""
+    ).strip()
+    if not question:
+        raise ValueError(
+            "intercode-nl2bash row missing instruction "
+            "(checked nl / instruction / prompt)"
+        )
+    command = str(
+        row.get("cmd")
+        or row.get("bash")
+        or row.get("command")
+        or row.get("response")
+        or ""
+    ).strip()
+    if not command:
+        raise ValueError(
+            "intercode-nl2bash row missing gold command "
+            "(checked cmd / bash / command / response)"
+        )
+    if len(command) > INTERCODE_NL2BASH_MAX_CMD_CHARS:
+        raise ValueError(
+            f"intercode-nl2bash row gold command exceeds M0 smoke cap "
+            f"({len(command)} > {INTERCODE_NL2BASH_MAX_CMD_CHARS} chars); "
+            "drop the nightmare row rather than truncate (shell semantics "
+            "change under truncation)"
+        )
+
+    user_content = (
+        "Write one shell command for the terminal task below. "
+        "Return only the command, without prose or Markdown.\n\n"
+        f"Task:\n{question}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=command,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "command_substring_match",
+            "max_score": 1.0,
+            "match": ["normalized_command"],
+        },
+        extra_env_info={
+            "expected_command": command,
+            "source_prompt": question,
+            "source_dataset_kind": "intercode_nl2bash_tier2",
+            "cmd_length_chars": len(command),
         },
     )
 
@@ -1056,6 +1183,542 @@ def transform_helpsteer2_pref(row: Mapping[str, Any], spec: Mapping[str, Any]) -
     )
 
 
+# Aya dataset (CohereLabs/aya_dataset) language subset for plan §7
+# multilingual coverage: de / es / fr / it / ja / zh. M0 smoke filter
+# pulls only these 6 codes; full 65-language set is M2 task027 scope.
+AYA_TARGET_LANGUAGES: frozenset[str] = frozenset({
+    "Standard Arabic",   # used by Aya for ar — kept for forward compat
+    "German",
+    "Spanish",
+    "French",
+    "Italian",
+    "Japanese",
+    "Chinese",
+    "Simplified Chinese",
+    "Traditional Chinese",
+})
+
+# Per-language ISO codes the converter accepts on the language_code
+# column (Aya sometimes stamps language as a full name, sometimes as
+# ISO; converter normalizes via either field).
+AYA_TARGET_LANGUAGE_CODES: frozenset[str] = frozenset({
+    "de", "es", "fr", "it", "ja", "zh", "zh-Hans", "zh-Hant", "zh-CN", "zh-TW",
+})
+
+
+def _aya_language_in_scope(row: Mapping[str, Any]) -> bool:
+    """True if *row*'s language is one of the M0 smoke 6.
+
+    Aya rows carry both ``language`` (full English name like "German")
+    and ``language_code`` (ISO). Accept either since upstream snapshots
+    have shipped both conventions.
+    """
+    language = str(row.get("language") or "").strip()
+    code = str(row.get("language_code") or "").strip()
+    if language in AYA_TARGET_LANGUAGES:
+        return True
+    if code in AYA_TARGET_LANGUAGE_CODES:
+        return True
+    return False
+
+
+def transform_aya_multilingual(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one Aya (CohereLabs/aya_dataset) row to the M0 contract.
+
+    Aya is human-written instruction/response pairs across ~65
+    languages. M0 smoke restricts to 6 languages (de / es / fr / it /
+    ja / zh) — rows outside the set raise ``ValueError`` so the prep
+    pipeline's row-level error counter surfaces them rather than
+    silently emitting.
+
+    Required input fields:
+
+    - ``inputs`` (or ``instruction``): user prompt
+    - ``targets`` (or ``response``): gold reference response
+    - ``language`` / ``language_code``: at least one must resolve to a
+      language in scope
+
+    Output shape uses the multilingual_exact_or_contains verifier
+    (defined in ``run_m0_health_baseline.py``) which normalizes case
+    and whitespace per Unicode and then runs the same exact-or-contains
+    check as the English HotpotQA / MuSiQue paths.
+    """
+    if not _aya_language_in_scope(row):
+        raise ValueError(
+            "Aya row language outside M0 smoke scope (de/es/fr/it/ja/zh)"
+        )
+    instruction = str(row.get("inputs") or row.get("instruction") or "").strip()
+    if not instruction:
+        raise ValueError("Aya row missing 'inputs' / 'instruction'")
+    target = str(row.get("targets") or row.get("response") or "").strip()
+    if not target:
+        raise ValueError("Aya row missing 'targets' / 'response'")
+    language = str(row.get("language") or "").strip() or None
+    language_code = str(row.get("language_code") or "").strip() or None
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=instruction,
+        expected_answer=target,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": instruction},
+        ],
+        reward_config={
+            "verifier": "multilingual_exact_or_contains",
+            "max_score": 1.0,
+            "match": ["normalized_unicode_text"],
+        },
+        extra_env_info={
+            "language": language,
+            "language_code": language_code,
+        },
+    )
+
+
+# LongAlpaca / long-context QA M0 smoke caps (task057 Session 2).
+#
+# LongAlpaca-12k carries documents spanning ~16K to ~100K characters
+# (rough est. ~4-25K tokens). M0 smoke caps doc length to keep the
+# oracle baseline tractable; rows above the cap are dropped (not
+# truncated — truncation changes the QA answer span semantics, so
+# silent truncation would corrupt the eval). True long-context (256K
+# to 1M+) is M2 task028 / task037 scope.
+LONGALPACA_MAX_DOC_CHARS: int = 32_000  # ~8K tokens; M0 smoke ceiling
+
+
+def _approx_token_count(text: str) -> int:
+    """Rough char-based token estimate (~4 chars/token for English).
+
+    Used only for telemetry (`doc_token_estimate` field). Not for
+    truncation decisions — those use exact char counts.
+    """
+    return max(1, len(text) // 4)
+
+
+def transform_longalpaca_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one LongAlpaca-12k row to the M0 long_context_qa_smoke contract.
+
+    LongAlpaca-12k is Alpaca-format with optional long ``input`` field:
+
+    - ``instruction``: the question (e.g., "What does the document say about X?")
+    - ``input``: the long document the question is grounded in (16K-100K chars)
+    - ``output``: the gold reference answer
+
+    Rows missing ``input`` are dropped (this env requires a document
+    context; question-only Alpaca rows don't belong in long-context QA).
+    Rows whose ``input`` exceeds ``LONGALPACA_MAX_DOC_CHARS`` are also
+    dropped — truncation would change answer-span semantics.
+
+    Output uses the ``long_context_qa_stub`` verifier (M0 oracle stub
+    delegating to contains-match; real long-context verifier is M2
+    task028 territory).
+    """
+    instruction = str(row.get("instruction") or "").strip()
+    if not instruction:
+        raise ValueError("LongAlpaca row missing 'instruction'")
+    output = str(row.get("output") or "").strip()
+    if not output:
+        raise ValueError("LongAlpaca row missing 'output'")
+    document = str(row.get("input") or "").strip()
+    if not document:
+        raise ValueError("LongAlpaca row missing 'input' (long document required)")
+    if len(document) > LONGALPACA_MAX_DOC_CHARS:
+        raise ValueError(
+            f"LongAlpaca row exceeds M0 smoke cap "
+            f"({len(document)} > {LONGALPACA_MAX_DOC_CHARS} chars); "
+            "real long-context support is M2 task028 / task037"
+        )
+
+    user_content = (
+        f"Document:\n{document}\n\n"
+        f"Question: {instruction}"
+    )
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=instruction,
+        expected_answer=output,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "long_context_qa_stub",
+            "max_score": 1.0,
+            "match": ["normalized_contains"],
+        },
+        extra_env_info={
+            "doc_length_chars": len(document),
+            "doc_token_estimate": _approx_token_count(document),
+            "question": instruction,
+        },
+    )
+
+
+# BIRD SQL normalization helpers (task057 Session 3).
+
+# SQL is whitespace-insensitive and keywords are case-insensitive. The
+# M0 oracle baseline uses normalized string match (NOT real execution
+# — execution requires a database sandbox; that's task024 / M2 BIRD
+# extension territory). Normalization:
+#   - Lowercase all tokens
+#   - Collapse runs of whitespace to single space
+#   - Strip leading/trailing whitespace + trailing semicolon
+#   - Remove surrounding backticks / quotes around identifiers (BIRD
+#     mixes conventions across schemas)
+_SQL_BACKTICK_RE = re.compile(r"`")
+_SQL_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def normalize_sql(value: Any) -> str:
+    """Normalize a SQL string for string-match scoring."""
+    text = str(value or "").lower().strip()
+    text = _SQL_BACKTICK_RE.sub("", text)
+    text = _SQL_WHITESPACE_RE.sub(" ", text)
+    if text.endswith(";"):
+        text = text[:-1].rstrip()
+    return text
+
+
+def score_sql_execution_match(candidate: Any, expected: Any) -> float:
+    """Oracle stub for the BIRD SQL env.
+
+    M0 baseline uses normalized SQL string match. The "execution" in
+    the verifier name signals INTENT (task024 / M2 BIRD will execute
+    against a real database sandbox); today's M0 oracle simply
+    compares normalized SQL.
+    """
+    norm_candidate = normalize_sql(candidate)
+    norm_expected = normalize_sql(expected)
+    if not norm_expected:
+        return 0.0
+    if norm_candidate == norm_expected:
+        return 1.0
+    return 1.0 if norm_expected in norm_candidate else 0.0
+
+
+def transform_bird_sql(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one BIRD SQL row to the M0 sql_text_to_query contract.
+
+    BIRD rows (from `bird-bench/bird` train + `birdsql/bird_mini_dev`)
+    typically carry:
+
+    - ``question_id``: integer id (used for source_id)
+    - ``db_id``: schema name (one of BIRD's 7 schemas)
+    - ``question``: natural-language question
+    - ``evidence``: optional hint text the model is allowed to use
+    - ``SQL`` or ``query`` or ``sql``: gold SQL query
+    - ``difficulty``: easy / medium / hard
+
+    Output uses ``sql_execution_match`` verifier (M0 oracle stub
+    delegates to normalized SQL string match; real execution is M2
+    task024 territory once a DB sandbox lands).
+
+    Cross-schema generalization is BIRD's central evaluation property,
+    so ``db_id`` is preserved in ``extra_env_info`` for downstream
+    per-schema stratification.
+    """
+    question = str(row.get("question") or "").strip()
+    if not question:
+        raise ValueError("BIRD row missing 'question'")
+    # BIRD ships gold SQL under different keys per snapshot
+    gold_sql = (
+        row.get("SQL") or row.get("sql") or row.get("query") or row.get("gold_sql")
+    )
+    gold_sql = str(gold_sql or "").strip()
+    if not gold_sql:
+        raise ValueError(
+            "BIRD row missing gold SQL (checked SQL / sql / query / gold_sql)"
+        )
+    db_id = str(row.get("db_id") or "").strip()
+    if not db_id:
+        raise ValueError("BIRD row missing 'db_id' (schema name required for grounding)")
+    evidence = str(row.get("evidence") or "").strip()
+    difficulty = str(row.get("difficulty") or "").strip() or None
+
+    # User-turn content embeds the schema name + question + evidence
+    # (if present). The schema itself is not included verbatim — BIRD
+    # schemas are large; the model is expected to know the schema by
+    # name during training (oracle pass-through) and to query DB
+    # introspection at runtime in production.
+    user_parts = [f"Database: {db_id}", f"Question: {question}"]
+    if evidence:
+        user_parts.append(f"Evidence: {evidence}")
+    user_content = "\n\n".join(user_parts)
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=gold_sql,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "sql_execution_match",
+            "max_score": 1.0,
+            "match": ["normalized_sql"],
+        },
+        extra_env_info={
+            "db_id": db_id,
+            "question_id": row.get("question_id"),
+            "difficulty": difficulty,
+            "has_evidence": bool(evidence),
+        },
+    )
+
+
+# Nemotron-Content-Safety-Reasoning verdict vocabulary (task057
+# Session 5). README of the dataset uses these three labels; verifier
+# normalizes case + maps a few common aliases (e.g., "safe" → "allow",
+# "unsafe" → "block").
+SAFETY_VERDICT_CANONICAL: tuple[str, ...] = ("allow", "block", "escalate")
+
+# Map alternate labels to the canonical 3. Operators add new aliases
+# here when a snapshot ships an unexpected label.
+SAFETY_VERDICT_ALIASES: dict[str, str] = {
+    "allow": "allow",
+    "safe": "allow",
+    "pass": "allow",
+    "ok": "allow",
+    "block": "block",
+    "unsafe": "block",
+    "refuse": "block",
+    "reject": "block",
+    "deny": "block",
+    "escalate": "escalate",
+    "review": "escalate",
+    "maybe": "escalate",
+}
+
+
+def _canonicalize_safety_verdict(raw: Any) -> str | None:
+    """Return canonical verdict (allow/block/escalate) or None if absent.
+
+    Accepts case-insensitive label; strips whitespace; runs through
+    the alias map. ``None`` signals the row didn't carry a verdict —
+    caller treats that as a row-quality bug (M0 safety dataset MUST
+    label every row).
+    """
+    if raw is None:
+        return None
+    text = str(raw).strip().lower()
+    if not text:
+        return None
+    return SAFETY_VERDICT_ALIASES.get(text)
+
+
+def transform_nemotron_safety_reasoning(
+    row: Mapping[str, Any], spec: Mapping[str, Any]
+) -> JsonDict:
+    """Convert one Nemotron-Content-Safety-Reasoning row to the M0 contract.
+
+    Per README of the upstream dataset, rows ship a user prompt + a
+    safety verdict + a reasoning explanation. The dataset viewer
+    occasionally reports schema errors so this converter is permissive
+    about field names — accepts the common variants:
+
+    - **prompt** column: ``prompt`` / ``input`` / ``question`` / ``messages``
+      (if ``messages`` is a list, last user message is taken)
+    - **verdict** column: ``verdict`` / ``label`` / ``safety`` /
+      ``classification`` / ``decision``
+    - **reasoning** column (optional): ``reasoning`` / ``explanation`` /
+      ``rationale``
+    - **category** column (optional): ``category`` / ``risk_category`` /
+      ``policy`` (informational; doesn't change reward)
+
+    M0 verifier is `safety_judge_stub` — case-insensitive contains-
+    match against the canonical verdict (allow / block / escalate).
+    Real judge-model scoring is M2 task029 (safety) territory.
+    """
+    prompt = _extract_safety_prompt(row)
+    if not prompt:
+        raise ValueError(
+            "Nemotron-Safety row missing prompt "
+            "(checked prompt / input / question / messages)"
+        )
+    raw_verdict = (
+        row.get("verdict")
+        or row.get("label")
+        or row.get("safety")
+        or row.get("classification")
+        or row.get("decision")
+    )
+    verdict = _canonicalize_safety_verdict(raw_verdict)
+    if verdict is None:
+        raise ValueError(
+            "Nemotron-Safety row missing or unrecognized verdict "
+            f"(raw={raw_verdict!r}; canonical labels: "
+            f"{sorted(set(SAFETY_VERDICT_ALIASES.values()))})"
+        )
+    reasoning = str(
+        row.get("reasoning")
+        or row.get("explanation")
+        or row.get("rationale")
+        or ""
+    ).strip()
+    category = str(
+        row.get("category")
+        or row.get("risk_category")
+        or row.get("policy")
+        or ""
+    ).strip() or None
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=prompt,
+        expected_answer=verdict,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": prompt},
+        ],
+        reward_config={
+            "verifier": "safety_judge_stub",
+            "max_score": 1.0,
+            "match": ["canonical_verdict"],
+        },
+        extra_env_info={
+            "verdict": verdict,
+            "reasoning": reasoning,
+            "category": category,
+        },
+    )
+
+
+def count_python_code_blocks(text: Any) -> int:
+    """Return the number of Python code blocks (fenced or `<python>`-tagged)
+    found in *text*. Used by `transform_mathcode_instruct` (task057
+    Session 6) to attest the gold solution actually contains a tool-use
+    step; the M0 health gate later asserts the same on candidate output.
+    """
+    if text is None:
+        return 0
+    return len(PYTHON_CODE_BLOCK_RE.findall(str(text)))
+
+
+def is_numinamath_source_id(source_id: str, numinamath_index: Iterable[str]) -> bool:
+    """Return True iff *source_id* appears in *numinamath_index*.
+
+    task057 Session 6 NuminaMath dedup hook: MathCodeInstruct shares
+    several seed problems with NuminaMath; per task README the policy is
+    "重的全部移到 math_with_tools (因为它的代码块更有信息)" — i.e. drop
+    NuminaMath rows whose source_id is present in MathCodeInstruct.
+
+    Index construction is Session 6.5 territory (needs the actual SHA-
+    pinned NuminaMath snapshot to enumerate source_ids); this helper is
+    the pure-function building block that the future bridge will call.
+    """
+    if not source_id:
+        return False
+    return source_id in set(numinamath_index)
+
+
+def transform_mathcode_instruct(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert one MathLLMs/MathCodeInstruct row to the M0 math_with_tools contract.
+
+    Layout per row (alias-tolerant — upstream snapshots vary by minor
+    revision):
+      - **problem** column: ``problem`` / ``question`` / ``instruction`` / ``input``
+      - **solution** column: ``solution`` / ``response`` / ``output`` / ``answer``
+
+    Solutions are CoT with embedded Python code (``<python>...</python>``
+    or ` ```python ... ``` `) culminating in a ``\\boxed{...}`` answer.
+    We preserve the full solution text in ``extra_env_info.reference_solution``
+    so SFT supervision keeps the tool-use trace verbatim, and surface
+    ``has_code_block`` / ``code_block_count`` for the health gate to
+    verify rows actually carry a code-block.
+
+    M0 verifier is ``math_with_tools_match`` — extracts the candidate's
+    last ``\\boxed{...}`` and compares against gold after normalization.
+    Real Python-execution + math-judge scoring is M1 task011 territory;
+    the "_match" suffix signals this is the oracle stub.
+    """
+    problem = (
+        row.get("problem")
+        or row.get("question")
+        or row.get("instruction")
+        or row.get("input")
+    )
+    if not isinstance(problem, str) or not problem.strip():
+        raise ValueError(
+            "MathCodeInstruct row missing problem "
+            "(checked problem / question / instruction / input)"
+        )
+    problem = problem.strip()
+
+    solution_raw = (
+        row.get("solution")
+        or row.get("response")
+        or row.get("output")
+        or row.get("answer")
+    )
+    if not isinstance(solution_raw, str) or not solution_raw.strip():
+        raise ValueError(
+            "MathCodeInstruct row missing solution "
+            "(checked solution / response / output / answer)"
+        )
+    solution = solution_raw.strip()
+
+    boxed = extract_boxed_answer(solution)
+    if not boxed:
+        raise ValueError(
+            "MathCodeInstruct row missing \\boxed{...} final answer in solution"
+        )
+
+    code_block_count = count_python_code_blocks(solution)
+    has_code_block = code_block_count > 0
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=problem,
+        expected_answer=boxed,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": problem},
+        ],
+        reward_config={
+            "verifier": "math_with_tools_match",
+            "max_score": 1.0,
+            "normalization": ["lowercase", "strip_punctuation", "collapse_whitespace"],
+        },
+        extra_env_info={
+            "reference_solution": solution,
+            "has_code_block": has_code_block,
+            "code_block_count": code_block_count,
+            "boxed_answer": boxed,
+        },
+    )
+
+
+def _extract_safety_prompt(row: Mapping[str, Any]) -> str:
+    """Pull the user prompt out of a Safety row.
+
+    Handles flat string fields (``prompt`` / ``input`` / ``question``)
+    AND a ``messages``-list shape where the dataset stores the prompt
+    as the last user message in a chat-style array.
+    """
+    for key in ("prompt", "input", "question"):
+        value = row.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    messages = row.get("messages")
+    if isinstance(messages, list):
+        for message in reversed(messages):
+            if not isinstance(message, Mapping):
+                continue
+            if message.get("role") == "user":
+                content = message.get("content")
+                if isinstance(content, str) and content.strip():
+                    return content.strip()
+    return ""
+
+
 def transform_musique_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     """Convert a MuSiQue (Ans config) row to the M0 NeMo-Gym JSONL contract.
 
@@ -1609,6 +2272,12 @@ CONVERTERS = {
     "swe_gym_lite_pivot": transform_swe_gym_lite_pivot,
     "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
     "helpsteer2_pref_pair": transform_helpsteer2_pref,
+    "aya_multilingual": transform_aya_multilingual,
+    "longalpaca_qa": transform_longalpaca_qa,
+    "bird_sql": transform_bird_sql,
+    "intercode_nl2bash": transform_intercode_nl2bash,
+    "nemotron_safety_reasoning": transform_nemotron_safety_reasoning,
+    "mathcode_instruct": transform_mathcode_instruct,
     "hermes_function_calling": transform_hermes_function_calling,
     "hermes_json_mode": transform_hermes_json_mode,
     "hermes_tool_call_repair_negative": transform_hermes_tool_call_repair_negative,
@@ -1982,6 +2651,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001 - CLI should render a concise error.
         print(f"prepare_m0_assets.py: error: {exc}", file=sys.stderr)
         return 1
+    # task069 Session 2: auto-publish lineage to W&B (no-op without active run).
+    try:
+        from nemotron.recipes.super3.milestones.lineage_publisher import (
+            maybe_publish_lineage_from_manifest,
+        )
+        maybe_publish_lineage_from_manifest(Path(manifest["output_dir"]) / "manifest.json")
+    except Exception:  # noqa: BLE001
+        pass
     print(json.dumps({"output_dir": manifest["output_dir"], "datasets": manifest["datasets"]}, indent=2))
     return 0 if not manifest["errors"] else 2
 

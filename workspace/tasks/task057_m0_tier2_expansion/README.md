@@ -1,12 +1,40 @@
 # task057_m0_tier2_expansion
 
-<!-- METADATA:STATUS=Todo,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
+<!-- SESSION 1 LANDED: PR #108 / d5d215c on 2026-05-19 (multilingual_instruct env via CohereLabs/aya_dataset) -->
+<!-- SESSION 2 LANDED: PR #118 / 3ca0b32 on 2026-05-20 (long_context_qa_smoke env via THUDM/LongAlpaca-12k; 17 tests) -->
+<!-- SESSION 3 LANDED: PR #120 / 8e1e7fe on 2026-05-20 (sql_text_to_query env via BIRD-SQL; 29 tests) -->
+<!-- SESSION 4 LANDED: PR #122 / 7730b8f on 2026-05-20 (terminal-tier2 via intercode-nl2bash; reuses existing env; quote normalization enhancement; 26 tests) -->
+<!-- SESSION 5 LANDED: PR #124 / 5c2c695 on 2026-05-20 (safety_reasoning_smoke env via Nemotron-Content-Safety-Reasoning; 37 tests) -->
+<!-- SESSION 6 LANDED: PR pending on 2026-05-20 (math_with_tools env via MathLLMs/MathCodeInstruct; 45 tests; data_registry row deferred for SHA pin + NuminaMath dedup index) -->
 
 ## 背景
 
 `docs/m0-dataset-expansion-plan.md` §3 Tier-2 列出 6 个 M0 environment，每个都对应 plan §7 一类 family，但比 Tier-1 多一层污染 / 许可证审计成本。Tier-1 (task056) 必须先合入主干，才有公平的 contamination baseline 可比对。
 
-## 目标
+## Session 切分 (2026-05-19 添加)
+
+整个 task 原 README 把 6 个 envs 当作一个原子工作。实际每个 env 自带独立的：
+- HF source 形态 (verify offline 的话需要 mock schema)
+- License/contamination 考量
+- Verifier 写法
+- Test 工作
+
+所以拆成 6 个 sessions，一 session 落地一个 env。Session 1 选 `multilingual_instruct`
+作为 baseline pattern (源 Aya 干净 / 无 contamination overlap with M0 + M1 eval / verifier
+只是 `normalized_exact_or_contains` 的多语言变种)，后续 5 个 env 按这个 pattern
+adapt。
+
+| Session | Env | HF source | Status |
+|---|---|---|---|
+| 1 | `multilingual_instruct` | `CohereLabs/aya_dataset` | ✓ Done (this PR) |
+| 2 | `long_context_qa_smoke` | `THUDM/LongAlpaca-12k` | ✓ Done (this PR) |
+| 3 | `sql_text_to_query` | `birdsql/bird_mini_dev` + `bird-bench/bird` | ✓ Done (this PR) |
+| 4 | `terminal_basic_shell` (tier-2 extension) | `epinnock/intercode-nl2bash-curated` | ✓ Done (this PR) |
+| 5 | `safety_reasoning_smoke` | `nvidia/Nemotron-Content-Safety-Reasoning-Dataset` | ✓ Done (this PR; data_registry row deferred for schema verification) |
+| 6 | `math_with_tools` | `MathLLMs/MathCodeInstruct` | ✓ Done (this PR; data_registry row deferred for SHA pin + NuminaMath dedup index) |
+
+## 目标 (整 task)
 
 落地 Tier-2 6 个环境，每个走完同样的六点 wiring checklist (见 `docs/m0-dataset-expansion-plan.md` §5)。
 
@@ -47,7 +75,28 @@
 - 每行 solution 包含 `<python>...</python>` 或 ` ```python ... ``` ` 代码块。converter 必须保留代码块原样，verifier oracle 用最后一个 `\boxed{}` 答案。
 - 注意跟 task056 NuminaMath 去重：用 `metadata.source_id` 比对，重的全部移到 math_with_tools (因为它的代码块更有信息)。
 
-## 验收
+## Session 1 验收
+
+- [x] 新 env `multilingual_instruct` in `environment_registry.yaml`
+  (family `multilingual`, verifier `multilingual_exact_or_contains`,
+  required field `extra_env_info.language`)
+- [x] 新 converter `transform_aya_multilingual` in
+  `prepare_m0_assets.py` — handles `inputs/targets` + alias
+  `instruction/response`; language-scope filter (`de/es/fr/it/ja/zh`);
+  accepts both `language` (full name) and `language_code` (ISO)
+- [x] 新 verifier `multilingual_exact_or_contains` in
+  `run_m0_health_baseline.py` — Unicode NFC + `casefold()`; preserves
+  CJK punctuation; does NOT strip English articles (German "die"
+  survives)
+- [x] `m0_multilingual_aya` data_registry row **deferred** to Session
+  1.5 — requires pinning a real Aya commit SHA which needs HF access.
+  Schema documented in YAML comment + locked-in test verifying the
+  row is NOT in the registry yet (catches accidental re-add without
+  real pin)
+- [x] 28 个 pytest case (vs ≥ 12 acceptance for 1 of 6 envs)
+- [x] 三个 data-registry audit 全 clean
+
+## 整 task 验收 (across 6 sessions)
 
 - [ ] 6 个 env 全部走完 6-point wiring。
 - [ ] 新加 5 个 verifier stub (`sql_execution_match`、`safety_judge_stub`、`multilingual_exact_or_contains`、`long_context_qa_stub`、`math_with_tools_match`)。

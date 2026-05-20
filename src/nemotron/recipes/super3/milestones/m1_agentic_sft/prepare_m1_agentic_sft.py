@@ -733,6 +733,74 @@ def count_difficulty_buckets(rows: Sequence[Mapping[str, Any]]) -> dict[str, int
     return dict(sorted(counts.items()))
 
 
+def _apply_curriculum_to_train(
+    train_rows: Sequence[Mapping[str, Any]],
+    *,
+    policy: str = "as_is",
+    seed: int = 0,
+    pass_rates_path: Path | None = None,
+    solved_threshold: float = 0.9,
+) -> tuple[list[Mapping[str, Any]], JsonDict]:
+    """Apply the task040 W1 curriculum sampler to *train_rows*.
+
+    Returns ``(reordered_rows, audit_dict)``. The audit dict carries
+    the inputs + outcome so the manifest can record what was applied:
+
+    - ``policy``: the policy that ran (matches the CLI flag value)
+    - ``seed``: rng seed used (only meaningful for ``shuffle``)
+    - ``pass_rates_provided``: whether a pass-rates JSON was loaded
+    - ``solved_threshold``: threshold used for ``filter_solved``
+    - ``rows_in`` / ``rows_out``: count before + after filtering
+    - ``rows_dropped_solved``: count of rows the pass-rate filter dropped
+
+    Sandbox-runnable; back-compat: with default ``as_is`` policy and no
+    pass-rates JSON, this is a passthrough (rows_in == rows_out, no
+    reordering).
+    """
+    import json as _json
+    import random
+    from nemotron.recipes.super3.milestones.m0_data_env.difficulty_sampler import (
+        bucket_rows,
+        filter_solved,
+    )
+
+    rows_list = list(train_rows)
+    rows_in = len(rows_list)
+
+    pass_rates: Mapping[str, float] | None = None
+    if pass_rates_path is not None:
+        if not pass_rates_path.is_file():
+            raise FileNotFoundError(
+                f"--curriculum-pass-rates-json not found: {pass_rates_path}"
+            )
+        with pass_rates_path.open(encoding="utf-8") as f:
+            raw = _json.load(f)
+        if not isinstance(raw, Mapping):
+            raise ValueError(
+                f"{pass_rates_path}: pass-rates JSON must be an object mapping row_id → float"
+            )
+        pass_rates = {str(k): float(v) for k, v in raw.items()}
+
+    rows_after_filter = filter_solved(
+        rows_list, pass_rates=pass_rates, threshold=solved_threshold
+    )
+    rows_dropped = rows_in - len(rows_after_filter)
+
+    rng = random.Random(seed) if policy == "shuffle" else None
+    reordered = bucket_rows(rows_after_filter, policy=policy, rng=rng)
+
+    audit: JsonDict = {
+        "policy": policy,
+        "seed": seed,
+        "pass_rates_provided": pass_rates is not None,
+        "solved_threshold": solved_threshold if pass_rates is not None else None,
+        "rows_in": rows_in,
+        "rows_out": len(reordered),
+        "rows_dropped_solved": rows_dropped,
+    }
+    return reordered, audit
+
+
 def check_output_paths(output_dir: Path, overwrite: bool) -> None:
     targets = [
         output_dir / "agentic_sft_v0_train.jsonl",
@@ -823,6 +891,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         difficulty_signal=difficulty_signal,
     )
 
+    # task040 Session 2: W1 curriculum sampler wiring. Applies to TRAIN
+    # only — val rows stay in stable order so shadow eval is reproducible.
+    train_rows, curriculum_audit = _apply_curriculum_to_train(
+        train_rows,
+        policy=getattr(args, "curriculum_policy", "as_is"),
+        seed=getattr(args, "curriculum_seed", 0),
+        pass_rates_path=getattr(args, "curriculum_pass_rates_json", None),
+        solved_threshold=getattr(args, "curriculum_solved_threshold", 0.9),
+    )
+
     train_path = args.output_dir / "agentic_sft_v0_train.jsonl"
     val_shadow_path = args.output_dir / "agentic_sft_v0_val_shadow.jsonl"
     blend_path = args.output_dir / "data_blend_agentic_sft_v0.json"
@@ -850,6 +928,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "train": count_difficulty_buckets(train_rows),
             "val_shadow": count_difficulty_buckets(val_rows),
         },
+        "curriculum": curriculum_audit,
         "errors": [*train_errors, *val_errors],
     }
 
@@ -924,6 +1003,45 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-shadow-per-env", type=int, default=None)
     parser.add_argument("--overwrite", action="store_true")
+    # task040 Session 2: W1 curriculum sampler wiring. Off by default
+    # (as_is = passthrough). Operators opt in via --curriculum-policy.
+    parser.add_argument(
+        "--curriculum-policy",
+        choices=["as_is", "easy_first", "hard_first", "shuffle"],
+        default="as_is",
+        help=(
+            "Reorder train rows by per-row difficulty bucket (task040 W1 sampler). "
+            "Default `as_is` is a no-op for back-compat. `easy_first` sorts "
+            "trivial→unknown→hard; `hard_first` reverses; `shuffle` with "
+            "--curriculum-seed gives a deterministic permutation. Val rows "
+            "are NEVER reordered (shadow eval needs stable order)."
+        ),
+    )
+    parser.add_argument(
+        "--curriculum-seed",
+        type=int,
+        default=0,
+        help="Seed for the `shuffle` curriculum policy (deterministic given seed).",
+    )
+    parser.add_argument(
+        "--curriculum-pass-rates-json",
+        type=Path,
+        default=None,
+        help=(
+            "Optional path to a JSON file mapping row id → pass_rate (float 0..1). "
+            "If provided, rows whose pass_rate > --curriculum-solved-threshold "
+            "are dropped from train before policy reordering. Row id resolves "
+            "in this order: metadata.m0_source_id > metadata.source_id > id > "
+            "instance_id. (M2 task032 rollout store will feed this; M1 sandbox "
+            "operators supply a static JSON.)"
+        ),
+    )
+    parser.add_argument(
+        "--curriculum-solved-threshold",
+        type=float,
+        default=0.9,
+        help="Pass-rate threshold above which rows are considered solved.",
+    )
     return parser
 
 
@@ -934,6 +1052,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001 - CLI should render concise failures.
         print(f"prepare_m1_agentic_sft.py: error: {exc}", file=sys.stderr)
         return 1
+    # task069 Session 2: auto-publish lineage to W&B (no-op without active run).
+    try:
+        from nemotron.recipes.super3.milestones.lineage_publisher import (
+            maybe_publish_lineage_from_manifest,
+        )
+        maybe_publish_lineage_from_manifest(args.output_dir / "manifest.json")
+    except Exception:  # noqa: BLE001
+        pass
     print(
         json.dumps(
             {

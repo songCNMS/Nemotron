@@ -178,6 +178,146 @@ environments:
         - expected_answer
         - extra_env_info.gold_tool_call
 
+  - id: safety_reasoning_smoke
+    family: safety
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: safety_judge_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: M0 oracle baseline uses case-insensitive contains-match on the canonical verdict (allow / block / escalate); real judge-model scoring is M2 task029 territory
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 15
+      max_turns: 1
+      expected_runtime_ms: 1000
+    telemetry:
+      - reward
+      - verdict_match
+      - latency_ms
+      - malformed_verdict
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.verdict
+
+  - id: sql_text_to_query
+    family: structured_query
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: sql_execution_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: M0 oracle baseline uses normalized SQL string match; real execution against a DB sandbox is M2 task024 territory
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 10
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - sql_match
+      - latency_ms
+      - malformed_sql
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.db_id
+
+  - id: long_context_qa_smoke
+    family: long_context
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: long_context_qa_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: gold answer must appear in the candidate (normalized contains-match) over a 16K-32K char document context
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 5000
+    telemetry:
+      - reward
+      - contains_match
+      - doc_length_chars
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.doc_length_chars
+
+  - id: rlhf_toolcall_paired
+    family: rlhf_preference
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: argument_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted first tool call (name + arguments) must match the gold pivot call paired to this preference prompt
+    resources:
+      sandbox: none
+      tools:
+        - "<varies per row — Hermes function schema attached>"
+      timeout_s: 10
+      max_turns: 1
+      expected_runtime_ms: 300
+    telemetry:
+      - reward
+      - tool_name_match
+      - tool_argument_match
+      - latency_ms
+      - malformed_tool_call
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.source_helpsteer2_id
+        - extra_env_info.source_hermes_id
+
+  - id: multilingual_instruct
+    family: multilingual
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: multilingual_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: emitted response normalized per Unicode + lowercase must exact-or-contains the gold target
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 10
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - exact_match
+      - contains_match
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.language
+
   - id: helpsteer2_pref_compare
     family: rlhf_preference
     stage: M0 data_env_foundation
@@ -422,6 +562,42 @@ environments:
         - expected_answer
         - responses_create_params.input
         - extra_env_info.reference_solution
+
+  - id: math_with_tools
+    family: reasoning
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: math_with_tools_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: |
+        M0 oracle stub — extracts the candidate's last `\boxed{...}` and
+        compares against gold after lowercase + whitespace-collapsed
+        normalization. Falls back to whole-candidate contains-match when
+        no `\boxed{...}` is present. Real Python-execution + math-judge
+        scoring is M1 task011 territory; the `_match` suffix signals
+        the M0 stub intent.
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 1500
+    telemetry:
+      - reward
+      - normalized_answer
+      - boxed_answer_extracted
+      - has_code_block_in_candidate
+      - latency_ms
+      - malformed_final_answer
+    health_check:
+      min_rows_per_split: 25
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.reference_solution
+        - extra_env_info.has_code_block
 
   - id: math_formal_lean
     family: reasoning

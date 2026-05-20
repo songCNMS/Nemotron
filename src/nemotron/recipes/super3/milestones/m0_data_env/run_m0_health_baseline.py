@@ -74,6 +74,38 @@ def normalize_text_answer(value: Any) -> str:
     return WHITESPACE_RE.sub(" ", text).strip()
 
 
+def normalize_multilingual_text(value: Any) -> str:
+    """Multilingual-aware text normalizer (task057 Session 1).
+
+    Differs from :func:`normalize_text_answer`:
+
+    - ``str.casefold()`` instead of ``.lower()`` so language-specific
+      case folding works (German ß → ss, Turkish dotless İ → i, etc.)
+    - Unicode NFC normalization so composed vs decomposed code points
+      compare equal (é written as one code point vs e + combining
+      accent)
+    - **Does NOT strip punctuation** — some languages (notably Chinese
+      / Japanese) rely on punctuation for meaning, and articles
+      ("the" / "a" / "an") are English-only
+    - Whitespace collapsed to single space, leading / trailing
+      stripped — same as the English path
+    """
+    import unicodedata
+    text = unicodedata.normalize("NFC", str(value)).casefold()
+    return WHITESPACE_RE.sub(" ", text).strip()
+
+
+def score_multilingual_text(candidate: Any, expected: Any) -> float:
+    """Exact-or-contains scoring on Unicode-normalised text."""
+    normalized_candidate = normalize_multilingual_text(candidate)
+    normalized_expected = normalize_multilingual_text(expected)
+    if not normalized_expected:
+        return 0.0
+    if normalized_candidate == normalized_expected:
+        return 1.0
+    return 1.0 if normalized_expected in normalized_candidate else 0.0
+
+
 def normalize_numeric_candidate(value: Any) -> str:
     text = normalize_numeric_answer(value)
     matches = NUMBER_RE.findall(text)
@@ -138,11 +170,28 @@ def score_json_value(candidate: Any, expected: Any) -> float:
 
 
 def normalize_command_text(value: Any) -> str:
+    """Normalize a shell command string for substring-match scoring.
+
+    Steps:
+      1. Extract fenced code block content if present (operator-quoted)
+      2. Collapse runs of whitespace to single space
+      3. Normalize quote style — map double quotes to single quotes
+         (functionally equivalent at the shell layer when no $var
+         expansion is involved; tier-2 intercode-nl2bash mixes quote
+         styles, this brings them onto a canonical form for compare)
+      4. Strip leading + trailing whitespace
+    """
     text = str(value).strip()
     blocks = re.findall(r"```(?:bash|sh|shell)?\s*(.*?)```", text, flags=re.DOTALL | re.IGNORECASE)
     if blocks:
         text = blocks[-1].strip()
-    return WHITESPACE_RE.sub(" ", text).strip()
+    text = WHITESPACE_RE.sub(" ", text).strip()
+    # task057 Session 4: quote-style normalization for tier-2 robustness.
+    # `find -name "*.txt"` and `find -name '*.txt'` are shell-equivalent
+    # outside $var expansion; canonicalize to single quotes so the
+    # oracle baseline doesn't false-negative on stylistic differences.
+    text = text.replace('"', "'")
+    return text
 
 
 def score_command(candidate: Any, expected: Any) -> float:
@@ -387,6 +436,99 @@ def score_record(
         score = score_text(candidate, expected)
         diagnostics = {
             "normalized_answer": normalize_text_answer(candidate),
+        }
+    elif verifier == "multilingual_exact_or_contains":
+        # task057 Session 1 — Aya / multilingual envs. Unicode-aware
+        # normalization (NFC + casefold; keeps punctuation since CJK
+        # depends on it).
+        score = score_multilingual_text(candidate, expected)
+        normalized_candidate = normalize_multilingual_text(candidate)
+        normalized_expected = normalize_multilingual_text(expected)
+        diagnostics = {
+            "normalized_answer": normalized_candidate,
+            "exact_match": bool(
+                normalized_expected and normalized_candidate == normalized_expected
+            ),
+            "contains_match": bool(
+                normalized_expected and normalized_expected in normalized_candidate
+            ),
+        }
+    elif verifier == "long_context_qa_stub":
+        # task057 Session 2 — long_context_qa_smoke env (LongAlpaca-12k
+        # source). M0 oracle baseline stub: delegates to the same
+        # contains-match logic as `normalized_exact_or_contains`. The
+        # "stub" suffix signals that a richer verifier (span-aware,
+        # judge-graded) is M2 task028 / task037 territory; today's
+        # M0 baseline just needs the oracle to pass through.
+        score = score_text(candidate, expected)
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(candidate),
+            "contains_match": bool(score == 1.0),
+        }
+    elif verifier == "sql_execution_match":
+        # task057 Session 3 — sql_text_to_query env (BIRD-SQL source).
+        # M0 oracle baseline uses normalized SQL string match (lowercase,
+        # whitespace-collapsed, backticks stripped, trailing semicolon
+        # removed). Real execution against a DB sandbox is M2 task024
+        # territory; the "execution_match" verifier name signals INTENT
+        # for the future verifier, not behaviour at M0 oracle time.
+        from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
+            normalize_sql,
+            score_sql_execution_match,
+        )
+        score = score_sql_execution_match(candidate, expected)
+        diagnostics = {
+            "normalized_sql": normalize_sql(candidate),
+            "sql_match": bool(score == 1.0),
+        }
+    elif verifier == "math_with_tools_match":
+        # task057 Session 6 — math_with_tools env (MathCodeInstruct
+        # source). M0 oracle stub: extract the candidate's LAST
+        # `\boxed{...}` block, normalize (lowercase + whitespace-
+        # collapsed + strip_punctuation per `score_text`), and contains-
+        # match against the gold boxed answer. If no `\boxed{...}` is
+        # present in the candidate, fall back to whole-candidate
+        # contains-match (so oracle still passes for trailing-token
+        # solutions that drop the box). Real Python-execution + math-
+        # judge scoring is M1 task011 territory; the "_match" suffix
+        # signals this M0 stub intent.
+        from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
+            count_python_code_blocks,
+            extract_boxed_answer,
+        )
+        candidate_str = str(candidate or "")
+        candidate_boxed = extract_boxed_answer(candidate_str)
+        if candidate_boxed:
+            score = score_text(candidate_boxed, expected)
+            boxed_answer_extracted = True
+        else:
+            score = score_text(candidate_str, expected)
+            boxed_answer_extracted = False
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(
+                candidate_boxed if candidate_boxed else candidate_str
+            ),
+            "boxed_answer_extracted": boxed_answer_extracted,
+            "has_code_block_in_candidate": count_python_code_blocks(candidate_str) > 0,
+            "malformed_final_answer": not boxed_answer_extracted,
+        }
+    elif verifier == "safety_judge_stub":
+        # task057 Session 5 — safety_reasoning_smoke env. M0 oracle
+        # baseline uses case-insensitive contains-match on the
+        # canonical verdict (allow / block / escalate). Real judge-
+        # model scoring is M2 task029 (safety) territory; the
+        # "judge_stub" name signals the future verifier intent.
+        norm_candidate = str(candidate or "").lower()
+        norm_expected = str(expected or "").strip().lower()
+        if not norm_expected:
+            score = 0.0
+        elif norm_expected in norm_candidate:
+            score = 1.0
+        else:
+            score = 0.0
+        diagnostics = {
+            "expected_verdict": norm_expected,
+            "verdict_match": bool(score == 1.0),
         }
     elif verifier == "normalized_numeric_exact_match":
         normalized_candidate = normalize_numeric_candidate(candidate)
