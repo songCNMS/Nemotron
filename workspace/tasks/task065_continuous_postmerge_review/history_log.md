@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-19 - intern_nemontron_code_reading
 
@@ -24,3 +24,14 @@
   - Real HF streaming smoke for `m0_swe_pivot_tool_call`, `m0_swe2_openhands_trace`, `m0_helpsteer2_pref` with 2/1 train/val each → success, no manifest errors.
   - Combined PR-scope tests: promotion gate, gap analysis, RLVR1 smoke wiring, SWE1/SWE2 bridges, sandbox watchdog, unified registry, M0 data env, SWE converters, HelpSteer-2 converter, revision audit → 249 passed, 2 skipped.
 - Follow-up PR opened: https://github.com/songCNMS/Nemotron/pull/91
+
+## Session 2 - 2026-05-20 - intern_nemontron_code_reading
+
+- Continued from user request "继续下一步".
+- Checked PR #91: state OPEN, mergeStateStatus CLEAN, mergeable MERGEABLE, no status checks pending.
+- Prepared merge-completion state on this branch per playbook:
+  - intern status set to Idle with empty task.
+  - task065 README metadata set to Completed.
+  - task065 task_knowledge metadata advanced to Session 2.
+  - durable task065 facts copied into personal knowledge base.
+- This commit is intended as the final pre-merge state update before merging PR #91.
