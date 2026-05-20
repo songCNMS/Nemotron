@@ -1,75 +1,61 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task070_openhands_loop_wrapper -->
+<!-- METADATA:STATUS=Idle -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Working |
-| Current Task | task070_openhands_loop_wrapper |
-| PR | pending push |
-| Session | 77 |
+| Status | Idle |
+| Current Task | - |
+| PR | - |
+| Session | 78 |
 
-正在做：task070 Session 1 — OpenHands loop wrapper Protocol + fake stub
-+ watchdog wiring + per-turn telemetry。Lifted from task017 Session 2
-deferral (after task067 ID-collision rename).
+刚做完：task070 Session 1 — OpenHands loop wrapper Protocol + fake stub
++ watchdog wiring + per-turn telemetry (PR #101 / f1a704a, merged
+2026-05-19).
 
-## What's in this PR
+- 新 module `m1_swe2/openhands_loop.py`：
+  - `Instance` / `TurnRecord` / `RolloutResult` frozen dataclasses
+    (RolloutResult invariants: binary reward 0|1, validated terminal_reason)
+  - 9-value terminal_reason enum (solved / patch_rejected /
+    tests_failed / turn_budget / timeout / policy_violation /
+    container_crash / tool_schema_mismatch / unknown)
+  - `OpenHandsLoop` Protocol (structural, no ABC)
+  - `FakeOpenHandsLoop` deterministic stub: canned trajectory + canned
+    terminal_reason + canned reward; routes run_shell / run_tests
+    through sandbox_watchdog; injectable clock for timeout testing
+  - `aggregate_turn_telemetry()` rolls into task021 Session 1 contract
+- 16 个新 pytest case; sandbox 测试基线 543 → 559 passed + 7 skipped
 
-### 新 module `m1_swe2/openhands_loop.py`
+## 本轮 PRs 收尾 (Roadmap refresh → 5 new sandbox sessions in 24h)
 
-- **Dataclasses**:
-  - `Instance` (frozen): instance_id / repo / problem_statement /
-    sif_path / agent_max_turns (default 200) / timeout_s (default 3600)
-  - `TurnRecord` (frozen): turn_index / tool_name / argument_dict /
-    observation_length_chars / latency_ms / blocked_by_watchdog
-  - `RolloutResult` (frozen): instance_id / reward (binary 0.0|1.0) /
-    terminal_reason (validated against `VALID_TERMINAL_REASONS`) /
-    turn_count / submitted_patch / elapsed_s / turns tuple
+- PR #94 — roadmap refresh + 4 gap-task scaffolds (task040 / task067 /
+  task068 / task069)
+- PR #95 — task067 → task070 rename (ID collision)
+- PR #97 — task013 Session 2a (two-stage SFT driver + YAMLs)
+- PR #99 — task040 Session 1 (W1 curriculum sampler)
+- PR #101 — task070 Session 1 (OpenHands wrapper Protocol + fake)
 
-- **Terminal reasons enum** (8 + unknown):
-  solved / patch_rejected / tests_failed / turn_budget / timeout /
-  policy_violation / container_crash / tool_schema_mismatch /
-  unknown
-
-- **`OpenHandsLoop` Protocol** — structural, no ABC inheritance needed
-- **`FakeOpenHandsLoop`** deterministic stub:
-  - Canned trajectory + canned terminal reason + canned reward
-  - Routes `run_shell` / `run_tests` through
-    `sandbox_watchdog.is_command_blocked`
-  - `view_file` / `search` / `edit_file` NOT gated (sandboxed Python
-    runtime, not fresh shell)
-  - Bounded by `agent_max_turns` + `timeout_s` (injected clock for
-    testability)
-  - Blocked command → terminal=`policy_violation` + reward 0; the turn
-    record marks `blocked_by_watchdog=True`
-- **`aggregate_turn_telemetry`** rolls up per-turn records into task021
-  Session 1 aggregate contract shape (numeric → min/mean/max, counts →
-  int, tool_name_counts → dict)
-
-### Tests (`test_openhands_loop.py`, 16 cases)
-
-- Dataclass surface 4: terminal reasons enum / reward must be binary /
-  unknown terminal raises / valid binary outcomes accepted
-- Protocol satisfaction 1
-- Happy path 2: reward 1 + terminal=solved / per-turn telemetry captured
-- Bounded rollout 2: turn budget exceeded / clock timeout exceeded
-- Watchdog integration 3: blocked shell → terminal=policy_violation +
-  blocked_by_watchdog=True / safe shell commands pass / view/search/
-  edit_file NOT gated
-- Failure modes 1: container_crash flows through
-- aggregate_turn_telemetry 3: empty turns / tool_name + violation
-  counting / shape matches task021 contract
-
-Sandbox 测试基线 543 → **559 passed + 7 skipped** (16 new)。
+Sandbox 测试基线 progression: 506 → 520 → 543 → 559 passed + 7 skipped
+(任 3 个 sandbox sessions 共 53 个新测试).
 
 ## task070 状态
 
-- Session 1 ✓ (this PR) — Protocol + FakeOpenHandsLoop + watchdog +
-  telemetry
+- Session 1 ✓ (this PR)
 - Session 2 ☐ — Real `OpenHandsLoopAdapter` against upstream OpenHands
-  library (depends on library availability in SIF container)
-- Session 3 ☐ — Cluster smoke (`nemotron super3 rl swe2 -c smoke`
-  against 1 SWE-Bench Verified instance with the adapter)
+  library; depends on library availability in SIF container
+- Session 3 ☐ — Cluster smoke
 
-Roadmap §5b sandbox queue 更新：task070 Session 1 ✓；Session 2 partial。
+## 下一候选 (sandbox-runnable per roadmap §5b)
+
+- task040 Session 2 — wire sampler into prepare_m0_assets.py /
+  prepare_m1_agentic_sft.py via `--curriculum-policy` CLI flag
+- task057 Session 1 — M0 tier2 expansion (lights up RLVR2/RLVR3 active)
+- task068 Session 1 — RLHF tool-call pairing harness design doc
+- task069 Session 1 — W&B lineage publisher (injectable W&B run +
+  FakeWandbRun + scripts/publish_lineage.py CLI)
+
+Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
+task014 Session 2 cluster part / task016 Session 3 / task017 Session 3 /
+task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
+task021 Session 4 / task070 Sessions 2-3。
