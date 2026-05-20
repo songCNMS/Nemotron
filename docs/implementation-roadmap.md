@@ -668,7 +668,8 @@ and cluster-bound work is queued waiting for NemTron access.
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | ~~**task057**~~ | ~~1~~ | ~~M0 tier2 — `multilingual_instruct` env + Aya converter + `multilingual_exact_or_contains` verifier (Unicode NFC + casefold, preserves CJK punctuation)~~ — **landed 2026-05-19**; data_registry row deferred to Session 1.5 pending Aya commit pin | ✓ done |
 | ~~**task057**~~ | ~~2~~ | ~~M0 tier2 — `long_context_qa_smoke` env via `THUDM/LongAlpaca-12k`~~ — **landed 2026-05-20** (env + converter + `long_context_qa_stub` verifier + 32K char M0 smoke cap; data_registry row deferred pending LongAlpaca commit SHA pin) | ✓ done |
-| **task057** | 3 | M0 tier2 — `sql_text_to_query` env via `birdsql/bird_mini_dev` + `bird-bench/bird` | ✓ |
+| ~~**task057**~~ | ~~3~~ | ~~M0 tier2 — `sql_text_to_query` env via BIRD-SQL~~ — **landed 2026-05-20** (env + bird_sql converter + sql_execution_match verifier with SQL normalization; data_registry row deferred pending BIRD commit SHA pin + mini_dev contamination split) | ✓ done |
+| **task057** | 4 | M0 tier2 — `terminal_basic_shell` tier-2 extension via `epinnock/intercode-nl2bash-curated` | ✓ |
 | **task057** | 1.5 | M0 tier2 — pin Aya commit SHA + add `m0_multilingual_aya` row to data_registry | partial (needs HF access) |
 | **task070** | 2 | OpenHands library integration — `OpenHandsLoopAdapter` against upstream | partial |
 | ~~**task068**~~ | ~~1~~ | ~~RLHF tool-call pairing harness — design doc + reference paired-row shape~~ — **landed 2026-05-19** (`task068_design.md`: keyword+template relevance filter / function-name gold-call match / K=1 sampling / decontam vs BFCL+TauBench+MCP-Mark+HelpSteer1; expected corpus 7K → ~1,200 paired rows after 83% drop) | ✓ done |

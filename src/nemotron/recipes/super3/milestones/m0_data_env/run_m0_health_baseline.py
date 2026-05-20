@@ -448,6 +448,22 @@ def score_record(
             "normalized_answer": normalize_text_answer(candidate),
             "contains_match": bool(score == 1.0),
         }
+    elif verifier == "sql_execution_match":
+        # task057 Session 3 — sql_text_to_query env (BIRD-SQL source).
+        # M0 oracle baseline uses normalized SQL string match (lowercase,
+        # whitespace-collapsed, backticks stripped, trailing semicolon
+        # removed). Real execution against a DB sandbox is M2 task024
+        # territory; the "execution_match" verifier name signals INTENT
+        # for the future verifier, not behaviour at M0 oracle time.
+        from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
+            normalize_sql,
+            score_sql_execution_match,
+        )
+        score = score_sql_execution_match(candidate, expected)
+        diagnostics = {
+            "normalized_sql": normalize_sql(candidate),
+            "sql_match": bool(score == 1.0),
+        }
     elif verifier == "normalized_numeric_exact_match":
         normalized_candidate = normalize_numeric_candidate(candidate)
         score = score_numeric(candidate, expected)

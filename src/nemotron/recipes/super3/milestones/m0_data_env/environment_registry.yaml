@@ -178,6 +178,33 @@ environments:
         - expected_answer
         - extra_env_info.gold_tool_call
 
+  - id: sql_text_to_query
+    family: structured_query
+    stage: M0 data_env_foundation
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: sql_execution_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: M0 oracle baseline uses normalized SQL string match; real execution against a DB sandbox is M2 task024 territory
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 10
+      max_turns: 1
+      expected_runtime_ms: 500
+    telemetry:
+      - reward
+      - sql_match
+      - latency_ms
+      - malformed_sql
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.db_id
+
   - id: long_context_qa_smoke
     family: long_context
     stage: M0 data_env_foundation
