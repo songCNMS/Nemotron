@@ -1,0 +1,75 @@
+# Stage B of the two-stage SFT loss schedule (task013 Session 2a).
+#
+# Plan §5.1: "first token-level, then sample-level". This config is
+# Stage B — sample-level loss starting from the Stage A checkpoint.
+# Deltas from stage_a_default.yaml:
+#   - `step_function: super3_sample_level_step` (per-sample mean → batch
+#     mean; no length domination)
+#   - `checkpoint.pretrained_checkpoint` placeholder; the two-stage
+#     driver fills it in with Stage A's `checkpoint.save` path at run
+#     time via Hydra-style CLI override
+#   - `checkpoint.save` points to a stage-B-distinct path
+#   - `convert_to_hf.enabled: true` — Stage B is the final checkpoint
+#
+# Direct usage (not via the driver) requires the operator to manually
+# pass `checkpoint.pretrained_checkpoint=<stage A checkpoint>`:
+#   nemotron super3 sft -c stage_b_default \
+#       checkpoint.pretrained_checkpoint=/nemo_run/super3-sft-stage-a-model
+#
+# Preferred usage via the driver:
+#   run_two_stage_finetune("config/stage_a_default.yaml",
+#                          "config/stage_b_default.yaml")
+
+run:
+  data: super3-sft-data:latest
+  model: super3-pretrain-model:latest
+  env:
+    container: nvcr.io/nvidia/nemo:26.02.nemotron_3_super
+
+# task013 Session 1: sample-level loss step function (per-sample mean
+# → batch mean over non-empty samples). Driver asserts this exact value
+# is set before invoking Stage B.
+step_function: super3_sample_level_step
+
+recipe:
+  _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
+  packed_sequence: true
+  peft: null
+
+dataset:
+  super3_packed_sft_dir: ${art:data,path}
+  seq_length: ${art:data,pack_size}
+  packed_sequence_specs:
+    packed_sequence_size: ${art:data,pack_size}
+
+train:
+  # Stage B can train fewer iters than Stage A — sample-level loss is
+  # tighter convergence per gradient step. Operator tunes.
+  train_iters: 800
+  global_batch_size: 4
+
+model:
+  seq_length: ${art:data,pack_size}
+
+scheduler:
+  lr_warmup_iters: 4
+
+logger:
+  log_interval: 10
+  wandb_project: ${run.wandb.project}
+  wandb_entity: ${run.wandb.entity}
+  wandb_exp_name: super3-sft-stage-b
+
+checkpoint:
+  save: /nemo_run/super3-sft-stage-b-model
+  save_interval: 20
+  # The two-stage driver overrides this at run time with Stage A's
+  # `checkpoint.save` value. The placeholder string makes it obvious
+  # to anyone reading the YAML that this MUST be set externally.
+  pretrained_checkpoint: TWO_STAGE_DRIVER_OVERRIDES_THIS
+  finetune: true
+
+convert_to_hf:
+  # Stage B is the final SFT checkpoint — convert + publish to HF here.
+  enabled: true
+  hf_model_id: "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-Base-BF16"

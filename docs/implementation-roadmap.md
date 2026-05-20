@@ -82,7 +82,7 @@ status `InProgress`).
 | # | Plan ref | Status | Suggested task |
 |---|---|---|---|
 | REVIEW #8 | §5.1 chat template | ✓ — task012 shipped `src/nemotron/data_prep/templates/super3.jinja` (verbatim copy of nano3 with a header comment for lineage), taught `_apply_chat_template` to resolve `super3`, and flipped the three data-prep YAMLs in `stage1_sft/config/data_prep/{default,agentic_v0,tiny}.yaml`. Render-time tests cover `system / user / assistant w/ tool_calls / tool turn` plus `tool_call_repair_negative` round-trip. Diverge `super3.jinja` from `nano3.jinja` as Super3-specific behavior is identified. |
-| REVIEW #9 | §5.1 two-stage SFT loss | ⚠ — Session 1 lands the hook + sample-level loss helper but defaults to ``gpt_step`` so behavior is unchanged today | **task013_super3_sft_two_stage_loss** — Session 1 ✓ (forward_step dispatch + sample-level loss math + adapter skeleton); Session 2 (two-stage driver + stage-a/stage-b YAMLs + cluster verify) still to go |
+| REVIEW #9 | §5.1 two-stage SFT loss | ⚠ — Session 1 + 2a landed (math + dispatch + driver + stage-a/stage-b YAMLs); behavior under default config still byte-for-byte identical to pre-task013 (gpt_step). Cluster verify (Session 2b) pending. | **task013_super3_sft_two_stage_loss** — Session 1 ✓ (forward_step dispatch + sample-level loss math + adapter skeleton); Session 2a ✓ (`run_two_stage_finetune` driver + `stage_a_default.yaml` + `stage_b_default.yaml` + 14 sandbox tests); Session 2b cluster verify still to go |
 
 ### 1.3 M1 RLVR 1/2/3 — data wiring (highest leverage)
 
@@ -613,8 +613,11 @@ Then in parallel:
 9. **task013** — M1 two-stage SFT loss (plan §5.1 / REVIEW #9). Session 1
    landed (`step_dispatch._STEP_FUNCTIONS` registry + `sample_level_loss`
    pure-torch helper + `sample_level_step` adapter; defaults to `gpt_step`
-   so existing configs unchanged); Session 2 (two-stage driver +
-   stage-a/stage-b YAMLs + cluster verify) still to go.
+   so existing configs unchanged). Session 2a landed (`run_two_stage_finetune`
+   driver with injectable `finetune_fn` + `stage_a_default.yaml` +
+   `stage_b_default.yaml`; sandbox-tested against a recording fake);
+   Session 2b (cluster verify in nvcr Megatron-Bridge container) still
+   to go.
 10. **task019** + **task020** — M1 eval basket. task019 Session 1 landed
     (8-benchmark registry per plan §5.7 v0 + new `eval_basket_registry`
     schema kind unblocking task030 Session 3 + `regression_report.py`
@@ -658,7 +661,7 @@ and cluster-bound work is queued waiting for NemTron access.
 
 | Task | Session | Scope | Pickable now? |
 |---|---|---|---|
-| **task013** | 2a | Two-stage finetune driver + stage-a/stage-b YAML chain (test against injected fake `finetune` so no real GPU needed) | ✓ |
+| ~~**task013**~~ | ~~2a~~ | ~~Two-stage finetune driver + stage-a/stage-b YAML chain~~ — **landed 2026-05-19** | ✓ done |
 | **task040** | 1 | W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample` | ✓ |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
