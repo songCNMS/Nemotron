@@ -1,47 +1,75 @@
 # intern_nemontron_review_cc - 状态
 
-<!-- METADATA:STATUS=Idle -->
+<!-- METADATA:STATUS=Working,TASK=task040_w1_curriculum_sampler -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nemontron_review_cc |
-| Status | Idle |
-| Current Task | - |
-| PR | - |
-| Session | 74 |
+| Status | Working |
+| Current Task | task040_w1_curriculum_sampler |
+| PR | pending push |
+| Session | 75 |
 
-刚做完：task013 Session 2a — two-stage finetune driver + stage-a/b YAML
-chain (PR #97 / 2f63ceb, merged 2026-05-19)。
+正在做：task040 Session 1 — W1 difficulty curriculum sampler。Plan §6
+W1 deliverable，roadmap §4 long-pending row。
 
-- 新 module `stage1_sft/two_stage_finetune.py`: `run_two_stage_finetune`
-  driver with injectable `finetune_fn` (DI pattern from task017 Session
-  2 watchdog); `StageInvocation` + `TwoStageResult` dataclasses
-- 新 `stage_a_default.yaml` (token-level / gpt_step) +
-  `stage_b_default.yaml` (sample-level / placeholder
-  `pretrained_checkpoint` driver overrides)
-- 14 个新 pytest case；sandbox 测试基线 506 → 520 passed + 7 skipped
+## What's in this PR
 
-task013 整 task：Session 1 ✓ + Session 2a ✓；Session 2b (cluster verify
-in nvcr Megatron-Bridge container) 仍待。
+### `m0_data_env/difficulty_sampler.py` 新模块
 
-## 本轮 (PRs #94 #95 #97) 收尾
+- `BUCKET_ORDER = ("trivial", "unknown", "hard")` — 跟 task008
+  `prepare_m1_agentic_sft._difficulty_for` / DIFFICULTY_* 常量对齐
+- `KNOWN_BUCKETS` frozenset；`VALID_POLICIES` frozenset
+  (easy_first / hard_first / shuffle / as_is)
+- `DEFAULT_SOLVED_THRESHOLD = 0.9`
+- `bucket_rows(rows, *, policy, rng=None)`：
+  - easy_first：ascending bucket ordinal (trivial → hard)；stable
+    within bucket
+  - hard_first：descending；same stability
+  - shuffle：deterministic given rng；operator 必须传 rng 给 reproducibility
+  - as_is：passthrough (control)
+  - Unknown / missing bucket → middle ordinal (不丢)
+- `filter_solved(rows, *, pass_rates=None, threshold=0.9)`：
+  - 缺 pass_rates → keep everything (no signal → no decision)
+  - Row id 解析顺序：metadata.m0_source_id > metadata.source_id >
+    top-level id > instance_id
+  - Strict > threshold (exact-threshold row kept)
+- `weighted_sample(rows, *, weights, n, rng=None, replace=False)`：
+  - replace=False (default)：caps at len(rows)
+  - replace=True：emits exactly n
+  - Negative weights → ValueError
+  - All-zero weights → []
+  - 没在 weights map 里的 bucket → weight 0 (excluded)
 
-PR #94 — roadmap 全面 refresh + 4 个 gap-task 脚手架 (task040 / task067 /
-task068 / task069)。
-PR #95 — task067 ID collision 修复 → task070_openhands_loop_wrapper
-(intern_nemontron_code_reading 同时落 task067_m1_agentic_qwen_scaleup)。
-PR #97 — task013 Session 2a 实施 (sandbox driver + YAMLs)。
+### 设计 vs scaffold spec
 
-下一候选 (sandbox-runnable per roadmap §5b)：
-- task040 Session 1 — W1 curriculum sampler (bucket_rows / filter_solved /
-  weighted_sample)
-- task057 Session 1 — M0 tier2 expansion (lights up RLVR2/RLVR3 active)
-- task068 Session 1 — RLHF tool-call pairing harness design doc
-- task069 Session 1 — W&B lineage publisher (injectable W&B run +
-  FakeWandbRun double + scripts/publish_lineage.py CLI)
-- task070 Session 1 — OpenHands wrapper Protocol + FakeOpenHandsLoop stub
+Scaffold README 原说 `BUCKET_ORDERINGS` per-domain ordinal map，但
+task008 实际只用了一个简单 3-bucket categorical (`trivial` / `unknown` /
+`hard`) 跨所有 env。所以本 PR 用一个共享 `BUCKET_ORDER` 元组而不是
+per-domain dict — 跟实际数据 schema 对齐。
 
-Cluster-bound queue (waiting on NemTron access)：task013 Session 2b /
-task014 Session 2 cluster part / task016 Session 3 / task017 Session 3 /
-task018 Sessions 3-4 / task019 Sessions 2-3 / task020 Session 3 /
-task021 Session 4。
+## Tests (`test_difficulty_sampler.py`, 23 cases)
+
+- Constants 3：BUCKET_ORDER / VALID_POLICIES / DEFAULT_SOLVED_THRESHOLD
+- bucket_rows 7：easy_first 3-bucket sort / hard_first reverses /
+  stable within bucket / unknown → middle / as_is passthrough /
+  shuffle deterministic / unknown policy raises
+- filter_solved 5：drops > threshold / keeps == threshold /
+  no pass_rates keeps all / row_id resolution preference /
+  no-id rows pass through
+- weighted_sample 8：respects weights / deterministic rng /
+  no-replace caps at pool size / with-replace = exactly n /
+  all-zero weights = [] / negative weights raise /
+  missing-bucket = excluded / n=0 = []
+
+Sandbox 测试基线 520 → **543 passed + 7 skipped** (23 new)。
+
+## task040 状态
+
+- Session 1 ✓ (this PR) — core sampler
+- Session 2 ☐ — wire into prepare_m0_assets.py / prepare_m1_agentic_sft.py
+  via `--curriculum-policy` CLI flag (sandbox-runnable next)
+- Session 3 ☐ — numeric pass-rate filter (depends task032 rollout store, M2)
+- Session 4 ☐ — per-env curriculum policy YAML
+
+Roadmap §4 cross-cutting + §5b sandbox queue 状态更新。
