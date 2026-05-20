@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 9 |
+| Session | 10 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Reran gpqa_diamond with the user-provided HF token; direct dataset probe and eval both still fail on gated Idavidrein/gpqa access before any model request. |
+| Latest | After HF GPQA access approval, direct dataset probe and gpqa_diamond 1-sample non-dry smoke both succeeded on vm4vpn via the endpoint tunnel; score=0.0 with successful_responses=1/1. |
