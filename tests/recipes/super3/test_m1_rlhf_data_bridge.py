@@ -182,9 +182,16 @@ def test_rlhf_profile_uses_correct_artifact() -> None:
     assert MIX_NAME == "rlhf"
 
 
-def test_rlhf_env_map_empty_today() -> None:
-    """All registry rows are m0_missing or blocked_external — env_map empty."""
-    assert RLHF_ENV_MAP == {}
+def test_rlhf_env_map_lights_up_post_task068_session_3() -> None:
+    """task068 Session 3 (M0 rlhf_toolcall_paired → NeMo-Gym
+    single_step_tool_use_with_argument_comparison) lit up the rlhf
+    active row for the tool-call validity env. genrm_compare stays
+    blocked_external until task018 Session 3 (judge service). Previously
+    asserted-empty — flipped to lock the active state so a future
+    regression that removes the active row gets caught."""
+    assert RLHF_ENV_MAP == {
+        "rlhf_toolcall_paired": "single_step_tool_use_with_argument_comparison",
+    }
 
 
 def test_derive_env_map_filters_to_active() -> None:
@@ -218,12 +225,12 @@ def test_coverage_report_includes_pref_dataset_breakdown_and_candidates() -> Non
 
 
 def test_coverage_report_today_reflects_main() -> None:
-    """Today's main: genrm_compare blocked_external (model + data),
-    tool-call validity m0_missing."""
+    """Post-task068-Session-3: tool-call validity env active (1);
+    genrm_compare stays blocked_external pending task018 Session 3
+    judge service deployment."""
     coverage = coverage_report(load_rlhf_env_registry(), load_rlhf_pref_data_registry())
-    assert coverage["counts"]["active"] == 0
+    assert coverage["counts"]["active"] >= 1
     assert coverage["counts"]["blocked_external"] >= 1
-    assert coverage["counts"]["m0_missing"] >= 1
     # known_pref_candidates surfaces the candidate registry.
     assert "helpsteer2" in coverage["known_pref_candidates"]
 
@@ -254,7 +261,34 @@ def test_tag_record_preserves_m0_payload_and_adds_rlhf_tags() -> None:
 # ---------- prepare() error and happy paths ----------
 
 
-def test_prepare_raises_coverage_aware_error_today(tmp_path: Path) -> None:
+def test_prepare_raises_coverage_aware_error_when_no_active_rows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Post-task068-Session-3 main has an active rlhf row, so pin the
+    error path by monkey-patching to an all-inactive registry."""
+    from nemotron.recipes.super3.milestones.m1_rlhf import prepare_m1_rlhf_jsonl
+
+    monkeypatch.setattr(
+        prepare_m1_rlhf_jsonl,
+        "_REGISTRY",
+        [
+            {
+                "nemo_gym_env": "genrm_compare",
+                "mix": "rlhf",
+                "m0_env_id": None,
+                "pref_dataset_candidate": "helpsteer2",
+                "status": "blocked_external",
+                "license": "cc-by-4.0",
+            }
+        ],
+    )
+    monkeypatch.setattr(prepare_m1_rlhf_jsonl, "RLHF_ENV_MAP", {})
+    monkeypatch.setattr(
+        prepare_m1_rlhf_jsonl,
+        "RLHF_PROFILE",
+        {**prepare_m1_rlhf_jsonl.RLHF_PROFILE, "env_map": {}},
+    )
+
     env_rows = {"rlhf_helpsteer2": {"train": [], "val": []}}
     m0_root = _build_m0_dir(tmp_path, env_rows=env_rows)
     out_dir = tmp_path / "rlhf_out"

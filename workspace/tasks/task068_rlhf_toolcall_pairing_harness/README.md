@@ -2,7 +2,8 @@
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
 <!-- SESSION 1 LANDED: PR #110 / 40a0faa on 2026-05-19 (task068_design.md captures filter / gold-call / sampling / decontamination decisions) -->
-<!-- SESSION 2 LANDED: PR pending on 2026-05-19 (transform_rlhf_toolcall_pairing converter implementing Session 1 design; 31 tests) -->
+<!-- SESSION 2 LANDED: PR #112 / 2f85e63 on 2026-05-19 (transform_rlhf_toolcall_pairing converter implementing Session 1 design; 31 tests) -->
+<!-- SESSION 3 LANDED: PR pending on 2026-05-19 (CLI dispatch + M0 env registry add + RLHF env registry flip to active) -->
 
 ## 背景
 
@@ -49,7 +50,7 @@ talking eloquently but loses tool-call competence).
 |---|---|---|---|
 | 1 | Pairing strategy design doc + reference paired dataset shape — what fields, what relevance heuristic, what sampling cap | yes | ✓ Done (this PR — see `task068_design.md`) |
 | 2 | M0 converter `transform_rlhf_toolcall_pairing` consuming HelpSteer-2 prompts + Hermes tool-call rows; emits paired rows for `single_step_tool_use_with_argument_comparison` env | yes | ✓ Done (this PR) |
-| 3 | Flip the RLHF env registry's tool-call row to active; bridge picks it up; M0 prep generates the paired data | yes | Todo |
+| 3 | Flip the RLHF env registry's tool-call row to active; bridge picks it up; M0 prep generates the paired data | yes | ✓ Done (this PR) |
 | 4 | Cluster smoke: end-to-end RLHF with both `genrm_compare` AND tool-call validity envs lit up | no — needs cluster + GenRM judge service (task018 Session 3) | Todo |
 
 ## Session 1 目标
