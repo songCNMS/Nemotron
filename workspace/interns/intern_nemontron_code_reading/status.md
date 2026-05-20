@@ -7,7 +7,7 @@
 | Name | intern_nemontron_code_reading |
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
-| PR |  |
+| PR | https://github.com/songCNMS/Nemotron/pull/96 |
 | Session | 1 |
 | Branch | intern_nemontron_code_reading/task071_m1_agentic_qwen_scaleup_train_exec |
-| Latest | Started task071 from latest main to run formal Qwen M1 Agentic SFT scale-up: regenerate scripts, run local prep, sync NemTron, launch train, and validate eval entry. |
+| Latest | Opened PR #96 for task071 and starting formal Qwen M1 Agentic SFT scale-up script generation and execution. |
