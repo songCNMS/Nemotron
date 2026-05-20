@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 7 |
+| Session | 8 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Retried deployment.type=none on vpn after Docker permission and disk resize: AIME_2025 non-dry smoke completed through the NemTron SGLang endpoint with score 1.0, 10/10 successful responses, and stage exit 0. |
+| Latest | Extended vpn deployment.type=none eval smoke: ifbench completed with stage exit 0 and 1/1 successful endpoint response; gpqa_diamond is blocked by gated HF dataset access. |

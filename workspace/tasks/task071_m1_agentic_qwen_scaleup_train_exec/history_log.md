@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 1
 
@@ -76,3 +76,12 @@
 - `simple_evals.AIME_2025` 初次失败于磁盘不足；扩容后成功拉取 `nvcr.io/nvidia/eval-factory/simple-evals:26.03` 并进入真实请求阶段。
 - 针对 SGLang endpoint 兼容性修正 AIME smoke 配置：去掉 `/v1/chat/completions/` 尾斜杠，将 `max_new_tokens` 从 launcher 默认 16384 降到 2048，以适配当前 endpoint 4096 context limit。
 - AIME_2025 non-dry smoke 成功：`stage.exit=0`，`score=1.0`，`n_repeats=10`，`successful_responses=10/10`，`avg_latency_ms=3341.95`，artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_aime/evaluations/20260520_174300-8a645eca228ad5d3/simple_evals.AIME_2025.0/artifacts`。
+
+## Session 8
+
+- 按用户要求执行下一步，继续基于 `vm4vpn` + SSH remote forward + `deployment.type=none` 路径扩展真实 eval smoke。
+- 重新建立 `vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` tunnel，并验证 endpoint 返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`、`max_model_len=4096`。
+- 修正并运行 `ifbench.ifbench` 1-sample non-dry：脚本包含 Docker `--network host`、`setuptools<81`、无尾斜杠 endpoint、`max_new_tokens=2048`，并补 `OPENAI_API_KEY=dummy` 以满足 LangChain OpenAI client 初始化。
+- ifbench 成功完成：`stage.exit=0`，`successful_responses=1/1`，`avg_latency_ms=3124.77`，strict/loose prompt-level 与 instruction-level 均为 `0.0`；artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval/evaluations/20260520_173914-319a71866969dc8a/ifbench.ifbench.0/artifacts`。
+- 尝试 `gpqa_diamond` 1-sample smoke，复用 AIME dry-run 注入的非空 `HF_TOKEN` 后仍失败于 `Dataset 'Idavidrein/gpqa' is a gated dataset on the Hub. You must be authenticated to access it.`，未打到模型 endpoint。
+- 本轮结束时清理 eval 容器；`vm4vpn` 上仅保留原有 `chromium` 容器，根分区约 16G 可用。

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Notes
 
@@ -30,3 +30,6 @@
 - Qwen endpoint context fact: the current served model rejects `max_tokens=16384` and also rejects `max_tokens=4096` when prompt tokens make total context exceed 4096; AIME smoke succeeded with `max_new_tokens=2048`.
 - AIME non-dry smoke fact: `simple_evals.AIME_2025` on `vm4vpn` with `deployment.type=none`, endpoint tunnel, `limit_samples=1`, `n_repeats=10`, and `max_new_tokens=2048` completed successfully with `score=1.0`, `successful_responses=10/10`, and artifacts under `vm4vpn:/tmp/task071_vpn_eval_aime/evaluations/20260520_174300-8a645eca228ad5d3/simple_evals.AIME_2025.0/artifacts`.
 - ifbench image fact: `nvcr.io/nvidia/eval-factory/ifbench:26.03` currently needs `setuptools<81` installed inside the container for `syllapy` to import `pkg_resources`.
+- ifbench runtime fact: the harness also needs an `OPENAI_API_KEY` value for LangChain/OpenAI client initialization even when it calls the local NeMo adapter; `OPENAI_API_KEY=dummy` is sufficient with the current adapter path.
+- ifbench non-dry smoke fact: on `vm4vpn`, `ifbench.ifbench` with `limit_samples=1`, `max_new_tokens=2048`, endpoint tunnel, `setuptools<81`, and `OPENAI_API_KEY=dummy` completed with `stage.exit=0`, `successful_responses=1/1`, and all strict/loose count metrics at `0.0`.
+- GPQA access fact: `gpqa_diamond` in `simple-evals:26.03` loads `Idavidrein/gpqa`, which is gated on Hugging Face; the available injected HF token is non-empty but does not grant access in this environment, so GPQA fails before any model request.
