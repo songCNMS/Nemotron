@@ -24,3 +24,4 @@
 - 按 project rule 将最新 main 代码同步到 NemTron `/root/Nemotron_task071_eval`，并在 `/root/nemotron_session5_venv` 安装 `nemo-evaluator-launcher==0.2.5`。
 - 已在 NemTron 启动 SGLang endpoint：tmux session `task071_sglang_eval`，URL `http://127.0.0.1:30000/v1/chat/completions`，model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`；smoke request 返回 `ready`。
 - 已对 `m1_full_basket` 做非 dry-run 提交尝试；未产出 benchmark metrics，原因是当前 19 个 `adlr_*` task name 均无法在 `nemo-evaluator-launcher` 421-task mapping 中解析，且 NemTron 无 Docker/Slurm，local executor 非 dry-run 报 `Docker is not installed or not in PATH`。
+- 已创建 PR #102 记录本轮 export/register 与 eval 阻塞结果。
