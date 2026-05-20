@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1
 
@@ -38,3 +38,10 @@
 - 本地验证：`ruff check` touched files + `git diff --check` 通过；`PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> 23 passed。
 - 远端验证：同步代码到 NemTron `/root/Nemotron_task071_eval`；14 个 task name 全部可由 launcher mapping 解析；`run_eval(..., dry_run=True)` 使用 dummy env vars 成功生成 sequential scripts，invocation id `f0c3d45f10b2f225`。
 - 真实 benchmark metrics 仍未产出：NemTron 节点缺 Docker/Slurm，launcher non-dry-run 的 local executor 生成脚本后会执行 `command -v docker`，当前环境无法启动 eval-factory containers。
+
+## Session 4
+
+- 回答用户关于 non-dry eval 是否需要 GPU 的问题。
+- 结论：当前默认 `deployment.type=generic` + local executor 会在 non-dry eval 中启动模型服务 Docker，并使用 `docker run --gpus all`，因此模型服务侧需要 GPU；eval client/harness 容器本身主要是 CPU/IO/网络负载。
+- 如果改为 `deployment.type=none` 并指向已经运行的 OpenAI-compatible endpoint（例如现有 SGLang endpoint），eval launcher 所在节点可以不分配 GPU，但外部 endpoint 仍必须由 GPU 支撑并在评测期间保持可用。
+- 对 task071 当前 NemTron 状态的判断：GPU0 上的 SGLang endpoint 已经承担模型推理，真正阻塞 non-dry eval 的不是 GPU，而是缺 Docker/Slurm/Lepton 这类可执行 eval-factory containers 的 executor。

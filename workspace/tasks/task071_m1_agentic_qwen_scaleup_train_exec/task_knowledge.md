@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Notes
 
@@ -18,3 +18,4 @@
 - Missing exact launcher tasks as of Session 3: `multichallenge`, `terminalbench`, `swe_bench_verified`, `mcp_mark`, and `tool_decathlon`; do not replace them with MT-Bench, codec contamination checks, ToolTalk, or BFCL proxy tasks when reporting benchmark metrics.
 - Eval CLI fact: `load_stage3_eval_config` expands compact basket configs into full `evaluation.tasks`, and `normalize_evaluator_launcher_config` removes old `execution.env_vars` plus sets `execution.mode=sequential` for local generic deployment compatibility with `nemo-evaluator-launcher==0.2.5`.
 - Remote dry-run fact: with dummy `HF_TOKEN`/W&B env vars, `run_eval(..., dry_run=True)` on NemTron generated scripts for 14 tasks under `/root/Nemotron_task071_eval/.nemotron/evaluations/20260520_113845-f0c3d45f10b2f225`, invocation id `f0c3d45f10b2f225`.
+- Non-dry eval resource fact: with the repo default `deployment.type=generic`, launcher non-dry runs a model-serving Docker container with GPU access, so GPU is required on the deployment side; with `deployment.type=none` and a pre-existing SGLang/OpenAI endpoint, the evaluator host can be CPU-only as long as it has Docker/Slurm/Lepton to run eval containers and the endpoint's GPU stays available.
