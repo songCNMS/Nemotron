@@ -556,7 +556,7 @@ long-context, multilingual` per plan §3 M3 acceptance.
 | Workflow | Plan ref | Gap | Suggested task |
 |---|---|---|---|
 | W1 unified data registry across SFT + RL + Eval | §6 | Sessions 1-2 + 4 ⚠ — schema layer + unified index over 9 existing registry YAMLs (M0 data + M0 env + 4 bridge env + SIF + pref data + sandbox image) + cross-registry inventory walks + write-time enforcement via pre-commit hook (`scripts/validate_data_registries.py`) + **single source of truth for row shape** via runtime loader delegation into schema (`fail_fast=True` mode raises on first issue; audit `collect-all` mode unchanged). Eval basket registry still missing — plugs into the same index when task019 lands. | **task030_unified_data_registry** — Session 1 ✓ (schema + index + inventories) + Session 2 ✓ (CLI validator + pre-commit local hook) + Session 4 ✓ (module-local loader merge into schema; row-shape single source of truth); Session 3 (eval basket; blocked on task019/020) still to go |
-| W1 difficulty curriculum sampler | §6 | task008 added bucket metadata; sampler not wired | **task040_w1_curriculum_sampler** — scaffold created 2026-05-19. Sessions 1-4 declared; Session 1 (`bucket_rows` / `filter_solved` / `weighted_sample`) sandbox-runnable, depends only on task008 bucket metadata (already landed). Session 3 numeric pass-rate filter depends on task032 (M2). |
+| W1 difficulty curriculum sampler | §6 | task008 added bucket metadata; sampler not wired | **task040_w1_curriculum_sampler** — Session 1 ✓ landed 2026-05-19 (`bucket_rows` / `filter_solved` / `weighted_sample` in `m0_data_env/difficulty_sampler.py`; 23 pytest cases; sandbox baseline 520 → 543 passed). Session 2 (wire into data prep paths via `--curriculum-policy` CLI flag) sandbox-runnable next; Session 3 numeric pass-rate filter depends on task032 (M2). |
 | W1 failure rollout → SFT repair pipeline | §6 | ✗ | folded into task031 / task047 |
 | W2 env telemetry emitter | §7 | env_registry lists names; emitter missing | folded into task021 + task037 |
 | W2 per-env held-out shadow split | §7 | ✗ | folded into task036 |
@@ -662,7 +662,8 @@ and cluster-bound work is queued waiting for NemTron access.
 | Task | Session | Scope | Pickable now? |
 |---|---|---|---|
 | ~~**task013**~~ | ~~2a~~ | ~~Two-stage finetune driver + stage-a/stage-b YAML chain~~ — **landed 2026-05-19** | ✓ done |
-| **task040** | 1 | W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample` | ✓ |
+| ~~**task040**~~ | ~~1~~ | ~~W1 difficulty curriculum sampler — `bucket_rows` / `filter_solved` / `weighted_sample`~~ — **landed 2026-05-19** | ✓ done |
+| **task040** | 2 | Wire curriculum sampler into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in `--curriculum-policy` CLI flag | ✓ |
 | **task056** | 2 | M0 tier1 expansion — formal Lean rows + verifier shim (some lean tooling sandbox-runnable; full verifier needs container) | ◐ |
 | **task057** | 1 | M0 tier2 expansion — additional M0 rows lighting up RLVR2/RLVR3 active envs | ✓ |
 | **task070** | 1 | OpenHands loop wrapper protocol + FakeOpenHandsLoop + watchdog wiring + per-turn telemetry | ✓ |
