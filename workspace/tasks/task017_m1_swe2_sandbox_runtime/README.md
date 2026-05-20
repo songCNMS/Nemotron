@@ -136,14 +136,20 @@ SIF images per `instance_id`，三个 family：
 - [x] 33 个新 + 2 个修改 pytest case；sandbox 测试基线 441 → 474 passed
   + 7 skipped
 
-## OpenHands wrapper 延后
+## OpenHands wrapper 延后 → lifted to task067 (2026-05-19)
 
-README Session 2 列了 OpenHands wrapper、converter、watchdog 三件事。
-本 PR 落了后两件。**OpenHands wrapper 延后**理由：repo 现在没有跟
-OpenHands 库的真集成 (只有 stage2_swe2/config 里引用 NeMo-Gym 起的
-swe_agents service)；写一个没真 backing 的 wrapper 是接口投机，多半接
-错。等真 OpenHands 集成的 PR 落到时（plan §10 cluster work）再开
-follow-up session 完成 wrapper。
+README Session 2 originally listed OpenHands wrapper + converter +
+watchdog 三件事。task017 Session 2 (PR #82) 落了后两件 (converter +
+watchdog)。
+
+OpenHands wrapper deferral 理由：repo 没有跟 OpenHands 库的真集成
+(只有 stage2_swe2/config 引用 NeMo-Gym swe_agents service)；写一个没
+真 backing 的 wrapper 是接口投机。
+
+**Now tracked**: `workspace/tasks/task067_openhands_loop_wrapper/` —
+Session 1 (Protocol + FakeOpenHandsLoop stub + watchdog wiring + per-
+turn telemetry) is sandbox-runnable and is the natural follow-on pick.
+Sessions 2-3 cluster-bound.
 
 ## Session 2+ 不在本 PR (cluster part)
 

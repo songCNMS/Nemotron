@@ -14,12 +14,13 @@ unmasked token 上算 mean — 长 assistant turn 占主导，每个样本的有
 跟长度成正比。Plan §5.1 要求第二段 optimizer pass 用 sample-level loss
 (per-sequence mean → batch mean)，让每个样本权重相同。
 
-整 task 拆 Sessions：
+整 task 拆 Sessions (Session 2 拆 sandbox / cluster two parts per 2026-05-19 roadmap refinement)：
 
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
-| 1 | `forward_step` dispatch (`_STEP_FUNCTIONS` 像 omni3) + `sample_level_loss` 纯 torch helper + `sample_level_step` adapter | yes (math + dispatch；adapter cluster verify 等 Session 2) | ✓ Done (this PR) |
-| 2 | 两阶段 driver (`run_two_stage_finetune`) + stage-a/stage-b YAML 链 + cluster verify (真训) | no — 需 CUDA + nvcr Megatron-Bridge container | Todo |
+| 1 | `forward_step` dispatch (`_STEP_FUNCTIONS` 像 omni3) + `sample_level_loss` 纯 torch helper + `sample_level_step` adapter | yes (math + dispatch；adapter cluster verify 等 Session 2b) | ✓ Done (PR #44) |
+| 2a | 两阶段 driver (`run_two_stage_finetune`) + stage-a/stage-b YAML 链 — sandbox 验 driver 派发 + YAML 加载 + stage A checkpoint path resolution | yes | Todo |
+| 2b | Cluster verify (真训 stage A → stage B) | no — 需 CUDA + nvcr Megatron-Bridge container | Todo |
 
 ## Session 1 目标
 
@@ -67,26 +68,40 @@ unmasked token 上算 mean — 长 assistant turn 占主导，每个样本的有
   跳过；非 sandbox 环境正常跑）
 - 不依赖 task014/15/16/17/18 等 critical-path
 
-## Session 2+ 不在本 PR
+## Session 2a (sandbox part) 目标 — pickable as next sandbox-runnable session
 
-Session 2 关键产物：
+Per 2026-05-19 roadmap refinement: Session 2 was originally bundled
+("driver + YAML chain + cluster verify"), but the driver function +
+YAML chain CAN be sandbox-tested:
 
-- `run_two_stage_finetune(config_path_a, config_path_b)` driver — 跑 stage A
-  token-level → checkpoint → stage B sample-level (from stage A checkpoint)
-- `config/stage_a_default.yaml` — token-level，跟今天 default 等价
-- `config/stage_b_default.yaml` — sample-level：
-  ```yaml
-  step_function: super3_sample_level_step
-  recipe:
-    _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
-  checkpoint:
-    pretrained_checkpoint: "${stage_a_checkpoint_path}"
-  ```
-- 集群上一次端到端跑：验 stage A 出 checkpoint → stage B 拾起 → loss
-  曲线收敛 + W&B 上 `lm loss` 跟 stage A 比 (期望相近，但 sample 权重均
-  匀让方差降)
+1. **`run_two_stage_finetune(config_path_a, config_path_b)` driver** —
+   stub the actual training call; verify the driver:
+   - Loads `config_path_a` → calls `finetune()` with `step_function=gpt_step`
+   - Captures the stage A checkpoint path from config / cli override
+   - Loads `config_path_b`, resolves `${stage_a_checkpoint_path}` to the
+     stage A output, calls `finetune()` with `step_function=super3_sample_level_step`
+   - Sandbox tests inject a fake `finetune` that records the calls
+2. **`config/stage_a_default.yaml`** — token-level, copy of today's
+   default (sandbox test: yaml load + omegaconf resolution + `step_function`
+   field defaults to `gpt_step`)
+3. **`config/stage_b_default.yaml`** — sample-level:
+   ```yaml
+   step_function: super3_sample_level_step
+   recipe:
+     _target_: megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config
+   checkpoint:
+     pretrained_checkpoint: "${stage_a_checkpoint_path}"
+   ```
+   (sandbox test: yaml load + step_function == sample_level + checkpoint
+   field references stage_a path)
+4. **Tests** (~10): driver dispatch / checkpoint path resolution / both
+   yaml load clean / yaml + dispatch cross-walk
 
-Session 2 在 nvcr Megatron-Bridge container 里跑；sandbox 不行。
+## Session 2b (cluster part) 不在本 PR
+
+集群上一次端到端跑：验 stage A 出 checkpoint → stage B 拾起 → loss
+曲线收敛 + W&B 上 `lm loss` 跟 stage A 比 (期望相近，但 sample 权重均
+匀让方差降)。在 nvcr Megatron-Bridge container 里跑；sandbox 不行。
 
 ## 参考文件
 

@@ -129,13 +129,16 @@ registry + plan-conformance pytest。
      registry (m0_data + pref_data)；测试改成断言 pref-candidate flag
      在 pref_data_registry entry 上即可
 
-5. **Tool-call pairing harness 延后**：
+5. **Tool-call pairing harness 延后 → lifted to task068 (2026-05-19)**：
    README 提到 "把 HelpSteer-2 prompts 跟 M0 hermes tool-call 数据
    cross-product 配对" 给 single_step_tool_use_with_argument_comparison
-   那条 env 用。但那个 env 是 RLHF 的*平行 validity check*，不是
-   GenRM 的 preference path；本 PR 聚焦 GenRM data；tool-call pairing
-   harness 是独立工作 (需要先思考 cross-product 策略避免组合爆炸)，留到
-   后续 session
+   那条 env 用 (RLHF 的*平行 validity check* per plan §5.6)。本 PR
+   聚焦 GenRM data；tool-call pairing harness 是独立工作 (需先思考
+   cross-product 策略避免 200M-pair 组合爆炸)。
+
+   **Now tracked**: `workspace/tasks/task068_rlhf_toolcall_pairing_harness/` —
+   Session 1 design-first (relevance filter + gold-call sourcing +
+   sampling cap + decontamination plan) is sandbox-runnable.
 
 6. **Tests** (`test_helpsteer2_pref.py`, 21 cases):
    - Module surface 2: SYSTEM_PROMPTS / CONVERTERS
