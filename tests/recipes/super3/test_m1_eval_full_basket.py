@@ -18,16 +18,20 @@ Covers:
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 yaml = pytest.importorskip("yaml")
 
-
+from nemotron.cli.commands.super3.eval import (  # noqa: E402
+    CONFIG_DIR,
+    load_stage3_eval_config,
+    normalize_evaluator_launcher_config,
+)
 from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
     diff_eval_runs,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 V0_REGISTRY_PATH = (
@@ -40,6 +44,14 @@ FULL_REGISTRY_PATH = (
 )
 FULL_BASKET_CONFIG_PATH = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket.yaml"
+)
+LAUNCHER_MAPPING_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_launcher_mapping.yaml"
+)
+LAUNCHER_AVAILABLE_CONFIG_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml"
 )
 
 
@@ -68,10 +80,23 @@ EXPECTED_V0_IDS = {
     "taubench_airline",
 }
 
+EXPECTED_LAUNCHER_MISSING_IDS = {
+    "multichallenge",
+    "terminalbench",
+    "swe_bench_verified",
+    "mcp_mark",
+    "tool_decathlon",
+}
+
 
 def _load_rows(path: Path) -> list[dict]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     return data["benchmarks"]
+
+
+def _load_launcher_rows() -> list[dict]:
+    data = yaml.safe_load(LAUNCHER_MAPPING_PATH.read_text(encoding="utf-8"))
+    return data["tasks"]
 
 
 # ---------- Registry shape ----------
@@ -208,6 +233,78 @@ def test_full_basket_config_task_names_match_registry_benchmark_ids() -> None:
         f"config / registry drift — missing in config: {expected - tasks}, "
         f"extra in config: {tasks - expected}"
     )
+
+
+def test_launcher_mapping_covers_full_basket_and_locks_known_gaps() -> None:
+    """The runtime mapping records every intended benchmark, including
+    launcher 0.2.5 gaps. This avoids silently replacing missing SWE /
+    terminal / MCP tasks with unrelated proxy benchmarks."""
+    rows = _load_launcher_rows()
+    ids = {row["benchmark_id"] for row in rows}
+    assert ids == EXPECTED_V0_IDS | EXPECTED_FULL_IDS
+
+    missing = {row["benchmark_id"] for row in rows if row["status"] == "missing"}
+    assert missing == EXPECTED_LAUNCHER_MISSING_IDS
+
+    available = [row for row in rows if row["status"] == "available"]
+    assert len(available) == 14
+    for row in available:
+        assert row["launcher_task"]
+        assert "." in row["launcher_task"]
+        assert not row["launcher_task"].startswith(("adlr_", "nemo_evaluator."))
+
+
+def test_launcher_available_config_uses_only_verified_available_tasks() -> None:
+    data = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+    assert data["defaults"] == "default.yaml"
+
+    expected = {
+        row["launcher_task"]
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    tasks = set(data["tasks"])
+    assert tasks == expected
+    assert len(tasks) == 14
+
+
+def test_launcher_available_config_expands_into_evaluator_schema() -> None:
+    """The recipe CLI must merge the compact basket overlay with
+    default.yaml; otherwise dry-run only prints top-level tasks and the
+    launcher receives no execution/deployment/evaluation schema."""
+    ctx = SimpleNamespace(
+        config="m1_full_basket_launcher_available",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+
+    expected = {
+        row["launcher_task"]
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    tasks = {task["name"] for task in config.evaluation.tasks}
+
+    assert tasks == expected
+    assert "execution" in config
+    assert "deployment" in config
+    assert "tasks" not in config
+
+
+def test_eval_config_normalization_matches_launcher_0_2_schema() -> None:
+    ctx = SimpleNamespace(
+        config="m1_full_basket_launcher_available",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+    assert "env_vars" in config.execution
+
+    normalize_evaluator_launcher_config(config)
+
+    assert "env_vars" not in config.execution
+    assert config.execution.mode == "sequential"
+    assert config.evaluation.env_vars.HF_HOME == "lit:/cache/huggingface"
+    assert config.deployment.env_vars.HF_TOKEN == "host:HF_TOKEN"
 
 
 # ---------- regression_report works on combined gate map ----------

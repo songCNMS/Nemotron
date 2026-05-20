@@ -1,0 +1,44 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# M1 eval full-basket runtime subset for nemo-evaluator-launcher==0.2.5.
+#
+# The intended M1 full basket has 19 benchmarks in m1_full_basket.yaml.
+# Current launcher mapping contains exact runnable tasks for 14 of them.
+# This config uses only those exact launcher task names; missing benchmarks
+# remain tracked in m1_eval_launcher_mapping.yaml and are not replaced with
+# unrelated proxy tasks.
+
+defaults: default.yaml
+
+tasks:
+  # General + Reasoning
+  - lm-evaluation-harness.mmlu_pro
+  - simple_evals.AIME_2025
+  - nemo_skills.ns_hmmt_feb2025
+  - simple_evals.gpqa_diamond
+  - hle.hle
+
+  # Coding
+  - livecodebench.codegeneration_release_latest
+  - scicode.scicode
+
+  # Chat / Instruction following
+  - ifbench.ifbench
+
+  # Long context
+  - ruler.ruler-256k-chat
+  - AA-LCR.aa_lcr
+
+  # Agentic / Tool use
+  - tau2_bench.tau2_bench_airline
+  - bfcl.bfclv3
+
+  # Multilingual
+  - lm-evaluation-harness.mmlu_prox_chat
+  - nemo_skills.ns_wmt24pp

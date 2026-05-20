@@ -335,6 +335,7 @@ ssh {_q(remote_host)} {_q(remote_cmd)}
 def render_eval_script(manifest: JsonDict) -> str:
     repo_dir = Path(manifest["repo_dir"])
     eval_config = manifest["eval"]["config"]
+    model_ref = f"sft:{manifest['run_name']}"
     remote_ckpt = Path(manifest["paths"]["remote_run_root"]) / "checkpoints"
     return f"""#!/usr/bin/env bash
 set -euo pipefail
@@ -347,7 +348,7 @@ export PYTHONPATH="${{PWD}}/src${{PYTHONPATH:+:${{PYTHONPATH}}}}"
 # launching NeMo Evaluator. Replace deployment/checkpoint overrides as needed
 # once the checkpoint has been exported or registered as a model artifact.
 python -m nemotron super3 eval -c {_q(eval_config)} --dry-run \\
-  run.model=sft:task067-qwen-scaleup \\
+  run.model={_q(model_ref)} \\
   deployment.checkpoint_path={_q(remote_ckpt)}
 """
 
@@ -425,7 +426,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--cuda-visible-devices", default="0,1")
     parser.add_argument("--nproc-per-node", type=int, default=2)
     parser.add_argument("--master-port", type=int, default=29693)
-    parser.add_argument("--eval-config", choices=("m1_basket", "m1_full_basket"), default="m1_basket")
+    parser.add_argument(
+        "--eval-config",
+        choices=(
+            "m1_basket",
+            "m1_full_basket",
+            "m1_full_basket_launcher_available",
+        ),
+        default="m1_basket",
+    )
     parser.add_argument("--overwrite", action="store_true")
     return parser
 

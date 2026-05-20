@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1
 
@@ -25,3 +25,16 @@
 - 已在 NemTron 启动 SGLang endpoint：tmux session `task071_sglang_eval`，URL `http://127.0.0.1:30000/v1/chat/completions`，model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`；smoke request 返回 `ready`。
 - 已对 `m1_full_basket` 做非 dry-run 提交尝试；未产出 benchmark metrics，原因是当前 19 个 `adlr_*` task name 均无法在 `nemo-evaluator-launcher` 421-task mapping 中解析，且 NemTron 无 Docker/Slurm，local executor 非 dry-run 报 `Docker is not installed or not in PATH`。
 - 已创建 PR #102 记录本轮 export/register 与 eval 阻塞结果。
+
+## Session 3
+
+- 继续 PR #102，针对 `m1_full_basket` eval 阻塞拆解 launcher task mapping 与配置展开问题。
+- 新增 `m1_eval_launcher_mapping.yaml`，记录 `nemo-evaluator-launcher==0.2.5` 中 M1 full basket 的真实 task name 覆盖情况：14 个 available，5 个 missing（`multichallenge`、`terminalbench`、`swe_bench_verified`、`mcp_mark`、`tool_decathlon`）。
+- 新增 `m1_full_basket_launcher_available.yaml`，只选择 14 个已验证的真实 launcher task；没有用 MT-Bench、codec contamination 或 ToolTalk 伪替 missing benchmark。
+- 修复 `nemotron super3 eval` 对 compact basket overlay 的处理：`defaults: default.yaml` 现在会合并完整 evaluator schema，顶层 `tasks` 会展开为 `evaluation.tasks[*].name`。
+- 修复当前 launcher 0.2.5 兼容性：将旧式 `execution.env_vars` 归一化到 deployment/evaluation/top-level env var scope，并在 local+generic deployment 下设置 `execution.mode=sequential`。
+- 已重刷 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen_scaleup_train_exec` 的 scale-up scripts，eval dry-run 配置改为 `m1_full_basket_launcher_available`。
+- 同时修正 scale-up eval script 的 `run.model` 生成逻辑，去掉旧的 `sft:task067-qwen-scaleup` 硬编码，改为基于当前 `run_name` 输出 `sft:task071_qwen_scaleup_train_exec`。
+- 本地验证：`ruff check` touched files + `git diff --check` 通过；`PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> 23 passed。
+- 远端验证：同步代码到 NemTron `/root/Nemotron_task071_eval`；14 个 task name 全部可由 launcher mapping 解析；`run_eval(..., dry_run=True)` 使用 dummy env vars 成功生成 sequential scripts，invocation id `f0c3d45f10b2f225`。
+- 真实 benchmark metrics 仍未产出：NemTron 节点缺 Docker/Slurm，launcher non-dry-run 的 local executor 生成脚本后会执行 `command -v docker`，当前环境无法启动 eval-factory containers。

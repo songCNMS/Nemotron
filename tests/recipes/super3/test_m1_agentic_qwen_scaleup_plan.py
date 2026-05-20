@@ -80,6 +80,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "train.global_batch_size=2" in remote_script
 
     assert "super3 eval -c m1_full_basket --dry-run" in eval_script
+    assert "run.model=sft:unit_qwen_scaleup" in eval_script
     assert "deployment.checkpoint_path=" in eval_script
 
 
@@ -101,6 +102,26 @@ def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
     assert Path(manifest["outputs"]["report"]).read_text(encoding="utf-8").startswith(
         "# Qwen M1 Agentic SFT Scale-up Plan"
     )
+
+
+def test_scaleup_planner_accepts_launcher_available_eval_config(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-4b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-4b-bridge",
+            "--eval-config",
+            "m1_full_basket_launcher_available",
+        ]
+    )
+    manifest = build_manifest(args)
+    assert manifest["eval"]["config"] == "m1_full_basket_launcher_available"
+    assert "m1_full_basket_launcher_available" in render_eval_script(manifest)
 
 
 def test_scaleup_requires_qwen_paths_when_env_absent(tmp_path, monkeypatch) -> None:

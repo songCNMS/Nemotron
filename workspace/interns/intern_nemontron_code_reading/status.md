@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 2 |
+| Session | 3 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | PR #96 merged; iter_0000122 exported and manifest-registered, SGLang endpoint is live on NemTron, and m1_full_basket non-dry-run submission is blocked by invalid task mapping plus missing Docker/Slurm executor. |
+| Latest | Added launcher-available M1 eval basket config, fixed super3 eval config expansion/schema normalization, and validated 14-task NeMo Evaluator dry-run on NemTron; real non-dry metrics still need a Docker/Slurm-capable executor. |

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Notes
 
@@ -14,3 +14,7 @@
 - Deployment fact: SGLang can serve the exported checkpoint on NemTron GPU 0 via `http://127.0.0.1:30000/v1/chat/completions` with model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`.
 - Eval blocker: current `m1_full_basket.yaml` uses `adlr_*` registry aliases that are not present in `nemo-evaluator-launcher==0.2.5` task mapping; examples of mapped task names are `AIME_2025`, `gpqa_diamond`, `scicode`, `bfclv3`, `tooltalk`, `ns_hmmt_feb2025`, and `ns_wmt24pp`.
 - Eval blocker: NemTron has no Docker, `sbatch`, or `srun`, so `nemo-evaluator-launcher` cannot run local Docker-based eval containers or Slurm jobs on this node even when the model endpoint is live.
+- Runtime mapping fact: `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_launcher_mapping.yaml` records the launcher 0.2.5 state for all 19 M1 full basket benchmarks; `m1_full_basket_launcher_available.yaml` contains the 14 exact runnable tasks.
+- Missing exact launcher tasks as of Session 3: `multichallenge`, `terminalbench`, `swe_bench_verified`, `mcp_mark`, and `tool_decathlon`; do not replace them with MT-Bench, codec contamination checks, ToolTalk, or BFCL proxy tasks when reporting benchmark metrics.
+- Eval CLI fact: `load_stage3_eval_config` expands compact basket configs into full `evaluation.tasks`, and `normalize_evaluator_launcher_config` removes old `execution.env_vars` plus sets `execution.mode=sequential` for local generic deployment compatibility with `nemo-evaluator-launcher==0.2.5`.
+- Remote dry-run fact: with dummy `HF_TOKEN`/W&B env vars, `run_eval(..., dry_run=True)` on NemTron generated scripts for 14 tasks under `/root/Nemotron_task071_eval/.nemotron/evaluations/20260520_113845-f0c3d45f10b2f225`, invocation id `f0c3d45f10b2f225`.
