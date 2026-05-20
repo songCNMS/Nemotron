@@ -1,7 +1,8 @@
 # task040_w1_curriculum_sampler
 
 <!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_review_cc -->
-<!-- SESSION 1 LANDED: PR pending on 2026-05-19 (bucket_rows / filter_solved / weighted_sample + 23 tests) -->
+<!-- SESSION 1 LANDED: PR #99 / a090453 on 2026-05-19 (bucket_rows / filter_solved / weighted_sample + 23 tests) -->
+<!-- SESSION 2 LANDED: PR pending on 2026-05-20 (wired into prepare_m1_agentic_sft.py via --curriculum-policy CLI flag; 13 tests) -->
 
 ## 背景
 
@@ -26,7 +27,7 @@ domain)，但下游 SFT/RL data prep 完全没用这个字段 — 数据按原�
 | Session | 子条目 | sandbox-runnable? | Status |
 |---|---|---|---|
 | 1 | `m0_data_env/difficulty_sampler.py` 实现 — `bucket_rows(rows, *, policy)` + `filter_solved(rows, pass_rate_threshold)` + `weighted_sample(rows, weights)` | yes | ✓ Done (this PR) |
-| 2 | Wire into `prepare_m0_assets.py` / `prepare_m1_agentic_sft.py` data prep paths via opt-in CLI flag `--curriculum-policy {default,easy_first,hard_first,drop_solved}` | yes | Todo |
+| 2 | Wire into `prepare_m1_agentic_sft.py` via opt-in CLI flags (`--curriculum-policy` / `--curriculum-seed` / `--curriculum-pass-rates-json` / `--curriculum-solved-threshold`); train-only (val skipped for shadow-eval reproducibility) | yes | ✓ Done (this PR) |
 | 3 | Integrate with task032 rollout store pass-rate (M2 dependency) for `filter_solved` real data; until then operator supplies a static pass-rate JSON | partial (depends task032) | Todo |
 | 4 | Per-env curriculum config: `m0_data_env/curriculum_policies.yaml` declares per-env policy + threshold defaults | yes | Todo |
 
