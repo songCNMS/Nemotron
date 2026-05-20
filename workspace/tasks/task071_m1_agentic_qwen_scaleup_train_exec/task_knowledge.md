@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Notes
 
@@ -24,3 +24,9 @@
 - `deployment.type=none` script fact: local executor still uses `docker run nvcr.io/nvidia/eval-factory/<task>:26.03` for eval clients, so a CPU node must have a working Docker/container runtime even when model serving is external.
 - Retry fact: `vpn` resolves to `vm4vpn` (`89.208.244.190`) as user `leisong`; it has Docker client but no socket permission (`leisong` not in docker group, sudo requires password), cannot reach `10.100.14.21:30000`, and has no `nemo_evaluator_launcher` or pip in system Python.
 - Current CPU node retry fact: private `dockerd` with bridge disabled and host cgroup namespace can start, but `docker run --network host` still fails with `failed to create default sandbox: operation not permitted`, so eval-factory client containers still cannot run there.
+- Updated vpn launcher fact: after permission change, `vm4vpn` user `leisong` is in the `docker` group and can run eval-factory containers; direct routing to `10.100.14.21:30000` still fails, so use SSH remote forwarding from the CPU node to expose the NemTron SGLang endpoint at `vm4vpn:127.0.0.1:13000`.
+- `deployment.type=none` remote-forward fact: with Docker `--network host`, eval-factory containers on `vm4vpn` can access `http://127.0.0.1:13000/v1/models` and submit requests through the tunnel to the NemTron SGLang endpoint.
+- SGLang compatibility fact: avoid the trailing slash in `target.api_endpoint.url`; `http://127.0.0.1:13000/v1/chat/completions/` returns 307, while `http://127.0.0.1:13000/v1/chat/completions` avoids redirect handling issues in simple-evals.
+- Qwen endpoint context fact: the current served model rejects `max_tokens=16384` and also rejects `max_tokens=4096` when prompt tokens make total context exceed 4096; AIME smoke succeeded with `max_new_tokens=2048`.
+- AIME non-dry smoke fact: `simple_evals.AIME_2025` on `vm4vpn` with `deployment.type=none`, endpoint tunnel, `limit_samples=1`, `n_repeats=10`, and `max_new_tokens=2048` completed successfully with `score=1.0`, `successful_responses=10/10`, and artifacts under `vm4vpn:/tmp/task071_vpn_eval_aime/evaluations/20260520_174300-8a645eca228ad5d3/simple_evals.AIME_2025.0/artifacts`.
+- ifbench image fact: `nvcr.io/nvidia/eval-factory/ifbench:26.03` currently needs `setuptools<81` installed inside the container for `syllapy` to import `pkg_resources`.

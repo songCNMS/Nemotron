@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 1
 
@@ -65,3 +65,14 @@
 - `vm4vpn` Python 环境无 `nemo_evaluator_launcher`，且系统 Python 无 pip；即使补包，Docker 权限和网络路由仍是硬阻塞。
 - 重新尝试当前 CPU node 的私有 `dockerd`：`--bridge=none --iptables=false --storage-driver=vfs --default-cgroupns-mode=host` 可以启动 daemon，但 `docker run --network host` 仍失败 `failed to create default sandbox: operation not permitted`。
 - 本轮未启动真实 benchmark eval，未产出 metrics；结论保持：现有 `vpn` 与当前 CPU node 都不能作为 non-dry eval launcher，除非提供 Docker 组权限/免密 sudo/可用 Slurm 或 Lepton，并确保 launcher host 能访问 NemTron endpoint。
+
+## Session 7
+
+- 用户为 `vpn` 增加 Docker 权限并扩容磁盘后，重新尝试 `deployment.type=none` 非 dry-run eval。
+- `vm4vpn` 上 `leisong` 已在 `docker` 组，`docker run hello-world` 与 eval-factory 容器均可执行；根分区扩容为 38G，约 18G 可用。
+- `vm4vpn` 仍不能直连 NemTron 私网 endpoint，因此在当前 CPU node 建立 SSH remote forward：`vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000`，并验证 Docker host network 容器可访问 `/v1/models`。
+- 用 NemTron 侧 `nemo-evaluator-launcher==0.2.5` 生成 `deployment.type=none` dry-run 脚本，再同步到 `vm4vpn` 并将 Docker run patch 为 `--network host`。
+- `ifbench.ifbench` 先暴露 eval image 内 `syllapy` 依赖 `pkg_resources` 问题；容器内安装 `setuptools<81` 可恢复该模块，说明该问题是 harness image 兼容性而非 endpoint 链路。
+- `simple_evals.AIME_2025` 初次失败于磁盘不足；扩容后成功拉取 `nvcr.io/nvidia/eval-factory/simple-evals:26.03` 并进入真实请求阶段。
+- 针对 SGLang endpoint 兼容性修正 AIME smoke 配置：去掉 `/v1/chat/completions/` 尾斜杠，将 `max_new_tokens` 从 launcher 默认 16384 降到 2048，以适配当前 endpoint 4096 context limit。
+- AIME_2025 non-dry smoke 成功：`stage.exit=0`，`score=1.0`，`n_repeats=10`，`successful_responses=10/10`，`avg_latency_ms=3341.95`，artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_aime/evaluations/20260520_174300-8a645eca228ad5d3/simple_evals.AIME_2025.0/artifacts`。
