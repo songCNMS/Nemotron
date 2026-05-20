@@ -137,17 +137,28 @@ class TestPackedSequenceBuilderPacking:
 
         # Both fit in one bin
         packed_item = packed[0]
-        assert packed_item["input_ids"] == [1, 2, 3, 4, 5]
-        # Per-subsequence: [1,1,0] + [1,0] = [1,1,0,1,0]
-        assert packed_item["loss_mask"] == [1, 1, 0, 1, 0]
-        # seq_start_id marks boundaries
-        assert packed_item["seq_start_id"] == [0, 3]
+        # `first_fit_shuffle` may reorder subsequences within a bin. Validate
+        # each original subsequence independently instead of assuming insertion
+        # order.
+        assert sorted(packed_item["input_ids"]) == [1, 2, 3, 4, 5]
+        assert packed_item["seq_start_id"][0] == 0
+        assert len(packed_item["seq_start_id"]) == 2
 
         # Verify invariant: loss_mask[end-1] == 0 for each subsequence
         boundaries = packed_item["seq_start_id"] + [len(packed_item["input_ids"])]
+        expected_masks = {
+            (1, 2, 3): [1, 1, 0],
+            (4, 5): [1, 0],
+        }
+        seen = set()
         for i in range(len(boundaries) - 1):
+            start = boundaries[i]
             end = boundaries[i + 1]
+            tokens = tuple(packed_item["input_ids"][start:end])
+            seen.add(tokens)
+            assert packed_item["loss_mask"][start:end] == expected_masks[tokens]
             assert packed_item["loss_mask"][end - 1] == 0, f"Subsequence {i} should have loss_mask[end-1]=0"
+        assert seen == set(expected_masks)
 
     def test_loss_mask_single_token_subsequence(self) -> None:
         """Single token subsequence should have loss_mask=0 (no label to predict)."""

@@ -10,6 +10,10 @@
 
 For M1 Agentic SFT on `NemTron`, use `/root/nemotron_session5_venv/bin/python` with `PYTHONPATH=$PWD/src`, Qwen3-4B-Instruct-2507 model/tokenizer at `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`, and pretrained Bridge checkpoint `/mnt/3fs/data/lei.song/nemotron/checkpoints/qwen3-4b-instruct-2507-megatron-bridge-20260517a`. Eval-only runs still need nonzero scheduler steps; `train.train_iters=1 scheduler.lr_decay_iters=1 scheduler.lr_warmup_iters=0 train.skip_train=true` is the stable override.
 
+### Task066 Qwen local runtime delta
+
+On 2026-05-20 in this workspace, `/root/nemotron_session5_venv/bin/python` no longer exists. `/work-agents/.venv` can run M0/M1 Agentic SFT data prep and Qwen tokenizer packed artifacts because it has `datasets`, `transformers`, `pyarrow`, and `cosmos_xenna`; it cannot launch Qwen SFT because it lacks `torch` and `megatron.bridge`, and the host has no visible NVIDIA GPU.
+
 ### Live HF checks in PR tests
 
 Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such as `NEMOTRON_RUN_LIVE_HF_TESTS=1`; default PR tests should assert static slugs/subsets and avoid network-dependent skip/fail behavior.
