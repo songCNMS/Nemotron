@@ -220,3 +220,10 @@
 - 确认训练覆盖：packed split 为 `72947` train rows / `1159` valid rows；planner 使用 `train_iters=ceil(72947/6)=12158`、`global_batch_size=6`，训练日志保存到 `iter_0012158`，最终 validation loss/PPL 为 `0.3308907` / `1.392208`。
 - 按用户指定路径检查 CephFS Qwen 模型：`/mnt/cephfs/datasprocessing/shared_models/Qwen` 在本机和 NemTron 均不存在；本机实际可见的相近目录 `/mnt/cephfs/data/processing/shared_models` 为空且无 `Qwen` 子目录。
 - 额外核对 CephFS 上可用的 Qwen 模型树：`/mnt/cephfs/data/stable/models/Qwen` 存在，按 `config.json` 和顶层 safetensors/bin 权重过滤出 41 个可加载模型目录，覆盖 Qwen2.5、Qwen3、Qwen3.5、Qwen3.6、Qwen3-Coder、Qwen3-Next、QwenLong 等系列。
+- 按用户要求停止 NemTron 上旧 task071 服务：kill 掉 `task071_sglang_eval`，释放 GPU0；复核后 NemTron 无 task071 SGLang/torchrun 残留进程。
+- 新增 `qwen3_30b_a3b_local_train.py`，使用 Megatron-Bridge Qwen3-MoE common finetune builder 接入本地 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`，并固定 full SFT 并行形态 TP=4/PP=2/EP=4、sequence_parallel=true；补充 env var resolver 单测。
+- 验证 Qwen3-4B-Instruct-2507 与 Qwen3-30B-A3B-Instruct-2507 的 `tokenizer.json`、`tokenizer_config.json` sha256 完全一致，因此复用 task071 uncapped Qwen packed split；远端 packed split 为 63 train parquet + 1 valid parquet，并已有 Bridge `.npy` cache。
+- 在 NemTron 上用 Bridge `AutoBridge.import_ckpt` 将 Qwen3-30B-A3B-Instruct-2507 HF checkpoint 导入 Megatron torch_dist：输出 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`，大小约 `57G`，日志出现 `IMPORT_DONE`。
+- 启动 8-GPU 30B-A3B full SFT：tmux session `task071_qwen30b_train`，`CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7`，GBS=8、MBS=1、seq=4096、`train_iters=9119`，checkpoint 输出到 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints`。
+- 首次训练启动因 CLI 传入 `dataset.super3_packed_sft_dir` 在第二次 Hydra merge 阶段被最终 `FinetuningDatasetConfig` struct 拒绝而失败；修正为只通过 `SUPER3_M1_AGENTIC_PACKED_DIR` 环境变量传 packed dir 后重启成功。
+- 训练已从 imported checkpoint 成功 reshard/load 到 TP=4/PP=2，进入 iteration；iter 40 时 loss `0.5799908`、load_balancing_loss `1.689439`，无 skipped/nan，8 卡显存约 `81-87GB`。
