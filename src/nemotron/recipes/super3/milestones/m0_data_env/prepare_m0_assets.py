@@ -75,6 +75,14 @@ SYSTEM_PROMPTS = {
         "You answer multi-hop questions using the provided retrieved passages. "
         "Cite the passages you used."
     ),
+    "browser_qa": (
+        "You answer questions by planning browser/search actions, then grounding "
+        "the final answer in cited web evidence."
+    ),
+    "browsecomp_grounded": (
+        "You solve hard browser/search questions by using web evidence. Return "
+        "a concise answer and cite the pages that support it."
+    ),
     "code_execution_python": "You are a Python coding assistant. Return a complete solution.",
     "general_tool_calling": "You are a tool-using assistant. Use the available functions when needed.",
     "multi_turn_tool_use": (
@@ -146,6 +154,67 @@ SYSTEM_PROMPTS = {
 }
 
 JsonDict = dict[str, Any]
+
+
+BROWSER_SEARCH_TOOLS: list[JsonDict] = [
+    {
+        "type": "function",
+        "function": {
+            "name": "browser_search",
+            "description": "Search the web for pages relevant to the question.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"},
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "browser_open",
+            "description": "Open a URL in the browser sandbox.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string"},
+                },
+                "required": ["url"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "browser_find",
+            "description": "Find text on the currently open page.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "pattern": {"type": "string"},
+                },
+                "required": ["pattern"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "browser_cite",
+            "description": "Attach a supporting URL and short evidence note to the answer.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string"},
+                    "evidence": {"type": "string"},
+                },
+                "required": ["url", "evidence"],
+            },
+        },
+    },
+]
 
 
 def load_yaml(path: Path) -> JsonDict:
@@ -269,6 +338,20 @@ def format_documents_for_prompt(documents: Sequence[Mapping[str, Any]]) -> str:
     return "\n\n".join(blocks)
 
 
+def string_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        stripped = value.strip()
+        return [stripped] if stripped else []
+    if isinstance(value, Mapping):
+        return [str(value).strip()] if value else []
+    if isinstance(value, Iterable):
+        return [str(item).strip() for item in value if str(item).strip()]
+    stripped = str(value).strip()
+    return [stripped] if stripped else []
+
+
 def transform_hotpotqa_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     question = str(row["question"]).strip()
     expected_answer = str(row["answer"]).strip()
@@ -299,6 +382,65 @@ def transform_hotpotqa_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -
             "level": row.get("level"),
             "search_query": question,
         },
+    )
+
+
+def transform_browsecomp_grounded(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a BrowseComp-style row to the M2 browser/search scaffold.
+
+    Session 1 intentionally stops at a sandbox-runnable record contract:
+    it emits browser/search tool schemas and an offline grounded-answer
+    verifier stub, but it does not import or launch Playwright/Chromium.
+    """
+    question = str(row.get("question") or row.get("prompt") or "").strip()
+    expected_answer = str(
+        row.get("answer") or row.get("final_answer") or row.get("expected_answer") or ""
+    ).strip()
+    if not question:
+        raise ValueError("browsecomp row must contain question or prompt")
+    if not expected_answer:
+        raise ValueError("browsecomp row must contain answer or final_answer")
+
+    seed_urls = string_list(
+        row.get("seed_urls")
+        or row.get("supporting_urls")
+        or row.get("source_urls")
+        or row.get("gold_urls")
+        or row.get("urls")
+    )
+    evidence = string_list(row.get("evidence") or row.get("supporting_facts") or row.get("rationale"))
+    allowed_domains = string_list(row.get("allowed_domains") or row.get("domains"))
+
+    seed_block = "\n".join(f"- {url}" for url in seed_urls) if seed_urls else "- none provided"
+    user_content = (
+        "Use browser/search tools to answer the question. Cite supporting pages in the final answer.\n\n"
+        f"Question: {question}\n\n"
+        f"Seed URLs:\n{seed_block}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=expected_answer,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "browser_grounded_answer_stub",
+            "max_score": 1.0,
+            "normalization": ["lowercase", "strip_articles", "strip_punctuation", "collapse_whitespace"],
+            "grounding": "stub_requires_answer_match_only",
+        },
+        extra_env_info={
+            "seed_urls": seed_urls,
+            "allowed_domains": allowed_domains,
+            "evidence": evidence,
+            "requires_live_browser": False,
+            "cluster_execution": "deferred_to_task022_session_3",
+            "browser_runtime": "playwright_chromium_placeholder",
+        },
+        tools=copy.deepcopy(BROWSER_SEARCH_TOOLS),
     )
 
 
@@ -2266,6 +2408,7 @@ def transform_hermes_tool_call_repair_negative(row: Mapping[str, Any], spec: Map
 CONVERTERS = {
     "hotpotqa_search": transform_hotpotqa_search,
     "musique_search": transform_musique_search,
+    "browsecomp_grounded": transform_browsecomp_grounded,
     "mbpp_code_execution": transform_mbpp_code_execution,
     "bash_command": transform_bash_command,
     "swe_bench_patch": transform_swe_bench_patch,
