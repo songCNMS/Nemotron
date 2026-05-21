@@ -387,6 +387,69 @@ environments:
         - expected_answer
         - extra_env_info.language
 
+  - id: multilingual_ifeval
+    family: multilingual
+    stage: M2 multilingual IF/code scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: multilingual_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: sandbox fallback checks Unicode-normalized exact-or-contains against a reference answer; production multilingual IF judge is deferred
+    resources:
+      sandbox: judge_model_cluster_deferred
+      tools: []
+      timeout_s: 20
+      max_turns: 1
+      expected_runtime_ms: 1000
+    telemetry:
+      - reward
+      - exact_match
+      - contains_match
+      - judge_model_deferred
+      - language_code
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.language_code
+        - extra_env_info.judge_model
+
+  - id: multilingual_humaneval
+    family: multilingual
+    stage: M2 multilingual IF/code scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: multilingual_exact_or_contains
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: sandbox fallback checks Unicode-normalized exact-or-contains against the reference solution; code execution smoke is deferred
+    resources:
+      sandbox: code_execution_cluster_deferred
+      tools:
+        - code_execution_deferred
+      timeout_s: 30
+      max_turns: 1
+      expected_runtime_ms: 1500
+    telemetry:
+      - reward
+      - exact_match
+      - contains_match
+      - runtime_execution_deferred
+      - language_code
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 20
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.language_code
+        - extra_env_info.code_execution
+
   - id: helpsteer2_pref_compare
     family: rlhf_preference
     stage: M0 data_env_foundation

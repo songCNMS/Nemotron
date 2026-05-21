@@ -210,6 +210,22 @@ datasets:
   #   reward_type: multilingual_exact_or_contains
   #   contamination_against: [MMLU-ProX, WMT24++]
   #   fields: id/inputs/targets/language/language_code
+  #
+  # task027 Session 1: m0_multilingual_ifeval and
+  # m0_multilingual_humaneval production data rows are also deferred.
+  # The envs and converters are sandbox-testable, but source selection,
+  # revision pins, judge-model scoring, and code-execution smoke require
+  # follow-up work outside this PR.
+  #
+  # Planned row ids:
+  #   - m0_multilingual_ifeval -> multilingual_ifeval,
+  #     converter: multilingual_ifeval,
+  #     reward_type: multilingual_exact_or_contains fallback;
+  #     production judge model deferred.
+  #   - m0_multilingual_humaneval -> multilingual_humaneval,
+  #     converter: multilingual_humaneval,
+  #     reward_type: multilingual_exact_or_contains fallback;
+  #     code execution smoke deferred.
 
   - id: m0_helpsteer2_pref
     environment: helpsteer2_pref_compare

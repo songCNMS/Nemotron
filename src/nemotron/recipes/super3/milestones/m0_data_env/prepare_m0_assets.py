@@ -115,6 +115,14 @@ SYSTEM_PROMPTS = {
         "user. Match the meaning of the target reference closely; small "
         "wording differences are fine."
     ),
+    "multilingual_ifeval": (
+        "You are a multilingual instruction-following assistant. Respond in "
+        "the same language as the user while satisfying every stated constraint."
+    ),
+    "multilingual_humaneval": (
+        "You are a multilingual coding assistant. Solve the programming task "
+        "and return the complete answer requested by the prompt."
+    ),
     "long_context_qa_smoke": (
         "You are a long-context reading-comprehension assistant. Read "
         "the document carefully and answer the user's question grounded "
@@ -1419,6 +1427,134 @@ def transform_aya_multilingual(row: Mapping[str, Any], spec: Mapping[str, Any]) 
     )
 
 
+def transform_multilingual_ifeval(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a multilingual IF row to the M2 sandbox scaffold contract.
+
+    Session 1 intentionally uses the existing
+    ``multilingual_exact_or_contains`` verifier as an offline fallback.
+    Production instruction-following judge scoring is recorded as
+    deferred metadata so the row shape can be exercised without a judge
+    model or cluster runtime.
+    """
+    instruction = str(
+        row.get("prompt") or row.get("instruction") or row.get("question") or ""
+    ).strip()
+    if not instruction:
+        raise ValueError("multilingual IF row must contain prompt/instruction/question")
+    expected_answer = str(
+        row.get("reference_answer")
+        or row.get("target")
+        or row.get("expected_answer")
+        or row.get("answer")
+        or row.get("response")
+        or ""
+    ).strip()
+    if not expected_answer:
+        raise ValueError("multilingual IF row must contain a reference answer")
+    language = str(row.get("language") or "").strip() or None
+    language_code = str(row.get("language_code") or row.get("locale") or "").strip() or None
+    if language is None and language_code is None:
+        raise ValueError("multilingual IF row must contain language or language_code")
+
+    constraints = string_list(row.get("constraints") or row.get("instruction_tags"))
+    constraint_block = "\n".join(f"- {item}" for item in constraints) if constraints else "- see prompt"
+    user_content = (
+        "Follow the multilingual instruction and every constraint.\n\n"
+        f"Language: {language or language_code}\n"
+        f"Instruction:\n{instruction}\n\n"
+        f"Constraints:\n{constraint_block}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=instruction,
+        expected_answer=expected_answer,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "multilingual_exact_or_contains",
+            "max_score": 1.0,
+            "match": ["normalized_unicode_text"],
+            "judge_model": "deferred",
+        },
+        extra_env_info={
+            "language": language,
+            "language_code": language_code,
+            "constraints": constraints,
+            "source_task_id": row.get("id") or row.get("task_id"),
+            "judge_model": {
+                "required_for_production": True,
+                "sandbox_fallback": "multilingual_exact_or_contains",
+                "status": "deferred_to_task027_followup",
+            },
+        },
+    )
+
+
+def transform_multilingual_humaneval(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a multilingual HumanEval-style row to the M2 scaffold.
+
+    Code execution is explicitly deferred. The sandbox contract uses
+    the Unicode exact-or-contains verifier against the reference
+    solution so converter, registry, and routing metadata can be tested
+    without launching a code sandbox.
+    """
+    prompt = str(
+        row.get("prompt") or row.get("instruction") or row.get("question") or ""
+    ).strip()
+    if not prompt:
+        raise ValueError("multilingual HumanEval row must contain prompt/instruction/question")
+    reference_solution = str(
+        row.get("canonical_solution")
+        or row.get("reference_solution")
+        or row.get("solution")
+        or row.get("expected_answer")
+        or ""
+    ).strip()
+    if not reference_solution:
+        raise ValueError("multilingual HumanEval row must contain a reference solution")
+    language = str(row.get("language") or "").strip() or None
+    language_code = str(row.get("language_code") or row.get("locale") or "").strip() or None
+    if language is None and language_code is None:
+        raise ValueError("multilingual HumanEval row must contain language or language_code")
+
+    tests = string_list(row.get("tests") or row.get("test") or row.get("unit_tests"))
+    user_content = (
+        "Solve the multilingual programming task. Return the complete solution.\n\n"
+        f"Language: {language or language_code}\n"
+        f"Task:\n{prompt}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=prompt,
+        expected_answer=reference_solution,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "multilingual_exact_or_contains",
+            "max_score": 1.0,
+            "match": ["normalized_unicode_text"],
+            "code_execution": "deferred",
+        },
+        extra_env_info={
+            "language": language,
+            "language_code": language_code,
+            "source_task_id": row.get("id") or row.get("task_id"),
+            "unit_tests": tests,
+            "code_execution": {
+                "required_for_production": True,
+                "sandbox_fallback": "multilingual_exact_or_contains",
+                "status": "deferred_to_task027_followup",
+            },
+        },
+    )
+
+
 # LongAlpaca / long-context QA M0 smoke caps (task057 Session 2).
 #
 # LongAlpaca-12k carries documents spanning ~16K to ~100K characters
@@ -2489,6 +2625,8 @@ CONVERTERS = {
     "swe_gym_openhands_trace": transform_swe_gym_openhands_trace,
     "helpsteer2_pref_pair": transform_helpsteer2_pref,
     "aya_multilingual": transform_aya_multilingual,
+    "multilingual_ifeval": transform_multilingual_ifeval,
+    "multilingual_humaneval": transform_multilingual_humaneval,
     "longalpaca_qa": transform_longalpaca_qa,
     "bird_sql": transform_bird_sql,
     "intercode_nl2bash": transform_intercode_nl2bash,
