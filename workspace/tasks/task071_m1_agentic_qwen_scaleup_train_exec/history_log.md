@@ -227,3 +227,4 @@
 - 启动 8-GPU 30B-A3B full SFT：tmux session `task071_qwen30b_train`，`CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7`，GBS=8、MBS=1、seq=4096、`train_iters=9119`，checkpoint 输出到 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints`。
 - 首次训练启动因 CLI 传入 `dataset.super3_packed_sft_dir` 在第二次 Hydra merge 阶段被最终 `FinetuningDatasetConfig` struct 拒绝而失败；修正为只通过 `SUPER3_M1_AGENTIC_PACKED_DIR` 环境变量传 packed dir 后重启成功。
 - 训练已从 imported checkpoint 成功 reshard/load 到 TP=4/PP=2，进入 iteration；iter 40 时 loss `0.5799908`、load_balancing_loss `1.689439`，无 skipped/nan，8 卡显存约 `81-87GB`。
+- 继续监控到 iter `80/9119`：consumed samples `640`，lm loss `0.4858986`，load_balancing_loss `1.648061`，无 skipped/nan；当前每 10 iter 约 24s，完整 1 epoch 预计为数小时量级，eval benchmark 对比需等待 final checkpoint export 后执行。

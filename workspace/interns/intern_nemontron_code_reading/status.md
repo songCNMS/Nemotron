@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Stopped the old task071 SGLang endpoint, imported Qwen3-30B-A3B-Instruct-2507 to Megatron format, and launched 8-GPU full SFT from iter 0 with 9,119 planned iters. |
+| Latest | Qwen3-30B-A3B-Instruct-2507 full SFT is running on NemTron in `task071_qwen30b_train`; latest observed iter 80/9,119 with no skipped/nan iterations. |
