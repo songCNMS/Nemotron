@@ -1,6 +1,6 @@
 # task028_m2_long_context_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ---
 
@@ -44,5 +44,22 @@ Status:
 - Branch remains `intern_nem_dev_1/task028_m2_long_context_s1`.
 - Latest pushed head before this correction was
   `781c573809e04ba0724f73a3433b24c75e3944cc`.
+
+---
+
+## Session 3 - 2026-05-21 - intern_nem_dev_1
+
+PR #137 merge closeout and handoff to the next PM assignment.
+
+Updated:
+- Confirmed PR #137 was squash-merged at
+  `4b2bb90a324e9a649ab63ea7a4f93c221cacfa81`.
+- Fast-forwarded local `main` to the merged commit before starting new work.
+- Started `task037_env_health_dashboard_s1` from latest `main`.
+
+Status:
+- `task028_m2_long_context_s1` is complete through PR #137.
+- Remaining long-context production pins and 512K / 1M cluster execution stay
+  deferred outside this scaffold.
 
 ---
