@@ -465,6 +465,25 @@ def score_record(
             "normalized_answer": normalize_text_answer(candidate),
             "contains_match": bool(score == 1.0),
         }
+    elif verifier == "browser_grounded_answer_stub":
+        # task022 Session 1 — browser/search scaffold. This intentionally
+        # stays offline: no Playwright/Chromium launch, no network fetch.
+        # The later cluster verifier will validate browser traces and page
+        # grounding; the sandbox stub only checks that the final answer
+        # contains the gold answer and emits placeholder grounding telemetry.
+        score = score_text(candidate, expected)
+        candidate_text = str(candidate or "")
+        cited_urls = sorted(set(re.findall(r"https?://[^\s)\]]+", candidate_text)))
+        diagnostics = {
+            "normalized_answer": normalize_text_answer(candidate),
+            "grounded_answer_match": bool(score == 1.0),
+            "citation_url_count": len(cited_urls),
+            "browser_trace_present": bool(
+                record.get("extra_env_info", {}).get("browser_trace")
+                or record.get("extra_env_info", {}).get("browser_actions")
+            ),
+            "cluster_execution": "deferred",
+        }
     elif verifier == "sql_execution_match":
         # task057 Session 3 — sql_text_to_query env (BIRD-SQL source).
         # M0 oracle baseline uses normalized SQL string match (lowercase,

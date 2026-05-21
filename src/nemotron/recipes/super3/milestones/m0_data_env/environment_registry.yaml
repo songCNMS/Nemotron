@@ -62,6 +62,73 @@ environments:
         - extra_env_info.context_documents
         - extra_env_info.supporting_titles
 
+  - id: browser_qa
+    family: browser_search
+    stage: M2 browser/search scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: browser_grounded_answer_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: sandbox stub checks normalized final-answer containment; future cluster verifier must validate browser trace grounding and citations
+    resources:
+      sandbox: playwright_chromium_cluster_deferred
+      tools:
+        - browser_search
+        - browser_open
+        - browser_find
+        - browser_cite
+      timeout_s: 180
+      max_turns: 8
+      expected_runtime_ms: 30000
+    telemetry:
+      - reward
+      - latency_ms
+      - grounded_answer_match
+      - citation_url_count
+      - browser_trace_present
+      - timeout
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.seed_urls
+
+  - id: browsecomp_grounded
+    family: browser_search
+    stage: M2 browser/search scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: browser_grounded_answer_stub
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: sandbox stub checks normalized final-answer containment for BrowseComp-style questions; future cluster verifier must run browser/search and validate evidence pages
+    resources:
+      sandbox: playwright_chromium_cluster_deferred
+      tools:
+        - browser_search
+        - browser_open
+        - browser_find
+        - browser_cite
+      timeout_s: 240
+      max_turns: 10
+      expected_runtime_ms: 45000
+    telemetry:
+      - reward
+      - latency_ms
+      - grounded_answer_match
+      - citation_url_count
+      - browser_trace_present
+      - timeout
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.seed_urls
+        - extra_env_info.cluster_execution
+
   - id: code_execution_python
     family: coding
     stage: M0 data_env_foundation
