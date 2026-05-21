@@ -610,6 +610,76 @@ environments:
         - extra_env_info.expected_tool_calls
         - extra_env_info.expected_trajectory
 
+  - id: taubench_retail
+    family: taubench
+    stage: M2 taubench_multi_domain scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: tool_schema_and_argument_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: >-
+        sandbox scaffold checks expected retail tool-name and JSON-argument
+        sequence; full TauBench simulator rollout is deferred to cluster
+        execution
+    resources:
+      sandbox: none
+      tools:
+        - openai_function_schema
+      timeout_s: 120
+      max_turns: 12
+      expected_runtime_ms: 3000
+    telemetry:
+      - reward
+      - invalid_tool_call
+      - schema_error
+      - argument_match
+      - turn_count
+      - latency_ms
+      - simulator_deferred
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - responses_create_params.tools
+        - extra_env_info.domain
+        - extra_env_info.expected_tool_calls
+        - extra_env_info.expected_trajectory
+
+  - id: taubench_telecom
+    family: taubench
+    stage: M2 taubench_multi_domain scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: tool_schema_and_argument_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: >-
+        sandbox scaffold checks expected telecom tool-name and JSON-argument
+        sequence; full TauBench simulator rollout is deferred to cluster
+        execution
+    resources:
+      sandbox: none
+      tools:
+        - openai_function_schema
+      timeout_s: 120
+      max_turns: 12
+      expected_runtime_ms: 3000
+    telemetry:
+      - reward
+      - invalid_tool_call
+      - schema_error
+      - argument_match
+      - turn_count
+      - latency_ms
+      - simulator_deferred
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - responses_create_params.tools
+        - extra_env_info.domain
+        - extra_env_info.expected_tool_calls
+        - extra_env_info.expected_trajectory
+
   - id: tool_call_repair_negative
     family: general_tool_calling
     stage: M0 data_env_foundation
