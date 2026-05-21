@@ -7,7 +7,7 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task036_shadow_eval_pipeline_s1 |
-| PR | N/A |
+| PR | https://github.com/songCNMS/Nemotron/pull/138 |
 | Session | 1 |
 
-最近进展：task032 PR #135 已 squash-merge；已同步 `origin/main` 到 `22261a0561b73fe886ff36a83f3f409ac855e64f`，开始 task036 shadow eval Session 1 scaffold。
+最近进展：task036 shadow eval Session 1 scaffold 已实现并提交 PR #138；分支已 rebase 到 `origin/main` 的 `573d2c2d882a5e1608507a5a58edeb0183a349b0`，head 为 `0970756e0646c4083869fedf9cd55b39c668eb0b`。
