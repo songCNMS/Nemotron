@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 17 |
+| Session | 18 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Restarted the task071 Qwen SGLang endpoint on an idle H200 node, reran HLE 1-sample non-dry through vm4vpn, and recorded generation success plus manual multiple-choice accuracy 0.0; official HLE judge remains blocked by missing Azure/OpenAI OAuth credentials. |
+| Latest | Summarized the M1 evaluation pool status: 19 intended benchmarks, 14 exact launcher mappings, 5 launcher-mapping gaps, 7 scored task071 runs, 3 partial runs, and 4 blocked mapped runs; task071 endpoint and vm4vpn launcher are currently available for reruns. |

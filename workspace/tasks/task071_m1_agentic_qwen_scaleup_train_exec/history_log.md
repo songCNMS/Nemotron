@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 1
 
@@ -166,3 +166,11 @@
 - HLE 官方 judge 阶段失败：`run_judge_results.py` 需要 `OPENAI_CLIENT_ID` 和 `OPENAI_CLIENT_SECRET` 做 Azure/OpenAI OAuth，当前本地、vm4vpn 和 NemTron 环境均未找到这些变量。
 - 已对该 multiple-choice 样本用标准答案核对：模型回答 `C`，标准答案 `D`，manual multiple-choice accuracy 为 `0.0`；response stats 为 `successful_responses=1/1`、`avg_prompt_tokens=117`、`avg_completion_tokens=157`、`avg_latency_ms=986.5`。
 - 更新结构化结果 manifest：HLE 从 `model_endpoint_unavailable` 改为 `partial` / `official_judge_credentials`，记录 artifacts、generation 成功、manual MC score 0.0 和 official judge blocker。
+
+## Session 18
+
+- 按用户要求梳理 evaluation pool 中全部 benchmark 的 ready/blocked 状态，基于 `m1_eval_launcher_mapping.yaml` 和 `m1_full_basket_non_dry_results_task071_iter0000122.yaml` 汇总。
+- Pool 总览：M1 intended full basket 共 19 个 benchmark；`nemo-evaluator-launcher==0.2.5` 当前有 14 个 exact launcher task mapping，另有 5 个 mapping gap。
+- task071 non-dry 结果总览：14 个 mapped benchmark 均已 attempt；7 个 scored，3 个 partial，4 个 blocked。
+- live runtime 检查：当前 `NemTron` 为 `lg-cmc-b7r201-f08u26-h200-000126`，tmux session `task071_sglang_eval` 正在运行，`/v1/models` 返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`，`max_model_len=4096`；`vm4vpn` Docker 可用，根分区约 19G 可用。
+- 当前仍需处理的 blockers：official HLE judge OAuth credentials、LiveCodeBench launcher host memory/disk、RULER/AA-LCR/tau2/MMLU-ProX 的 4096 context limit、BFCL executable external API credentials，以及 5 个 launcher mapping gaps。

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Notes
 
@@ -52,3 +52,4 @@
 - HLE retry fact: Session 16 confirmed `cais/hle` access succeeds with the current Hugging Face credential inside `nvcr.io/nvidia/eval-factory/hle:26.03`, but task071 HLE scoring is still blocked because the Qwen endpoint at NemTron port 30000 is down; all H200 GPUs are occupied by a separate `gpt-oss-120b` SGLang service on port 39454, which should not be used as a task071 score.
 - SGLang relocation fact: Session 17 used the current `NemTron` alias at `10.100.2.62:33808`, copied the 7.6G `hf_export_iter_0000122` directory from old node `10.100.14.21:19355`, and restarted task071 SGLang on GPU0 port 30000 with model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`.
 - HLE scoring fact: `hle.hle` generation works with `limit_samples=1`, `parallelism=1`, and `max_new_tokens=2048`; official HLE judging requires `OPENAI_CLIENT_ID` and `OPENAI_CLIENT_SECRET`. Without those judge credentials, the run is partial even though the model request succeeds. For the first text-only multiple-choice sample, task071 answered `C` while the correct answer was `D`, so manual MC accuracy is `0.0`.
+- Eval pool status fact: Session 18 status classification is 19 intended M1 benchmarks = 14 exact launcher mappings + 5 launcher-mapping gaps; among the 14 mapped task071 attempts, 7 are scored, 3 are partial, and 4 are blocked. Current runtime is available for reruns of mapped benchmarks that do not require long-context, external judge credentials, or external executable API credentials.
