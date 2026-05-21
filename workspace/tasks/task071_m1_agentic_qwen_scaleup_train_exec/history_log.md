@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 1
 
@@ -228,3 +228,4 @@
 - 首次训练启动因 CLI 传入 `dataset.super3_packed_sft_dir` 在第二次 Hydra merge 阶段被最终 `FinetuningDatasetConfig` struct 拒绝而失败；修正为只通过 `SUPER3_M1_AGENTIC_PACKED_DIR` 环境变量传 packed dir 后重启成功。
 - 训练已从 imported checkpoint 成功 reshard/load 到 TP=4/PP=2，进入 iteration；iter 40 时 loss `0.5799908`、load_balancing_loss `1.689439`，无 skipped/nan，8 卡显存约 `81-87GB`。
 - 继续监控到 iter `80/9119`：consumed samples `640`，lm loss `0.4858986`，load_balancing_loss `1.648061`，无 skipped/nan；当前每 10 iter 约 24s，完整 1 epoch 预计为数小时量级，eval benchmark 对比需等待 final checkpoint export 后执行。
+- Stop-hook 补充复核：`history_log.md` metadata 已更正为 `SESSION=20`；训练仍在 `task071_qwen30b_train` 中运行，最新观测 iter `150/9119`、consumed samples `1200`，lm loss `0.4167098`，无 skipped/nan。
