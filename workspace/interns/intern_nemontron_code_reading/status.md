@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 18 |
+| Session | 19 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Summarized the M1 evaluation pool status: 19 intended benchmarks, 14 exact launcher mappings, 5 launcher-mapping gaps, 7 scored task071 runs, 3 partial runs, and 4 blocked mapped runs; task071 endpoint and vm4vpn launcher are currently available for reruns. |
+| Latest | Verified that the current Qwen checkpoint `iter_0000122` completed the configured task071 Agentic SFT run over the full prepared packed train split, but that prepared split is a capped scale-up subset rather than the full upstream HF source datasets. |

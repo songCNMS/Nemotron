@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 1
 
@@ -174,3 +174,10 @@
 - task071 non-dry 结果总览：14 个 mapped benchmark 均已 attempt；7 个 scored，3 个 partial，4 个 blocked。
 - live runtime 检查：当前 `NemTron` 为 `lg-cmc-b7r201-f08u26-h200-000126`，tmux session `task071_sglang_eval` 正在运行，`/v1/models` 返回 `task071-qwen3-4b-agentic-sft-iter0000122-hf`，`max_model_len=4096`；`vm4vpn` Docker 可用，根分区约 19G 可用。
 - 当前仍需处理的 blockers：official HLE judge OAuth credentials、LiveCodeBench launcher host memory/disk、RULER/AA-LCR/tau2/MMLU-ProX 的 4096 context limit、BFCL executable external API credentials，以及 5 个 launcher mapping gaps。
+
+## Session 19
+
+- 按用户问题核对现有 Qwen checkpoint 是否完整跑完 SFT 数据：检查本地 `training_manifest.json`、packed split metadata、task README，以及旧训练节点上的 `train.log` 和 checkpoint directory。
+- 结论：`iter_0000122` 完整跑完了 task071 formal scale-up 配置生成的全部 prepared packed train split。证据是 packed train rows `244`、`global_batch_size=2`、`train_iters=122`，几何上正好覆盖 `244` 个 packed train rows；远端 train log 显示 `train_iters: 122`、training loop 到 iteration 122、成功保存 `iter_0000122`，并在 iteration 122 上完成 validation loss `2.835580E-01` / PPL `1.327846E+00`。
+- 该 checkpoint 不是“所有上游 HF 原始数据全集”的 SFT：task071 scale-up manifest 明确设置 11 个 M0 slices，每个 dataset 最多 `100` 条 train、`25` 条 val shadow；最终 M1 train JSONL 为 `1100` 行，val shadow 为 `273` 行，packing 后为 `944,050` tokens、`244` train packed rows、`8` valid packed rows。
+- 远端证据：旧训练节点 `10.100.14.21:19355` 上存在 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/checkpoints/iter_0000122`，大小约 `53G`，`latest_checkpointed_iteration.txt` 为 `122`。

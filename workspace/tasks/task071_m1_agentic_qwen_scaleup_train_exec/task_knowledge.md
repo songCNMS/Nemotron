@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Notes
 
@@ -53,3 +53,4 @@
 - SGLang relocation fact: Session 17 used the current `NemTron` alias at `10.100.2.62:33808`, copied the 7.6G `hf_export_iter_0000122` directory from old node `10.100.14.21:19355`, and restarted task071 SGLang on GPU0 port 30000 with model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`.
 - HLE scoring fact: `hle.hle` generation works with `limit_samples=1`, `parallelism=1`, and `max_new_tokens=2048`; official HLE judging requires `OPENAI_CLIENT_ID` and `OPENAI_CLIENT_SECRET`. Without those judge credentials, the run is partial even though the model request succeeds. For the first text-only multiple-choice sample, task071 answered `C` while the correct answer was `D`, so manual MC accuracy is `0.0`.
 - Eval pool status fact: Session 18 status classification is 19 intended M1 benchmarks = 14 exact launcher mappings + 5 launcher-mapping gaps; among the 14 mapped task071 attempts, 7 are scored, 3 are partial, and 4 are blocked. Current runtime is available for reruns of mapped benchmarks that do not require long-context, external judge credentials, or external executable API credentials.
+- Qwen SFT completion fact: `iter_0000122` is the completed checkpoint for the configured task071 prepared packed SFT data, not for the complete upstream HF source datasets. The prepared data was capped at 11 M0 slices with `max_train_per_dataset=100` and produced 1100 M1 train JSONL rows; packing produced 244 train packed rows, and training used `global_batch_size=2` for `train_iters=122`, exactly one pass over those packed train rows.
