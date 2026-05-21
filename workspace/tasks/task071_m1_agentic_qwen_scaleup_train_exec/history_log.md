@@ -202,3 +202,4 @@
 - 与 `iter_0000122` 对比：AIME25 1-sample/10-repeats 从 `1.0` 到 `0.0`；MMLU-Pro 14 requests 仍为 `0.0`；HMMT 1-sample symbolic_correct 从 `100.0` 到 `0.0` 且 no_answer `100.0`；IFBench 1-sample 仍为全 `0.0`；WMT24++ 1-sample BLEU 仍为 `64.31870218238025`。AIME/HMMT 都是单样本口径，结论只作为回归信号。
 - 新增结构化结果记录 `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0012158.yaml`；本轮未重跑 GPQA/HLE，因为当前 `vm4vpn` active shell 没有 HF token，且 HLE 仍需要官方 judge OAuth credential 才能得到 official score。
 - 运行中处理了 `vm4vpn` 磁盘满：AIME/MMLU 完成后 HMMT 首次因 Docker image/log 写入触发 no space，清理不再需要的 eval-factory images 后重新运行 HMMT/WMT，再移除 `nemo-skills` image 后运行 IFBench；最终根分区恢复到约 `18G` 可用。
+- 按用户要求从 `vm4vpn:/tmp/task071_vpn_eval_iter0012158` 抽取并返回 5 个任务的完整原始结果字段，包括每个任务的 `results.yml` 核心 metrics、`eval_factory_metrics.json` response stats、额外 `metrics.json` 和 `docker_exit=0` 状态。
