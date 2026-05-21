@@ -1,6 +1,6 @@
 # task035_contamination_pipeline_s1 - task_knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 Notes
 
@@ -8,3 +8,4 @@
 - The matrix reuses `classify_contamination_row` from `contamination_audit.py`; keep blocker/informational posture aligned with `--check-contamination`.
 - `--eval-overlap-matrix` is the canonical CLI flag; `--contamination-matrix` is an alias for operator discoverability.
 - Live registry smoke on this branch reported 14 M0 data rows, 0 blockers, 0 informational findings, and 14 clean rows.
+- Session 2 added no implementation knowledge; it only confirmed post-merge fast-forward sync and Idle status.
