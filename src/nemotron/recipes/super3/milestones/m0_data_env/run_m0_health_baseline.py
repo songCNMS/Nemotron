@@ -568,8 +568,16 @@ def score_record(
             "exact_value_match": bool(score == 1.0),
         }
     elif verifier == "command_substring_match":
+        reward_config = record.get("reward_config", {})
+        extra_env_info = record.get("extra_env_info", {})
         score = score_command(candidate, expected)
         diagnostics = {"command_match": bool(score == 1.0)}
+        timeout_s = reward_config.get("timeout_s") or extra_env_info.get("extended_timeout_s")
+        if timeout_s is not None:
+            diagnostics["timeout_s"] = int(timeout_s)
+        timeout_profile = reward_config.get("timeout_profile") or extra_env_info.get("timeout_profile")
+        if timeout_profile:
+            diagnostics["timeout_profile"] = str(timeout_profile)
     elif verifier == "patch_diff_match":
         normalized_candidate = normalize_patch_text(candidate)
         score = score_patch(candidate, expected)

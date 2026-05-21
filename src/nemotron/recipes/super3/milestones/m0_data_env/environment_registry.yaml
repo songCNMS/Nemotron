@@ -187,6 +187,38 @@ environments:
         - expected_answer
         - extra_env_info.expected_command
 
+  - id: terminal_workplace
+    family: terminal
+    stage: M2 terminalbench scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: command_substring_match
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: Session 1 scaffold reuses normalized command substring matching; future cluster verifier executes TerminalBench workplace tasks in a terminal sandbox
+    resources:
+      sandbox: terminal
+      tools:
+        - shell_command_prompt
+        - terminal_workspace
+      timeout_s: 300
+      max_turns: 4
+      expected_runtime_ms: 60000
+    telemetry:
+      - reward
+      - command_match
+      - timeout_s
+      - timeout_profile
+      - latency_ms
+      - unsafe_command_flag
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.expected_command
+        - extra_env_info.extended_timeout_s
+
   - id: swe_pivot_patch_supervision
     family: software_engineering
     stage: M0 data_env_foundation
