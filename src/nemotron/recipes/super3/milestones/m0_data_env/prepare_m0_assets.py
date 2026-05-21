@@ -89,6 +89,14 @@ SYSTEM_PROMPTS = {
         "You are a tool-using assistant. Use the available functions across "
         "multiple turns when needed and incorporate tool results into the final answer."
     ),
+    "taubench_retail": (
+        "You are a retail customer-support agent. Use the available tools to "
+        "complete the user's retail task accurately and follow policy constraints."
+    ),
+    "taubench_telecom": (
+        "You are a telecom customer-support agent. Use the available tools to "
+        "complete the user's telecom task accurately and follow policy constraints."
+    ),
     "structured_outputs_json": (
         "You are a structured-output assistant. Return only valid JSON that matches the schema."
     ),
@@ -215,6 +223,103 @@ BROWSER_SEARCH_TOOLS: list[JsonDict] = [
         },
     },
 ]
+
+
+TAUBENCH_DEFAULT_TOOLS: dict[str, list[JsonDict]] = {
+    "retail": [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_order_details",
+                "description": "Look up an order by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"order_id": {"type": "string"}},
+                    "required": ["order_id"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "update_order_address",
+                "description": "Update the shipping address for an eligible order.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "order_id": {"type": "string"},
+                        "address": {"type": "string"},
+                    },
+                    "required": ["order_id", "address"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "refund_order",
+                "description": "Issue a refund for an eligible retail order.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "order_id": {"type": "string"},
+                        "reason": {"type": "string"},
+                    },
+                    "required": ["order_id", "reason"],
+                },
+            },
+        },
+    ],
+    "telecom": [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_customer_profile",
+                "description": "Look up a telecom customer profile by account id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"account_id": {"type": "string"}},
+                    "required": ["account_id"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "update_service_plan",
+                "description": "Change a telecom customer's service plan.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "account_id": {"type": "string"},
+                        "plan": {"type": "string"},
+                    },
+                    "required": ["account_id", "plan"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "schedule_technician",
+                "description": "Schedule a field technician appointment.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "account_id": {"type": "string"},
+                        "window": {"type": "string"},
+                    },
+                    "required": ["account_id", "window"],
+                },
+            },
+        },
+    ],
+}
+
+TAUBENCH_ENV_DOMAINS = {
+    "taubench_retail": "retail",
+    "taubench_telecom": "telecom",
+}
 
 
 def load_yaml(path: Path) -> JsonDict:
@@ -352,6 +457,72 @@ def string_list(value: Any) -> list[str]:
     return [stripped] if stripped else []
 
 
+def first_present(row: Mapping[str, Any], keys: Sequence[str]) -> Any:
+    for key in keys:
+        value = row.get(key)
+        if value is not None and str(value).strip():
+            return value
+    return ""
+
+
+def normalize_openai_tool_call(call: Any, *, index: int) -> JsonDict | None:
+    if isinstance(call, str):
+        call = parse_json_maybe(call, default={})
+    if not isinstance(call, Mapping):
+        return None
+    function = call.get("function")
+    if isinstance(function, Mapping):
+        name = function.get("name")
+        arguments = function.get("arguments", {})
+    else:
+        name = (
+            call.get("name")
+            or call.get("tool_name")
+            or call.get("function_name")
+            or call.get("action")
+        )
+        arguments = (
+            call.get("arguments")
+            if "arguments" in call
+            else call.get("args", call.get("parameters", {}))
+        )
+    if isinstance(arguments, str):
+        arguments = parse_json_maybe(arguments, default=arguments)
+    if not isinstance(arguments, Mapping):
+        arguments = {"value": arguments}
+    name_text = str(name or "").strip()
+    if not name_text:
+        return None
+    return {
+        "id": str(call.get("id") or f"call_{index}"),
+        "type": "function",
+        "function": {
+            "name": name_text,
+            "arguments": dict(arguments),
+        },
+    }
+
+
+def normalize_tool_call_list(value: Any) -> list[JsonDict]:
+    parsed = parse_json_maybe(value, default=value)
+    if isinstance(parsed, Mapping):
+        for key in ("expected_tool_calls", "tool_calls", "expected_actions", "actions"):
+            nested = parsed.get(key)
+            if nested is not None:
+                return normalize_tool_call_list(nested)
+        raw_calls = [parsed]
+    elif isinstance(parsed, list):
+        raw_calls = parsed
+    else:
+        raw_calls = []
+    calls: list[JsonDict] = []
+    for index, call in enumerate(raw_calls):
+        normalized = normalize_openai_tool_call(call, index=index)
+        if normalized is not None:
+            calls.append(normalized)
+    return calls
+
+
 def transform_hotpotqa_search(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
     question = str(row["question"]).strip()
     expected_answer = str(row["answer"]).strip()
@@ -441,6 +612,90 @@ def transform_browsecomp_grounded(row: Mapping[str, Any], spec: Mapping[str, Any
             "browser_runtime": "playwright_chromium_placeholder",
         },
         tools=copy.deepcopy(BROWSER_SEARCH_TOOLS),
+    )
+
+
+def transform_taubench_multi_domain(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a TauBench retail/telecom row to the Session 1 scaffold.
+
+    This is a record-contract converter only. It reuses
+    ``tool_schema_and_argument_match`` for sandbox smoke tests and marks
+    full multi-turn rollout / simulator execution as a later cluster step.
+    """
+    env_id = str(spec["environment"])
+    domain = TAUBENCH_ENV_DOMAINS.get(env_id) or str(row.get("domain") or "").strip()
+    if domain not in TAUBENCH_DEFAULT_TOOLS:
+        raise ValueError(f"unsupported TauBench domain for environment {env_id!r}: {domain!r}")
+
+    question = str(
+        first_present(row, ("user_message", "instruction", "prompt", "query", "goal", "task"))
+    ).strip()
+    if not question:
+        raise ValueError("taubench row must contain a user task prompt")
+
+    expected_tool_calls = normalize_tool_call_list(
+        row.get("expected_tool_calls")
+        or row.get("tool_calls")
+        or row.get("expected_actions")
+        or row.get("actions")
+    )
+    if not expected_tool_calls:
+        raise ValueError("taubench row must contain expected tool calls/actions")
+
+    raw_tools = parse_json_maybe(row.get("tools"), default=[])
+    tools = raw_tools if isinstance(raw_tools, list) else []
+    if not tools:
+        tools = copy.deepcopy(TAUBENCH_DEFAULT_TOOLS[domain])
+
+    raw_trajectory = row.get("expected_trajectory") or row.get("trajectory")
+    if isinstance(raw_trajectory, list) and raw_trajectory:
+        expected_trajectory = [
+            dict(turn) if isinstance(turn, Mapping) else {"content": str(turn)}
+            for turn in raw_trajectory
+        ]
+    else:
+        expected_trajectory = [
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": copy.deepcopy(expected_tool_calls),
+            }
+        ]
+    expected_final_content = str(
+        row.get("expected_final_content") or row.get("final_response") or row.get("answer") or ""
+    ).strip()
+
+    user_content = (
+        f"Complete this TauBench {domain} customer-support task. "
+        "Use tools when policy or account state requires it.\n\n"
+        f"Task:\n{question}"
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=expected_tool_calls,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[env_id]},
+            {"role": "user", "content": user_content},
+        ],
+        tools=tools,
+        reward_config={
+            "verifier": "tool_schema_and_argument_match",
+            "max_score": 1.0,
+            "match": ["tool_name", "json_arguments"],
+            "multi_turn_rollout": "deferred",
+        },
+        extra_env_info={
+            "domain": domain,
+            "expected_tool_calls": expected_tool_calls,
+            "expected_trajectory": expected_trajectory,
+            "expected_final_content": expected_final_content,
+            "expected_turn_count": len(expected_trajectory),
+            "requires_live_rollout": False,
+            "cluster_execution": "deferred_to_task023_session_3",
+            "simulator": "taubench_placeholder",
+        },
     )
 
 
@@ -2482,6 +2737,7 @@ CONVERTERS = {
     "hotpotqa_search": transform_hotpotqa_search,
     "musique_search": transform_musique_search,
     "browsecomp_grounded": transform_browsecomp_grounded,
+    "taubench_multi_domain": transform_taubench_multi_domain,
     "mbpp_code_execution": transform_mbpp_code_execution,
     "bash_command": transform_bash_command,
     "swe_bench_patch": transform_swe_bench_patch,
