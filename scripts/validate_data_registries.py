@@ -100,6 +100,18 @@ def main(argv: list[str] | None = None) -> int:
             "(TBD/TODO/pending/etc.) → exit 0."
         ),
     )
+    parser.add_argument(
+        "--eval-overlap-matrix",
+        "--contamination-matrix",
+        dest="eval_overlap_matrix",
+        action="store_true",
+        help=(
+            "Print the task035 per-environment contamination/eval-overlap "
+            "matrix for m0_data_registry rows. Uses the same blocker vs "
+            "informational semantics as --check-contamination; blockers "
+            "exit 1, informational-only reports exit 0."
+        ),
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -173,6 +185,30 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"validate_data_registries: {len(audit['blockers'])} broken "
                 "contamination_against field(s) — fix the listed rows",
+                file=sys.stderr,
+            )
+            return 1
+        return 0
+
+    if args.eval_overlap_matrix:
+        try:
+            from nemotron.recipes.super3.milestones.data_registries.contamination_matrix import (
+                build_eval_overlap_matrix,
+                format_eval_overlap_matrix,
+            )
+            matrix = build_eval_overlap_matrix(args.index_path)
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"validate_data_registries: eval-overlap matrix raised: {exc}",
+                file=sys.stderr,
+            )
+            return 2
+        sys.stdout.write(format_eval_overlap_matrix(matrix))
+        blockers = matrix.get("counts", {}).get("blocker", 0)
+        if blockers:
+            print(
+                f"validate_data_registries: {blockers} broken "
+                "contamination_against field(s) in eval-overlap matrix",
                 file=sys.stderr,
             )
             return 1
