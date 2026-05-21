@@ -58,6 +58,10 @@ TASK071_NON_DRY_RESULTS_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml"
 )
+TASK071_UNCAPPED_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0012158.yaml"
+)
 
 
 EXPECTED_FULL_IDS = {
@@ -108,6 +112,10 @@ def _load_launcher_rows() -> list[dict]:
 
 def _load_task071_non_dry_results() -> dict:
     return yaml.safe_load(TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
+
+
+def _load_task071_uncapped_non_dry_results() -> dict:
+    return yaml.safe_load(TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
 
 
 # ---------- Registry shape ----------
@@ -334,6 +342,40 @@ def test_task071_non_dry_results_make_scored_and_blocked_states_explicit() -> No
 
 def test_task071_non_dry_results_do_not_store_secret_tokens() -> None:
     text = TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_uncapped_non_dry_results_record_selected_regression_subset() -> None:
+    """The uncapped checkpoint comparison is a selected non-dry subset,
+    not a replacement for the full 14-task iter0000122 sweep."""
+    result_manifest = _load_task071_uncapped_non_dry_results()
+    config = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+
+    result_tasks = [row["launcher_task"] for row in result_manifest["results"]]
+    config_tasks = set(config["tasks"])
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0012158-hf:v1")
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["selected_regression_tasks"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert set(result_tasks) <= config_tasks
+    assert result_manifest["summary"]["attempted_tasks"] == len(result_tasks) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["not_attempted_in_this_pass"]
+
+    for row in result_manifest["results"]:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert "baseline_iter0000122" in row
+        assert "delta_vs_iter0000122" in row
+
+
+def test_task071_uncapped_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
     assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
     assert "HF_TOKEN" not in text
 

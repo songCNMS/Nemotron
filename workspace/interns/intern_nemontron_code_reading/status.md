@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Regenerated uncapped M0/M1 data, packed 302,049,374 tokens into 72,947 train rows, and completed the 6-GPU Qwen SFT run to `iter_0012158` with final validation loss `0.3308907` / PPL `1.392208`; metrics and loss plot are under `../outputs/task071_qwen_uncapped_sft_train_exec/metrics`. |
+| Latest | Exported and registered uncapped Qwen SFT `iter_0012158` as HF artifact `task071-qwen3-4b-agentic-sft-iter0012158-hf:v1`, restarted the SGLang endpoint on GPU0, and recorded 5 non-dry regression evals in `m1_full_basket_non_dry_results_task071_iter0012158.yaml`. |

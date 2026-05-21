@@ -1,0 +1,215 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Task071 non-dry eval record for the uncapped Qwen3 4B M1 Agentic SFT run.
+#
+# This run compares the full uncapped-data SFT checkpoint against the earlier
+# capped scale-up checkpoint recorded in
+# m1_full_basket_non_dry_results_task071_iter0000122.yaml.
+
+schema_version: 1
+milestone: M1
+run_id: task071_qwen3_4b_agentic_sft_iter0012158_selected_non_dry
+recorded_at_utc: "2026-05-21T07:02:27Z"
+
+model:
+  artifact: task071-qwen3-4b-agentic-sft-iter0012158-hf:v1
+  endpoint_model_id: task071-qwen3-4b-agentic-sft-iter0012158-hf
+  checkpoint_path: /work-agents/intern_nemontron_code_reading/task071_qwen_uncapped_sft_train_exec/task071_qwen_uncapped_sft_train_exec/checkpoints/iter_0012158
+  hf_export_path: /work-agents/intern_nemontron_code_reading/task071_qwen_uncapped_sft_train_exec/task071_qwen_uncapped_sft_train_exec/hf_export_iter_0012158
+  endpoint_max_model_len: 4096
+  validation:
+    final_loss: 0.3308907
+    final_ppl: 1.392208
+    best_iter: 11000
+    best_loss: 0.3213488
+    best_ppl: 1.378986
+
+launcher:
+  config: m1_full_basket_launcher_available
+  launcher: nemo-evaluator-launcher
+  launcher_version: "0.2.5"
+  eval_factory_image_tag: "26.03"
+  deployment_type: none
+  evaluator_host: vm4vpn
+  endpoint_access: "ssh remote forward vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000"
+  endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+
+run_scope:
+  non_dry: true
+  task_order_source: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml
+  selected_regression_tasks: true
+  all_available_tasks_attempted: false
+  selection_reason: Re-ran the quick scored subset that does not require gated HF tokens or long-context endpoint support.
+  request_body_logging: disabled_for_larger_runs
+
+summary:
+  attempted_tasks: 5
+  scored_tasks: 5
+  blocked_or_not_attempted_tasks: 9
+  primary_constraints:
+    - no_runtime_hf_token_on_eval_host_for_gpqa_hle
+    - endpoint_context_window_for_long_context_and_some_agentic_tasks
+    - launcher_host_disk_required_image_pruning_during_run
+
+comparison_baseline:
+  run_id: task071_qwen3_4b_agentic_sft_iter0000122_m1_full_basket_non_dry
+  manifest: src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml
+  model_artifact: task071-qwen3-4b-agentic-sft-iter0000122-hf:v1
+
+results:
+  - benchmark_id: aime25
+    launcher_task: simple_evals.AIME_2025
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample with 10 repeats
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_iter0012158/aime25
+    observed_metrics:
+      score: 0.0
+    baseline_iter0000122:
+      score: 1.0
+    delta_vs_iter0000122:
+      score: -1.0
+    response_stats:
+      successful_responses: 10
+      total_responses: 10
+      avg_prompt_tokens: 66.0
+      avg_completion_tokens: 355.0
+      avg_total_tokens: 421.0
+      avg_latency_ms: 2066.44
+    caveat: Single AIME item with 10 repeats is high variance and should not be read as the full benchmark score.
+
+  - benchmark_id: mmlu_pro
+    launcher_task: lm-evaluation-harness.mmlu_pro
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample per category, 14 requests total
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_iter0012158/mmlu_pro
+    observed_metrics:
+      group_exact_match: 0.0
+    baseline_iter0000122:
+      group_exact_match: 0.0
+    delta_vs_iter0000122:
+      group_exact_match: 0.0
+    response_stats:
+      successful_responses: 14
+      total_responses: 14
+      avg_prompt_tokens: 1319.57
+      avg_completion_tokens: 32.0
+      avg_total_tokens: 1351.57
+      avg_latency_ms: 835.81
+
+  - benchmark_id: hmmt
+    launcher_task: nemo_skills.ns_hmmt_feb2025
+    attempt_status: scored
+    source_basket: full
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_iter0012158/hmmt
+    observed_metrics:
+      symbolic_correct_percent: 0.0
+      num_entries: 1
+      no_answer_percent: 100.0
+    baseline_iter0000122:
+      symbolic_correct_percent: 100.0
+      num_entries: 1
+    delta_vs_iter0000122:
+      symbolic_correct_percent: -100.0
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_prompt_tokens: 57
+      avg_completion_tokens: 4
+      avg_total_tokens: 61
+      avg_latency_ms: 635.76
+    caveat: Single HMMT item is high variance; the model returned no parseable answer for this item.
+
+  - benchmark_id: ifbench
+    launcher_task: ifbench.ifbench
+    attempt_status: scored
+    source_basket: v0
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_iter0012158/ifbench
+    observed_metrics:
+      prompt_level_strict_accuracy: 0.0
+      prompt_level_loose_accuracy: 0.0
+      instruction_level_strict_accuracy: 0.0
+      instruction_level_loose_accuracy: 0.0
+    baseline_iter0000122:
+      prompt_level_strict_accuracy: 0.0
+      prompt_level_loose_accuracy: 0.0
+      instruction_level_strict_accuracy: 0.0
+      instruction_level_loose_accuracy: 0.0
+    delta_vs_iter0000122:
+      prompt_level_strict_accuracy: 0.0
+      prompt_level_loose_accuracy: 0.0
+      instruction_level_strict_accuracy: 0.0
+      instruction_level_loose_accuracy: 0.0
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_prompt_tokens: 140
+      avg_completion_tokens: 441
+      avg_total_tokens: 581
+      avg_latency_ms: 2136.15
+
+  - benchmark_id: wmt24pp
+    launcher_task: nemo_skills.ns_wmt24pp
+    attempt_status: scored
+    source_basket: full
+    sample_scope: 1 sample
+    docker_exit: 0
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_iter0012158/wmt24pp
+    observed_metrics:
+      bleu: 64.31870218238025
+    baseline_iter0000122:
+      bleu: 64.31870218238025
+    delta_vs_iter0000122:
+      bleu: 0.0
+    response_stats:
+      successful_responses: 1
+      total_responses: 1
+      avg_prompt_tokens: 51
+      avg_completion_tokens: 38
+      avg_total_tokens: 89
+      avg_latency_ms: 693.42
+
+not_attempted_in_this_pass:
+  - benchmark_id: gpqa
+    launcher_task: simple_evals.gpqa_diamond
+    baseline_iter0000122:
+      score: 0.3
+      sample_scope: 10 samples
+    reason: No HF token was configured in the active vm4vpn shell; this gated dataset needs a runtime token.
+  - benchmark_id: hle
+    launcher_task: hle.hle
+    reason: Requires gated HF access and official judge credentials for final scoring.
+  - benchmark_id: livecodebench
+    launcher_task: livecodebench.codegeneration_release_latest
+    reason: Prior run was blocked by launcher host memory or disk during data build.
+  - benchmark_id: scicode
+    launcher_task: scicode.scicode
+    reason: Prior run was partial because some later-step prompts exceeded the 4096-token endpoint context.
+  - benchmark_id: ruler_256k
+    launcher_task: ruler.ruler-256k-chat
+    reason: Requires a context window far above the current 4096-token endpoint.
+  - benchmark_id: aa_lcr
+    launcher_task: AA-LCR.aa_lcr
+    reason: First sample is about 101k input tokens, above the current endpoint context.
+  - benchmark_id: taubench_airline
+    launcher_task: tau2_bench.tau2_bench_airline
+    reason: Prior first agent input exceeded the current endpoint context.
+  - benchmark_id: bfcl
+    launcher_task: bfcl.bfclv3
+    reason: Prior scoring needed real external executable credentials; dummy keys only validated model reachability.
+  - benchmark_id: mmlu_prox
+    launcher_task: lm-evaluation-harness.mmlu_prox_chat
+    reason: Prior run was partial because one request exceeded the current endpoint context.
