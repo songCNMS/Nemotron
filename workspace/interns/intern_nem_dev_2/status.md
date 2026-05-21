@@ -7,5 +7,5 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task024_m2_sql_execution_s1 |
-| PR | N/A |
+| PR | https://github.com/songCNMS/Nemotron/pull/131 |
 | Session | 0 |
