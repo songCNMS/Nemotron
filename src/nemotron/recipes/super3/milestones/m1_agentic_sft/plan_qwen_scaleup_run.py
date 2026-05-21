@@ -135,8 +135,9 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         },
         "data": {
             "m0_dataset_ids": list(AGENTIC_M0_DATASET_IDS),
-            "max_train_per_dataset": args.max_train_per_dataset,
-            "max_val_per_dataset": args.max_val_per_dataset,
+            "uncapped": args.uncapped_data,
+            "max_train_per_dataset": None if args.uncapped_data else args.max_train_per_dataset,
+            "max_val_per_dataset": None if args.uncapped_data else args.max_val_per_dataset,
             "expected_agentic_environments": 11,
         },
         "packing": {
@@ -153,6 +154,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "global_batch_size": args.global_batch_size,
             "micro_batch_size": args.micro_batch_size,
             "seq_length": args.seq_length,
+            "eval_interval": args.eval_interval,
             "save_interval": args.save_interval,
             "nemtron_host": args.nemtron_host,
             "nemtron_venv": str(args.nemtron_venv),
@@ -185,6 +187,14 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
     dataset_flags = " ".join(
         f"--dataset-id {_q(dataset_id)}" for dataset_id in data["m0_dataset_ids"]
     )
+    m0_row_flags = (
+        "--uncapped"
+        if data.get("uncapped")
+        else (
+            f"--max-train-per-dataset {int(data['max_train_per_dataset'])} \\\n"
+            f"  --max-val-per-dataset {int(data['max_val_per_dataset'])}"
+        )
+    )
     return f"""#!/usr/bin/env bash
 set -euo pipefail
 
@@ -197,8 +207,7 @@ export WANDB_DISABLED="${{WANDB_DISABLED:-true}}"
 python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \\
   --output-dir {_q(paths["m0_dir"])} \\
   {dataset_flags} \\
-  --max-train-per-dataset {int(data["max_train_per_dataset"])} \\
-  --max-val-per-dataset {int(data["max_val_per_dataset"])} \\
+  {m0_row_flags} \\
   --overwrite
 
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \\
@@ -233,6 +242,7 @@ python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft
   --global-batch-size {int(training["global_batch_size"])} \\
   --micro-batch-size {int(training["micro_batch_size"])} \\
   --epochs {training["epochs"]} \\
+  --eval-interval {int(training["eval_interval"])} \\
   --seq-length {int(training["seq_length"])} \\
   --save-interval {int(training["save_interval"])} \\
   --overwrite
@@ -286,6 +296,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"dataset.packed_sequence_specs.packed_sequence_size={int(training['seq_length'])}",
         f"model.seq_length={int(training['seq_length'])}",
         "train.train_iters=$TRAIN_ITERS",
+        f"train.eval_interval={int(training['eval_interval'])}",
         f"train.global_batch_size={int(training['global_batch_size'])}",
         f"train.micro_batch_size={int(training['micro_batch_size'])}",
         "scheduler.lr_decay_iters=$TRAIN_ITERS",
@@ -321,6 +332,7 @@ print(manifest["training"]["train_iters"])
 PY
 )"
 export TRAIN_ITERS
+tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"
 tmux kill-session -t {_q(session)} 2>/dev/null || true
 tmux new-session -d -s {_q(session)} {_q(train_cmd)}
 tmux ls | grep {_q(session)}
@@ -335,6 +347,7 @@ ssh {_q(remote_host)} {_q(remote_cmd)}
 def render_eval_script(manifest: JsonDict) -> str:
     repo_dir = Path(manifest["repo_dir"])
     eval_config = manifest["eval"]["config"]
+    model_ref = f"sft:{manifest['run_name']}"
     remote_ckpt = Path(manifest["paths"]["remote_run_root"]) / "checkpoints"
     return f"""#!/usr/bin/env bash
 set -euo pipefail
@@ -347,7 +360,7 @@ export PYTHONPATH="${{PWD}}/src${{PYTHONPATH:+:${{PYTHONPATH}}}}"
 # launching NeMo Evaluator. Replace deployment/checkpoint overrides as needed
 # once the checkpoint has been exported or registered as a model artifact.
 python -m nemotron super3 eval -c {_q(eval_config)} --dry-run \\
-  run.model=sft:task067-qwen-scaleup \\
+  run.model={_q(model_ref)} \\
   deployment.checkpoint_path={_q(remote_ckpt)}
 """
 
@@ -355,14 +368,20 @@ python -m nemotron super3 eval -c {_q(eval_config)} --dry-run \\
 def render_report(manifest: JsonDict) -> str:
     data = manifest["data"]
     training = manifest["training"]
+    row_scope = (
+        "uncapped"
+        if data.get("uncapped")
+        else f"train={data['max_train_per_dataset']}, val={data['max_val_per_dataset']}"
+    )
     return "\n".join(
         [
             "# Qwen M1 Agentic SFT Scale-up Plan",
             "",
             f"- Run name: `{manifest['run_name']}`",
             f"- M0 datasets: {len(data['m0_dataset_ids'])} agentic SFT slices",
-            f"- Rows per dataset: train={data['max_train_per_dataset']}, val={data['max_val_per_dataset']}",
+            f"- Rows per dataset: {row_scope}",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
+            f"- Eval / save interval: {training['eval_interval']} / {training['save_interval']}",
             (
                 f"- NemTron launch: host `{training['nemtron_host']}`, "
                 f"GPUs `{training['cuda_visible_devices']}`, nproc={training['nproc_per_node']}"
@@ -409,6 +428,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--pretrained-checkpoint", default=None)
     parser.add_argument("--max-train-per-dataset", type=int, default=100)
     parser.add_argument("--max-val-per-dataset", type=int, default=25)
+    parser.add_argument(
+        "--uncapped-data",
+        action="store_true",
+        help="Generate M0 data with prepare_m0_assets.py --uncapped instead of per-dataset row caps.",
+    )
     parser.add_argument("--num-shards", type=int, default=32)
     parser.add_argument("--pack-size", type=int, default=4096)
     parser.add_argument("--seq-length", type=int, default=4096)
@@ -418,6 +442,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--epochs", type=float, default=1.0)
     parser.add_argument("--global-batch-size", type=int, default=2)
     parser.add_argument("--micro-batch-size", type=int, default=1)
+    parser.add_argument("--eval-interval", type=int, default=100)
     parser.add_argument("--save-interval", type=int, default=20)
     parser.add_argument("--remote-root", type=Path, default=DEFAULT_REMOTE_ROOT)
     parser.add_argument("--nemtron-host", default="NemTron")
@@ -425,7 +450,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--cuda-visible-devices", default="0,1")
     parser.add_argument("--nproc-per-node", type=int, default=2)
     parser.add_argument("--master-port", type=int, default=29693)
-    parser.add_argument("--eval-config", choices=("m1_basket", "m1_full_basket"), default="m1_basket")
+    parser.add_argument(
+        "--eval-config",
+        choices=(
+            "m1_basket",
+            "m1_full_basket",
+            "m1_full_basket_launcher_available",
+        ),
+        default="m1_basket",
+    )
     parser.add_argument("--overwrite", action="store_true")
     return parser
 

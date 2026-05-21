@@ -36,6 +36,8 @@ def _args(tmp_path: Path):
             "512",
             "--seq-length",
             "512",
+            "--eval-interval",
+            "7",
             "--eval-config",
             "m1_full_basket",
             "--overwrite",
@@ -74,13 +76,42 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "--nproc_per_node=2" in remote_script
     assert "TRAIN_ITERS=" in remote_script
     assert "export TRAIN_ITERS" in remote_script
+    assert 'tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"' in remote_script
     assert 'Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup' in remote_script
     assert "dataset.packed_sequence_specs.packed_sequence_size=512" in remote_script
     assert "CUDA_VISIBLE_DEVICES=0,1" in remote_script
     assert "train.global_batch_size=2" in remote_script
+    assert "train.eval_interval=7" in remote_script
+    assert "--eval-interval 7" in local_script
 
     assert "super3 eval -c m1_full_basket --dry-run" in eval_script
+    assert "run.model=sft:unit_qwen_scaleup" in eval_script
     assert "deployment.checkpoint_path=" in eval_script
+
+
+def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-4b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-4b-bridge",
+            "--uncapped-data",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["uncapped"] is True
+    assert manifest["data"]["max_train_per_dataset"] is None
+    assert manifest["data"]["max_val_per_dataset"] is None
+    assert "--uncapped" in local_script
+    assert "--max-train-per-dataset" not in local_script
+    assert "--max-val-per-dataset" not in local_script
 
 
 def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
@@ -101,6 +132,26 @@ def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
     assert Path(manifest["outputs"]["report"]).read_text(encoding="utf-8").startswith(
         "# Qwen M1 Agentic SFT Scale-up Plan"
     )
+
+
+def test_scaleup_planner_accepts_launcher_available_eval_config(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-4b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-4b-bridge",
+            "--eval-config",
+            "m1_full_basket_launcher_available",
+        ]
+    )
+    manifest = build_manifest(args)
+    assert manifest["eval"]["config"] == "m1_full_basket_launcher_available"
+    assert "m1_full_basket_launcher_available" in render_eval_script(manifest)
 
 
 def test_scaleup_requires_qwen_paths_when_env_absent(tmp_path, monkeypatch) -> None:

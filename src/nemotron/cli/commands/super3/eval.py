@@ -28,22 +28,21 @@ Design: LLM-Native Recipe Architecture
 
 from __future__ import annotations
 
-import sys
+from pathlib import Path
 
 import typer
+from omegaconf import DictConfig, OmegaConf, open_dict
 from rich.console import Console
 
 from nemo_runspec.config import (
     build_job_config,
     clear_artifact_cache,
-    generate_job_dir,
     parse_config,
     register_resolvers_from_config,
 )
 from nemo_runspec.display import display_job_config, display_job_submission
 from nemo_runspec.env import parse_env
 from nemo_runspec.evaluator import (
-    collect_evaluator_images,
     ensure_wandb_host_env,
     get_non_task_args,
     inject_wandb_env_mappings,
@@ -78,6 +77,101 @@ META = RecipeMeta(
 # =============================================================================
 
 
+def _as_task_entry(task):
+    """Normalize a compact task selector into launcher task-entry shape."""
+    if isinstance(task, str):
+        return {"name": task}
+    return task
+
+
+def load_stage3_eval_config(ctx, config_dir: Path, default_config: str) -> DictConfig:
+    """Load a stage3 eval config and expand compact basket overlays.
+
+    ``m1_basket.yaml`` and ``m1_full_basket*.yaml`` use a compact overlay:
+
+    defaults: default.yaml
+    tasks:
+      - benchmark.task
+
+    ``nemo_runspec.config.parse_config`` intentionally loads one YAML file
+    and does not implement this recipe-local inheritance convention. Expand it
+    here so basket configs inherit the full evaluator launcher schema and map
+    top-level ``tasks`` into ``evaluation.tasks``.
+    """
+    config = parse_config(ctx, config_dir, default_config)
+    defaults = config.get("defaults")
+
+    if isinstance(defaults, str):
+        base_path = config_dir / defaults
+        base = OmegaConf.load(base_path)
+        overlay = OmegaConf.create(OmegaConf.to_container(config, resolve=False))
+        del overlay["defaults"]
+        config = OmegaConf.merge(base, overlay)
+
+    if "tasks" in config:
+        task_entries = [_as_task_entry(task) for task in config.tasks]
+        if "evaluation" not in config:
+            config.evaluation = {}
+        config.evaluation.tasks = task_entries
+        del config["tasks"]
+
+    return config
+
+
+def _ensure_mapping(cfg, *keys: str):
+    current = cfg
+    for key in keys:
+        if key not in current or current[key] is None:
+            with open_dict(current):
+                current[key] = {}
+        current = current[key]
+    return current
+
+
+def _merge_env_vars(target, source) -> None:
+    if not source:
+        return
+    for key, value in source.items():
+        if key not in target or target[key] is None:
+            with open_dict(target):
+                target[key] = value
+
+
+def normalize_evaluator_launcher_config(config: DictConfig) -> None:
+    """Normalize repo eval configs for current nemo-evaluator-launcher.
+
+    Launcher 0.2.5 rejects the older ``execution.env_vars`` layout. Move those
+    entries to the scope-specific locations accepted by the launcher and select
+    sequential local execution for generic deployments, which cannot run in
+    the launcher's default parallel mode.
+    """
+    if "execution" in config and "env_vars" in config.execution:
+        execution_env_vars = config.execution.env_vars
+
+        if "deployment" in execution_env_vars:
+            target = _ensure_mapping(config, "deployment", "env_vars")
+            _merge_env_vars(target, execution_env_vars.deployment)
+
+        if "evaluation" in execution_env_vars:
+            target = _ensure_mapping(config, "evaluation", "env_vars")
+            _merge_env_vars(target, execution_env_vars.evaluation)
+
+        if "export" in execution_env_vars:
+            target = _ensure_mapping(config, "env_vars")
+            _merge_env_vars(target, execution_env_vars.export)
+
+        with open_dict(config.execution):
+            del config.execution["env_vars"]
+
+    if (
+        config.get("execution", {}).get("type") == "local"
+        and config.get("deployment", {}).get("type") == "generic"
+        and "mode" not in config.execution
+    ):
+        with open_dict(config.execution):
+            config.execution.mode = "sequential"
+
+
 def _execute_eval(cfg: RecipeConfig):
     """Execute evaluation with nemo-evaluator-launcher.
 
@@ -87,10 +181,6 @@ def _execute_eval(cfg: RecipeConfig):
     Args:
         cfg: Parsed recipe configuration
     """
-    from pathlib import Path
-
-    from omegaconf import OmegaConf
-
     # --stage is not supported for evaluator
     if cfg.stage:
         typer.echo("Error: --stage is not supported for evaluator commands", err=True)
@@ -100,7 +190,7 @@ def _execute_eval(cfg: RecipeConfig):
     # 1. Parse configuration
     # =========================================================================
     config_dir = Path(CONFIG_DIR)
-    train_config = parse_config(cfg.ctx, config_dir, "default")
+    train_config = load_stage3_eval_config(cfg.ctx, config_dir, "default")
     env = parse_env(cfg.ctx)
 
     # Build full job config with provenance
@@ -118,6 +208,7 @@ def _execute_eval(cfg: RecipeConfig):
     # =========================================================================
     if needs_wandb(job_config):
         inject_wandb_env_mappings(job_config)
+    normalize_evaluator_launcher_config(job_config)
 
     # =========================================================================
     # 3. Auto-squash container images for Slurm execution
@@ -197,6 +288,7 @@ def _execute_eval(cfg: RecipeConfig):
     # Inject W&B env var mappings into eval_config if needed
     if needs_wandb(eval_config):
         inject_wandb_env_mappings(eval_config)
+    normalize_evaluator_launcher_config(eval_config)
 
     # Call the launcher
     console.print("\n[bold blue]Starting evaluation...[/bold blue]")

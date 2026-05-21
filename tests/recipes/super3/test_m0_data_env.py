@@ -14,6 +14,7 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     ENV_REGISTRY_PATH,
     cleanup_stale_split_files,
     convert_hermes_conversations,
+    desired_counts,
     extract_boxed_answer,
     load_yaml,
     normalize_numeric_answer,
@@ -185,6 +186,20 @@ def test_data_registry_rejects_non_string_contamination_targets() -> None:
 
     with pytest.raises(ValueError, match="contamination_against entries must be non-empty strings"):
         validate_registries(data_registry, env_registry)
+
+
+def test_desired_counts_uncapped_uses_exhaustive_source_splits() -> None:
+    args = type(
+        "Args",
+        (),
+        {
+            "uncapped": True,
+            "max_train_per_dataset": None,
+            "max_val_per_dataset": None,
+        },
+    )()
+
+    assert desired_counts(_spec("m0_reasoning_gsm8k"), args) == (None, None)
 
 
 def test_gsm8k_transform_normalizes_final_answer() -> None:
@@ -526,9 +541,24 @@ def test_musique_transform_keeps_supporting_titles_and_aliases() -> None:
         "answer_aliases": ["Dearborn, Michigan"],
         "answerable": True,
         "paragraphs": [
-            {"idx": 0, "title": "Henry Ford", "paragraph_text": "Henry Ford was born in Dearborn.", "is_supporting": True},
-            {"idx": 1, "title": "Detroit",  "paragraph_text": "Detroit is a city in Michigan.",    "is_supporting": False},
-            {"idx": 2, "title": "Assembly Line", "paragraph_text": "Ford pioneered the assembly line.", "is_supporting": True},
+            {
+                "idx": 0,
+                "title": "Henry Ford",
+                "paragraph_text": "Henry Ford was born in Dearborn.",
+                "is_supporting": True,
+            },
+            {
+                "idx": 1,
+                "title": "Detroit",
+                "paragraph_text": "Detroit is a city in Michigan.",
+                "is_supporting": False,
+            },
+            {
+                "idx": 2,
+                "title": "Assembly Line",
+                "paragraph_text": "Ford pioneered the assembly line.",
+                "is_supporting": True,
+            },
         ],
         "question_decomposition": [{"id": 0, "question": "who invented the assembly line"}],
     }

@@ -17,17 +17,22 @@ Covers:
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 yaml = pytest.importorskip("yaml")
 
-
+from nemotron.cli.commands.super3.eval import (  # noqa: E402
+    CONFIG_DIR,
+    load_stage3_eval_config,
+    normalize_evaluator_launcher_config,
+)
 from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
     diff_eval_runs,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 V0_REGISTRY_PATH = (
@@ -40,6 +45,36 @@ FULL_REGISTRY_PATH = (
 )
 FULL_BASKET_CONFIG_PATH = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket.yaml"
+)
+LAUNCHER_MAPPING_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_launcher_mapping.yaml"
+)
+LAUNCHER_AVAILABLE_CONFIG_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml"
+)
+TASK071_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml"
+)
+TASK071_UNCAPPED_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0012158.yaml"
+)
+TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_task071_iter0012158.yaml"
+    )
+)
+QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml"
+    )
 )
 
 
@@ -68,10 +103,45 @@ EXPECTED_V0_IDS = {
     "taubench_airline",
 }
 
+EXPECTED_LAUNCHER_MISSING_IDS = {
+    "multichallenge",
+    "terminalbench",
+    "swe_bench_verified",
+    "mcp_mark",
+    "tool_decathlon",
+}
+
+EXPECTED_NON_DRY_STATUSES = {"scored", "blocked", "partial"}
+
 
 def _load_rows(path: Path) -> list[dict]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     return data["benchmarks"]
+
+
+def _load_launcher_rows() -> list[dict]:
+    data = yaml.safe_load(LAUNCHER_MAPPING_PATH.read_text(encoding="utf-8"))
+    return data["tasks"]
+
+
+def _load_task071_non_dry_results() -> dict:
+    return yaml.safe_load(TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
+
+
+def _load_task071_uncapped_non_dry_results() -> dict:
+    return yaml.safe_load(TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
+
+
+def _load_task071_uncapped_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
+
+
+def _load_qwen3_4b_original_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
 
 
 # ---------- Registry shape ----------
@@ -208,6 +278,350 @@ def test_full_basket_config_task_names_match_registry_benchmark_ids() -> None:
         f"config / registry drift — missing in config: {expected - tasks}, "
         f"extra in config: {tasks - expected}"
     )
+
+
+def test_launcher_mapping_covers_full_basket_and_locks_known_gaps() -> None:
+    """The runtime mapping records every intended benchmark, including
+    launcher 0.2.5 gaps. This avoids silently replacing missing SWE /
+    terminal / MCP tasks with unrelated proxy benchmarks."""
+    rows = _load_launcher_rows()
+    ids = {row["benchmark_id"] for row in rows}
+    assert ids == EXPECTED_V0_IDS | EXPECTED_FULL_IDS
+
+    missing = {row["benchmark_id"] for row in rows if row["status"] == "missing"}
+    assert missing == EXPECTED_LAUNCHER_MISSING_IDS
+
+    available = [row for row in rows if row["status"] == "available"]
+    assert len(available) == 14
+    for row in available:
+        assert row["launcher_task"]
+        assert "." in row["launcher_task"]
+        assert not row["launcher_task"].startswith(("adlr_", "nemo_evaluator."))
+
+
+def test_launcher_available_config_uses_only_verified_available_tasks() -> None:
+    data = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+    assert data["defaults"] == "default.yaml"
+
+    expected = {
+        row["launcher_task"]
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    tasks = set(data["tasks"])
+    assert tasks == expected
+    assert len(tasks) == 14
+
+
+def test_task071_non_dry_results_cover_launcher_available_config() -> None:
+    """The task071 run manifest is useful only if it covers every
+    launcher task we selected for the runnable full-basket subset."""
+    config = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+    result_manifest = _load_task071_non_dry_results()
+
+    config_tasks = config["tasks"]
+    result_tasks = [row["launcher_task"] for row in result_manifest["results"]]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["launcher"]["config"] == "m1_full_basket_launcher_available"
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is True
+    assert result_tasks == config_tasks
+    assert result_manifest["summary"]["attempted_tasks"] == len(config_tasks)
+
+
+def test_task071_non_dry_results_match_launcher_mapping_ids() -> None:
+    mapping_by_task = {
+        row["launcher_task"]: row
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    result_manifest = _load_task071_non_dry_results()
+
+    for row in result_manifest["results"]:
+        mapping_row = mapping_by_task[row["launcher_task"]]
+        assert row["benchmark_id"] == mapping_row["benchmark_id"]
+        assert row["source_basket"] == mapping_row["source_basket"]
+
+
+def test_task071_non_dry_results_make_scored_and_blocked_states_explicit() -> None:
+    result_manifest = _load_task071_non_dry_results()
+    rows = result_manifest["results"]
+
+    statuses = [row["attempt_status"] for row in rows]
+    assert set(statuses) <= EXPECTED_NON_DRY_STATUSES
+    assert statuses.count("scored") == result_manifest["summary"]["scored_tasks"]
+    assert len([s for s in statuses if s != "scored"]) == result_manifest["summary"][
+        "blocked_or_partial_tasks"
+    ]
+
+    for row in rows:
+        if row["attempt_status"] == "scored":
+            assert row["docker_exit"] == 0
+            assert row["artifacts"].startswith("vm4vpn:")
+            assert row["observed_metrics"]
+            assert row["response_stats"]["successful_responses"] > 0
+        else:
+            assert row["blocker"]["type"]
+            assert row["response_stats"]["total_responses"] >= 0
+
+
+def test_task071_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_uncapped_non_dry_results_record_selected_regression_subset() -> None:
+    """The uncapped checkpoint comparison is a selected non-dry subset,
+    not a replacement for the full 14-task iter0000122 sweep."""
+    result_manifest = _load_task071_uncapped_non_dry_results()
+    config = yaml.safe_load(LAUNCHER_AVAILABLE_CONFIG_PATH.read_text(encoding="utf-8"))
+
+    result_tasks = [row["launcher_task"] for row in result_manifest["results"]]
+    config_tasks = set(config["tasks"])
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0012158-hf:v1")
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["selected_regression_tasks"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert set(result_tasks) <= config_tasks
+    assert result_manifest["summary"]["attempted_tasks"] == len(result_tasks) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["not_attempted_in_this_pass"]
+
+    for row in result_manifest["results"]:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert "baseline_iter0000122" in row
+        assert "delta_vs_iter0000122" in row
+
+
+def test_task071_uncapped_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_uncapped_full_non_dry_results_record_full_selected_runs() -> None:
+    """The full-selected follow-up removes the smoke-run sample limits
+    for the same 5 scored tasks while keeping it separate from the
+    small regression manifest."""
+    result_manifest = _load_task071_uncapped_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0012158-hf:v1")
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["selected_regression_tasks"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+
+
+def test_task071_uncapped_full_non_dry_results_lock_key_metrics() -> None:
+    result_manifest = _load_task071_uncapped_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.2755102040816326)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(0.11)
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == 0.0
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == pytest.approx(
+        93.33333333333333
+    )
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        29.295411202064134
+    )
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.1346409574468085
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_task071_uncapped_full_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_qwen3_4b_original_full_non_dry_results_record_full_selected_runs() -> None:
+    """The original-Qwen baseline must match the same 5 full-selected
+    benchmark tasks and sample scopes as the iter0012158 SFT comparison
+    run, so metric deltas are interpretable."""
+    result_manifest = _load_qwen3_4b_original_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["source_model"] == "Qwen/Qwen3-4B-Instruct-2507"
+    assert (
+        result_manifest["model"]["endpoint_model_id"]
+        == "qwen3-4b-instruct-2507-original"
+    )
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["selected_regression_tasks"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+        assert "comparison_vs_iter0012158_sft" in row
+
+
+def test_qwen3_4b_original_full_non_dry_results_lock_key_metrics() -> None:
+    result_manifest = _load_qwen3_4b_original_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.30612244897959184)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(
+        0.09333333333333335
+    )
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == pytest.approx(
+        6.666666666666667
+    )
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == pytest.approx(
+        83.33333333333333
+    )
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        28.361839067434847
+    )
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.0078125
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_qwen3_4b_original_full_non_dry_results_lock_sft_comparison() -> None:
+    result_manifest = _load_qwen3_4b_original_full_non_dry_results()
+    summary_rows = {
+        row["benchmark_id"]: row
+        for row in result_manifest["summary"]["primary_metric_comparison"]
+    }
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert result_manifest["summary"]["comparison_direction"] == (
+        "original_minus_iter0012158_sft"
+    )
+    assert summary_rows["ifbench"]["original_minus_iter0012158_sft"] == pytest.approx(
+        0.03061224489795924
+    )
+    assert summary_rows["aime25"]["original_minus_iter0012158_sft"] == pytest.approx(
+        -0.01666666666666665
+    )
+    assert summary_rows["hmmt"]["original_minus_iter0012158_sft"] == pytest.approx(
+        6.666666666666667
+    )
+    assert summary_rows["wmt24pp"]["original_minus_iter0012158_sft"] == pytest.approx(
+        -0.933572134629287
+    )
+    assert summary_rows["mmlu_pro"]["original_minus_iter0012158_sft"] == pytest.approx(
+        -0.1268284574468085
+    )
+
+    assert by_id["mmlu_pro"]["comparison_vs_iter0012158_sft"][
+        "iter0012158_sft"
+    ] == pytest.approx(0.1346409574468085)
+
+
+def test_qwen3_4b_original_full_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_launcher_available_config_expands_into_evaluator_schema() -> None:
+    """The recipe CLI must merge the compact basket overlay with
+    default.yaml; otherwise dry-run only prints top-level tasks and the
+    launcher receives no execution/deployment/evaluation schema."""
+    ctx = SimpleNamespace(
+        config="m1_full_basket_launcher_available",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+
+    expected = {
+        row["launcher_task"]
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+    tasks = {task["name"] for task in config.evaluation.tasks}
+
+    assert tasks == expected
+    assert "execution" in config
+    assert "deployment" in config
+    assert "tasks" not in config
+
+
+def test_eval_config_normalization_matches_launcher_0_2_schema() -> None:
+    ctx = SimpleNamespace(
+        config="m1_full_basket_launcher_available",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+    assert "env_vars" in config.execution
+
+    normalize_evaluator_launcher_config(config)
+
+    assert "env_vars" not in config.execution
+    assert config.execution.mode == "sequential"
+    assert config.evaluation.env_vars.HF_HOME == "lit:/cache/huggingface"
+    assert config.deployment.env_vars.HF_TOKEN == "host:HF_TOKEN"
 
 
 # ---------- regression_report works on combined gate map ----------

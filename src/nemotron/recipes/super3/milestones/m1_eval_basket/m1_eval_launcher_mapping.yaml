@@ -1,0 +1,148 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# NeMo Evaluator launcher task mapping for the M1 eval basket.
+#
+# Verified against nemo-evaluator-launcher==0.2.5 on NemTron during
+# task071 Session 3. Keep this file separate from the benchmark registry:
+# registry rows describe the intended M1 acceptance basket, while this file
+# records the concrete launcher task names currently available to execute.
+#
+# Rows with status=missing are intentionally not substituted with unrelated
+# benchmarks. They must be mapped only when an equivalent launcher task exists.
+
+schema_version: 1
+milestone: M1
+launcher: nemo-evaluator-launcher
+verified_launcher_version: "0.2.5"
+verified_at_utc: "2026-05-20T11:30:40Z"
+
+tasks:
+  - benchmark_id: mmlu_pro
+    source_basket: v0
+    launcher_task: lm-evaluation-harness.mmlu_pro
+    status: available
+    notes: Exact MMLU-Pro task present in launcher mapping.
+
+  - benchmark_id: aime25
+    source_basket: v0
+    launcher_task: simple_evals.AIME_2025
+    status: available
+    notes: AIME 2025 chat task present in launcher mapping.
+
+  - benchmark_id: hmmt
+    source_basket: full
+    launcher_task: nemo_skills.ns_hmmt_feb2025
+    status: available
+    notes: HMMT February 2025 task present through nemo_skills.
+
+  - benchmark_id: gpqa
+    source_basket: v0
+    launcher_task: simple_evals.gpqa_diamond
+    status: available
+    notes: GPQA Diamond task present in simple_evals.
+
+  - benchmark_id: hle
+    source_basket: full
+    launcher_task: hle.hle
+    status: available
+    notes: HLE task present in launcher mapping.
+
+  - benchmark_id: livecodebench
+    source_basket: v0
+    launcher_task: livecodebench.codegeneration_release_latest
+    status: available
+    notes: Current LiveCodeBench codegeneration release task.
+
+  - benchmark_id: scicode
+    source_basket: full
+    launcher_task: scicode.scicode
+    status: available
+    notes: SciCode task present in launcher mapping.
+
+  - benchmark_id: ifbench
+    source_basket: v0
+    launcher_task: ifbench.ifbench
+    status: available
+    notes: IFBench task present in launcher mapping.
+
+  - benchmark_id: multichallenge
+    source_basket: v0
+    launcher_task: null
+    status: missing
+    candidate_tasks:
+      - mtbench.mtbench-cor1
+    notes: No exact MultiChallenge task found; MT-Bench is related but not equivalent.
+
+  - benchmark_id: ruler_256k
+    source_basket: v0
+    launcher_task: ruler.ruler-256k-chat
+    status: available
+    notes: 256k RULER chat task present in launcher mapping.
+
+  - benchmark_id: aa_lcr
+    source_basket: full
+    launcher_task: AA-LCR.aa_lcr
+    status: available
+    notes: AA-LCR task present in launcher mapping.
+
+  - benchmark_id: taubench_airline
+    source_basket: v0
+    launcher_task: tau2_bench.tau2_bench_airline
+    status: available
+    notes: Tau2Bench airline task present in launcher mapping.
+
+  - benchmark_id: terminalbench
+    source_basket: full
+    launcher_task: null
+    status: missing
+    candidate_tasks:
+      - codec.terminalbench
+    notes: Only contamination-detection TerminalBench task found; not a benchmark substitute.
+
+  - benchmark_id: bfcl
+    source_basket: full
+    launcher_task: bfcl.bfclv3
+    status: available
+    notes: BFCL v3 task present in launcher mapping.
+
+  - benchmark_id: mcp_mark
+    source_basket: full
+    launcher_task: null
+    status: missing
+    candidate_tasks: []
+    notes: No MCP-Mark task found in launcher 0.2.5 mapping.
+
+  - benchmark_id: tool_decathlon
+    source_basket: full
+    launcher_task: null
+    status: missing
+    candidate_tasks:
+      - tooltalk.tooltalk
+      - bfcl.bfclv3_ast_prompting
+    notes: ToolTalk/BFCL are tool-use tasks but are not Tool-Decathlon equivalents.
+
+  - benchmark_id: swe_bench_verified
+    source_basket: full
+    launcher_task: null
+    status: missing
+    candidate_tasks:
+      - codec.swebench_test
+    notes: Only contamination-detection SWE-Bench task found; not SWE-Bench Verified eval.
+
+  - benchmark_id: mmlu_prox
+    source_basket: full
+    launcher_task: lm-evaluation-harness.mmlu_prox_chat
+    status: available
+    notes: MMLU-ProX chat task present in launcher mapping.
+
+  - benchmark_id: wmt24pp
+    source_basket: full
+    launcher_task: nemo_skills.ns_wmt24pp
+    status: available
+    notes: WMT24++ task present through nemo_skills.
