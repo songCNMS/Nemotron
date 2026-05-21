@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Notes
 
@@ -54,3 +54,9 @@
 - HLE scoring fact: `hle.hle` generation works with `limit_samples=1`, `parallelism=1`, and `max_new_tokens=2048`; official HLE judging requires `OPENAI_CLIENT_ID` and `OPENAI_CLIENT_SECRET`. Without those judge credentials, the run is partial even though the model request succeeds. For the first text-only multiple-choice sample, task071 answered `C` while the correct answer was `D`, so manual MC accuracy is `0.0`.
 - Eval pool status fact: Session 18 status classification is 19 intended M1 benchmarks = 14 exact launcher mappings + 5 launcher-mapping gaps; among the 14 mapped task071 attempts, 7 are scored, 3 are partial, and 4 are blocked. Current runtime is available for reruns of mapped benchmarks that do not require long-context, external judge credentials, or external executable API credentials.
 - Qwen SFT completion fact: `iter_0000122` is the completed checkpoint for the configured task071 prepared packed SFT data, not for the complete upstream HF source datasets. The prepared data was capped at 11 M0 slices with `max_train_per_dataset=100` and produced 1100 M1 train JSONL rows; packing produced 244 train packed rows, and training used `global_batch_size=2` for `train_iters=122`, exactly one pass over those packed train rows.
+- Uncapped M0 fact: `prepare_m0_assets.py --uncapped` exhausts each selected HF source split instead of using registry `default_train_rows/default_val_rows`; datasets without `hf_val_split` assign all valid converted records to train and keep the no-holdout warning.
+- Uncapped task071 data fact: the full agentic M0 selection produced M1 `983397` train rows and `11354` val-shadow rows; Qwen packing produced `302049374` total tokens, `72947` packed train rows, and `1159` packed valid rows.
+- Qwen scale-up GPU fact: `qwen_local_train.py` currently sets `tensor_model_parallel_size=2`. On the current NemTron node, GPU0 is used by the SGLang eval endpoint, so the stable high-utilization training choice is GPU1-6 with `nproc_per_node=6`, TP=2, DP=3, `global_batch_size=6`, and `train_iters=ceil(72947/6)=12158`.
+- Remote tmux launch fact: exporting `TRAIN_ITERS` before `tmux new-session` is insufficient when tmux server state is reused; `tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"` is required so the launched torchrun receives `train.train_iters=12158` instead of an empty value.
+- New NemTron training dependency fact: the H200 node at `10.100.2.62:33808` can run Qwen training with `/root/nemotron_session5_venv --system-site-packages`, but required adding `nvidia-resiliency-ext`, `hydra-core`, and `megatron-energon` to satisfy Megatron-Bridge imports.
+- Uncapped SFT result fact: the 6-GPU run completed to `iter_0012158`; final validation loss/PPL is `0.3308907` / `1.392208`, best observed validation is iter `11000` at `0.3213488` / `1.378986`, and metrics/plot live under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen_uncapped_sft_train_exec/metrics`.

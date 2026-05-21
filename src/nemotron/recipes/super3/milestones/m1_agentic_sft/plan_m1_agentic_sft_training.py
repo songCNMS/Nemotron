@@ -147,6 +147,7 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
         "--config",
         str(paths["config_path"]),
         f"train.train_iters={training['train_iters']}",
+        f"train.eval_interval={training['eval_interval']}",
         f"train.global_batch_size={training['global_batch_size']}",
         f"train.micro_batch_size={training['micro_batch_size']}",
         f"model.seq_length={training['seq_length']}",
@@ -226,6 +227,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
             "## Training",
             "",
             f"- `train_iters`: {manifest['training']['train_iters']}",
+            f"- `eval_interval`: {manifest['training']['eval_interval']}",
             f"- `global_batch_size`: {manifest['training']['global_batch_size']}",
             f"- `micro_batch_size`: {manifest['training']['micro_batch_size']}",
             f"- `seq_length`: {manifest['training']['seq_length']}",
@@ -365,6 +367,7 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         "training": {
             "epochs": args.epochs,
             "train_iters": train_iters,
+            "eval_interval": args.eval_interval,
             "global_batch_size": args.global_batch_size,
             "micro_batch_size": args.micro_batch_size,
             "seq_length": args.seq_length,
@@ -420,6 +423,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--global-batch-size", type=int, default=8)
     parser.add_argument("--micro-batch-size", type=int, default=1)
     parser.add_argument("--seq-length", type=int, default=4096)
+    parser.add_argument("--eval-interval", type=int, default=100)
     parser.add_argument("--save-interval", type=int, default=20)
     parser.add_argument("--allow-missing-checkpoint", action="store_true")
     parser.add_argument("--overwrite", action="store_true")

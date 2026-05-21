@@ -49,3 +49,14 @@ def test_patch_wandb_init_for_lineage_registers_artifacts_and_tags(monkeypatch):
 
     assert used == ["ent/proj/nano3-pretrain-data:v5"]
     assert "pretrain" in fake_run.tags
+
+
+def test_finish_run_ignores_wandb_module_without_run(monkeypatch):
+    import nemotron.kit.wandb_kit as wb
+
+    wb = importlib.reload(wb)
+
+    fake_wandb = types.SimpleNamespace(finish=lambda **kwargs: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
+
+    wb.finish_run(exit_code=0)

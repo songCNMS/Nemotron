@@ -181,3 +181,16 @@
 - 结论：`iter_0000122` 完整跑完了 task071 formal scale-up 配置生成的全部 prepared packed train split。证据是 packed train rows `244`、`global_batch_size=2`、`train_iters=122`，几何上正好覆盖 `244` 个 packed train rows；远端 train log 显示 `train_iters: 122`、training loop 到 iteration 122、成功保存 `iter_0000122`，并在 iteration 122 上完成 validation loss `2.835580E-01` / PPL `1.327846E+00`。
 - 该 checkpoint 不是“所有上游 HF 原始数据全集”的 SFT：task071 scale-up manifest 明确设置 11 个 M0 slices，每个 dataset 最多 `100` 条 train、`25` 条 val shadow；最终 M1 train JSONL 为 `1100` 行，val shadow 为 `273` 行，packing 后为 `944,050` tokens、`244` train packed rows、`8` valid packed rows。
 - 远端证据：旧训练节点 `10.100.14.21:19355` 上存在 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/checkpoints/iter_0000122`，大小约 `53G`，`latest_checkpointed_iteration.txt` 为 `122`。
+
+## Session 20
+
+- 按用户要求重新生成 uncapped M0/M1 prepared data：为 `prepare_m0_assets.py` 增加 `--uncapped`，并让 `plan_qwen_scaleup_run.py` 能生成 uncapped M0 数据准备脚本；同时补充单测覆盖 uncapped 参数透传。
+- 本地数据结果：M0 11 个 agentic slice 合计写出 `983397` 条 train 可用记录和 `11354` 条 val-shadow 来源记录；最大 slice 为 NuminaMath `859494` train / `100` val。Hermes 源中 `2389` 条不可验证空 assistant/tool-call 行被 converter reject，保留有效 tool-call/repair/json 数据。
+- M1 与 packing 结果：`prepare_m1_agentic_sft.py` 产出 `983397` train rows、`11354` val-shadow rows；Qwen tokenizer packing 产出 `302049374` tokens、`72947` packed train rows、`1159` packed valid rows。
+- 修复执行链路问题：`wandb_kit.finish_run()` 兼容无 `wandb.run` 的本地 stub；scale-up planner 增加 `eval_interval`；remote train script 通过 `tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"` 避免 tmux 内 `TRAIN_ITERS` 为空。
+- 初次 2-GPU 启动是为了沿用 Qwen local recipe 的 `tensor_model_parallel_size=2` 并快速验证全量数据链路；用户指出 GPU 利用不足后，保留 2-GPU `iter_0001000` 到 `checkpoints_2gpu_iter1000_interrupted_20260521_1107`，改为 GPU1-6 的 6-GPU run。GPU0 保留给既有 SGLang eval endpoint，GPU7 因 TP=2 需要偶数 world size未纳入。
+- 远端依赖补齐：当前 NemTron 新节点无原 session venv，创建 `/root/nemotron_session5_venv --system-site-packages` 后补 `nvidia-resiliency-ext`、`hydra-core`、`megatron-energon`，Qwen training import 与 Megatron checkpoint load 均通过。
+- 6-GPU 训练配置：`CUDA_VISIBLE_DEVICES=1,2,3,4,5,6`，`nproc_per_node=6`，TP=2、DP=3，`global_batch_size=6`，`micro_batch_size=1`，`train_iters=12158`，`eval_interval=1000`，`save_interval=1000`。
+- 训练完成：最终 checkpoint 为 `iter_0012158`，远端大小约 `53G`，`latest_checkpointed_iteration.txt=12158`。最终 validation loss/PPL 为 `0.3308907` / `1.392208`；最佳 validation 为 iter `11000` 的 `0.3213488` / `1.378986`。
+- 指标产物：已拉取远端 train log 并生成 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen_uncapped_sft_train_exec/metrics/train_6gpu_metrics.json`、`train_6gpu_train_loss.csv`、`train_6gpu_validation.csv`、`train_6gpu_loss_curve.png`。
+- 验证：`pytest -q tests/kit/test_wandb_patch.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m0_data_env.py` -> `88 passed, 3 skipped`；ruff touched files passed；`git diff --check` passed。

@@ -1,6 +1,12 @@
 import json
 from argparse import Namespace
 
+from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
+    build_plan,
+    compute_train_iters,
+    render_run_script,
+    write_plan,
+)
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (
     DIFFICULTY_HARD,
     DIFFICULTY_TRIVIAL,
@@ -12,12 +18,6 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     convert_m0_record,
     load_difficulty_signal,
     prepare,
-)
-from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
-    build_plan,
-    compute_train_iters,
-    render_run_script,
-    write_plan,
 )
 from nemotron.recipes.super3.milestones.m1_agentic_sft.run_m1_sft_roundtrip_smoke import (
     run as run_m1_sft_roundtrip_smoke,
@@ -445,6 +445,7 @@ def test_compute_train_iters_from_rows_and_epochs() -> None:
 def test_plan_m1_rejects_multi_node_run(tmp_path) -> None:
     """Regression for review finding B4: planner used to silently emit single-node command."""
     import pytest
+
     from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import build_torchrun_command
 
     manifest = {
@@ -454,6 +455,7 @@ def test_plan_m1_rejects_multi_node_run(tmp_path) -> None:
             "global_batch_size": 4,
             "micro_batch_size": 1,
             "seq_length": 4096,
+            "eval_interval": 3,
             "save_interval": 3,
         },
         "paths": {
@@ -484,6 +486,7 @@ def test_ensure_batch_geometry_accepts_valid_combos() -> None:
 def test_ensure_batch_geometry_rejects_gbs_smaller_than_dp_times_mbs() -> None:
     """Regression for review finding P0 #2: original default GBS=4, GPUs=8 used to crash at setup."""
     import pytest
+
     from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
         ensure_batch_geometry,
     )
@@ -530,6 +533,7 @@ def test_build_plan_uses_batch_geometry_guard(tmp_path) -> None:
         global_batch_size = 4
         micro_batch_size = 1
         seq_length = 4096
+        eval_interval = 3
         save_interval = 3
         allow_missing_checkpoint = False
 
@@ -539,25 +543,26 @@ def test_build_plan_uses_batch_geometry_guard(tmp_path) -> None:
 
 def test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env(monkeypatch) -> None:
     """Regression for review finding N2: smoke yaml used to raise MissingMandatoryValue."""
-    import pytest
     from pathlib import Path
+
+    import pytest
 
     # omegaconf is a megatron-bridge / nemo_runspec dep; skip gracefully when
     # the test env doesn't have it (matches the cosmos_xenna / megatron.bridge
     # skip gates elsewhere in this file).
-    OmegaConf = pytest.importorskip("omegaconf").OmegaConf
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
 
     monkeypatch.delenv("SUPER3_M1_PRETRAINED_CHECKPOINT", raising=False)
-    cfg = OmegaConf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml"))
+    cfg = omega_conf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_smoke.yaml"))
     # Resolving the field used to raise MissingMandatoryValue because the file
     # had `pretrained_checkpoint: ${oc.env:SUPER3_M1_PRETRAINED_CHECKPOINT}` (no
     # default). After the fix it is a YAML literal null.
-    assert OmegaConf.select(cfg, "checkpoint.pretrained_checkpoint") is None
+    assert omega_conf.select(cfg, "checkpoint.pretrained_checkpoint") is None
     # And the train-side yaml *does* still require the env var — that is the
     # intentional contract for finetune=true. Sanity-check that the smoke fix
     # didn't accidentally weaken the train-side requirement.
-    train_cfg = OmegaConf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"))
-    train_pc = OmegaConf.to_yaml(train_cfg.checkpoint)
+    train_cfg = omega_conf.load(Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"))
+    train_pc = omega_conf.to_yaml(train_cfg.checkpoint)
     assert "SUPER3_M1_PRETRAINED_CHECKPOINT" in train_pc
 
 
@@ -731,8 +736,9 @@ def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:
 
 def test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer() -> None:
     """Regression for review finding B2: training defaults used the Nano tokenizer."""
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     root = Path("src/nemotron/recipes/super3/stage1_sft/config")
     with (root / "data_prep" / "agentic_v0.yaml").open(encoding="utf-8") as f:
@@ -800,6 +806,7 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
         global_batch_size = 4
         micro_batch_size = 1
         seq_length = 4096
+        eval_interval = 3
         save_interval = 3
         allow_missing_checkpoint = False
 
@@ -865,6 +872,7 @@ def test_build_plan_derives_train_iters_from_packed_rows(tmp_path, monkeypatch) 
         global_batch_size = 16
         micro_batch_size = 1
         seq_length = 4096
+        eval_interval = 5
         save_interval = 5
         allow_missing_checkpoint = False
 
@@ -1306,7 +1314,9 @@ def test_convert_multi_turn_tool_use_routes_through_trajectory_builder() -> None
         {
             "role": "assistant",
             "content": "",
-            "tool_calls": [{"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}],
+            "tool_calls": [
+                {"id": "call_0", "type": "function", "function": {"name": "lookup", "arguments": {"q": "x"}}}
+            ],
         },
         {"role": "tool", "content": '{"result":"y"}', "tool_calls": []},
         {"role": "assistant", "content": "Done.", "tool_calls": []},

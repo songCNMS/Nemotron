@@ -229,7 +229,7 @@ def finish_run(exit_code: int = 0) -> None:
     try:
         import wandb
 
-        if wandb.run is not None:
+        if getattr(wandb, "run", None) is not None:
             wandb.finish(exit_code=exit_code)
     except ImportError:
         pass
@@ -498,7 +498,7 @@ def _resolve_to_lustre_path(path: str) -> str:
     # mount with the same device to reconstruct the full path.
     try:
         mountinfo_lines = []
-        with open("/proc/self/mountinfo", "r") as f:
+        with open("/proc/self/mountinfo") as f:
             mountinfo_lines = f.readlines()
 
         nemo_run_root = None
@@ -544,12 +544,12 @@ def _resolve_to_lustre_path(path: str) -> str:
 
         if nemo_run_root is None:
             print("[WANDB] No /nemo_run mount found in /proc/self/mountinfo")
-    except (OSError, IOError) as e:
+    except OSError as e:
         print(f"[WANDB] Could not read /proc/self/mountinfo: {e}")
 
     # Method 2: Try /proc/mounts (less detail but wider compatibility)
     try:
-        with open("/proc/mounts", "r") as f:
+        with open("/proc/mounts") as f:
             for line in f:
                 parts = line.split()
                 if len(parts) >= 2:
@@ -562,7 +562,7 @@ def _resolve_to_lustre_path(path: str) -> str:
                             return result
                         elif resolved == "/nemo_run":
                             return source
-    except (OSError, IOError):
+    except OSError:
         pass
 
     # Method 3: Fall back to NEMO_RUN_DIR environment variable
@@ -580,8 +580,8 @@ def _resolve_to_lustre_path(path: str) -> str:
             return nemo_run_dir
 
     print(
-        f"[WANDB] Could not resolve /nemo_run to Lustre path. "
-        f"Set NEMO_RUN_DIR environment variable to the actual Lustre path."
+        "[WANDB] Could not resolve /nemo_run to Lustre path. "
+        "Set NEMO_RUN_DIR environment variable to the actual Lustre path."
     )
     return resolved
 
@@ -592,8 +592,8 @@ def _get_manifest_tracker():
     Returns the tracker only if it is a ManifestTracker instance.
     Used by the dual-mode monkey-patches to write manifests alongside wandb.
     """
-    from nemotron.kit.trackers import get_lineage_tracker
     from nemo_runspec.manifest_tracker import ManifestTracker
+    from nemotron.kit.trackers import get_lineage_tracker
 
     tracker = get_lineage_tracker()
     if isinstance(tracker, ManifestTracker):
