@@ -210,3 +210,8 @@
 - HMMT full 30 题完成，`symbolic_correct=0.0`、`no_answer=93.33333333333333`；WMT24++ full output JSONL 为 4990 行，`xx->xx` BLEU `29.295411202064134`。
 - MMLU-Pro full 首轮 parallelism=8 在 7166/12032 成功响应后 aiohttp timeout；保留 cache 后用 parallelism=4、request_timeout=300、max_retries=8 续跑完成 12032/12032，group exact_match `0.1346409574468085`。
 - 新增 full-selected 结果 manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_iter0012158.yaml`，并在 `tests/recipes/super3/test_m1_eval_full_basket.py` 中锁定样本限制已移除、关键 metrics 和 secret scan。
+- 按用户要求在原始 Qwen3-4B-Instruct-2507 上运行同一组 full-selected non-dry benchmarks：在 NemTron GPU1 启动 `qwen3-4b-instruct-2507-original` SGLang endpoint，通过 `vm4vpn:127.0.0.1:13001` 两跳 tunnel 运行 IFBench、AIME25 local scorer、HMMT、WMT24++、MMLU-Pro 五项。
+- 原始 Qwen 五项均 `docker_exit=0`：IFBench strict prompt-level `0.30612244897959184`；AIME25 score `0.09333333333333335`；HMMT symbolic_correct `6.666666666666667`、no_answer `83.33333333333333`；WMT24++ `xx->xx` BLEU `28.361839067434847`；MMLU-Pro group exact_match `0.0078125`。
+- 与 iter0012158 SFT 的 primary metric delta（original minus SFT）：IFBench `+0.03061224489795924`、AIME25 `-0.01666666666666665`、HMMT `+6.666666666666667`、WMT24++ `-0.933572134629287`、MMLU-Pro `-0.1268284574468085`。
+- 新增原始 Qwen baseline manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml`，并扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 baseline 样本范围、关键 metrics、SFT delta 和 secret scan。
+- 清理本轮临时资源：关闭原始 Qwen 的两跳 SSH tunnel，停止 NemTron `task071_sglang_original_qwen` tmux endpoint，保留 GPU0 上 iter0012158 SFT endpoint `task071_sglang_eval`；`vm4vpn` 仅保留既有 chromium 容器且根分区约 20G 可用。

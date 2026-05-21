@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Completed the full-data follow-up eval for the 5 iter0012158 scored regression benchmarks, registered the full-selected manifest, and captured IFBench/AIME compatibility notes plus the MMLU-Pro cache-resume run. |
+| Latest | Ran the same five full-selected non-dry benchmarks on the original Qwen3-4B-Instruct-2507 checkpoint, registered the baseline manifest, and compared primary metrics against iter0012158 SFT. |
