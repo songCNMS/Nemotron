@@ -84,6 +84,18 @@ registries:
     consumed_by:
       - prepare_m1_swe2_jsonl.py (resolve_sif_path / validate_sif_exists)
 
+  - id: m2_swe_harnesses
+    kind: swe_harness_registry
+    path: ../m1_swe2/swe_harness_registry.yaml
+    summary: |
+      Sandbox-runnable M2 SWE multi-harness adapter declarations for
+      OpenHands, OpenCode, and Codex. Holds launcher routing metadata
+      beside the existing task070 OpenHands loop path without importing
+      external harness packages or requiring SIF/Docker/cluster smoke.
+    produced_by: (authored)
+    consumed_by:
+      - swe_multi_harness.py (adapter declaration + route lookup)
+
   - id: m1_rlhf_envs
     kind: bridge_env_registry
     path: ../m1_rlhf/rlhf_env_registry.yaml
