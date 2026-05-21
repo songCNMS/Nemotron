@@ -23,3 +23,27 @@
   - Real OpenCode/Codex adapter implementation.
   - Packaged OpenCode/Codex agent configs.
   - SIF/Docker/container-backed smoke for OpenHands/OpenCode/Codex harnesses.
+
+## 2026-05-21 13:24:26 UTC - task027_m2_multilingual_if_code_s1
+
+- Status: PR ready for PM gate
+- Branch: `intern_nem_dev_3/task027_m2_multilingual_if_code_s1`
+- Base SHA: `fb45b78d8280b04720f937e2a9a1c578f2effa60`
+- Implementation SHA: `c350eabf0ed743a721f90a7553604eefcb247d71`
+- PR: https://github.com/songCNMS/Nemotron/pull/132
+- Scope delivered:
+  - Added sandbox-runnable `multilingual_ifeval` and `multilingual_humaneval` environment rows.
+  - Added converter/record contracts for multilingual IF and multilingual HumanEval-style rows.
+  - Reused `multilingual_exact_or_contains` as the sandbox verifier fallback.
+  - Recorded deferred judge-model and code-execution runtime metadata explicitly.
+- Tests:
+  - `PYTHONPATH=src python -m pytest tests/recipes/super3/test_multilingual_if_code_s1.py -q` -> 11 passed
+  - `PYTHONPATH=src python -m pytest tests/recipes/super3/test_multilingual_if_code_s1.py tests/recipes/super3/test_aya_multilingual.py tests/recipes/super3/test_m0_data_env.py -q` -> 69 passed, 2 skipped
+  - `PYTHONPATH=src python scripts/validate_data_registries.py --quiet` -> passed
+  - `git diff --check` -> passed
+  - `PYTHONPATH=src python -m py_compile src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py src/nemotron/recipes/super3/milestones/m0_data_env/run_m0_health_baseline.py` -> passed
+- Cluster-bound follow-up:
+  - Production multilingual IF judge model scoring.
+  - Production multilingual code-execution verifier/runtime.
+  - Source selection + revision pins for `m0_multilingual_ifeval` and `m0_multilingual_humaneval`.
+  - SIF/Docker/cluster smoke for judge/runtime paths.
