@@ -1525,21 +1525,92 @@ def normalize_sql(value: Any) -> str:
     return text
 
 
-def score_sql_execution_match(candidate: Any, expected: Any) -> float:
+def score_sql_execution_match_with_diagnostics(
+    candidate: Any,
+    expected: Any,
+    execution_context: Mapping[str, Any] | None = None,
+) -> tuple[float, JsonDict]:
     """Oracle stub for the BIRD SQL env.
 
-    M0 baseline uses normalized SQL string match. The "execution" in
-    the verifier name signals INTENT (task024 / M2 BIRD will execute
-    against a real database sandbox); today's M0 oracle simply
-    compares normalized SQL.
+    M0 baseline uses normalized SQL string match. M2 task024 Session 1
+    adds an opt-in local SQLite scaffold: if a record carries
+    ``extra_env_info.sql_execution`` with schema + fixtures, execute
+    candidate and gold SQL against an in-memory SQLite DB and compare
+    result rows. Records without that context keep the M0 fallback.
     """
+    if execution_context:
+        from nemotron.recipes.super3.milestones.m2_sql_execution import (
+            has_sqlite_execution_context,
+            score_sqlite_execution_match,
+        )
+
+        if has_sqlite_execution_context(execution_context):
+            result = score_sqlite_execution_match(
+                candidate,
+                expected,
+                execution_context,
+            )
+            result.diagnostics.setdefault("normalized_sql", normalize_sql(candidate))
+            result.diagnostics.setdefault("normalized_expected_sql", normalize_sql(expected))
+            return result.score, result.diagnostics
+
     norm_candidate = normalize_sql(candidate)
     norm_expected = normalize_sql(expected)
+    diagnostics = {
+        "sql_execution_mode": "normalized_sql",
+        "normalized_sql": norm_candidate,
+        "normalized_expected_sql": norm_expected,
+    }
     if not norm_expected:
-        return 0.0
+        diagnostics["sql_match"] = False
+        return 0.0, diagnostics
     if norm_candidate == norm_expected:
-        return 1.0
-    return 1.0 if norm_expected in norm_candidate else 0.0
+        diagnostics["sql_match"] = True
+        return 1.0, diagnostics
+    score = 1.0 if norm_expected in norm_candidate else 0.0
+    diagnostics["sql_match"] = bool(score == 1.0)
+    return score, diagnostics
+
+
+def score_sql_execution_match(
+    candidate: Any,
+    expected: Any,
+    execution_context: Mapping[str, Any] | None = None,
+) -> float:
+    """Return only the score for callers that do not need diagnostics."""
+    score, _ = score_sql_execution_match_with_diagnostics(
+        candidate,
+        expected,
+        execution_context,
+    )
+    return score
+
+
+def bird_sql_execution_context(row: Mapping[str, Any], *, db_id: str) -> JsonDict:
+    """Extract optional local SQLite execution context from a BIRD-like row."""
+    schema_sql = (
+        row.get("schema_sql")
+        or row.get("sqlite_schema")
+        or row.get("schema")
+        or row.get("db_schema")
+    )
+    fixture_rows = row.get("fixture_rows") or row.get("sqlite_fixture_rows")
+    context: JsonDict = {
+        "engine": "sqlite",
+        "db_id": db_id,
+        "available": bool(schema_sql or fixture_rows),
+    }
+    if schema_sql:
+        context["schema_sql"] = str(schema_sql)
+    if fixture_rows:
+        context["fixture_rows"] = fixture_rows
+    if "order_sensitive" in row:
+        context["order_sensitive"] = bool(row["order_sensitive"])
+    if "max_sql_steps" in row:
+        context["max_sql_steps"] = row["max_sql_steps"]
+    if not context["available"]:
+        context["reason"] = "row has no local SQLite schema/fixtures"
+    return context
 
 
 def transform_bird_sql(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
@@ -1555,9 +1626,10 @@ def transform_bird_sql(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonD
     - ``SQL`` or ``query`` or ``sql``: gold SQL query
     - ``difficulty``: easy / medium / hard
 
-    Output uses ``sql_execution_match`` verifier (M0 oracle stub
-    delegates to normalized SQL string match; real execution is M2
-    task024 territory once a DB sandbox lands).
+    Output uses ``sql_execution_match`` verifier. Rows that carry
+    local ``schema_sql`` / ``fixture_rows`` also carry an opt-in
+    SQLite execution context for M2 task024 Session 1; plain BIRD rows
+    keep the M0 normalized-SQL fallback until the DB sandbox lands.
 
     Cross-schema generalization is BIRD's central evaluation property,
     so ``db_id`` is preserved in ``extra_env_info`` for downstream
@@ -1610,6 +1682,7 @@ def transform_bird_sql(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonD
             "question_id": row.get("question_id"),
             "difficulty": difficulty,
             "has_evidence": bool(evidence),
+            "sql_execution": bird_sql_execution_context(row, db_id=db_id),
         },
     )
 

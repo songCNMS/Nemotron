@@ -282,14 +282,16 @@ environments:
       success_threshold: 1.0
       semantics: M0 oracle baseline uses normalized SQL string match; real execution against a DB sandbox is M2 task024 territory
     resources:
-      sandbox: none
-      tools: []
+      sandbox: sql_sqlite
+      tools:
+        - sqlite3
       timeout_s: 10
       max_turns: 1
       expected_runtime_ms: 500
     telemetry:
       - reward
       - sql_match
+      - sql_execution_mode
       - latency_ms
       - malformed_sql
     health_check:

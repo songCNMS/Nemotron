@@ -486,20 +486,21 @@ def score_record(
         }
     elif verifier == "sql_execution_match":
         # task057 Session 3 — sql_text_to_query env (BIRD-SQL source).
-        # M0 oracle baseline uses normalized SQL string match (lowercase,
-        # whitespace-collapsed, backticks stripped, trailing semicolon
-        # removed). Real execution against a DB sandbox is M2 task024
-        # territory; the "execution_match" verifier name signals INTENT
-        # for the future verifier, not behaviour at M0 oracle time.
+        # M0 records without local DB context keep the normalized SQL
+        # string-match fallback. M2 task024 Session 1 adds an opt-in
+        # local SQLite scaffold when extra_env_info.sql_execution carries
+        # schema + fixtures.
         from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
             normalize_sql,
-            score_sql_execution_match,
+            score_sql_execution_match_with_diagnostics,
         )
-        score = score_sql_execution_match(candidate, expected)
-        diagnostics = {
-            "normalized_sql": normalize_sql(candidate),
-            "sql_match": bool(score == 1.0),
-        }
+        score, diagnostics = score_sql_execution_match_with_diagnostics(
+            candidate,
+            expected,
+            record.get("extra_env_info", {}),
+        )
+        diagnostics.setdefault("normalized_sql", normalize_sql(candidate))
+        diagnostics["sql_match"] = bool(score == 1.0)
     elif verifier == "math_with_tools_match":
         # task057 Session 6 — math_with_tools env (MathCodeInstruct
         # source). M0 oracle stub: extract the candidate's LAST

@@ -109,7 +109,7 @@ registries:
     kind: sandbox_image_registry
     path: ../sandbox_containers/sandbox_image_registry.yaml
     summary: |
-      3 sandbox container images (code_exec / lean / terminal) with
+      4 sandbox container images (code_exec / lean / terminal / sql_sqlite) with
       per-env routing. Pairs each Dockerfile with the M0 envs whose
       verifier needs that runtime to run safely. task021 Session 3
       source of truth; Session 4 wires the ContainerSandbox shim into
