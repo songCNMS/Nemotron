@@ -19,4 +19,3 @@ verifier stub for browser/search.
 - Offline verifier stub does not require Playwright, Chromium, network, or
   cluster execution.
 - Focused tests and registry validation pass.
-
