@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Ran the same five full-selected non-dry benchmarks on the original Qwen3-4B-Instruct-2507 checkpoint, registered the baseline manifest, and compared primary metrics against iter0012158 SFT. |
+| Latest | Checked SFT data completeness: current uncapped SFT uses all valid rows from the 11 selected M0 registry datasets, packing filtered 173 invalid rows, and train_iters covers all 72,947 packed train rows. |

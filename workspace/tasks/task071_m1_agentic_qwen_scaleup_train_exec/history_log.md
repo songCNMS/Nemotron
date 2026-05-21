@@ -215,3 +215,6 @@
 - 与 iter0012158 SFT 的 primary metric delta（original minus SFT）：IFBench `+0.03061224489795924`、AIME25 `-0.01666666666666665`、HMMT `+6.666666666666667`、WMT24++ `-0.933572134629287`、MMLU-Pro `-0.1268284574468085`。
 - 新增原始 Qwen baseline manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml`，并扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 baseline 样本范围、关键 metrics、SFT delta 和 secret scan。
 - 清理本轮临时资源：关闭原始 Qwen 的两跳 SSH tunnel，停止 NemTron `task071_sglang_original_qwen` tmux endpoint，保留 GPU0 上 iter0012158 SFT endpoint `task071_sglang_eval`；`vm4vpn` 仅保留既有 chromium 容器且根分区约 20G 可用。
+- 审计 uncapped SFT 数据完整性：`scaleup_manifest.json` 记录 11 个 M0 registry 数据集 `uncapped=true` 且无 train/val cap；M0 经过 converter 校验后写出 `983397` 条 train 可用记录和 `11354` 条 val-shadow 来源记录，其中 Hermes 三个切片合计 `2389` 条不可验证 assistant/tool-call 目标被 reject。
+- 确认 M1 与 packing 覆盖：M1 curriculum 保持 `983397 -> 983397` train rows 且无 solved-rate drop；Qwen packing 读入全部 `983397` 行，产出 `983224` 条 tokenized sequences 和 `74106` 条 packed sequences，过滤 `173` 条无效/tokenization 行，并有 `211` 条截断到 4096 pack size。
+- 确认训练覆盖：packed split 为 `72947` train rows / `1159` valid rows；planner 使用 `train_iters=ceil(72947/6)=12158`、`global_batch_size=6`，训练日志保存到 `iter_0012158`，最终 validation loss/PPL 为 `0.3308907` / `1.392208`。
