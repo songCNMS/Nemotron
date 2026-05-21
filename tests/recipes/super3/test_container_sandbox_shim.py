@@ -175,6 +175,13 @@ def test_sandbox_for_env_honors_runtime_kwarg() -> None:
     assert sandbox.image == "lean:v0.1.0"
 
 
+def test_sandbox_for_env_returns_sql_sqlite_sandbox() -> None:
+    sandbox = sandbox_for_env("sql_text_to_query", runtime="docker")
+    assert sandbox is not None
+    assert sandbox.runtime == "docker"
+    assert sandbox.image == "sql_sqlite:v0.1.0"
+
+
 # ---------- run_python_unit_tests integration ----------
 
 
