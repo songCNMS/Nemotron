@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 1
 
@@ -147,3 +147,11 @@
 - 新增 `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml`，登记 task071 iter_0000122 导出模型、launcher 版本、vm4vpn + endpoint tunnel 执行形态、14 个 benchmark 的 attempt 状态、指标、artifacts 和阻塞原因。
 - 在 `tests/recipes/super3/test_m1_eval_full_basket.py` 增加结果 manifest 校验：要求结果顺序覆盖 `m1_full_basket_launcher_available.yaml` 的全部 14 个 launcher task，要求 benchmark/source_basket 与 mapping 对齐，要求 scored 与 blocked/partial 状态显式，并检查不写入 HF token。
 - 验证：`PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> 22 passed；`/work-agents/.venv/bin/ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed；`git diff --check` passed。
+
+## Session 16
+
+- 按用户要求在 HLE 权限更新后重试 HLE：先在 `vm4vpn` 上用 `nvcr.io/nvidia/eval-factory/hle:26.03` 做 dataset probe，不带 token 仍显示 `cais/hle` gated，需要显式 credential。
+- 使用当前 Hugging Face credential 重新 probe，`load_dataset("cais/hle", split="test[:1]")` 成功，返回 1 条样本和列名，确认 HLE 数据权限已生效。
+- 检查 task071 标准模型 endpoint：NemTron `127.0.0.1:30000` 已无 Qwen SGLang 服务；`vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` remote-forward 后，host curl 和 Docker curl 均返回 connection reset。
+- 检查 NemTron GPU 状态：8 张 H200 均被独立 `gpt-oss-120b` SGLang 服务占满，服务端口为 `10.100.14.21:39454`，不是 task071 的 Qwen checkpoint；本轮没有直接停止该服务。
+- 更新 `m1_full_basket_non_dry_results_task071_iter0000122.yaml` 中 HLE 的 blocker：从 `gated_dataset` 改为 `model_endpoint_unavailable`，并记录 dataset probe 通过、endpoint probe 失败；本轮未产生 task071 HLE benchmark score。

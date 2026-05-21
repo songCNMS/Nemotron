@@ -45,7 +45,7 @@ summary:
   scored_tasks: 7
   blocked_or_partial_tasks: 7
   primary_blockers:
-    - gated_dataset
+    - model_endpoint_unavailable
     - launcher_host_memory_or_disk
     - endpoint_context_window
     - external_executable_credentials
@@ -122,8 +122,15 @@ results:
     sample_scope: 1 sample requested
     docker_exit: 1
     blocker:
-      type: gated_dataset
-      detail: Current Hugging Face token did not have access to cais/hle, so the run failed before model requests.
+      type: model_endpoint_unavailable
+      detail: Session 16 verified cais/hle access with the current Hugging Face credential, but the task071 Qwen endpoint on NemTron port 30000 was not running and all H200 GPUs were occupied by a separate gpt-oss-120b SGLang service.
+    retry_probe:
+      attempted_at_utc: "2026-05-21T01:13:00Z"
+      hle_dataset_access: passed
+      dataset: cais/hle
+      split_probe: test[:1]
+      endpoint_probe: failed
+      endpoint_probe_detail: vm4vpn remote-forwarded 127.0.0.1:13000 to NemTron 10.100.14.21:30000; host and Docker curl both returned connection reset.
     response_stats:
       total_responses: 0
 
