@@ -62,6 +62,13 @@ TASK071_UNCAPPED_NON_DRY_RESULTS_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0012158.yaml"
 )
+TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_task071_iter0012158.yaml"
+    )
+)
 
 
 EXPECTED_FULL_IDS = {
@@ -116,6 +123,12 @@ def _load_task071_non_dry_results() -> dict:
 
 def _load_task071_uncapped_non_dry_results() -> dict:
     return yaml.safe_load(TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8"))
+
+
+def _load_task071_uncapped_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
 
 
 # ---------- Registry shape ----------
@@ -376,6 +389,75 @@ def test_task071_uncapped_non_dry_results_record_selected_regression_subset() ->
 
 def test_task071_uncapped_non_dry_results_do_not_store_secret_tokens() -> None:
     text = TASK071_UNCAPPED_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_uncapped_full_non_dry_results_record_full_selected_runs() -> None:
+    """The full-selected follow-up removes the smoke-run sample limits
+    for the same 5 scored tasks while keeping it separate from the
+    small regression manifest."""
+    result_manifest = _load_task071_uncapped_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0012158-hf:v1")
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["selected_regression_tasks"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+
+
+def test_task071_uncapped_full_non_dry_results_lock_key_metrics() -> None:
+    result_manifest = _load_task071_uncapped_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.2755102040816326)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(0.11)
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == 0.0
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == pytest.approx(
+        93.33333333333333
+    )
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        29.295411202064134
+    )
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.1346409574468085
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_task071_uncapped_full_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_UNCAPPED_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
     assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
     assert "HF_TOKEN" not in text
 

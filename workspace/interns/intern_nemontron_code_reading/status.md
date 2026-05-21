@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Extracted the complete raw `results.yml` / `eval_factory_metrics.json` details for the 5 `iter_0012158` non-dry regression evals and confirmed all five completed with `docker_exit=0`. |
+| Latest | Completed the full-data follow-up eval for the 5 iter0012158 scored regression benchmarks, registered the full-selected manifest, and captured IFBench/AIME compatibility notes plus the MMLU-Pro cache-resume run. |

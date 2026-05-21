@@ -203,3 +203,10 @@
 - 新增结构化结果记录 `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0012158.yaml`；本轮未重跑 GPQA/HLE，因为当前 `vm4vpn` active shell 没有 HF token，且 HLE 仍需要官方 judge OAuth credential 才能得到 official score。
 - 运行中处理了 `vm4vpn` 磁盘满：AIME/MMLU 完成后 HMMT 首次因 Docker image/log 写入触发 no space，清理不再需要的 eval-factory images 后重新运行 HMMT/WMT，再移除 `nemo-skills` image 后运行 IFBench；最终根分区恢复到约 `18G` 可用。
 - 按用户要求从 `vm4vpn:/tmp/task071_vpn_eval_iter0012158` 抽取并返回 5 个任务的完整原始结果字段，包括每个任务的 `results.yml` 核心 metrics、`eval_factory_metrics.json` response stats、额外 `metrics.json` 和 `docker_exit=0` 状态。
+- 用户指出上述 5 个 eval benchmark 只有少量数据后，确认原因是前一轮 manifest 明确使用 1-sample / 1-per-category 的 quick regression 口径，不是完整 benchmark 口径。
+- 在 `vm4vpn:/tmp/task071_vpn_eval_iter0012158_full` 启动同一 iter0012158 endpoint 的 full-selected non-dry eval：IFBench、AIME25、HMMT、WMT24++、MMLU-Pro 五项均去掉 sample limit。
+- IFBench 官方 full 配置的 `max_new_tokens=2048` 在 293/294 后触发 4096-token endpoint context limit；兼容性重跑使用 `max_new_tokens=1536` 完成 294/294，strict prompt-level `0.2755102040816326`、loose prompt-level `0.2857142857142857`。
+- AIME25 官方 `simple_evals.AIME_2025` full 尝试失败于外部 judge credential；采用同一 AIME 2025 30 题 x10 repeats 的 `aime_2025_nemo` 本地 exact/sympy scorer，score `0.11`、stderr `0.015425013273341405`。
+- HMMT full 30 题完成，`symbolic_correct=0.0`、`no_answer=93.33333333333333`；WMT24++ full output JSONL 为 4990 行，`xx->xx` BLEU `29.295411202064134`。
+- MMLU-Pro full 首轮 parallelism=8 在 7166/12032 成功响应后 aiohttp timeout；保留 cache 后用 parallelism=4、request_timeout=300、max_retries=8 续跑完成 12032/12032，group exact_match `0.1346409574468085`。
+- 新增 full-selected 结果 manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_iter0012158.yaml`，并在 `tests/recipes/super3/test_m1_eval_full_basket.py` 中锁定样本限制已移除、关键 metrics 和 secret scan。
