@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 1
 
@@ -155,3 +155,14 @@
 - 检查 task071 标准模型 endpoint：NemTron `127.0.0.1:30000` 已无 Qwen SGLang 服务；`vm4vpn:127.0.0.1:13000 -> 10.100.14.21:30000` remote-forward 后，host curl 和 Docker curl 均返回 connection reset。
 - 检查 NemTron GPU 状态：8 张 H200 均被独立 `gpt-oss-120b` SGLang 服务占满，服务端口为 `10.100.14.21:39454`，不是 task071 的 Qwen checkpoint；本轮没有直接停止该服务。
 - 更新 `m1_full_basket_non_dry_results_task071_iter0000122.yaml` 中 HLE 的 blocker：从 `gated_dataset` 改为 `model_endpoint_unavailable`，并记录 dataset probe 通过、endpoint probe 失败；本轮未产生 task071 HLE benchmark score。
+
+## Session 17
+
+- 按用户要求重新启动 task071 Qwen SGLang endpoint 并复跑 `hle.hle` non-dry。当前 `NemTron` alias 指向空闲 H200 节点 `10.100.2.62:33808`，该节点 8 张 H200 空闲但没有 task071 artifacts。
+- 从旧 task071 节点 `10.100.14.21:19355` 将 `/work-agents/intern_nemontron_code_reading/task071_qwen_scaleup_train_exec/task071_qwen_scaleup_train_exec/hf_export_iter_0000122` 流式复制到新空闲节点，校验大小约 7.6G 且 safetensors/tokenizer/config 文件齐全。
+- 在新节点用 tmux session `task071_sglang_eval` 启动 SGLang：model id `task071-qwen3-4b-agentic-sft-iter0000122-hf`，端口 `30000`，`context-length=4096`，GPU0；`/v1/models` 和 chat smoke 均通过。
+- 重建 `vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000` remote forward，宿主和 Docker 容器内均可访问 task071 endpoint。
+- 运行 `hle.hle` 1-sample text-only non-dry：`limit_samples=1`、`parallelism=1`、`max_new_tokens=2048`、HLE 数据访问通过，模型 generation 成功并写出 `/tmp/task071_vpn_eval_hle1_retry/hle_task071-qwen3-4b-agentic-sft-iter0000122-hf.json`。
+- HLE 官方 judge 阶段失败：`run_judge_results.py` 需要 `OPENAI_CLIENT_ID` 和 `OPENAI_CLIENT_SECRET` 做 Azure/OpenAI OAuth，当前本地、vm4vpn 和 NemTron 环境均未找到这些变量。
+- 已对该 multiple-choice 样本用标准答案核对：模型回答 `C`，标准答案 `D`，manual multiple-choice accuracy 为 `0.0`；response stats 为 `successful_responses=1/1`、`avg_prompt_tokens=117`、`avg_completion_tokens=157`、`avg_latency_ms=986.5`。
+- 更新结构化结果 manifest：HLE 从 `model_endpoint_unavailable` 改为 `partial` / `official_judge_credentials`，记录 artifacts、generation 成功、manual MC score 0.0 和 official judge blocker。

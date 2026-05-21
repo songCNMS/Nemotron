@@ -45,7 +45,7 @@ summary:
   scored_tasks: 7
   blocked_or_partial_tasks: 7
   primary_blockers:
-    - model_endpoint_unavailable
+    - official_judge_credentials
     - launcher_host_memory_or_disk
     - endpoint_context_window
     - external_executable_credentials
@@ -117,22 +117,36 @@ results:
 
   - benchmark_id: hle
     launcher_task: hle.hle
-    attempt_status: blocked
+    attempt_status: partial
     source_basket: full
-    sample_scope: 1 sample requested
+    sample_scope: 1 text-only sample
     docker_exit: 1
+    artifacts: vm4vpn:/tmp/task071_vpn_eval_hle1_retry
+    observed_metrics:
+      manual_multiple_choice_accuracy: 0.0
+      official_hle_score: null
     blocker:
-      type: model_endpoint_unavailable
-      detail: Session 16 verified cais/hle access with the current Hugging Face credential, but the task071 Qwen endpoint on NemTron port 30000 was not running and all H200 GPUs were occupied by a separate gpt-oss-120b SGLang service.
+      type: official_judge_credentials
+      detail: Session 17 restarted the task071 Qwen SGLang endpoint and completed HLE generation, but the official HLE judge failed because OPENAI_CLIENT_ID and OPENAI_CLIENT_SECRET were not available for Azure/OpenAI OAuth.
     retry_probe:
-      attempted_at_utc: "2026-05-21T01:13:00Z"
+      attempted_at_utc: "2026-05-21T01:25:38Z"
       hle_dataset_access: passed
       dataset: cais/hle
-      split_probe: test[:1]
-      endpoint_probe: failed
-      endpoint_probe_detail: vm4vpn remote-forwarded 127.0.0.1:13000 to NemTron 10.100.14.21:30000; host and Docker curl both returned connection reset.
+      split_probe: first text-only sample
+      endpoint_probe: passed
+      endpoint_probe_detail: vm4vpn remote-forwarded 127.0.0.1:13000 to NemTron 10.100.2.62:30000; host and Docker curl both reached the task071 Qwen endpoint.
+      generated_answer: C
+      correct_answer: D
+      official_judge: failed_missing_openai_oauth
     response_stats:
-      total_responses: 0
+      successful_responses: 1
+      total_responses: 1
+      status_codes:
+        "200": 1
+      avg_prompt_tokens: 117
+      avg_completion_tokens: 157
+      avg_total_tokens: 274
+      avg_latency_ms: 986.5
 
   - benchmark_id: livecodebench
     launcher_task: livecodebench.codegeneration_release_latest

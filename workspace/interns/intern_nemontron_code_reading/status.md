@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
-| Session | 16 |
+| Session | 17 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Retried HLE after permission update: cais/hle dataset access now passes with the current credential, but the task071 Qwen endpoint on NemTron port 30000 is down and all H200 GPUs are occupied by a separate gpt-oss-120b SGLang service, so no task071 HLE score was produced. |
+| Latest | Restarted the task071 Qwen SGLang endpoint on an idle H200 node, reran HLE 1-sample non-dry through vm4vpn, and recorded generation success plus manual multiple-choice accuracy 0.0; official HLE judge remains blocked by missing Azure/OpenAI OAuth credentials. |
