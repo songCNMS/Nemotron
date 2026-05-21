@@ -1,6 +1,6 @@
 # task036_shadow_eval_pipeline_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -9,3 +9,4 @@
 - `evaluate_shadow_plan` reads latest candidate/baseline traces from `LocalRolloutStore`, applies canary minimum-score checks, then delegates category regression logic to `evaluate_promotion_gate`.
 - Final status precedence is rollback from the promotion gate, then hold for canary failures or missing rollout coverage, otherwise the gate status.
 - Real checkpoint promotion, live cluster eval, W&B/lineage publishing, and production shadow split execution remain separate follow-up work.
+- Session 2 added no new implementation knowledge; it only confirmed PR #138 post-merge sync and idle status after local `main` fast-forwarded to `156403be8a4cdb8987613ff3787da0629442bcd3`.
