@@ -9,5 +9,5 @@
 - Rebased cleanly after `origin/main` advanced to `573d2c2d882a5e1608507a5a58edeb0183a349b0`.
 - Implemented the sandbox shadow-eval pipeline scaffold with synthetic/local held-out splits, canary threshold checks, and M1 promotion-gate reuse.
 - Integrated with the task032 repo-local rollout store read path for candidate/baseline rollout lookup keyed on `(prompt_id, model_version, env_id)`.
-- Opened PR #138 to `main` with head `0970756e0646c4083869fedf9cd55b39c668eb0b`.
+- Opened PR #138 to `main` from branch `intern_nem_dev_2/task036_shadow_eval_pipeline_s1`.
 - Follow-up explicitly deferred: real checkpoint promotion, live cluster eval, W&B/lineage publishing, and production shadow split execution.
