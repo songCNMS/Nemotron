@@ -1,6 +1,6 @@
 # task023_m2_taubench_multi_domain_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ---
 
@@ -23,5 +23,18 @@ PM review fix:
 - Reran focused pytest shard -> 65 passed, 2 skipped.
 - Reran `PYTHONPATH=src python scripts/validate_data_registries.py --quiet` -> passed.
 - Reran `git diff --check` -> passed.
+
+---
+
+## Session 2 - 2026-05-21 - intern_nem_dev_1
+
+PR #134 was PM-gated and squash-merged.
+
+Merge:
+- Latest `main` after merge: `0bbbd543b092bd54ab309db963b33fd03c62baa9`.
+- Local checkout was synced with `git pull --ff-only origin main`.
+
+Follow-up:
+- Next PM assignment is `task028_m2_long_context_s1` from latest `main`.
 
 ---

@@ -106,6 +106,44 @@ def score_multilingual_text(candidate: Any, expected: Any) -> float:
     return 1.0 if normalized_expected in normalized_candidate else 0.0
 
 
+def string_values(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        stripped = value.strip()
+        return [stripped] if stripped else []
+    if isinstance(value, Mapping):
+        return [str(value).strip()] if value else []
+    if isinstance(value, Sequence):
+        return [str(item).strip() for item in value if str(item).strip()]
+    stripped = str(value).strip()
+    return [stripped] if stripped else []
+
+
+def score_long_context_qa(candidate: Any, expected: Any, record: Mapping[str, Any]) -> tuple[float, JsonDict]:
+    candidate_norm = normalize_text_answer(candidate)
+    answers = string_values(expected)
+    answer_matches = [
+        normalize_text_answer(answer)
+        for answer in answers
+        if normalize_text_answer(answer) and normalize_text_answer(answer) in candidate_norm
+    ]
+    answer_match = bool(answer_matches)
+    spans = string_values(record.get("extra_env_info", {}).get("evidence_spans"))
+    normalized_spans = [normalize_text_answer(span) for span in spans]
+    evidence_span_match = any(span and span in candidate_norm for span in normalized_spans)
+    requires_span = bool(record.get("reward_config", {}).get("requires_evidence_span")) and bool(spans)
+    score = 1.0 if answer_match and (not requires_span or evidence_span_match) else 0.0
+    diagnostics = {
+        "normalized_answer": candidate_norm,
+        "answer_match": answer_match,
+        "evidence_span_match": evidence_span_match,
+        "evidence_span_count": len(spans),
+        "requires_evidence_span": requires_span,
+    }
+    return score, diagnostics
+
+
 def normalize_numeric_candidate(value: Any) -> str:
     text = normalize_numeric_answer(value)
     matches = NUMBER_RE.findall(text)
@@ -465,6 +503,11 @@ def score_record(
             "normalized_answer": normalize_text_answer(candidate),
             "contains_match": bool(score == 1.0),
         }
+    elif verifier == "long_context_qa":
+        # task028 Session 1 — M2 long-context scaffold. Sandbox-friendly:
+        # no 512K/1M context runtime, but the verifier checks both the
+        # normalized answer and, when provided, a supporting evidence span.
+        score, diagnostics = score_long_context_qa(candidate, expected, record)
     elif verifier == "browser_grounded_answer_stub":
         # task022 Session 1 — browser/search scaffold. This intentionally
         # stays offline: no Playwright/Chromium launch, no network fetch.

@@ -361,6 +361,114 @@ environments:
         - expected_answer
         - extra_env_info.doc_length_chars
 
+  - id: long_context_ruler
+    family: long_context
+    stage: M2 long_context scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: long_context_qa
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: >-
+        answer must match after normalization and include a supporting
+        evidence span when one is provided; full RULER 512K/1M execution
+        is deferred to cluster runs
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 60
+      max_turns: 1
+      expected_runtime_ms: 8000
+      target_context_tokens: 512000
+    telemetry:
+      - reward
+      - answer_match
+      - evidence_span_match
+      - evidence_span_count
+      - doc_length_chars
+      - doc_token_estimate
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.doc_length_chars
+        - extra_env_info.evidence_spans
+
+  - id: long_context_aalcr
+    family: long_context
+    stage: M2 long_context scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: long_context_qa
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: >-
+        answer must match after normalization and include a supporting
+        evidence span when one is provided; AA-LCR benchmark source pins
+        and full long-context runs are deferred
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 60
+      max_turns: 1
+      expected_runtime_ms: 8000
+      target_context_tokens: 512000
+    telemetry:
+      - reward
+      - answer_match
+      - evidence_span_match
+      - evidence_span_count
+      - doc_length_chars
+      - doc_token_estimate
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.doc_length_chars
+        - extra_env_info.evidence_spans
+
+  - id: long_context_doc_qa
+    family: long_context
+    stage: M2 long_context scaffold
+    input_schema: nemo_gym_jsonl
+    reward:
+      verifier: long_context_qa
+      range: [0.0, 1.0]
+      success_threshold: 1.0
+      semantics: >-
+        answer must match after normalization and include a supporting
+        evidence span when one is provided; production long-document QA
+        source pins and 1M context execution are deferred
+    resources:
+      sandbox: none
+      tools: []
+      timeout_s: 60
+      max_turns: 1
+      expected_runtime_ms: 8000
+      target_context_tokens: 1000000
+    telemetry:
+      - reward
+      - answer_match
+      - evidence_span_match
+      - evidence_span_count
+      - doc_length_chars
+      - doc_token_estimate
+      - latency_ms
+      - malformed_answer
+    health_check:
+      min_rows_per_split: 10
+      required_fields:
+        - question
+        - expected_answer
+        - extra_env_info.doc_length_chars
+        - extra_env_info.evidence_spans
+
   - id: rlhf_toolcall_paired
     family: rlhf_preference
     stage: M0 data_env_foundation
