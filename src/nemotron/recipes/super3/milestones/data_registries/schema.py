@@ -16,7 +16,7 @@ its own module's loader. This file declares the *shape* each kind
 must hold so a single validation pass can catch drift before a
 cluster run wastes a slot.
 
-Six registry kinds are recognised today:
+Seven registry kinds are recognised today:
 
 - ``m0_data_registry`` — `m0_data_env/data_registry.yaml` — 11 HF
   datasets backing M0 envs (hf_revision pin + license + contamination
@@ -33,6 +33,9 @@ Six registry kinds are recognised today:
 - ``sandbox_image_registry`` —
   `sandbox_containers/sandbox_image_registry.yaml` — code-exec / Lean /
   terminal Dockerfiles + per-env routing (task021 Session 3).
+- ``swe_harness_registry`` — `m1_swe2/swe_harness_registry.yaml` —
+  OpenHands / OpenCode / Codex adapter declarations + launcher routing
+  metadata for M2 SWE multi-harness.
 
 Adding a new kind (e.g., the future M1 eval basket from task019) is a
 one-validator addition here + one row in ``unified_index.yaml``.
@@ -116,6 +119,20 @@ _KIND_SCHEMAS: dict[str, dict[str, Any]] = {
             "version_tag",
             "dockerfile_path",
             "target_envs",
+        ),
+        "expected_top_level": ("description",),
+    },
+    "swe_harness_registry": {
+        "rows_key": "harnesses",
+        "required_row_fields": (
+            "harness_id",
+            "nemo_gym_env",
+            "mix",
+            "adapter_class",
+            "tool_format",
+            "config_path",
+            "status",
+            "cluster_smoke_required",
         ),
         "expected_top_level": ("description",),
     },

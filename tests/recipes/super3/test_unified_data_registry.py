@@ -54,6 +54,7 @@ def test_known_kinds_covers_today_registry_families() -> None:
             "sif_registry",
             "pref_data_registry",
             "sandbox_image_registry",  # task021 Session 3
+            "swe_harness_registry",    # task026 Session 1
             "eval_basket_registry",    # task019 Session 1
         }
     )
@@ -231,6 +232,7 @@ def test_unified_index_loads_with_expected_registries() -> None:
         "m1_swe1_envs",
         "m1_swe2_envs",
         "m1_swe2_sif",
+        "m2_swe_harnesses",
         "m1_rlhf_envs",
         "m1_rlhf_pref_data",
     }
