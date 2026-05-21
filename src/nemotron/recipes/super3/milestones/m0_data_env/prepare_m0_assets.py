@@ -93,6 +93,10 @@ SYSTEM_PROMPTS = {
         "You are a structured-output assistant. Return only valid JSON that matches the schema."
     ),
     "terminal_basic_shell": "You are a terminal assistant. Return a safe shell command only.",
+    "terminal_workplace": (
+        "You are a terminal workplace assistant. Solve the task with safe shell "
+        "commands. Return only the final command or command sequence."
+    ),
     "swe_pivot_patch_supervision": "You are a software engineering assistant. Return a unified diff patch only.",
     "swe_pivot_tool_call": (
         "You are a software engineering agent. Decide the single next tool "
@@ -520,6 +524,8 @@ def transform_bash_command(row: Mapping[str, Any], spec: Mapping[str, Any]) -> J
 # documented limit; rows above the cap are dropped (not truncated —
 # truncation would change the shell semantics).
 INTERCODE_NL2BASH_MAX_CMD_CHARS: int = 200
+TERMINAL_WORKPLACE_DEFAULT_TIMEOUT_S: int = 300
+TERMINAL_WORKPLACE_TIMEOUT_PROFILE: str = "terminal_workplace_extended"
 
 
 def transform_intercode_nl2bash(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
@@ -601,6 +607,117 @@ def transform_intercode_nl2bash(row: Mapping[str, Any], spec: Mapping[str, Any])
             "source_dataset_kind": "intercode_nl2bash_tier2",
             "cmd_length_chars": len(command),
         },
+    )
+
+
+def _first_text(row: Mapping[str, Any], keys: Sequence[str]) -> str:
+    for key in keys:
+        value = row.get(key)
+        if value is not None:
+            text = str(value).strip()
+            if text:
+                return text
+    return ""
+
+
+def _terminal_workplace_timeout(row: Mapping[str, Any], spec: Mapping[str, Any]) -> int:
+    for key in ("timeout_s", "execution_timeout_s", "time_limit_s", "max_duration_s"):
+        value = row.get(key)
+        if value is None:
+            continue
+        try:
+            timeout_s = int(value)
+        except (TypeError, ValueError):
+            continue
+        if timeout_s > 0:
+            return timeout_s
+    return int(spec.get("default_timeout_s") or TERMINAL_WORKPLACE_DEFAULT_TIMEOUT_S)
+
+
+def transform_terminalbench_v2(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert a TerminalBench v2-style row to the M2 terminal_workplace shape.
+
+    Session 1 is a sandbox-runnable scaffold, not a real TerminalBench
+    cluster runner. The record contract deliberately reuses the existing
+    ``command_substring_match`` verifier while carrying explicit extended
+    timeout metadata so future terminal sandbox execution can pick up the
+    longer budget without changing the converter shape.
+    """
+    question = _first_text(
+        row,
+        (
+            "instruction",
+            "prompt",
+            "task",
+            "description",
+            "question",
+        ),
+    )
+    if not question:
+        raise ValueError(
+            "TerminalBench v2 row missing instruction "
+            "(checked instruction / prompt / task / description / question)"
+        )
+    command = _first_text(
+        row,
+        (
+            "expected_command",
+            "gold_command",
+            "reference_command",
+            "command",
+            "cmd",
+            "solution",
+            "answer",
+        ),
+    )
+    if not command:
+        raise ValueError(
+            "TerminalBench v2 row missing gold command "
+            "(checked expected_command / gold_command / reference_command / "
+            "command / cmd / solution / answer)"
+        )
+
+    timeout_s = _terminal_workplace_timeout(row, spec)
+    user_content = (
+        "Complete the terminal workplace task below. Return only the shell "
+        "command or command sequence, without prose or Markdown.\n\n"
+        f"Task:\n{question}"
+    )
+    task_id = row.get("task_id") or row.get("id") or row.get("name")
+    extra_env_info: JsonDict = {
+        "expected_command": command,
+        "source_prompt": question,
+        "source_dataset_kind": "terminalbench_v2",
+        "terminalbench_task_id": task_id,
+        "extended_timeout_s": timeout_s,
+        "timeout_profile": TERMINAL_WORKPLACE_TIMEOUT_PROFILE,
+        "cluster_execution": {
+            "required": False,
+            "reason": "Session 1 scaffold defers real terminal sandbox/cluster smoke",
+        },
+    }
+    for key in ("category", "difficulty", "workdir", "setup_commands"):
+        if row.get(key) is not None:
+            extra_env_info[key] = row[key]
+
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=command,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "command_substring_match",
+            "max_score": 1.0,
+            "match": ["normalized_command_substring"],
+            "timeout_s": timeout_s,
+            "timeout_profile": TERMINAL_WORKPLACE_TIMEOUT_PROFILE,
+            "sandbox": "terminal",
+        },
+        extra_env_info=extra_env_info,
     )
 
 
@@ -2492,6 +2609,7 @@ CONVERTERS = {
     "longalpaca_qa": transform_longalpaca_qa,
     "bird_sql": transform_bird_sql,
     "intercode_nl2bash": transform_intercode_nl2bash,
+    "terminalbench_v2": transform_terminalbench_v2,
     "nemotron_safety_reasoning": transform_nemotron_safety_reasoning,
     "mathcode_instruct": transform_mathcode_instruct,
     "hermes_function_calling": transform_hermes_function_calling,

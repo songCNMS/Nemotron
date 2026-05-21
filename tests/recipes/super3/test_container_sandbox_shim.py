@@ -182,6 +182,13 @@ def test_sandbox_for_env_returns_sql_sqlite_sandbox() -> None:
     assert sandbox.image == "sql_sqlite:v0.1.0"
 
 
+def test_sandbox_for_env_returns_terminal_workplace_sandbox() -> None:
+    sandbox = sandbox_for_env("terminal_workplace", runtime="docker")
+    assert sandbox is not None
+    assert sandbox.runtime == "docker"
+    assert sandbox.image == "terminal:v0.1.0"
+
+
 # ---------- run_python_unit_tests integration ----------
 
 

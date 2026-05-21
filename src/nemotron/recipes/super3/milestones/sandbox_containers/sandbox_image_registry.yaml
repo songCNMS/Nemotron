@@ -62,6 +62,7 @@ images:
     dockerfile_path: terminal.Dockerfile
     target_envs:
       - terminal_basic_shell
+      - terminal_workplace
       # terminal_pivot will be added once it ships in M0 (task057).
     base_image: alpine:3.20
     runtime_recommendations:

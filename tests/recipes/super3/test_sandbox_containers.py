@@ -133,6 +133,7 @@ def test_resolve_image_for_known_env_returns_correct_tag() -> None:
     assert resolve_image_for_env("code_execution_python") == "code_exec:v0.1.0"
     assert resolve_image_for_env("math_formal_lean") == "lean:v0.1.0"
     assert resolve_image_for_env("terminal_basic_shell") == "terminal:v0.1.0"
+    assert resolve_image_for_env("terminal_workplace") == "terminal:v0.1.0"
     assert resolve_image_for_env("sql_text_to_query") == "sql_sqlite:v0.1.0"
 
 
@@ -150,6 +151,7 @@ def test_envs_covered_by_registry_matches_target_envs_union() -> None:
     assert "code_execution_python" in covered
     assert "math_formal_lean" in covered
     assert "terminal_basic_shell" in covered
+    assert "terminal_workplace" in covered
     assert "sql_text_to_query" in covered
 
 
