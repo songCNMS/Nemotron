@@ -226,6 +226,24 @@ datasets:
   #     converter: multilingual_humaneval,
   #     reward_type: multilingual_exact_or_contains fallback;
   #     code execution smoke deferred.
+  #
+  # task029 Session 1: m0_safety_judge, m0_jailbreak_resist, and
+  # m0_over_refusal production data rows are deferred. The envs and
+  # converters are sandbox-testable with `safety_judge_stub`, but real
+  # judge model selection/calibration, live judge inference, benchmark
+  # source selection, revision pins, and cluster smoke are follow-up
+  # blockers.
+  #
+  # Planned row ids:
+  #   - m0_safety_judge -> safety_judge,
+  #     converter: safety_judge,
+  #     reward_type: safety_judge_stub fallback.
+  #   - m0_jailbreak_resist -> jailbreak_resist,
+  #     converter: jailbreak_resist,
+  #     reward_type: safety_judge_stub fallback.
+  #   - m0_over_refusal -> over_refusal,
+  #     converter: over_refusal,
+  #     reward_type: safety_judge_stub fallback.
 
   - id: m0_helpsteer2_pref
     environment: helpsteer2_pref_compare
