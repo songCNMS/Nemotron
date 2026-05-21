@@ -5,7 +5,7 @@
 - Status: PR ready for PM gate
 - Branch: `intern_nem_dev_3/task026_m2_swe_multi_harness_s1`
 - Base SHA: `afabdeef959293f9391581b392b6856847362b24`
-- Head SHA: `d5261f6c79e6aedc85756096dc8c9a0a8deb12b5`
+- Implementation SHA: `d5261f6c79e6aedc85756096dc8c9a0a8deb12b5`
 - PR: https://github.com/songCNMS/Nemotron/pull/130
 - Scope delivered:
   - Added sandbox-runnable SWE multi-harness registry beside `m1_swe2/openhands_loop.py`.
