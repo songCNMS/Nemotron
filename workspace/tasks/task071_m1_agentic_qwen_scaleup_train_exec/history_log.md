@@ -218,3 +218,5 @@
 - 审计 uncapped SFT 数据完整性：`scaleup_manifest.json` 记录 11 个 M0 registry 数据集 `uncapped=true` 且无 train/val cap；M0 经过 converter 校验后写出 `983397` 条 train 可用记录和 `11354` 条 val-shadow 来源记录，其中 Hermes 三个切片合计 `2389` 条不可验证 assistant/tool-call 目标被 reject。
 - 确认 M1 与 packing 覆盖：M1 curriculum 保持 `983397 -> 983397` train rows 且无 solved-rate drop；Qwen packing 读入全部 `983397` 行，产出 `983224` 条 tokenized sequences 和 `74106` 条 packed sequences，过滤 `173` 条无效/tokenization 行，并有 `211` 条截断到 4096 pack size。
 - 确认训练覆盖：packed split 为 `72947` train rows / `1159` valid rows；planner 使用 `train_iters=ceil(72947/6)=12158`、`global_batch_size=6`，训练日志保存到 `iter_0012158`，最终 validation loss/PPL 为 `0.3308907` / `1.392208`。
+- 按用户指定路径检查 CephFS Qwen 模型：`/mnt/cephfs/datasprocessing/shared_models/Qwen` 在本机和 NemTron 均不存在；本机实际可见的相近目录 `/mnt/cephfs/data/processing/shared_models` 为空且无 `Qwen` 子目录。
+- 额外核对 CephFS 上可用的 Qwen 模型树：`/mnt/cephfs/data/stable/models/Qwen` 存在，按 `config.json` 和顶层 safetensors/bin 权重过滤出 41 个可加载模型目录，覆盖 Qwen2.5、Qwen3、Qwen3.5、Qwen3.6、Qwen3-Coder、Qwen3-Next、QwenLong 等系列。

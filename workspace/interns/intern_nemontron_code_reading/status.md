@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/102 |
 | Session | 20 |
 | Branch | intern_nemontron_code_reading/task071_eval_register_results |
-| Latest | Checked SFT data completeness: current uncapped SFT uses all valid rows from the 11 selected M0 registry datasets, packing filtered 173 invalid rows, and train_iters covers all 72,947 packed train rows. |
+| Latest | Checked the requested CephFS Qwen model path: `/mnt/cephfs/datasprocessing/shared_models/Qwen` is absent; the populated CephFS Qwen model tree is `/mnt/cephfs/data/stable/models/Qwen`. |
