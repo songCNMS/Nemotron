@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task028_m2_long_context_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/137 |
-| Session | 1 |
-| Recent Progress | PR opened; focused long-context checks and registry validation passed |
+| Session | 2 |
+| Recent Progress | Stop-hook history log correction added for task028 |

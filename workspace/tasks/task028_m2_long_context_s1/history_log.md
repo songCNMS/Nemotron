@@ -1,6 +1,6 @@
 # task028_m2_long_context_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ---
 
@@ -28,5 +28,21 @@ Validation:
 Cluster-bound follow-up:
 - Pin approved RULER / AA-LCR / long-doc QA sources and add data-registry rows.
 - Run full 512K / 1M context execution and publish cluster smoke evidence.
+
+---
+
+## Session 2 - 2026-05-21 - intern_nem_dev_1
+
+Stop-hook correction after PR #137 creation.
+
+Updated:
+- Added this Session 2 record so the task history matches the active
+  session checklist.
+
+Status:
+- PR #137 remains open at https://github.com/songCNMS/Nemotron/pull/137.
+- Branch remains `intern_nem_dev_1/task028_m2_long_context_s1`.
+- Latest pushed head before this correction was
+  `781c573809e04ba0724f73a3433b24c75e3944cc`.
 
 ---
