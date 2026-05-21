@@ -47,3 +47,27 @@
   - Production multilingual code-execution verifier/runtime.
   - Source selection + revision pins for `m0_multilingual_ifeval` and `m0_multilingual_humaneval`.
   - SIF/Docker/cluster smoke for judge/runtime paths.
+
+## 2026-05-21 14:11:03 UTC - task029_m2_safety_jailbreak_overrefusal_s1
+
+- Status: PR ready for PM gate
+- Branch: `intern_nem_dev_3/task029_m2_safety_jailbreak_overrefusal_s1`
+- Base SHA: `0bbbd543b092bd54ab309db963b33fd03c62baa9`
+- Implementation SHA: `cd32d5921022f700b8b0d979001345550b5ab4ed`
+- PR: https://github.com/songCNMS/Nemotron/pull/136
+- Scope delivered:
+  - Added sandbox-runnable `safety_judge`, `jailbreak_resist`, and `over_refusal` environment rows.
+  - Added converter/record contracts for general safety judging, jailbreak resistance, and over-refusal reduction rows.
+  - Reused `safety_judge_stub` as the sandbox verifier fallback.
+  - Recorded deferred judge-model/runtime metadata explicitly.
+- Tests:
+  - `PYTHONPATH=src python -m pytest tests/recipes/super3/test_safety_jailbreak_overrefusal_s1.py -q` -> 12 passed
+  - `PYTHONPATH=src python -m pytest tests/recipes/super3/test_safety_jailbreak_overrefusal_s1.py tests/recipes/super3/test_nemotron_safety_reasoning.py tests/recipes/super3/test_m0_data_env.py -q` -> 79 passed, 2 skipped
+  - `PYTHONPATH=src python scripts/validate_data_registries.py --quiet` -> passed
+  - `git diff --check` -> passed
+  - `PYTHONPATH=src python -m py_compile src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py src/nemotron/recipes/super3/milestones/m0_data_env/run_m0_health_baseline.py` -> passed
+- Judge/cluster blockers:
+  - Real safety judge model selection and calibration.
+  - Live judge inference path for safety, jailbreak, and over-refusal scoring.
+  - Production benchmark source selection and revision pins.
+  - SIF/Docker/cluster smoke for judge runtime paths.
