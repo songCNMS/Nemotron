@@ -141,6 +141,18 @@ SYSTEM_PROMPTS = {
         "in the document's content. Quote or paraphrase the relevant "
         "passage; do not invent facts."
     ),
+    "long_context_ruler": (
+        "You are a long-context retrieval assistant. Find the relevant span "
+        "inside the provided context and answer with grounded evidence."
+    ),
+    "long_context_aalcr": (
+        "You are a long-context reasoning assistant. Use the provided context "
+        "to answer the question and cite the supporting span."
+    ),
+    "long_context_doc_qa": (
+        "You are a long-document QA assistant. Read the document, answer the "
+        "question, and quote or paraphrase the evidence span."
+    ),
     "sql_text_to_query": (
         "You are a text-to-SQL assistant. Given a natural-language "
         "question about a database schema, emit a single valid SQL "
@@ -1948,6 +1960,7 @@ def transform_multilingual_humaneval(row: Mapping[str, Any], spec: Mapping[str, 
 # silent truncation would corrupt the eval). True long-context (256K
 # to 1M+) is M2 task028 / task037 scope.
 LONGALPACA_MAX_DOC_CHARS: int = 32_000  # ~8K tokens; M0 smoke ceiling
+M2_LONG_CONTEXT_SCAFFOLD_MAX_DOC_CHARS: int = 128_000  # ~32K tokens; sandbox Session 1 ceiling
 
 
 def _approx_token_count(text: str) -> int:
@@ -1957,6 +1970,44 @@ def _approx_token_count(text: str) -> int:
     truncation decisions — those use exact char counts.
     """
     return max(1, len(text) // 4)
+
+
+def _first_nonempty_string(row: Mapping[str, Any], keys: Sequence[str]) -> str:
+    for key in keys:
+        value = row.get(key)
+        if isinstance(value, list):
+            values = string_list(value)
+            if values:
+                return values[0]
+        elif value is not None and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def _infer_evidence_spans(document: str, answer: str) -> list[str]:
+    normalized_doc = document.casefold()
+    normalized_answer = answer.casefold()
+    if not normalized_answer:
+        return []
+    match_index = normalized_doc.find(normalized_answer)
+    if match_index < 0:
+        return []
+    start_candidates = [
+        document.rfind(".", 0, match_index),
+        document.rfind("\n", 0, match_index),
+    ]
+    start = max(start_candidates) + 1
+    end_candidates = [
+        index
+        for index in (
+            document.find(".", match_index + len(answer)),
+            document.find("\n", match_index + len(answer)),
+        )
+        if index >= 0
+    ]
+    end = min(end_candidates) + 1 if end_candidates else min(len(document), match_index + len(answer) + 240)
+    span = document[start:end].strip()
+    return [span] if span else []
 
 
 def transform_longalpaca_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
@@ -2016,6 +2067,71 @@ def transform_longalpaca_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> 
             "doc_length_chars": len(document),
             "doc_token_estimate": _approx_token_count(document),
             "question": instruction,
+        },
+    )
+
+
+def transform_long_context_m2_qa(row: Mapping[str, Any], spec: Mapping[str, Any]) -> JsonDict:
+    """Convert RULER / AA-LCR / long-doc QA rows to the M2 scaffold.
+
+    Session 1 keeps the contract sandbox-runnable with small synthetic
+    contexts. Production 512K / 1M execution and source-specific pins
+    are explicit follow-ups.
+    """
+    question = _first_nonempty_string(row, ("question", "query", "prompt", "instruction", "task"))
+    if not question:
+        raise ValueError("long_context_m2 row missing question/query/prompt")
+    answer = _first_nonempty_string(row, ("answer", "answers", "output", "expected_answer", "target"))
+    if not answer:
+        raise ValueError("long_context_m2 row missing answer/output")
+    document = _first_nonempty_string(row, ("document", "context", "input", "passage", "long_context"))
+    if not document:
+        raise ValueError("long_context_m2 row missing document/context")
+    if len(document) > M2_LONG_CONTEXT_SCAFFOLD_MAX_DOC_CHARS:
+        raise ValueError(
+            f"long_context_m2 row exceeds Session 1 sandbox cap "
+            f"({len(document)} > {M2_LONG_CONTEXT_SCAFFOLD_MAX_DOC_CHARS} chars); "
+            "full 512K/1M context execution is deferred"
+        )
+
+    evidence_spans = string_list(
+        row.get("evidence_spans")
+        or row.get("evidence_span")
+        or row.get("supporting_spans")
+        or row.get("supporting_sentences")
+        or row.get("gold_evidence")
+    )
+    if not evidence_spans:
+        evidence_spans = _infer_evidence_spans(document, answer)
+
+    target_context_tokens = row.get("target_context_tokens") or spec.get("target_context_tokens")
+    user_content = (
+        f"Document:\n{document}\n\n"
+        f"Question: {question}\n\n"
+        "Answer using the document and include the supporting evidence span."
+    )
+    return make_record(
+        spec=spec,
+        row=row,
+        question=question,
+        expected_answer=answer,
+        input_messages=[
+            {"role": "system", "content": SYSTEM_PROMPTS[spec["environment"]]},
+            {"role": "user", "content": user_content},
+        ],
+        reward_config={
+            "verifier": "long_context_qa",
+            "max_score": 1.0,
+            "match": ["normalized_answer_contains", "evidence_span_contains"],
+            "requires_evidence_span": bool(evidence_spans),
+        },
+        extra_env_info={
+            "doc_length_chars": len(document),
+            "doc_token_estimate": _approx_token_count(document),
+            "evidence_spans": evidence_spans,
+            "target_context_tokens": target_context_tokens,
+            "benchmark_family": spec["environment"],
+            "cluster_execution": "deferred_to_task028_session_3",
         },
     )
 
@@ -3184,6 +3300,7 @@ CONVERTERS = {
     "multilingual_ifeval": transform_multilingual_ifeval,
     "multilingual_humaneval": transform_multilingual_humaneval,
     "longalpaca_qa": transform_longalpaca_qa,
+    "long_context_m2_qa": transform_long_context_m2_qa,
     "bird_sql": transform_bird_sql,
     "intercode_nl2bash": transform_intercode_nl2bash,
     "terminalbench_v2": transform_terminalbench_v2,
