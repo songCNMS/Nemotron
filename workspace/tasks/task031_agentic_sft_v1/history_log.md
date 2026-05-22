@@ -1,6 +1,34 @@
 # task031_agentic_sft_v1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+---
+
+## Session 2 - 2026-05-22 - intern_nem_dev_1
+
+Confirmed PR #149 was merged through PR flow at
+`2026-05-22T03:34:12Z`; merge commit:
+`f4acf31adf4220474c04bb9dbdae2d2508e9fe5e`.
+
+Sync:
+- Started from clean `intern_nem_dev_1/task031_agentic_sft_v1_s1` tracking
+  origin.
+- Switched to `main` before any further work, per PM closeout instruction.
+- Ran `git pull --ff-only origin main`; local `main` fast-forwarded from
+  `bb215b8739c99eaaafa812bb4be42e021cabebc7` to
+  `f4acf31adf4220474c04bb9dbdae2d2508e9fe5e`.
+- Confirmed `git status --short --branch` is clean on latest `main` before
+  creating this closeout branch.
+
+Closeout:
+- Marked task031 completed after PR #149 merge.
+- Set intern status to Idle because PM explicitly said there is no new sandbox
+  assignment right now.
+- Kept residual blockers separate from Session 1 sandbox scope: task013 cluster
+  SFT loss/run verification, task070/task026 live cross-harness runtime/data
+  collection, OpenHands/OpenCode/Codex production traces, real failure rollout
+  mining, packed SFT generation at scale, cluster training, W&B/lineage
+  publication, and eval gate against live M1/M2 checkpoints.
 
 ---
 

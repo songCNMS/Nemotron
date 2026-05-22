@@ -1,6 +1,6 @@
 # task031_agentic_sft_v1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 Session 1 scaffold for the Agentic SFT v1 supervision builder contract.
 
