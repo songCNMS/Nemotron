@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task034_judge_pool -->
+<!-- METADATA:STATUS=Working,TASK=task038_m2_rl_curriculum_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task034_judge_pool |
-| PR | https://github.com/songCNMS/Nemotron/pull/145 |
+| Current Task | task038_m2_rl_curriculum_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/148 |
 | Session | 1 |
 
-最近进展：`task034_judge_pool` Session 1 sandbox scaffold 已实现并提交 PR #145；测试通过，live judge/GenRM/cluster blockers 已在 report 中显式记录。
+最近进展：`task038_m2_rl_curriculum_s1` sandbox gap estimator / dynamic sampler scaffold 已实现并提交 PR #148；分支已 rebase 到 `origin/main` 的 `010e657df7648132bf485ffa0753d0e5d64fe802`。
