@@ -103,6 +103,37 @@ def test_transform_long_context_m2_accepts_alias_fields_and_infers_span() -> Non
     ]
 
 
+def test_transform_long_context_m2_inferred_span_preserves_non_ascii_indices() -> None:
+    """Lock in correct span inference under non-ASCII length expansion.
+
+    The implementation previously used `casefold()` for the answer index
+    lookup, but `casefold()` can change string length (German `ß` → `ss`,
+    Greek `ς` → `σ` only same length but `ϐ` → `β` same too — sharp s is
+    the canonical expander). When the document contains a length-changing
+    character BEFORE the matched answer, the casefolded `match_index`
+    diverges from the original-document index by the cumulative expansion
+    width, and any subsequent slice of the ORIGINAL document with that
+    index can land off-by-N. The fix searches the original document with
+    `re.IGNORECASE` so `match.start()` is in original-document coordinates.
+    """
+    row = {
+        "question": "Wo liegt die Straße?",
+        "answer": "Straße",
+        "document": (
+            "Größe spielt keine Rolle. "  # earlier `ß` expands casefolded form
+            "Die Straße liegt im Norden. "
+            "Weitere Notizen folgen."
+        ),
+    }
+    record = transform_long_context_m2_qa(row, _spec("long_context_doc_qa"))
+    spans = record["extra_env_info"]["evidence_spans"]
+    assert len(spans) == 1
+    # The inferred span must be the SENTENCE that contains the answer,
+    # not a slice that drifted past it due to casefold-induced length
+    # expansion in the document before the match site.
+    assert spans[0] == "Die Straße liegt im Norden."
+
+
 def test_transform_long_context_m2_rejects_missing_fields_or_over_cap() -> None:
     with pytest.raises(ValueError, match="question"):
         transform_long_context_m2_qa({"answer": "A", "document": "doc"}, _spec("long_context_doc_qa"))
