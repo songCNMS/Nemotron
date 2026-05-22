@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Notes
 
@@ -89,6 +89,9 @@
 - Qwen3-30B-A3B SFT comparison fact: primary deltas computed as original minus SFT are IFBench `+0.017006802721088454`, AIME25 `+0.16666666666666666`, HMMT `+6.666666666666667`, WMT24++ `-0.2920210751419958`, and MMLU-Pro `-0.0772938829787234`.
 - Qwen3-30B-A3B eval cleanup fact: after baseline eval, stop the `task071_qwen30b_sglang_original` tmux endpoint to release all 8 H200 GPUs; `vm4vpn` disk recovers to about `20G` free after eval-factory images are removed.
 - M1 reasoning SFT strategy fact: for `math_reasoning_numeric` and `math_competition_numeric`, prefer `extra_env_info.reference_solution` when present so GSM8K/NuminaMath retain solution traces; strip GSM8K `####` verifier markers, and append `Final answer: <expected_answer>` only when the normalized final answer is absent from the reference text.
-- Qwen3-30B-A3B conservative retrain script fact: generated scripts live at `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/`; they target uncapped data, `qwen3_30b_a3b_local_train.py`, all 8 GPUs, `global_batch_size=8`, `epochs=0.5`, `optimizer.lr=1e-6`, `scheduler.min_lr=1e-7`, `scheduler.lr_warmup_iters=100`, `scheduler.lr_decay_iters=$TRAIN_ITERS`, and save/eval interval 500.
+- Qwen3-30B-A3B conservative retrain script fact: generated scripts live at `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/`; they target uncapped data, `qwen3_30b_a3b_local_train.py`, all 8 GPUs, `global_batch_size=8`, `epochs=0.5`, `optimizer.lr=1e-6`, `optimizer.min_lr=1e-7`, `scheduler.lr_warmup_iters=100`, `scheduler.lr_decay_iters=$TRAIN_ITERS`, and save/eval interval 500.
 - Remote-only checkpoint planning fact: use `plan_qwen_scaleup_run.py --allow-missing-checkpoint` when the Megatron bridge checkpoint exists on NemTron but not on the local data-prep machine; the generated local `plan_m1_agentic_sft_training.py` call passes `--allow-missing-checkpoint`, while the remote train script still exports `SUPER3_M1_PRETRAINED_CHECKPOINT` to the real NemTron checkpoint path.
-- Planner override fact: `plan_m1_agentic_sft_training.py` now emits `optimizer.lr`, `scheduler.min_lr`, `scheduler.lr_warmup_iters`, and `scheduler.lr_decay_iters` torchrun overrides when supplied; `plan_qwen_scaleup_run.py` also supports `--train-entrypoint` so 30B runs do not accidentally launch the 4B `qwen_local_train.py` entry.
+- Planner override fact: `plan_m1_agentic_sft_training.py` now emits Hydra `++optimizer.lr`, `++optimizer.min_lr`, `scheduler.lr_warmup_iters`, and `++scheduler.lr_decay_iters` torchrun overrides when supplied; `plan_qwen_scaleup_run.py` also supports `--train-entrypoint` so 30B runs do not accidentally launch the 4B `qwen_local_train.py` entry.
+- M0 uncapped script fact: selected Hermes source rows with neither expected tool calls nor non-empty assistant content are recorded as M0 manifest errors and make `prepare_m0_assets.py` return 2; generated `run_local_data_prep.sh` should treat exit 2 as "continue with valid converted rows" after emitting the manifest path.
+- Tmux launch fact: `tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"` fails when no tmux server exists; generated remote train scripts should use `tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS" 2>/dev/null || true` so fresh nodes can still start a session while reused servers still receive the global env update.
+- Conservative 30B run fact: Session 23 regenerated full-reference M1 packed data with `665,777,436` tokens, `161757` packed train rows, and `train_iters=10110` for 0.5 epoch at GBS=8; NemTron session `task067_task071_qwen30b_a3b_sft_strategy_conservative_v2` reached iter `100/10110` with no skipped/nan iterations and final config `optimizer.min_lr=1e-7`.

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 1
 
@@ -255,3 +255,18 @@
 - 远端路径核验：NemTron 上存在 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507` 与 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`，因此生成脚本指向真实 30B HF model 与 Megatron bridge checkpoint。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `61 passed, 1 skipped`；targeted regression tests -> `3 passed`；ruff touched files passed；`git diff --check` passed。
 - 已提交并推送分支，创建 PR #152：`https://github.com/songCNMS/Nemotron/pull/152`。
+
+## Session 23
+
+- 按用户要求合并 PR #152：`gh pr merge 152 --squash --delete-branch=false` 成功，随后快进本地 `main` 到 `origin/main` 的合并提交 `537d89d`，并创建执行分支 `intern_nemontron_code_reading/task071_conservative_30b_train_session23`。
+- 执行 conservative 30B 脚本链路。原始 `run_local_data_prep.sh` 在 M0 阶段因 `prepare_m0_assets.py` 记录 2389 条 Hermes invalid source rows 返回 2 而中断；这些 rows 已进入 M0 manifest errors，M1 转换使用 valid rows 继续执行。
+- 手动续跑 M1 与 packing：M1 输出 `983397` train rows、`11354` val-shadow rows、`errors=0`；Qwen3-30B tokenizer packing 输出 `665,777,436` tokens、`161757` packed train rows、`2552` valid rows。
+- 重新运行 planner：0.5 epoch、GBS=8、MBS=1 计算得到 `train_iters=10110`；training plan 位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/training_plan/task071_qwen30b_a3b_sft_strategy_conservative_v2/training_manifest.json`。
+- 完成 `sync_to_nemtron.sh`：远端 run root 为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2`，packed data 约 `3.9G`；NemTron 8 张 H200 在训练前为空闲。
+- 首次 `run_nemtron_train.sh` 失败于 `tmux set-environment` 在无 tmux server 时触发 `set -e`；修复 planner 生成器为 `tmux set-environment ... 2>/dev/null || true`。
+- 第二次启动失败于 Hydra struct：`scheduler.min_lr` 不是基础 YAML 字段；将 optional overrides 改为 Hydra `++` 语义。第三次启动显示 `scheduler.lr_decay_iters` 已存在，因此进一步保留 `++scheduler.lr_decay_iters` 覆盖逻辑。
+- 发现 `min_lr` 最终应落到 `optimizer.min_lr` 而不是 `scheduler.min_lr`；修复 `plan_m1_agentic_sft_training.py`、`plan_qwen_scaleup_run.py` 和 Qwen local entry 的 min-lr 映射，重新生成 scripts 后重启训练。
+- 当前 NemTron tmux session `task067_task071_qwen30b_a3b_sft_strategy_conservative_v2` 正常运行；最终 config 确认 `optimizer.lr=1e-6`、`optimizer.min_lr=1e-7`、`scheduler.lr_warmup_iters=100`、`scheduler.lr_decay_iters=10110`。
+- 最新观测：训练到 iter `100/10110`，consumed samples `800`，LR `1.0e-6`，lm loss `0.4876802`，load_balancing_loss `1.508493`，无 skipped/nan；8 卡显存约 `81-88GB`，GPU util 正常。
+- 新建 PR #153：`https://github.com/songCNMS/Nemotron/pull/153`，包含 local data prep exit-2 容错、tmux env 容错、Hydra `++` override 和 `optimizer.min_lr` 映射修复。
+- 验证：`pytest -q tests/recipes/super3/test_m1_agentic_sft.py::test_plan_m1_torchrun_command_includes_strategy_overrides tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py::test_qwen30b_a3b_local_train_requires_env_var tests/recipes/super3/test_m1_agentic_sft.py::test_qwen30b_a3b_local_train_uses_env_var_when_set` -> `10 passed`；ruff touched files passed；`git diff --check` passed。
