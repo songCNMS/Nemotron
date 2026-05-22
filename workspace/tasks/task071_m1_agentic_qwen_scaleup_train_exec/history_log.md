@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 1
 
@@ -229,3 +229,17 @@
 - 训练已从 imported checkpoint 成功 reshard/load 到 TP=4/PP=2，进入 iteration；iter 40 时 loss `0.5799908`、load_balancing_loss `1.689439`，无 skipped/nan，8 卡显存约 `81-87GB`。
 - 继续监控到 iter `80/9119`：consumed samples `640`，lm loss `0.4858986`，load_balancing_loss `1.648061`，无 skipped/nan；当前每 10 iter 约 24s，完整 1 epoch 预计为数小时量级，eval benchmark 对比需等待 final checkpoint export 后执行。
 - Stop-hook 补充复核：`history_log.md` metadata 已更正为 `SESSION=20`；训练仍在 `task071_qwen30b_train` 中运行，最新观测 iter `150/9119`、consumed samples `1200`，lm loss `0.4167098`，无 skipped/nan。
+
+## Session 21
+
+- 接续监控 Qwen3-30B-A3B full SFT：训练已完成到 `iter_0009119`，最终 checkpoint 位于 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints/iter_0009119`，`latest_checkpointed_iteration.txt=9119`，最终 validation loss/PPL 为 `0.3001248` / `1.350027`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 将 `iter_0009119` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119`，导出目录约 `57G`，含 16 个 safetensors shard，`AutoConfig` 显示 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`。
+- 在 NemTron 8 张 H200 上启动 SGLang endpoint：model id `task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf`，`tp=4`、`dp=2`、`context_length=4096`，通过 `vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000` remote forward 暴露给 eval launcher。
+- 对 Qwen3-30B-A3B SFT 跑完五项 full-selected non-dry eval：IFBench、AIME25 local scorer、HMMT、WMT24++、MMLU-Pro 全部 `docker_exit=0`；raw artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full`。
+- SFT 五项主指标：IFBench strict prompt-level `0.30272108843537415`；AIME25 score `0.0`；HMMT symbolic_correct `0.0`、no_answer `93.33333333333333`；WMT24++ `xx->xx` BLEU `33.332009385866584`；MMLU-Pro group exact_match `0.07737699468085106`。
+- 切换同一 8-GPU SGLang endpoint 到原始 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`，model id `qwen3-30b-a3b-instruct-2507-original`，复用同一 vpn tunnel，并运行同一五项 full-selected non-dry baseline；raw artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full`。
+- 原始 30B 五项主指标：IFBench strict prompt-level `0.3197278911564626`；AIME25 score `0.16666666666666666`；HMMT symbolic_correct `6.666666666666667`、no_answer `93.33333333333333`；WMT24++ `xx->xx` BLEU `33.03998831072459`；MMLU-Pro group exact_match `0.00008311170212765957`。
+- 与 SFT 的 primary metric delta（original minus SFT）：IFBench `+0.017006802721088454`、AIME25 `+0.16666666666666666`、HMMT `+6.666666666666667`、WMT24++ `-0.2920210751419958`、MMLU-Pro `-0.0772938829787234`。
+- 新增结构化结果 manifest：`m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml` 和 `m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml`；扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 30B SFT/original 样本范围、关键 metrics、delta 和 secret scan。
+- 清理运行资源：停止原始 30B SGLang tmux endpoint，NemTron 8 张 GPU 均回到空闲；`vm4vpn` 仅保留既有 chromium 容器，根分区约 `20G` 可用。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `38 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed；`git diff --check` passed。

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Notes
 
@@ -81,3 +81,10 @@
 - CephFS Qwen model path fact: `/mnt/cephfs/datasprocessing/shared_models/Qwen` is absent, while `/mnt/cephfs/data/stable/models/Qwen` is populated with loadable Qwen HF-style model directories. `/mnt/cephfs/data/processing/shared_models` exists but is empty and has no `Qwen` child.
 - Qwen3-30B-A3B SFT launch fact: use local HF model `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`, imported Megatron checkpoint `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`, and training entry `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`. Full SFT uses 8 GPUs with TP=4, PP=2, EP=4, GBS=8, MBS=1, seq=4096, and `train_iters=ceil(72947/8)=9119`.
 - Qwen3-30B-A3B launch pitfall: do not pass `dataset.super3_packed_sft_dir` as a CLI override to `run_finetune`; it is a script YAML field and fails the second Hydra merge against final `FinetuningDatasetConfig`. Set `SUPER3_M1_AGENTIC_PACKED_DIR` instead, and set `SUPER3_M1_TOKENIZER_MODEL` plus `tokenizer.tokenizer_model` to the Qwen3-30B-A3B HF path.
+- Qwen3-30B-A3B SFT completion fact: the 8-GPU run completed to `iter_0009119`; final validation loss/PPL is `0.3001248` / `1.350027`, with previous eval at iter `9000` loss/PPL `0.3093685` / `1.362564`.
+- Qwen3-30B-A3B export fact: `iter_0009119` converts successfully with Megatron-Bridge `AutoBridge.export_ckpt` to `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119`; the export is about `57G`, has 16 safetensors shards, and validates as HF `model_type=qwen3_moe` with `num_hidden_layers=48`, `num_experts=128`, and `num_experts_per_tok=8`.
+- Qwen3-30B-A3B serving fact: both SFT and original 30B can be served on NemTron with SGLang `tp=4`, `dp=2`, `context_length=4096`, port `30000`, and exposed to `vm4vpn` via `127.0.0.1:13000`; a chat smoke returning exact `ready` is sufficient before launcher eval.
+- Qwen3-30B-A3B full-selected SFT eval fact: raw artifacts are under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full`; five tasks all `docker_exit=0`; key metrics are IFBench strict prompt `0.30272108843537415`, AIME25 `0.0`, HMMT symbolic_correct `0.0`, WMT24++ BLEU `33.332009385866584`, and MMLU-Pro exact_match `0.07737699468085106`.
+- Qwen3-30B-A3B original full-selected eval fact: raw artifacts are under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full`; five tasks all `docker_exit=0`; key metrics are IFBench strict prompt `0.3197278911564626`, AIME25 `0.16666666666666666`, HMMT symbolic_correct `6.666666666666667`, WMT24++ BLEU `33.03998831072459`, and MMLU-Pro exact_match `0.00008311170212765957`.
+- Qwen3-30B-A3B SFT comparison fact: primary deltas computed as original minus SFT are IFBench `+0.017006802721088454`, AIME25 `+0.16666666666666666`, HMMT `+6.666666666666667`, WMT24++ `-0.2920210751419958`, and MMLU-Pro `-0.0772938829787234`.
+- Qwen3-30B-A3B eval cleanup fact: after baseline eval, stop the `task071_qwen30b_sglang_original` tmux endpoint to release all 8 H200 GPUs; `vm4vpn` disk recovers to about `20G` free after eval-factory images are removed.
