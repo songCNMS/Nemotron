@@ -9,3 +9,5 @@
 - Scope accepted as sandbox-only registry and adapter-config scaffold.
 - Live benchmark assets, cluster launchers, Qwen baseline numbers, and
   W&B publication remain explicit blockers.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/147 with head
+  `37bb4b8f9bc3b1f2ea61703efa971cb25fe008c2`.
