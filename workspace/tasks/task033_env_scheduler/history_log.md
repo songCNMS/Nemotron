@@ -10,6 +10,9 @@ Started from clean `main` at `d92abd55a32b2135273e7167baba4cd5006683be`.
 
 Branch: `intern_nem_dev_1/task033_env_scheduler_s1`
 
+PR: https://github.com/songCNMS/Nemotron/pull/146
+Initial implementation SHA: `0d32c450be6e83fd008221668703fdbe59ec7825`
+
 Implemented:
 - Added sandbox-only `m2_env_scheduler` scaffold with queue classification,
   per-env quotas, backpressure state, deterministic scheduling decisions, and a
@@ -26,6 +29,7 @@ Validation:
 - `python -m py_compile src/nemotron/recipes/super3/milestones/m2_env_scheduler/__init__.py src/nemotron/recipes/super3/milestones/m2_env_scheduler/scheduler.py`
   -> passed.
 - `git diff --check` -> passed.
+- `git diff --cached --check` -> passed before commit.
 
 Out of scope:
 - task021 Session 4 launch path validation.
