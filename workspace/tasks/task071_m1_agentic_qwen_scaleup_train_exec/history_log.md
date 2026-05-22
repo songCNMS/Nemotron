@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Session 1
 
@@ -312,3 +312,13 @@
 - 4500 之后曲线恢复：iter `5000` loss/PPL `0.3774891` / `1.458618`，iter `6000` `0.3767208` / `1.457497`，iter `9000` 达到当前全局最好 `0.37042` / `1.448343`；latest validation iter `9500` 为 `0.3770263` / `1.457943`。
 - 趋势判断：validation 不单调，4500 是短期回退点；从后续多个 checkpoint 看，训练没有发散，并在 9000 刷新最好 validation，整体属于波动后恢复改善。
 - 健康状态：max skipped iterations `0`，max nan iterations `0`；checkpoints 已保存 `[500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]`。
+
+## Session 29
+
+- 按用户要求继续监控到训练完成点 `10110`；远端 run `task071_qwen30b_a3b_sft_strategy_conservative_v2` 已完成，最终 checkpoint marker `latest_checkpointed_iteration.txt=10110`。
+- 最终 checkpoint 存在：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints/iter_0010110`，单 checkpoint 约 `399G`，checkpoint root 约 `8.2T`。
+- 最终 train iter `10110/10110`：train lm loss `0.3630138`，load_balancing_loss `1.212688`，LR `1e-7`，grad norm `0.771`，max skipped/nan iterations `0/0`。
+- 最终 validation loss/PPL：iter `10110` 为 `0.3727816` / `1.451767`；当前最好 validation 仍为 iter `9000` 的 `0.37042` / `1.448343`，final 相对 best loss 高约 `0.0023616`。
+- 训练进程已退出，NemTron 8 张 GPU 已空闲；`/root/nemotron_session5_venv/bin/python` 可 import Megatron-Bridge，源 HF 模型 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507` 已确认存在。
+- 生成最终 artifacts：`metric_curves.png`、`loss_validation_curve.png`、`final_metric_summary.json`、`health_summary.json`、`validation_trend_summary.json`、`train_loss_points.csv`、`validation_points.csv`、`checkpoint_export_prep_checklist.md`，均位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics`。
+- export 准备清单建议导出路径：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110`，候选模型 id：`task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf`。

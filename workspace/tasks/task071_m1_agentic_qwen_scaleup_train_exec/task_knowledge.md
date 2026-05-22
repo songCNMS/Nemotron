@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Notes
 
@@ -100,3 +100,4 @@
 - Feishu image return fact: use `/work-agents/Nemotron/workspace/.skill_sources/intern_agent_skills/intern_feishu_messaging_skill/scripts/send_image.py --intern-name intern_nemontron_code_reading --project Nemotron --file <png>` to return local PNG charts to the supervisor group; Session 26 sent `loss_validation_curve.png` successfully.
 - Conservative 30B metric-curve fact: Session 27 generated `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png` from logs through train iter `4020/10110`; latest validation is iter `4000` loss/PPL `0.3803424/1.462785`, best validation remains iter `3500` loss/PPL `0.3752722/1.455387`, with checkpoints through `4000` and no skipped/nan iterations.
 - Conservative 30B trend fact: Session 28 refreshed metric curves through train iter `9650/10110` and checkpoint `9500`; iter `4500` validation regressed to loss/PPL `0.3960631/1.485963`, but later recovered and set current best at iter `9000` loss/PPL `0.37042/1.448343`, with no skipped/nan iterations.
+- Conservative 30B completion/export fact: Session 29 confirmed conservative Qwen3-30B-A3B SFT completed at iter `10110/10110` with final validation loss/PPL `0.3727816/1.451767`, best validation iter `9000` loss/PPL `0.37042/1.448343`, final checkpoint `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints/iter_0010110` size about `399G`, and export checklist at `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/checkpoint_export_prep_checklist.md`.
