@@ -155,6 +155,14 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
         f"dataset.packed_sequence_specs.packed_sequence_size={training['seq_length']}",
         f"checkpoint.save_interval={training['save_interval']}",
     ]
+    if training.get("optimizer_lr") is not None:
+        command.append(f"optimizer.lr={training['optimizer_lr']}")
+    if training.get("scheduler_min_lr") is not None:
+        command.append(f"scheduler.min_lr={training['scheduler_min_lr']}")
+    if training.get("lr_warmup_iters") is not None:
+        command.append(f"scheduler.lr_warmup_iters={training['lr_warmup_iters']}")
+    if training.get("lr_decay_iters") is not None:
+        command.append(f"scheduler.lr_decay_iters={training['lr_decay_iters']}")
     return command
 
 
@@ -232,6 +240,10 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
             f"- `micro_batch_size`: {manifest['training']['micro_batch_size']}",
             f"- `seq_length`: {manifest['training']['seq_length']}",
             f"- `epochs`: {manifest['training']['epochs']}",
+            f"- `optimizer.lr`: {manifest['training'].get('optimizer_lr')}",
+            f"- `scheduler.min_lr`: {manifest['training'].get('scheduler_min_lr')}",
+            f"- `scheduler.lr_warmup_iters`: {manifest['training'].get('lr_warmup_iters')}",
+            f"- `scheduler.lr_decay_iters`: {manifest['training'].get('lr_decay_iters')}",
             "",
             "## Command",
             "",
@@ -336,6 +348,10 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         epochs=args.epochs,
         fallback=args.fallback_train_iters,
     )
+    optimizer_lr = getattr(args, "optimizer_lr", None)
+    scheduler_min_lr = getattr(args, "scheduler_min_lr", None)
+    lr_warmup_iters = getattr(args, "lr_warmup_iters", None)
+    lr_decay_iters = getattr(args, "lr_decay_iters", None)
     run_name = args.run_name or f"m1-agentic-sft-v0-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     output_dir = args.output_dir / run_name
     manifest_path = output_dir / "training_manifest.json"
@@ -372,6 +388,10 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
             "micro_batch_size": args.micro_batch_size,
             "seq_length": args.seq_length,
             "save_interval": args.save_interval,
+            "optimizer_lr": optimizer_lr,
+            "scheduler_min_lr": scheduler_min_lr,
+            "lr_warmup_iters": lr_warmup_iters,
+            "lr_decay_iters": lr_decay_iters,
         },
         "splits": {
             name: {"shards": summary.shards, "rows": summary.rows, "path": summary.path}
@@ -425,6 +445,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seq-length", type=int, default=4096)
     parser.add_argument("--eval-interval", type=int, default=100)
     parser.add_argument("--save-interval", type=int, default=20)
+    parser.add_argument("--optimizer-lr", type=float, default=None)
+    parser.add_argument("--scheduler-min-lr", type=float, default=None)
+    parser.add_argument("--lr-warmup-iters", type=int, default=None)
+    parser.add_argument("--lr-decay-iters", type=int, default=None)
     parser.add_argument("--allow-missing-checkpoint", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     return parser

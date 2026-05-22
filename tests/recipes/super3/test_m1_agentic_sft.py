@@ -52,17 +52,18 @@ def _base_record(environment: str) -> dict:
     }
 
 
-def test_convert_reasoning_record_prefers_expected_answer_over_reference_solution() -> None:
-    """Regression for review finding P1 #3: GSM8K `####` marker used to leak into SFT target."""
+def test_convert_reasoning_record_preserves_reference_solution_without_gsm8k_marker() -> None:
+    """Reasoning SFT keeps solution traces but strips GSM8K's verifier marker."""
     record = _base_record("math_reasoning_numeric")
     record["expected_answer"] = "42"
     record["extra_env_info"]["reference_solution"] = "Work it out.\n#### 42"
 
     converted = convert_m0_record(record, split="train")
 
-    # SFT target should be the normalized answer, never the verifier marker.
-    assert converted["messages"][-1] == {"role": "assistant", "content": "42"}
-    assert "####" not in converted["messages"][-1]["content"]
+    content = converted["messages"][-1]["content"]
+    assert "Work it out." in content
+    assert "####" not in content
+    assert content.endswith("42")
     assert USED_IN_TAG in converted["used_in"]
     assert converted["metadata"]["m0_environment"] == "math_reasoning_numeric"
     assert converted["metadata"]["m1_stage"] == "Agentic SFT v0"
@@ -81,6 +82,17 @@ def test_convert_reasoning_record_strips_gsm8k_marker_when_falling_back() -> Non
     # The reasoning text is preserved.
     assert "Step 1: do something." in content
     assert content.endswith("24")
+
+
+def test_convert_reasoning_record_appends_missing_expected_answer() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = "Reason through the problem."
+
+    converted = convert_m0_record(record, split="train")
+
+    content = converted["messages"][-1]["content"]
+    assert content == "Reason through the problem.\n\nFinal answer: 42"
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -465,6 +477,37 @@ def test_plan_m1_rejects_multi_node_run(tmp_path) -> None:
     }
     with pytest.raises(ValueError, match="single-node launch"):
         build_torchrun_command(manifest)
+
+
+def test_plan_m1_torchrun_command_includes_strategy_overrides(tmp_path) -> None:
+    from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import build_torchrun_command
+
+    manifest = {
+        "resources": {"nodes": 1, "gpus_per_node": 8},
+        "training": {
+            "train_iters": 9,
+            "global_batch_size": 8,
+            "micro_batch_size": 1,
+            "seq_length": 4096,
+            "eval_interval": 3,
+            "save_interval": 3,
+            "optimizer_lr": 1e-6,
+            "scheduler_min_lr": 1e-7,
+            "lr_warmup_iters": 100,
+            "lr_decay_iters": 900,
+        },
+        "paths": {
+            "script_path": tmp_path / "qwen3_30b_a3b_local_train.py",
+            "config_path": tmp_path / "config.yaml",
+        },
+    }
+
+    command = build_torchrun_command(manifest)
+
+    assert "optimizer.lr=1e-06" in command
+    assert "scheduler.min_lr=1e-07" in command
+    assert "scheduler.lr_warmup_iters=100" in command
+    assert "scheduler.lr_decay_iters=900" in command
 
 
 def test_ensure_batch_geometry_accepts_valid_combos() -> None:
@@ -1316,7 +1359,7 @@ def test_convert_multihop_search_uses_grounded_template_with_musique_titles() ->
 
 def test_convert_competition_math_routes_through_reasoning_builder() -> None:
     """task056: NuminaMath competition math reuses `assistant_for_reasoning`;
-    expected_answer is the already-extracted `\\boxed{}` content."""
+    reference_solution carries the full competition-math solution trace."""
     record = _base_record("math_competition_numeric")
     record["expected_answer"] = "42"
     record["extra_env_info"]["reference_solution"] = "Steps... \\boxed{42}"
@@ -1324,7 +1367,7 @@ def test_convert_competition_math_routes_through_reasoning_builder() -> None:
 
     converted = convert_m0_record(record, split="train")
 
-    assert converted["messages"][-1] == {"role": "assistant", "content": "42"}
+    assert converted["messages"][-1] == {"role": "assistant", "content": "Steps... \\boxed{42}"}
     assert converted["metadata"]["m1_use"] == ["reasoning answer format", "competition math"]
 
 
