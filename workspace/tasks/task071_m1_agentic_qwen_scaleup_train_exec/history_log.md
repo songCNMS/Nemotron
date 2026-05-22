@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 1
 
@@ -245,8 +245,6 @@
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `38 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed；`git diff --check` passed。
 
 ## Session 22
-
-<!-- METADATA:SESSION=22 -->
 
 - 按用户要求合并 PR #151：`gh pr merge 151 --squash --delete-branch=false` 成功，合并时间 `2026-05-22T05:34:44Z`，merge commit 为 `b05f851f8e2cd8c9ee5e5bbb21b4eb10605d9c1b`。
 - 从最新 `main` 创建分支 `intern_nemontron_code_reading/task071_sft_strategy_adjust_session22`，分析 30B-A3B SFT 在 AIME/HMMT 退化的可能原因：M1 math/reasoning target 原先优先使用短 `expected_answer`，会把 GSM8K/NuminaMath 的 full solution supervision 压缩成 answer-only。
