@@ -1,0 +1,64 @@
+schema_version: 1
+milestone: M2
+description: |
+  Adapter-config scaffold for task039 Session 1. These profiles are
+  dry-run/config validation entries only; every runtime remains
+  cluster_deferred until live assets, APIs, and Qwen3.5-122B-A10B
+  baselines are available.
+
+adapter_profiles:
+  - benchmark_id: hle
+    task_name: adlr_m2_hle
+    adapter: nemo_evaluator.hle
+    evaluator_task: hle.hle
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: browsecomp
+    task_name: adlr_m2_browsecomp
+    adapter: nemo_evaluator.browsecomp
+    evaluator_task: browsecomp.browsecomp
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: bird_real_execution
+    task_name: adlr_m2_bird_real_execution
+    adapter: nemo_evaluator.bird_real_execution
+    evaluator_task: bird.bird_real_execution
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: bfcl_full
+    task_name: adlr_m2_bfcl_full
+    adapter: nemo_evaluator.bfcl_full
+    evaluator_task: bfcl.bfclv3_full
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: mcp_mark
+    task_name: adlr_m2_mcp_mark
+    adapter: nemo_evaluator.mcp_mark
+    evaluator_task: mcp_mark.mcp_mark
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: tool_decathlon
+    task_name: adlr_m2_tool_decathlon
+    adapter: nemo_evaluator.tool_decathlon
+    evaluator_task: tool_decathlon.tool_decathlon
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: multilingual_ifeval
+    task_name: adlr_m2_multilingual_ifeval
+    adapter: nemo_evaluator.multilingual_ifeval
+    evaluator_task: multilingual_ifeval.multilingual_ifeval
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
+
+  - benchmark_id: multilingual_humaneval
+    task_name: adlr_m2_multilingual_humaneval
+    adapter: nemo_evaluator.multilingual_humaneval
+    evaluator_task: multilingual_humaneval.multilingual_humaneval
+    dry_run_mode: config_validate_only
+    default_runtime: cluster_deferred
