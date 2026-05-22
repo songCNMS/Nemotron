@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task034_judge_pool -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Idle |
-| Current Task |  |
-| PR | https://github.com/songCNMS/Nemotron/pull/138 merged |
-| Session | 2 |
+| Status | Working |
+| Current Task | task034_judge_pool |
+| PR | https://github.com/songCNMS/Nemotron/pull/145 |
+| Session | 1 |
 
-最近进展：PR #138 已 merge；已按 PM post-merge sync 要求 fast-forward 本地 `main` 到 `156403be8a4cdb8987613ff3787da0629442bcd3`，当前无 active implementation assignment。
+最近进展：`task034_judge_pool` Session 1 sandbox scaffold 已实现并提交 PR #145；测试通过，live judge/GenRM/cluster blockers 已在 report 中显式记录。
