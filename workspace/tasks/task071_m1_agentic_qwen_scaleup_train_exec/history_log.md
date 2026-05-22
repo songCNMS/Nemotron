@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 1
 
@@ -279,3 +279,11 @@
 - iter 500 validation 完成：validation lm loss `0.3861638`，PPL `1.471326`；evaluate timing 记录在 train log 中。
 - iter 500 checkpoint 保存成功：远端 checkpoint root `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints`，`latest_checkpointed_iteration.txt=500`，存在 `iter_0000500`，目录大小约 `399G`。
 - 训练在 checkpoint 后继续运行；最新观测到 iter `600/10110`，consumed samples `4800`，LR `9.944708e-7`，lm loss `0.3932771`，load_balancing_loss `1.426876`，无 skipped/nan；8 张 H200 显存约 `81-88GB` 且 GPU util 正常。
+
+## Session 25
+
+- 按“执行下一步”继续监控 NemTron conservative Qwen3-30B-A3B 训练；PR #153 当前 `state=OPEN`、`mergeable=MERGEABLE`，本轮保持 PR 打开以继续跟随完整 conservative run。
+- 远端 tmux session `task067_task071_qwen30b_a3b_sft_strategy_conservative_v2` 持续运行；checkpoint root `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints` 的 `latest_checkpointed_iteration.txt=1500`，存在 `iter_0000500`、`iter_0001000`、`iter_0001500`。
+- validation points：iter `500` loss/PPL `0.3861638` / `1.471326`，iter `1000` loss/PPL `0.4025858` / `1.495687`，iter `1500` loss/PPL `0.4071296` / `1.502499`。
+- 最新解析到 train iter `1530/10110`；训练日志内 max skipped iterations `0`、max nan iterations `0`；8 张 H200 显存约 `81-88GB`，GPU util 正常。
+- 生成当前训练健康 artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/train_loss_points.csv`、`validation_points.csv`、`health_summary.json`、`loss_validation_curve.png`。

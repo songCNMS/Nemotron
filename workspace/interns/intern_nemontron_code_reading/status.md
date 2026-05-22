@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/153 |
-| Session | 24 |
+| Session | 25 |
 | Branch | intern_nemontron_code_reading/task071_conservative_30b_train_session23 |
-| Latest | Conservative Qwen3-30B-A3B training passed iter 500 eval/save with validation loss/PPL 0.3861638/1.471326; iter_0000500 checkpoint saved and training continues beyond iter 600/10110. |
+| Latest | Conservative Qwen3-30B-A3B training passed iter 1500 eval/save with validation loss/PPL 0.4071296/1.502499; checkpoints 500/1000/1500 saved and loss plot artifacts generated. |
