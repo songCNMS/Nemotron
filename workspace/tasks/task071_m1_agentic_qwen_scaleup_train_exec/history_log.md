@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Session 1
 
@@ -270,3 +270,12 @@
 - 最新观测：训练到 iter `100/10110`，consumed samples `800`，LR `1.0e-6`，lm loss `0.4876802`，load_balancing_loss `1.508493`，无 skipped/nan；8 卡显存约 `81-88GB`，GPU util 正常。
 - 新建 PR #153：`https://github.com/songCNMS/Nemotron/pull/153`，包含 local data prep exit-2 容错、tmux env 容错、Hydra `++` override 和 `optimizer.min_lr` 映射修复。
 - 验证：`pytest -q tests/recipes/super3/test_m1_agentic_sft.py::test_plan_m1_torchrun_command_includes_strategy_overrides tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py::test_qwen30b_a3b_local_train_requires_env_var tests/recipes/super3/test_m1_agentic_sft.py::test_qwen30b_a3b_local_train_uses_env_var_when_set` -> `10 passed`；ruff touched files passed；`git diff --check` passed。
+
+## Session 24
+
+- 按“执行下一步”继续监控 NemTron conservative Qwen3-30B-A3B 训练到首个 eval/save 点；PR #153 当前仍 open 且 `mergeable=MERGEABLE`。
+- 远端 tmux session `task067_task071_qwen30b_a3b_sft_strategy_conservative_v2` 持续运行；训练日志确认 `optimizer.lr=1e-6`、`optimizer.min_lr=1e-7`、`scheduler.lr_warmup_iters=100`、`scheduler.lr_decay_iters=10110`。
+- iter `500/10110` 已完成：consumed samples `4000`，LR `9.964587e-7`，train lm loss `0.4050700`，load_balancing_loss `1.440887`，grad norm `0.759`，无 skipped/nan。
+- iter 500 validation 完成：validation lm loss `0.3861638`，PPL `1.471326`；evaluate timing 记录在 train log 中。
+- iter 500 checkpoint 保存成功：远端 checkpoint root `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints`，`latest_checkpointed_iteration.txt=500`，存在 `iter_0000500`，目录大小约 `399G`。
+- 训练在 checkpoint 后继续运行；最新观测到 iter `520/10110`，consumed samples `4160`，LR `9.960962e-7`，lm loss `0.4111041`，load_balancing_loss `1.471660`，无 skipped/nan；8 张 H200 显存约 `81-88GB` 且 GPU util 正常。
