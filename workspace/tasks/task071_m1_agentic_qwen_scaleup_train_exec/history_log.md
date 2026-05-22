@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 1
 
@@ -215,3 +215,31 @@
 - 与 iter0012158 SFT 的 primary metric delta（original minus SFT）：IFBench `+0.03061224489795924`、AIME25 `-0.01666666666666665`、HMMT `+6.666666666666667`、WMT24++ `-0.933572134629287`、MMLU-Pro `-0.1268284574468085`。
 - 新增原始 Qwen baseline manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml`，并扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 baseline 样本范围、关键 metrics、SFT delta 和 secret scan。
 - 清理本轮临时资源：关闭原始 Qwen 的两跳 SSH tunnel，停止 NemTron `task071_sglang_original_qwen` tmux endpoint，保留 GPU0 上 iter0012158 SFT endpoint `task071_sglang_eval`；`vm4vpn` 仅保留既有 chromium 容器且根分区约 20G 可用。
+- 审计 uncapped SFT 数据完整性：`scaleup_manifest.json` 记录 11 个 M0 registry 数据集 `uncapped=true` 且无 train/val cap；M0 经过 converter 校验后写出 `983397` 条 train 可用记录和 `11354` 条 val-shadow 来源记录，其中 Hermes 三个切片合计 `2389` 条不可验证 assistant/tool-call 目标被 reject。
+- 确认 M1 与 packing 覆盖：M1 curriculum 保持 `983397 -> 983397` train rows 且无 solved-rate drop；Qwen packing 读入全部 `983397` 行，产出 `983224` 条 tokenized sequences 和 `74106` 条 packed sequences，过滤 `173` 条无效/tokenization 行，并有 `211` 条截断到 4096 pack size。
+- 确认训练覆盖：packed split 为 `72947` train rows / `1159` valid rows；planner 使用 `train_iters=ceil(72947/6)=12158`、`global_batch_size=6`，训练日志保存到 `iter_0012158`，最终 validation loss/PPL 为 `0.3308907` / `1.392208`。
+- 按用户指定路径检查 CephFS Qwen 模型：`/mnt/cephfs/datasprocessing/shared_models/Qwen` 在本机和 NemTron 均不存在；本机实际可见的相近目录 `/mnt/cephfs/data/processing/shared_models` 为空且无 `Qwen` 子目录。
+- 额外核对 CephFS 上可用的 Qwen 模型树：`/mnt/cephfs/data/stable/models/Qwen` 存在，按 `config.json` 和顶层 safetensors/bin 权重过滤出 41 个可加载模型目录，覆盖 Qwen2.5、Qwen3、Qwen3.5、Qwen3.6、Qwen3-Coder、Qwen3-Next、QwenLong 等系列。
+- 按用户要求停止 NemTron 上旧 task071 服务：kill 掉 `task071_sglang_eval`，释放 GPU0；复核后 NemTron 无 task071 SGLang/torchrun 残留进程。
+- 新增 `qwen3_30b_a3b_local_train.py`，使用 Megatron-Bridge Qwen3-MoE common finetune builder 接入本地 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`，并固定 full SFT 并行形态 TP=4/PP=2/EP=4、sequence_parallel=true；补充 env var resolver 单测。
+- 验证 Qwen3-4B-Instruct-2507 与 Qwen3-30B-A3B-Instruct-2507 的 `tokenizer.json`、`tokenizer_config.json` sha256 完全一致，因此复用 task071 uncapped Qwen packed split；远端 packed split 为 63 train parquet + 1 valid parquet，并已有 Bridge `.npy` cache。
+- 在 NemTron 上用 Bridge `AutoBridge.import_ckpt` 将 Qwen3-30B-A3B-Instruct-2507 HF checkpoint 导入 Megatron torch_dist：输出 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`，大小约 `57G`，日志出现 `IMPORT_DONE`。
+- 启动 8-GPU 30B-A3B full SFT：tmux session `task071_qwen30b_train`，`CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7`，GBS=8、MBS=1、seq=4096、`train_iters=9119`，checkpoint 输出到 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints`。
+- 首次训练启动因 CLI 传入 `dataset.super3_packed_sft_dir` 在第二次 Hydra merge 阶段被最终 `FinetuningDatasetConfig` struct 拒绝而失败；修正为只通过 `SUPER3_M1_AGENTIC_PACKED_DIR` 环境变量传 packed dir 后重启成功。
+- 训练已从 imported checkpoint 成功 reshard/load 到 TP=4/PP=2，进入 iteration；iter 40 时 loss `0.5799908`、load_balancing_loss `1.689439`，无 skipped/nan，8 卡显存约 `81-87GB`。
+- 继续监控到 iter `80/9119`：consumed samples `640`，lm loss `0.4858986`，load_balancing_loss `1.648061`，无 skipped/nan；当前每 10 iter 约 24s，完整 1 epoch 预计为数小时量级，eval benchmark 对比需等待 final checkpoint export 后执行。
+- Stop-hook 补充复核：`history_log.md` metadata 已更正为 `SESSION=20`；训练仍在 `task071_qwen30b_train` 中运行，最新观测 iter `150/9119`、consumed samples `1200`，lm loss `0.4167098`，无 skipped/nan。
+
+## Session 21
+
+- 接续监控 Qwen3-30B-A3B full SFT：训练已完成到 `iter_0009119`，最终 checkpoint 位于 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints/iter_0009119`，`latest_checkpointed_iteration.txt=9119`，最终 validation loss/PPL 为 `0.3001248` / `1.350027`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 将 `iter_0009119` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119`，导出目录约 `57G`，含 16 个 safetensors shard，`AutoConfig` 显示 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`。
+- 在 NemTron 8 张 H200 上启动 SGLang endpoint：model id `task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf`，`tp=4`、`dp=2`、`context_length=4096`，通过 `vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000` remote forward 暴露给 eval launcher。
+- 对 Qwen3-30B-A3B SFT 跑完五项 full-selected non-dry eval：IFBench、AIME25 local scorer、HMMT、WMT24++、MMLU-Pro 全部 `docker_exit=0`；raw artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full`。
+- SFT 五项主指标：IFBench strict prompt-level `0.30272108843537415`；AIME25 score `0.0`；HMMT symbolic_correct `0.0`、no_answer `93.33333333333333`；WMT24++ `xx->xx` BLEU `33.332009385866584`；MMLU-Pro group exact_match `0.07737699468085106`。
+- 切换同一 8-GPU SGLang endpoint 到原始 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`，model id `qwen3-30b-a3b-instruct-2507-original`，复用同一 vpn tunnel，并运行同一五项 full-selected non-dry baseline；raw artifacts 位于 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full`。
+- 原始 30B 五项主指标：IFBench strict prompt-level `0.3197278911564626`；AIME25 score `0.16666666666666666`；HMMT symbolic_correct `6.666666666666667`、no_answer `93.33333333333333`；WMT24++ `xx->xx` BLEU `33.03998831072459`；MMLU-Pro group exact_match `0.00008311170212765957`。
+- 与 SFT 的 primary metric delta（original minus SFT）：IFBench `+0.017006802721088454`、AIME25 `+0.16666666666666666`、HMMT `+6.666666666666667`、WMT24++ `-0.2920210751419958`、MMLU-Pro `-0.0772938829787234`。
+- 新增结构化结果 manifest：`m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml` 和 `m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml`；扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 30B SFT/original 样本范围、关键 metrics、delta 和 secret scan。
+- 清理运行资源：停止原始 30B SGLang tmux endpoint，NemTron 8 张 GPU 均回到空闲；`vm4vpn` 仅保留既有 chromium 容器，根分区约 `20G` 可用。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `38 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed；`git diff --check` passed。

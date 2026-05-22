@@ -76,6 +76,20 @@ QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH = (
         "m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml"
     )
 )
+TASK071_QWEN3_30B_A3B_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml"
+    )
+)
+QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml"
+    )
+)
 
 
 EXPECTED_FULL_IDS = {
@@ -141,6 +155,18 @@ def _load_task071_uncapped_full_non_dry_results() -> dict:
 def _load_qwen3_4b_original_full_non_dry_results() -> dict:
     return yaml.safe_load(
         QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
+
+
+def _load_task071_qwen3_30b_a3b_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        TASK071_QWEN3_30B_A3B_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
+
+
+def _load_qwen3_30b_a3b_original_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
     )
 
 
@@ -578,6 +604,196 @@ def test_qwen3_4b_original_full_non_dry_results_lock_sft_comparison() -> None:
 
 def test_qwen3_4b_original_full_non_dry_results_do_not_store_secret_tokens() -> None:
     text = QWEN3_4B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_qwen3_30b_a3b_full_non_dry_results_record_full_selected_runs() -> None:
+    """The 30B-A3B follow-up must use the same full-selected benchmark
+    subset as the 4B comparison so the before/after score deltas stay
+    interpretable."""
+    result_manifest = _load_task071_qwen3_30b_a3b_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0009119-hf:v1")
+    assert result_manifest["model"]["training"]["train_iters"] == 9119
+    assert result_manifest["model"]["training"]["global_batch_size"] == 8
+    assert result_manifest["model"]["validation"]["final_loss"] == pytest.approx(
+        0.3001248
+    )
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+
+
+def test_task071_qwen3_30b_a3b_full_non_dry_results_lock_key_metrics() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.30272108843537415)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == 0.0
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == 0.0
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == pytest.approx(
+        93.33333333333333
+    )
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        33.332009385866584
+    )
+    assert by_id["wmt24pp"]["response_stats"]["successful_responses"] == 4971
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.07737699468085106
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_task071_qwen3_30b_a3b_full_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_QWEN3_30B_A3B_FULL_NON_DRY_RESULTS_PATH.read_text(
+        encoding="utf-8"
+    )
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs() -> None:
+    result_manifest = _load_qwen3_30b_a3b_original_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert (
+        result_manifest["model"]["source_model"]
+        == "Qwen/Qwen3-30B-A3B-Instruct-2507"
+    )
+    assert (
+        result_manifest["model"]["endpoint_model_id"]
+        == "qwen3-30b-a3b-instruct-2507-original"
+    )
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17626
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+        assert "comparison_vs_qwen3_30b_a3b_sft_iter0009119" in row
+
+
+def test_qwen3_30b_a3b_original_full_non_dry_results_lock_key_metrics() -> None:
+    result_manifest = _load_qwen3_30b_a3b_original_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.3197278911564626)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(
+        0.16666666666666666
+    )
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == pytest.approx(
+        6.666666666666667
+    )
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == pytest.approx(
+        93.33333333333333
+    )
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        33.03998831072459
+    )
+    assert by_id["wmt24pp"]["response_stats"]["successful_responses"] == 4970
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        8.311170212765957e-05
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_qwen3_30b_a3b_original_full_non_dry_results_lock_sft_comparison() -> None:
+    result_manifest = _load_qwen3_30b_a3b_original_full_non_dry_results()
+    summary_rows = {
+        row["benchmark_id"]: row
+        for row in result_manifest["summary"]["primary_metric_comparison"]
+    }
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert result_manifest["summary"]["comparison_direction"] == (
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    )
+    assert summary_rows["ifbench"][
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(0.017006802721088454)
+    assert summary_rows["aime25"][
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(0.16666666666666666)
+    assert summary_rows["hmmt"][
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(6.666666666666667)
+    assert summary_rows["wmt24pp"][
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(-0.2920210751419958)
+    assert summary_rows["mmlu_pro"][
+        "original_minus_qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(-0.0772938829787234)
+
+    assert by_id["mmlu_pro"]["comparison_vs_qwen3_30b_a3b_sft_iter0009119"][
+        "qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(0.07737699468085106)
+
+
+def test_qwen3_30b_a3b_original_full_non_dry_results_do_not_store_secret_tokens() -> None:
+    text = QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(
+        encoding="utf-8"
+    )
     assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
     assert "HF_TOKEN" not in text
 

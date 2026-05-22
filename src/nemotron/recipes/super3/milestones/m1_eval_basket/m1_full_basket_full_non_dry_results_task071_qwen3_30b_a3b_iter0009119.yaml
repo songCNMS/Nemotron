@@ -1,0 +1,269 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Full-data comparison subset for the Qwen3-30B-A3B iter0009119 agentic SFT checkpoint.
+
+schema_version: 1
+milestone: M1
+run_id: task071_qwen3_30b_a3b_agentic_sft_iter0009119_full_selected_non_dry
+recorded_at_utc: '2026-05-22T04:06:00Z'
+model:
+  artifact: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf:v1
+  endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf
+  source_model: Qwen/Qwen3-30B-A3B-Instruct-2507
+  checkpoint_path: /work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/checkpoints/iter_0009119
+  hf_export_path: /work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119
+  endpoint_max_model_len: 4096
+  training:
+    train_iters: 9119
+    global_batch_size: 8
+    micro_batch_size: 1
+    tensor_model_parallel_size: 4
+    pipeline_model_parallel_size: 2
+    expert_model_parallel_size: 4
+    packed_train_rows: 72947
+    packed_valid_rows: 1159
+  validation:
+    final_iter: 9119
+    final_loss: 0.3001248
+    final_ppl: 1.350027
+    previous_eval_iter: 9000
+    previous_eval_loss: 0.3093685
+    previous_eval_ppl: 1.362564
+launcher:
+  config: m1_full_basket_launcher_available
+  launcher: nemo-evaluator-launcher
+  launcher_version: 0.2.5
+  eval_factory_image_tag: '26.03'
+  deployment_type: none
+  evaluator_host: vm4vpn
+  endpoint_access: ssh remote forward vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000
+  endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+run_scope:
+  non_dry: true
+  task_order_source: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml
+  selected_regression_tasks: true
+  full_selected_tasks_attempted: true
+  sample_limits_removed: true
+  all_available_tasks_attempted: false
+  selected_benchmark_ids:
+  - ifbench
+  - aime25
+  - hmmt
+  - wmt24pp
+  - mmlu_pro
+  selection_reason: Full-data comparison subset runnable on the current 4096-token
+    endpoint without gated dataset, official judge, external executable API, or long-context
+    blockers.
+  request_body_logging: limited_eval_factory_logs_only
+summary:
+  attempted_tasks: 5
+  scored_tasks: 5
+  failed_tasks: 0
+  total_successful_responses_from_stats: 17627
+  raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full
+  compatibility_overrides:
+  - benchmark_id: ifbench
+    reason: Used max_new_tokens=1536 so all 294 IFBench prompts fit the 4096-token
+      endpoint window.
+  - benchmark_id: aime25
+    reason: Used aime_2025_nemo local exact or sympy scoring on the same 30 AIME 2025
+      problems with 10 repeats.
+results:
+- benchmark_id: ifbench
+  launcher_task: ifbench.ifbench
+  execution_task: ifbench.ifbench
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    prompts: 294
+    description: full IFBench prompt set
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full/ifbench_ctx1536
+  observed_metrics:
+    instruction_level_loose_accuracy: 0.35522388059701493
+    instruction_level_strict_accuracy: 0.33432835820895523
+    prompt_level_loose_accuracy: 0.3197278911564626
+    prompt_level_strict_accuracy: 0.30272108843537415
+    strict_count: 0.4838709677419355
+    strict_custom: 0.4
+    strict_format: 0.5204081632653061
+  response_stats:
+    avg_completion_tokens: 303.13
+    avg_latency_ms: 1938.8
+    avg_prompt_tokens: 89.58
+    avg_total_tokens: 392.77
+    finish_reason:
+      length: 20
+      stop: 274
+    max_completion_tokens: 1536
+    max_prompt_tokens: 2341
+    max_total_tokens: 2378
+    status_codes:
+      '200': 294
+    successful_responses: 294
+    total_responses: 294
+  compatibility_note:
+    scored_max_new_tokens: 1536
+    reason: Matched the 4096-token endpoint by capping IFBench completions at 1536
+      tokens so all 294 prompts complete.
+- benchmark_id: aime25
+  launcher_task: simple_evals.AIME_2025
+  execution_task: simple_evals.aime_2025_nemo
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    problems: 30
+    repeats_per_problem: 10
+    requests: 300
+    description: full AIME 2025 with 10 repeats per problem
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full/aime25_nemo
+  observed_metrics:
+    score: 0.0
+    stddev: 0.0
+    stderr: 0.0
+  response_stats:
+    avg_completion_tokens: 3.74
+    avg_latency_ms: 696.53
+    avg_prompt_tokens: 158.69
+    avg_total_tokens: 162.23
+    finish_reason:
+      stop: 300
+    max_completion_tokens: 16
+    max_prompt_tokens: 294
+    max_total_tokens: 299
+    status_codes:
+      '200': 300
+    successful_responses: 300
+    total_responses: 300
+  compatibility_note:
+    reason: Used aime_2025_nemo local exact or sympy scoring on the same 30 AIME 2025
+      problems with 10 repeats, avoiding the official external judge credential path.
+- benchmark_id: hmmt
+  launcher_task: nemo_skills.ns_hmmt_feb2025
+  execution_task: nemo_skills.ns_hmmt_feb2025
+  attempt_status: scored
+  source_basket: full
+  sample_scope:
+    limit_samples: null
+    entries: 30
+    description: full HMMT February 2025 task
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full/hmmt
+  observed_metrics:
+    avg_tokens: 4
+    gen_seconds: 6
+    no_answer_percent: 93.33333333333333
+    num_entries: 30
+    symbolic_correct_percent: 0.0
+  response_stats:
+    avg_completion_tokens: 4.23
+    avg_latency_ms: 668.03
+    avg_prompt_tokens: 138.83
+    avg_total_tokens: 143.06
+    finish_reason:
+      stop: 30
+    max_completion_tokens: 14
+    max_prompt_tokens: 656
+    max_total_tokens: 670
+    status_codes:
+      '200': 30
+    successful_responses: 30
+    total_responses: 30
+- benchmark_id: wmt24pp
+  launcher_task: nemo_skills.ns_wmt24pp
+  execution_task: nemo_skills.ns_wmt24pp
+  attempt_status: scored
+  source_basket: full
+  sample_scope:
+    limit_samples: null
+    output_jsonl_rows: 4990
+    description: full WMT24++ task output
+    response_stats_requests: 4971
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full/wmt24pp
+  observed_metrics:
+    bleu_by_direction:
+      en_to_de_DE: 28.343244558335254
+      en_to_es_MX: 41.78108603361783
+      en_to_fr_FR: 35.89592438766886
+      en_to_it_IT: 36.515111945983605
+      en_to_ja_JP: 24.124680003727363
+      en_to_xx: 33.332009385866584
+      xx_to_de_DE: 28.343244558335254
+      xx_to_es_MX: 41.78108603361783
+      xx_to_fr_FR: 35.89592438766886
+      xx_to_it_IT: 36.515111945983605
+      xx_to_ja_JP: 24.124680003727363
+      xx_to_xx: 33.332009385866584
+    bleu_xx_to_xx: 33.332009385866584
+  response_stats:
+    avg_completion_tokens: 60.78
+    avg_latency_ms: 853.15
+    avg_prompt_tokens: 60.81
+    avg_total_tokens: 121.83
+    finish_reason:
+      length: 2
+      stop: 4969
+    max_completion_tokens: 512
+    max_prompt_tokens: 242
+    max_total_tokens: 559
+    status_codes:
+      '200': 4971
+    successful_responses: 4971
+    total_responses: 4971
+  compatibility_note: The scored output file has 4990 JSONL rows; response-stats counts
+    reflect endpoint responses recorded by the interceptor.
+- benchmark_id: mmlu_pro
+  launcher_task: lm-evaluation-harness.mmlu_pro
+  execution_task: lm-evaluation-harness.mmlu_pro
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    requests: 12032
+    num_fewshot: 5
+    description: full MMLU-Pro test split
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full/mmlu_pro
+  observed_metrics:
+    category_exact_match:
+      biology: 0.07531380753138076
+      business: 0.06590621039290241
+      chemistry: 0.014134275618374558
+      computer_science: 0.11463414634146342
+      economics: 0.11018957345971564
+      engineering: 0.02889576883384933
+      health: 0.11858190709046455
+      history: 0.07349081364829396
+      law: 0.011807447774750226
+      math: 0.05847520355292376
+      other: 0.18614718614718614
+      philosophy: 0.14829659318637275
+      physics: 0.05850654349499615
+      psychology: 0.12781954887218044
+    group_exact_match: 0.07737699468085106
+    group_exact_match_stderr: 0.0023929694555540515
+  response_stats:
+    avg_completion_tokens: 30.73
+    avg_latency_ms: 697.64
+    avg_prompt_tokens: 1372.86
+    avg_total_tokens: 1404.24
+    finish_reason:
+      length: 11085
+      stop: 947
+    max_completion_tokens: 32
+    max_prompt_tokens: 2859
+    max_total_tokens: 2891
+    status_codes:
+      '200': 12032
+    successful_responses: 12032
+    total_responses: 12032

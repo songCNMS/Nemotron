@@ -598,6 +598,35 @@ def test_qwen_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
     assert resolve_qwen_hf_model() == str(target)
 
 
+def test_qwen30b_a3b_local_train_requires_env_var(monkeypatch) -> None:
+    import pytest
+
+    pytest.importorskip("omegaconf")
+    from nemotron.recipes.super3.stage1_sft.qwen3_30b_a3b_local_train import (
+        QWEN_MODEL_ENV_VAR,
+        resolve_qwen_hf_model,
+    )
+
+    monkeypatch.delenv(QWEN_MODEL_ENV_VAR, raising=False)
+    with pytest.raises(ValueError, match=QWEN_MODEL_ENV_VAR):
+        resolve_qwen_hf_model()
+
+
+def test_qwen30b_a3b_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
+    import pytest
+
+    pytest.importorskip("omegaconf")
+    from nemotron.recipes.super3.stage1_sft.qwen3_30b_a3b_local_train import (
+        QWEN_MODEL_ENV_VAR,
+        resolve_qwen_hf_model,
+    )
+
+    target = tmp_path / "qwen3-30b-a3b"
+    target.mkdir()
+    monkeypatch.setenv(QWEN_MODEL_ENV_VAR, str(target))
+    assert resolve_qwen_hf_model() == str(target)
+
+
 def test_convert_m0_record_raises_on_empty_supervision_across_all_envs() -> None:
     """Regression for review finding P1 #4: every env must reject empty assistant supervision.
 
