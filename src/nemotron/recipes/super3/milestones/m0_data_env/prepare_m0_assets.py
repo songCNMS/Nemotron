@@ -1985,13 +1985,17 @@ def _first_nonempty_string(row: Mapping[str, Any], keys: Sequence[str]) -> str:
 
 
 def _infer_evidence_spans(document: str, answer: str) -> list[str]:
-    normalized_doc = document.casefold()
-    normalized_answer = answer.casefold()
-    if not normalized_answer:
+    if not answer:
         return []
-    match_index = normalized_doc.find(normalized_answer)
-    if match_index < 0:
+    # Case-insensitive search over the ORIGINAL document so the returned
+    # indices map back to original-document slices. `casefold()` can change
+    # string length (e.g. German `ß` → `ss`), so indexing into the
+    # casefolded form and then slicing the original is unsafe.
+    match = re.search(re.escape(answer), document, re.IGNORECASE)
+    if match is None:
         return []
+    match_index = match.start()
+    match_end = match.end()
     start_candidates = [
         document.rfind(".", 0, match_index),
         document.rfind("\n", 0, match_index),
@@ -2000,12 +2004,12 @@ def _infer_evidence_spans(document: str, answer: str) -> list[str]:
     end_candidates = [
         index
         for index in (
-            document.find(".", match_index + len(answer)),
-            document.find("\n", match_index + len(answer)),
+            document.find(".", match_end),
+            document.find("\n", match_end),
         )
         if index >= 0
     ]
-    end = min(end_candidates) + 1 if end_candidates else min(len(document), match_index + len(answer) + 240)
+    end = min(end_candidates) + 1 if end_candidates else min(len(document), match_end + 240)
     span = document[start:end].strip()
     return [span] if span else []
 
