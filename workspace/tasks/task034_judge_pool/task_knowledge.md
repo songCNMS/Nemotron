@@ -1,6 +1,6 @@
 # task034_judge_pool - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -10,3 +10,4 @@
 - `MockJudge` can score from per-request overrides or a stable SHA-256 hash path for local tests.
 - `evaluate_ensemble` sorts responses by frozen judge version key before aggregating, so voting is deterministic independent of input judge order.
 - `DeferredLiveJudgeAdapter` is an explicit boundary for future live GenRM/judge service routing; it intentionally raises until production dependencies are ready.
+- Session 2 added no new judge-pool implementation knowledge; it confirmed PR #145 merge and handed off the local judge-pool contract for task038 sandbox curriculum work.
