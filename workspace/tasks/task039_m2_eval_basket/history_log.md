@@ -1,6 +1,6 @@
 # task039_m2_eval_basket - history_log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-22
 
@@ -11,3 +11,10 @@
   W&B publication remain explicit blockers.
 - Opened PR https://github.com/songCNMS/Nemotron/pull/147 with head
   `37bb4b8f9bc3b1f2ea61703efa971cb25fe008c2`.
+
+## Session 2 - 2026-05-22
+
+- PM closeout confirmed PR #147 and the five requested M2 sandbox scaffolds were merged.
+- Local `main` fast-forward synced to `f4acf31adf4220474c04bb9dbdae2d2508e9fe5e`; sync was clean.
+- No active implementation assignment remains after the post-merge sync.
+- Status moved from Working to Idle through PR-flow bookkeeping branch `intern_nem_dev_3/task039_postmerge_sync_s2`.
