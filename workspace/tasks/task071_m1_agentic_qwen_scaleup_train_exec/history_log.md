@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Session 1
 
@@ -287,3 +287,11 @@
 - validation points：iter `500` loss/PPL `0.3861638` / `1.471326`，iter `1000` loss/PPL `0.4025858` / `1.495687`，iter `1500` loss/PPL `0.4071296` / `1.502499`。
 - 最新解析到 train iter `1530/10110`；训练日志内 max skipped iterations `0`、max nan iterations `0`；8 张 H200 显存约 `81-88GB`，GPU util 正常。
 - 生成当前训练健康 artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/train_loss_points.csv`、`validation_points.csv`、`health_summary.json`、`loss_validation_curve.png`。
+
+## Session 26
+
+- 按用户要求将 conservative Qwen3-30B-A3B loss 曲线返回到飞书；先从 NemTron 刷新 train log 并重生成本地 artifacts。
+- 最新曲线覆盖 train iter `1670/10110`；validation points 仍为 iter `500` loss/PPL `0.3861638` / `1.471326`、iter `1000` loss/PPL `0.4025858` / `1.495687`、iter `1500` loss/PPL `0.4071296` / `1.502499`。
+- 训练健康摘要：max skipped iterations `0`，max nan iterations `0`，saved checkpoints `[500, 1000, 1500]`。
+- 飞书图片发送成功：`loss_validation_curve.png` 发往主管群 `oc_85148c845ddf7f30b7d7d7944596cccc`，image message id `om_x100b6e366d1830a4b3664059f07ff3f`，follow-up text message id `om_x100b6e366d3478e8b3ef574d8000f01`。
+- 本地 artifacts 路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/loss_validation_curve.png`、`health_summary.json`、`train_loss_points.csv`、`validation_points.csv`。

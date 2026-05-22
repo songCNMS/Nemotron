@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Notes
 
@@ -97,3 +97,4 @@
 - Conservative 30B run fact: Session 23 regenerated full-reference M1 packed data with `665,777,436` tokens, `161757` packed train rows, and `train_iters=10110` for 0.5 epoch at GBS=8; NemTron session `task067_task071_qwen30b_a3b_sft_strategy_conservative_v2` reached iter `100/10110` with no skipped/nan iterations and final config `optimizer.min_lr=1e-7`.
 - Conservative 30B checkpoint fact: Session 24 confirmed the same tmux run passed iter `500/10110`, saved `iter_0000500` with `latest_checkpointed_iteration.txt=500`, reported validation loss/PPL `0.3861638` / `1.471326`, and continued beyond iter `600/10110` without skipped/nan iterations.
 - Conservative 30B monitoring fact: Session 25 confirmed checkpoints `iter_0000500`, `iter_0001000`, and `iter_0001500` exist with latest checkpoint marker `1500`; validation loss/PPL were `0.3861638/1.471326`, `0.4025858/1.495687`, and `0.4071296/1.502499`; local curve artifacts are under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics`.
+- Feishu image return fact: use `/work-agents/Nemotron/workspace/.skill_sources/intern_agent_skills/intern_feishu_messaging_skill/scripts/send_image.py --intern-name intern_nemontron_code_reading --project Nemotron --file <png>` to return local PNG charts to the supervisor group; Session 26 sent `loss_validation_curve.png` successfully.
