@@ -84,6 +84,18 @@ registries:
     consumed_by:
       - prepare_m1_swe2_jsonl.py (resolve_sif_path / validate_sif_exists)
 
+  - id: m2_swe_harnesses
+    kind: swe_harness_registry
+    path: ../m1_swe2/swe_harness_registry.yaml
+    summary: |
+      Sandbox-runnable M2 SWE multi-harness adapter declarations for
+      OpenHands, OpenCode, and Codex. Holds launcher routing metadata
+      beside the existing task070 OpenHands loop path without importing
+      external harness packages or requiring SIF/Docker/cluster smoke.
+    produced_by: (authored)
+    consumed_by:
+      - swe_multi_harness.py (adapter declaration + route lookup)
+
   - id: m1_rlhf_envs
     kind: bridge_env_registry
     path: ../m1_rlhf/rlhf_env_registry.yaml
@@ -109,7 +121,7 @@ registries:
     kind: sandbox_image_registry
     path: ../sandbox_containers/sandbox_image_registry.yaml
     summary: |
-      3 sandbox container images (code_exec / lean / terminal) with
+      4 sandbox container images (code_exec / lean / terminal / sql_sqlite) with
       per-env routing. Pairs each Dockerfile with the M0 envs whose
       verifier needs that runtime to run safely. task021 Session 3
       source of truth; Session 4 wires the ContainerSandbox shim into
@@ -150,3 +162,17 @@ registries:
     consumed_by:
       - regression_report.py (gate_metric lookup for combined diff)
       - stage3_eval/config/m1_full_basket.yaml (combined NeMo Evaluator selector)
+
+  # M2 eval — acceptance basket scaffold (task039 Session 1)
+  - id: m2_eval_basket
+    kind: eval_basket_registry
+    path: ../m2_eval_basket/m2_eval_basket_registry.yaml
+    summary: |
+      Sandbox-runnable M2 eval basket registry for HLE, BrowseComp,
+      BIRD real execution, BFCL full, MCP-Mark, Tool Decathlon, and
+      multilingual IF/code. Rows carry adapter metadata plus explicit
+      cluster/API/data/Qwen-baseline blockers; later sessions wire live
+      assets and promotion baseline numbers.
+    produced_by: (authored)
+    consumed_by:
+      - m2_eval_basket/registry.py (adapter lookup + runtime blocker report)

@@ -2,7 +2,7 @@ schema_version: 1
 milestone: M1
 description: |
   Sandbox container image registry (roadmap §1.8 task021 Session 3).
-  Three Dockerfiles co-located with this YAML pair an `image_id` with
+  Four Dockerfiles co-located with this YAML pair an `image_id` with
   the M0 environments that need that runtime to run safely:
 
     - `code_exec`  → `code_execution_python` env's `python_unit_tests`
@@ -13,14 +13,15 @@ description: |
                      M0 `lean_proof_stub` verifier does not call it)
     - `terminal`   → `terminal_basic_shell` + future `terminal_pivot`
                      env's bash command execution
+    - `sql_sqlite` → `sql_text_to_query` env's safe local SQLite
+                     execution scaffold for M2 task024 Session 1
 
   `image_resolver.py::resolve_image_for_env(env_id)` reads this file
   to map an M0 env id back to its sandbox image. The
   `build_sandbox_containers.sh` script reads it to build each image
   via `docker build` / `podman build` / `singularity build`.
 
-  Adding a new sandbox runtime (e.g., SQL sandbox for task057's
-  `sql_text_to_query`) is a one-row addition here + a new Dockerfile.
+  Adding a new sandbox runtime is a one-row addition here + a new Dockerfile.
 
 images:
   - image_id: code_exec
@@ -61,6 +62,7 @@ images:
     dockerfile_path: terminal.Dockerfile
     target_envs:
       - terminal_basic_shell
+      - terminal_workplace
       # terminal_pivot will be added once it ships in M0 (task057).
     base_image: alpine:3.20
     runtime_recommendations:
@@ -72,3 +74,21 @@ images:
     notes: |
       bash + coreutils + findutils + grep + sed + gawk. Alpine for size
       (~10 MB). UID 1000 non-root.
+
+  - image_id: sql_sqlite
+    version_tag: v0.1.0
+    dockerfile_path: sql_sqlite.Dockerfile
+    target_envs:
+      - sql_text_to_query
+    base_image: python:3.12-slim
+    runtime_recommendations:
+      - "--network=none"
+      - "--read-only"
+      - "--tmpfs /tmp"
+      - "--memory=256m"
+      - "--cpus=1"
+    notes: |
+      Python 3.12 stdlib sqlite3 only. Session 1 verifier builds an
+      in-memory SQLite database from record-local schema + fixtures and
+      rejects non-read-only candidate SQL before execution. No external
+      DB service or cluster smoke is required for this scaffold.

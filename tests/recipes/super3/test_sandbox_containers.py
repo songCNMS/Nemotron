@@ -41,10 +41,10 @@ from nemotron.recipes.super3.milestones.sandbox_containers.image_resolver import
 # ---------- Registry shape ----------
 
 
-def test_registry_loads_three_declared_images() -> None:
+def test_registry_loads_four_declared_images() -> None:
     rows = load_sandbox_image_registry()
     image_ids = {row["image_id"] for row in rows}
-    assert image_ids == {"code_exec", "lean", "terminal"}
+    assert image_ids == {"code_exec", "lean", "terminal", "sql_sqlite"}
 
 
 def test_registry_path_lives_in_sandbox_containers_dir() -> None:
@@ -123,6 +123,7 @@ def test_image_tag_is_image_id_colon_version() -> None:
     by_id = {row["image_id"]: row for row in rows}
     assert image_tag(by_id["code_exec"]) == "code_exec:v0.1.0"
     assert image_tag(by_id["lean"]) == "lean:v0.1.0"
+    assert image_tag(by_id["sql_sqlite"]) == "sql_sqlite:v0.1.0"
 
 
 # ---------- Per-env resolution ----------
@@ -132,6 +133,8 @@ def test_resolve_image_for_known_env_returns_correct_tag() -> None:
     assert resolve_image_for_env("code_execution_python") == "code_exec:v0.1.0"
     assert resolve_image_for_env("math_formal_lean") == "lean:v0.1.0"
     assert resolve_image_for_env("terminal_basic_shell") == "terminal:v0.1.0"
+    assert resolve_image_for_env("terminal_workplace") == "terminal:v0.1.0"
+    assert resolve_image_for_env("sql_text_to_query") == "sql_sqlite:v0.1.0"
 
 
 def test_resolve_image_for_unsandboxed_env_returns_none() -> None:
@@ -148,12 +151,19 @@ def test_envs_covered_by_registry_matches_target_envs_union() -> None:
     assert "code_execution_python" in covered
     assert "math_formal_lean" in covered
     assert "terminal_basic_shell" in covered
+    assert "terminal_workplace" in covered
+    assert "sql_text_to_query" in covered
 
 
 # ---------- Dockerfile content lint ----------
 
 
-_DOCKERFILE_NAMES = ("code_exec.Dockerfile", "lean.Dockerfile", "terminal.Dockerfile")
+_DOCKERFILE_NAMES = (
+    "code_exec.Dockerfile",
+    "lean.Dockerfile",
+    "terminal.Dockerfile",
+    "sql_sqlite.Dockerfile",
+)
 
 
 def _dockerfile_path(name: str) -> Path:

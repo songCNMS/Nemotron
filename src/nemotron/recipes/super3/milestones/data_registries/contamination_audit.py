@@ -139,6 +139,16 @@ def _classify_row(row: Mapping[str, Any]) -> tuple[list[str], list[str]]:
     return blocker_reasons, informational_reasons
 
 
+def classify_contamination_row(row: Mapping[str, Any]) -> tuple[list[str], list[str]]:
+    """Public wrapper for row-level contamination posture.
+
+    Returns ``(blocker_reasons, informational_reasons)`` using the same
+    semantics as ``find_weak_contamination``. Other registry reports use
+    this helper so blocker/informational posture does not drift.
+    """
+    return _classify_row(row)
+
+
 def find_weak_contamination(
     index_path: Path | None = None,
 ) -> dict[str, list[JsonDict]]:
@@ -236,6 +246,7 @@ def format_contamination_report(result: Mapping[str, list]) -> str:
 
 __all__ = [
     "SENTINEL_PHRASES",
+    "classify_contamination_row",
     "find_weak_contamination",
     "format_contamination_report",
     "is_placeholder_entry",

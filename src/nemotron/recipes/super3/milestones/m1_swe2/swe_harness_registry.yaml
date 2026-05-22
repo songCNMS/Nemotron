@@ -1,0 +1,56 @@
+schema_version: 1
+milestone: M2
+description: |
+  Sandbox-runnable SWE multi-harness registry for task026 Session 1.
+  Rows declare the adapter and routing metadata for OpenHands, OpenCode,
+  and Codex SWE harnesses beside the existing task070 OpenHands path.
+
+  This registry does not require the real OpenCode/Codex packages, Docker,
+  SIF images, or cluster access. Rows marked `sandbox_declared` are adapter
+  declarations only; real implementation and cluster smoke stay explicit
+  follow-up work.
+
+harnesses:
+  - harness_id: openhands
+    nemo_gym_env: swe_agents
+    mix: swe2
+    m0_env_id: swe2_openhands_trace
+    sif_source: swegym
+    adapter_class: nemotron.recipes.super3.milestones.m1_swe2.openhands_loop.OpenHandsLoop
+    tool_format: openhands
+    config_path: responses_api_agents/swe_agents/configs/swebench_openhands_training.yaml
+    status: protocol_ready
+    cluster_smoke_required: true
+    notes: |
+      Existing task070 Session 1 protocol/fake-stub path. The real upstream
+      OpenHands adapter and SIF-backed smoke remain task070 Session 2-3 work.
+
+  - harness_id: opencode
+    nemo_gym_env: swe_agents_opencode
+    mix: swe2
+    m0_env_id: null
+    sif_source: swegym
+    adapter_class: nemotron.recipes.super3.milestones.m1_swe2.swe_multi_harness.OpenCodeLoopAdapter
+    tool_format: opencode
+    config_path: responses_api_agents/swe_agents/configs/swebench_opencode_training.yaml
+    status: sandbox_declared
+    cluster_smoke_required: true
+    notes: |
+      M2 task026 adapter declaration for OpenCode-style tool I/O. Session 1
+      only pins the routing surface; implementation, packaged config, and
+      container-backed smoke are follow-up work.
+
+  - harness_id: codex
+    nemo_gym_env: swe_agents_codex
+    mix: swe2
+    m0_env_id: null
+    sif_source: swegym
+    adapter_class: nemotron.recipes.super3.milestones.m1_swe2.swe_multi_harness.CodexLoopAdapter
+    tool_format: codex
+    config_path: responses_api_agents/swe_agents/configs/swebench_codex_training.yaml
+    status: sandbox_declared
+    cluster_smoke_required: true
+    notes: |
+      M2 task026 adapter declaration for Codex CLI-style tool I/O. Session 1
+      only pins the routing surface; implementation, packaged config, and
+      container-backed smoke are follow-up work.

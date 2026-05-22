@@ -36,9 +36,11 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (  
     DATA_REGISTRY_PATH,
     ENV_REGISTRY_PATH,
     SYSTEM_PROMPTS,
+    bird_sql_execution_context,
     load_yaml,
     normalize_sql,
     score_sql_execution_match,
+    score_sql_execution_match_with_diagnostics,
     transform_bird_sql,
     validate_registries,
 )
@@ -195,6 +197,48 @@ def test_transform_handles_missing_difficulty() -> None:
     assert record["extra_env_info"]["difficulty"] is None
 
 
+def test_transform_marks_sql_execution_unavailable_without_fixture_context() -> None:
+    row = _bird_row()
+    record = transform_bird_sql(row, _spec("m0_bird_sql"))
+    sql_execution = record["extra_env_info"]["sql_execution"]
+    assert sql_execution["engine"] == "sqlite"
+    assert sql_execution["db_id"] == "movies_4_directors"
+    assert sql_execution["available"] is False
+
+
+def test_transform_carries_local_sqlite_execution_context_when_present() -> None:
+    row = _bird_row(
+        db_id="movies_4_directors",
+        gold_sql="SELECT COUNT(*) FROM movies;",
+    )
+    row["schema_sql"] = "CREATE TABLE movies (id INTEGER, title TEXT);"
+    row["fixture_rows"] = {
+        "movies": [
+            {"id": 1, "title": "A"},
+            {"id": 2, "title": "B"},
+        ]
+    }
+    record = transform_bird_sql(row, _spec("m0_bird_sql"))
+    sql_execution = record["extra_env_info"]["sql_execution"]
+    assert sql_execution["available"] is True
+    assert sql_execution["schema_sql"].startswith("CREATE TABLE movies")
+    assert len(sql_execution["fixture_rows"]["movies"]) == 2
+
+
+def test_bird_sql_execution_context_accepts_schema_aliases() -> None:
+    context = bird_sql_execution_context(
+        {
+            "sqlite_schema": "CREATE TABLE movies (id INTEGER);",
+            "sqlite_fixture_rows": {"movies": [{"id": 1}]},
+            "order_sensitive": True,
+        },
+        db_id="movies",
+    )
+    assert context["available"] is True
+    assert context["schema_sql"] == "CREATE TABLE movies (id INTEGER);"
+    assert context["order_sensitive"] is True
+
+
 # ---------- normalize_sql ----------
 
 
@@ -244,6 +288,93 @@ def test_score_empty_expected_returns_zero() -> None:
     assert score_sql_execution_match("SELECT * FROM t", "") == 0.0
 
 
+def test_score_with_diagnostics_falls_back_to_normalized_sql_without_context() -> None:
+    score, diagnostics = score_sql_execution_match_with_diagnostics(
+        "SELECT * FROM t;",
+        "select * from t",
+    )
+    assert score == 1.0
+    assert diagnostics["sql_execution_mode"] == "normalized_sql"
+    assert diagnostics["sql_match"] is True
+
+
+def test_score_with_local_sqlite_execution_context_matches_result_rows() -> None:
+    context = {
+        "sql_execution": {
+            "engine": "sqlite",
+            "schema_sql": "CREATE TABLE movies (id INTEGER, genre TEXT);",
+            "fixture_rows": {
+                "movies": [
+                    {"id": 1, "genre": "comedy"},
+                    {"id": 2, "genre": "drama"},
+                    {"id": 3, "genre": "comedy"},
+                ]
+            },
+        }
+    }
+    score, diagnostics = score_sql_execution_match_with_diagnostics(
+        "SELECT COUNT(*) FROM movies WHERE genre = 'comedy'",
+        "SELECT COUNT(*) FROM movies WHERE genre = 'comedy'",
+        context,
+    )
+    assert score == 1.0
+    assert diagnostics["sql_execution_mode"] == "local_sqlite"
+    assert diagnostics["sql_execution_match"] is True
+
+
+def test_score_with_local_sqlite_execution_context_detects_result_mismatch() -> None:
+    context = {
+        "sql_execution": {
+            "engine": "sqlite",
+            "schema_sql": "CREATE TABLE movies (id INTEGER);",
+            "fixture_rows": {"movies": [{"id": 1}, {"id": 2}]},
+        }
+    }
+    score, diagnostics = score_sql_execution_match_with_diagnostics(
+        "SELECT COUNT(*) FROM movies WHERE id > 1",
+        "SELECT COUNT(*) FROM movies",
+        context,
+    )
+    assert score == 0.0
+    assert diagnostics["sql_execution_mode"] == "local_sqlite"
+    assert diagnostics["sql_execution_match"] is False
+
+
+def test_score_with_local_sqlite_rejects_non_readonly_candidate() -> None:
+    context = {
+        "sql_execution": {
+            "engine": "sqlite",
+            "schema_sql": "CREATE TABLE movies (id INTEGER);",
+            "fixture_rows": {"movies": [{"id": 1}]},
+        }
+    }
+    score, diagnostics = score_sql_execution_match_with_diagnostics(
+        "DELETE FROM movies",
+        "SELECT COUNT(*) FROM movies",
+        context,
+    )
+    assert score == 0.0
+    assert diagnostics["candidate_error"] == "only SELECT/WITH queries are allowed"
+
+
+def test_score_with_local_sqlite_rejects_unsafe_schema_token() -> None:
+    context = {
+        "sql_execution": {
+            "engine": "sqlite",
+            "schema_sql": "ATTACH DATABASE '/tmp/other.db' AS other;",
+        }
+    }
+    score, diagnostics = score_sql_execution_match_with_diagnostics(
+        "SELECT 1",
+        "SELECT 1",
+        context,
+    )
+    assert score == 0.0
+    assert diagnostics["sql_execution_setup_error"] == (
+        "schema_sql contains an unsafe SQLite token"
+    )
+
+
 # ---------- score_record dispatch ----------
 
 
@@ -270,6 +401,26 @@ def test_score_record_sql_execution_match_no_match() -> None:
     score, diagnostics = score_record("INSERT INTO movies VALUES (1)", record)
     assert score == 0.0
     assert diagnostics["sql_match"] is False
+
+
+def test_score_record_uses_local_sqlite_execution_context() -> None:
+    record = {
+        "environment": "sql_text_to_query",
+        "expected_answer": "SELECT COUNT(*) FROM movies",
+        "reward_config": {"verifier": "sql_execution_match"},
+        "extra_env_info": {
+            "db_id": "movies_4",
+            "sql_execution": {
+                "engine": "sqlite",
+                "schema_sql": "CREATE TABLE movies (id INTEGER);",
+                "fixture_rows": {"movies": [{"id": 1}, {"id": 2}]},
+            },
+        },
+    }
+    score, diagnostics = score_record("SELECT COUNT(*) FROM movies", record)
+    assert score == 1.0
+    assert diagnostics["sql_match"] is True
+    assert diagnostics["sql_execution_mode"] == "local_sqlite"
 
 
 # ---------- Error surfaces ----------
@@ -311,7 +462,8 @@ def test_env_registry_carries_new_sql_text_to_query_env() -> None:
     assert env is not None
     assert env["family"] == "structured_query"
     assert env["reward"]["verifier"] == "sql_execution_match"
-    assert env["resources"]["sandbox"] == "none"
+    assert env["resources"]["sandbox"] == "sql_sqlite"
+    assert env["resources"]["tools"] == ["sqlite3"]
     required = env["health_check"]["required_fields"]
     assert any("db_id" in r for r in required)
 

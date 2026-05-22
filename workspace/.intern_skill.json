@@ -1,5 +1,8 @@
 {
   "enabled": [
-    "intern_agent_skills/intern_feishu_docs_skill"
+    "intern_agent_skills/intern_feishu_docs_skill",
+    "intern_agent_skills/secretary_pm_dev_test_intern_team_pattern_skill",
+    "intern_agent_skills/intern_ltp_skill",
+    "intern_agent_skills/intern_feishu_messaging_skill"
   ]
 }

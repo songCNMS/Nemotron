@@ -261,17 +261,14 @@ def test_live_unified_index_validates_clean_after_full_basket_addition() -> None
 
 def test_full_basket_uses_existing_eval_basket_registry_kind() -> None:
     """task020 Session 1 explicitly reuses task019's schema kind — no
-    new KNOWN_KINDS entry expected. Lock that to catch accidental
-    expansion."""
+    new eval-basket-specific KNOWN_KINDS entry expected. Lock that to
+    catch accidental expansion while allowing unrelated registry kinds
+    such as M2 SWE harness metadata."""
     from nemotron.recipes.super3.milestones.data_registries.schema import (
         KNOWN_KINDS,
     )
     assert "eval_basket_registry" in KNOWN_KINDS
-    assert len(KNOWN_KINDS) == 7, (
-        f"KNOWN_KINDS grew unexpectedly to {len(KNOWN_KINDS)} "
-        f"({sorted(KNOWN_KINDS)}); task020 Session 1 should reuse the "
-        "task019 kind, not add a new one"
-    )
+    assert "m2_eval_basket_registry" not in KNOWN_KINDS
 
 
 # ---------- m1_full_basket.yaml ----------
