@@ -299,7 +299,7 @@
 ## Session 27
 
 - 按用户要求继续下一步并返回最新 metric 曲线图；从 NemTron 刷新 train log 后生成 `metric_curves.png`，图中包含 train/validation loss、validation PPL、load-balancing loss、learning rate 和 grad norm。
-- 最新曲线覆盖 train iter `3920/10110`；latest train lm loss `0.3808611`，load_balancing_loss `1.218161`，LR `7.135267e-7`，grad norm `0.722`，max skipped/nan iterations 仍为 `0/0`。
-- 最新和当前最好 validation 均为 iter `3500`：loss/PPL `0.3752722` / `1.455387`；已保存 checkpoints `[500, 1000, 1500, 2000, 2500, 3000, 3500]`。
-- 飞书图片发送成功：`metric_curves.png` 发往主管群 `oc_85148c845ddf7f30b7d7d7944596cccc`，image message id `om_x100b6e37eb2ab0acb4cb96447401486`，follow-up text message id `om_x100b6e37e8c7a0b4b2cae3862e6848a`。
+- 训练接近 iter 4000 时等待 eval/save 完成后重新生成最终返回图；最新曲线覆盖 train iter `4020/10110`，latest train lm loss `0.4020862`，load_balancing_loss `1.234097`，LR `7.002907e-7`，grad norm `0.862`，max skipped/nan iterations 仍为 `0/0`。
+- 最新 validation 为 iter `4000`：loss/PPL `0.3803424` / `1.462785`；当前最好 validation 仍为 iter `3500`：loss/PPL `0.3752722` / `1.455387`；已保存 checkpoints `[500, 1000, 1500, 2000, 2500, 3000, 3500, 4000]`。
+- 飞书最终图片发送成功：`metric_curves.png` 发往主管群 `oc_85148c845ddf7f30b7d7d7944596cccc`，image message id `om_x100b6e37f2c2a0a0b374dd73d28cfb0`，follow-up text message id `om_x100b6e37f2e6b0b8b3067b488b9b3c3`。
 - 本地 artifacts 路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png`、`loss_validation_curve.png`、`health_summary.json`、`train_loss_points.csv`、`validation_points.csv`。

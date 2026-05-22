@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/153 |
 | Session | 27 |
 | Branch | intern_nemontron_code_reading/task071_conservative_30b_train_session23 |
-| Latest | Refreshed conservative Qwen3-30B-A3B metric curves to train iter 3920, latest/best validation at iter 3500 loss/PPL 0.3752722/1.455387, and sent the PNG to Feishu. |
+| Latest | Refreshed conservative Qwen3-30B-A3B metric curves to train iter 4020; latest validation at iter 4000 loss/PPL 0.3803424/1.462785, best remains iter 3500, and sent the PNG to Feishu. |
