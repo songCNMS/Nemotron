@@ -1,6 +1,6 @@
 # task033_env_scheduler - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 

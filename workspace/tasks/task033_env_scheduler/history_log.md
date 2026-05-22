@@ -1,6 +1,38 @@
 # task033_env_scheduler - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+---
+
+## Session 2 - 2026-05-22 - intern_nem_dev_1
+
+Confirmed PR #146 was merged through PR flow at
+`2026-05-22T03:00:46Z`; merge commit:
+`010e657df7648132bf485ffa0753d0e5d64fe802`.
+
+Sync:
+- `git status --short --branch` on
+  `intern_nem_dev_1/task033_env_scheduler_s1` showed a clean branch tracking
+  origin.
+- `git fetch origin main` advanced `origin/main` from `f0695b7` to
+  `a8e005850f20a7ed34df14b30e7ca4ca3efe89d1`.
+- Rebase of the closed task033 branch onto `origin/main` was attempted because
+  the branch was clean, but it conflicted against the already squash-merged
+  task033 status/history files; the rebase was aborted to preserve pushed work.
+- Local `main` was then fast-forwarded to
+  `a8e005850f20a7ed34df14b30e7ca4ca3efe89d1` with
+  `git pull --ff-only origin main`.
+
+Closeout:
+- Marked task033 completed after PR #146 merge.
+- Kept cluster/runtime blockers separated from the Session 1 sandbox scaffold:
+  task021 Session 4 launch validation, real Ray/NeMo-RL/vLLM/NeMo-Gym
+  scheduler hookup, cluster resource telemetry, live queue workers,
+  retry/accounting integration, and production deployment.
+
+Next PM assignment noted:
+- `task031_agentic_sft_v1` Session 1 is assigned from clean latest main at or
+  after `a8e005850f20a7ed34df14b30e7ca4ca3efe89d1`.
 
 ---
 

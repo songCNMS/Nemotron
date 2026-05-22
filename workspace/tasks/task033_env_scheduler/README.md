@@ -1,6 +1,6 @@
 # task033_env_scheduler
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 Session 1 scaffold for the M2 environment scheduler quota/backpressure policy.
 
