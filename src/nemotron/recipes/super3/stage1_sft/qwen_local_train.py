@@ -79,7 +79,7 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
         cfg.optimizer.lr = float(optimizer_lr)
     scheduler_min_lr = OmegaConf.select(config, "scheduler.min_lr", default=None)
     if scheduler_min_lr is not None:
-        cfg.scheduler.min_lr = float(scheduler_min_lr)
+        cfg.optimizer.min_lr = float(scheduler_min_lr)
     lr_warmup_iters = OmegaConf.select(config, "scheduler.lr_warmup_iters", default=None)
     if lr_warmup_iters is not None:
         cfg.scheduler.lr_warmup_iters = int(lr_warmup_iters)

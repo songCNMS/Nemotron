@@ -504,10 +504,10 @@ def test_plan_m1_torchrun_command_includes_strategy_overrides(tmp_path) -> None:
 
     command = build_torchrun_command(manifest)
 
-    assert "optimizer.lr=1e-06" in command
-    assert "scheduler.min_lr=1e-07" in command
+    assert "++optimizer.lr=1e-06" in command
+    assert "++optimizer.min_lr=1e-07" in command
     assert "scheduler.lr_warmup_iters=100" in command
-    assert "scheduler.lr_decay_iters=900" in command
+    assert "++scheduler.lr_decay_iters=900" in command
 
 
 def test_ensure_batch_geometry_accepts_valid_combos() -> None:

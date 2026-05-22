@@ -40,6 +40,9 @@ def _qwen30b_a3b_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     hf_model = resolve_qwen_hf_model()
     seq_length = int(OmegaConf.select(config, "dataset.seq_length", default=4096))
     train_iters = int(OmegaConf.select(config, "train.train_iters", default=100))
+    min_lr = OmegaConf.select(config, "optimizer.min_lr", default=None)
+    if min_lr is None:
+        min_lr = OmegaConf.select(config, "scheduler.min_lr", default=0.0)
     cfg = _qwen3_moe_finetune_common(
         hf_path=hf_model,
         pretrained_checkpoint=OmegaConf.select(config, "checkpoint.pretrained_checkpoint", default=None),
@@ -51,7 +54,7 @@ def _qwen30b_a3b_local_recipe_builder(config: DictConfig) -> ConfigContainer:
         eval_interval=int(OmegaConf.select(config, "train.eval_interval", default=1000)),
         save_interval=int(OmegaConf.select(config, "checkpoint.save_interval", default=1000)),
         finetune_lr=float(OmegaConf.select(config, "optimizer.lr", default=5e-6)),
-        min_lr=float(OmegaConf.select(config, "scheduler.min_lr", default=0.0)),
+        min_lr=float(min_lr),
         lr_warmup_iters=int(OmegaConf.select(config, "scheduler.lr_warmup_iters", default=0)),
         lr_decay_iters=int(OmegaConf.select(config, "scheduler.lr_decay_iters", default=train_iters)),
     )

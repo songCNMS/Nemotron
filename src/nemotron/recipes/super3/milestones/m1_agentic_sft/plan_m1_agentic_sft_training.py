@@ -156,13 +156,13 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
         f"checkpoint.save_interval={training['save_interval']}",
     ]
     if training.get("optimizer_lr") is not None:
-        command.append(f"optimizer.lr={training['optimizer_lr']}")
+        command.append(f"++optimizer.lr={training['optimizer_lr']}")
     if training.get("scheduler_min_lr") is not None:
-        command.append(f"scheduler.min_lr={training['scheduler_min_lr']}")
+        command.append(f"++optimizer.min_lr={training['scheduler_min_lr']}")
     if training.get("lr_warmup_iters") is not None:
         command.append(f"scheduler.lr_warmup_iters={training['lr_warmup_iters']}")
     if training.get("lr_decay_iters") is not None:
-        command.append(f"scheduler.lr_decay_iters={training['lr_decay_iters']}")
+        command.append(f"++scheduler.lr_decay_iters={training['lr_decay_iters']}")
     return command
 
 
