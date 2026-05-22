@@ -12,3 +12,6 @@
 - Rebased cleanly after `origin/main` advanced to `010e657df7648132bf485ffa0753d0e5d64fe802`.
 - Opened PR #148 to `main` from branch `intern_nem_dev_2/task038_m2_rl_curriculum_s1`.
 - Follow-up explicitly deferred: task014 real RLVR cluster smoke, task021 launch path/scheduler integration, task034 live judge deployment, production rollout store backend, W&B/lineage publication, reward service routing, and full cluster M2 RL runs.
+- PR #148 was merged to `main` as part of the completed M2 sandbox scaffold wave.
+- PM closeout reported latest `main` as `f4acf31adf4220474c04bb9dbdae2d2508e9fe5e`; synced local `main` with `git pull --ff-only origin main`.
+- No new sandbox assignment is active after closeout.
