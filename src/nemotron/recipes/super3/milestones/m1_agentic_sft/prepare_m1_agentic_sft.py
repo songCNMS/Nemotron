@@ -15,12 +15,16 @@ import sys
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
 
 try:
     from nemotron.recipes.super3.milestones.lineage import (
         SFT_DATA_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from nemotron.recipes.super3.milestones.lineage import (
         make_record as make_lineage_record,
     )
 except ModuleNotFoundError:
@@ -30,10 +34,10 @@ except ModuleNotFoundError:
         SFT_DATA_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from lineage import (  # type: ignore[no-redef]
         make_record as make_lineage_record,
     )
-from pathlib import Path
-from typing import Any
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -244,20 +248,14 @@ def assistant_for_code(record: Mapping[str, Any]) -> JsonDict:
 
 
 def assistant_for_reasoning(record: Mapping[str, Any]) -> JsonDict:
-    # GSM8K's raw `answer` (M0 carries it as extra_env_info.reference_solution)
-    # ends with the verifier marker `#### <number>`. If we put that string into
-    # the SFT target verbatim, the model learns to literally emit `####` on
-    # every reasoning task — that pattern then escapes GSM8K and shows up on
-    # unrelated math prompts at inference. M0's `expected_answer` is the
-    # already-normalized numeric answer (no `####`), so prefer it; fall back to
-    # `reference_solution` only with the marker stripped.
     expected_answer = str(record.get("expected_answer", "")).strip()
-    if expected_answer:
-        return {"role": "assistant", "content": expected_answer}
     reference = record.get("extra_env_info", {}).get("reference_solution")
-    if reference is None:
-        reference = ""
-    return {"role": "assistant", "content": _strip_gsm8k_marker(str(reference)).strip()}
+    if reference is not None and str(reference).strip():
+        return {
+            "role": "assistant",
+            "content": _reasoning_target_from_reference(str(reference), expected_answer),
+        }
+    return {"role": "assistant", "content": expected_answer}
 
 
 _GSM8K_MARKER_RE = re.compile(r"####\s*")
@@ -265,6 +263,18 @@ _GSM8K_MARKER_RE = re.compile(r"####\s*")
 
 def _strip_gsm8k_marker(text: str) -> str:
     return _GSM8K_MARKER_RE.sub("", text)
+
+
+def _reasoning_target_from_reference(reference_solution: str, expected_answer: str) -> str:
+    """Preserve chain-of-thought supervision while removing verifier artifacts."""
+    content = _strip_gsm8k_marker(reference_solution).strip()
+    expected_answer = expected_answer.strip()
+    if expected_answer and expected_answer not in content:
+        if content:
+            content = f"{content}\n\nFinal answer: {expected_answer}"
+        else:
+            content = expected_answer
+    return content
 
 
 def assistant_for_structured_output(record: Mapping[str, Any]) -> JsonDict:
@@ -410,10 +420,9 @@ ASSISTANT_BUILDERS = {
     "structured_outputs_json": assistant_for_structured_output,
     "tool_call_repair_negative": assistant_for_tool_call_repair,
     "math_reasoning_numeric": assistant_for_reasoning,
-    # NuminaMath competition math reuses `assistant_for_reasoning`; the boxed
-    # answer is already extracted into `expected_answer` at M0-prep time so
-    # the reasoning builder will prefer it (and the `_strip_gsm8k_marker`
-    # fallback is harmless for non-GSM8K rows).
+    # NuminaMath competition math reuses `assistant_for_reasoning`; when
+    # reference_solution is present the builder preserves the solution path
+    # instead of training only on the extracted boxed answer.
     "math_competition_numeric": assistant_for_reasoning,
     # math_formal_lean uses a dedicated builder so the Lean proof text
     # passes through verbatim — no boxed-answer extraction, no marker
@@ -759,6 +768,7 @@ def _apply_curriculum_to_train(
     """
     import json as _json
     import random
+
     from nemotron.recipes.super3.milestones.m0_data_env.difficulty_sampler import (
         bucket_rows,
         filter_solved,
@@ -816,6 +826,7 @@ def check_output_paths(output_dir: Path, overwrite: bool) -> None:
 
 
 def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
+    health_baseline = manifest.get("m0_health_baseline") or "(none — every row tagged difficulty=unknown)"
     lines = [
         "# M1 Agentic SFT v0 Data Report",
         "",
@@ -823,7 +834,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         f"- M0 input directory: `{manifest['m0_input_dir']}`",
         f"- Output directory: `{manifest['output_dir']}`",
         f"- Training blend: `{manifest['blend_path']}`",
-        f"- M0 health baseline: `{manifest.get('m0_health_baseline') or '(none — every row tagged difficulty=unknown)'}`",
+        f"- M0 health baseline: `{health_baseline}`",
         "",
         "## Counts",
         "",

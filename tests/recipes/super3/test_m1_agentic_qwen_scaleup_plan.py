@@ -89,6 +89,46 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "deployment.checkpoint_path=" in eval_script
 
 
+def test_scaleup_planner_wires_30b_entrypoint_and_strategy_overrides(tmp_path) -> None:
+    train_entrypoint = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--train-entrypoint",
+            train_entrypoint,
+            "--optimizer-lr",
+            "1e-6",
+            "--scheduler-min-lr",
+            "1e-7",
+            "--lr-warmup-iters",
+            "100",
+            "--allow-missing-checkpoint",
+        ]
+    )
+    manifest = build_manifest(args)
+
+    local_script = render_local_data_prep_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+
+    assert manifest["training"]["train_entrypoint"] == train_entrypoint
+    assert f"--script-path {train_entrypoint}" in local_script
+    assert "--optimizer-lr" in local_script
+    assert "--allow-missing-checkpoint" in local_script
+    assert "1e-06" in local_script
+    assert "qwen3_30b_a3b_local_train.py" in remote_script
+    assert "optimizer.lr=1e-06" in remote_script
+    assert "scheduler.min_lr=1e-07" in remote_script
+    assert "scheduler.lr_warmup_iters=100" in remote_script
+    assert "scheduler.lr_decay_iters=$TRAIN_ITERS" in remote_script
+
+
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
     args = build_parser().parse_args(
         [

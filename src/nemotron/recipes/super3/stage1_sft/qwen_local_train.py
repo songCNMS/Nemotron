@@ -8,11 +8,15 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 # torch / megatron / nemotron.kit are only needed at runtime when the recipe
 # is built; deferring their imports lets unit tests poke at `resolve_qwen_hf_model`
 # without pulling the whole training stack into the test environment.
 from omegaconf import DictConfig, OmegaConf
+
+if TYPE_CHECKING:
+    from megatron.bridge.training.config import ConfigContainer
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -37,7 +41,7 @@ def resolve_qwen_hf_model() -> str:
     return value
 
 
-def _qwen_local_recipe_builder(config: DictConfig) -> "ConfigContainer":
+def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     """Build a Qwen3 4B SFT config from a local HF model directory."""
     import torch
     from megatron.bridge.recipes.qwen.qwen3 import qwen3_4b_finetune_config
@@ -70,6 +74,18 @@ def _qwen_local_recipe_builder(config: DictConfig) -> "ConfigContainer":
     cfg.train.eval_interval = int(OmegaConf.select(config, "train.eval_interval", default=100))
     cfg.train.manual_gc = False
     cfg.train.manual_gc_interval = 0
+    optimizer_lr = OmegaConf.select(config, "optimizer.lr", default=None)
+    if optimizer_lr is not None:
+        cfg.optimizer.lr = float(optimizer_lr)
+    scheduler_min_lr = OmegaConf.select(config, "scheduler.min_lr", default=None)
+    if scheduler_min_lr is not None:
+        cfg.scheduler.min_lr = float(scheduler_min_lr)
+    lr_warmup_iters = OmegaConf.select(config, "scheduler.lr_warmup_iters", default=None)
+    if lr_warmup_iters is not None:
+        cfg.scheduler.lr_warmup_iters = int(lr_warmup_iters)
+    lr_decay_iters = OmegaConf.select(config, "scheduler.lr_decay_iters", default=None)
+    if lr_decay_iters is not None:
+        cfg.scheduler.lr_decay_iters = int(lr_decay_iters)
 
     cfg.model.transformer_impl = "transformer_engine"
     cfg.model.cuda_graph_impl = "none"
