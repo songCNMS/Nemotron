@@ -1,0 +1,238 @@
+schema_version: 1
+milestone: M2
+description: |
+  M2 eval basket scaffold (task039 Session 1). The rows below declare
+  the benchmark targets and adapter metadata needed for the M2
+  acceptance basket without launching live benchmarks, fetching assets,
+  or replacing promotion baseline numbers.
+
+  Every row is intentionally sandbox-runnable as configuration only:
+  runtime_requirements captures the cluster/API/data/Qwen-baseline
+  blockers that must be resolved by later task019/task020/task039
+  cluster sessions.
+
+benchmarks:
+  - benchmark_id: hle
+    display_name: Humanity's Last Exam
+    adapter: nemo_evaluator.hle
+    category: reasoning_extreme_difficulty
+    license: cc-by-4.0
+    gate_metric: accuracy
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: HLEAdapter
+      evaluator_task: hle.hle
+      runner: nemo-evaluator-launcher
+      result_metrics: [accuracy]
+      task_name: adlr_m2_hle
+    runtime_requirements:
+      sandbox_status: config_only
+      cluster_required: true
+      live_assets_required: true
+      api_required: false
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Live HLE benchmark assets and launcher credentials must be available.
+        - Qwen3.5-122B-A10B frozen baseline number is not recorded in this scaffold.
+        - Full scoring requires task019/task020 cluster eval flow.
+    notes: |
+      HLE already exists in the M1 full basket; the M2 row keeps the
+      benchmark in the acceptance basket while making 122B baseline and
+      cluster runtime prerequisites explicit.
+
+  - benchmark_id: browsecomp
+    display_name: BrowseComp
+    adapter: nemo_evaluator.browsecomp
+    category: browser_search
+    license: evaluation-asset-restricted
+    gate_metric: exact_match
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: BrowseCompAdapter
+      evaluator_task: browsecomp.browsecomp
+      runner: nemo-evaluator-launcher
+      result_metrics: [exact_match, citation_support_rate]
+      task_name: adlr_m2_browsecomp
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: true
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Browse/search API access and network policy are required for live browsing.
+        - Benchmark prompt assets and citation-checking policy must be pinned.
+        - Browser runtime must run under the M2 cluster sandbox, not local unit tests.
+    notes: |
+      Pairs with task022 browser/search scaffolds. Session 1 only
+      declares adapter routing and runtime blockers.
+
+  - benchmark_id: bird_real_execution
+    display_name: BIRD real execution
+    adapter: nemo_evaluator.bird_real_execution
+    category: sql_execution
+    license: cc-by-4.0
+    gate_metric: execution_accuracy
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: BIRDRealExecutionAdapter
+      evaluator_task: bird.bird_real_execution
+      runner: nemo-evaluator-launcher
+      result_metrics: [execution_accuracy, valid_sql_rate]
+      task_name: adlr_m2_bird_real_execution
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: false
+      database_required: true
+      qwen_baseline_required: true
+      blockers:
+        - BIRD database assets and execution harness must be provisioned.
+        - Real DB execution is cluster/runtime work; SQLite smoke from task024 is not the final gate.
+        - Frozen Qwen3.5-122B-A10B execution baseline is unavailable in Session 1.
+    notes: |
+      Distinguishes the real BIRD execution gate from task024's
+      sandbox SQLite verifier scaffold.
+
+  - benchmark_id: bfcl_full
+    display_name: BFCL full
+    adapter: nemo_evaluator.bfcl_full
+    category: tool_use_function_call
+    license: apache-2.0
+    gate_metric: overall_accuracy
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: BFCLFullAdapter
+      evaluator_task: bfcl.bfclv3_full
+      runner: nemo-evaluator-launcher
+      result_metrics: [overall_accuracy, ast_accuracy, executable_accuracy]
+      task_name: adlr_m2_bfcl_full
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: false
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Full BFCL category matrix must be enabled, not the M1 smoke subset.
+        - Tool schema assets and scorer version must be pinned before gate runs.
+        - Qwen3.5-122B-A10B full-BFCL baseline remains unrecorded.
+    notes: |
+      Keeps BFCL full separate from the M1 `bfcl` row so promotion
+      logic can distinguish full-category parity from smoke coverage.
+
+  - benchmark_id: mcp_mark
+    display_name: MCP-Mark
+    adapter: nemo_evaluator.mcp_mark
+    category: tool_use_mcp
+    license: apache-2.0
+    gate_metric: success_rate
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: MCPMarkAdapter
+      evaluator_task: mcp_mark.mcp_mark
+      runner: nemo-evaluator-launcher
+      result_metrics: [success_rate, server_error_rate]
+      task_name: adlr_m2_mcp_mark
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: true
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - MCP server fleet and health-check policy must be available.
+        - Live server credentials and benchmark assets must be pinned.
+        - Promotion gate needs Qwen3.5-122B-A10B MCP-Mark baseline.
+    notes: |
+      M1 launcher mapping marked MCP-Mark missing; M2 keeps it as a
+      declared benchmark with explicit live-server blockers.
+
+  - benchmark_id: tool_decathlon
+    display_name: Tool Decathlon
+    adapter: nemo_evaluator.tool_decathlon
+    category: tool_use_agentic
+    license: cc-by-4.0
+    gate_metric: weighted_score
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: ToolDecathlonAdapter
+      evaluator_task: tool_decathlon.tool_decathlon
+      runner: nemo-evaluator-launcher
+      result_metrics: [weighted_score, task_success_rate]
+      task_name: adlr_m2_tool_decathlon
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: true
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Tool service fleet and per-tool credentials must be provisioned.
+        - Full benchmark assets and scoring rubric must be pinned.
+        - Qwen3.5-122B-A10B weighted-score baseline is not available.
+    notes: |
+      Carries over the M1 full-basket target while surfacing the
+      multi-tool live runtime requirements.
+
+  - benchmark_id: multilingual_ifeval
+    display_name: Multilingual IFEval
+    adapter: nemo_evaluator.multilingual_ifeval
+    category: multilingual_instruction_following
+    license: apache-2.0
+    gate_metric: strict_accuracy
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: MultilingualIFEvalAdapter
+      evaluator_task: multilingual_ifeval.multilingual_ifeval
+      runner: nemo-evaluator-launcher
+      result_metrics: [strict_accuracy, loose_accuracy]
+      task_name: adlr_m2_multilingual_ifeval
+    runtime_requirements:
+      sandbox_status: config_only
+      cluster_required: true
+      live_assets_required: true
+      api_required: false
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Full multilingual IF prompt assets and locale list must be pinned.
+        - Judge/runtime calibration from task027 remains cluster-bound.
+        - Qwen3.5-122B-A10B multilingual IF baseline must be frozen.
+    notes: |
+      Extends task027's sandbox multilingual IF scaffold into the M2
+      eval basket declaration.
+
+  - benchmark_id: multilingual_humaneval
+    display_name: Multilingual HumanEval
+    adapter: nemo_evaluator.multilingual_humaneval
+    category: multilingual_code
+    license: mit
+    gate_metric: pass_at_1
+    source_plan_ref: docs/m2-implementation-plan.md §2.5
+    adapter_config:
+      adapter_class: MultilingualHumanEvalAdapter
+      evaluator_task: multilingual_humaneval.multilingual_humaneval
+      runner: nemo-evaluator-launcher
+      result_metrics: [pass_at_1, compile_rate]
+      task_name: adlr_m2_multilingual_humaneval
+    runtime_requirements:
+      sandbox_status: runtime_deferred
+      cluster_required: true
+      live_assets_required: true
+      api_required: false
+      database_required: false
+      qwen_baseline_required: true
+      blockers:
+        - Full multilingual HumanEval assets and language matrix must be pinned.
+        - Code execution sandbox must run through the cluster evaluator path.
+        - Qwen3.5-122B-A10B multilingual code baseline is not available.
+    notes: |
+      Extends task027's sandbox multilingual code scaffold. Session 1
+      does not execute untrusted code.
