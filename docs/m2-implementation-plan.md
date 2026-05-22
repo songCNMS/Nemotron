@@ -1,8 +1,11 @@
 # M2 Implementation Plan
 
-Last updated: 2026-05-20 (drafted from `docs/multi-environment-rl-post-training-plan.md`
-§3 M2 milestone + `docs/implementation-roadmap.md` §2 M2 fanout +
-current sandbox baseline 829 passed + 7 skipped after task057 close).
+Last updated: 2026-05-21 — refreshed after a 12-PR parallel landing
+(see §10 below) by `intern_nem_dev_1/2/3` brought all 8 M2
+environment-expansion Session 1's plus 4 of 6 M2 infra Session 1's
+in. Sandbox baseline 829 → **934 passed + 7 skipped** (+105 tests).
+Originally drafted 2026-05-20 from `docs/multi-environment-rl-post-training-plan.md`
+§3 M2 milestone + `docs/implementation-roadmap.md` §2 M2 fanout.
 
 ## 0. Goal & schedule
 
@@ -22,8 +25,13 @@ Per PRD §3 (Milestones) and §4 (Execution Schedule):
   gate (`task020/promotion_gate.py`) with a 122B-class baseline
   swapped in (per-category thresholds tightened from the M1 numbers).
 
-The M2 stack is **entirely unbuilt** today — roadmap §2 lists 17
-tasks (task022-039 + task047 partial) with no workspace scaffolds yet.
+**Status snapshot (2026-05-21)**: 12 of 17 M2 tasks have Session 1
+landed in main (sandbox scaffolds; no cluster work yet). Detailed
+breakdown in §10. The unbuilt-today framing in this plan now applies
+to **Sessions 2+** for the 12 landed tasks (bridge wiring + cluster
+verification + production hardening) plus the **5 task scaffolds
+still missing** (task031 Agentic SFT v1, task033 env scheduler,
+task034 judge pool, task038 RL curriculum, task039 eval basket).
 
 ---
 
@@ -76,16 +84,16 @@ One task per family. Each follows the **8-point M0 wiring checklist**
 (see `docs/m0-dataset-expansion-plan.md` §5) plus M1 bridge wiring
 (env_registry + bridge `prepare_*.py` + lineage publish).
 
-| Task | Family | M0 envs needed | Verifier work | Sandbox? |
+| Task | Family | M0 envs needed | Verifier work | S1 status |
 |---|---|---|---|---|
-| **task022** | browser / search | `browser_qa`, `browsecomp_grounded` | Playwright sandbox + grounded-answer verifier | cluster (Playwright + Chromium) |
-| **task023** | TauBench multi-domain | `taubench_retail`, `taubench_telecom` (airline lives in M1) | Reuse `tool_schema_and_argument_match` + multi-turn rollout | sandbox-runnable for converter; cluster for end-to-end |
-| **task024** | BIRD / text-to-SQL execution | Promote `sql_text_to_query` from M0 stub → real DB sandbox env `sql_execution` | New `sql_execution` verifier (real SQLite/Postgres exec) | cluster (DB container) |
-| **task025** | TerminalBench v2 | `terminal_workplace` longer-budget variant | Reuse `command_substring_match` + extended timeout | cluster (terminal sandbox) |
-| **task026** | SWE multi-harness | OpenCode + Codex agent classes alongside OpenHands (task070) | Reuse task017 sandbox runtime; add per-harness adapter | cluster (SIF / Docker) |
-| **task027** | Multilingual IF / code | `multilingual_ifeval`, `multilingual_humaneval` | Reuse `multilingual_exact_or_contains` (task057 Session 1) + new IF judge | sandbox-runnable for converter; cluster for judge |
-| **task028** | Long context | RULER 512K / 1M + AA-LCR + long-doc QA (extends task057 Session 2 `long_context_qa_smoke`) | New `long_context_qa` non-stub verifier with span-aware match | sandbox-runnable for converter; cluster for full 1M context |
-| **task029** | Safety / jailbreak / over-refusal | `safety_judge`, `jailbreak_resist`, `over_refusal` (extends task057 Session 5 `safety_reasoning_smoke`) | New `safety_judge` verifier with real judge model | cluster (judge model) |
+| **task022** | browser / search | `browser_qa`, `browsecomp_grounded` | Playwright sandbox + grounded-answer verifier | ✓ S1 landed (offline `browser_grounded_answer_stub`; both envs registered) |
+| **task023** | TauBench multi-domain | `taubench_retail`, `taubench_telecom` (airline lives in M1) | Reuse `tool_schema_and_argument_match` + multi-turn rollout | ✓ S1 landed (both envs + converter scaffold) |
+| **task024** | BIRD / text-to-SQL execution | Promote `sql_text_to_query` from M0 stub → real DB sandbox env `sql_execution` | New `sql_execution` verifier (real SQLite/Postgres exec) | ✓ S1 landed (`m2_sql_execution/sqlite_verifier.py` sandbox SQLite executor + `sql_execution_mode` env field; cluster Postgres TBD) |
+| **task025** | TerminalBench v2 | `terminal_workplace` longer-budget variant | Reuse `command_substring_match` + extended timeout | ✓ S1 landed (`terminal_workplace` env registered) |
+| **task026** | SWE multi-harness | OpenCode + Codex agent classes alongside OpenHands (task070) | Reuse task017 sandbox runtime; add per-harness adapter | ✓ S1 landed (`m1_swe2/swe_multi_harness.py` adapter scaffold) |
+| **task027** | Multilingual IF / code | `multilingual_ifeval`, `multilingual_humaneval` | Reuse `multilingual_exact_or_contains` (task057 Session 1) + new IF judge | ✓ S1 landed (both envs registered + tests) |
+| **task028** | Long context | RULER 512K / 1M + AA-LCR + long-doc QA (extends task057 Session 2 `long_context_qa_smoke`) | New `long_context_qa` non-stub verifier with span-aware match | ✓ S1 landed (`long_context_ruler` + `long_context_aalcr` + `long_context_doc_qa` envs + `long_context_qa` span-aware verifier) |
+| **task029** | Safety / jailbreak / over-refusal | `safety_judge`, `jailbreak_resist`, `over_refusal` (extends task057 Session 5 `safety_reasoning_smoke`) | New `safety_judge` verifier with real judge model | ✓ S1 landed (all 3 envs registered; `safety_judge_stub` verifier reused — real judge service still TBD per task034) |
 
 **Each task is 1-2 weeks**; all depend on **task021** for infra and
 on the corresponding M1 bridges. Within each family, prefer
@@ -123,14 +131,14 @@ Suggested sessions:
 
 Per PRD §10 M2 infra block:
 
-| Task | Component | Depends on |
-|---|---|---|
-| **task032** | Central rollout store — schema, write path, indexed retrieval keyed on `(prompt_id, model_version, env_id)`. Foundation for failure mining + dynamic sampling. | task069 lineage stream |
-| **task033** | Env scheduler — quota, backpressure, fast/slow queue split. Slow envs (SWE / browser / GUI) run on separate queue. | task032 (backpressure signal) + task021 |
-| **task034** | Judge service pool — model versioning + calibration sets + ensemble voting. Generalizes the GenRM router from task018. | task018 S3 (GenRM deployed) |
-| **task035** | Contamination pipeline + eval-overlap report — reuses task001's `contamination` field; emits a per-env overlap matrix. | task030 (unified registry done) |
-| **task036** | Canary + shadow-eval pipeline — every promoted checkpoint runs the held-out shadow split; gates promotion. | task020 promotion gate |
-| **task037** | Env health dashboard — Grafana / W&B board over telemetry stream from task021/021. | task021 S2 lineage emitter |
+| Task | Component | Depends on | S1 status |
+|---|---|---|---|
+| **task032** | Central rollout store — schema, write path, indexed retrieval keyed on `(prompt_id, model_version, env_id)`. Foundation for failure mining + dynamic sampling. | task069 lineage stream | ✓ S1 landed (`rollout_store/local_store.py` — `LocalRolloutStore` + `RolloutKey` + `RolloutTrace`, sandbox JSONL backend; production backend + W&B/lineage stream + retention policy TBD in S2+) |
+| **task033** | Env scheduler — quota, backpressure, fast/slow queue split. Slow envs (SWE / browser / GUI) run on separate queue. | task032 (backpressure signal) + task021 | ✗ unscaffolded |
+| **task034** | Judge service pool — model versioning + calibration sets + ensemble voting. Generalizes the GenRM router from task018. | task018 S3 (GenRM deployed) | ✗ unscaffolded |
+| **task035** | Contamination pipeline + eval-overlap report — reuses task001's `contamination` field; emits a per-env overlap matrix. | task030 (unified registry done) | ✓ S1 landed (`contamination_matrix.py` reusing `classify_contamination_row` + new `--eval-overlap-matrix`/`--contamination-matrix` CLI flag on `validate_data_registries.py`; 14 M0 rows clean in live registry smoke) |
+| **task036** | Canary + shadow-eval pipeline — every promoted checkpoint runs the held-out shadow split; gates promotion. | task020 promotion gate | ✓ S1 landed (`shadow_eval/pipeline.py` — `build_synthetic_shadow_plan` + `evaluate_shadow_plan` reading `LocalRolloutStore` + delegating to `evaluate_promotion_gate`; real cluster eval + W&B publish TBD in S2+) |
+| **task037** | Env health dashboard — Grafana / W&B board over telemetry stream from task021/021. | task021 S2 lineage emitter | ✓ S1 landed (`m2_env_health_dashboard/dashboard.py` reading recorded `health_baseline_report.json` — slow-signal threshold + telemetry-gap detection + latency panel; Grafana/W&B board layout TBD in S2+) |
 
 Suggested ordering: 032 → 034 (parallel with 033) → 035 (parallel
 with 036) → 037 last (rides on stable telemetry stream).
@@ -228,17 +236,19 @@ during this window: M2 task scaffolds + sandbox-only sessions
 (see Phase 1 below; can start immediately).
 
 ### Phase 1 — M2 scaffolding + sandbox env work (parallel with Phase 0)
-1. **task022-029 Session 1** scaffolds — converters + env_registry
-   entries + verifier stubs. 8 tasks × 1 session each = 8 PRs.
-   All sandbox-runnable.
-2. **task032 Session 1** rollout-store schema + write path.
-3. **task035 Session 1** contamination audit logic (reuses task001
-   field).
-4. **task036 Session 1** promotion-gate extension for shadow-eval.
-5. **task037 Session 1** dashboard layout against recorded
-   telemetry stream.
+**Status as of 2026-05-21: largely complete** (12 of ~12 planned
+PRs landed by `intern_nem_dev_1/2/3` — see §10).
+1. ✓ **task022-029 Session 1** scaffolds — converters +
+   env_registry entries + verifier stubs. 8 tasks × 1 session each
+   = 8 PRs. **All landed.**
+2. ✓ **task032 Session 1** rollout-store schema + write path.
+3. ✓ **task035 Session 1** contamination eval-overlap matrix.
+4. ✓ **task036 Session 1** shadow-eval pipeline.
+5. ✓ **task037 Session 1** dashboard against recorded telemetry.
 
-Net: ~12 PRs sandbox-runnable before any M2 cluster work.
+**Remaining Phase 1 work**: scaffold the 5 missing tasks
+(task031 / task033 / task034 / task038 / task039) and start their
+Session 1's where sandbox-actionable.
 
 ### Phase 2 — M2 Environment Expansion sprint (2026-08-01 → 08-31)
 1. **task022-029 Session 2 + 3** — bridge wiring + cluster smoke
@@ -348,32 +358,109 @@ training-metrics dump are the final deliverables.
 
 ---
 
-## 9. Appendix — workspace scaffolds to create
+## 9. Appendix — workspace scaffolds
 
-When M1 freezes and M2 kickoff is imminent (per roadmap §5b
-guidance — earlier scaffolding risks scope drift), create:
+Status as of 2026-05-21 (✓ = directory exists in `workspace/tasks/`;
+✗ = still missing):
 
 ```
-workspace/tasks/task022_m2_browser_env/
-workspace/tasks/task023_m2_taubench_envs/
-workspace/tasks/task024_m2_bird_execution_env/
-workspace/tasks/task025_m2_terminalbench_v2/
-workspace/tasks/task026_m2_swe_multiharness/
-workspace/tasks/task027_m2_multilingual_envs/
-workspace/tasks/task028_m2_longcontext_envs/
-workspace/tasks/task029_m2_safety_envs/
-workspace/tasks/task031_agentic_sft_v1/
-workspace/tasks/task032_rollout_store/
-workspace/tasks/task033_env_scheduler/
-workspace/tasks/task034_judge_pool/
-workspace/tasks/task035_contamination_pipeline/
-workspace/tasks/task036_shadow_eval/
-workspace/tasks/task037_env_health_dashboard/
-workspace/tasks/task038_m2_rl_curriculum/
-workspace/tasks/task039_m2_eval_basket/
+✓ workspace/tasks/task022_m2_browser_search_s1/
+✓ workspace/tasks/task023_m2_taubench_multi_domain_s1/
+✓ workspace/tasks/task024_m2_sql_execution_s1/
+✓ workspace/tasks/task025_m2_terminalbench_v2_s1/
+✓ workspace/tasks/task026_m2_swe_multi_harness_s1/
+✓ workspace/tasks/task027_m2_multilingual_if_code_s1/
+✓ workspace/tasks/task028_m2_long_context_s1/
+✓ workspace/tasks/task029_m2_safety_jailbreak_overrefusal_s1/
+✗ workspace/tasks/task031_agentic_sft_v1/
+✓ workspace/tasks/task032_rollout_store_s1/
+✗ workspace/tasks/task033_env_scheduler/
+✗ workspace/tasks/task034_judge_pool/
+✓ workspace/tasks/task035_contamination_pipeline_s1/
+✓ workspace/tasks/task036_shadow_eval_pipeline_s1/
+✓ workspace/tasks/task037_env_health_dashboard_s1/
+✗ workspace/tasks/task038_m2_rl_curriculum/
+✗ workspace/tasks/task039_m2_eval_basket/
 ```
 
-Each scaffold should ship with:
+Naming convention drift: the landed scaffolds use a `_s1` suffix
+(e.g. `task022_m2_browser_search_s1`) and a longer family-descriptive
+name vs the shorter convention proposed in the 2026-05-20 draft of
+this plan. Going forward, either convention is fine; the long-form
+`taskNNN_<family>_<sN>` form makes session boundaries explicit and
+matches what the parallel interns produced.
+
+Each scaffold ships with:
 - `README.md` — scope, dependencies, sessions table, acceptance
+  (only `task022_m2_browser_search_s1` and `task028_m2_long_context_s1`
+  have READMEs at 2026-05-21; the others are knowledge/history only)
 - `task_knowledge.md` — open-questions resolutions as they land
 - `history_log.md` — PR landings, blockers, decisions
+
+---
+
+## 10. Status snapshot (2026-05-21 — post parallel-landing sync)
+
+Between the 2026-05-20 draft of this plan and the 2026-05-21
+fast-forward sync, `intern_nem_dev_1`, `intern_nem_dev_2`, and
+`intern_nem_dev_3` landed 12 PRs that move ~70% of Phase 1
+sandbox work into main. Sandbox baseline 829 → 934 passed
+(+105 tests, 7 skipped unchanged).
+
+### Landed Session 1's
+
+**Environment expansion (all 8 envs)**
+
+| Task | PR | New env IDs | Code modules |
+|---|---|---|---|
+| task022 browser/search | (recorded in scaffold) | `browser_qa`, `browsecomp_grounded` | env_registry + `browser_grounded_answer_stub` verifier (offline) |
+| task023 TauBench multi-domain | (recorded in scaffold) | `taubench_retail`, `taubench_telecom` | env_registry + converter scaffolding |
+| task024 BIRD execution | (recorded in scaffold) | `sql_execution_mode` field on `sql_text_to_query` | `m2_sql_execution/sqlite_verifier.py` |
+| task025 TerminalBench v2 | (recorded in scaffold) | `terminal_workplace` | env_registry only at S1 |
+| task026 SWE multi-harness | (recorded in scaffold) | (no new env; harness adapter) | `m1_swe2/swe_multi_harness.py` |
+| task027 Multilingual IF/code | (recorded in scaffold) | `multilingual_ifeval`, `multilingual_humaneval` | env_registry + tests |
+| task028 Long context | PR #137 | `long_context_ruler`, `long_context_aalcr`, `long_context_doc_qa` | env_registry + new `long_context_qa` span-aware verifier in run_m0_health_baseline |
+| task029 Safety/jailbreak/over-refusal | PR #136 | `safety_judge`, `jailbreak_resist`, `over_refusal` | env_registry + data_registry + converter; `safety_judge_stub` reused as judge stand-in |
+
+**M2 infra (4 of 6)**
+
+| Task | PR | Module | Notes |
+|---|---|---|---|
+| task032 rollout store | PR #135 | `rollout_store/local_store.py` | `LocalRolloutStore` + `RolloutKey` + `RolloutTrace`; JSONL backend; production W&B/lineage hookup deferred |
+| task035 contamination | PR #139 | `data_registries/contamination_matrix.py` | Reuses `classify_contamination_row`; new `--eval-overlap-matrix` CLI flag; live registry smoke 14/14 clean |
+| task036 shadow eval | PR #138 | `shadow_eval/pipeline.py` | `build_synthetic_shadow_plan` + `evaluate_shadow_plan` reading `LocalRolloutStore`; delegates to `evaluate_promotion_gate` |
+| task037 env health dashboard | PR #140 | `m2_env_health_dashboard/dashboard.py` | Reads recorded `health_baseline_report.json`; slow-signal + telemetry-gap detection; Grafana/W&B board layout TBD |
+
+### Still missing (Phase 1 work to do)
+
+| Task | Reason it didn't land yet |
+|---|---|
+| **task031** Agentic SFT v1 | Depends on ≥ 4 of task022-028 to provide multi-turn data sources; Session 1 (supervision builder design + failure-rollout schema) is now sandbox-actionable |
+| **task033** Env scheduler | Needs task032 backpressure signal (now available) + a quota policy model |
+| **task034** Judge pool | Generalizes task018 GenRM router; needs at least design + interface contract; the model deployment itself is cluster-bound |
+| **task038** M2 RL curriculum | Needs task032 (have it) + task034 (don't have it yet); the per-env gap estimator + dynamic sampler can land sandbox-only |
+| **task039** M2 eval basket | Depends on ≥ 6 of task022-028 (have all 8) + task020 promotion gate (have it); the new benchmark adapter configs can land sandbox-only |
+
+### Recommended next sandbox picks (after this sync)
+
+1. **task033 Session 1** — env scheduler interface design + quota
+   policy model (rides on the now-landed `LocalRolloutStore` for
+   backpressure). Sandbox-runnable.
+2. **task034 Session 1** — judge pool interface + versioning
+   contract; mock judge for sandbox tests. Sandbox-runnable.
+3. **task038 Session 1** — per-env gap estimator + dynamic-sampler
+   logic against synthetic rollout traces. Sandbox-runnable.
+4. **task039 Session 1** — benchmark adapter configs (HLE,
+   BrowseComp, BIRD-real, BFCL-full, MCP-Mark, Tool Decathlon,
+   multilingual). Sandbox-runnable.
+5. **task031 Session 1** — multi-turn supervision builder design
+   doc + failure-rollout schema (reads from `LocalRolloutStore`).
+   Sandbox-runnable.
+
+Plus **Session 2** for the 12 landed tasks: bridge wiring +
+production hardening (still mostly sandbox; a few hooks
+need real lineage / cluster access).
+
+After these ~5 sandbox PRs land, M2 Phase 1 is fully scaffolded.
+Phase 2 (cluster smoke for each landed task) becomes the next
+bottleneck and is gated on the Group A predecessor closure (§1).
