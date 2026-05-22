@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task031_agentic_sft_v1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/149 |
 | Session | 1 |
-| Recent Progress | Started task031 Agentic SFT v1 Session 1 from latest main bb215b8739c99eaaafa812bb4be42e021cabebc7 |
+| Recent Progress | PR #149 opened for task031 Agentic SFT v1 Session 1; focused tests passed |

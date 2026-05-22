@@ -11,6 +11,9 @@ after the PM latest-main correction.
 
 Branch: `intern_nem_dev_1/task031_agentic_sft_v1_s1`
 
+PR: https://github.com/songCNMS/Nemotron/pull/149
+Initial implementation SHA: `8380db8308a0dc4d5a9e9ae14956b7bedc908993`
+
 Implemented:
 - Added sandbox-only Agentic SFT v1 supervision-builder contract near the
   M1 Agentic SFT preparation code.
@@ -30,6 +33,7 @@ Validation:
 - `python -m py_compile src/nemotron/recipes/super3/milestones/m1_agentic_sft/__init__.py src/nemotron/recipes/super3/milestones/m1_agentic_sft/agentic_sft_v1.py`
   -> passed.
 - `git diff --check` -> passed.
+- `git diff --cached --check` -> passed before commit.
 
 Out of scope:
 - task013 cluster SFT loss/run verification.
