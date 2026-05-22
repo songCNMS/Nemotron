@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Session 1
 
@@ -303,3 +303,12 @@
 - 最新 validation 为 iter `4000`：loss/PPL `0.3803424` / `1.462785`；当前最好 validation 仍为 iter `3500`：loss/PPL `0.3752722` / `1.455387`；已保存 checkpoints `[500, 1000, 1500, 2000, 2500, 3000, 3500, 4000]`。
 - 飞书最终图片发送成功：`metric_curves.png` 发往主管群 `oc_85148c845ddf7f30b7d7d7944596cccc`，image message id `om_x100b6e37f2c2a0a0b374dd73d28cfb0`，follow-up text message id `om_x100b6e37f2e6b0b8b3067b488b9b3c3`。
 - 本地 artifacts 路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png`、`loss_validation_curve.png`、`health_summary.json`、`train_loss_points.csv`、`validation_points.csv`。
+
+## Session 28
+
+- 按用户要求继续监控到 iter `4500` eval/save 点；实际远端训练已推进到 checkpoint marker `9500`，最新 train log 解析到 iter `9650/10110`。
+- 刷新 metric artifacts：`metric_curves.png`、`loss_validation_curve.png`、`health_summary.json`、`validation_trend_summary.json`、`train_loss_points.csv`、`validation_points.csv`，全部位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics`。
+- iter `4500` validation loss/PPL 为 `0.3960631` / `1.485963`，相对 iter `4000` loss 增加 `0.0157207`，相对 iter `3500` loss 增加 `0.0207909`，因此 4500 点本身没有维持改善。
+- 4500 之后曲线恢复：iter `5000` loss/PPL `0.3774891` / `1.458618`，iter `6000` `0.3767208` / `1.457497`，iter `9000` 达到当前全局最好 `0.37042` / `1.448343`；latest validation iter `9500` 为 `0.3770263` / `1.457943`。
+- 趋势判断：validation 不单调，4500 是短期回退点；从后续多个 checkpoint 看，训练没有发散，并在 9000 刷新最好 validation，整体属于波动后恢复改善。
+- 健康状态：max skipped iterations `0`，max nan iterations `0`；checkpoints 已保存 `[500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]`。

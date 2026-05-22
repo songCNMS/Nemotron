@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Notes
 
@@ -99,3 +99,4 @@
 - Conservative 30B monitoring fact: Session 25 confirmed checkpoints `iter_0000500`, `iter_0001000`, and `iter_0001500` exist with latest checkpoint marker `1500`; validation loss/PPL were `0.3861638/1.471326`, `0.4025858/1.495687`, and `0.4071296/1.502499`; local curve artifacts are under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics`.
 - Feishu image return fact: use `/work-agents/Nemotron/workspace/.skill_sources/intern_agent_skills/intern_feishu_messaging_skill/scripts/send_image.py --intern-name intern_nemontron_code_reading --project Nemotron --file <png>` to return local PNG charts to the supervisor group; Session 26 sent `loss_validation_curve.png` successfully.
 - Conservative 30B metric-curve fact: Session 27 generated `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png` from logs through train iter `4020/10110`; latest validation is iter `4000` loss/PPL `0.3803424/1.462785`, best validation remains iter `3500` loss/PPL `0.3752722/1.455387`, with checkpoints through `4000` and no skipped/nan iterations.
+- Conservative 30B trend fact: Session 28 refreshed metric curves through train iter `9650/10110` and checkpoint `9500`; iter `4500` validation regressed to loss/PPL `0.3960631/1.485963`, but later recovered and set current best at iter `9000` loss/PPL `0.37042/1.448343`, with no skipped/nan iterations.
