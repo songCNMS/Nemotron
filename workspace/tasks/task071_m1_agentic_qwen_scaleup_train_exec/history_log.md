@@ -278,4 +278,4 @@
 - iter `500/10110` 已完成：consumed samples `4000`，LR `9.964587e-7`，train lm loss `0.4050700`，load_balancing_loss `1.440887`，grad norm `0.759`，无 skipped/nan。
 - iter 500 validation 完成：validation lm loss `0.3861638`，PPL `1.471326`；evaluate timing 记录在 train log 中。
 - iter 500 checkpoint 保存成功：远端 checkpoint root `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints`，`latest_checkpointed_iteration.txt=500`，存在 `iter_0000500`，目录大小约 `399G`。
-- 训练在 checkpoint 后继续运行；最新观测到 iter `520/10110`，consumed samples `4160`，LR `9.960962e-7`，lm loss `0.4111041`，load_balancing_loss `1.471660`，无 skipped/nan；8 张 H200 显存约 `81-88GB` 且 GPU util 正常。
+- 训练在 checkpoint 后继续运行；最新观测到 iter `600/10110`，consumed samples `4800`，LR `9.944708e-7`，lm loss `0.3932771`，load_balancing_loss `1.426876`，无 skipped/nan；8 张 H200 显存约 `81-88GB` 且 GPU util 正常。

@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/153 |
 | Session | 24 |
 | Branch | intern_nemontron_code_reading/task071_conservative_30b_train_session23 |
-| Latest | Conservative Qwen3-30B-A3B training passed iter 500 eval/save: validation loss/PPL 0.3861638/1.471326, iter_0000500 checkpoint saved, training continues beyond iter 520/10110. |
+| Latest | Conservative Qwen3-30B-A3B training passed iter 500 eval/save with validation loss/PPL 0.3861638/1.471326; iter_0000500 checkpoint saved and training continues beyond iter 600/10110. |
