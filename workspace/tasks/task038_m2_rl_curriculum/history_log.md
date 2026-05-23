@@ -1,6 +1,6 @@
 # task038_m2_rl_curriculum - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-22
 
@@ -24,3 +24,15 @@
 - Verified focused S2/S1/rollout/judge shard: 29 passed, `py_compile` passed, and `git diff --check` passed.
 - Opened PR #157 to `main` from branch `intern_nem_dev_2/task038_m2_rl_curriculum_s2`.
 - Follow-up remains cluster RL/training launch, live judge deployment, production rollout backend, W&B/lineage publication, and live reward calibration.
+
+## Session 3 - 2026-05-23
+
+- Synced clean `main` to corrected PR #157 merge SHA `e1b0838ef1f2c07cedce828700df81b61e505e01` before implementation.
+- Started branch `intern_nem_dev_2/task038_m2_rl_curriculum_s3`.
+- Rebased cleanly after `origin/main` advanced to `74755c1b12b355fb3419d5d1cc1aeabbd25a4bc4`.
+- Added sandbox per-env judge routing policies and a rollout-to-`JudgeRequest` converter over synthetic/local `LocalRolloutStore` traces.
+- Added deterministic mock judge ensemble dispatch through the task034 `JudgeVersionRegistry` and `evaluate_ensemble` contracts.
+- Added rollout metrics conversion so aggregate judge score/confidence can feed existing gap-estimator and reward-calibration flows.
+- Verified focused S3/S2/S1/rollout/judge shard: 34 passed, `py_compile` passed, and `git diff --check` passed.
+- Opened PR #160 to `main` from branch `intern_nem_dev_2/task038_m2_rl_curriculum_s3`.
+- Follow-up remains live GenRM/judge deployment, reward-service routing, auth/secrets, calibration corpora access, cluster inference, RL training launch, and W&B/lineage publication.

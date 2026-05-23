@@ -3,12 +3,14 @@
 M2 RL curriculum scaffold for per-environment gap estimation and deterministic
 dynamic sampling.
 
-Session 1 is sandbox-only. It reads synthetic/local `LocalRolloutStore` traces,
-estimates per-env reward gaps, and allocates sampling quota toward failing or
-under-covered environments. The landed task034 judge-pool contract can provide
-local judge metrics, but no live judge or reward service is called.
+Sessions 1-3 are sandbox-only. Session 1 reads synthetic/local
+`LocalRolloutStore` traces, estimates per-env reward gaps, and allocates
+sampling quota toward failing or under-covered environments. Session 2 adds
+per-env/per-checkpoint reward calibration summaries. Session 3 adds a local
+judge ensemble dispatcher that routes env-specific mock judge refs through the
+landed task034 judge-pool contract.
 
-Out of scope for Session 1:
+Out of scope for these sandbox sessions:
 - task014 real RLVR cluster smoke
 - task021 launch path / scheduler integration
 - task034 Session 2+ live judge model/service deployment
@@ -17,3 +19,6 @@ Out of scope for Session 1:
 - W&B/lineage publication
 - production rollout store backend
 - live reward calibration
+- live GenRM/judge service deployment
+- reward-service routing
+- auth/secrets and calibration corpora access
