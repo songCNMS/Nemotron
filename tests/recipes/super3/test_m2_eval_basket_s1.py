@@ -125,6 +125,21 @@ def test_validator_rejects_missing_runtime_blockers() -> None:
     assert any("blockers must be non-empty strings" in issue for issue in issues)
 
 
+def test_adapter_config_validator_rejects_duplicate_benchmark_ids() -> None:
+    """Regression: ``validate_m2_eval_basket`` catches duplicate
+    ``benchmark_id``s in the registry, but the sibling
+    ``validate_m2_adapter_config`` previously did not — a YAML edit that
+    listed the same id twice across adapter profiles slipped through.
+    Both validators should agree on uniqueness as the data contract."""
+    data = yaml.safe_load(ADAPTER_CONFIG_PATH.read_text(encoding="utf-8"))
+    duplicate = dict(data["adapter_profiles"][0])
+    data["adapter_profiles"].append(duplicate)
+
+    issues = validate_m2_adapter_config(data)
+
+    assert any("duplicate benchmark_id" in issue for issue in issues)
+
+
 def test_unified_index_registers_m2_eval_basket_and_validates_clean() -> None:
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         load_unified_index,

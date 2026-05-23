@@ -206,6 +206,8 @@ def validate_m2_adapter_config(data: Mapping[str, Any]) -> list[str]:
             if field not in profile:
                 issues.append(f"{prefix} missing required field {field!r}")
         benchmark_id = str(profile.get("benchmark_id", ""))
+        if benchmark_id in seen:
+            issues.append(f"{prefix} duplicate benchmark_id {benchmark_id!r}")
         seen.add(benchmark_id)
         if profile.get("task_name") != f"adlr_m2_{benchmark_id}":
             issues.append(f"{prefix}.task_name must be adlr_m2_{benchmark_id}")

@@ -23,6 +23,21 @@ def test_slow_envs_route_to_slow_queue_and_fast_envs_stay_normal() -> None:
     assert classify_env_queue("gui_desktop_control") == QueueName.SLOW
     assert classify_env_queue("math_reasoning_numeric") == QueueName.NORMAL
 
+
+def test_queue_name_is_python_3_10_compatible_str_enum() -> None:
+    """Regression: scheduler imported `from enum import StrEnum`, which
+    requires Python 3.11+; pyproject declares `requires-python = ">=3.10"`.
+    The fix is `class QueueName(str, Enum)` — verify the enum stays a str
+    subclass so members compare equal to their string value, and explicitly
+    confirm `StrEnum` is NOT pulled in from the scheduler module."""
+    import nemotron.recipes.super3.milestones.m2_env_scheduler.scheduler as scheduler_module
+
+    assert issubclass(QueueName, str)
+    assert QueueName.NORMAL == "normal"
+    assert QueueName.SLOW == "slow"
+    assert QueueName("normal") is QueueName.NORMAL
+    assert not hasattr(scheduler_module, "StrEnum")
+
     scheduler = SandboxEnvScheduler(
         quotas={
             "browser_qa": EnvQuota("browser_qa", max_in_flight=1),
