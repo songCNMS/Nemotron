@@ -20,7 +20,7 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass, field
-from enum import StrEnum
+from enum import Enum
 from typing import Any
 
 JsonDict = dict[str, Any]
@@ -29,8 +29,13 @@ DEFAULT_SLOW_ENV_TERMS = ("swe", "browser", "gui")
 SUCCESS_TERMINAL_REASONS = frozenset({"solved", "success", "passed", "pass", "complete"})
 
 
-class QueueName(StrEnum):
-    """Logical queues in the sandbox scheduler plan."""
+class QueueName(str, Enum):
+    """Logical queues in the sandbox scheduler plan.
+
+    Subclasses ``str`` so members compare equal to their string value and
+    serialize cleanly. Avoids ``enum.StrEnum`` so we keep Python 3.10
+    support (StrEnum was added in 3.11).
+    """
 
     NORMAL = "normal"
     SLOW = "slow"
