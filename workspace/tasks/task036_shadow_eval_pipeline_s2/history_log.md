@@ -1,6 +1,6 @@
 # task036_shadow_eval_pipeline_s2 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-21
 
@@ -20,3 +20,11 @@
 - Verified the focused shadow-eval pytest target with `PYTHONPATH=src python -m pytest tests/recipes/super3/test_shadow_eval_pipeline.py`.
 - Opened PR https://github.com/songCNMS/Nemotron/pull/161 to `main`.
 - Deferred by PM scope: cluster evaluation, W&B/lineage publication, live checkpoint promotion, and task020 runtime integration.
+
+## Session 3 - 2026-05-23
+
+- PM reported the six no-cluster M2 PR queue merged through PR #161.
+- Confirmed the task036 worktree was clean on `intern_nem_dev_3/task036_shadow_eval_pipeline_s2` before syncing.
+- Switched to `main`, fetched `origin/main`, and fast-forwarded with `git pull --ff-only origin main`.
+- Verified local `main`, `origin/main`, and `HEAD` reached `412d54aebd75ec33145cab93fb023648a758d64d`.
+- Created bookkeeping branch `intern_nem_dev_3/task036_postmerge_sync_s3` from synced `main`; no new implementation assignment is active.

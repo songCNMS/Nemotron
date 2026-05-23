@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task036_shadow_eval_pipeline_s2 -->
+<!-- METADATA:STATUS=Idle,TASK=task036_shadow_eval_pipeline_s2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
+| Status | Idle |
 | Current Task | task036_shadow_eval_pipeline_s2 |
 | PR | https://github.com/songCNMS/Nemotron/pull/161 |
-| Session | 2 |
-| Recent Progress | Opened PR #161 for task036 Session 2 sandbox canary policy and threshold tuning scaffold from clean main `74755c1b12b355fb3419d5d1cc1aeabbd25a4bc4` |
+| Session | 3 |
+| Recent Progress | PR #161 is merged; fast-forward synced local `main` to `412d54aebd75ec33145cab93fb023648a758d64d` and recorded post-merge readiness on `intern_nem_dev_3/task036_postmerge_sync_s3` |
