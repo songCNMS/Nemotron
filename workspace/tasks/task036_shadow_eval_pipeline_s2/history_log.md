@@ -2,6 +2,13 @@
 
 <!-- METADATA:SESSION=2 -->
 
+## Session 1 - 2026-05-21
+
+- Inherited the merged Session 1 scaffold from `task036_shadow_eval_pipeline_s1`.
+- Session 1 implemented the sandbox shadow-eval pipeline under `nemotron.recipes.super3.milestones.shadow_eval`.
+- The scaffold provided synthetic canary and shadow examples, local rollout lookup through `LocalRolloutStore`, canary minimum-score checks, and M1 promotion-gate reuse.
+- PR #138 merged the Session 1 baseline to `main`; real checkpoint promotion, live cluster eval, W&B/lineage publishing, and production shadow split execution stayed deferred.
+
 ## Session 2 - 2026-05-23
 
 - PM assigned `task036_shadow_eval_pipeline_s2` after PR #158 merged.
