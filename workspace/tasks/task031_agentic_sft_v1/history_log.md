@@ -11,6 +11,9 @@ after the PM high-priority sync instruction.
 
 Branch: `intern_nem_dev_1/task031_agentic_sft_v1_s2`
 
+PR: https://github.com/songCNMS/Nemotron/pull/156
+Initial implementation SHA: `94b79aa7ab898fff8dc6a306ccb14acf57a46b4c`
+
 Implemented:
 - Added deterministic cross-harness routing for local/synthetic Agentic SFT v1
   traces across OpenHands, OpenCode, Codex, browser, terminal, and generic
@@ -30,6 +33,7 @@ Validation:
 - `python -m py_compile src/nemotron/recipes/super3/milestones/m1_agentic_sft/__init__.py src/nemotron/recipes/super3/milestones/m1_agentic_sft/agentic_sft_v1.py`
   -> passed.
 - `git diff --check` -> passed.
+- `git diff --cached --check` -> passed before commit.
 
 Out of scope:
 - Production OpenHands/OpenCode/Codex trace mining.
