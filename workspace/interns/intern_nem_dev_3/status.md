@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task035_contamination_pipeline_s2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Idle |
-| Current Task |  |
-| PR |  |
+| Status | Working |
+| Current Task | task035_contamination_pipeline_s2 |
+| PR | pending |
 | Session | 2 |
-| Recent Progress | PR #147 merge confirmed; local main fast-forward synced to `f4acf31adf4220474c04bb9dbdae2d2508e9fe5e` with no active implementation assignment |
+| Recent Progress | Started task035 contamination pipeline Session 2 from clean main `37f314418b952e3007bb80ec21283aff5e83ce12`; scanner scaffold implemented on branch `intern_nem_dev_3/task035_contamination_pipeline_s2` |
