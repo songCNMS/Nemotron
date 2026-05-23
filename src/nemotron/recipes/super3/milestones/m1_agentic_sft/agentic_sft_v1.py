@@ -36,6 +36,75 @@ COMPACT_SYSTEM_PROMPT = (
     "the tool calls, observations, and final repair action needed to solve the task."
 )
 SUCCESS_TERMINAL_REASONS = frozenset({"solved", "success", "passed", "pass", "complete"})
+DEFAULT_ROUTE_NAME = "generic_agentic_repair"
+DEFAULT_ROUTE_ORDER = (
+    "swe_openhands_repair",
+    "swe_opencode_repair",
+    "swe_codex_repair",
+    "browser_repair",
+    "terminal_repair",
+    DEFAULT_ROUTE_NAME,
+)
+
+_ROUTE_DEFINITIONS: tuple[dict[str, Any], ...] = (
+    {
+        "route_name": "swe_openhands_repair",
+        "harness": "openhands",
+        "family": "swe",
+        "aliases": ("openhands", "open_hands", "swe2_openhands"),
+        "route_tags": ("cross-harness", "swe", "openhands"),
+    },
+    {
+        "route_name": "swe_opencode_repair",
+        "harness": "opencode",
+        "family": "swe",
+        "aliases": ("opencode", "open_code"),
+        "route_tags": ("cross-harness", "swe", "opencode"),
+    },
+    {
+        "route_name": "swe_codex_repair",
+        "harness": "codex",
+        "family": "swe",
+        "aliases": ("codex", "codex_cli"),
+        "route_tags": ("cross-harness", "swe", "codex"),
+    },
+    {
+        "route_name": "browser_repair",
+        "harness": "browser",
+        "family": "browser",
+        "aliases": ("browser", "browse", "playwright", "chromium"),
+        "route_tags": ("cross-harness", "browser"),
+    },
+    {
+        "route_name": "terminal_repair",
+        "harness": "terminal",
+        "family": "terminal",
+        "aliases": ("terminal", "shell", "bash", "console"),
+        "route_tags": ("cross-harness", "terminal"),
+    },
+)
+
+
+@dataclass(frozen=True)
+class HarnessRoute:
+    """Deterministic route for a local multi-turn trace source."""
+
+    route_name: str
+    harness: str
+    source: str
+    family: str
+    route_tags: tuple[str, ...] = ()
+    reason: str = "default"
+
+    def to_jsonable(self) -> JsonDict:
+        return {
+            "route_name": self.route_name,
+            "harness": self.harness,
+            "source": self.source,
+            "family": self.family,
+            "route_tags": list(self.route_tags),
+            "reason": self.reason,
+        }
 
 
 @dataclass(frozen=True)
@@ -109,6 +178,10 @@ def describe_agentic_sft_v1_schema() -> JsonDict:
             "metadata": {
                 "source_rollout_id": "LocalRolloutStore rollout_id",
                 "m0_environment": "rollout env_id",
+                "trace_harness": "openhands | opencode | codex | browser | terminal | generic",
+                "trace_source": "explicit local source hint or inferred harness",
+                "routing_family": "swe | browser | terminal | generic",
+                "cross_harness_route": "deterministic route contract",
                 "failure_kind": "reward_zero | terminal:<reason> | explicit_failure",
                 "supervision_family": "failure_rollout_repair",
                 "self_correction": "boolean marker for repair trajectory rows",
@@ -129,6 +202,56 @@ def describe_agentic_sft_v1_schema() -> JsonDict:
             "eval gate against live M1/M2 checkpoints",
         ],
     }
+
+
+def infer_harness_route(record: Any) -> HarnessRoute:
+    """Infer a stable local route for synthetic multi-turn trace records.
+
+    Routing is intentionally deterministic and sandbox-only. Explicit metadata
+    hints such as ``harness`` or ``trace_source`` win over env/tool heuristics;
+    no production trace discovery or filesystem mining is performed.
+    """
+
+    metadata = _record_metadata(record)
+    env_id = _required_text(_record_value(record, "env_id"), "env_id")
+    source = _explicit_source(metadata)
+    for key in ("harness", "trace_harness", "source_harness", "trace_source", "source"):
+        value = metadata.get(key)
+        if isinstance(value, str):
+            match = _match_route(value)
+            if match is not None:
+                return _route_from_definition(
+                    match,
+                    source=source or _clean_source(value),
+                    reason=f"metadata:{key}",
+                )
+
+    env_match = _match_route(env_id)
+    if env_match is not None:
+        return _route_from_definition(
+            env_match,
+            source=source or env_match["harness"],
+            reason="env_id",
+        )
+
+    for turn in _record_trace(record):
+        tool_name = _turn_tool_name(turn, fallback="")
+        tool_match = _match_route(tool_name)
+        if tool_match is not None:
+            return _route_from_definition(
+                tool_match,
+                source=source or tool_match["harness"],
+                reason="trace_tool",
+            )
+
+    return HarnessRoute(
+        route_name=DEFAULT_ROUTE_NAME,
+        harness="generic",
+        source=source or "local_synthetic",
+        family="generic",
+        route_tags=("cross-harness", "generic"),
+        reason="default",
+    )
 
 
 def failure_candidate_from_rollout(record: Any) -> FailureRolloutCandidate | None:
@@ -171,6 +294,7 @@ def build_failure_repair_example(
     if candidate is None:
         raise ValueError("rollout is not a failed rollout candidate")
     mode = _normalise_compact_mode(compact_reasoning_mode)
+    route = infer_harness_route(record)
     messages: list[JsonDict] = []
     if include_system_prompt:
         prompt = DEFAULT_SYSTEM_PROMPT if mode == "standard" else f"{DEFAULT_SYSTEM_PROMPT} {COMPACT_SYSTEM_PROMPT}"
@@ -185,11 +309,18 @@ def build_failure_repair_example(
             "multi-turn supervision",
             "failure rollout repair",
             "self-correction trajectory",
+            f"{route.family} harness repair",
         ],
         "source_rollout_id": candidate.rollout_id,
         "source_prompt_id": candidate.prompt_id,
         "source_model_version": candidate.model_version,
         "m0_environment": candidate.env_id,
+        "trace_harness": route.harness,
+        "trace_source": route.source,
+        "routing_family": route.family,
+        "route_name": route.route_name,
+        "route_tags": list(route.route_tags),
+        "cross_harness_route": route.to_jsonable(),
         "failure_kind": candidate.failure_kind,
         "reward": candidate.reward,
         "terminal_reason": candidate.terminal_reason,
@@ -224,6 +355,53 @@ def build_failure_repair_examples_from_store(
         candidate = failure_candidate_from_rollout(record)
         if candidate is None:
             continue
+        examples.append(
+            build_failure_repair_example(
+                record,
+                repair_target=targets.get(candidate.rollout_id),
+                compact_reasoning_mode=compact_reasoning_mode,
+            )
+        )
+        if limit is not None and len(examples) >= limit:
+            break
+    return examples
+
+
+def build_routed_failure_repair_examples(
+    records: Iterable[Any],
+    *,
+    repair_targets: Mapping[str, str | Mapping[str, Any]] | None = None,
+    compact_reasoning_mode: str = "standard",
+    route_order: tuple[str, ...] = DEFAULT_ROUTE_ORDER,
+    route_filter: str | None = None,
+    limit: int | None = None,
+) -> list[AgenticSFTV1Example]:
+    """Build failed-rollout examples in deterministic cross-harness route order."""
+
+    targets = repair_targets or {}
+    prepared: list[tuple[int, str, str, str, Any, FailureRolloutCandidate, HarnessRoute]] = []
+    rank_by_route = {route: index for index, route in enumerate(route_order)}
+    for record in records:
+        candidate = failure_candidate_from_rollout(record)
+        if candidate is None:
+            continue
+        route = infer_harness_route(record)
+        if route_filter is not None and route.route_name != route_filter and route.harness != route_filter:
+            continue
+        prepared.append(
+            (
+                rank_by_route.get(route.route_name, len(rank_by_route)),
+                candidate.env_id,
+                candidate.prompt_id,
+                candidate.rollout_id,
+                record,
+                candidate,
+                route,
+            )
+        )
+
+    examples: list[AgenticSFTV1Example] = []
+    for _, _, _, _, record, candidate, _ in sorted(prepared):
         examples.append(
             build_failure_repair_example(
                 record,
@@ -288,6 +466,43 @@ def _record_value(record: Any, field_name: str) -> Any:
     if isinstance(record, Mapping):
         return record.get(field_name)
     return getattr(record, field_name, None)
+
+
+def _explicit_source(metadata: Mapping[str, Any]) -> str | None:
+    for key in ("trace_source", "source", "harness", "trace_harness", "collector"):
+        value = metadata.get(key)
+        if isinstance(value, str) and value.strip():
+            return _clean_source(value)
+    return None
+
+
+def _clean_source(value: str) -> str:
+    return value.strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def _match_route(value: str) -> Mapping[str, Any] | None:
+    text = _clean_source(value)
+    for definition in _ROUTE_DEFINITIONS:
+        for alias in definition["aliases"]:
+            if alias in text:
+                return definition
+    return None
+
+
+def _route_from_definition(
+    definition: Mapping[str, Any],
+    *,
+    source: str,
+    reason: str,
+) -> HarnessRoute:
+    return HarnessRoute(
+        route_name=str(definition["route_name"]),
+        harness=str(definition["harness"]),
+        source=source,
+        family=str(definition["family"]),
+        route_tags=tuple(str(tag) for tag in definition["route_tags"]),
+        reason=reason,
+    )
 
 
 def _record_trace(record: Any) -> tuple[JsonDict, ...]:
