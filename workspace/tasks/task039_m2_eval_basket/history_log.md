@@ -13,6 +13,8 @@
   local `main` at `412d54aebd75ec33145cab93fb023648a758d64d`.
 - Created closeout branch `intern_nem_dev_1/task039_m2_eval_basket_s4_closeout`
   from synced `main` for status/task bookkeeping only.
+- Opened metadata-only closeout PR https://github.com/songCNMS/Nemotron/pull/162
+  with initial closeout SHA `17c240184c89a7268f1667588703cc00aa1926e5`.
 - No additional task039 implementation was started after the merge closeout;
   live benchmark assets/APIs, cluster/NeMo eval, W&B, task019/task020 runtime
   sessions, frozen Qwen3.5-122B-A10B production baselines, and PR #153 remain
