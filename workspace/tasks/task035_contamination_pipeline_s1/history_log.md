@@ -28,3 +28,5 @@
 - Scope accepted as sandbox prompt-corpus contamination scanning using
   local fixtures and deterministic token n-gram overlap.
 - Live HF full downloads, Docker, cluster, W&B, and external network requirements remain outside this PR.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/158 with head
+  `c2057f3e9060083f6c58f9b6097bf87c0782618c`.
