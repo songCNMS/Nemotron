@@ -11,4 +11,5 @@
 - Added deterministic local calibration helper `tune_canary_policy` for canary threshold tuning from fixture-style score samples.
 - Exposed resolved canary thresholds in the JSON and markdown reports so reviewers can audit threshold decisions from local artifacts.
 - Verified the focused shadow-eval pytest target with `PYTHONPATH=src python -m pytest tests/recipes/super3/test_shadow_eval_pipeline.py`.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/161 to `main`.
 - Deferred by PM scope: cluster evaluation, W&B/lineage publication, live checkpoint promotion, and task020 runtime integration.
