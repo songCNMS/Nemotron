@@ -28,3 +28,10 @@ Out of scope for Session 1:
 - Packed SFT generation at scale and cluster training.
 - W&B/lineage publication.
 - Eval gate against live M1/M2 checkpoints.
+
+Session 2 scope:
+- Add sandbox-only cross-harness routing for local/synthetic multi-turn traces
+  from OpenHands, OpenCode, Codex, browser, terminal, and generic sources.
+- Keep route selection deterministic and metadata-driven; use env/tool hints
+  only as local fixture fallbacks.
+- Preserve Session 1 failure-repair and compact-reasoning behavior.

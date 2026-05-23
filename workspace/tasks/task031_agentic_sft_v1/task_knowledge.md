@@ -1,6 +1,6 @@
 # task031_agentic_sft_v1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 
@@ -16,5 +16,8 @@
    assistant loss.
 3. Compact reasoning is represented as explicit metadata plus a concise system
    prompt variant, not as a cluster training mode.
+4. Session 2 routing prefers explicit local metadata hints such as `harness`,
+   `trace_harness`, or `trace_source`; env/tool heuristics are fallbacks for
+   synthetic rows only.
 
 ---
