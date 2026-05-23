@@ -19,3 +19,14 @@
 - Local `main` fast-forward synced to `156403be8a4cdb8987613ff3787da0629442bcd3`; sync was clean and at the requested post-merge SHA.
 - No active implementation assignment remains after the post-merge sync.
 - Status was moved from Working to Idle through PR-flow bookkeeping branch `intern_nem_dev_3/task035_postmerge_sync_s2`.
+
+## Session 2 - 2026-05-23
+
+- PM assigned `task035_contamination_pipeline_s2` after PR #150 merged.
+- Synced clean `main` to `37f314418b952e3007bb80ec21283aff5e83ce12`.
+- Created branch `intern_nem_dev_3/task035_contamination_pipeline_s2`.
+- Scope accepted as sandbox prompt-corpus contamination scanning using
+  local fixtures and deterministic token n-gram overlap.
+- Live HF full downloads, Docker, cluster, W&B, and external network requirements remain outside this PR.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/158 with head
+  `c2057f3e9060083f6c58f9b6097bf87c0782618c`.
