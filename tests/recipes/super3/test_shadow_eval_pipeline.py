@@ -6,12 +6,14 @@ from pathlib import Path
 
 from nemotron.recipes.super3.milestones.rollout_store import LocalRolloutStore
 from nemotron.recipes.super3.milestones.shadow_eval import (
+    CanaryPolicy,
     DEFAULT_SHADOW_EVAL_BLOCKERS,
     ShadowEvalExample,
     ShadowEvalPlan,
     build_synthetic_shadow_plan,
     evaluate_shadow_plan,
     format_shadow_eval_report,
+    tune_canary_policy,
 )
 
 
@@ -182,6 +184,87 @@ def test_shadow_eval_can_use_custom_local_heldout_split(tmp_path: Path) -> None:
     assert report.task_results[0].example.prompt_id == "custom-heldout-001"
 
 
+def test_shadow_eval_canary_policy_prompt_override_controls_hold(tmp_path: Path) -> None:
+    store = LocalRolloutStore(tmp_path)
+    canary = ShadowEvalExample(
+        prompt_id="canary-browser-001",
+        env_id="browser_qa",
+        benchmark_id="browser_canary",
+        category="browser_search",
+        split="canary",
+        is_canary=True,
+    )
+    plan = ShadowEvalPlan(
+        plan_id="custom_canary_policy",
+        candidate_model_version="candidate@1",
+        baseline_model_version="baseline@1",
+        examples=(canary,),
+        canary_policy=CanaryPolicy(
+            default_min_score=0.5,
+            min_score_by_category={"browser_search": 0.7},
+            min_score_by_env={"browser_qa": 0.8},
+            min_score_by_prompt={"canary-browser-001": 0.9},
+        ),
+    )
+    _populate(
+        store,
+        plan,
+        candidate_rewards={"canary-browser-001": 0.85},
+        baseline_rewards={"canary-browser-001": 0.85},
+    )
+
+    report = evaluate_shadow_plan(store, plan)
+    assert report.final_status == "hold"
+    assert report.gate_decision.status == "promote"
+    assert report.canary_failures == ("canary-browser-001",)
+    assert report.task_results[0].canary_threshold == 0.9
+
+
+def test_shadow_eval_canary_policy_default_can_relax_sandbox_canary(tmp_path: Path) -> None:
+    store = LocalRolloutStore(tmp_path)
+    canary = ShadowEvalExample(
+        prompt_id="canary-browser-002",
+        env_id="browser_qa",
+        benchmark_id="browser_canary_relaxed",
+        category="browser_search",
+        split="canary",
+        is_canary=True,
+    )
+    plan = ShadowEvalPlan(
+        plan_id="relaxed_canary_policy",
+        candidate_model_version="candidate@1",
+        baseline_model_version="baseline@1",
+        examples=(canary,),
+        canary_policy=CanaryPolicy(default_min_score=0.8),
+    )
+    _populate(
+        store,
+        plan,
+        candidate_rewards={"canary-browser-002": 0.85},
+        baseline_rewards={"canary-browser-002": 0.85},
+    )
+
+    report = evaluate_shadow_plan(store, plan)
+    assert report.final_status == "promote"
+    assert report.task_results[0].canary_threshold == 0.8
+
+
+def test_tune_canary_policy_uses_local_calibration_scores() -> None:
+    policy = tune_canary_policy(
+        (
+            {"category": "browser_search", "score": 0.95},
+            {"category": "browser_search", "candidate_score": 0.90},
+            {"category": "safety_jailbreak", "reward": 0.04},
+        ),
+        margin=0.05,
+        default_min_score=0.7,
+    )
+
+    assert abs(policy.min_score_by_category["browser_search"] - 0.85) < 1e-12
+    assert policy.min_score_by_category["safety_jailbreak"] == 0.0
+    assert policy.default_min_score == 0.7
+
+
 def test_format_shadow_eval_report_includes_gate_and_deferred_blockers(tmp_path: Path) -> None:
     store = LocalRolloutStore(tmp_path)
     plan = build_synthetic_shadow_plan(
@@ -193,6 +276,7 @@ def test_format_shadow_eval_report_includes_gate_and_deferred_blockers(tmp_path:
 
     text = format_shadow_eval_report(report)
     assert text.startswith("# Shadow eval decision: **PROMOTE**")
+    assert "**Canary thresholds**:" in text
     assert "## Promotion Gate" in text
     for blocker in DEFAULT_SHADOW_EVAL_BLOCKERS:
         assert blocker in text

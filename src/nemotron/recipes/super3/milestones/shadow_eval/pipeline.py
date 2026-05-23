@@ -17,7 +17,7 @@ publishing, and production shadow split execution remain follow-up work.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -45,6 +45,7 @@ DEFAULT_SHADOW_EVAL_BLOCKERS = (
     "W&B/lineage publishing",
     "production shadow split execution",
 )
+CANARY_POLICY_GROUPS = frozenset({"category", "env_id", "prompt_id"})
 
 
 def _require_nonempty(value: Any, field_name: str) -> str:
@@ -86,6 +87,61 @@ class ShadowEvalExample:
 
 
 @dataclass(frozen=True)
+class CanaryPolicy:
+    """Sandbox canary thresholds keyed by stable fixture metadata."""
+
+    default_min_score: float = DEFAULT_CANARY_MIN_SCORE
+    min_score_by_category: Mapping[str, float] = field(default_factory=dict)
+    min_score_by_env: Mapping[str, float] = field(default_factory=dict)
+    min_score_by_prompt: Mapping[str, float] = field(default_factory=dict)
+
+    def threshold_for(
+        self,
+        example: ShadowEvalExample,
+        *,
+        fallback_min_score: float | None = None,
+    ) -> float | None:
+        """Resolve the canary threshold for one example."""
+
+        if not example.is_canary:
+            return None
+
+        if example.prompt_id in self.min_score_by_prompt:
+            return _validate_score_threshold(
+                self.min_score_by_prompt[example.prompt_id],
+                f"prompt threshold for {example.prompt_id}",
+            )
+        if example.env_id in self.min_score_by_env:
+            return _validate_score_threshold(
+                self.min_score_by_env[example.env_id],
+                f"env threshold for {example.env_id}",
+            )
+        if example.category in self.min_score_by_category:
+            return _validate_score_threshold(
+                self.min_score_by_category[example.category],
+                f"category threshold for {example.category}",
+            )
+        if example.min_score is not None:
+            return _validate_score_threshold(
+                example.min_score,
+                f"example threshold for {example.prompt_id}",
+            )
+        if self.default_min_score != DEFAULT_CANARY_MIN_SCORE:
+            return _validate_score_threshold(self.default_min_score, "default canary threshold")
+        if fallback_min_score is not None:
+            return _validate_score_threshold(fallback_min_score, "fallback canary threshold")
+        return _validate_score_threshold(self.default_min_score, "default canary threshold")
+
+    def to_jsonable(self) -> JsonDict:
+        return {
+            "default_min_score": self.default_min_score,
+            "min_score_by_category": dict(self.min_score_by_category),
+            "min_score_by_env": dict(self.min_score_by_env),
+            "min_score_by_prompt": dict(self.min_score_by_prompt),
+        }
+
+
+@dataclass(frozen=True)
 class ShadowEvalPlan:
     """A local shadow-eval run plan comparing candidate vs baseline."""
 
@@ -97,6 +153,7 @@ class ShadowEvalPlan:
     weighted_parity_threshold: float = DEFAULT_WEIGHTED_PARITY_THRESHOLD
     category_regression_threshold: float = DEFAULT_CATEGORY_REGRESSION_THRESHOLD
     rollback_categories: frozenset[str] = DEFAULT_ROLLBACK_CATEGORIES
+    canary_policy: CanaryPolicy = field(default_factory=CanaryPolicy)
 
     def __post_init__(self) -> None:
         _require_nonempty(self.plan_id, "plan_id")
@@ -109,6 +166,12 @@ class ShadowEvalPlan:
     def registry_rows(self) -> list[JsonDict]:
         return [example.registry_row() for example in self.examples]
 
+    def canary_threshold_for(self, example: ShadowEvalExample) -> float | None:
+        return self.canary_policy.threshold_for(
+            example,
+            fallback_min_score=self.canary_min_score,
+        )
+
 
 @dataclass(frozen=True)
 class ShadowTaskResult:
@@ -119,14 +182,7 @@ class ShadowTaskResult:
     baseline_score: float | None
     candidate_rollout_id: str | None = None
     baseline_rollout_id: str | None = None
-
-    @property
-    def canary_threshold(self) -> float | None:
-        if not self.example.is_canary:
-            return None
-        if self.example.min_score is not None:
-            return float(self.example.min_score)
-        return DEFAULT_CANARY_MIN_SCORE
+    canary_threshold: float | None = None
 
     @property
     def canary_failed(self) -> bool:
@@ -179,6 +235,11 @@ class ShadowEvalReport:
             "missing_baseline": list(self.missing_baseline),
             "canary_failures": list(self.canary_failures),
             "blockers": list(self.blockers),
+            "resolved_canary_thresholds": {
+                result.example.prompt_id: result.canary_threshold
+                for result in self.task_results
+                if result.example.is_canary
+            },
         }
 
 
@@ -230,6 +291,43 @@ def build_synthetic_shadow_plan(
         baseline_model_version=baseline_model_version,
         examples=examples,
     )
+
+
+def tune_canary_policy(
+    samples: Sequence[Mapping[str, object] | ShadowTaskResult],
+    *,
+    group_by: str = "category",
+    margin: float = 0.0,
+    default_min_score: float = DEFAULT_CANARY_MIN_SCORE,
+) -> CanaryPolicy:
+    """Build a deterministic sandbox canary policy from local calibration scores."""
+
+    if group_by not in CANARY_POLICY_GROUPS:
+        raise ValueError(f"group_by must be one of {sorted(CANARY_POLICY_GROUPS)}")
+    if margin < 0:
+        raise ValueError("margin must be non-negative")
+
+    grouped: dict[str, list[float]] = {}
+    for sample in samples:
+        group_key = _sample_group_key(sample, group_by)
+        score = _sample_score(sample)
+        grouped.setdefault(group_key, []).append(score)
+
+    tuned = {
+        group_key: _clamp_score_threshold(min(scores) - margin)
+        for group_key, scores in sorted(grouped.items())
+    }
+
+    kwargs: dict[str, object] = {
+        "default_min_score": _validate_score_threshold(default_min_score, "default_min_score")
+    }
+    if group_by == "category":
+        kwargs["min_score_by_category"] = tuned
+    elif group_by == "env_id":
+        kwargs["min_score_by_env"] = tuned
+    else:
+        kwargs["min_score_by_prompt"] = tuned
+    return CanaryPolicy(**kwargs)
 
 
 def evaluate_shadow_plan(
@@ -311,6 +409,15 @@ def format_shadow_eval_report(report: ShadowEvalReport) -> str:
         for prompt_id in report.missing_baseline:
             lines.append(f"- `{prompt_id}`")
         lines.append("")
+    canary_results = [result for result in report.task_results if result.example.is_canary]
+    if canary_results:
+        lines.append("**Canary thresholds**:")
+        for result in canary_results:
+            lines.append(
+                f"- `{result.example.prompt_id}`: "
+                f"score={result.candidate_score}, threshold={result.canary_threshold}"
+            )
+        lines.append("")
     lines.append("## Promotion Gate")
     lines.append("")
     lines.append(format_gate_report(report.gate_decision).strip())
@@ -335,6 +442,7 @@ def _resolve_task_result(
         baseline_score=baseline.reward if baseline else None,
         candidate_rollout_id=candidate.rollout_id if candidate else None,
         baseline_rollout_id=baseline.rollout_id if baseline else None,
+        canary_threshold=plan.canary_threshold_for(example),
     )
 
 
@@ -361,3 +469,43 @@ def _combine_status(
     if gate_status == SHADOW_STATUS_HOLD:
         return SHADOW_STATUS_HOLD
     return SHADOW_STATUS_PROMOTE
+
+
+def _sample_group_key(sample: Mapping[str, object] | ShadowTaskResult, group_by: str) -> str:
+    if isinstance(sample, ShadowTaskResult):
+        if group_by == "category":
+            return sample.example.category
+        if group_by == "env_id":
+            return sample.example.env_id
+        return sample.example.prompt_id
+
+    value = sample.get(group_by)
+    if value is None:
+        raise ValueError(f"calibration sample is missing {group_by}")
+    return str(value)
+
+
+def _sample_score(sample: Mapping[str, object] | ShadowTaskResult) -> float:
+    if isinstance(sample, ShadowTaskResult):
+        if sample.candidate_score is None:
+            raise ValueError(f"calibration sample {sample.example.prompt_id} is missing candidate_score")
+        return _validate_score_threshold(sample.candidate_score, f"score for {sample.example.prompt_id}")
+
+    for key in ("score", "candidate_score", "reward"):
+        if key in sample:
+            return _validate_score_threshold(sample[key], f"sample {key}")
+    raise ValueError("calibration sample must include score, candidate_score, or reward")
+
+
+def _validate_score_threshold(value: object, label: str) -> float:
+    try:
+        score = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{label} must be numeric") from exc
+    if score < 0.0 or score > 1.0:
+        raise ValueError(f"{label} must be between 0.0 and 1.0")
+    return score
+
+
+def _clamp_score_threshold(value: float) -> float:
+    return max(0.0, min(1.0, value))
