@@ -6,14 +6,16 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 
-"""Sandbox M2 RL curriculum scaffold (task038 Sessions 1-2).
+"""Sandbox M2 RL curriculum scaffold (task038 Sessions 1-3).
 
 This module is local-only. It reads synthetic/local rollout traces from
 ``LocalRolloutStore``, estimates per-environment gaps, and turns those gaps
 into deterministic sampling quotas. Session 2 adds per-environment,
 per-checkpoint reward calibration summaries and deterministic calibrated reward
-outputs. Cluster RL runs, live judge dispatch, reward service routing,
-production rollout backends, and W&B/lineage streams remain follow-up work.
+outputs. Session 3 adds a sandbox judge-ensemble dispatcher over the task034
+judge-pool mock interfaces. Cluster RL runs, live judge dispatch, reward
+service routing, production rollout backends, and W&B/lineage streams remain
+follow-up work.
 """
 
 from __future__ import annotations
@@ -23,7 +25,14 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
-from nemotron.recipes.super3.milestones.m2_judge_pool import JudgeResponse
+from nemotron.recipes.super3.milestones.m2_judge_pool import (
+    EnsembleVoteResult,
+    JudgeRequest,
+    JudgeResponse,
+    JudgeVersionRegistry,
+    build_default_sandbox_judge_pool,
+    evaluate_ensemble,
+)
 from nemotron.recipes.super3.milestones.rollout_store import (
     LocalRolloutStore,
     RolloutTrace,
@@ -37,6 +46,7 @@ DEFAULT_PASS_THRESHOLD = 1.0
 DEFAULT_MIN_WEIGHT = 0.05
 DEFAULT_COVERAGE_GAP_WEIGHT = 0.25
 ZERO_VARIANCE_STD_FALLBACK = 1.0
+DEFAULT_JUDGE_DECISION_THRESHOLD = 0.5
 DEFAULT_RL_CURRICULUM_BLOCKERS = (
     "task014 real RLVR cluster smoke",
     "task021 launch path / scheduler integration",
@@ -46,6 +56,15 @@ DEFAULT_RL_CURRICULUM_BLOCKERS = (
     "W&B/lineage publication",
     "production rollout store backend",
     "live reward calibration",
+)
+DEFAULT_JUDGE_DISPATCH_BLOCKERS = (
+    "live GenRM/judge service deployment",
+    "reward-service routing",
+    "auth/secrets for live judge endpoints",
+    "calibration corpora access",
+    "cluster inference",
+    "RL training launch",
+    "W&B/lineage publication",
 )
 
 
@@ -346,6 +365,101 @@ class CalibratedReward:
         }
 
 
+@dataclass(frozen=True)
+class EnvJudgeRoutingPolicy:
+    """Per-environment judge refs and decision policy for sandbox dispatch."""
+
+    env_id: str
+    judge_refs: tuple[str, ...]
+    decision_threshold: float = DEFAULT_JUDGE_DECISION_THRESHOLD
+    rubric: str | None = None
+    metadata: JsonDict = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "env_id", _require_nonempty(self.env_id, "env_id"))
+        judge_refs = _freeze_unique_strings(self.judge_refs, "judge_refs")
+        if not judge_refs:
+            raise ValueError("judge_refs must contain at least one judge ref")
+        object.__setattr__(self, "judge_refs", judge_refs)
+        threshold = float(self.decision_threshold)
+        if not 0.0 <= threshold <= 1.0:
+            raise ValueError("decision_threshold must be in [0, 1]")
+        object.__setattr__(self, "decision_threshold", threshold)
+        if self.rubric is not None:
+            object.__setattr__(self, "rubric", _require_nonempty(self.rubric, "rubric"))
+        object.__setattr__(self, "metadata", dict(self.metadata or {}))
+
+    def to_jsonable(self) -> JsonDict:
+        return {
+            "env_id": self.env_id,
+            "judge_refs": list(self.judge_refs),
+            "decision_threshold": self.decision_threshold,
+            "rubric": self.rubric,
+            "metadata": dict(self.metadata),
+        }
+
+
+@dataclass(frozen=True)
+class JudgeDispatchRecord:
+    """One rollout judged through an environment-specific mock ensemble."""
+
+    rollout_id: str
+    prompt_id: str
+    env_id: str
+    model_version: str
+    request: JudgeRequest
+    routing_policy: EnvJudgeRoutingPolicy
+    result: EnsembleVoteResult
+    rollout_metrics: JsonDict
+    blockers: tuple[str, ...] = DEFAULT_JUDGE_DISPATCH_BLOCKERS
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "rollout_id",
+            _require_nonempty(self.rollout_id, "rollout_id"),
+        )
+        object.__setattr__(
+            self,
+            "prompt_id",
+            _require_nonempty(self.prompt_id, "prompt_id"),
+        )
+        object.__setattr__(self, "env_id", _require_nonempty(self.env_id, "env_id"))
+        object.__setattr__(
+            self,
+            "model_version",
+            _require_nonempty(self.model_version, "model_version"),
+        )
+        if self.request.request_id != self.rollout_id:
+            raise ValueError("judge request_id must match rollout_id")
+        if self.request.env_id != self.env_id:
+            raise ValueError("judge request env_id must match rollout env_id")
+        if self.result.request_id != self.request.request_id:
+            raise ValueError("ensemble result request_id must match judge request_id")
+        object.__setattr__(self, "rollout_metrics", dict(self.rollout_metrics or {}))
+        object.__setattr__(self, "blockers", tuple(self.blockers))
+
+    @property
+    def reward(self) -> float:
+        return self.result.aggregate_score
+
+    def to_jsonable(self) -> JsonDict:
+        return {
+            "schema_version": 1,
+            "kind": "m2_rl_curriculum_judge_dispatch_record",
+            "rollout_id": self.rollout_id,
+            "prompt_id": self.prompt_id,
+            "env_id": self.env_id,
+            "model_version": self.model_version,
+            "reward": self.reward,
+            "request": self.request.to_jsonable(),
+            "routing_policy": self.routing_policy.to_jsonable(),
+            "result": self.result.to_jsonable(),
+            "rollout_metrics": dict(self.rollout_metrics),
+            "blockers": list(self.blockers),
+        }
+
+
 def estimate_env_gaps(
     store: LocalRolloutStore,
     *,
@@ -569,6 +683,165 @@ def build_dynamic_sampling_plan(
     )
 
 
+def build_default_env_judge_routing_policies() -> tuple[EnvJudgeRoutingPolicy, ...]:
+    """Return sandbox per-env judge-routing policies compatible with task034."""
+
+    return (
+        EnvJudgeRoutingPolicy(
+            env_id="genrm_compare",
+            judge_refs=("genrm_primary", "if_primary"),
+            rubric="Score preference-comparison quality for local RL curriculum shaping.",
+            metadata={"source": "task038_s3_default"},
+        ),
+        EnvJudgeRoutingPolicy(
+            env_id="multilingual_ifeval",
+            judge_refs=("if_primary", "genrm_primary"),
+            rubric="Score multilingual instruction-following quality for local curriculum shaping.",
+            metadata={"source": "task038_s3_default"},
+        ),
+        EnvJudgeRoutingPolicy(
+            env_id="safety_judge",
+            judge_refs=("safety_primary", "genrm_primary"),
+            rubric="Score safety and alignment quality for local curriculum shaping.",
+            metadata={"source": "task038_s3_default"},
+        ),
+    )
+
+
+def rollout_trace_to_judge_request(
+    trace: RolloutTrace,
+    *,
+    routing_policy: EnvJudgeRoutingPolicy | None = None,
+) -> JudgeRequest:
+    """Convert a local rollout trace into a task034 judge-pool request."""
+
+    prompt = _first_text(
+        trace.metadata,
+        ("prompt", "instruction", "input"),
+        default=f"prompt_id={trace.prompt_id}",
+    )
+    candidate_response = (
+        _first_text(
+            trace.metadata,
+            ("candidate_response", "response", "answer", "completion"),
+            default=None,
+        )
+        or _candidate_response_from_trace(trace)
+        or trace.terminal_reason
+        or f"rollout_id={trace.rollout_id}"
+    )
+    reference_response = _first_text(
+        trace.metadata,
+        ("reference_response", "reference", "expected_response"),
+        default=None,
+    )
+    rubric = (
+        (routing_policy.rubric if routing_policy is not None else None)
+        or _first_text(trace.metadata, ("rubric",), default=None)
+    )
+    return JudgeRequest(
+        request_id=trace.rollout_id,
+        env_id=trace.env_id,
+        prompt=prompt,
+        candidate_response=candidate_response,
+        reference_response=reference_response,
+        rubric=rubric,
+        metadata={
+            "prompt_id": trace.prompt_id,
+            "model_version": trace.model_version,
+            "source": "task038_s3_rollout_dispatch",
+        },
+    )
+
+
+def judge_ensemble_result_to_rollout_metrics(
+    result: EnsembleVoteResult,
+    *,
+    routing_policy: EnvJudgeRoutingPolicy,
+) -> JsonDict:
+    """Convert a task034 ensemble result into rollout-store metrics."""
+
+    calibration_set_ids = sorted(
+        {
+            response.calibration_set_id
+            for response in result.responses
+            if response.calibration_set_id is not None
+        }
+    )
+    return {
+        "judge_score": result.aggregate_score,
+        "judge_confidence": result.aggregate_confidence,
+        "judge_label": result.label,
+        "judge_votes_by_label": dict(result.votes_by_label),
+        "judge_version_keys": list(result.judge_version_keys),
+        "judge_response_count": len(result.responses),
+        "judge_decision_threshold": result.decision_threshold,
+        "judge_decision_rule": result.decision_rule,
+        "judge_routing_env_id": routing_policy.env_id,
+        "judge_routing_refs": list(routing_policy.judge_refs),
+        "judge_calibration_set_ids": calibration_set_ids,
+    }
+
+
+def dispatch_judge_ensembles_for_rollouts(
+    store: LocalRolloutStore,
+    *,
+    registry: JudgeVersionRegistry | None = None,
+    routing_policies: Sequence[EnvJudgeRoutingPolicy] | None = None,
+    model_version: str | None = None,
+    score_overrides: Mapping[str, Mapping[str, Any]] | None = None,
+    strict: bool = True,
+) -> tuple[JudgeDispatchRecord, ...]:
+    """Dispatch local rollout traces through per-env sandbox judge ensembles."""
+
+    registry = registry or build_default_sandbox_judge_pool()
+    policies_by_env = _routing_policies_by_env(
+        routing_policies or build_default_env_judge_routing_policies()
+    )
+    requested_model_version = (
+        _require_nonempty(model_version, "model_version")
+        if model_version is not None
+        else None
+    )
+    overrides = dict(score_overrides or {})
+    dispatched: list[JudgeDispatchRecord] = []
+    for trace in sorted(
+        store.iter_all(),
+        key=lambda item: (item.model_version, item.env_id, item.prompt_id, item.rollout_id),
+    ):
+        if requested_model_version is not None and trace.model_version != requested_model_version:
+            continue
+        policy = policies_by_env.get(trace.env_id)
+        if policy is None:
+            if strict:
+                raise KeyError(f"no judge routing policy for env_id {trace.env_id!r}")
+            continue
+        request = rollout_trace_to_judge_request(trace, routing_policy=policy)
+        judges = tuple(
+            registry.build_mock_judge(ref, score_overrides=overrides.get(ref))
+            for ref in policy.judge_refs
+        )
+        result = evaluate_ensemble(
+            request,
+            judges,
+            decision_threshold=policy.decision_threshold,
+        )
+        metrics = judge_ensemble_result_to_rollout_metrics(result, routing_policy=policy)
+        dispatched.append(
+            JudgeDispatchRecord(
+                rollout_id=trace.rollout_id,
+                prompt_id=trace.prompt_id,
+                env_id=trace.env_id,
+                model_version=trace.model_version,
+                request=request,
+                routing_policy=policy,
+                result=result,
+                rollout_metrics=metrics,
+            )
+        )
+    return tuple(dispatched)
+
+
 def judge_response_to_rollout_metrics(response: JudgeResponse) -> JsonDict:
     """Convert a local judge-pool response into rollout-store metrics."""
 
@@ -631,6 +904,52 @@ def _freeze_requested_values(values: Sequence[str], field_name: str) -> tuple[st
     return tuple(sorted(out))
 
 
+def _freeze_unique_strings(values: Sequence[str], field_name: str) -> tuple[str, ...]:
+    out = tuple(_require_nonempty(value, field_name) for value in values)
+    if len(set(out)) != len(out):
+        raise ValueError(f"{field_name} must not contain duplicates")
+    return out
+
+
+def _routing_policies_by_env(
+    policies: Sequence[EnvJudgeRoutingPolicy],
+) -> dict[str, EnvJudgeRoutingPolicy]:
+    if not policies:
+        raise ValueError("routing_policies must contain at least one policy")
+    by_env = {policy.env_id: policy for policy in policies}
+    if len(by_env) != len(tuple(policies)):
+        raise ValueError("routing_policies must be unique by env_id")
+    return by_env
+
+
+def _first_text(
+    values: Mapping[str, Any],
+    keys: Sequence[str],
+    *,
+    default: str | None,
+) -> str | None:
+    for key in keys:
+        value = values.get(key)
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return default
+
+
+def _candidate_response_from_trace(trace: RolloutTrace) -> str | None:
+    for turn in reversed(trace.trace):
+        candidate = _first_text(
+            turn,
+            ("candidate_response", "response", "answer", "output", "observation", "content"),
+            default=None,
+        )
+        if candidate is not None:
+            return candidate
+    return None
+
+
 def _summary_from_rewards(
     env_id: str,
     model_version: str,
@@ -681,17 +1000,25 @@ def _metric_float(trace: RolloutTrace, key: str) -> float | None:
 
 __all__ = [
     "CalibratedReward",
+    "DEFAULT_JUDGE_DECISION_THRESHOLD",
     "DEFAULT_RL_CURRICULUM_BLOCKERS",
+    "DEFAULT_JUDGE_DISPATCH_BLOCKERS",
     "CurriculumSamplingPlan",
     "EnvGapConfig",
     "EnvGapEstimate",
+    "EnvJudgeRoutingPolicy",
+    "JudgeDispatchRecord",
     "RewardCalibrationSummary",
     "SamplingAllocation",
     "build_dynamic_sampling_plan",
+    "build_default_env_judge_routing_policies",
     "build_reward_calibration_summaries",
     "calibrate_rollout_rewards",
     "calibrate_trace_reward",
+    "dispatch_judge_ensembles_for_rollouts",
     "estimate_env_gaps",
     "format_curriculum_plan",
+    "judge_ensemble_result_to_rollout_metrics",
     "judge_response_to_rollout_metrics",
+    "rollout_trace_to_judge_request",
 ]
