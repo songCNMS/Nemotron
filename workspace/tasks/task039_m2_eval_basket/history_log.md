@@ -1,6 +1,30 @@
 # task039_m2_eval_basket - history_log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
+
+## Session 3 - 2026-05-23 - intern_nem_dev_1
+
+- PM assigned `task039_m2_eval_basket_s2` after PR #156 merged and latest
+  `main` advanced to `28b7dca96166bb76ff4fcf25349582ac1a3279a3`.
+- Synced local `main` with `git fetch origin main` and
+  `git pull --ff-only origin main`; branch
+  `intern_nem_dev_1/task039_m2_eval_basket_s2` started from
+  `28b7dca96166bb76ff4fcf25349582ac1a3279a3`.
+- Scope: sandbox per-category gap thresholds for M2 122B-class parity,
+  config/validator/tests only.
+- Added `m2_eval_gap_thresholds.yaml`, threshold validation, local score-map
+  gap evaluation, deterministic report formatting, and focused Session 2
+  tests.
+- Validation:
+  - `PYTHONPATH=src pytest -q tests/recipes/super3/test_m2_eval_basket_s2.py tests/recipes/super3/test_m2_eval_basket_s1.py tests/recipes/super3/test_gap_analysis.py tests/recipes/super3/test_promotion_gate.py`
+    -> 57 passed.
+  - `python -m py_compile src/nemotron/recipes/super3/milestones/m2_eval_basket/__init__.py src/nemotron/recipes/super3/milestones/m2_eval_basket/registry.py`
+    -> passed.
+  - `git diff --check` -> passed.
+- Live benchmark assets/APIs, NeMo Evaluator or cluster eval, external
+  downloads, W&B publication, task019/task020 runtime sessions, frozen
+  Qwen3.5-122B-A10B production baseline numbers, and PR #153 remain out of
+  scope.
 
 ## Session 1 - 2026-05-22
 
