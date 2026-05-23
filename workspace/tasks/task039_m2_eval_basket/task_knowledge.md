@@ -1,6 +1,6 @@
 # task039_m2_eval_basket - task_knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 Notes
 
@@ -11,3 +11,4 @@
 - The Session 1 adapter config is a dry-run/config-validation scaffold.
   Live NeMo Evaluator tasks, benchmark assets, and baseline numbers are
   cluster-bound.
+- Session 2 added no implementation knowledge; it confirmed post-merge sync and Idle status.
