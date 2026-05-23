@@ -1,6 +1,6 @@
 # task039_m2_eval_basket
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Goal
 
@@ -16,6 +16,18 @@ registry plus adapter-config metadata for the M2 acceptance basket.
   benchmark.
 - Reuse the existing `eval_basket_registry` schema kind and unified data
   registry validation.
+
+## Session 2 Scope
+
+- Add sandbox per-category gap thresholds for M2 122B-class parity.
+- Validate that each threshold category exactly matches the benchmark IDs in
+  the Session 1 registry.
+- Provide deterministic local score-map evaluation and markdown reporting
+  helpers without reading production baselines.
+- Keep threshold rows as config-only gate metadata; live benchmark assets,
+  APIs, cluster eval, W&B publication, task019/task020 runtime sessions,
+  PR #153, and frozen Qwen3.5-122B-A10B production baseline numbers remain
+  outside this PR.
 
 ## Out Of Scope
 

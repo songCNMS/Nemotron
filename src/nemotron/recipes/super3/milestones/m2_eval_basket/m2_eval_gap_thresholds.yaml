@@ -1,0 +1,65 @@
+schema_version: 1
+milestone: M2
+target_model_class: qwen3_5_122b_a10b_class
+description: |
+  Sandbox per-category gap thresholds for M2 eval basket 122B-class parity.
+  This file defines allowable category-level drift only; it does not encode
+  frozen production baseline numbers, live benchmark assets, evaluator APIs,
+  cluster jobs, or W&B publication targets.
+
+category_thresholds:
+  - category: reasoning_extreme_difficulty
+    benchmark_ids: [hle]
+    max_regression: 0.010
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Tight parity guard for the highest-difficulty reasoning row.
+
+  - category: browser_search
+    benchmark_ids: [browsecomp]
+    max_regression: 0.020
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Browser/search parity remains sandbox-gated until live APIs and assets are pinned.
+
+  - category: sql_execution
+    benchmark_ids: [bird_real_execution]
+    max_regression: 0.015
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Real SQL execution gets a stricter gap guard while DB assets remain cluster-bound.
+
+  - category: tool_use_function_call
+    benchmark_ids: [bfcl_full]
+    max_regression: 0.020
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Full BFCL category parity is checked without launching the live evaluator.
+
+  - category: tool_use_mcp
+    benchmark_ids: [mcp_mark]
+    max_regression: 0.020
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: MCP-Mark parity thresholds stay config-only until live server fleets are available.
+
+  - category: tool_use_agentic
+    benchmark_ids: [tool_decathlon]
+    max_regression: 0.020
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Agentic tool-use parity is declared separately from cluster runtime execution.
+
+  - category: multilingual_instruction_following
+    benchmark_ids: [multilingual_ifeval]
+    max_regression: 0.015
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Multilingual instruction-following drift is kept below the broad tool/API rows.
+
+  - category: multilingual_code
+    benchmark_ids: [multilingual_humaneval]
+    max_regression: 0.015
+    gate_action: hold
+    blocker_scope: sandbox_threshold_only
+    rationale: Multilingual code parity remains threshold-only until code execution sandbox runs.

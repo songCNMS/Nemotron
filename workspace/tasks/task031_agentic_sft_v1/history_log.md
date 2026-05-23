@@ -1,6 +1,18 @@
 # task031_agentic_sft_v1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
+
+---
+
+## Session 3 - 2026-05-23 - intern_nem_dev_1
+
+- Confirmed task031 PR #156 merged at `2026-05-23T14:28:01Z`; PM merge
+  commit advanced `main` to `28b7dca96166bb76ff4fcf25349582ac1a3279a3`.
+- Switched from clean branch `intern_nem_dev_1/task031_agentic_sft_v1_s2`
+  to `main`, fetched `origin/main`, and fast-forwarded local `main` to
+  `28b7dca96166bb76ff4fcf25349582ac1a3279a3` before any new work.
+- PM then assigned `task039_m2_eval_basket_s2`; no further task031
+  implementation was started after the merge closeout.
 
 ---
 

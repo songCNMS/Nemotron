@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task031_agentic_sft_v1 -->
+<!-- METADATA:STATUS=Working,TASK=task039_m2_eval_basket -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task031_agentic_sft_v1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/156 |
-| Session | 2 |
-| Recent Progress | PR #156 opened for task031 Agentic SFT v1 Session 2; focused checks passed |
+| Current Task | task039_m2_eval_basket |
+| PR | https://github.com/songCNMS/Nemotron/pull/159 |
+| Session | 3 |
+| Recent Progress | PR #159 opened for task039 M2 eval basket S2 gap thresholds; focused checks passed |

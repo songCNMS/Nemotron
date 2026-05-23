@@ -1,6 +1,6 @@
 # task031_agentic_sft_v1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 
@@ -19,5 +19,7 @@
 4. Session 2 routing prefers explicit local metadata hints such as `harness`,
    `trace_harness`, or `trace_source`; env/tool heuristics are fallbacks for
    synthetic rows only.
+5. Session 3 added no new Agentic SFT implementation knowledge; it only
+   recorded PR #156 merge closeout before the PM-assigned task039 work.
 
 ---
