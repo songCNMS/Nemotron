@@ -12,6 +12,8 @@
   `28b7dca96166bb76ff4fcf25349582ac1a3279a3`.
 - Scope: sandbox per-category gap thresholds for M2 122B-class parity,
   config/validator/tests only.
+- PR: https://github.com/songCNMS/Nemotron/pull/159
+- Initial implementation SHA: `da0dc154d70152eea5779fd3d7f6ef1fb09dfd05`
 - Added `m2_eval_gap_thresholds.yaml`, threshold validation, local score-map
   gap evaluation, deterministic report formatting, and focused Session 2
   tests.

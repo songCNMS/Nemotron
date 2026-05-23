@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task039_m2_eval_basket |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/159 |
 | Session | 3 |
-| Recent Progress | PR #156 merged; synced main to 28b7dca96166bb76ff4fcf25349582ac1a3279a3 and started task039 S2 gap-threshold scaffold |
+| Recent Progress | PR #159 opened for task039 M2 eval basket S2 gap thresholds; focused checks passed |
