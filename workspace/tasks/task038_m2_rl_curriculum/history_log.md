@@ -34,4 +34,5 @@
 - Added deterministic mock judge ensemble dispatch through the task034 `JudgeVersionRegistry` and `evaluate_ensemble` contracts.
 - Added rollout metrics conversion so aggregate judge score/confidence can feed existing gap-estimator and reward-calibration flows.
 - Verified focused S3/S2/S1/rollout/judge shard: 34 passed, `py_compile` passed, and `git diff --check` passed.
+- Opened PR #160 to `main` from branch `intern_nem_dev_2/task038_m2_rl_curriculum_s3`.
 - Follow-up remains live GenRM/judge deployment, reward-service routing, auth/secrets, calibration corpora access, cluster inference, RL training launch, and W&B/lineage publication.
