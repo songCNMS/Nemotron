@@ -29,6 +29,7 @@
 
 - Synced clean `main` to corrected PR #157 merge SHA `e1b0838ef1f2c07cedce828700df81b61e505e01` before implementation.
 - Started branch `intern_nem_dev_2/task038_m2_rl_curriculum_s3`.
+- Rebased cleanly after `origin/main` advanced to `74755c1b12b355fb3419d5d1cc1aeabbd25a4bc4`.
 - Added sandbox per-env judge routing policies and a rollout-to-`JudgeRequest` converter over synthetic/local `LocalRolloutStore` traces.
 - Added deterministic mock judge ensemble dispatch through the task034 `JudgeVersionRegistry` and `evaluate_ensemble` contracts.
 - Added rollout metrics conversion so aggregate judge score/confidence can feed existing gap-estimator and reward-calibration flows.
