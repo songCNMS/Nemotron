@@ -726,6 +726,13 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs()
     assert result_manifest["summary"]["official_comparability"]["status"] == (
         "not_official_comparable"
     )
+    calibration = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_calibration"
+    ]
+    assert calibration["checked_in_session"] == 33
+    assert calibration["corrected_accuracy"] == pytest.approx(0.6178571428571429)
+    assert calibration["corrected_parsed_rate"] == 1.0
+    assert calibration["old_same_slice_invalid_rate"] == 1.0
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",

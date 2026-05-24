@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Notes
 
@@ -109,3 +109,4 @@
 - Conservative 30B final-vs-original fact: final `iter0010110` deltas vs original Qwen3-30B-A3B-Instruct-2507 are IFBench `+0.02040816326530609`, AIME25 `-0.13333333333333333`, HMMT `-6.666666666666667`, WMT24++ `+0.3214833850773573`, and MMLU-Pro `+0.010305851063829786`.
 - Qwen3-30B-A3B official-score debug fact: Session 32 found the current task071 original/SFT/final 30B MMLU-Pro, AIME25, and HMMT numbers are regression-harness scores, not Qwen official-comparable benchmark scores. MMLU-Pro used completions with `max_gen_toks=32` despite a step-by-step prompt and produced `12030/12032` invalid filtered responses for original Qwen; the same first MMLU sample reaches the correct `B` with `max_tokens=512` or chat answer-only prompting.
 - Qwen3-30B-A3B math eval debug fact: original AIME25 had `finish_reason.length=234/300` at `max_tokens=2048`; original HMMT had `finish_reason.length=28/30` and `no_answer=93.33333333333333`. Qwen official guidance recommends enough output length and standardized final-answer formats, so corrected Qwen-style eval needs larger generation caps plus parser-aligned prompts before rerunning full comparisons.
+- Qwen3-30B-A3B MMLU-Pro calibration fact: Session 33 ran original Qwen debug endpoint on a 14-category x 20-sample MMLU-Pro slice with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.6178571428571429`, parsed rate `1.0`, stop finish rate `1.0`, while the same slice under the old task071 MMLU-Pro output had accuracy `0.0` and invalid rate `1.0`.

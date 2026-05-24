@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Session 1
 
@@ -356,4 +356,15 @@
 - 运行 probe：同一 MMLU-Pro biology 样本 target `B`，completions `max_tokens=32` 无法抽取选项且 length 截断；completions `max_tokens=512` 输出 `The answer is (B)`；chat answer-only prompt `max_tokens=16` 直接返回 `B`。
 - AIME 第一题在同一 original debug endpoint 上提升到 `max_tokens=4096` 后仍 `finish_reason=length`，进一步确认当前 2048-token math eval 不是官方可比口径。
 - 新增诊断报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_debug_session32.md`；更新 30B original、iter0009119、final conservative 三个 manifest 的 `official_comparability` 标记，明确这些分数只能作为 task071 regression harness 结果。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。
+
+## Session 33
+
+- 按“执行下一步”运行 corrected MMLU-Pro calibration slice，目标是先确认 parser/truncation 口径是否可用，再扩到完整三模型对比。
+- 确认 original debug endpoint 仍在 NemTron 运行：tmux session `task071_qwen30b_original_debug_sglang`，model id `qwen3-30b-a3b-instruct-2507-original-debug`，context length `8192`；vpn 通过 `127.0.0.1:13000` 可访问。
+- 校准输入来自 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/qwen3-30b-a3b-instruct-2507-original`，共 14 个 MMLU-Pro category、12032 条 raw sample；本轮取每个 category 前 20 条，共 280 requests。
+- 编写并执行 calibration script：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/run_mmlu_corrected_calibration.py`，prompt 为 chat JSON answer-only，`max_tokens=64`、`temperature=0.0`、`top_p=1e-5`、parallelism `8`。
+- 结果：corrected accuracy `0.6178571428571429`，parsed rate `1.0`，finish_reason stop rate `1.0`，`280/280` requests 成功；同一 slice 旧 task071 MMLU-Pro accuracy `0.0`、invalid rate `1.0`。
+- 本轮不声称复现 Qwen 官方 MMLU-Pro `78.4`，因为 calibration 使用 answer-only JSON prompt 和 first-20-per-category slice；它证明之前 original baseline 的 0 分主要由旧 harness truncation/parser failure 导致。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_calibration_session33.md`，并把 calibration 摘要登记到 30B original manifest 的 `official_comparability.corrected_mmlu_pro_calibration`。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。
