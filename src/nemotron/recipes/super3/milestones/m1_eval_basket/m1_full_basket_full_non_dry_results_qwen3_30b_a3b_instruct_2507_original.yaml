@@ -128,6 +128,50 @@ summary:
         boxed_rows: 2
         contains_expected_answer_rows: 4
         length_contains_expected_without_prediction: 2
+    corrected_math_probe:
+      checked_in_session: 37
+      run_id: qwen3_30b_a3b_original_math_probe_session37
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_probe_session37.md
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/summary.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/results.jsonl
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-math-probe
+      endpoint_max_model_len: 16384
+      total_requests: 54
+      runtime_sec: 126.423
+      sample_scope:
+        aime25_unique_prompts: 3
+        hmmt_entries: 3
+        prompt_variants:
+        - original
+        - concise_boxed
+        - answer_only
+        max_tokens:
+        - 2048
+        - 4096
+        - 8192
+      aime25:
+        labeled_accuracy_available: false
+        original_2048_parsed_rate: 0.3333333333333333
+        original_8192_parsed_rate: 1.0
+        concise_boxed_2048_parsed_rate: 0.0
+        concise_boxed_8192_parsed_rate: 0.6666666666666666
+        answer_only_2048_parsed_rate: 1.0
+        answer_only_8192_parsed_rate: 1.0
+      hmmt:
+        original_2048_parsed_rate: 0.6666666666666666
+        original_2048_correct_rate: 0.6666666666666666
+        original_4096_parsed_rate: 1.0
+        original_8192_correct_rate: 0.6666666666666666
+        concise_boxed_8192_parsed_rate: 1.0
+        concise_boxed_8192_correct_rate: 0.6666666666666666
+        answer_only_8192_parsed_rate: 0.6666666666666666
+        answer_only_8192_correct_rate: 0.6666666666666666
+      conclusion: >-
+        Small-sample reruns confirm that the old math scores mix model ability
+        with output-budget and final-answer-contract failures. AIME parseability
+        reaches 100% with answer-only prompts at 2048 tokens or the original
+        prompt at 8192 tokens; HMMT parseability reaches 100% for the original
+        prompt at 4096/8192 and for the concise boxed prompt at 8192.
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

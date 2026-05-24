@@ -769,6 +769,27 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs()
     assert math_audit["hmmt"]["finish_reason_counts"] == {"length": 28, "stop": 2}
     assert math_audit["hmmt"]["predicted_answer_rows"] == 2
     assert math_audit["hmmt"]["length_contains_expected_without_prediction"] == 2
+    math_probe = result_manifest["summary"]["official_comparability"][
+        "corrected_math_probe"
+    ]
+    assert math_probe["checked_in_session"] == 37
+    assert math_probe["endpoint_max_model_len"] == 16384
+    assert math_probe["total_requests"] == 54
+    assert math_probe["sample_scope"]["aime25_unique_prompts"] == 3
+    assert math_probe["sample_scope"]["hmmt_entries"] == 3
+    assert math_probe["sample_scope"]["max_tokens"] == [2048, 4096, 8192]
+    assert math_probe["aime25"]["labeled_accuracy_available"] is False
+    assert math_probe["aime25"]["original_2048_parsed_rate"] == pytest.approx(
+        1 / 3
+    )
+    assert math_probe["aime25"]["original_8192_parsed_rate"] == 1.0
+    assert math_probe["aime25"]["answer_only_2048_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["original_4096_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["original_8192_correct_rate"] == pytest.approx(2 / 3)
+    assert math_probe["hmmt"]["concise_boxed_8192_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["answer_only_8192_correct_rate"] == pytest.approx(
+        2 / 3
+    )
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",

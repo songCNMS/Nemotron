@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/153 |
-| Session | 36 |
+| Session | 37 |
 | Branch | intern_nemontron_code_reading/task071_conservative_30b_train_session23 |
-| Latest | Audited original Qwen3-30B AIME/HMMT artifacts: AIME has 234/300 length finishes and only 76 boxed rows, while HMMT has 28/30 length finishes and 2 length rows that contain the expected answer but no parsed prediction; recorded math eval audit in PR #153. |
+| Latest | Ran a corrected original Qwen3-30B math probe on AIME/HMMT slices with prompt variants and 2048/4096/8192 token caps; recorded that AIME answer-only reaches 100% parseability at 2048 while original AIME needs 8192 on the slice, and HMMT original reaches 100% parseability at 4096/8192. |

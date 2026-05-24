@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Notes
 
@@ -113,3 +113,4 @@
 - Qwen3-30B-A3B corrected full MMLU-Pro fact: Session 34 ran `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` against the original debug endpoint for all `12032` MMLU-Pro rows with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.561751994680851`, parsed rate `1.0`, stop finish rate `1.0`, and old same-row invalid rate `0.9998337765957447`. Summary artifact is `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json`.
 - Qwen3-30B-A3B corrected same-protocol comparison fact: Session 35 ran the same full MMLU-Pro chat JSON protocol on `iter0009119` and conservative `iter0010110`; corrected accuracies are original `0.561751994680851`, SFT `iter0009119` `0.5339926861702128`, and conservative final `0.527593085106383`. All three runs have parsed rate `1.0` and stop finish rate `1.0`; SFT old invalid rate is `0.8833942819148937`, conservative old invalid rate is `0.9834607712765957`.
 - Qwen3-30B-A3B math artifact audit fact: Session 36 found original AIME25 uses a chat endpoint but `234/300` responses finish by length at `max_tokens=2048`; only `76/300` rows contain boxed final answers, and all `50` correct rows contain boxed answers. Original HMMT has `28/30` length finishes, only `2` parsed predicted answers, and `2` length-truncated rows that contain the expected answer text but have `predicted_answer=null`.
+- Qwen3-30B-A3B corrected math probe fact: Session 37 served original Qwen3-30B-A3B with SGLang `context_length=16384` and probed 3 AIME prompts plus 3 HMMT entries across `original`, `concise_boxed`, and `answer_only` prompts with `max_tokens=2048/4096/8192`. On the AIME slice, `answer_only` was `3/3` parsed even at 2048 while the original prompt needed 8192 for `3/3` parsed. On the HMMT slice, the original prompt reached `3/3` parsed at 4096/8192 with `2/3` correct; concise boxed reached `3/3` parsed at 8192 with `2/3` correct. Probe artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37`.

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Session 1
 
@@ -398,3 +398,13 @@
 - 结论：AIME/HMMT 已走 chat endpoint，不是完全缺少 chat-template routing；主要问题是 detailed reasoning prompt + `2048` token cap + 必须 boxed/final-answer parser 的组合。当前分数保留为 task071 regression records，不应作为 Qwen 官方可比数学分数。
 - 本地 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/summary.json` 及输入 cache/output；新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_audit_session36.md`，并将 audit 摘要登记到 30B original manifest 的 `official_comparability.math_eval_artifact_audit`。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/analyze_math_eval_artifacts.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；YAML audit 字段可解析；`git diff --check` passed。
+
+## Session 37
+
+- 按“执行下一步”继续 math eval debug，启动 original Qwen3-30B-A3B 长上下文 SGLang endpoint：NemTron tmux session `task071_qwen30b_original_math_probe_sglang`，model id `qwen3-30b-a3b-instruct-2507-original-math-probe`，8 张 H200，`tp=4`、`dp=2`、`context_length=16384`，通过 `vm4vpn:127.0.0.1:13000` 访问。
+- 新增 probe 脚本 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_math_probe.py`，读取原始 full-selected AIME score cache 和 HMMT output JSONL，对 3 个 AIME prompts、3 个 HMMT entries 组合 `original`、`concise_boxed`、`answer_only` 三种 prompt 与 `2048/4096/8192` token caps，共执行 `54` 个 chat requests。
+- Probe 结果：AIME 无本地 label，仅看 parseability；`answer_only` 在 `2048/4096/8192` 均 `3/3` parsed 且全部 stop，`original` 从 `2048` 的 `1/3` parsed 提升到 `8192` 的 `3/3` parsed，`concise_boxed` 到 `8192` 仍为 `2/3` parsed。
+- HMMT 小样本结果：`original` 在 `4096/8192` 达到 `3/3` parsed，correct rate 为 `2/3`；`concise_boxed` 需 `8192` 才达到 `3/3` parsed；`answer_only` 到 `8192` 为 `2/3` parsed、`2/3` correct。
+- 结论更新：task071 math 分数仍应作为 regression-harness 记录；corrected full math eval 需要同时记录 parser coverage 和 accuracy，并使用足够输出 budget 与 benchmark-consistent final-answer contract。
+- 本地 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/summary.json` 与 `results.jsonl`；新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_probe_session37.md`，并将摘要登记到 30B original manifest 的 `official_comparability.corrected_math_probe`。
+- 资源清理：probe 完成后停止 NemTron `task071_qwen30b_original_math_probe_sglang`，8 张 H200 回到空闲。
