@@ -85,6 +85,20 @@ summary:
       old_same_slice_invalid_rate: 1.0
       summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json
       raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl
+    corrected_mmlu_pro_full:
+      checked_in_session: 34
+      run_id: qwen3_30b_a3b_original_mmlu_pro_chat_json_full
+      sample_scope: full MMLU-Pro test split
+      evaluated_rows: 12032
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.561751994680851
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_rows_accuracy: 8.311170212765957e-05
+      old_same_rows_invalid_rate: 0.9998337765957447
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

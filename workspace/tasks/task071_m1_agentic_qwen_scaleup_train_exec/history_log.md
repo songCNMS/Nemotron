@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Session 1
 
@@ -368,3 +368,13 @@
 - 本轮不声称复现 Qwen 官方 MMLU-Pro `78.4`，因为 calibration 使用 answer-only JSON prompt 和 first-20-per-category slice；它证明之前 original baseline 的 0 分主要由旧 harness truncation/parser failure 导致。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_calibration_session33.md`，并把 calibration 摘要登记到 30B original manifest 的 `official_comparability.corrected_mmlu_pro_calibration`。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。
+
+## Session 34
+
+- 按“执行下一步”将 Session 33 的 corrected MMLU-Pro 从 14x20 calibration slice 扩到完整 original Qwen3-30B-A3B baseline；original debug endpoint 继续使用 NemTron tmux session `task071_qwen30b_original_debug_sglang`，model id `qwen3-30b-a3b-instruct-2507-original-debug`，vpn endpoint `http://127.0.0.1:13000/v1/chat/completions`。
+- 新增可复用 full-run 脚本 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py`，读取 lm-eval MMLU-Pro sample JSONL，使用 chat JSON answer-only prompt，支持 `--per-category`、`--parallelism`、`--resume` 和 summary/results artifact 输出。
+- 在 `vm4vpn` 对 `/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/qwen3-30b-a3b-instruct-2507-original` 执行 full run：`12032/12032` rows 完成，runtime `400.62s`，`finish_reason.stop=12032`，`status.ok=12032`。
+- Full corrected original MMLU-Pro 结果：accuracy `0.561751994680851`，parsed rate `1.0`，correct `6759/12032`；同一 rows 的旧 task071 score 为 `0.00008311170212765957`，invalid rate `0.9998337765957447`。
+- 本地保存 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json` 与 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl`。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_full_session34.md`，并把 full-run 摘要登记到 30B original manifest 的 `official_comparability.corrected_mmlu_pro_full`，测试锁定 evaluated rows、accuracy、parsed/stop rate 与旧 invalid rate。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；`git diff --check` passed。

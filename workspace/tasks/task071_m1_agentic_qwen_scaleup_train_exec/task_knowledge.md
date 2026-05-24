@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Notes
 
@@ -110,3 +110,4 @@
 - Qwen3-30B-A3B official-score debug fact: Session 32 found the current task071 original/SFT/final 30B MMLU-Pro, AIME25, and HMMT numbers are regression-harness scores, not Qwen official-comparable benchmark scores. MMLU-Pro used completions with `max_gen_toks=32` despite a step-by-step prompt and produced `12030/12032` invalid filtered responses for original Qwen; the same first MMLU sample reaches the correct `B` with `max_tokens=512` or chat answer-only prompting.
 - Qwen3-30B-A3B math eval debug fact: original AIME25 had `finish_reason.length=234/300` at `max_tokens=2048`; original HMMT had `finish_reason.length=28/30` and `no_answer=93.33333333333333`. Qwen official guidance recommends enough output length and standardized final-answer formats, so corrected Qwen-style eval needs larger generation caps plus parser-aligned prompts before rerunning full comparisons.
 - Qwen3-30B-A3B MMLU-Pro calibration fact: Session 33 ran original Qwen debug endpoint on a 14-category x 20-sample MMLU-Pro slice with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.6178571428571429`, parsed rate `1.0`, stop finish rate `1.0`, while the same slice under the old task071 MMLU-Pro output had accuracy `0.0` and invalid rate `1.0`.
+- Qwen3-30B-A3B corrected full MMLU-Pro fact: Session 34 ran `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` against the original debug endpoint for all `12032` MMLU-Pro rows with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.561751994680851`, parsed rate `1.0`, stop finish rate `1.0`, and old same-row invalid rate `0.9998337765957447`. Summary artifact is `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json`.
