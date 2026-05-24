@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Session 1
 
@@ -322,3 +322,16 @@
 - 训练进程已退出，NemTron 8 张 GPU 已空闲；`/root/nemotron_session5_venv/bin/python` 可 import Megatron-Bridge，源 HF 模型 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507` 已确认存在。
 - 生成最终 artifacts：`metric_curves.png`、`loss_validation_curve.png`、`final_metric_summary.json`、`health_summary.json`、`validation_trend_summary.json`、`train_loss_points.csv`、`validation_points.csv`、`checkpoint_export_prep_checklist.md`，均位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics`。
 - export 准备清单建议导出路径：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110`，候选模型 id：`task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf`。
+
+## Session 30
+
+- 按用户要求返回训练 metric 曲线并执行下一步：最终曲线 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png` 已发往飞书主管群，image message id `om_x100b6e2c9e2bb8a4b37f999501b6618`，follow-up text message id `om_x100b6e2c9fcc74a0b2048a9163a67e2`。
+- 按用户提供的命令验证本地 venv：`source /work-agents/.venv/bin/activate && python -V && which python` 返回 `Python 3.12.3` 与 `/work-agents/.venv/bin/python`，本地命令继续显式使用该环境。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 将 conservative final checkpoint `iter_0010110` 导出到 HF：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110`。
+- HF export 验证通过：目录约 `57G`，含 `model-00001-of-00016.safetensors` 到 `model-00016-of-00016.safetensors`、`model.safetensors.index.json`、tokenizer/config 文件；`AutoConfig` 显示 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`。
+- 写入 export manifest：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110/task071_export_manifest.json`，model id 为 `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf`，final validation loss/PPL `0.3727816/1.451767`，best validation iter `9000` loss/PPL `0.37042/1.448343`。
+- 在 NemTron 启动 final SGLang endpoint：tmux session `task071_qwen30b_conservative_iter0010110_sglang`，model id `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf`，`tp=4`、`dp=2`、`context_length=4096`，port `30000`；`/v1/models` 和 chat smoke 均通过，chat smoke 返回 exact `ready`。
+- 验证 vpn launcher 通道：`vm4vpn` 通过 `127.0.0.1:13000` 可访问 NemTron endpoint，根分区约 `20G` 可用；复用上一轮 30B full-selected 五项评测配置并替换为 final model id。
+- 首次用 vpn tmux 启动 eval 时，任务在 Docker 前置阶段失败于 `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`；判断为 tmux server 未继承当前 `docker` group，已将该失败 log 单独保留并改用 `nohup` 启动。
+- 当前 full-selected non-dry eval 已在 vpn 以 `nohup` 启动，pid `330562`，目录 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`；IFBench 已完成 `docker_exit=0`，strict prompt-level `0.3401360544217687`、loose prompt-level `0.36054421768707484`，`successful_count=294/294` 且 `status_codes.200=294`。
+- driver 已进入 AIME25 local scorer，当前进程仍在运行；NemTron SGLang endpoint 在 IFBench 阶段观测到 8 张 H200 GPU 利用率约 `85-100%`。

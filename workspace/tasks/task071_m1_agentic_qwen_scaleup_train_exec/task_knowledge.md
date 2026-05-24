@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Notes
 
@@ -101,3 +101,6 @@
 - Conservative 30B metric-curve fact: Session 27 generated `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/metric_curves.png` from logs through train iter `4020/10110`; latest validation is iter `4000` loss/PPL `0.3803424/1.462785`, best validation remains iter `3500` loss/PPL `0.3752722/1.455387`, with checkpoints through `4000` and no skipped/nan iterations.
 - Conservative 30B trend fact: Session 28 refreshed metric curves through train iter `9650/10110` and checkpoint `9500`; iter `4500` validation regressed to loss/PPL `0.3960631/1.485963`, but later recovered and set current best at iter `9000` loss/PPL `0.37042/1.448343`, with no skipped/nan iterations.
 - Conservative 30B completion/export fact: Session 29 confirmed conservative Qwen3-30B-A3B SFT completed at iter `10110/10110` with final validation loss/PPL `0.3727816/1.451767`, best validation iter `9000` loss/PPL `0.37042/1.448343`, final checkpoint `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints/iter_0010110` size about `399G`, and export checklist at `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_sft_strategy_conservative_v2/metrics/checkpoint_export_prep_checklist.md`.
+- Conservative 30B final export fact: Session 30 exported `iter_0010110` with Megatron-Bridge `AutoBridge.export_ckpt` to `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110`; the HF export is about `57G`, contains 16 safetensors shards, validates with HF config/tokenizer, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` in `task071_export_manifest.json`.
+- Conservative 30B eval launch fact: Session 30 serves `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` on NemTron port `30000` with SGLang `tp=4`, `dp=2`, `context_length=4096`, exposed to vpn as `127.0.0.1:13000`; the final endpoint returns exact `ready` on chat smoke. Use `nohup` for vpn full-selected eval launch because a tmux server with stale Unix groups can fail Docker with `permission denied while trying to connect to the docker API`; the active run directory is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`.
+- Conservative 30B final IFBench fact: Session 30 completed `ifbench_ctx1536` against `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` with `docker_exit=0`, strict prompt-level `0.3401360544217687`, loose prompt-level `0.36054421768707484`, `successful_count=294/294`, and `status_codes.200=294`; artifacts are in `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/ifbench_ctx1536`.
