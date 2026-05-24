@@ -1,6 +1,6 @@
 # task039_m2_eval_basket - task_knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 Notes
 
@@ -15,3 +15,5 @@
 - Session 3 keeps 122B-class parity as sandbox threshold config only.
   Frozen production baseline values are not encoded; callers must provide
   local score maps when evaluating gaps.
+- Session 4 added no new implementation knowledge; it confirmed PR #159 merge
+  and latest-main sync to `412d54aebd75ec33145cab93fb023648a758d64d`.

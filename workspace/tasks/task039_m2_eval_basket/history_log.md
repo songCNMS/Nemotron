@@ -1,6 +1,24 @@
 # task039_m2_eval_basket - history_log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
+
+## Session 4 - 2026-05-23 - intern_nem_dev_1
+
+- PM reported the no-cluster M2 PR queue merged through PR #161 and latest
+  `main` advanced to `412d54aebd75ec33145cab93fb023648a758d64d`.
+- Confirmed PR #159 merged at `2026-05-23T14:56:39Z`; merge commit
+  `687314830ae58e544bedcdd182e962d8512dda38`.
+- Preserved the merged feature branch, switched to `main`, ran
+  `git fetch origin main` and `git pull --ff-only origin main`, and verified
+  local `main` at `412d54aebd75ec33145cab93fb023648a758d64d`.
+- Created closeout branch `intern_nem_dev_1/task039_m2_eval_basket_s4_closeout`
+  from synced `main` for status/task bookkeeping only.
+- Opened metadata-only closeout PR https://github.com/songCNMS/Nemotron/pull/162
+  with initial closeout SHA `17c240184c89a7268f1667588703cc00aa1926e5`.
+- No additional task039 implementation was started after the merge closeout;
+  live benchmark assets/APIs, cluster/NeMo eval, W&B, task019/task020 runtime
+  sessions, frozen Qwen3.5-122B-A10B production baselines, and PR #153 remain
+  outside the completed Session 2 scaffold.
 
 ## Session 3 - 2026-05-23 - intern_nem_dev_1
 
