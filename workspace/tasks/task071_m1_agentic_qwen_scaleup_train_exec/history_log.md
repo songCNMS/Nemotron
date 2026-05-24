@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
 
 ## Session 1
 
@@ -428,3 +428,13 @@
 - 更新 M1 SFT README、manifest/report metadata 与 lineage 输出，显式记录 `math_final_answer_supervision` 的 environments、format、sidecar path、sidecar weight 与 effective weight。
 - 已 push 并创建 PR #163：`https://github.com/songCNMS/Nemotron/pull/163`。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py` -> `57 passed, 1 skipped`；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `64 passed, 1 skipped`；`ruff check src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_sft.py` passed；`git diff --check` passed。
+
+## Session 40
+
+- 合并 PR #163 到 `main`，确认 mergedAt `2026-05-24T23:09:10Z`；随后从最新 `main` 创建 `intern_nemontron_code_reading/task071_math_sidecar_data_session40` 继续执行 boxed math sidecar 数据与训练链路。
+- 生成新脚本链路 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1`，沿用 conservative 30B 训练策略：Qwen3-30B-A3B local HF model、8 GPUs、TP=4/PP=2/EP=4 entrypoint、GBS 8、MBS 1、seq 4096、0.5 epoch、lr `1e-6`、min lr `1e-7`、warmup 100、eval/save interval 500。
+- 执行 local data prep 完整链路：M0 uncapped 11 slices 完成；M1 train rows `983397`、val shadow rows `11354`、errors `0`；math final-answer sidecar rows `866967`，`data_blend_agentic_sft_v0.json` 包含 base train JSONL 与 `m1-agentic-sft-v0-math-final-answer` 两个 dataset，权重均为 `1.0`。
+- 完成 Qwen tokenizer packing：packed artifact `total_sequences=1850191`、`total_tokens=1148861776`、train split `140369` rows / `64` shards、valid split `2585` rows / `1` shard；planner 计算 `train_iters=8774`。
+- 同步 repo 和 17GB run artifacts 到 NemTron `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_v1`，远端校验 packed parquet `65` files、training manifest `train_iters=8774`。
+- 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1`，训练进入 loop：checkpoint load 成功，latest observed iter `180/8774` 时 lm loss `0.4211270`、step time 约 `2.35s`、GPU 显存约 `81-87GB`/卡、skipped iterations `0`、nan iterations `0`。
+- 已 push 并创建 PR #164：`https://github.com/songCNMS/Nemotron/pull/164`。
