@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Session 1
 
@@ -335,3 +335,14 @@
 - 首次用 vpn tmux 启动 eval 时，任务在 Docker 前置阶段失败于 `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`；判断为 tmux server 未继承当前 `docker` group，已将该失败 log 单独保留并改用 `nohup` 启动。
 - 当前 full-selected non-dry eval 已在 vpn 以 `nohup` 启动，pid `330562`，目录 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`；IFBench 已完成 `docker_exit=0`，strict prompt-level `0.3401360544217687`、loose prompt-level `0.36054421768707484`，`successful_count=294/294` 且 `status_codes.200=294`。
 - driver 已进入 AIME25 local scorer，当前进程仍在运行；NemTron SGLang endpoint 在 IFBench 阶段观测到 8 张 H200 GPU 利用率约 `85-100%`。
+
+## Session 31
+
+- 继续监控 conservative Qwen3-30B-A3B final checkpoint `iter_0010110` 的 full-selected non-dry eval；`vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full` 下 IFBench、AIME25、HMMT、WMT24++、MMLU-Pro 五项均 `docker_exit=0`。
+- AIME25 使用 `aime_2025_nemo` local exact/sympy scorer，30 题 x10 repeats，score `0.03333333333333333`，`successful_responses=300/300`。
+- HMMT February 2025 full task 完成 30 entries，symbolic_correct `0.0`、no_answer `0.0`，`successful_responses=30/30`。
+- WMT24++ full task 完成，`xx->xx` BLEU `33.361471695801946`，response stats `successful_responses=4971/4971`，scored output 记录 4990 JSONL rows。
+- MMLU-Pro full test split 完成 `12032/12032` requests，group exact_match `0.010388962765957447`；IFBench strict prompt-level `0.3401360544217687`。
+- 汇总 final vs `iter0009119` vs original：final 对 `iter0009119` 在 IFBench `+0.037414965986394544`、AIME25 `+0.03333333333333333`、HMMT `+0.0`、WMT24++ `+0.029462309935361475`、MMLU-Pro `-0.06698803191489361`；final 对 original 在 IFBench `+0.02040816326530609`、AIME25 `-0.13333333333333333`、HMMT `-6.666666666666667`、WMT24++ `+0.3214833850773573`、MMLU-Pro `+0.010305851063829786`。
+- 新增结构化 manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml`，并扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 final metrics、baseline deltas 和 secret scan。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。

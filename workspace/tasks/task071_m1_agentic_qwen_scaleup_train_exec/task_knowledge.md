@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Notes
 
@@ -104,3 +104,6 @@
 - Conservative 30B final export fact: Session 30 exported `iter_0010110` with Megatron-Bridge `AutoBridge.export_ckpt` to `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110`; the HF export is about `57G`, contains 16 safetensors shards, validates with HF config/tokenizer, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` in `task071_export_manifest.json`.
 - Conservative 30B eval launch fact: Session 30 serves `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` on NemTron port `30000` with SGLang `tp=4`, `dp=2`, `context_length=4096`, exposed to vpn as `127.0.0.1:13000`; the final endpoint returns exact `ready` on chat smoke. Use `nohup` for vpn full-selected eval launch because a tmux server with stale Unix groups can fail Docker with `permission denied while trying to connect to the docker API`; the active run directory is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`.
 - Conservative 30B final IFBench fact: Session 30 completed `ifbench_ctx1536` against `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` with `docker_exit=0`, strict prompt-level `0.3401360544217687`, loose prompt-level `0.36054421768707484`, `successful_count=294/294`, and `status_codes.200=294`; artifacts are in `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/ifbench_ctx1536`.
+- Conservative 30B final full-selected eval fact: Session 31 completed all five selected tasks against `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`; IFBench, AIME25, HMMT, WMT24++, and MMLU-Pro all have `docker_exit=0` and are registered in `m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml`.
+- Conservative 30B final benchmark comparison fact: final `iter0010110` primary metrics are IFBench strict prompt `0.3401360544217687`, AIME25 `0.03333333333333333`, HMMT symbolic_correct `0.0`, WMT24++ BLEU `33.361471695801946`, and MMLU-Pro exact_match `0.010388962765957447`; deltas vs `iter0009119` are `+0.037414965986394544`, `+0.03333333333333333`, `+0.0`, `+0.029462309935361475`, and `-0.06698803191489361`.
+- Conservative 30B final-vs-original fact: final `iter0010110` deltas vs original Qwen3-30B-A3B-Instruct-2507 are IFBench `+0.02040816326530609`, AIME25 `-0.13333333333333333`, HMMT `-6.666666666666667`, WMT24++ `+0.3214833850773573`, and MMLU-Pro `+0.010305851063829786`.

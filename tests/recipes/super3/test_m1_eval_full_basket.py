@@ -90,6 +90,13 @@ QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH = (
         "m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml"
     )
 )
+TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml"
+    )
+)
 
 
 EXPECTED_FULL_IDS = {
@@ -167,6 +174,14 @@ def _load_task071_qwen3_30b_a3b_full_non_dry_results() -> dict:
 def _load_qwen3_30b_a3b_original_full_non_dry_results() -> dict:
     return yaml.safe_load(
         QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
+
+
+def _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH.read_text(
+            encoding="utf-8"
+        )
     )
 
 
@@ -792,6 +807,131 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_lock_sft_comparison() -> No
 
 def test_qwen3_30b_a3b_original_full_non_dry_results_do_not_store_secret_tokens() -> None:
     text = QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(
+        encoding="utf-8"
+    )
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_record_full_selected_runs() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0010110-hf:v1")
+    assert result_manifest["model"]["training"]["train_iters"] == 10110
+    assert result_manifest["model"]["training"]["global_batch_size"] == 8
+    assert result_manifest["model"]["training"]["target_epoch_fraction"] == 0.5
+    assert result_manifest["model"]["validation"]["final_loss"] == pytest.approx(
+        0.3727816
+    )
+    assert result_manifest["model"]["validation"]["best_iter"] == 9000
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+        assert "comparison_vs_baselines" in row
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_lock_key_metrics() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.3401360544217687)
+    assert by_id["ifbench"]["observed_metrics"][
+        "instruction_level_strict_accuracy"
+    ] == pytest.approx(0.3641791044776119)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(
+        0.03333333333333333
+    )
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == 0.0
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == 0.0
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        33.361471695801946
+    )
+    assert by_id["wmt24pp"]["response_stats"]["successful_responses"] == 4971
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.010388962765957447
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_lock_comparison() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    summary_rows = {
+        row["benchmark_id"]: row
+        for row in result_manifest["summary"]["primary_metric_comparison"]
+    }
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert (
+        result_manifest["summary"]["comparison_direction"]
+        == "conservative_iter0010110_minus_baselines"
+    )
+    assert summary_rows["ifbench"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.037414965986394544)
+    assert summary_rows["ifbench"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.02040816326530609)
+    assert summary_rows["aime25"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.03333333333333333)
+    assert summary_rows["aime25"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(-0.13333333333333333)
+    assert summary_rows["hmmt"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(-6.666666666666667)
+    assert summary_rows["wmt24pp"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.029462309935361475)
+    assert summary_rows["wmt24pp"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.3214833850773573)
+    assert summary_rows["mmlu_pro"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(-0.06698803191489361)
+    assert summary_rows["mmlu_pro"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.010305851063829786)
+
+    assert by_id["mmlu_pro"]["comparison_vs_baselines"][
+        "qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(0.07737699468085106)
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH.read_text(
         encoding="utf-8"
     )
     assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None

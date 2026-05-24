@@ -1,0 +1,347 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Full-data comparison subset for the conservative Qwen3-30B-A3B final checkpoint.
+
+schema_version: 1
+milestone: M1
+run_id: task071_qwen3_30b_a3b_agentic_sft_conservative_iter0010110_full_selected_non_dry
+recorded_at_utc: '2026-05-24T07:20:00Z'
+model:
+  artifact: task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf:v1
+  endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf
+  source_model: Qwen/Qwen3-30B-A3B-Instruct-2507
+  checkpoint_path: /work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/checkpoints/iter_0010110
+  hf_export_path: /work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_sft_strategy_conservative_v2/hf_export_iter_0010110
+  endpoint_max_model_len: 4096
+  training:
+    train_iters: 10110
+    global_batch_size: 8
+    micro_batch_size: 1
+    tensor_model_parallel_size: 4
+    pipeline_model_parallel_size: 2
+    expert_model_parallel_size: 4
+    packed_train_rows: 161757
+    packed_valid_rows: 2552
+    target_epoch_fraction: 0.5
+    optimizer_lr: 1.0e-06
+    optimizer_min_lr: 1.0e-07
+    warmup_iters: 100
+  validation:
+    final_iter: 10110
+    final_loss: 0.3727816
+    final_ppl: 1.451767
+    best_iter: 9000
+    best_loss: 0.37042
+    best_ppl: 1.448343
+launcher:
+  config: m1_full_basket_launcher_available
+  launcher: nemo-evaluator-launcher
+  launcher_version: 0.2.5
+  eval_factory_image_tag: '26.03'
+  deployment_type: none
+  evaluator_host: vm4vpn
+  endpoint_access: ssh remote forward vm4vpn:127.0.0.1:13000 -> NemTron 10.100.2.62:30000
+  endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+run_scope:
+  non_dry: true
+  task_order_source: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml
+  selected_regression_tasks: true
+  full_selected_tasks_attempted: true
+  sample_limits_removed: true
+  all_available_tasks_attempted: false
+  selected_benchmark_ids:
+  - ifbench
+  - aime25
+  - hmmt
+  - wmt24pp
+  - mmlu_pro
+  selection_reason: Final conservative-checkpoint comparison subset runnable on the
+    current 4096-token endpoint without gated dataset, official judge, external
+    executable API, or long-context blockers.
+  request_body_logging: limited_eval_factory_logs_only
+summary:
+  attempted_tasks: 5
+  scored_tasks: 5
+  failed_tasks: 0
+  total_successful_responses_from_stats: 17627
+  raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full
+  comparison_direction: conservative_iter0010110_minus_baselines
+  primary_metric_comparison:
+  - benchmark_id: ifbench
+    metric: prompt_level_strict_accuracy
+    conservative_iter0010110: 0.3401360544217687
+    qwen3_30b_a3b_sft_iter0009119: 0.30272108843537415
+    original: 0.3197278911564626
+    conservative_iter0010110_minus_iter0009119: 0.037414965986394544
+    conservative_iter0010110_minus_original: 0.02040816326530609
+    higher_is_better: true
+  - benchmark_id: aime25
+    metric: score
+    conservative_iter0010110: 0.03333333333333333
+    qwen3_30b_a3b_sft_iter0009119: 0.0
+    original: 0.16666666666666666
+    conservative_iter0010110_minus_iter0009119: 0.03333333333333333
+    conservative_iter0010110_minus_original: -0.13333333333333333
+    higher_is_better: true
+  - benchmark_id: hmmt
+    metric: symbolic_correct_percent
+    conservative_iter0010110: 0.0
+    qwen3_30b_a3b_sft_iter0009119: 0.0
+    original: 6.666666666666667
+    conservative_iter0010110_minus_iter0009119: 0.0
+    conservative_iter0010110_minus_original: -6.666666666666667
+    higher_is_better: true
+  - benchmark_id: wmt24pp
+    metric: bleu_xx_to_xx
+    conservative_iter0010110: 33.361471695801946
+    qwen3_30b_a3b_sft_iter0009119: 33.332009385866584
+    original: 33.03998831072459
+    conservative_iter0010110_minus_iter0009119: 0.029462309935361475
+    conservative_iter0010110_minus_original: 0.3214833850773573
+    higher_is_better: true
+  - benchmark_id: mmlu_pro
+    metric: group_exact_match
+    conservative_iter0010110: 0.010388962765957447
+    qwen3_30b_a3b_sft_iter0009119: 0.07737699468085106
+    original: 8.311170212765957e-05
+    conservative_iter0010110_minus_iter0009119: -0.06698803191489361
+    conservative_iter0010110_minus_original: 0.010305851063829786
+    higher_is_better: true
+  compatibility_overrides:
+  - benchmark_id: ifbench
+    reason: Used max_new_tokens=1536 so all 294 IFBench prompts fit the 4096-token
+      endpoint window.
+  - benchmark_id: aime25
+    reason: Used aime_2025_nemo local exact or sympy scoring on the same 30 AIME 2025
+      problems with 10 repeats.
+results:
+- benchmark_id: ifbench
+  launcher_task: ifbench.ifbench
+  execution_task: ifbench.ifbench
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    prompts: 294
+    description: full IFBench prompt set
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/ifbench_ctx1536
+  observed_metrics:
+    instruction_level_loose_accuracy: 0.3970149253731343
+    instruction_level_strict_accuracy: 0.3641791044776119
+    prompt_level_loose_accuracy: 0.36054421768707484
+    prompt_level_strict_accuracy: 0.3401360544217687
+    strict_count: 0.6290322580645161
+    strict_custom: 0.4
+    strict_format: 0.5612244897959183
+  response_stats:
+    avg_completion_tokens: 411.62
+    avg_latency_ms: 2357.59
+    avg_prompt_tokens: 89.65
+    avg_total_tokens: 501.24
+    finish_reason:
+      length: 25
+      stop: 269
+    max_completion_tokens: 1536
+    max_prompt_tokens: 2341
+    max_total_tokens: 3877
+    status_codes:
+      '200': 294
+    successful_responses: 294
+    total_responses: 294
+  comparison_vs_baselines:
+    primary_metric: prompt_level_strict_accuracy
+    conservative_iter0010110: 0.3401360544217687
+    qwen3_30b_a3b_sft_iter0009119: 0.30272108843537415
+    original: 0.3197278911564626
+    conservative_iter0010110_minus_iter0009119: 0.037414965986394544
+    conservative_iter0010110_minus_original: 0.02040816326530609
+- benchmark_id: aime25
+  launcher_task: simple_evals.AIME_2025
+  execution_task: simple_evals.aime_2025_nemo
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    problems: 30
+    repeats_per_problem: 10
+    requests: 300
+    description: full AIME 2025 with 10 repeats per problem
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/aime25_nemo
+  observed_metrics:
+    score: 0.03333333333333333
+    stddev: 0.053748384988656986
+    stderr: 0.009980824526939037
+  response_stats:
+    avg_completion_tokens: 775.21
+    avg_latency_ms: 3727.52
+    avg_prompt_tokens: 158.71
+    avg_total_tokens: 933.92
+    finish_reason:
+      length: 20
+      stop: 280
+    max_completion_tokens: 2048
+    max_prompt_tokens: 294
+    max_total_tokens: 2217
+    status_codes:
+      '200': 300
+    successful_responses: 300
+    total_responses: 300
+  compatibility_note:
+    reason: Used aime_2025_nemo local exact or sympy scoring on the same 30 AIME 2025
+      problems with 10 repeats, avoiding the official external judge credential path.
+  comparison_vs_baselines:
+    primary_metric: score
+    conservative_iter0010110: 0.03333333333333333
+    qwen3_30b_a3b_sft_iter0009119: 0.0
+    original: 0.16666666666666666
+    conservative_iter0010110_minus_iter0009119: 0.03333333333333333
+    conservative_iter0010110_minus_original: -0.13333333333333333
+- benchmark_id: hmmt
+  launcher_task: nemo_skills.ns_hmmt_feb2025
+  execution_task: nemo_skills.ns_hmmt_feb2025
+  attempt_status: scored
+  source_basket: full
+  sample_scope:
+    limit_samples: null
+    entries: 30
+    description: full HMMT February 2025 task
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/hmmt
+  observed_metrics:
+    avg_tokens: 768
+    gen_seconds: 29
+    no_answer_percent: 0.0
+    num_entries: 30
+    symbolic_correct_percent: 0.0
+  response_stats:
+    avg_completion_tokens: 768.23
+    avg_latency_ms: 3669.48
+    avg_prompt_tokens: 138.83
+    avg_total_tokens: 907.07
+    finish_reason:
+      stop: 30
+    max_completion_tokens: 1767
+    max_prompt_tokens: 656
+    max_total_tokens: 1894
+    status_codes:
+      '200': 30
+    successful_responses: 30
+    total_responses: 30
+  comparison_vs_baselines:
+    primary_metric: symbolic_correct_percent
+    conservative_iter0010110: 0.0
+    qwen3_30b_a3b_sft_iter0009119: 0.0
+    original: 6.666666666666667
+    conservative_iter0010110_minus_iter0009119: 0.0
+    conservative_iter0010110_minus_original: -6.666666666666667
+- benchmark_id: wmt24pp
+  launcher_task: nemo_skills.ns_wmt24pp
+  execution_task: nemo_skills.ns_wmt24pp
+  attempt_status: scored
+  source_basket: full
+  sample_scope:
+    limit_samples: null
+    output_jsonl_rows: 4990
+    description: full WMT24++ task output
+    response_stats_requests: 4971
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/wmt24pp
+  observed_metrics:
+    bleu_by_direction:
+      en_to_de_DE: 28.4987564476018
+      en_to_es_MX: 41.48212620300474
+      en_to_fr_FR: 35.705336909057706
+      en_to_it_IT: 36.41751454627055
+      en_to_ja_JP: 24.70362437307495
+      en_to_xx: 33.361471695801946
+      xx_to_de_DE: 28.4987564476018
+      xx_to_es_MX: 41.48212620300474
+      xx_to_fr_FR: 35.705336909057706
+      xx_to_it_IT: 36.41751454627055
+      xx_to_ja_JP: 24.70362437307495
+      xx_to_xx: 33.361471695801946
+    bleu_xx_to_xx: 33.361471695801946
+  response_stats:
+    avg_completion_tokens: 60.85
+    avg_latency_ms: 850.64
+    avg_prompt_tokens: 60.8
+    avg_total_tokens: 121.91
+    finish_reason:
+      length: 1
+      stop: 4970
+    max_completion_tokens: 512
+    max_prompt_tokens: 242
+    max_total_tokens: 562
+    status_codes:
+      '200': 4971
+    successful_responses: 4971
+    total_responses: 4971
+  compatibility_note: The scored output file has 4990 JSONL rows; response-stats counts
+    reflect endpoint responses recorded by the interceptor.
+  comparison_vs_baselines:
+    primary_metric: bleu_xx_to_xx
+    conservative_iter0010110: 33.361471695801946
+    qwen3_30b_a3b_sft_iter0009119: 33.332009385866584
+    original: 33.03998831072459
+    conservative_iter0010110_minus_iter0009119: 0.029462309935361475
+    conservative_iter0010110_minus_original: 0.3214833850773573
+- benchmark_id: mmlu_pro
+  launcher_task: lm-evaluation-harness.mmlu_pro
+  execution_task: lm-evaluation-harness.mmlu_pro
+  attempt_status: scored
+  source_basket: v0
+  sample_scope:
+    limit_samples: null
+    requests: 12032
+    num_fewshot: 5
+    description: full MMLU-Pro test split
+  docker_exit: 0
+  artifacts: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full/mmlu_pro
+  observed_metrics:
+    category_exact_match:
+      biology: 0.001394700139470014
+      business: 0.0076045627376425855
+      chemistry: 0.0017667844522968198
+      computer_science: 0.0024390243902439024
+      economics: 0.004739336492890996
+      engineering: 0.0
+      health: 0.014669926650366748
+      history: 0.013123359580052493
+      law: 0.0
+      math: 0.003700962250185048
+      other: 0.049783549783549784
+      philosophy: 0.02004008016032064
+      physics: 0.003079291762894534
+      psychology: 0.03634085213032581
+    group_exact_match: 0.010388962765957447
+    group_exact_match_stderr: 0.0009151814656984348
+  response_stats:
+    avg_completion_tokens: 32.0
+    avg_latency_ms: 704.59
+    avg_prompt_tokens: 1373.14
+    avg_total_tokens: 1405.14
+    finish_reason:
+      length: 12029
+      stop: 3
+    max_completion_tokens: 32
+    max_prompt_tokens: 2859
+    max_total_tokens: 2891
+    status_codes:
+      '200': 12032
+    successful_responses: 12032
+    total_responses: 12032
+  comparison_vs_baselines:
+    primary_metric: group_exact_match
+    conservative_iter0010110: 0.010388962765957447
+    qwen3_30b_a3b_sft_iter0009119: 0.07737699468085106
+    original: 8.311170212765957e-05
+    conservative_iter0010110_minus_iter0009119: -0.06698803191489361
+    conservative_iter0010110_minus_original: 0.010305851063829786
