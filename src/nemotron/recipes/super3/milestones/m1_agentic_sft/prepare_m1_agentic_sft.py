@@ -46,6 +46,16 @@ DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0")
 USED_IN_TAG = "super3_agentic_sft_v0"
 MILESTONE = "M1"
 TOOL_CALLING_SYSTEM_PROMPT = "You are a tool-using assistant. Use the available functions when needed."
+MATH_FINAL_ANSWER_ENVIRONMENTS = frozenset(
+    {
+        "math_reasoning_numeric",
+        "math_competition_numeric",
+    }
+)
+MATH_FINAL_ANSWER_FORMAT = "boxed_final_line"
+MATH_FINAL_ANSWER_SIDECAR_WEIGHT = 1.0
+MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT = 2.0
+MATH_FINAL_ANSWER_SIDECAR_NAME = "m1-agentic-sft-v0-math-final-answer"
 
 JsonDict = dict[str, Any]
 
@@ -255,25 +265,53 @@ def assistant_for_reasoning(record: Mapping[str, Any]) -> JsonDict:
             "role": "assistant",
             "content": _reasoning_target_from_reference(str(reference), expected_answer),
         }
+    if expected_answer:
+        return {"role": "assistant", "content": f"Final answer: {_boxed_final_answer(expected_answer)}"}
     return {"role": "assistant", "content": expected_answer}
 
 
 _GSM8K_MARKER_RE = re.compile(r"####\s*")
+_BOXED_ANSWER_FULL_RE = re.compile(r"^\\+boxed\s*\{(?P<answer>.*)\}$", re.DOTALL)
 
 
 def _strip_gsm8k_marker(text: str) -> str:
     return _GSM8K_MARKER_RE.sub("", text)
 
 
+def _unbox_expected_answer(expected_answer: str) -> str:
+    expected_answer = expected_answer.strip()
+    match = _BOXED_ANSWER_FULL_RE.match(expected_answer)
+    if match:
+        return match.group("answer").strip()
+    return expected_answer
+
+
+def _boxed_final_answer(expected_answer: str) -> str:
+    return f"\\boxed{{{_unbox_expected_answer(expected_answer)}}}"
+
+
+def _compact_math_text(text: str) -> str:
+    return re.sub(r"\s+", "", text)
+
+
+def _contains_boxed_expected_answer(content: str, expected_answer: str) -> bool:
+    if not expected_answer.strip():
+        return False
+    compact_content = _compact_math_text(content)
+    compact_boxed = _compact_math_text(_boxed_final_answer(expected_answer))
+    return compact_boxed in compact_content
+
+
 def _reasoning_target_from_reference(reference_solution: str, expected_answer: str) -> str:
-    """Preserve chain-of-thought supervision while removing verifier artifacts."""
+    """Preserve solution traces while enforcing parser-readable math finals."""
     content = _strip_gsm8k_marker(reference_solution).strip()
     expected_answer = expected_answer.strip()
-    if expected_answer and expected_answer not in content:
+    if expected_answer and not _contains_boxed_expected_answer(content, expected_answer):
+        boxed_answer = _boxed_final_answer(expected_answer)
         if content:
-            content = f"{content}\n\nFinal answer: {expected_answer}"
+            content = f"{content}\n\nFinal answer: {boxed_answer}"
         else:
-            content = expected_answer
+            content = f"Final answer: {boxed_answer}"
     return content
 
 
@@ -455,6 +493,18 @@ def _m1_use_for_env(env_id: str) -> list[str]:
     return list(M1_USE_BY_ENV.get(env_id, ["unknown"]))
 
 
+def _math_final_answer_supervision(env_id: str) -> JsonDict | None:
+    if env_id not in MATH_FINAL_ANSWER_ENVIRONMENTS:
+        return None
+    return {
+        "format": MATH_FINAL_ANSWER_FORMAT,
+        "target_template": "Final answer: \\boxed{expected_answer}",
+        "base_blend_weight": 1.0,
+        "sidecar_blend_weight": MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+        "effective_weight": MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
+    }
+
+
 DIFFICULTY_UNKNOWN = "unknown"
 DIFFICULTY_TRIVIAL = "trivial"
 DIFFICULTY_HARD = "hard"
@@ -583,7 +633,7 @@ def m1_metadata(
         m0_use_stage = record.get("use_stage")
     if not isinstance(m0_use_stage, list):
         m0_use_stage = []
-    return {
+    metadata = {
         "m1_stage": "Agentic SFT v0",
         "m1_milestone": MILESTONE,
         "m1_use": _m1_use_for_env(env_id),
@@ -603,6 +653,10 @@ def m1_metadata(
         "reward_type": source_metadata.get("reward_type"),
         "contamination": source_metadata.get("contamination"),
     }
+    final_answer_supervision = _math_final_answer_supervision(env_id)
+    if final_answer_supervision is not None:
+        metadata["final_answer_supervision"] = final_answer_supervision
+    return metadata
 
 
 def convert_m0_record(
@@ -713,16 +767,40 @@ def convert_split(
     return converted, errors
 
 
-def build_blend(train_path: Path) -> JsonDict:
-    return {
-        "_comment": "M1 Agentic SFT v0 blend generated from M0 public smoke data. M0 val shadow is not included.",
-        "datasets": [
+def _is_math_final_answer_row(row: Mapping[str, Any]) -> bool:
+    env = str(row.get("metadata", {}).get("m0_environment", ""))
+    return env in MATH_FINAL_ANSWER_ENVIRONMENTS
+
+
+def build_blend(
+    train_path: Path,
+    *,
+    math_final_answer_train_path: Path | None = None,
+    math_final_answer_weight: float = MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+) -> JsonDict:
+    datasets: list[JsonDict] = [
+        {
+            "name": "m1-agentic-sft-v0-from-m0",
+            "path": str(train_path),
+            "weight": 1.0,
+        }
+    ]
+    if math_final_answer_train_path is not None and math_final_answer_weight > 0.0:
+        datasets.append(
             {
-                "name": "m1-agentic-sft-v0-from-m0",
-                "path": str(train_path),
-                "weight": 1.0,
+                "name": MATH_FINAL_ANSWER_SIDECAR_NAME,
+                "path": str(math_final_answer_train_path),
+                "weight": float(math_final_answer_weight),
             }
-        ],
+        )
+    return {
+        "_comment": (
+            "M1 Agentic SFT v0 blend generated from M0 public data. "
+            "M0 val shadow is not included. Numeric math rows are duplicated "
+            "into the math-final-answer sidecar when present so boxed final-answer "
+            "supervision gets an extra training weight."
+        ),
+        "datasets": datasets,
     }
 
 
@@ -814,6 +892,7 @@ def _apply_curriculum_to_train(
 def check_output_paths(output_dir: Path, overwrite: bool) -> None:
     targets = [
         output_dir / "agentic_sft_v0_train.jsonl",
+        output_dir / "agentic_sft_v0_math_final_answer_train.jsonl",
         output_dir / "agentic_sft_v0_val_shadow.jsonl",
         output_dir / "data_blend_agentic_sft_v0.json",
         output_dir / "manifest.json",
@@ -835,6 +914,13 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         f"- Output directory: `{manifest['output_dir']}`",
         f"- Training blend: `{manifest['blend_path']}`",
         f"- M0 health baseline: `{health_baseline}`",
+        "",
+        "## Math final-answer supervision",
+        "",
+        f"- Format: `{manifest['math_final_answer_supervision']['format']}`",
+        f"- Train sidecar rows: `{manifest['math_final_answer_supervision']['train_rows']}`",
+        f"- Effective weight: `{manifest['math_final_answer_supervision']['effective_weight']}`",
+        f"- Sidecar path: `{manifest['math_final_answer_supervision']['sidecar_path']}`",
         "",
         "## Counts",
         "",
@@ -913,11 +999,23 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     )
 
     train_path = args.output_dir / "agentic_sft_v0_train.jsonl"
+    math_final_answer_train_path = args.output_dir / "agentic_sft_v0_math_final_answer_train.jsonl"
     val_shadow_path = args.output_dir / "agentic_sft_v0_val_shadow.jsonl"
     blend_path = args.output_dir / "data_blend_agentic_sft_v0.json"
+    math_final_answer_rows = [row for row in train_rows if _is_math_final_answer_row(row)]
     write_jsonl(train_path, train_rows)
+    write_jsonl(math_final_answer_train_path, math_final_answer_rows)
     write_jsonl(val_shadow_path, val_rows)
-    write_json(blend_path, build_blend(train_path))
+    write_json(
+        blend_path,
+        build_blend(
+            train_path,
+            math_final_answer_train_path=(
+                math_final_answer_train_path if math_final_answer_rows else None
+            ),
+            math_final_answer_weight=MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+        ),
+    )
 
     manifest = {
         "schema_version": 1,
@@ -928,6 +1026,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "m0_input_dir": str(args.m0_input_dir),
         "output_dir": str(args.output_dir),
         "train_path": str(train_path),
+        "math_final_answer_train_path": str(math_final_answer_train_path),
         "val_shadow_path": str(val_shadow_path),
         "blend_path": str(blend_path),
         "m0_health_baseline": str(health_baseline_path) if health_baseline_path else None,
@@ -940,6 +1039,18 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "val_shadow": count_difficulty_buckets(val_rows),
         },
         "curriculum": curriculum_audit,
+        "math_final_answer_supervision": {
+            "environments": sorted(MATH_FINAL_ANSWER_ENVIRONMENTS),
+            "format": MATH_FINAL_ANSWER_FORMAT,
+            "target_template": "Final answer: \\boxed{expected_answer}",
+            "base_blend_weight": 1.0,
+            "sidecar_blend_weight": MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+            "effective_weight": MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
+            "sidecar_dataset_name": MATH_FINAL_ANSWER_SIDECAR_NAME,
+            "sidecar_path": str(math_final_answer_train_path),
+            "sidecar_in_blend": bool(math_final_answer_rows),
+            "train_rows": len(math_final_answer_rows),
+        },
         "errors": [*train_errors, *val_errors],
     }
 
@@ -974,6 +1085,12 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             ref=str(val_shadow_path.relative_to(args.output_dir)),
             rows=sum(manifest["counts"]["val_shadow"].values()),
             notes="held-out shadow file; not used at training time",
+        ),
+        LineageOutput(
+            kind="m1_sft_math_final_answer_jsonl",
+            ref=str(math_final_answer_train_path.relative_to(args.output_dir)),
+            rows=len(math_final_answer_rows),
+            notes="numeric math rows duplicated for boxed final-answer supervision",
         ),
         LineageOutput(
             kind="m1_sft_blend",

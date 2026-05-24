@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
 
 ## Session 1
 
@@ -419,3 +419,12 @@
 - Conservative iter0010110 corrected full：AIME accuracy `0.03333333333333333`、parsed rate `0.9933333333333333`、finish `stop=298/length=2`；HMMT exact-normalized correct percent `6.666666666666667`、parsed rate `1.0`、finish `stop=30`。该 checkpoint 基本恢复 final-answer 格式，但 math correctness 仍明显低于 original。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md`；更新 original、iter0009119、conservative 三个 30B manifest 的 `official_comparability.corrected_math_full` 字段，并在 conservative manifest 中登记三模型 same-protocol comparison。
 - 资源清理：三模型评测完成后停止 NemTron `task071_corrected_math_sglang`，8 张 H200 均回到空闲。
+
+## Session 39
+
+- 合并 PR #153 后从最新 `main` 创建 `intern_nemontron_code_reading/task071_math_final_answer_supervision_session39`，基于 Session 38 corrected math 结果调整 M1 SFT 数学 final-answer 监督策略。
+- 修改 `prepare_m1_agentic_sft.py`：`math_reasoning_numeric` 与 `math_competition_numeric` 保留参考解法并继续移除 GSM8K `####` marker；当参考解法缺少 boxed final answer 时追加 `Final answer: \boxed{expected_answer}`，无参考解法时也输出同样格式，避免 bare numeric target。
+- 新增数学 final-answer sidecar：`agentic_sft_v0_math_final_answer_train.jsonl` 复制 train split 中的 numeric math rows；`data_blend_agentic_sft_v0.json` 在 base train JSONL 权重 `1.0` 外加入 `m1-agentic-sft-v0-math-final-answer` 权重 `1.0`，使 boxed final-answer 监督获得有效 2x exposure。
+- 更新 M1 SFT README、manifest/report metadata 与 lineage 输出，显式记录 `math_final_answer_supervision` 的 environments、format、sidecar path、sidecar weight 与 effective weight。
+- 已 push 并创建 PR #163：`https://github.com/songCNMS/Nemotron/pull/163`。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py` -> `57 passed, 1 skipped`；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `64 passed, 1 skipped`；`ruff check src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_sft.py` passed；`git diff --check` passed。
