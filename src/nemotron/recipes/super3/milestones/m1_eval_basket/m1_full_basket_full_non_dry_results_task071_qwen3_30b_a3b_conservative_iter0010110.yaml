@@ -79,6 +79,31 @@ summary:
       harness. The MMLU-Pro/AIME25/HMMT settings are not aligned with Qwen
       official benchmark guidance on chat-template use, adequate output length,
       and standardized final-answer format.
+    corrected_mmlu_pro_full:
+      checked_in_session: 35
+      run_id: qwen3_30b_a3b_conservative_iter0010110_mmlu_pro_chat_json_full
+      sample_scope: full MMLU-Pro test split
+      evaluated_rows: 12032
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.527593085106383
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_rows_accuracy: 0.010388962765957447
+      old_same_rows_invalid_rate: 0.9834607712765957
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_conservative_iter0010110.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_conservative_iter0010110.jsonl
+    corrected_mmlu_pro_same_protocol_comparison:
+      checked_in_session: 35
+      metric: corrected_accuracy
+      sample_scope: full MMLU-Pro test split
+      prompting: chat JSON answer-only, max_tokens=64, temperature=0.0, top_p=1e-5
+      original: 0.561751994680851
+      qwen3_30b_a3b_sft_iter0009119: 0.5339926861702128
+      conservative_iter0010110: 0.527593085106383
+      qwen3_30b_a3b_sft_iter0009119_minus_original: -0.027759308510638236
+      conservative_iter0010110_minus_original: -0.03415890957446799
+      conservative_iter0010110_minus_iter0009119: -0.006399601063829752
   comparison_direction: conservative_iter0010110_minus_baselines
   primary_metric_comparison:
   - benchmark_id: ifbench

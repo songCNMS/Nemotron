@@ -647,6 +647,16 @@ def test_task071_qwen3_30b_a3b_full_non_dry_results_record_full_selected_runs() 
     assert result_manifest["summary"]["official_comparability"]["status"] == (
         "regression_only_not_official_comparable"
     )
+    full = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_full"
+    ]
+    assert full["checked_in_session"] == 35
+    assert full["evaluated_rows"] == 12032
+    assert full["corrected_accuracy"] == pytest.approx(0.5339926861702128)
+    assert full["corrected_parsed_rate"] == 1.0
+    assert full["corrected_finish_reason_stop_rate"] == 1.0
+    assert full["old_same_rows_accuracy"] == pytest.approx(0.07737699468085106)
+    assert full["old_same_rows_invalid_rate"] == pytest.approx(0.8833942819148937)
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -859,6 +869,16 @@ def test_task071_qwen3_30b_a3b_conservative_results_record_full_selected_runs() 
     assert result_manifest["summary"]["official_comparability"]["status"] == (
         "regression_only_not_official_comparable"
     )
+    full = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_full"
+    ]
+    assert full["checked_in_session"] == 35
+    assert full["evaluated_rows"] == 12032
+    assert full["corrected_accuracy"] == pytest.approx(0.527593085106383)
+    assert full["corrected_parsed_rate"] == 1.0
+    assert full["corrected_finish_reason_stop_rate"] == 1.0
+    assert full["old_same_rows_accuracy"] == pytest.approx(0.010388962765957447)
+    assert full["old_same_rows_invalid_rate"] == pytest.approx(0.9834607712765957)
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -923,6 +943,24 @@ def test_task071_qwen3_30b_a3b_conservative_results_lock_comparison() -> None:
         result_manifest["summary"]["comparison_direction"]
         == "conservative_iter0010110_minus_baselines"
     )
+    corrected = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_same_protocol_comparison"
+    ]
+    assert corrected["checked_in_session"] == 35
+    assert corrected["original"] == pytest.approx(0.561751994680851)
+    assert corrected["qwen3_30b_a3b_sft_iter0009119"] == pytest.approx(
+        0.5339926861702128
+    )
+    assert corrected["conservative_iter0010110"] == pytest.approx(0.527593085106383)
+    assert corrected[
+        "qwen3_30b_a3b_sft_iter0009119_minus_original"
+    ] == pytest.approx(-0.027759308510638236)
+    assert corrected["conservative_iter0010110_minus_original"] == pytest.approx(
+        -0.03415890957446799
+    )
+    assert corrected[
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(-0.006399601063829752)
     assert summary_rows["ifbench"][
         "conservative_iter0010110_minus_iter0009119"
     ] == pytest.approx(0.037414965986394544)

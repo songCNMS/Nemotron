@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Session 1
 
@@ -378,3 +378,13 @@
 - 本地保存 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json` 与 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl`。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_full_session34.md`，并把 full-run 摘要登记到 30B original manifest 的 `official_comparability.corrected_mmlu_pro_full`，测试锁定 evaluated rows、accuracy、parsed/stop rate 与旧 invalid rate。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；`git diff --check` passed。
+
+## Session 35
+
+- 按“执行下一步”把 corrected MMLU-Pro full-run 扩到 SFT `iter0009119` 与 conservative final `iter0010110`，使用 Session 34 的同一个 runner、chat JSON answer-only prompt、`max_tokens=64`、`temperature=0.0`、`top_p=1e-5`。
+- 为避免闲置 GPU，释放 original debug endpoint 后在 NemTron 以 `tp=4`、`dp=2`、8 张 H200、`context_length=4096` 分别启动 `task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf` 与 `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf`；每个 full run 完成后停止临时 SGLang endpoint，最终 GPU 全部释放。
+- `iter0009119` corrected full MMLU-Pro：`12032/12032` parsed，`12032/12032` stop，accuracy `0.5339926861702128`，旧同 rows accuracy `0.07737699468085106`，old invalid rate `0.8833942819148937`，runtime `194.346s`。
+- Conservative `iter0010110` corrected full MMLU-Pro：`12032/12032` parsed，`12032/12032` stop，accuracy `0.527593085106383`，旧同 rows accuracy `0.010388962765957447`，old invalid rate `0.9834607712765957`，runtime `194.002s`。
+- 三模型同口径 corrected MMLU-Pro：original `0.561751994680851`，SFT `iter0009119` `0.5339926861702128`，conservative final `0.527593085106383`；deltas 为 `iter0009119-original=-0.027759308510638236`、`conservative-original=-0.03415890957446799`、`conservative-iter0009119=-0.006399601063829752`。
+- 拉回本地 artifacts 到 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/`，新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_three_way_session35.md`，并把 corrected full 结果登记进 `iter0009119` 与 conservative final manifests。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；两个新增 YAML manifest 字段可解析；`git diff --check` passed。

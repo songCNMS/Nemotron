@@ -75,6 +75,20 @@ summary:
       harness. The MMLU-Pro/AIME25/HMMT settings are not aligned with Qwen
       official benchmark guidance on chat-template use, adequate output length,
       and standardized final-answer format.
+    corrected_mmlu_pro_full:
+      checked_in_session: 35
+      run_id: qwen3_30b_a3b_sft_iter0009119_mmlu_pro_chat_json_full
+      sample_scope: full MMLU-Pro test split
+      evaluated_rows: 12032
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.5339926861702128
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_rows_accuracy: 0.07737699468085106
+      old_same_rows_invalid_rate: 0.8833942819148937
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_iter0009119.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_iter0009119.jsonl
   compatibility_overrides:
   - benchmark_id: ifbench
     reason: Used max_new_tokens=1536 so all 294 IFBench prompts fit the 4096-token
