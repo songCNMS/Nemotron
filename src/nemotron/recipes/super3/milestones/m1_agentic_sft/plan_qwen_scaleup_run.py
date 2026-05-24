@@ -226,6 +226,7 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
         if training.get("allow_missing_checkpoint")
         else ""
     )
+    m0_manifest_path = Path(paths["m0_dir"]) / "manifest.json"
     return f"""#!/usr/bin/env bash
 set -euo pipefail
 
@@ -235,11 +236,21 @@ export PYTHONPATH="${{PWD}}/src${{PYTHONPATH:+:${{PYTHONPATH}}}}"
 export WANDB_MODE="${{WANDB_MODE:-disabled}}"
 export WANDB_DISABLED="${{WANDB_DISABLED:-true}}"
 
+set +e
 python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \\
   --output-dir {_q(paths["m0_dir"])} \\
   {dataset_flags} \\
   {m0_row_flags} \\
   --overwrite
+m0_status=$?
+set -e
+if [[ "$m0_status" -ne 0 && "$m0_status" -ne 2 ]]; then
+  exit "$m0_status"
+fi
+if [[ "$m0_status" -eq 2 ]]; then
+  echo "prepare_m0_assets.py recorded manifest errors; continuing with valid converted rows." >&2
+  echo "Inspect {_q(m0_manifest_path)}." >&2
+fi
 
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \\
   --m0-input-dir {_q(paths["m0_dir"])} \\
@@ -333,18 +344,18 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"train.global_batch_size={int(training['global_batch_size'])}",
         f"train.micro_batch_size={int(training['micro_batch_size'])}",
         (
-            "scheduler.lr_decay_iters=$TRAIN_ITERS"
+            "++scheduler.lr_decay_iters=$TRAIN_ITERS"
             if lr_decay_override is None
-            else f"scheduler.lr_decay_iters={int(lr_decay_override)}"
+            else f"++scheduler.lr_decay_iters={int(lr_decay_override)}"
         ),
         f"scheduler.lr_warmup_iters={int(training['lr_warmup_iters'])}",
         f"checkpoint.save_interval={int(training['save_interval'])}",
         "logger.log_interval=10",
     ]
     if training.get("optimizer_lr") is not None:
-        torchrun_args.append(f"optimizer.lr={training['optimizer_lr']}")
+        torchrun_args.append(f"++optimizer.lr={training['optimizer_lr']}")
     if training.get("scheduler_min_lr") is not None:
-        torchrun_args.append(f"scheduler.min_lr={training['scheduler_min_lr']}")
+        torchrun_args.append(f"++optimizer.min_lr={training['scheduler_min_lr']}")
     train_cmd_parts = [
         f"cd {_q(remote_repo)}",
         f"source {_q(Path(training['nemtron_venv']) / 'bin' / 'activate')}",
@@ -373,7 +384,7 @@ print(manifest["training"]["train_iters"])
 PY
 )"
 export TRAIN_ITERS
-tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"
+tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS" 2>/dev/null || true
 tmux kill-session -t {_q(session)} 2>/dev/null || true
 tmux new-session -d -s {_q(session)} {_q(train_cmd)}
 tmux ls | grep {_q(session)}

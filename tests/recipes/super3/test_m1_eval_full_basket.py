@@ -54,6 +54,10 @@ LAUNCHER_AVAILABLE_CONFIG_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml"
 )
+CORRECTED_MATH_COMPARISON_CONFIG_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml"
+)
 TASK071_NON_DRY_RESULTS_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_non_dry_results_task071_iter0000122.yaml"
@@ -88,6 +92,13 @@ QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH = (
     / (
         "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
         "m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml"
+    )
+)
+TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH = (
+    REPO_ROOT
+    / (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml"
     )
 )
 
@@ -167,6 +178,14 @@ def _load_task071_qwen3_30b_a3b_full_non_dry_results() -> dict:
 def _load_qwen3_30b_a3b_original_full_non_dry_results() -> dict:
     return yaml.safe_load(
         QWEN3_30B_A3B_ORIGINAL_FULL_NON_DRY_RESULTS_PATH.read_text(encoding="utf-8")
+    )
+
+
+def _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results() -> dict:
+    return yaml.safe_load(
+        TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH.read_text(
+            encoding="utf-8"
+        )
     )
 
 
@@ -334,6 +353,30 @@ def test_launcher_available_config_uses_only_verified_available_tasks() -> None:
     tasks = set(data["tasks"])
     assert tasks == expected
     assert len(tasks) == 14
+
+
+def test_corrected_math_comparison_config_records_long_budget_protocol() -> None:
+    data = yaml.safe_load(
+        CORRECTED_MATH_COMPARISON_CONFIG_PATH.read_text(encoding="utf-8")
+    )
+
+    assert data["defaults"] == "default.yaml"
+    task_names = [task["name"] for task in data["tasks"]]
+    assert task_names == [
+        "simple_evals.AIME_2025",
+        "nemo_skills.ns_hmmt_feb2025",
+    ]
+
+    corrected = data["corrected_math"]
+    assert corrected["endpoint"]["served_context_length"] == 16384
+    assert corrected["sampling"] == {"temperature": 0.0, "top_p": 1.0e-5}
+    assert corrected["tasks"]["aime25"]["prompt_variant"] == "original"
+    assert corrected["tasks"]["aime25"]["max_tokens"] == 8192
+    assert corrected["tasks"]["aime25"]["parser_metric"] == (
+        "boxed_answer_parsed_rate"
+    )
+    assert corrected["tasks"]["hmmt"]["prompt_variant"] == "original"
+    assert corrected["tasks"]["hmmt"]["max_tokens"] == 8192
 
 
 def test_task071_non_dry_results_cover_launcher_available_config() -> None:
@@ -629,6 +672,34 @@ def test_task071_qwen3_30b_a3b_full_non_dry_results_record_full_selected_runs() 
     assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
     assert result_manifest["summary"]["scored_tasks"] == 5
     assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "regression_only_not_official_comparable"
+    )
+    full = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_full"
+    ]
+    assert full["checked_in_session"] == 35
+    assert full["evaluated_rows"] == 12032
+    assert full["corrected_accuracy"] == pytest.approx(0.5339926861702128)
+    assert full["corrected_parsed_rate"] == 1.0
+    assert full["corrected_finish_reason_stop_rate"] == 1.0
+    assert full["old_same_rows_accuracy"] == pytest.approx(0.07737699468085106)
+    assert full["old_same_rows_invalid_rate"] == pytest.approx(0.8833942819148937)
+    math_full = result_manifest["summary"]["official_comparability"][
+        "corrected_math_full"
+    ]
+    assert math_full["checked_in_session"] == 38
+    assert math_full["endpoint_max_model_len"] == 16384
+    assert math_full["aime25"]["rows"] == 300
+    assert math_full["aime25"]["max_tokens"] == 8192
+    assert math_full["aime25"]["exact_normalized_accuracy"] == 0.0
+    assert math_full["aime25"]["parsed_rate"] == pytest.approx(1 / 30)
+    assert math_full["aime25"]["finish_reason_counts"] == {"stop": 300}
+    assert math_full["hmmt"]["rows"] == 30
+    assert math_full["hmmt"]["max_tokens"] == 8192
+    assert math_full["hmmt"]["exact_normalized_correct_percent"] == 0.0
+    assert math_full["hmmt"]["parsed_rate"] == pytest.approx(1 / 30)
+    assert math_full["hmmt"]["finish_reason_counts"] == {"stop": 30}
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -705,6 +776,90 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs()
     assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
     assert result_manifest["summary"]["scored_tasks"] == 5
     assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17626
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "not_official_comparable"
+    )
+    calibration = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_calibration"
+    ]
+    assert calibration["checked_in_session"] == 33
+    assert calibration["corrected_accuracy"] == pytest.approx(0.6178571428571429)
+    assert calibration["corrected_parsed_rate"] == 1.0
+    assert calibration["old_same_slice_invalid_rate"] == 1.0
+    full = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_full"
+    ]
+    assert full["checked_in_session"] == 34
+    assert full["evaluated_rows"] == 12032
+    assert full["corrected_accuracy"] == pytest.approx(0.561751994680851)
+    assert full["corrected_parsed_rate"] == 1.0
+    assert full["corrected_finish_reason_stop_rate"] == 1.0
+    assert full["old_same_rows_accuracy"] == pytest.approx(8.311170212765957e-05)
+    assert full["old_same_rows_invalid_rate"] == pytest.approx(0.9998337765957447)
+    math_audit = result_manifest["summary"]["official_comparability"][
+        "math_eval_artifact_audit"
+    ]
+    assert math_audit["checked_in_session"] == 36
+    assert math_audit["aime25"]["score_rows"] == 300
+    assert math_audit["aime25"]["finish_reason_counts"] == {
+        "length": 234,
+        "stop": 66,
+    }
+    assert math_audit["aime25"]["boxed_rows"] == 76
+    assert math_audit["aime25"]["correct_with_boxed"] == 50
+    assert math_audit["aime25"]["correct_without_boxed"] == 0
+    assert math_audit["hmmt"]["rows"] == 30
+    assert math_audit["hmmt"]["finish_reason_counts"] == {"length": 28, "stop": 2}
+    assert math_audit["hmmt"]["predicted_answer_rows"] == 2
+    assert math_audit["hmmt"]["length_contains_expected_without_prediction"] == 2
+    math_probe = result_manifest["summary"]["official_comparability"][
+        "corrected_math_probe"
+    ]
+    assert math_probe["checked_in_session"] == 37
+    assert math_probe["endpoint_max_model_len"] == 16384
+    assert math_probe["total_requests"] == 54
+    assert math_probe["sample_scope"]["aime25_unique_prompts"] == 3
+    assert math_probe["sample_scope"]["hmmt_entries"] == 3
+    assert math_probe["sample_scope"]["max_tokens"] == [2048, 4096, 8192]
+    assert math_probe["aime25"]["labeled_accuracy_available"] is False
+    assert math_probe["aime25"]["original_2048_parsed_rate"] == pytest.approx(
+        1 / 3
+    )
+    assert math_probe["aime25"]["original_8192_parsed_rate"] == 1.0
+    assert math_probe["aime25"]["answer_only_2048_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["original_4096_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["original_8192_correct_rate"] == pytest.approx(2 / 3)
+    assert math_probe["hmmt"]["concise_boxed_8192_parsed_rate"] == 1.0
+    assert math_probe["hmmt"]["answer_only_8192_correct_rate"] == pytest.approx(
+        2 / 3
+    )
+    math_full = result_manifest["summary"]["official_comparability"][
+        "corrected_math_full"
+    ]
+    assert math_full["checked_in_session"] == 38
+    assert math_full["endpoint_max_model_len"] == 16384
+    assert math_full["aime25"]["rows"] == 300
+    assert math_full["aime25"]["max_tokens"] == 8192
+    assert math_full["aime25"]["exact_normalized_accuracy"] == pytest.approx(
+        0.5166666666666667
+    )
+    assert math_full["aime25"]["parsed_rate"] == pytest.approx(0.6133333333333333)
+    assert math_full["aime25"]["correct_rows"] == 155
+    assert math_full["aime25"]["finish_reason_counts"] == {
+        "stop": 173,
+        "length": 127,
+    }
+    assert math_full["hmmt"]["rows"] == 30
+    assert math_full["hmmt"]["max_tokens"] == 8192
+    assert math_full["hmmt"]["exact_normalized_correct_percent"] == pytest.approx(
+        26.666666666666668
+    )
+    assert math_full["hmmt"]["parsed_rate"] == pytest.approx(0.5666666666666667)
+    assert math_full["hmmt"]["correct_rows"] == 8
+    assert math_full["hmmt"]["finish_reason_counts"] == {
+        "stop": 14,
+        "length": 16,
+    }
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -798,6 +953,199 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_do_not_store_secret_tokens(
     assert "HF_TOKEN" not in text
 
 
+def test_task071_qwen3_30b_a3b_conservative_results_record_full_selected_runs() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    rows = result_manifest["results"]
+
+    assert result_manifest["schema_version"] == 1
+    assert result_manifest["model"]["artifact"].endswith("iter0010110-hf:v1")
+    assert result_manifest["model"]["training"]["train_iters"] == 10110
+    assert result_manifest["model"]["training"]["global_batch_size"] == 8
+    assert result_manifest["model"]["training"]["target_epoch_fraction"] == 0.5
+    assert result_manifest["model"]["validation"]["final_loss"] == pytest.approx(
+        0.3727816
+    )
+    assert result_manifest["model"]["validation"]["best_iter"] == 9000
+    assert result_manifest["run_scope"]["non_dry"] is True
+    assert result_manifest["run_scope"]["full_selected_tasks_attempted"] is True
+    assert result_manifest["run_scope"]["sample_limits_removed"] is True
+    assert result_manifest["run_scope"]["all_available_tasks_attempted"] is False
+    assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
+    assert result_manifest["summary"]["scored_tasks"] == 5
+    assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "regression_only_not_official_comparable"
+    )
+    full = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_full"
+    ]
+    assert full["checked_in_session"] == 35
+    assert full["evaluated_rows"] == 12032
+    assert full["corrected_accuracy"] == pytest.approx(0.527593085106383)
+    assert full["corrected_parsed_rate"] == 1.0
+    assert full["corrected_finish_reason_stop_rate"] == 1.0
+    assert full["old_same_rows_accuracy"] == pytest.approx(0.010388962765957447)
+    assert full["old_same_rows_invalid_rate"] == pytest.approx(0.9834607712765957)
+    math_full = result_manifest["summary"]["official_comparability"][
+        "corrected_math_full"
+    ]
+    assert math_full["checked_in_session"] == 38
+    assert math_full["endpoint_max_model_len"] == 16384
+    assert math_full["aime25"]["exact_normalized_accuracy"] == pytest.approx(
+        0.03333333333333333
+    )
+    assert math_full["aime25"]["parsed_rate"] == pytest.approx(0.9933333333333333)
+    assert math_full["aime25"]["correct_rows"] == 10
+    assert math_full["aime25"]["finish_reason_counts"] == {"stop": 298, "length": 2}
+    assert math_full["hmmt"]["exact_normalized_correct_percent"] == pytest.approx(
+        6.666666666666667
+    )
+    assert math_full["hmmt"]["parsed_rate"] == 1.0
+    assert math_full["hmmt"]["correct_rows"] == 2
+    assert math_full["hmmt"]["finish_reason_counts"] == {"stop": 30}
+    math_comparison = result_manifest["summary"]["official_comparability"][
+        "corrected_math_same_protocol_comparison"
+    ]
+    assert math_comparison["checked_in_session"] == 38
+    assert math_comparison["aime25"]["original"] == pytest.approx(
+        0.5166666666666667
+    )
+    assert math_comparison["aime25"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(-0.48333333333333334)
+    assert math_comparison["aime25"][
+        "parsed_rate_conservative_iter0010110"
+    ] == pytest.approx(0.9933333333333333)
+    assert math_comparison["hmmt"][
+        "original_exact_normalized_correct_percent"
+    ] == pytest.approx(26.666666666666668)
+    assert math_comparison["hmmt"][
+        "conservative_iter0010110_minus_original_percent"
+    ] == pytest.approx(-20.0)
+    assert math_comparison["hmmt"]["parsed_rate_conservative_iter0010110"] == 1.0
+
+    assert [row["benchmark_id"] for row in rows] == [
+        "ifbench",
+        "aime25",
+        "hmmt",
+        "wmt24pp",
+        "mmlu_pro",
+    ]
+    for row in rows:
+        assert row["attempt_status"] == "scored"
+        assert row["docker_exit"] == 0
+        assert row["sample_scope"]["limit_samples"] is None
+        assert row["artifacts"].startswith("vm4vpn:")
+        assert row["observed_metrics"]
+        assert row["response_stats"]["successful_responses"] > 0
+        assert "comparison_vs_baselines" in row
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_lock_key_metrics() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert by_id["ifbench"]["sample_scope"]["prompts"] == 294
+    assert by_id["ifbench"]["observed_metrics"][
+        "prompt_level_strict_accuracy"
+    ] == pytest.approx(0.3401360544217687)
+    assert by_id["ifbench"]["observed_metrics"][
+        "instruction_level_strict_accuracy"
+    ] == pytest.approx(0.3641791044776119)
+
+    assert by_id["aime25"]["sample_scope"]["requests"] == 300
+    assert by_id["aime25"]["observed_metrics"]["score"] == pytest.approx(
+        0.03333333333333333
+    )
+
+    assert by_id["hmmt"]["sample_scope"]["entries"] == 30
+    assert by_id["hmmt"]["observed_metrics"]["symbolic_correct_percent"] == 0.0
+    assert by_id["hmmt"]["observed_metrics"]["no_answer_percent"] == 0.0
+
+    assert by_id["wmt24pp"]["sample_scope"]["output_jsonl_rows"] == 4990
+    assert by_id["wmt24pp"]["observed_metrics"]["bleu_xx_to_xx"] == pytest.approx(
+        33.361471695801946
+    )
+    assert by_id["wmt24pp"]["response_stats"]["successful_responses"] == 4971
+
+    assert by_id["mmlu_pro"]["sample_scope"]["requests"] == 12032
+    assert by_id["mmlu_pro"]["observed_metrics"]["group_exact_match"] == pytest.approx(
+        0.010388962765957447
+    )
+    assert by_id["mmlu_pro"]["response_stats"]["successful_responses"] == 12032
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_lock_comparison() -> None:
+    result_manifest = _load_task071_qwen3_30b_a3b_conservative_full_non_dry_results()
+    summary_rows = {
+        row["benchmark_id"]: row
+        for row in result_manifest["summary"]["primary_metric_comparison"]
+    }
+    by_id = {row["benchmark_id"]: row for row in result_manifest["results"]}
+
+    assert (
+        result_manifest["summary"]["comparison_direction"]
+        == "conservative_iter0010110_minus_baselines"
+    )
+    corrected = result_manifest["summary"]["official_comparability"][
+        "corrected_mmlu_pro_same_protocol_comparison"
+    ]
+    assert corrected["checked_in_session"] == 35
+    assert corrected["original"] == pytest.approx(0.561751994680851)
+    assert corrected["qwen3_30b_a3b_sft_iter0009119"] == pytest.approx(
+        0.5339926861702128
+    )
+    assert corrected["conservative_iter0010110"] == pytest.approx(0.527593085106383)
+    assert corrected[
+        "qwen3_30b_a3b_sft_iter0009119_minus_original"
+    ] == pytest.approx(-0.027759308510638236)
+    assert corrected["conservative_iter0010110_minus_original"] == pytest.approx(
+        -0.03415890957446799
+    )
+    assert corrected[
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(-0.006399601063829752)
+    assert summary_rows["ifbench"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.037414965986394544)
+    assert summary_rows["ifbench"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.02040816326530609)
+    assert summary_rows["aime25"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.03333333333333333)
+    assert summary_rows["aime25"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(-0.13333333333333333)
+    assert summary_rows["hmmt"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(-6.666666666666667)
+    assert summary_rows["wmt24pp"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(0.029462309935361475)
+    assert summary_rows["wmt24pp"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.3214833850773573)
+    assert summary_rows["mmlu_pro"][
+        "conservative_iter0010110_minus_iter0009119"
+    ] == pytest.approx(-0.06698803191489361)
+    assert summary_rows["mmlu_pro"][
+        "conservative_iter0010110_minus_original"
+    ] == pytest.approx(0.010305851063829786)
+
+    assert by_id["mmlu_pro"]["comparison_vs_baselines"][
+        "qwen3_30b_a3b_sft_iter0009119"
+    ] == pytest.approx(0.07737699468085106)
+
+
+def test_task071_qwen3_30b_a3b_conservative_results_do_not_store_secret_tokens() -> None:
+    text = TASK071_QWEN3_30B_A3B_CONSERVATIVE_FULL_NON_DRY_RESULTS_PATH.read_text(
+        encoding="utf-8"
+    )
+    assert re.search(r"\bhf_[A-Za-z0-9]{20,}\b", text) is None
+    assert "HF_TOKEN" not in text
+
+
 def test_launcher_available_config_expands_into_evaluator_schema() -> None:
     """The recipe CLI must merge the compact basket overlay with
     default.yaml; otherwise dry-run only prints top-level tasks and the
@@ -835,6 +1183,41 @@ def test_eval_config_normalization_matches_launcher_0_2_schema() -> None:
     assert config.execution.mode == "sequential"
     assert config.evaluation.env_vars.HF_HOME == "lit:/cache/huggingface"
     assert config.deployment.env_vars.HF_TOKEN == "host:HF_TOKEN"
+
+
+def test_corrected_math_comparison_config_expands_into_evaluator_schema() -> None:
+    ctx = SimpleNamespace(
+        config="m1_corrected_math_comparison",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+
+    assert [task["name"] for task in config.evaluation.tasks] == [
+        "simple_evals.AIME_2025",
+        "nemo_skills.ns_hmmt_feb2025",
+    ]
+    assert config.corrected_math.tasks.aime25.max_tokens == 8192
+    assert config.corrected_math.tasks.hmmt.max_tokens == 8192
+    assert "execution" in config
+    assert "deployment" in config
+    assert "tasks" not in config
+
+
+def test_corrected_math_metadata_is_stripped_before_launcher_submission() -> None:
+    ctx = SimpleNamespace(
+        config="m1_corrected_math_comparison",
+        dotlist=[],
+    )
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+    assert "corrected_math" in config
+
+    normalize_evaluator_launcher_config(config)
+
+    assert "corrected_math" not in config
+    assert [task["name"] for task in config.evaluation.tasks] == [
+        "simple_evals.AIME_2025",
+        "nemo_skills.ns_hmmt_feb2025",
+    ]
 
 
 # ---------- regression_report works on combined gate map ----------

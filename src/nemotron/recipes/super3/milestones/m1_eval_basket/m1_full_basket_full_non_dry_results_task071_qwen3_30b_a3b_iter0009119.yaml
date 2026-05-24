@@ -67,6 +67,58 @@ summary:
   failed_tasks: 0
   total_successful_responses_from_stats: 17627
   raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full
+  official_comparability:
+    status: regression_only_not_official_comparable
+    checked_in_session: 32
+    reason: >-
+      These scores are only comparable within the task071 regression
+      harness. The MMLU-Pro/AIME25/HMMT settings are not aligned with Qwen
+      official benchmark guidance on chat-template use, adequate output length,
+      and standardized final-answer format.
+    corrected_mmlu_pro_full:
+      checked_in_session: 35
+      run_id: qwen3_30b_a3b_sft_iter0009119_mmlu_pro_chat_json_full
+      sample_scope: full MMLU-Pro test split
+      evaluated_rows: 12032
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.5339926861702128
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_rows_accuracy: 0.07737699468085106
+      old_same_rows_invalid_rate: 0.8833942819148937
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_iter0009119.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_iter0009119.jsonl
+    corrected_math_full:
+      checked_in_session: 38
+      run_id: qwen3_30b_a3b_sft_iter0009119_corrected_math_full
+      config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md
+      endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf-corrected-math-full
+      endpoint_max_model_len: 16384
+      prompt_variant: original
+      sampling: temperature=0.0, top_p=1e-5
+      aime25:
+        rows: 300
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.0
+        parsed_rate: 0.03333333333333333
+        correct_rows: 0
+        finish_reason_counts:
+          stop: 300
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
+      hmmt:
+        rows: 30
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.0
+        exact_normalized_correct_percent: 0.0
+        parsed_rate: 0.03333333333333333
+        correct_rows: 0
+        finish_reason_counts:
+          stop: 30
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
   compatibility_overrides:
   - benchmark_id: ifbench
     reason: Used max_new_tokens=1536 so all 294 IFBench prompts fit the 4096-token

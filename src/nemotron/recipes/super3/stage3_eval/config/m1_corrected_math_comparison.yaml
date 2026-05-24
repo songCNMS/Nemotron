@@ -1,0 +1,61 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Corrected task071 math comparison protocol for Qwen3-30B-A3B.
+#
+# This config records the runtime settings used to rerun full AIME25/HMMT
+# comparisons after Session 36/37 found that the prior regression runs mixed
+# model quality with length truncation and final-answer parser failures.
+# The task071 runner consumes the corrected_math section below; the regular
+# launcher task entries remain present so the selected benchmarks are explicit.
+
+defaults: default.yaml
+
+tasks:
+  - name: simple_evals.AIME_2025
+    nemo_evaluator_config:
+      config:
+        params:
+          max_new_tokens: 8192
+          n_repeats: 10
+          parallelism: 16
+          request_timeout: 900
+  - name: nemo_skills.ns_hmmt_feb2025
+    nemo_evaluator_config:
+      config:
+        params:
+          max_new_tokens: 8192
+          parallelism: 16
+          request_timeout: 900
+
+corrected_math:
+  run_id: qwen3_30b_a3b_corrected_math_full_comparison
+  protocol_version: 1
+  endpoint:
+    deployment_type: none
+    api_shape: openai_chat_completions
+    url: http://127.0.0.1:13000/v1/chat/completions
+    served_context_length: 16384
+  sampling:
+    temperature: 0.0
+    top_p: 1.0e-5
+  tasks:
+    aime25:
+      input_source: prior_aime_2025_nemo_score_cache
+      sample_scope: 30 AIME 2025 problems x 10 repeats
+      prompt_variant: original
+      max_tokens: 8192
+      metric: exact_normalized_accuracy
+      parser_metric: boxed_answer_parsed_rate
+    hmmt:
+      input_source: prior_nemo_skills_hmmt_feb2025_output_jsonl
+      sample_scope: 30 HMMT February 2025 entries
+      prompt_variant: original
+      max_tokens: 8192
+      metric: exact_normalized_accuracy
+      parser_metric: boxed_answer_parsed_rate

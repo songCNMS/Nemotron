@@ -57,6 +57,153 @@ summary:
   failed_tasks: 0
   total_successful_responses_from_stats: 17626
   raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full
+  official_comparability:
+    status: not_official_comparable
+    checked_in_session: 32
+    reason: >-
+      These are regression-harness scores for the current task071 launcher
+      settings, not Qwen official benchmark scores. Session 32 found severe
+      harness mismatch for original Qwen3-30B-A3B-Instruct-2507: MMLU-Pro used
+      completions with max_gen_toks=32 while the prompt asks for step-by-step
+      reasoning, producing 12030 invalid filtered responses out of 12032; AIME25
+      and HMMT used 2048 generation tokens, with many original outputs ending at
+      the length cap before a scorer-parseable final answer.
+    debug_report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_debug_session32.md
+    probe_artifacts:
+    - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/original_probe_inputs.json
+    - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/original_probe_results.json
+    corrected_mmlu_pro_calibration:
+      checked_in_session: 33
+      run_id: qwen3_30b_a3b_original_mmlu_pro_chat_json_calibration_14x20
+      sample_scope: 14 categories x 20 samples
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.6178571428571429
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_slice_accuracy: 0.0
+      old_same_slice_invalid_rate: 1.0
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl
+    corrected_mmlu_pro_full:
+      checked_in_session: 34
+      run_id: qwen3_30b_a3b_original_mmlu_pro_chat_json_full
+      sample_scope: full MMLU-Pro test split
+      evaluated_rows: 12032
+      corrected_prompting: chat JSON answer-only, max_tokens=64, temperature=0.0,
+        top_p=1e-5
+      corrected_accuracy: 0.561751994680851
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_rows_accuracy: 8.311170212765957e-05
+      old_same_rows_invalid_rate: 0.9998337765957447
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl
+    math_eval_artifact_audit:
+      checked_in_session: 36
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_audit_session36.md
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/summary.json
+      aime25:
+        scorer: simple_evals.aime_2025_nemo local exact or sympy
+        score_rows: 300
+        unique_prompts: 30
+        score: 0.16666666666666666
+        correct_rows: 50
+        finish_reason_counts:
+          length: 234
+          stop: 66
+        boxed_rows: 76
+        correct_with_boxed: 50
+        correct_without_boxed: 0
+        wrong_with_boxed: 26
+      hmmt:
+        scorer: nemo_skills.ns_hmmt_feb2025 symbolic parser
+        rows: 30
+        symbolic_correct_rows: 2
+        symbolic_correct_percent: 6.666666666666667
+        finish_reason_counts:
+          length: 28
+          stop: 2
+        predicted_answer_rows: 2
+        boxed_rows: 2
+        contains_expected_answer_rows: 4
+        length_contains_expected_without_prediction: 2
+    corrected_math_probe:
+      checked_in_session: 37
+      run_id: qwen3_30b_a3b_original_math_probe_session37
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_probe_session37.md
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/summary.json
+      raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/results.jsonl
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-math-probe
+      endpoint_max_model_len: 16384
+      total_requests: 54
+      runtime_sec: 126.423
+      sample_scope:
+        aime25_unique_prompts: 3
+        hmmt_entries: 3
+        prompt_variants:
+        - original
+        - concise_boxed
+        - answer_only
+        max_tokens:
+        - 2048
+        - 4096
+        - 8192
+      aime25:
+        labeled_accuracy_available: false
+        original_2048_parsed_rate: 0.3333333333333333
+        original_8192_parsed_rate: 1.0
+        concise_boxed_2048_parsed_rate: 0.0
+        concise_boxed_8192_parsed_rate: 0.6666666666666666
+        answer_only_2048_parsed_rate: 1.0
+        answer_only_8192_parsed_rate: 1.0
+      hmmt:
+        original_2048_parsed_rate: 0.6666666666666666
+        original_2048_correct_rate: 0.6666666666666666
+        original_4096_parsed_rate: 1.0
+        original_8192_correct_rate: 0.6666666666666666
+        concise_boxed_8192_parsed_rate: 1.0
+        concise_boxed_8192_correct_rate: 0.6666666666666666
+        answer_only_8192_parsed_rate: 0.6666666666666666
+        answer_only_8192_correct_rate: 0.6666666666666666
+      conclusion: >-
+        Small-sample reruns confirm that the old math scores mix model ability
+        with output-budget and final-answer-contract failures. AIME parseability
+        reaches 100% with answer-only prompts at 2048 tokens or the original
+        prompt at 8192 tokens; HMMT parseability reaches 100% for the original
+        prompt at 4096/8192 and for the concise boxed prompt at 8192.
+    corrected_math_full:
+      checked_in_session: 38
+      run_id: qwen3_30b_a3b_original_corrected_math_full
+      config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-corrected-math-full
+      endpoint_max_model_len: 16384
+      prompt_variant: original
+      sampling: temperature=0.0, top_p=1e-5
+      aime25:
+        rows: 300
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.5166666666666667
+        parsed_rate: 0.6133333333333333
+        correct_rows: 155
+        finish_reason_counts:
+          stop: 173
+          length: 127
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/results.jsonl
+      hmmt:
+        rows: 30
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.26666666666666666
+        exact_normalized_correct_percent: 26.666666666666668
+        parsed_rate: 0.5666666666666667
+        correct_rows: 8
+        finish_reason_counts:
+          stop: 14
+          length: 16
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/results.jsonl
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

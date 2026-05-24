@@ -64,6 +64,8 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     eval_script = render_eval_script(manifest)
 
     assert "prepare_m0_assets.py" in local_script
+    assert "m0_status=$?" in local_script
+    assert 'if [[ "$m0_status" -ne 0 && "$m0_status" -ne 2 ]]' in local_script
     assert "prepare_m1_agentic_sft.py" in local_script
     assert "stage1_sft/data_prep.py" in local_script
     assert "plan_m1_agentic_sft_training.py" in local_script
@@ -76,7 +78,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "--nproc_per_node=2" in remote_script
     assert "TRAIN_ITERS=" in remote_script
     assert "export TRAIN_ITERS" in remote_script
-    assert 'tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS"' in remote_script
+    assert 'tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS" 2>/dev/null || true' in remote_script
     assert 'Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup' in remote_script
     assert "dataset.packed_sequence_specs.packed_sequence_size=512" in remote_script
     assert "CUDA_VISIBLE_DEVICES=0,1" in remote_script
@@ -123,10 +125,10 @@ def test_scaleup_planner_wires_30b_entrypoint_and_strategy_overrides(tmp_path) -
     assert "--allow-missing-checkpoint" in local_script
     assert "1e-06" in local_script
     assert "qwen3_30b_a3b_local_train.py" in remote_script
-    assert "optimizer.lr=1e-06" in remote_script
-    assert "scheduler.min_lr=1e-07" in remote_script
+    assert "++optimizer.lr=1e-06" in remote_script
+    assert "++optimizer.min_lr=1e-07" in remote_script
     assert "scheduler.lr_warmup_iters=100" in remote_script
-    assert "scheduler.lr_decay_iters=$TRAIN_ITERS" in remote_script
+    assert "++scheduler.lr_decay_iters=$TRAIN_ITERS" in remote_script
 
 
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
