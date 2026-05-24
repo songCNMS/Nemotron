@@ -753,6 +753,22 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs()
     assert full["corrected_finish_reason_stop_rate"] == 1.0
     assert full["old_same_rows_accuracy"] == pytest.approx(8.311170212765957e-05)
     assert full["old_same_rows_invalid_rate"] == pytest.approx(0.9998337765957447)
+    math_audit = result_manifest["summary"]["official_comparability"][
+        "math_eval_artifact_audit"
+    ]
+    assert math_audit["checked_in_session"] == 36
+    assert math_audit["aime25"]["score_rows"] == 300
+    assert math_audit["aime25"]["finish_reason_counts"] == {
+        "length": 234,
+        "stop": 66,
+    }
+    assert math_audit["aime25"]["boxed_rows"] == 76
+    assert math_audit["aime25"]["correct_with_boxed"] == 50
+    assert math_audit["aime25"]["correct_without_boxed"] == 0
+    assert math_audit["hmmt"]["rows"] == 30
+    assert math_audit["hmmt"]["finish_reason_counts"] == {"length": 28, "stop": 2}
+    assert math_audit["hmmt"]["predicted_answer_rows"] == 2
+    assert math_audit["hmmt"]["length_contains_expected_without_prediction"] == 2
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",

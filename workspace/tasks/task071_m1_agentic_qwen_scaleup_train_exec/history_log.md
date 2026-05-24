@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Session 1
 
@@ -388,3 +388,13 @@
 - 三模型同口径 corrected MMLU-Pro：original `0.561751994680851`，SFT `iter0009119` `0.5339926861702128`，conservative final `0.527593085106383`；deltas 为 `iter0009119-original=-0.027759308510638236`、`conservative-original=-0.03415890957446799`、`conservative-iter0009119=-0.006399601063829752`。
 - 拉回本地 artifacts 到 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/`，新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_three_way_session35.md`，并把 corrected full 结果登记进 `iter0009119` 与 conservative final manifests。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；两个新增 YAML manifest 字段可解析；`git diff --check` passed。
+
+## Session 36
+
+- 按“执行下一步”继续 debug AIME25/HMMT 官方口径差异，重点从 original Qwen3-30B-A3B full-selected raw artifacts 中拆分 output-length、final-answer parser 和 chat endpoint 使用情况。
+- 新增审计脚本 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/analyze_math_eval_artifacts.py`，读取 AIME simple-evals score cache、AIME response cache 与 HMMT `output.jsonl`，统计 finish reason、boxed final answer、parser prediction 与 expected-answer containment。
+- AIME25 审计结果：`300` score rows、`30` unique prompts、score `0.16666666666666666`；response finish reasons 为 `length=234`、`stop=66`；只有 `76` rows 含 boxed final answer，`50/50` correct rows 都含 boxed，`0` correct rows 缺 boxed，说明 scorer 依赖最终答案格式且当前 `2048` cap 大量截断。
+- HMMT 审计结果：`30` rows、symbolic correct `2` rows / `6.666666666666667%`；finish reasons 为 `length=28`、`stop=2`；只有 `2` rows 有 parsed predicted answer/boxed answer，`4` rows 原文包含 expected answer，其中 `2` 个 length rows 包含 expected answer 但 `predicted_answer=null`。
+- 结论：AIME/HMMT 已走 chat endpoint，不是完全缺少 chat-template routing；主要问题是 detailed reasoning prompt + `2048` token cap + 必须 boxed/final-answer parser 的组合。当前分数保留为 task071 regression records，不应作为 Qwen 官方可比数学分数。
+- 本地 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/summary.json` 及输入 cache/output；新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_audit_session36.md`，并将 audit 摘要登记到 30B original manifest 的 `official_comparability.math_eval_artifact_audit`。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/analyze_math_eval_artifacts.py workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` passed；YAML audit 字段可解析；`git diff --check` passed。

@@ -99,6 +99,35 @@ summary:
       old_same_rows_invalid_rate: 0.9998337765957447
       summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json
       raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl
+    math_eval_artifact_audit:
+      checked_in_session: 36
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_audit_session36.md
+      summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/summary.json
+      aime25:
+        scorer: simple_evals.aime_2025_nemo local exact or sympy
+        score_rows: 300
+        unique_prompts: 30
+        score: 0.16666666666666666
+        correct_rows: 50
+        finish_reason_counts:
+          length: 234
+          stop: 66
+        boxed_rows: 76
+        correct_with_boxed: 50
+        correct_without_boxed: 0
+        wrong_with_boxed: 26
+      hmmt:
+        scorer: nemo_skills.ns_hmmt_feb2025 symbolic parser
+        rows: 30
+        symbolic_correct_rows: 2
+        symbolic_correct_percent: 6.666666666666667
+        finish_reason_counts:
+          length: 28
+          stop: 2
+        predicted_answer_rows: 2
+        boxed_rows: 2
+        contains_expected_answer_rows: 4
+        length_contains_expected_without_prediction: 2
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Notes
 
@@ -112,3 +112,4 @@
 - Qwen3-30B-A3B MMLU-Pro calibration fact: Session 33 ran original Qwen debug endpoint on a 14-category x 20-sample MMLU-Pro slice with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.6178571428571429`, parsed rate `1.0`, stop finish rate `1.0`, while the same slice under the old task071 MMLU-Pro output had accuracy `0.0` and invalid rate `1.0`.
 - Qwen3-30B-A3B corrected full MMLU-Pro fact: Session 34 ran `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_mmlu_pro_eval.py` against the original debug endpoint for all `12032` MMLU-Pro rows with chat JSON answer-only prompting, `max_tokens=64`, `temperature=0.0`, `top_p=1e-5`; corrected accuracy was `0.561751994680851`, parsed rate `1.0`, stop finish rate `1.0`, and old same-row invalid rate `0.9998337765957447`. Summary artifact is `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json`.
 - Qwen3-30B-A3B corrected same-protocol comparison fact: Session 35 ran the same full MMLU-Pro chat JSON protocol on `iter0009119` and conservative `iter0010110`; corrected accuracies are original `0.561751994680851`, SFT `iter0009119` `0.5339926861702128`, and conservative final `0.527593085106383`. All three runs have parsed rate `1.0` and stop finish rate `1.0`; SFT old invalid rate is `0.8833942819148937`, conservative old invalid rate is `0.9834607712765957`.
+- Qwen3-30B-A3B math artifact audit fact: Session 36 found original AIME25 uses a chat endpoint but `234/300` responses finish by length at `max_tokens=2048`; only `76/300` rows contain boxed final answers, and all `50` correct rows contain boxed answers. Original HMMT has `28/30` length finishes, only `2` parsed predicted answers, and `2` length-truncated rows that contain the expected answer text but have `predicted_answer=null`.
