@@ -57,6 +57,21 @@ summary:
   failed_tasks: 0
   total_successful_responses_from_stats: 17626
   raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full
+  official_comparability:
+    status: not_official_comparable
+    checked_in_session: 32
+    reason: >-
+      These are regression-harness scores for the current task071 launcher
+      settings, not Qwen official benchmark scores. Session 32 found severe
+      harness mismatch for original Qwen3-30B-A3B-Instruct-2507: MMLU-Pro used
+      completions with max_gen_toks=32 while the prompt asks for step-by-step
+      reasoning, producing 12030 invalid filtered responses out of 12032; AIME25
+      and HMMT used 2048 generation tokens, with many original outputs ending at
+      the length cap before a scorer-parseable final answer.
+    debug_report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_debug_session32.md
+    probe_artifacts:
+    - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/original_probe_inputs.json
+    - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/original_probe_results.json
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

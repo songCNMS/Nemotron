@@ -67,6 +67,14 @@ summary:
   failed_tasks: 0
   total_successful_responses_from_stats: 17627
   raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_iter0009119_full
+  official_comparability:
+    status: regression_only_not_official_comparable
+    checked_in_session: 32
+    reason: >-
+      These scores are only comparable within the task071 regression
+      harness. The MMLU-Pro/AIME25/HMMT settings are not aligned with Qwen
+      official benchmark guidance on chat-template use, adequate output length,
+      and standardized final-answer format.
   compatibility_overrides:
   - benchmark_id: ifbench
     reason: Used max_new_tokens=1536 so all 294 IFBench prompts fit the 4096-token

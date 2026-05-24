@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Session 1
 
@@ -345,4 +345,15 @@
 - MMLU-Pro full test split 完成 `12032/12032` requests，group exact_match `0.010388962765957447`；IFBench strict prompt-level `0.3401360544217687`。
 - 汇总 final vs `iter0009119` vs original：final 对 `iter0009119` 在 IFBench `+0.037414965986394544`、AIME25 `+0.03333333333333333`、HMMT `+0.0`、WMT24++ `+0.029462309935361475`、MMLU-Pro `-0.06698803191489361`；final 对 original 在 IFBench `+0.02040816326530609`、AIME25 `-0.13333333333333333`、HMMT `-6.666666666666667`、WMT24++ `+0.3214833850773573`、MMLU-Pro `+0.010305851063829786`。
 - 新增结构化 manifest `src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml`，并扩展 `tests/recipes/super3/test_m1_eval_full_basket.py` 锁定 final metrics、baseline deltas 和 secret scan。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。
+
+## Session 32
+
+- 按用户反馈 debug original Qwen3-30B-A3B-Instruct-2507 分数与官方差异过大的问题；对照 Qwen 官方模型卡，官方报告 MMLU-Pro `78.4`、AIME25 `61.3`、HMMT25 `43.0`，并建议 chat-template、充足输出长度和标准化答案格式。
+- 解析 `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full` raw artifacts：MMLU-Pro 原始 run 使用 `lm-eval local-completions`、`max_gen_toks=32`，但 prompt 要求 step-by-step 后输出 `the answer is (X)`；原始 Qwen `12030/12032` 样本 filtered response 为 `[invalid]`，`12032/12032` 均以 length 结束。
+- 解析 AIME/HMMT raw stats：AIME25 `finish_reason.length=234/300`、avg completion `1950.45`；HMMT `finish_reason.length=28/30`、`no_answer=93.33333333333333`，说明 2048 token cap 与 final-answer extraction 对 original baseline 明显不匹配。
+- 临时释放 final SGLang endpoint，启动 original debug endpoint `qwen3-30b-a3b-instruct-2507-original-debug`：NemTron tmux session `task071_qwen30b_original_debug_sglang`，GPU0-3，TP=4，context length `8192`。
+- 运行 probe：同一 MMLU-Pro biology 样本 target `B`，completions `max_tokens=32` 无法抽取选项且 length 截断；completions `max_tokens=512` 输出 `The answer is (B)`；chat answer-only prompt `max_tokens=16` 直接返回 `B`。
+- AIME 第一题在同一 original debug endpoint 上提升到 `max_tokens=4096` 后仍 `finish_reason=length`，进一步确认当前 2048-token math eval 不是官方可比口径。
+- 新增诊断报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_debug_session32.md`；更新 30B original、iter0009119、final conservative 三个 manifest 的 `official_comparability` 标记，明确这些分数只能作为 task071 regression harness 结果。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_eval_full_basket.py` -> `42 passed, 8 warnings`；`ruff check tests/recipes/super3/test_m1_eval_full_basket.py` passed。

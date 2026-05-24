@@ -71,6 +71,14 @@ summary:
   failed_tasks: 0
   total_successful_responses_from_stats: 17627
   raw_artifacts_root: vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full
+  official_comparability:
+    status: regression_only_not_official_comparable
+    checked_in_session: 32
+    reason: >-
+      These scores are only comparable within the task071 regression
+      harness. The MMLU-Pro/AIME25/HMMT settings are not aligned with Qwen
+      official benchmark guidance on chat-template use, adequate output length,
+      and standardized final-answer format.
   comparison_direction: conservative_iter0010110_minus_baselines
   primary_metric_comparison:
   - benchmark_id: ifbench

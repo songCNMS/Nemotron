@@ -644,6 +644,9 @@ def test_task071_qwen3_30b_a3b_full_non_dry_results_record_full_selected_runs() 
     assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
     assert result_manifest["summary"]["scored_tasks"] == 5
     assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "regression_only_not_official_comparable"
+    )
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -720,6 +723,9 @@ def test_qwen3_30b_a3b_original_full_non_dry_results_record_full_selected_runs()
     assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
     assert result_manifest["summary"]["scored_tasks"] == 5
     assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17626
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "not_official_comparable"
+    )
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",
@@ -833,6 +839,9 @@ def test_task071_qwen3_30b_a3b_conservative_results_record_full_selected_runs() 
     assert result_manifest["summary"]["attempted_tasks"] == len(rows) == 5
     assert result_manifest["summary"]["scored_tasks"] == 5
     assert result_manifest["summary"]["total_successful_responses_from_stats"] == 17627
+    assert result_manifest["summary"]["official_comparability"]["status"] == (
+        "regression_only_not_official_comparable"
+    )
 
     assert [row["benchmark_id"] for row in rows] == [
         "ifbench",

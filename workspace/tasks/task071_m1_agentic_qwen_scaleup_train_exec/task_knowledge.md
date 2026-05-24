@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Notes
 
@@ -107,3 +107,5 @@
 - Conservative 30B final full-selected eval fact: Session 31 completed all five selected tasks against `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf` under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_conservative_iter0010110_full`; IFBench, AIME25, HMMT, WMT24++, and MMLU-Pro all have `docker_exit=0` and are registered in `m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_conservative_iter0010110.yaml`.
 - Conservative 30B final benchmark comparison fact: final `iter0010110` primary metrics are IFBench strict prompt `0.3401360544217687`, AIME25 `0.03333333333333333`, HMMT symbolic_correct `0.0`, WMT24++ BLEU `33.361471695801946`, and MMLU-Pro exact_match `0.010388962765957447`; deltas vs `iter0009119` are `+0.037414965986394544`, `+0.03333333333333333`, `+0.0`, `+0.029462309935361475`, and `-0.06698803191489361`.
 - Conservative 30B final-vs-original fact: final `iter0010110` deltas vs original Qwen3-30B-A3B-Instruct-2507 are IFBench `+0.02040816326530609`, AIME25 `-0.13333333333333333`, HMMT `-6.666666666666667`, WMT24++ `+0.3214833850773573`, and MMLU-Pro `+0.010305851063829786`.
+- Qwen3-30B-A3B official-score debug fact: Session 32 found the current task071 original/SFT/final 30B MMLU-Pro, AIME25, and HMMT numbers are regression-harness scores, not Qwen official-comparable benchmark scores. MMLU-Pro used completions with `max_gen_toks=32` despite a step-by-step prompt and produced `12030/12032` invalid filtered responses for original Qwen; the same first MMLU sample reaches the correct `B` with `max_tokens=512` or chat answer-only prompting.
+- Qwen3-30B-A3B math eval debug fact: original AIME25 had `finish_reason.length=234/300` at `max_tokens=2048`; original HMMT had `finish_reason.length=28/30` and `no_answer=93.33333333333333`. Qwen official guidance recommends enough output length and standardized final-answer formats, so corrected Qwen-style eval needs larger generation caps plus parser-aligned prompts before rerunning full comparisons.
