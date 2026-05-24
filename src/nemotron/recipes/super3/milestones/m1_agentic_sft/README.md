@@ -72,6 +72,7 @@ and writes:
 ```text
 <output-dir>/
 ├── agentic_sft_v0_train.jsonl
+├── agentic_sft_v0_math_final_answer_train.jsonl
 ├── agentic_sft_v0_val_shadow.jsonl
 ├── data_blend_agentic_sft_v0.json
 ├── manifest.json
@@ -89,7 +90,15 @@ and writes:
 | `general_tool_calling` | User/tool schema prompt, assistant `tool_calls` (multi-turn trajectories propagate `tool_call_id` so `tool` turns pair with the originating call) |
 | `structured_outputs_json` | User JSON-mode prompt with schema in the system message, assistant emits the reference JSON object |
 | `tool_call_repair_negative` | User sees a malformed or hallucinated tool-use artifact, assistant emits a repair message plus corrected `tool_calls` |
-| `math_reasoning_numeric` | User math prompt, assistant emits the normalized numeric answer (GSM8K `####` verifier marker is stripped from any `reference_solution` fallback) |
+| `math_reasoning_numeric` | User math prompt, assistant preserves the reference solution, strips GSM8K `####` verifier markers, and appends `Final answer: \boxed{...}` when the reference lacks a boxed final answer |
+| `math_competition_numeric` | User competition-math prompt, assistant preserves the reference solution and keeps or appends parser-readable `\boxed{...}` final-answer supervision |
+
+Numeric math rows are also duplicated into
+`agentic_sft_v0_math_final_answer_train.jsonl`. The generated
+`data_blend_agentic_sft_v0.json` includes that sidecar as a separate dataset
+with weight `1.0`, in addition to the base train JSONL weight `1.0`, so
+`math_reasoning_numeric` and `math_competition_numeric` receive an effective
+2x exposure for boxed final-answer supervision during packed SFT data prep.
 
 ## Difficulty signal (optional)
 

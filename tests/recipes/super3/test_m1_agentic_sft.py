@@ -12,6 +12,9 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     DIFFICULTY_TRIVIAL,
     DIFFICULTY_UNKNOWN,
     M1_USE_BY_ENV,
+    MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
+    MATH_FINAL_ANSWER_SIDECAR_NAME,
+    MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
@@ -63,10 +66,12 @@ def test_convert_reasoning_record_preserves_reference_solution_without_gsm8k_mar
     content = converted["messages"][-1]["content"]
     assert "Work it out." in content
     assert "####" not in content
-    assert content.endswith("42")
+    assert content.endswith(r"Final answer: \boxed{42}")
     assert USED_IN_TAG in converted["used_in"]
     assert converted["metadata"]["m0_environment"] == "math_reasoning_numeric"
     assert converted["metadata"]["m1_stage"] == "Agentic SFT v0"
+    assert converted["metadata"]["final_answer_supervision"]["format"] == "boxed_final_line"
+    assert converted["metadata"]["final_answer_supervision"]["effective_weight"] == MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT
 
 
 def test_convert_reasoning_record_strips_gsm8k_marker_when_falling_back() -> None:
@@ -92,7 +97,25 @@ def test_convert_reasoning_record_appends_missing_expected_answer() -> None:
     converted = convert_m0_record(record, split="train")
 
     content = converted["messages"][-1]["content"]
-    assert content == "Reason through the problem.\n\nFinal answer: 42"
+    assert content == r"Reason through the problem." "\n\n" r"Final answer: \boxed{42}"
+
+
+def test_convert_reasoning_record_boxes_answer_when_no_reference_solution() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
+
+
+def test_convert_reasoning_record_does_not_double_box_expected_answer() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = r"\boxed{42}"
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -329,6 +352,18 @@ def test_build_blend_points_to_train_jsonl() -> None:
 
     assert blend["datasets"][0]["name"] == "m1-agentic-sft-v0-from-m0"
     assert blend["datasets"][0]["path"] == "/tmp/train.jsonl"
+    assert len(blend["datasets"]) == 1
+
+
+def test_build_blend_can_add_math_final_answer_sidecar() -> None:
+    blend = build_blend(
+        "/tmp/train.jsonl",
+        math_final_answer_train_path="/tmp/math-final-answer.jsonl",
+    )
+
+    assert blend["datasets"][1]["name"] == MATH_FINAL_ANSWER_SIDECAR_NAME
+    assert blend["datasets"][1]["path"] == "/tmp/math-final-answer.jsonl"
+    assert blend["datasets"][1]["weight"] == MATH_FINAL_ANSWER_SIDECAR_WEIGHT
 
 
 def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
@@ -336,6 +371,7 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     env_dir = m0_root / "math_reasoning_numeric"
     env_dir.mkdir(parents=True)
     record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
     record["extra_env_info"]["reference_solution"] = "#### 42"
     for split in ("train", "val"):
         with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
@@ -355,8 +391,24 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     assert manifest["counts"]["train"] == {"math_reasoning_numeric": 1}
     assert manifest["counts"]["val_shadow"] == {"math_reasoning_numeric": 1}
     assert (Args.output_dir / "agentic_sft_v0_train.jsonl").exists()
+    assert (Args.output_dir / "agentic_sft_v0_math_final_answer_train.jsonl").exists()
     assert (Args.output_dir / "agentic_sft_v0_val_shadow.jsonl").exists()
     assert (Args.output_dir / "data_blend_agentic_sft_v0.json").exists()
+    math_sidecar = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_final_answer_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert len(math_sidecar) == 1
+    assert math_sidecar[0]["messages"][-1]["content"].endswith(r"Final answer: \boxed{42}")
+    blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
+    assert [dataset["name"] for dataset in blend["datasets"]] == [
+        "m1-agentic-sft-v0-from-m0",
+        MATH_FINAL_ANSWER_SIDECAR_NAME,
+    ]
+    assert manifest["math_final_answer_supervision"]["train_rows"] == 1
+    assert manifest["math_final_answer_supervision"]["sidecar_in_blend"] is True
     # No M0 baseline supplied → every row falls into the unknown bucket.
     assert manifest["difficulty_buckets"]["train"] == {"unknown": 1}
     assert manifest["difficulty_buckets"]["val_shadow"] == {"unknown": 1}
@@ -1369,6 +1421,10 @@ def test_convert_competition_math_routes_through_reasoning_builder() -> None:
 
     assert converted["messages"][-1] == {"role": "assistant", "content": "Steps... \\boxed{42}"}
     assert converted["metadata"]["m1_use"] == ["reasoning answer format", "competition math"]
+    assert (
+        converted["metadata"]["final_answer_supervision"]["sidecar_blend_weight"]
+        == MATH_FINAL_ANSWER_SIDECAR_WEIGHT
+    )
 
 
 def test_convert_multi_turn_tool_use_routes_through_trajectory_builder() -> None:
