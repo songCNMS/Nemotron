@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Notes
 
@@ -114,3 +114,4 @@
 - Qwen3-30B-A3B corrected same-protocol comparison fact: Session 35 ran the same full MMLU-Pro chat JSON protocol on `iter0009119` and conservative `iter0010110`; corrected accuracies are original `0.561751994680851`, SFT `iter0009119` `0.5339926861702128`, and conservative final `0.527593085106383`. All three runs have parsed rate `1.0` and stop finish rate `1.0`; SFT old invalid rate is `0.8833942819148937`, conservative old invalid rate is `0.9834607712765957`.
 - Qwen3-30B-A3B math artifact audit fact: Session 36 found original AIME25 uses a chat endpoint but `234/300` responses finish by length at `max_tokens=2048`; only `76/300` rows contain boxed final answers, and all `50` correct rows contain boxed answers. Original HMMT has `28/30` length finishes, only `2` parsed predicted answers, and `2` length-truncated rows that contain the expected answer text but have `predicted_answer=null`.
 - Qwen3-30B-A3B corrected math probe fact: Session 37 served original Qwen3-30B-A3B with SGLang `context_length=16384` and probed 3 AIME prompts plus 3 HMMT entries across `original`, `concise_boxed`, and `answer_only` prompts with `max_tokens=2048/4096/8192`. On the AIME slice, `answer_only` was `3/3` parsed even at 2048 while the original prompt needed 8192 for `3/3` parsed. On the HMMT slice, the original prompt reached `3/3` parsed at 4096/8192 with `2/3` correct; concise boxed reached `3/3` parsed at 8192 with `2/3` correct. Probe artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37`.
+- Qwen3-30B-A3B corrected math full comparison fact: Session 38 added `m1_corrected_math_comparison.yaml` and ran full AIME/HMMT with original prompts, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and 16k SGLang context. Corrected AIME exact-normalized accuracies are original `0.5166666666666667`, iter0009119 `0.0`, conservative iter0010110 `0.03333333333333333`; parsed rates are `0.6133333333333333`, `0.03333333333333333`, and `0.9933333333333333`. Corrected HMMT exact-normalized correct percents are original `26.666666666666668`, iter0009119 `0.0`, conservative iter0010110 `6.666666666666667`; parsed rates are `0.5666666666666667`, `0.03333333333333333`, and `1.0`. Full artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_*_session38`.

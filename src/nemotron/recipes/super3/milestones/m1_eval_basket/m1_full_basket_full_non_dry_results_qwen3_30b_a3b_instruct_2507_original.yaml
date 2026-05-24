@@ -172,6 +172,38 @@ summary:
         reaches 100% with answer-only prompts at 2048 tokens or the original
         prompt at 8192 tokens; HMMT parseability reaches 100% for the original
         prompt at 4096/8192 and for the concise boxed prompt at 8192.
+    corrected_math_full:
+      checked_in_session: 38
+      run_id: qwen3_30b_a3b_original_corrected_math_full
+      config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-corrected-math-full
+      endpoint_max_model_len: 16384
+      prompt_variant: original
+      sampling: temperature=0.0, top_p=1e-5
+      aime25:
+        rows: 300
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.5166666666666667
+        parsed_rate: 0.6133333333333333
+        correct_rows: 155
+        finish_reason_counts:
+          stop: 173
+          length: 127
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/results.jsonl
+      hmmt:
+        rows: 30
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.26666666666666666
+        exact_normalized_correct_percent: 26.666666666666668
+        parsed_rate: 0.5666666666666667
+        correct_rows: 8
+        finish_reason_counts:
+          stop: 14
+          length: 16
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/results.jsonl
   comparison_direction: original_minus_qwen3_30b_a3b_sft_iter0009119
   primary_metric_comparison:
   - benchmark_id: ifbench

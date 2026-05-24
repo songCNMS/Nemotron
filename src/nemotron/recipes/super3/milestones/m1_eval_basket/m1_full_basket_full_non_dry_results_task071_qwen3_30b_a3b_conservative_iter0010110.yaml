@@ -104,6 +104,63 @@ summary:
       qwen3_30b_a3b_sft_iter0009119_minus_original: -0.027759308510638236
       conservative_iter0010110_minus_original: -0.03415890957446799
       conservative_iter0010110_minus_iter0009119: -0.006399601063829752
+    corrected_math_full:
+      checked_in_session: 38
+      run_id: qwen3_30b_a3b_conservative_iter0010110_corrected_math_full
+      config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+      report: workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md
+      endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf-corrected-math-full
+      endpoint_max_model_len: 16384
+      prompt_variant: original
+      sampling: temperature=0.0, top_p=1e-5
+      aime25:
+        rows: 300
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.03333333333333333
+        parsed_rate: 0.9933333333333333
+        correct_rows: 10
+        finish_reason_counts:
+          stop: 298
+          length: 2
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_conservative_iter0010110_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_conservative_iter0010110_session38/results.jsonl
+      hmmt:
+        rows: 30
+        max_tokens: 8192
+        exact_normalized_accuracy: 0.06666666666666667
+        exact_normalized_correct_percent: 6.666666666666667
+        parsed_rate: 1.0
+        correct_rows: 2
+        finish_reason_counts:
+          stop: 30
+        summary_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_conservative_iter0010110_session38/summary.json
+        raw_results_artifact: /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_conservative_iter0010110_session38/results.jsonl
+    corrected_math_same_protocol_comparison:
+      checked_in_session: 38
+      metric: exact_normalized_accuracy
+      parser_metric: boxed_answer_parsed_rate
+      sample_scope: AIME25 30 problems x10 repeats; HMMT February 2025 30 entries
+      prompting: original prompts, max_tokens=8192, temperature=0.0, top_p=1e-5
+      aime25:
+        original: 0.5166666666666667
+        qwen3_30b_a3b_sft_iter0009119: 0.0
+        conservative_iter0010110: 0.03333333333333333
+        qwen3_30b_a3b_sft_iter0009119_minus_original: -0.5166666666666667
+        conservative_iter0010110_minus_original: -0.48333333333333334
+        conservative_iter0010110_minus_iter0009119: 0.03333333333333333
+        parsed_rate_original: 0.6133333333333333
+        parsed_rate_iter0009119: 0.03333333333333333
+        parsed_rate_conservative_iter0010110: 0.9933333333333333
+      hmmt:
+        original_exact_normalized_correct_percent: 26.666666666666668
+        qwen3_30b_a3b_sft_iter0009119_exact_normalized_correct_percent: 0.0
+        conservative_iter0010110_exact_normalized_correct_percent: 6.666666666666667
+        qwen3_30b_a3b_sft_iter0009119_minus_original_percent: -26.666666666666668
+        conservative_iter0010110_minus_original_percent: -20.0
+        conservative_iter0010110_minus_iter0009119_percent: 6.666666666666667
+        parsed_rate_original: 0.5666666666666667
+        parsed_rate_iter0009119: 0.03333333333333333
+        parsed_rate_conservative_iter0010110: 1.0
   comparison_direction: conservative_iter0010110_minus_baselines
   primary_metric_comparison:
   - benchmark_id: ifbench

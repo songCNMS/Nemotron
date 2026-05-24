@@ -171,6 +171,10 @@ def normalize_evaluator_launcher_config(config: DictConfig) -> None:
         with open_dict(config.execution):
             config.execution.mode = "sequential"
 
+    if "corrected_math" in config:
+        with open_dict(config):
+            del config["corrected_math"]
+
 
 def _execute_eval(cfg: RecipeConfig):
     """Execute evaluation with nemo-evaluator-launcher.

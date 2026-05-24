@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Session 1
 
@@ -408,3 +408,14 @@
 - 结论更新：task071 math 分数仍应作为 regression-harness 记录；corrected full math eval 需要同时记录 parser coverage 和 accuracy，并使用足够输出 budget 与 benchmark-consistent final-answer contract。
 - 本地 artifacts：`/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/summary.json` 与 `results.jsonl`；新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_math_probe_session37.md`，并将摘要登记到 30B original manifest 的 `official_comparability.corrected_math_probe`。
 - 资源清理：probe 完成后停止 NemTron `task071_qwen30b_original_math_probe_sglang`，8 张 H200 回到空闲。
+
+## Session 38
+
+- 按用户要求修改 math eval config 并重跑 full comparison；新增 `src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml`，记录 AIME/HMMT corrected protocol：OpenAI chat endpoint、16k served context、original benchmark prompts、AIME/HMMT 均 `max_tokens=8192`、`temperature=0.0`、`top_p=1e-5`、parser coverage 单独统计。
+- 新增 full runner `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_math_full_eval.py`，从原始 AIME score cache 提取 300 rows/正确答案，从 HMMT `output.jsonl` 提取 30 entries/正确答案，输出 exact-normalized accuracy、boxed parsed rate、finish reasons、raw JSONL 和 summary JSON。
+- 在 NemTron 顺序启动三次 16k SGLang endpoint（均为 8 H200、`tp=4`、`dp=2`、port 30000）：original `qwen3-30b-a3b-instruct-2507-original-corrected-math-full`、SFT `task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf-corrected-math-full`、conservative `task071-qwen3-30b-a3b-agentic-sft-conservative-iter0010110-hf-corrected-math-full`。
+- Original corrected full：AIME `300` rows，accuracy `0.5166666666666667`、parsed rate `0.6133333333333333`、finish `stop=173/length=127`；HMMT 先用 4096 发现仍 length-dominated 后改为 8192，最终 exact-normalized correct percent `26.666666666666668`、parsed rate `0.5666666666666667`、finish `stop=14/length=16`。
+- SFT iter0009119 corrected full：AIME accuracy `0.0`、parsed rate `0.03333333333333333`、finish `stop=300`；HMMT exact-normalized correct percent `0.0`、parsed rate `0.03333333333333333`、finish `stop=30`。该 checkpoint 多数输出极短且不满足 boxed final-answer contract。
+- Conservative iter0010110 corrected full：AIME accuracy `0.03333333333333333`、parsed rate `0.9933333333333333`、finish `stop=298/length=2`；HMMT exact-normalized correct percent `6.666666666666667`、parsed rate `1.0`、finish `stop=30`。该 checkpoint 基本恢复 final-answer 格式，但 math correctness 仍明显低于 original。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/eval_logic_corrected_math_full_session38.md`；更新 original、iter0009119、conservative 三个 30B manifest 的 `official_comparability.corrected_math_full` 字段，并在 conservative manifest 中登记三模型 same-protocol comparison。
+- 资源清理：三模型评测完成后停止 NemTron `task071_corrected_math_sglang`，8 张 H200 均回到空闲。
