@@ -121,7 +121,12 @@ policy:
   model_name: "/path/to/model"
   tokenizer:
     name: ${policy.model_name}
-    chat_template_kwargs: null
+    # Qwen-chat contract shared with vLLM serving below. Keep this in
+    # lockstep with
+    # policy.generation.vllm_cfg.http_server_serving_chat_kwargs.chat_template_kwargs.
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
   hf_config_overrides: {}
   train_global_batch_size: 1024
   train_micro_batch_size: 1
@@ -256,7 +261,7 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    # Stop at the super3 chat-template assistant-turn delimiter so vLLM
+    # Stop at the Qwen chat-template assistant-turn delimiter so vLLM
     # doesn't burn budget past `<|im_end|>`. Multi-turn tool loops
     # terminate one turn here and the runtime iterates for the next
     # turn. See docs/chat-template-consistency-review.md PR A.
@@ -279,7 +284,6 @@ policy:
       vllm_metrics_logger_interval: 0.5
       expose_http_server: true
       skip_tokenizer_init: false
-      enable_thinking: true
       http_server_serving_chat_kwargs:
         enable_auto_tools: true
         tool_parser: qwen3_coder

@@ -117,7 +117,12 @@ policy:
   model_name: "/path/to/model"
   tokenizer:
     name: ${policy.model_name}
-    chat_template_kwargs: null
+    # Qwen-chat contract shared with vLLM serving below. Keep this in
+    # lockstep with
+    # policy.generation.vllm_cfg.http_server_serving_chat_kwargs.chat_template_kwargs.
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
   hf_config_overrides: {}
   train_global_batch_size: 2048
   train_micro_batch_size: 1
@@ -252,7 +257,7 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    # Stop at the super3 chat-template assistant-turn delimiter so vLLM
+    # Stop at the Qwen chat-template assistant-turn delimiter so vLLM
     # doesn't burn budget past `<|im_end|>`. RLHF GenRM comparison only
     # scores a single assistant turn, so terminating there is required.
     # See docs/chat-template-consistency-review.md PR A.
@@ -279,8 +284,9 @@ policy:
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
-        # Pin super3 chat-template kwargs explicitly so every RL stage
-        # uses the same contract. enable_thinking=false matches what
+        # Pin Qwen chat-template kwargs explicitly so every RL stage
+        # and tokenizer preprocessing path uses the same contract.
+        # enable_thinking=false matches what
         # SFT actually trains against (auto-injected `<think></think>`
         # empty prefix; CoT lives in content body, not inside
         # `<think>...</think>` blocks). PR D fix from
