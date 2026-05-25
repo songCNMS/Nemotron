@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
 
 ## Session 1
 
@@ -561,3 +561,14 @@
 - 训练健康判断：validation 从 `2500` 到 `3000` 继续改善、recent train loss mean 下降、skipped/nan 仍为 `0/0`，因此支持继续跑到 `3500/4000` eval/save 点再判断是否存在 v1 类似的中段回升。
 - 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
 - 记录报告 `qwen_chat_aligned_metrics_session53.md`，包含 2500/3000 validation、v1/conservative 对比和继续训练判断。
+
+## Session 54
+
+- 按用户要求返回 metrics 曲线图；由于远端训练已接近 `3500` eval 点，等待并确认 `validation loss at iteration 3500` 写入日志后同步最新 `train.log`。
+- 刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves.png`、`metric_curves_session54_iter3500.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json` 和 v1 comparison markdown。
+- 本轮图表解析到 train iter `3500/8740`，progress `40.05%`，latest train lm loss `0.4007806`，latest lr `6.977427e-07`，skipped/nan `0/0`。
+- Validation@3500 loss/PPL 为 `0.3879959/1.474024`，相比 best validation@3000 `0.3531853/1.423595` 明显回升；与旧 v1 同点 `0.3861476/1.471302` 相比 loss 高 `0.0018483`。
+- 飞书图片发送成功：image message id `om_x100b6e7161ba14a4b4bf4743bbc48dc`，follow-up text message id `om_x100b6e71615994b0b2685ab8dcfcd75`。
+- 结束前远端 spot-check：`3500` checkpoint save 已开始，`latest_checkpointed_iteration.txt` 仍显示 `3000`，最近训练行 skipped/nan 仍为 `0/0`。
+- 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
+- 记录报告 `qwen_chat_aligned_metrics_session54.md`，包含 3500 点曲线返回、飞书 message id 和 validation 回升判断。

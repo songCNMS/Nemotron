@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
 
 ## Notes
 
@@ -141,3 +141,5 @@
 - Qwen chat-template retrain Session 52 comparison fact: versus stopped Super3-template v1, qwen_chat_v2 is lower at iter `1000` and `1500`, nearly tied at iter `2000` (`+0.0005155` loss); versus conservative baseline, qwen_chat_v2 is lower at iter `1000/1500/2000`, but that comparison is only directional because the baseline used a different data blend and supervision recipe.
 - Qwen chat-template retrain Session 53 metric fact: refreshed logs reached train iter `3350/8740`, checkpoint marker `3000`, skipped/nan `0/0`; validation points added iter `2500` `0.3618866/1.436036` and iter `3000` `0.3531853/1.423595`, with iter `3000` best so far.
 - Qwen chat-template retrain Session 53 decision fact: validation improved from iter `2500` to `3000` and qwen_chat_v2 is slightly better than stopped Super3-template v1 at iter `3000` (`-0.0009298` loss), so continue through `3500/4000` to check whether the mid-run validation rebound seen in v1 appears again.
+- Qwen chat-template retrain Session 54 metric fact: refreshed curve through train iter `3500/8740`; validation@3500 is `0.3879959/1.474024`, best remains iter `3000` `0.3531853/1.423595`, skipped/nan `0/0`, and `3500` checkpoint save had started while latest checkpoint marker still showed `3000`.
+- Feishu return fact: Session 54 sent `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session54_iter3500.png` to the supervisor chat; image message id `om_x100b6e7161ba14a4b4bf4743bbc48dc`, text message id `om_x100b6e71615994b0b2685ab8dcfcd75`.
