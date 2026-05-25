@@ -524,5 +524,5 @@
 - 复用 Session 40 生成的全量 M1 JSONL blend，重新执行 Qwen tokenizer-template packing：`chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`；新 artifact 总 sequences `1,850,191`、tokens `1,144,606,843`、train rows `139,840`、valid rows `2,576`。
 - 新 packed artifact 本地和 NemTron 均通过 `validate_qwen_packed_sft_chat_contract`；重新生成 training manifest，`train_iters=8740`。
 - 同步最新 PR branch 代码和 6.7GB 新 run artifacts 到 NemTron `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`。
-- 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`；训练进入 loop，最新观察到 iter `80/8740`，lm loss `0.6876534`，step time 约 `2.34s`，8 张 H200 显存约 `81-88GB`/卡，skipped/nan `0/0`。
+- 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`；训练进入 loop，最新观察到 iter `110/8740`，lm loss `0.4872709`，step time 约 `2.95s`，8 张 H200 显存约 `81-88GB`/卡，skipped/nan `0/0`。
 - 记录报告 `qwen_chat_aligned_retrain_session50.md`，包含旧 Super3-template packing 证据、新 Qwen-template packed data、remote run root 与早期训练健康状态。

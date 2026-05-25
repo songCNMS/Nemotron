@@ -32,7 +32,7 @@ Contract guard passed locally and on NemTron:
 - GPUs: `0,1,2,3,4,5,6,7`
 - TP/PP/EP entrypoint: Qwen3 30B-A3B local recipe
 - LR settings: `optimizer.lr=1e-6`, `optimizer.min_lr=1e-7`, warmup `100`, cosine decay over `8740`
-- Latest observed: iter `80/8740`, lm loss `0.6876534`, step time `2.336s`, skipped iterations `0`, nan iterations `0`
+- Latest observed: iter `110/8740`, lm loss `0.4872709`, step time `2.948s`, skipped iterations `0`, nan iterations `0`
 - GPU memory at startup: about `81-88GB` per H200
 
 ## Immediate Monitoring Target

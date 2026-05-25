@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
 | Session | 50 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Regenerated math-final-answer 30B packed SFT data with Qwen tokenizer chat template, validated the new contract locally and on NemTron, synced artifacts, and launched `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`; latest observed iter 80/8740 with skipped/nan 0/0. |
+| Latest | Regenerated math-final-answer 30B packed SFT data with Qwen tokenizer chat template, validated the new contract locally and on NemTron, synced artifacts, and launched `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`; latest observed iter 110/8740 with skipped/nan 0/0. |
