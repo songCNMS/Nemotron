@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Notes
 
@@ -133,3 +133,4 @@
 - Corrected comparison Session 48 fact: `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/corrected_eval_comparison_session48.md` compares original Session 47 corrected metrics with existing corrected SFT metrics from Sessions 35/38; original remains ahead of SFT `iter0009119` and conservative `iter0010110` on corrected MMLU-Pro, AIME25, and HMMT.
 - Corrected comparison Session 48 delta fact: SFT `iter0009119` deltas vs original are MMLU-Pro `-0.028008643617021267`, AIME25 `-0.5333333333333333`, HMMT exact percent `-43.333333333333336`; conservative `iter0010110` deltas vs original are MMLU-Pro `-0.03440824468085102`, AIME25 `-0.5`, HMMT exact percent `-36.66666666666667`.
 - Current checkpoint eval gap fact: math-final-answer v1 stopped at `iter_0005000`, but it is not in the Session 48 comparison because it has not been exported to HF and served for corrected eval.
+- Qwen chat-template train-pipeline fact: Qwen M1 SFT packed artifacts must record `chat_template=tokenizer` and `chat_template_kwargs` with `enable_thinking=false` plus `truncate_history_thinking=false`; both Qwen train entrypoints now validate this metadata before building the Megatron recipe, and generated scale-up local data-prep scripts run the same guard before planning remote training.

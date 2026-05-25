@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Session 1
 
@@ -508,3 +508,11 @@
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/corrected_eval_comparison_session48.md`，对比 original、SFT `iter0009119`、conservative `iter0010110` 的 corrected MMLU-Pro、AIME25、HMMT metrics 与 parser coverage。
 - Comparison 结果：original Qwen3-30B-A3B 为 MMLU-Pro `0.562001329787234`、AIME25 `0.5333333333333333`、HMMT exact percent `43.333333333333336`；SFT `iter0009119` 相对 original 分别为 `-0.028008643617021267`、`-0.5333333333333333`、`-43.333333333333336`；conservative `iter0010110` 相对 original 分别为 `-0.03440824468085102`、`-0.5`、`-36.66666666666667`。
 - 结论：conservative checkpoint 显著恢复 AIME/HMMT parser coverage，但 corrected correctness 仍明显低于 original；当前 math-final-answer v1 `iter_0005000` 需要先 export/register 为 HF，再按 same corrected protocol 评测。
+
+## Session 49
+
+- 按用户要求基于 debug 结论重新整理 train pipeline，使 Qwen M1 SFT 明确对齐 Qwen tokenizer chat template，而不是仅依赖 planner 注释或人工 override。
+- 新增 `qwen_chat_contract.py`：训练前读取 packed SFT `metadata.json`，强制 `chat_template=tokenizer`、`chat_template_kwargs.enable_thinking=false`、`chat_template_kwargs.truncate_history_thinking=false`，并校验 packed tokenizer 与训练 tokenizer 一致；支持 `file://`、HF URL、`hf://models/` 三类 tokenizer URI。
+- 扩展 `SFTDataArtifact` 与 `stage1_sft/data_prep.py`，把实际 packing 使用的 `chat_template` 和 `chat_template_kwargs` 写入 artifact metadata，避免旧数据无法被审计。
+- 在 `qwen_local_train.py` 与 `qwen3_30b_a3b_local_train.py` recipe builder 入口调用 Qwen contract guard；在 `plan_qwen_scaleup_run.py` 生成的 local data prep 脚本中加入同一 guard，使 local data prep -> planning -> remote training 链路提前失败而不是训练后才发现模板错配。
+- 新增/更新测试覆盖 artifact metadata、Qwen contract accept/reject、HF tokenizer URI normalize、scale-up script validation wiring；验证结果：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `73 passed, 1 skipped`；`ruff check ...` passed；`compileall` passed；`git diff --check` passed。

@@ -290,6 +290,17 @@ python src/nemotron/recipes/super3/stage1_sft/data_prep.py \\
   execution_mode=batch \\
   observability.wandb_log_pipeline_stats=false
 
+python - <<'PY'
+from pathlib import Path
+
+from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+validate_qwen_packed_sft_chat_contract(
+    Path({json.dumps(str(Path(paths["packed_dir"]) / "splits"))}),
+    tokenizer_model={json.dumps(str(packing["tokenizer_model"]))},
+)
+PY
+
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py \\
   --packed-sft-dir {_q(Path(paths["packed_dir"]) / "splits")} \\
   --pretrained-checkpoint {_q(training["pretrained_checkpoint"])} \\

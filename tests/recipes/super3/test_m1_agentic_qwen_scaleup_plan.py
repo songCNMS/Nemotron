@@ -75,6 +75,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "chat_template=tokenizer" in local_script
     assert "chat_template_kwargs.enable_thinking=false" in local_script
     assert "chat_template_kwargs.truncate_history_thinking=false" in local_script
+    assert "validate_qwen_packed_sft_chat_contract" in local_script
     assert "chat_template=super3" not in local_script
     assert "pack_size=512" in local_script
     assert manifest["packing"]["chat_template"] == "tokenizer"

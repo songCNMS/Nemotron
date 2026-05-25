@@ -874,6 +874,178 @@ def test_qwen_sft_data_prep_contract_can_use_tokenizer_template() -> None:
     assert tokenizer.chat_template == "qwen tokenizer template"
 
 
+def test_sft_data_artifact_records_chat_template_contract(tmp_path) -> None:
+    from nemotron.data_prep.blend import DataBlend, Dataset
+    from nemotron.data_prep.config import FormatResult
+    from nemotron.kit.artifacts.sft_data import SFTDataArtifact
+
+    output_dir = tmp_path / "packed_qwen"
+    (output_dir / "splits").mkdir(parents=True)
+    format_result = FormatResult(
+        run_hash="abc123",
+        run_dir=str(output_dir / "runs" / "abc123"),
+        output_dir=output_dir,
+        num_shards=1,
+        data_paths=[],
+        dataset_stats={},
+        from_cache=False,
+        total_tokens=32,
+        total_sequences=4,
+    )
+    blend = DataBlend.from_datasets(
+        Dataset(name="unit", path=str(tmp_path / "unit.jsonl"), split="train", text_field="messages")
+    )
+
+    artifact = SFTDataArtifact.from_result(
+        format_result=format_result,
+        blend=blend,
+        tokenizer_model=str(tmp_path / "qwen-tokenizer"),
+        blend_json_path=tmp_path / "blend.json",
+        pack_size=4096,
+        chat_template="tokenizer",
+        chat_template_kwargs={
+            "enable_thinking": False,
+            "truncate_history_thinking": False,
+        },
+    )
+
+    assert artifact.path == (output_dir / "splits").resolve()
+    assert artifact.chat_template == "tokenizer"
+    assert artifact.chat_template_kwargs == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+
+
+def test_qwen_packed_sft_chat_contract_accepts_tokenizer_template(tmp_path) -> None:
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    tokenizer_dir = tmp_path / "qwen"
+    tokenizer_dir.mkdir()
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": f"file://{tokenizer_dir}",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model=str(tokenizer_dir)) == (
+        splits_dir / "metadata.json"
+    )
+
+
+def test_qwen_packed_sft_chat_contract_accepts_hf_tokenizer_uri(tmp_path) -> None:
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "https://huggingface.co/Qwen/Qwen3-4B",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3-4B")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_super3_template(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "hf://models/Qwen/Qwen3",
+                "chat_template": "super3",
+                "chat_template_kwargs": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="chat_template=tokenizer"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_enabled_thinking(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "hf://models/Qwen/Qwen3",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": True,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="enable_thinking"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_tokenizer_mismatch(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    packed_tokenizer = tmp_path / "qwen-packed"
+    train_tokenizer = tmp_path / "qwen-train"
+    packed_tokenizer.mkdir()
+    train_tokenizer.mkdir()
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": f"file://{packed_tokenizer}",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="tokenizer mismatch"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model=str(train_tokenizer))
+
+
 def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:
     """Regression for review finding P1 #14: the role-based mask contract.
 
