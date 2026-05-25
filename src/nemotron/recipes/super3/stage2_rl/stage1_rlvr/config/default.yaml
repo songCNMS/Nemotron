@@ -254,7 +254,12 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    # Stop at the super3 chat-template assistant-turn delimiter so vLLM
+    # doesn't burn budget past `<|im_end|>`. task071 math-eval audit
+    # (session 36) saw 234/300 AIME generations hit the 2048-token cap
+    # without emitting `\boxed{}` largely because nothing terminated
+    # generation. See docs/chat-template-consistency-review.md PR A.
+    stop_strings: ["<|im_end|>"]
     vllm_cfg:
       async_engine: true
       precision: ${policy.precision}
