@@ -218,6 +218,28 @@ def test_dispatch_validates_missing_and_duplicate_policies(tmp_path: Path) -> No
         EnvJudgeRoutingPolicy(env_id="safety_judge", judge_refs=("safety_primary", "safety_primary"))
 
 
+def test_dispatch_accepts_generator_routing_policies(tmp_path: Path) -> None:
+    """Regression: `_routing_policies_by_env` previously iterated the
+    sequence twice (once via dict comprehension, once via `len(tuple(...))`
+    for the dedup check). If a caller passed a generator, the second
+    iteration drained to empty and the dedup check incorrectly raised
+    "must be unique by env_id". Fix: materialize once."""
+    store = LocalRolloutStore(tmp_path)
+    _write_rollout(store, prompt_id="safe-1", env_id="safety_judge", rollout_id="roll-safe")
+
+    def _generator():
+        yield EnvJudgeRoutingPolicy(env_id="safety_judge", judge_refs=("safety_primary",))
+
+    # Generator (single-pass) used to trigger spurious "must be unique"
+    # ValueError. With the fix it dispatches normally.
+    records = dispatch_judge_ensembles_for_rollouts(
+        store,
+        routing_policies=_generator(),
+    )
+    assert len(records) == 1
+    assert records[0].env_id == "safety_judge"
+
+
 def test_judge_ensemble_result_to_rollout_metrics_is_jsonable(tmp_path: Path) -> None:
     store = LocalRolloutStore(tmp_path)
     _write_rollout(store, prompt_id="safe-1", env_id="safety_judge", rollout_id="roll-safe")

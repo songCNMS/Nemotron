@@ -401,7 +401,12 @@ def build_routed_failure_repair_examples(
         )
 
     examples: list[AgenticSFTV1Example] = []
-    for _, _, _, _, record, candidate, _ in sorted(prepared):
+    # Sort by the first 4 elements only. Tuple element 5+ holds the raw
+    # record / candidate / route objects which don't define comparison;
+    # rollout_id at position 3 is unique in a well-formed LocalRolloutStore
+    # so the fallback never matters today, but an explicit slice avoids
+    # a confusing TypeError if a caller ever passes duplicate-id records.
+    for _, _, _, _, record, candidate, _ in sorted(prepared, key=lambda item: item[:4]):
         examples.append(
             build_failure_repair_example(
                 record,

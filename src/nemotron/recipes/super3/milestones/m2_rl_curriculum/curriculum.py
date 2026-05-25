@@ -914,10 +914,15 @@ def _freeze_unique_strings(values: Sequence[str], field_name: str) -> tuple[str,
 def _routing_policies_by_env(
     policies: Sequence[EnvJudgeRoutingPolicy],
 ) -> dict[str, EnvJudgeRoutingPolicy]:
-    if not policies:
+    # Materialize once: if `policies` is a generator, iterating it twice
+    # (dict comprehension + len()) drains the second pass and incorrectly
+    # raises "must be unique". Convert up front so the dedup check is
+    # always on the same materialized sequence.
+    policies_tuple = tuple(policies)
+    if not policies_tuple:
         raise ValueError("routing_policies must contain at least one policy")
-    by_env = {policy.env_id: policy for policy in policies}
-    if len(by_env) != len(tuple(policies)):
+    by_env = {policy.env_id: policy for policy in policies_tuple}
+    if len(by_env) != len(policies_tuple):
         raise ValueError("routing_policies must be unique by env_id")
     return by_env
 
