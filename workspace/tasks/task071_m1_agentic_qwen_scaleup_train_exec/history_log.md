@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Session 1
 
@@ -526,3 +526,14 @@
 - 同步最新 PR branch 代码和 6.7GB 新 run artifacts 到 NemTron `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`。
 - 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`；训练进入 loop，最新观察到 iter `110/8740`，lm loss `0.4872709`，step time 约 `2.95s`，8 张 H200 显存约 `81-88GB`/卡，skipped/nan `0/0`。
 - 记录报告 `qwen_chat_aligned_retrain_session50.md`，包含旧 Super3-template packing 证据、新 Qwen-template packed data、remote run root 与早期训练健康状态。
+
+## Session 51
+
+- 按“执行下一步”继续监控 `task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`；远端 tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 仍 active，checkpoint marker 为 `1000`。
+- 同步 NemTron 最新 `train.log` 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/train.log`，并新增可复用脚本 `plot_qwen_sft_metrics.py` 解析 Megatron train/validation 日志。
+- 生成 refreshed artifacts：`metric_curves.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`、`early_comparison_vs_task071_qwen30b_a3b_math_final_answer_v1.md`。
+- 本轮图表解析到 train iter `1280/8740`，progress `14.65%`，latest train lm loss `0.3881855`，recent-50 train loss mean `0.390078948`，latest lr `9.592108e-07`，skipped/nan `0/0`。
+- Validation 已过 `500` 与 `1000` eval/save 点：iter `500` loss/PPL `0.4614768/1.586415`，iter `1000` loss/PPL `0.3756810/1.455983`，latest validation 相比 previous validation 改善。
+- 与旧 Super3-template v1 早期对比：iter `500` 当前 loss 比 v1 高 `0.0001782`，iter `1000` 当前 loss 比 v1 低 `0.0006877`；早期曲线显示 Qwen-chat aligned packing 没有引入训练健康回归。
+- 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过。
+- 记录报告 `qwen_chat_aligned_metrics_session51.md`，包含图表路径、早期 validation 对比与继续监控点。
