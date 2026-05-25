@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=41 -->
+<!-- METADATA:SESSION=42 -->
 
 ## Session 1
 
@@ -447,3 +447,12 @@
 - 飞书发送成功：image message id `om_x100b6e0e59d32908b4c4be1fc0597e3`，follow-up text message id `om_x100b6e0e59f6488cb1292238c0e801d`。
 - 结束前复查远端训练仍在 tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` active，latest observed iter `1860/8774`，latest checkpoint marker `1500`，最近训练行 skipped/nan 仍为 `0/0`。
 - PR #164 保持 open 且 mergeStateStatus `CLEAN`，本轮仅补充任务状态记录并推送到现有分支。
+
+## Session 42
+
+- 按“进行下一步”继续监控 math-final-answer 30B retrain；远端训练已越过 `2000/2500` 计划观察点，tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` 仍 active。
+- 同步 NemTron 最新 train log 并刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/metric_curves.png`、`metric_curves_session42.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 本轮图表解析到 train iter `3850/8774`，progress `43.88%`，latest train lm loss `0.3580311`，recent-50 mean `0.380231`，skipped/nan `0/0`。
+- Validation 趋势：iter `2000` loss/PPL `0.3630795/1.437750`，iter `2500` `0.3616964/1.435763`，iter `3000` `0.3541151/1.424919` 为当前 best；iter `3500` 回升到 `0.3861476/1.471302`，说明最新 validation 点相对 best 明显回退，需以 `4000/4500` 点确认是否恢复。
+- 飞书发送成功：image message id `om_x100b6e0fc1700c88b4a0c6cb63dbd26`，follow-up text message id `om_x100b6e0fc12d64f4b3e50b6e4763d27`。
+- 结束前复查远端训练 latest observed iter `3920/8774`，latest checkpoint marker `3500`，最近训练行 skipped/nan 仍为 `0/0`。
