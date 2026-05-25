@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
 
 ## Session 1
 
@@ -456,3 +456,11 @@
 - Validation 趋势：iter `2000` loss/PPL `0.3630795/1.437750`，iter `2500` `0.3616964/1.435763`，iter `3000` `0.3541151/1.424919` 为当前 best；iter `3500` 回升到 `0.3861476/1.471302` 后，iter `4000` 恢复到 `0.3747286/1.454597`，但仍未回到当前 best。
 - 飞书发送成功：4000 点最终图 image message id `om_x100b6e0fe9882c8cc2de85b950cc03e`，follow-up text message id `om_x100b6e0fe9af7cb0b14a5b3d69882e1`；早前 3850 点临时图 image id `om_x100b6e0fc1700c88b4a0c6cb63dbd26`。
 - 结束前复查远端训练 tmux 仍 active，latest checkpoint marker `4000`，`iter_0004000` checkpoint 目录存在，最近训练行 skipped/nan 仍为 `0/0`。
+
+## Session 43
+
+- 按 supervisor sync instruction 执行主干同步：当前工作树干净，保留 PR #164 分支 `intern_nemontron_code_reading/task071_math_sidecar_data_session40`。
+- 执行 `git fetch origin main` 后，`origin/main` 从 `2ed4ad583375ef107e40a54bdb87c91fb6eabcc1` 更新到 `9456469509539648a5a2ab4e4b36a16fa46a95dd`。
+- 使用 fast-forward refspec 将本地 `main` 从 `2ed4ad583375ef107e40a54bdb87c91fb6eabcc1` 对齐到 `9456469509539648a5a2ab4e4b36a16fa46a95dd`；验证本地 `main` 与 `origin/main` 均包含 supervisor 要求 commit。
+- 未遇到 fast-forward blocker；同步后仍停留在 PR 分支，未直接 push `main`。
+- 顺带复查远端训练：tmux session active，latest observed iter `4500/8774`，checkpoint marker `4000`，validation@4500 loss/PPL `0.3830723/1.466784`，最近训练行 skipped/nan `0/0`。
