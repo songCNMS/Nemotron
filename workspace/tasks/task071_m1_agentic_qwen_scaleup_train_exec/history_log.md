@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Session 1
 
@@ -491,3 +491,13 @@
 - Fresh original Qwen scores：IFBench prompt-level strict accuracy `0.3197278911564626`；AIME25 local `aime_2025_nemo` score `0.16`；HMMT symbolic correct percent `6.666666666666667`、no-answer `90.0`；WMT24++ `xx->xx` BLEU `32.99304811154927`；MMLU-Pro legacy completion-route group exact match `0.00008311170212765957`。
 - 重要口径：本轮使用 task071 five full-selected regression harness；latest Qwen eval gate 仍将 legacy MMLU-Pro completions `max_gen_toks=32`、AIME/HMMT short-output parser-sensitive paths标记为非官方可比。已有 corrected reference 仍是 MMLU-Pro chat JSON full `0.561751994680851`、AIME corrected `0.5166666666666667`、HMMT corrected exact percent `26.666666666666668`。
 - 清理资源：停止 NemTron `task071_qwen30b_original_session46_sglang`，确认 8 张 H200 无 compute apps；关闭 `vpn:13000` tunnel。
+
+## Session 47
+
+- 按“执行下一步”基于 Session 46 fresh artifacts 执行 corrected Qwen eval path，重点覆盖 legacy regression harness 中已知 parser/truncation 问题最大的 MMLU-Pro、AIME25、HMMT。
+- 在 NemTron 重新启动 original `Qwen/Qwen3-30B-A3B-Instruct-2507` SGLang endpoint：tmux session `task071_qwen30b_original_session47_sglang`，model id `qwen3-30b-a3b-instruct-2507-original`，8 张 H200，`tp=4`、`dp=2`、`context_length=16384`，port `30000`；通过 `vpn:127.0.0.1:13000` 访问，chat smoke 返回 exact `ready`。
+- 将 corrected runners 同步到 `vpn:/tmp`，运行输出 root 为 `vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47`；输入使用 Session 46 的 legacy artifacts：MMLU-Pro sample JSONL、AIME `aime_2025_nemo/cache/cache.sqlite/cache.db`、HMMT `eval-results/hmmt_feb25/output.jsonl`。
+- Corrected MMLU-Pro full：`12032` rows，chat JSON answer-only prompt，`max_tokens=64`，accuracy `0.562001329787234`，parsed rate `1.0`，runtime `398.079s`；old same-row accuracy `0.00008311170212765957`，old invalid rate `0.9998337765957447`。
+- Corrected AIME25 full：`300` rows，original prompt，`max_tokens=8192`，exact-normalized accuracy `0.5333333333333333`，parsed rate `0.65`，correct rows `160`，finish reasons `stop=180`、`length=120`，old source-cache score mean `0.16`。
+- Corrected HMMT full：`30` rows，original prompt，`max_tokens=8192`，exact-normalized accuracy `0.43333333333333335` / correct percent `43.333333333333336`，parsed rate `0.6666666666666666`，correct rows `13`, finish reasons `stop=18`、`length=12`。
+- 清理资源：停止 NemTron `task071_qwen30b_original_session47_sglang`，确认 8 张 H200 无 compute apps；关闭 `vpn:13000` tunnel。

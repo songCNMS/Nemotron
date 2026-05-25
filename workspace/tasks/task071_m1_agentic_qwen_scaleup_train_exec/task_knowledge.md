@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Notes
 
@@ -126,3 +126,7 @@
 - Original Qwen3-30B-A3B fresh Session 46 full-selected result fact: raw artifacts are under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_latest_session46`; IFBench, AIME25, HMMT, WMT24++, and MMLU-Pro all completed with `docker_exit=0` between `2026-05-25T06:46:58Z` and `2026-05-25T08:06:26Z`.
 - Original Qwen3-30B-A3B fresh Session 46 score fact: IFBench prompt-level strict accuracy `0.3197278911564626`; AIME25 local `aime_2025_nemo` score `0.16`; HMMT symbolic correct percent `6.666666666666667` with no-answer `90.0`; WMT24++ `xx->xx` BLEU `32.99304811154927`; MMLU-Pro legacy completions group exact match `0.00008311170212765957`.
 - Original Qwen3-30B-A3B Session 46 cleanup fact: after the eval, the temporary SGLang tmux session `task071_qwen30b_original_session46_sglang` was stopped, H200 compute apps were empty, and the `vpn:13000` tunnel was closed.
+- Original Qwen3-30B-A3B corrected Session 47 eval fact: artifacts are under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47`; the endpoint was original Qwen served with SGLang `context_length=16384` and exposed as `vpn:127.0.0.1:13000`.
+- Corrected MMLU-Pro Session 47 fact: full chat JSON answer-only run over `12032` rows scored accuracy `0.562001329787234`, parsed rate `1.0`, and old same-row invalid rate `0.9998337765957447`; summary artifact is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47/mmlu_corrected_full/summary.json`.
+- Corrected math Session 47 fact: full original-prompt AIME/HMMT run with `max_tokens=8192` scored AIME exact-normalized accuracy `0.5333333333333333` with parsed rate `0.65` and finish `stop=180/length=120`; HMMT exact-normalized correct percent `43.333333333333336` with parsed rate `0.6666666666666666` and finish `stop=18/length=12`; summary artifact is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47/math_corrected_full/summary.json`.
+- Original Qwen3-30B-A3B Session 47 cleanup fact: after corrected evals, `task071_qwen30b_original_session47_sglang` was stopped, H200 compute apps were empty, and the `vpn:13000` tunnel was closed.
