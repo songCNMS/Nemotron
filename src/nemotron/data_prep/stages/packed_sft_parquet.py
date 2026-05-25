@@ -224,6 +224,7 @@ class PackedSftParquetStage(pipelines_v1.Stage[SftShardWorkItem, SftShardWorkIte
             algorithm=str(task.algorithm),
             dtype=np.dtype(task.dtype),
             chat_template=task.chat_template,
+            chat_template_kwargs=task.chat_template_kwargs,
             max_doc_tokens=task.max_doc_tokens,
             max_rows=task.max_rows,
             seed=task.seed,

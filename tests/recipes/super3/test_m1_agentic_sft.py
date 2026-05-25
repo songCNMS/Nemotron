@@ -693,6 +693,25 @@ def test_qwen_local_train_uses_env_var_when_set(monkeypatch, tmp_path) -> None:
     assert resolve_qwen_hf_model() == str(target)
 
 
+def test_qwen_local_train_uses_qwen_tokenizer_when_config_has_nemotron_fallback(tmp_path) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import (
+        NEMOTRON_SUPER_TOKENIZER_DEFAULT,
+        resolve_qwen_tokenizer_model,
+    )
+
+    qwen_model = str(tmp_path / "qwen3-4b")
+    cfg = omega_conf.create({"tokenizer": {"tokenizer_model": NEMOTRON_SUPER_TOKENIZER_DEFAULT}})
+
+    assert resolve_qwen_tokenizer_model(cfg, qwen_model) == qwen_model
+
+    explicit_tokenizer = str(tmp_path / "explicit-tokenizer")
+    cfg.tokenizer.tokenizer_model = explicit_tokenizer
+    assert resolve_qwen_tokenizer_model(cfg, qwen_model) == explicit_tokenizer
+
+
 def test_qwen30b_a3b_local_train_requires_env_var(monkeypatch) -> None:
     import pytest
 
@@ -720,6 +739,21 @@ def test_qwen30b_a3b_local_train_uses_env_var_when_set(monkeypatch, tmp_path) ->
     target.mkdir()
     monkeypatch.setenv(QWEN_MODEL_ENV_VAR, str(target))
     assert resolve_qwen_hf_model() == str(target)
+
+
+def test_qwen30b_a3b_local_train_uses_qwen_tokenizer_when_config_has_nemotron_fallback(tmp_path) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen3_30b_a3b_local_train import (
+        NEMOTRON_SUPER_TOKENIZER_DEFAULT,
+        resolve_qwen_tokenizer_model,
+    )
+
+    qwen_model = str(tmp_path / "qwen3-30b-a3b")
+    cfg = omega_conf.create({"tokenizer": {"tokenizer_model": NEMOTRON_SUPER_TOKENIZER_DEFAULT}})
+
+    assert resolve_qwen_tokenizer_model(cfg, qwen_model) == qwen_model
 
 
 def test_convert_m0_record_raises_on_empty_supervision_across_all_envs() -> None:
@@ -813,6 +847,31 @@ def test_tool_role_supervision_survives_to_chat_template_input() -> None:
             "loss_mask logic would still treat its tokens as 0, but downstream "
             "renderers may misinterpret the schema"
         )
+
+
+def test_qwen_sft_data_prep_contract_can_use_tokenizer_template() -> None:
+    from nemotron.data_prep.core.chat_sft_shard_core import _apply_chat_template
+    from nemotron.recipes.super3.stage1_sft.data_prep import SFTDataPrepConfig
+
+    cfg = SFTDataPrepConfig(
+        chat_template="tokenizer",
+        chat_template_kwargs={
+            "enable_thinking": False,
+            "truncate_history_thinking": False,
+        },
+    )
+    assert cfg.chat_template == "tokenizer"
+    assert cfg.chat_template_kwargs == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+
+    class _Tokenizer:
+        chat_template = "qwen tokenizer template"
+
+    tokenizer = _Tokenizer()
+    _apply_chat_template(tokenizer, "tokenizer")
+    assert tokenizer.chat_template == "qwen tokenizer template"
 
 
 def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:

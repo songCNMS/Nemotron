@@ -22,6 +22,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "m1_agentic_train.yaml"
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
+NEMOTRON_SUPER_TOKENIZER_DEFAULT = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"
 
 
 def resolve_qwen_hf_model() -> str:
@@ -39,6 +40,15 @@ def resolve_qwen_hf_model() -> str:
             "(e.g. one produced by scripts/import_qwen3_4b_local_to_megatron.py)"
         )
     return value
+
+
+def resolve_qwen_tokenizer_model(config: DictConfig, hf_model: str) -> str:
+    """Resolve the training tokenizer without falling back to Nemotron defaults."""
+
+    tokenizer_model = OmegaConf.select(config, "tokenizer.tokenizer_model", default=None)
+    if not tokenizer_model or tokenizer_model == NEMOTRON_SUPER_TOKENIZER_DEFAULT:
+        return hf_model
+    return str(tokenizer_model)
 
 
 def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
@@ -60,7 +70,7 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
         eval_interval=int(OmegaConf.select(config, "train.eval_interval", default=100)),
         save_interval=int(OmegaConf.select(config, "checkpoint.save_interval", default=100)),
     )
-    cfg.tokenizer.tokenizer_model = OmegaConf.select(config, "tokenizer.tokenizer_model", default=hf_model)
+    cfg.tokenizer.tokenizer_model = resolve_qwen_tokenizer_model(config, hf_model)
 
     cfg.model.seq_length = seq_length
     cfg.model.tensor_model_parallel_size = 2

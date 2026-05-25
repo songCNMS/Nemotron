@@ -102,6 +102,7 @@ class SftDatasetWorkItem:
     messages_field: str = "messages"
     tools_field: str = "tools"
     chat_template: str | None = None
+    chat_template_kwargs: dict[str, Any] = field(default_factory=dict)
     used_in_filter: str | None = None
     used_in_field: str = "used_in"
 
@@ -134,6 +135,7 @@ class SftShardWorkItem:
     messages_field: str = "messages"
     tools_field: str = "tools"
     chat_template: str | None = None
+    chat_template_kwargs: dict[str, Any] = field(default_factory=dict)
     max_doc_tokens: int | None = None
     max_rows: int | None = None
     used_in_filter: str | None = None

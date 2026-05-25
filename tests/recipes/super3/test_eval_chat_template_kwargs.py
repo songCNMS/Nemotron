@@ -29,7 +29,7 @@ EVAL_DEFAULT_PATH = (
 
 
 def _eval_chat_template_kwargs() -> dict:
-    data = yaml.safe_load(EVAL_DEFAULT_PATH.read_text(encoding="utf-8"))
+    data = _eval_default_data()
     evaluation = data.get("evaluation")
     assert isinstance(evaluation, dict), "missing evaluation block"
     nemo_cfg = evaluation.get("nemo_evaluator_config")
@@ -50,6 +50,18 @@ def _eval_chat_template_kwargs() -> dict:
         "checkpoint's saved tokenizer config)"
     )
     return kwargs
+
+
+def _eval_default_data() -> dict:
+    data = yaml.safe_load(EVAL_DEFAULT_PATH.read_text(encoding="utf-8"))
+    assert isinstance(data, dict), "eval default must load as a mapping"
+    return data
+
+
+def _qwen_chat_contract() -> dict:
+    contract = _eval_default_data().get("qwen_chat_contract")
+    assert isinstance(contract, dict), "missing qwen_chat_contract audit block"
+    return contract
 
 
 def test_eval_default_pins_enable_thinking() -> None:
@@ -93,4 +105,28 @@ def test_eval_default_values_match_unified_rl_contract() -> None:
     assert kwargs["truncate_history_thinking"] is False, (
         "PR C: every RL stage uses truncate_history_thinking=false; "
         "eval mirrors."
+    )
+
+
+def test_eval_qwen_contract_matches_eval_extra_kwargs() -> None:
+    kwargs = _eval_chat_template_kwargs()
+    contract = _qwen_chat_contract()
+
+    assert contract["target_family"] == "qwen"
+    assert contract["sft"]["chat_template"] == "tokenizer"
+    assert contract["sft"]["chat_template_kwargs"] == kwargs
+    assert contract["eval"]["extra_chat_template_kwargs"] == kwargs
+
+
+def test_eval_qwen_contract_calls_out_non_chat_and_parser_sensitive_tasks() -> None:
+    task_audit = _qwen_chat_contract()["task_audit"]
+
+    assert "ifbench.ifbench" in task_audit["valid_qwen_chat_tasks"]
+    assert (
+        "livecodebench.codegeneration_release_latest"
+        in task_audit["completion_or_non_chat_prompt_tasks"]
+    )
+    assert (
+        "simple_evals.AIME_2025"
+        in task_audit["short_generation_cap_or_parser_sensitive_tasks"]
     )
