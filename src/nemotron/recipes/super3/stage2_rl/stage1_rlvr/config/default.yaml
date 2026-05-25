@@ -282,6 +282,16 @@ policy:
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        # Pin super3 chat-template kwargs explicitly so every RL stage
+        # uses the same contract instead of silently inheriting the
+        # template default. truncate_history_thinking=false matches
+        # SWE1/SWE2 (their explicit choice for multi-turn agentic
+        # loops); for RLVR1 single-turn flows the kwarg is a no-op
+        # because no prior assistant turn carries `<think>` content.
+        # See docs/chat-template-consistency-review.md PR C.
+        chat_template_kwargs:
+          enable_thinking: true
+          truncate_history_thinking: false
 
 
     vllm_kwargs:

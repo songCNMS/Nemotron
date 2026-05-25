@@ -279,6 +279,15 @@ policy:
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        # Pin super3 chat-template kwargs explicitly so every RL stage
+        # uses the same contract. Matches SWE1/SWE2 (multi-turn
+        # agentic loops chose false explicitly). RLHF is single-turn
+        # comparison so truncate_history_thinking is a no-op here;
+        # we still pin it for cross-stage uniformity. See
+        # docs/chat-template-consistency-review.md PR C.
+        chat_template_kwargs:
+          enable_thinking: true
+          truncate_history_thinking: false
 
     vllm_kwargs:
       mamba_ssm_cache_dtype: "float32"

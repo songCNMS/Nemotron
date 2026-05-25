@@ -162,16 +162,16 @@ evaluation:
           tokenizer_backend: huggingface
           # Eval chat-template rendering contract — pin explicitly so
           # eval doesn't silently inherit whatever the checkpoint's
-          # tokenizer config happens to carry. Values match the
-          # super3.jinja defaults (also what RLVR1 / RLHF use today;
-          # SWE1 / SWE2 explicitly override `truncate_history_thinking
-          # = false` for multi-turn tool loops — per-task agentic eval
-          # configs should consider overriding for symmetry with SWE
-          # training). See docs/chat-template-consistency-review.md
-          # PR B.
+          # tokenizer config happens to carry. truncate_history_thinking
+          # flipped from True (PR B initial value) to False in PR C as
+          # part of the cross-stage unification: every super3 RL stage
+          # now uses {enable_thinking: true, truncate_history_thinking:
+          # false}, matching SWE1/SWE2's explicit multi-turn agentic
+          # choice. Single-turn benchmarks see no behavioral change.
+          # See docs/chat-template-consistency-review.md PR C.
           chat_template_kwargs:
             enable_thinking: true
-            truncate_history_thinking: true
+            truncate_history_thinking: false
         # Uncomment for quick testing:
         # limit_samples: 10
     target:

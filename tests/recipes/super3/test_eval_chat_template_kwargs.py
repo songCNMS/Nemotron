@@ -72,20 +72,21 @@ def test_eval_default_pins_truncate_history_thinking() -> None:
     )
 
 
-def test_eval_default_values_match_super3_template_defaults() -> None:
-    """The pinned values match the super3.jinja defaults, which is also
-    what RLVR1 / RLHF use today. SWE1 / SWE2 explicitly override
-    `truncate_history_thinking=false` for multi-turn tool loops — those
-    per-task agentic configs are expected to override on top of these
-    defaults. See docs/chat-template-consistency-review.md PR B / PR C
-    for the cross-stage consistency follow-up."""
+def test_eval_default_values_match_unified_rl_contract() -> None:
+    """After PR C unification, every super3 RL stage (RLVR1, SWE1,
+    SWE2, RLHF) explicitly sets `chat_template_kwargs` to
+    {enable_thinking: true, truncate_history_thinking: false}, matching
+    SWE1/SWE2's original multi-turn agentic choice. The eval default
+    follows the same contract so eval-time rendering matches RL-time
+    rendering. PR D may revisit `enable_thinking` if the SFT/RL
+    mismatch is resolved by changing the RL side; until then, eval
+    matches RL. See docs/chat-template-consistency-review.md PR C."""
     kwargs = _eval_chat_template_kwargs()
     assert kwargs["enable_thinking"] is True, (
-        "PR B initial value is True (matches super3.jinja default + RL "
-        "stage usage); PR D may flip this to match SFT-side rendering"
+        "PR C: every RL stage uses enable_thinking=true; eval mirrors"
     )
-    assert kwargs["truncate_history_thinking"] is True, (
-        "PR B initial value is True (matches super3.jinja default + "
-        "RLVR1/RLHF); PR C unifies across RL stages — until then, "
-        "agentic per-task configs override to False as needed"
+    assert kwargs["truncate_history_thinking"] is False, (
+        "PR C: every RL stage uses truncate_history_thinking=false; "
+        "eval mirrors. Was True under PR B initial values; flipped to "
+        "False in PR C as part of the cross-stage unification."
     )
