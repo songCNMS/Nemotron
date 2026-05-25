@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Session 1
 
@@ -480,3 +480,14 @@
 - 使用 fast-forward refspec 将本地 `main` 从 `9456469509539648a5a2ab4e4b36a16fa46a95dd` 对齐到 `ab1fbbf64f892abda34582a7cfc18229fb6f1824`；验证 local main 与 origin/main 互为 ancestor，即两者一致。
 - 同步过程中没有切换或覆盖当前 PR 分支，也没有直接 push `main`。
 - 顺带复查 NemTron 停止状态：tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` inactive，checkpoint marker `5000`，匹配训练进程为空。
+
+## Session 46
+
+- 按用户要求使用最新代码评测 original Qwen model；先将 `origin/main@ab1fbbf64f892abda34582a7cfc18229fb6f1824` merge 到当前 PR branch，merge commit 为 `ff241a2ec51257fdd9516fdf495f41dfde88212d`，未遇到冲突。
+- 在 NemTron 启动 original `Qwen/Qwen3-30B-A3B-Instruct-2507` SGLang endpoint：tmux session `task071_qwen30b_original_session46_sglang`，model id `qwen3-30b-a3b-instruct-2507-original`，8 张 H200，`tp=4`、`dp=2`、`context_length=16384`，port `30000`。
+- 通过 SSH remote forward 暴露到 `vpn:127.0.0.1:13000`，确认 `/v1/models` 返回 original Qwen model，chat smoke 返回 exact `ready`。
+- 在 `vpn` 执行 fresh full-selected non-dry run，artifact root 为 `/tmp/task071_vpn_eval_qwen30b_original_latest_session46`，start `2026-05-25T06:46:58Z`，done `2026-05-25T08:06:26Z`。
+- 五个 benchmark 均 `docker_exit=0`：IFBench、AIME25、HMMT、WMT24++、MMLU-Pro；eval-factory images 已按阶段清理，`vpn` root disk 回到约 `20G` free。
+- Fresh original Qwen scores：IFBench prompt-level strict accuracy `0.3197278911564626`；AIME25 local `aime_2025_nemo` score `0.16`；HMMT symbolic correct percent `6.666666666666667`、no-answer `90.0`；WMT24++ `xx->xx` BLEU `32.99304811154927`；MMLU-Pro legacy completion-route group exact match `0.00008311170212765957`。
+- 重要口径：本轮使用 task071 five full-selected regression harness；latest Qwen eval gate 仍将 legacy MMLU-Pro completions `max_gen_toks=32`、AIME/HMMT short-output parser-sensitive paths标记为非官方可比。已有 corrected reference 仍是 MMLU-Pro chat JSON full `0.561751994680851`、AIME corrected `0.5166666666666667`、HMMT corrected exact percent `26.666666666666668`。
+- 清理资源：停止 NemTron `task071_qwen30b_original_session46_sglang`，确认 8 张 H200 无 compute apps；关闭 `vpn:13000` tunnel。

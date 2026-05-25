@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Notes
 
@@ -122,3 +122,7 @@
 - Main sync fact: Session 43 fetched `origin/main` and fast-forwarded local `main` from `2ed4ad583375ef107e40a54bdb87c91fb6eabcc1` to supervisor-required `9456469509539648a5a2ab4e4b36a16fa46a95dd` while preserving PR branch `intern_nemontron_code_reading/task071_math_sidecar_data_session40`; no fast-forward blocker occurred.
 - Math-final-answer 30B stop fact: Session 44 stopped tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` on user request after it saved `iter_0005000`; final observed train log reached iter `5060/8774`, validation@5000 loss/PPL was `0.3791636/1.461062`, skipped/nan remained `0/0`, and post-stop verification found no matching training processes or GPU compute apps.
 - Main sync fact: Session 45 fetched `origin/main` and fast-forwarded local `main` from `9456469509539648a5a2ab4e4b36a16fa46a95dd` to `ab1fbbf64f892abda34582a7cfc18229fb6f1824` while preserving PR branch `intern_nemontron_code_reading/task071_math_sidecar_data_session40`; no fast-forward blocker occurred.
+- Original Qwen3-30B-A3B fresh Session 46 eval fact: after merging `origin/main@ab1fbbf64f892abda34582a7cfc18229fb6f1824` into PR branch, original `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507` was served as `qwen3-30b-a3b-instruct-2507-original` with SGLang `tp=4`, `dp=2`, `context_length=16384`, and exposed to `vpn` as `127.0.0.1:13000`; chat smoke returned exact `ready`.
+- Original Qwen3-30B-A3B fresh Session 46 full-selected result fact: raw artifacts are under `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_latest_session46`; IFBench, AIME25, HMMT, WMT24++, and MMLU-Pro all completed with `docker_exit=0` between `2026-05-25T06:46:58Z` and `2026-05-25T08:06:26Z`.
+- Original Qwen3-30B-A3B fresh Session 46 score fact: IFBench prompt-level strict accuracy `0.3197278911564626`; AIME25 local `aime_2025_nemo` score `0.16`; HMMT symbolic correct percent `6.666666666666667` with no-answer `90.0`; WMT24++ `xx->xx` BLEU `32.99304811154927`; MMLU-Pro legacy completions group exact match `0.00008311170212765957`.
+- Original Qwen3-30B-A3B Session 46 cleanup fact: after the eval, the temporary SGLang tmux session `task071_qwen30b_original_session46_sglang` was stopped, H200 compute apps were empty, and the `vpn:13000` tunnel was closed.
