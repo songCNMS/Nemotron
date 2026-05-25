@@ -88,9 +88,17 @@ class ShadowEvalExample:
 
 @dataclass(frozen=True)
 class CanaryPolicy:
-    """Sandbox canary thresholds keyed by stable fixture metadata."""
+    """Sandbox canary thresholds keyed by stable fixture metadata.
 
-    default_min_score: float = DEFAULT_CANARY_MIN_SCORE
+    ``default_min_score`` is ``None`` when the policy doesn't override
+    the module default. Callers passing ``fallback_min_score`` to
+    :meth:`threshold_for` only see their fallback when the policy
+    has *neither* a per-key threshold nor an explicit
+    ``default_min_score`` — so an explicit policy default (even one
+    that happens to equal the module constant) is always respected.
+    """
+
+    default_min_score: float | None = None
     min_score_by_category: Mapping[str, float] = field(default_factory=dict)
     min_score_by_env: Mapping[str, float] = field(default_factory=dict)
     min_score_by_prompt: Mapping[str, float] = field(default_factory=dict)
@@ -101,7 +109,18 @@ class CanaryPolicy:
         *,
         fallback_min_score: float | None = None,
     ) -> float | None:
-        """Resolve the canary threshold for one example."""
+        """Resolve the canary threshold for one example.
+
+        Precedence (highest first):
+          1. ``min_score_by_prompt[example.prompt_id]``
+          2. ``min_score_by_env[example.env_id]``
+          3. ``min_score_by_category[example.category]``
+          4. ``example.min_score`` (per-example override on the
+             :class:`ShadowEvalExample`)
+          5. ``self.default_min_score`` if the policy set one
+          6. ``fallback_min_score`` if the caller passed one
+          7. ``DEFAULT_CANARY_MIN_SCORE`` (module default)
+        """
 
         if not example.is_canary:
             return None
@@ -126,11 +145,17 @@ class CanaryPolicy:
                 example.min_score,
                 f"example threshold for {example.prompt_id}",
             )
-        if self.default_min_score != DEFAULT_CANARY_MIN_SCORE:
-            return _validate_score_threshold(self.default_min_score, "default canary threshold")
+        if self.default_min_score is not None:
+            return _validate_score_threshold(
+                self.default_min_score, "default canary threshold"
+            )
         if fallback_min_score is not None:
-            return _validate_score_threshold(fallback_min_score, "fallback canary threshold")
-        return _validate_score_threshold(self.default_min_score, "default canary threshold")
+            return _validate_score_threshold(
+                fallback_min_score, "fallback canary threshold"
+            )
+        return _validate_score_threshold(
+            DEFAULT_CANARY_MIN_SCORE, "module default canary threshold"
+        )
 
     def to_jsonable(self) -> JsonDict:
         return {
@@ -298,9 +323,15 @@ def tune_canary_policy(
     *,
     group_by: str = "category",
     margin: float = 0.0,
-    default_min_score: float = DEFAULT_CANARY_MIN_SCORE,
+    default_min_score: float | None = DEFAULT_CANARY_MIN_SCORE,
 ) -> CanaryPolicy:
-    """Build a deterministic sandbox canary policy from local calibration scores."""
+    """Build a deterministic sandbox canary policy from local calibration scores.
+
+    ``default_min_score`` defaults to ``DEFAULT_CANARY_MIN_SCORE`` so the
+    tuned policy carries an explicit floor that the caller's
+    ``fallback_min_score`` cannot override. Pass ``None`` to leave the
+    policy's default unset (so callers' fallbacks can layer underneath).
+    """
 
     if group_by not in CANARY_POLICY_GROUPS:
         raise ValueError(f"group_by must be one of {sorted(CANARY_POLICY_GROUPS)}")
@@ -319,7 +350,11 @@ def tune_canary_policy(
     }
 
     kwargs: dict[str, object] = {
-        "default_min_score": _validate_score_threshold(default_min_score, "default_min_score")
+        "default_min_score": (
+            _validate_score_threshold(default_min_score, "default_min_score")
+            if default_min_score is not None
+            else None
+        )
     }
     if group_by == "category":
         kwargs["min_score_by_category"] = tuned
