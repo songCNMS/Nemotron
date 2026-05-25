@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
 
 ## Notes
 
@@ -145,3 +145,5 @@
 - Feishu return fact: Session 54 sent `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session54_iter3500.png` to the supervisor chat; image message id `om_x100b6e7161ba14a4b4bf4743bbc48dc`, text message id `om_x100b6e71615994b0b2685ab8dcfcd75`.
 - Qwen chat-template retrain Session 55 metric fact: refreshed logs reached train iter `4280/8740`, checkpoint marker `4000`, skipped/nan `0/0`; validation@4000 is `0.3775419/1.458695`, which partially recovers from iter `3500` but remains above best iter `3000` `0.3531853/1.423595`.
 - Qwen chat-template retrain Session 55 decision fact: iter `3000` is the current export/eval candidate; keep the training run active through `4500/5000` to determine whether validation returns near best or remains in the higher-loss band.
+- Qwen chat-template retrain Session 56 metric fact: refreshed logs reached train iter `5000/8740`, checkpoint marker `5000`, skipped/nan `0/0`; validation@4500 is `0.3790836/1.460945`, validation@5000 is `0.3781844/1.459632`, and best remains iter `3000` `0.3531853/1.423595`.
+- Qwen chat-template retrain Session 56 decision fact: iter `3000` is the current export/eval candidate; iter `5000` is not a priority candidate because its validation loss is `+0.0249991` above iter `3000`, while `iter_0003000`, `iter_0004500`, and `iter_0005000` all exist at about `399G` each.

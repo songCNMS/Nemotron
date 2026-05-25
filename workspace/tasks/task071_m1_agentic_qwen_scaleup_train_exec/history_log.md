@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
 
 ## Session 1
 
@@ -583,3 +583,15 @@
 - 判断：iter `3000` 继续作为当前 export/eval 候选；训练保持运行到 `4500/5000` eval/save 点，确认 3500 的回升是否持续或再次恢复。
 - 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
 - 记录报告 `qwen_chat_aligned_metrics_session55.md`，包含 4000 点曲线、baseline 对比和 checkpoint 候选判断。
+
+## Session 56
+
+- 按“执行下一步”继续监控 Qwen-chat aligned 30B retrain；远端训练已过 `4500` 与 `5000` eval/save 点，checkpoint marker 到 `5000`，tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 仍 active。
+- 同步最新 NemTron `train.log` 并刷新 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves.png`、`metric_curves_session56_iter5000.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json` 和 v1 comparison markdown。
+- 本轮 refreshed metrics 解析到 train iter `5000/8740`，progress `57.21%`，latest train lm loss `0.3745380`，recent-50 train loss mean `0.380308006`，skipped/nan `0/0`。
+- Validation@4500 loss/PPL 为 `0.3790836/1.460945`，validation@5000 loss/PPL 为 `0.3781844/1.459632`；5000 较 4500 略有改善，但仍比 current best validation@3000 `0.3531853/1.423595` 高 `0.0249991` loss。
+- 与 conservative baseline 同点对比：iter `4500` 当前 loss 低 `0.0169795`，iter `5000` 当前 loss 高 `0.0006953`；与 v1 不再有同点对比，因为 v1 只记录到 `4000`。
+- 判断：iter `3000` 固定为当前 export/eval 候选；iter `5000` 不作为优先候选。训练保持 active，用于观察 `5500/6000`，但导出/评测准备应围绕 iter `3000`。
+- 远端 checkpoint 校验：`iter_0003000`、`iter_0004500`、`iter_0005000` 均存在，大小均约 `399G`，`latest_checkpointed_iteration.txt=5000`。
+- 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
+- 记录报告 `qwen_chat_aligned_metrics_session56.md`，包含 4500/5000 validation、checkpoint candidate 判断和 iter 3000 export/eval 准备清单。
