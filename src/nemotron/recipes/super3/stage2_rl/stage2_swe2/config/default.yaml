@@ -257,7 +257,11 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    # Stop at the super3 chat-template assistant-turn delimiter so vLLM
+    # doesn't burn budget past `<|im_end|>`. SWE2 OpenHands multi-turn
+    # loop terminates one turn here and iterates for the next turn.
+    # See docs/chat-template-consistency-review.md PR A.
+    stop_strings: ["<|im_end|>"]
     vllm_cfg:
       enable_prefix_caching: true
       async_engine: true

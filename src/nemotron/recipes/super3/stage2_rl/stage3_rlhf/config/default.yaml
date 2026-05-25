@@ -252,7 +252,11 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    # Stop at the super3 chat-template assistant-turn delimiter so vLLM
+    # doesn't burn budget past `<|im_end|>`. RLHF GenRM comparison only
+    # scores a single assistant turn, so terminating there is required.
+    # See docs/chat-template-consistency-review.md PR A.
+    stop_strings: ["<|im_end|>"]
     vllm_cfg:
       async_engine: true
       precision: ${policy.precision}
