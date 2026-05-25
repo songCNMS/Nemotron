@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Notes
 
@@ -117,3 +117,4 @@
 - Qwen3-30B-A3B corrected math full comparison fact: Session 38 added `m1_corrected_math_comparison.yaml` and ran full AIME/HMMT with original prompts, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and 16k SGLang context. Corrected AIME exact-normalized accuracies are original `0.5166666666666667`, iter0009119 `0.0`, conservative iter0010110 `0.03333333333333333`; parsed rates are `0.6133333333333333`, `0.03333333333333333`, and `0.9933333333333333`. Corrected HMMT exact-normalized correct percents are original `26.666666666666668`, iter0009119 `0.0`, conservative iter0010110 `6.666666666666667`; parsed rates are `0.5666666666666667`, `0.03333333333333333`, and `1.0`. Full artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_*_session38`.
 - Math-final-answer 30B retrain data fact: Session 40 run `task071_qwen30b_a3b_math_final_answer_v1` regenerated uncapped M1 train rows `983397`, math final-answer sidecar rows `866967`, total packed sequences `1850191`, total tokens `1148861776`, packed train rows `140369`, valid rows `2585`, and `train_iters=8774` at 0.5 epoch with GBS 8.
 - Math-final-answer 30B retrain launch fact: Session 40 synced the packed data to NemTron under `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_v1` and launched tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` on all 8 H200 GPUs with initial training reaching at least iter 180/8774 with skipped/nan iterations both 0.
+- Math-final-answer 30B retrain metric fact: Session 41 pulled the active NemTron train log into `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics`, generated `metric_curves.png`, and sent it to Feishu. The plot parsed through train iter `1810/8774`; latest validation was iter `1500` loss/PPL `0.3830907/1.466811`, recent-50 train loss mean `0.389833`, and skipped/nan remained `0/0`. A later remote tail observed iter `1860/8774` with checkpoint marker `1500`.

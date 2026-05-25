@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Session 1
 
@@ -438,3 +438,12 @@
 - 同步 repo 和 17GB run artifacts 到 NemTron `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_v1`，远端校验 packed parquet `65` files、training manifest `train_iters=8774`。
 - 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1`，训练进入 loop：checkpoint load 成功，latest observed iter `180/8774` 时 lm loss `0.4211270`、step time 约 `2.35s`、GPU 显存约 `81-87GB`/卡、skipped iterations `0`、nan iterations `0`。
 - 已 push 并创建 PR #164：`https://github.com/songCNMS/Nemotron/pull/164`。
+
+## Session 41
+
+- 按用户要求返回训练 metric 曲线并发送到飞书；同步 NemTron 远端 `task071_qwen30b_a3b_math_final_answer_v1/logs/train.log` 到本地 metrics 目录并解析训练/validation 指标。
+- 生成 artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/metric_curves.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`；曲线覆盖 train lm loss、validation loss/PPL、learning rate、grad norm、MoE load-balancing loss 与 skipped/nan health。
+- 本地图表解析到 train iter `1810/8774`，progress `20.63%`，latest train lm loss `0.3926409`，recent-50 mean `0.389833`，latest validation 为 iter `1500` loss/PPL `0.3830907/1.466811`，skipped/nan `0/0`。
+- 飞书发送成功：image message id `om_x100b6e0e59d32908b4c4be1fc0597e3`，follow-up text message id `om_x100b6e0e59f6488cb1292238c0e801d`。
+- 结束前复查远端训练仍在 tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` active，latest observed iter `1860/8774`，latest checkpoint marker `1500`，最近训练行 skipped/nan 仍为 `0/0`。
+- PR #164 保持 open 且 mergeStateStatus `CLEAN`，本轮仅补充任务状态记录并推送到现有分支。
