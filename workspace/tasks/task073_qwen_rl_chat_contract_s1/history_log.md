@@ -11,3 +11,4 @@
 - Removed conflicting sibling `vllm_cfg.enable_thinking: true` from SWE1/SWE2 because nested Qwen chat kwargs set `enable_thinking: false`.
 - Extended focused tests to fail on null tokenizer kwargs, tokenizer/serving mismatch, and sibling/nested `enable_thinking` conflicts.
 - Verified focused tests: 18 passed; touched test modules `py_compile` passed; `git diff --check` passed.
+- Opened PR #172 to `main` from branch `intern_nem_dev_2/task073_qwen_rl_chat_contract_s1`.
