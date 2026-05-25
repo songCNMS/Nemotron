@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
 
 ## Session 1
 
@@ -572,3 +572,14 @@
 - 结束前远端 spot-check：`3500` checkpoint save 已开始，`latest_checkpointed_iteration.txt` 仍显示 `3000`，最近训练行 skipped/nan 仍为 `0/0`。
 - 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
 - 记录报告 `qwen_chat_aligned_metrics_session54.md`，包含 3500 点曲线返回、飞书 message id 和 validation 回升判断。
+
+## Session 55
+
+- 按“执行下一步”继续监控 Qwen-chat aligned 30B retrain；远端训练已过 `4000` eval/save 点，checkpoint marker 到 `4000`，tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 仍 active。
+- 同步最新 NemTron `train.log` 并刷新 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves.png`、`metric_curves_session55_iter4000.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json` 和 v1 comparison markdown。
+- 本轮 refreshed metrics 解析到 train iter `4280/8740`，progress `48.97%`，latest train lm loss `0.3979205`，recent-50 train loss mean `0.377208316`，latest lr `5.728975e-07`，skipped/nan `0/0`。
+- Validation@4000 loss/PPL 为 `0.3775419/1.458695`，相比 validation@3500 `0.3879959/1.474024` 部分恢复，但仍高于 current best validation@3000 `0.3531853/1.423595`。
+- 与旧 Super3-template v1 同点对比：iter `4000` 当前 loss 高 `0.0028133`；与 conservative baseline 同点对比：iter `4000` 当前 loss 低 `0.0028005`，但该对比仅作方向参考。
+- 判断：iter `3000` 继续作为当前 export/eval 候选；训练保持运行到 `4500/5000` eval/save 点，确认 3500 的回升是否持续或再次恢复。
+- 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
+- 记录报告 `qwen_chat_aligned_metrics_session55.md`，包含 4000 点曲线、baseline 对比和 checkpoint 候选判断。
