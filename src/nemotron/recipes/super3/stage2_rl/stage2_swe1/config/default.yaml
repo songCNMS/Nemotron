@@ -285,8 +285,15 @@ policy:
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        # PR D: flipped enable_thinking from true (original Super3
+        # release default) to false to match what SFT actually trains
+        # against today — SFT data has no `reasoning_content` and the
+        # CoT lives in content body, not inside `<think>...</think>`
+        # blocks. The generation prompt is then `<|im_start|>assistant
+        # \n<think></think>` (closed empty), same as SFT.
+        # docs/chat-template-consistency-review.md PR D.
         chat_template_kwargs:
-          enable_thinking: true
+          enable_thinking: false
           truncate_history_thinking: false
 
     vllm_kwargs:

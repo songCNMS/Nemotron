@@ -283,14 +283,21 @@ policy:
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
         # Pin super3 chat-template kwargs explicitly so every RL stage
-        # uses the same contract instead of silently inheriting the
-        # template default. truncate_history_thinking=false matches
-        # SWE1/SWE2 (their explicit choice for multi-turn agentic
-        # loops); for RLVR1 single-turn flows the kwarg is a no-op
-        # because no prior assistant turn carries `<think>` content.
-        # See docs/chat-template-consistency-review.md PR C.
+        # uses the same contract. enable_thinking=false matches what
+        # SFT actually trains against today: no M0/M1 converter sets
+        # `reasoning_content` and `assistant_for_reasoning` puts the
+        # CoT directly in content body (post PR #163) — not inside a
+        # `<think>...</think>` block — so the auto-injected
+        # `<think></think>` (closed empty) prefix is what the model
+        # learned to emit. With enable_thinking=false the generation
+        # prompt is `<|im_start|>assistant\n<think></think>`, the same
+        # prefix; with true it would be `<|im_start|>assistant\n<think>\n`
+        # which the SFT-trained model has never seen. PR D fix from
+        # docs/chat-template-consistency-review.md. Revisit if a future
+        # PR carries `reasoning_content` through M0/M1 builders so
+        # SFT actually trains on `<think>{cot}</think>{answer}` content.
         chat_template_kwargs:
-          enable_thinking: true
+          enable_thinking: false
           truncate_history_thinking: false
 
 

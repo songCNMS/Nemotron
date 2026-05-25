@@ -280,13 +280,14 @@ policy:
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
         # Pin super3 chat-template kwargs explicitly so every RL stage
-        # uses the same contract. Matches SWE1/SWE2 (multi-turn
-        # agentic loops chose false explicitly). RLHF is single-turn
-        # comparison so truncate_history_thinking is a no-op here;
-        # we still pin it for cross-stage uniformity. See
-        # docs/chat-template-consistency-review.md PR C.
+        # uses the same contract. enable_thinking=false matches what
+        # SFT actually trains against (auto-injected `<think></think>`
+        # empty prefix; CoT lives in content body, not inside
+        # `<think>...</think>` blocks). PR D fix from
+        # docs/chat-template-consistency-review.md. Revisit if a future
+        # PR carries `reasoning_content` through M0/M1 builders.
         chat_template_kwargs:
-          enable_thinking: true
+          enable_thinking: false
           truncate_history_thinking: false
 
     vllm_kwargs:
