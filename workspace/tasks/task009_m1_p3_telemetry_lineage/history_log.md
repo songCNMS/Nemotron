@@ -1,6 +1,6 @@
 # history_log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - 2026-05-17 - intern_nemontron_review_cc
 
@@ -43,3 +43,18 @@ task009 仍无新代码改动；本 intern 已切到 Idle，等待新任务分�
 ## Session 5 - 2026-05-17 - intern_nemontron_review_cc
 
 task009 仍无新代码改动。本次 session 主要是按 stop hook 要求 bump 元数据，补齐 task008/task009 history Session 4/5 段以保持 hook 形式合规。REVIEW_v0.md 在 main 上的终态保持 17 fixed / 1 partial / 2 still open / 2 tracked，无新 PR 计划。
+
+## Session 6 - 2026-05-25 - intern_nemontron_review_cc
+
+拉取主干最新代码：worktree main 从 `4cb1228` (PR #15 task009 merge) 推进到 `2ed4ad5` ("Adjust math final-answer SFT supervision" #163)，期间合并 162 个 commit。主要包括：
+
+- M2 implementation plan refresh (PR #155)
+- Qwen3-30B-A3B SFT + baseline eval (task071, PR #151)
+- M1 SFT reasoning strategy (PR #152) + 30B SFT launch overrides (PR #153)
+- M2 phase 1 scaffolds：sandbox env scheduler (task033)、judge pool (task034)、prompt corpus contamination scanner (task035)、shadow eval thresholds (task036)、judge ensemble dispatcher / reward calibration (task038)、M2 eval gap thresholds (task039)
+- Agentic SFT v1 builder scaffold (task031) + cross-harness SFT routing
+- Python 3.10 StrEnum compat + eval_basket adapter dup check (PR #154)
+- task071 Qwen3-30B-A3B eval probes / corrected math probes
+- Math final-answer SFT supervision tweak (PR #163)
+
+task009 自身无后续工作。intern 仍 Idle；如有新 review 任务可基于最新 `2ed4ad5` 起点。
