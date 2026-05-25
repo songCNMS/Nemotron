@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
 
 ## Session 1
 
@@ -606,3 +606,15 @@
 - Validation@5500 loss/PPL 为 `0.3557427/1.427240`，明显好于 validation@5000 `0.3781844/1.459632`，但仍高于 best validation@3000 `0.3531853/1.423595`；因此 `iter_0003000` 继续作为当前 eval 候选。
 - 刷新本地图表 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session57_iter5500.png`，并记录报告 `qwen_chat_iter3000_export_session57.md`。
 - 评测入口状态：当前没有 active SGLang endpoint，端口 `30000/30001` 未监听；由于 8 张 H200 均在训练进程中，未启动并发 SGLang 服务以避免训练显存与吞吐风险。可执行入口是分配 serving 窗口后用 `tp=4`、`dp=2`、`context_length=16384` 服务导出的 HF 目录，再跑 corrected MMLU-Pro/AIME25/HMMT comparison。
+
+## Session 58
+
+- 按“执行下一步”尝试为 `iter_0003000` HF export 启动 corrected-eval endpoint；训练当时已过 `6000` eval/save 点，validation@6000 loss/PPL 为 `0.3681244/1.445022`，best 仍为 iter `3000` 的 `0.3531853/1.423595`。
+- 第一次并发 SGLang 启动使用 `mem_fraction_static=0.25`、`max_running_requests=1`、`max_total_tokens=16384`、`context_length=16384`，加载权重后因静态显存池太小失败，报 `Not enough memory. Please try to increase --mem-fraction-static`；训练未中断，显存回落。
+- 第二次启动使用 tmux session `task071_qwen_chat_iter3000_sglang_smoke`，参数为 `tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.35`、`max_running_requests=1`、`max_total_tokens=12288`、`--disable-cuda-graph`，成功服务 model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`。
+- Endpoint smoke 通过：`/v1/models` 返回 `max_model_len=16384`，chat smoke 对 `Reply exactly: ready` 返回 exact `ready`。
+- Corrected MMLU-Pro smoke 完成：输入来自 Session 46 original MMLU-Pro sample JSONL，每个 category 1 条，共 `14` 条；`status ok=14/14`，parsed rate `1.0`，corrected accuracy `8/14=0.5714285714285714`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session58/mmlu_smoke_percat1`。
+- Corrected math smoke 完成：AIME25 与 HMMT 各 1 条，原始 prompt，`max_tokens=8192`，`parallelism=1`；两条均 `status=ok`、`finish_reason=stop`、parsed rate `1.0`，exact-normalized accuracy `0.0`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session58/math_smoke_1each`。
+- 刷新训练 metrics 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session58_iter6000.png`；本轮解析到 train iter `6220/8740`，progress `71.17%`，latest validation@6000 比 validation@5500 回落，skipped/nan 仍为 `0/0`。
+- 资源清理：完成 smoke 后停止 `task071_qwen_chat_iter3000_sglang_smoke`，确认 port `30000` 释放，GPU 显存恢复为训练独占状态；训练继续到至少 iter `6230/8740`，skipped/nan 仍为 `0/0`。
+- 记录报告 `qwen_chat_iter3000_endpoint_smoke_session58.md`，包含 endpoint 参数、smoke metrics、训练影响和 full corrected eval 的执行入口。

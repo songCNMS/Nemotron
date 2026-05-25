@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
 
 ## Notes
 
@@ -151,3 +151,6 @@
 - Qwen chat-template retrain HF artifact fact: the Session 57 export is about `57G`, contains `16` safetensors shards plus `model.safetensors.index.json`, validates with HF config/tokenizer as `model_type=qwen3_moe`, `num_hidden_layers=48`, `num_experts=128`, `num_experts_per_tok=8`, and is recorded in `task071_export_manifest.json` as model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`.
 - Qwen chat-template retrain Session 57 metric fact: refreshed logs reached train iter `5570/8740`, checkpoint marker `5500`, skipped/nan `0/0`; validation@5500 is `0.3557427/1.427240`, improving sharply from iter `5000` but still above best iter `3000` `0.3531853/1.423595`.
 - Qwen chat-template retrain eval-capacity fact: when the all-GPU training job is active, corrected 30B evaluation should either wait for a serving window or explicitly accept concurrent SGLang contention; the known corrected-eval serving shape is SGLang `tp=4`, `dp=2`, `context_length=16384`, model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`, exposed to `vm4vpn` via `127.0.0.1:13000`.
+- Qwen chat-template retrain Session 58 serving fact: while training is active, SGLang `mem_fraction_static=0.25` with `max_total_tokens=16384` is too small after loading `iter_0003000` and fails during memory-pool init; `mem_fraction_static=0.35`, `max_total_tokens=12288`, `max_running_requests=1`, and `--disable-cuda-graph` starts successfully for smoke usage with 16k context.
+- Qwen chat-template retrain Session 58 smoke fact: `iter_0003000` endpoint smoke returned exact `ready`; corrected MMLU-Pro per-category-1 smoke scored `8/14` with parsed rate `1.0`; AIME25/HMMT 1-row math smoke with original prompts and `max_tokens=8192` had `2/2` parsed, `2/2` stop finishes, and `0/2` exact-normalized correctness.
+- Qwen chat-template retrain Session 58 cleanup fact: after endpoint smoke, `task071_qwen_chat_iter3000_sglang_smoke` was stopped, port `30000` was clear, GPU memory returned to training-only levels, and the active training run continued through at least iter `6230/8740` with skipped/nan `0/0`.
