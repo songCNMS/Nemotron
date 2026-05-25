@@ -37,6 +37,11 @@ DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_tr
 
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 QWEN_CHECKPOINT_ENV_VAR = "SUPER3_M1_PRETRAINED_CHECKPOINT"
+QWEN_CHAT_TEMPLATE = "tokenizer"
+QWEN_CHAT_TEMPLATE_KWARGS: dict[str, Any] = {
+    "enable_thinking": False,
+    "truncate_history_thinking": False,
+}
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -156,6 +161,8 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         },
         "packing": {
             "tokenizer_model": qwen_hf_model,
+            "chat_template": QWEN_CHAT_TEMPLATE,
+            "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "num_shards": args.num_shards,
             "pack_size": args.pack_size,
             "train_ratio": args.train_ratio,
@@ -185,7 +192,16 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         "eval": {
             "config": args.eval_config,
             "tasks": "configured by stage3_eval config",
+            "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "dry_run_only": True,
+        },
+        "qwen_chat_contract": {
+            "sft_tokenizer_model": qwen_hf_model,
+            "sft_chat_template": QWEN_CHAT_TEMPLATE,
+            "sft_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
+            "train_tokenizer_env": "SUPER3_M1_TOKENIZER_MODEL",
+            "train_model_env": QWEN_MODEL_ENV_VAR,
+            "eval_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
         },
         "outputs": {
             "manifest": str(paths.manifest_path),
@@ -262,6 +278,9 @@ python src/nemotron/recipes/super3/stage1_sft/data_prep.py \\
   blend_path={_q(Path(paths["m1_dir"]) / "data_blend_agentic_sft_v0.json")} \\
   output_dir={_q(paths["packed_dir"])} \\
   tokenizer.model={_q(packing["tokenizer_model"])} \\
+  chat_template={_q(packing["chat_template"])} \\
+  chat_template_kwargs.enable_thinking=false \\
+  chat_template_kwargs.truncate_history_thinking=false \\
   num_shards={int(packing["num_shards"])} \\
   pack_size={int(packing["pack_size"])} \\
   train_ratio={packing["train_ratio"]} \\
@@ -433,6 +452,11 @@ def render_report(manifest: JsonDict) -> str:
             f"- M0 datasets: {len(data['m0_dataset_ids'])} agentic SFT slices",
             f"- Rows per dataset: {row_scope}",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
+            (
+                f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
+                f"template `{manifest['packing']['chat_template']}`, "
+                f"kwargs `{manifest['packing']['chat_template_kwargs']}`"
+            ),
             f"- Train entrypoint: `{training['train_entrypoint']}`",
             (
                 f"- LR overrides: optimizer={training['optimizer_lr']}, "

@@ -26,10 +26,21 @@ from __future__ import annotations
 
 import copy
 import json
-from typing import TYPE_CHECKING
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from transformers import PreTrainedTokenizerBase
+
+
+def _resolve_chat_template_kwargs(
+    *,
+    enable_thinking: bool,
+    chat_template_kwargs: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    kwargs = dict(chat_template_kwargs or {})
+    kwargs.setdefault("enable_thinking", enable_thinking)
+    return kwargs
 
 
 def replace_json_args(messages: list[dict]) -> list[dict]:
@@ -64,6 +75,7 @@ def find_last_user_message_end(
     tokenizer: PreTrainedTokenizerBase,
     enable_thinking: bool = True,
     tools: list | None = None,
+    chat_template_kwargs: Mapping[str, Any] | None = None,
 ) -> int:
     """Find where the last user message ends in the rendered template.
 
@@ -86,7 +98,13 @@ def find_last_user_message_end(
     last_user_idx = max(i for i, msg in enumerate(messages) if msg["role"] == "user")
 
     # Render up to the last user message (inclusive)
-    if enable_thinking and (
+    template_kwargs = _resolve_chat_template_kwargs(
+        enable_thinking=enable_thinking,
+        chat_template_kwargs=chat_template_kwargs,
+    )
+    render_enable_thinking = bool(template_kwargs.get("enable_thinking"))
+
+    if render_enable_thinking and (
         "reasoning_content" not in messages[last_user_idx + 1]
         or messages[last_user_idx + 1]["reasoning_content"] == ""
     ):
@@ -96,7 +114,7 @@ def find_last_user_message_end(
             tokenize=False,
             add_generation_prompt=False,
             tools=tools,
-            chat_template_kwargs={"enable_thinking": enable_thinking},
+            chat_template_kwargs=template_kwargs,
         )
         template_up_to_last_user += "<|im_start|>assistant\n<think></think>"
     else:
@@ -104,7 +122,7 @@ def find_last_user_message_end(
             messages[: last_user_idx + 1],
             tokenize=False,
             add_generation_prompt=True,
-            chat_template_kwargs={"enable_thinking": enable_thinking},
+            chat_template_kwargs=template_kwargs,
             tools=tools,
         )
 
@@ -117,6 +135,7 @@ def split_template_into_messages(
     start_from_last_user: bool = True,
     enable_thinking: bool = True,
     tools: list | None = None,
+    chat_template_kwargs: Mapping[str, Any] | None = None,
 ) -> list[dict]:
     """Split rendered template back into individual message chunks.
 
@@ -140,13 +159,19 @@ def split_template_into_messages(
     Note:
         Exact port of materialize.py::split_template_into_messages()
     """
+    template_kwargs = _resolve_chat_template_kwargs(
+        enable_thinking=enable_thinking,
+        chat_template_kwargs=chat_template_kwargs,
+    )
+    render_enable_thinking = bool(template_kwargs.get("enable_thinking"))
+
     # Render full template
     full_template = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=False,
         tools=tools,
-        chat_template_kwargs={"enable_thinking": enable_thinking},
+        chat_template_kwargs=template_kwargs,
     )
 
     # Get first "message": if starting from last user, this includes all prior turns
@@ -154,7 +179,11 @@ def split_template_into_messages(
         system_end = full_template.find("<|im_end|>\n") + len("<|im_end|>\n")
         last_user_idx = max(i for i, msg in enumerate(messages) if msg["role"] == "user")
         last_user_pos = find_last_user_message_end(
-            messages, tokenizer, enable_thinking=enable_thinking, tools=tools
+            messages,
+            tokenizer,
+            enable_thinking=enable_thinking,
+            tools=tools,
+            chat_template_kwargs=template_kwargs,
         )
         previous_pos = last_user_pos
         # First chunk: everything up to last user message, split at system boundary
@@ -179,7 +208,7 @@ def split_template_into_messages(
 
         # Render up to this message
         if (
-            enable_thinking
+            render_enable_thinking
             and messages[i]["role"] != "assistant"
             and i + 1 < len(messages)
             and (
@@ -193,7 +222,7 @@ def split_template_into_messages(
                 tokenize=False,
                 add_generation_prompt=False,
                 tools=tools,
-                chat_template_kwargs={"enable_thinking": enable_thinking},
+                chat_template_kwargs=template_kwargs,
             )
             template_up_to_here += "<|im_start|>assistant\n<think></think>"
         else:
@@ -204,7 +233,7 @@ def split_template_into_messages(
                 tokenize=False,
                 add_generation_prompt=add_gen_prompt,
                 tools=tools,
-                chat_template_kwargs={"enable_thinking": enable_thinking},
+                chat_template_kwargs=template_kwargs,
             )
 
         current_pos = len(template_up_to_here)
@@ -226,6 +255,7 @@ def create_masked_messages(
     messages: list[dict],
     tokenizer: PreTrainedTokenizerBase,
     tools: list | None = None,
+    chat_template_kwargs: Mapping[str, Any] | None = None,
 ) -> list[tuple[list[dict], list[dict]]]:
     """Create message chunks for masking, optionally splitting at user turns.
 
@@ -266,6 +296,7 @@ def create_masked_messages(
                 start_from_last_user=True,
                 enable_thinking=has_thinking,
                 tools=tools,
+                chat_template_kwargs=chat_template_kwargs,
             )
 
             result.append((chunks, messages_i))  # Return both chunks and original messages
@@ -278,6 +309,7 @@ def create_masked_messages(
             start_from_last_user=False,
             enable_thinking=has_thinking,
             tools=tools,
+            chat_template_kwargs=chat_template_kwargs,
         )
         return [(chunks, messages)]  # Return both chunks and original messages
 
@@ -373,6 +405,7 @@ def split_system_user_chunks(chunks: list[dict]) -> list[dict]:
 
 __all__ = [
     "replace_json_args",
+    "_resolve_chat_template_kwargs",
     "find_last_user_message_end",
     "split_template_into_messages",
     "create_masked_messages",

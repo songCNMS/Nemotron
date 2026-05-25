@@ -19,7 +19,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 
@@ -156,6 +156,7 @@ class ChatSftOutputConfig:
     tools_field: str = "tools"
     used_in_filter: str | None = None
     used_in_field: str = "used_in"
+    chat_template_kwargs: dict[str, Any] = field(default_factory=dict)
 
     parquet_row_group_size: int = 1000
     parquet_compression: Literal["zstd", "snappy", "gzip", "none"] = "zstd"
@@ -462,5 +463,4 @@ class SourceChangedError(Exception):
     """Raised when source data has changed since plan creation."""
 
     pass
-
 

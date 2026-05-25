@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import json
 import time
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from pathlib import Path
 from typing import Any
 
@@ -47,10 +47,16 @@ from nemotron.data_prep.packing.spool import (
 
 
 _BUILTIN_TEMPLATES = {"nano3", "super3"}
+_TOKENIZER_TEMPLATE_ALIASES = {"tokenizer", "tokenizer_default", "tokenizer-default"}
 
 
 def _apply_chat_template(tokenizer: PreTrainedTokenizerBase, chat_template: str) -> None:
-    if chat_template in _BUILTIN_TEMPLATES:
+    if chat_template in _TOKENIZER_TEMPLATE_ALIASES:
+        if not getattr(tokenizer, "chat_template", None):
+            raise ValueError(
+                "chat_template='tokenizer' requires the tokenizer to define its own chat_template"
+            )
+    elif chat_template in _BUILTIN_TEMPLATES:
         template_path = Path(__file__).parent.parent / "templates" / f"{chat_template}.jinja"
         with open(template_path) as f:
             tokenizer.chat_template = f.read()
@@ -154,6 +160,7 @@ def process_chat_sft_spool_core(
     algorithm: str,
     dtype: np.dtype,
     chat_template: str | None,
+    chat_template_kwargs: Mapping[str, Any] | None,
     max_doc_tokens: int | None,
     max_rows: int | None,
     seed: int | None,
@@ -231,7 +238,12 @@ def process_chat_sft_spool_core(
             return
 
         try:
-            masked_results = create_masked_messages(messages_local, tokenizer, tools)
+            masked_results = create_masked_messages(
+                messages_local,
+                tokenizer,
+                tools,
+                chat_template_kwargs=chat_template_kwargs,
+            )
         except Exception:
             stats["num_filtered"] += 1
             stats["num_errors"] += 1
@@ -295,6 +307,7 @@ def process_chat_sft_spool_core(
             "messages_field": messages_field,
             "tools_field": tools_field,
             "chat_template": chat_template,
+            "chat_template_kwargs": dict(chat_template_kwargs or {}),
             "max_doc_tokens": max_doc_tokens,
             "max_rows": max_rows,
             "seed": seed,

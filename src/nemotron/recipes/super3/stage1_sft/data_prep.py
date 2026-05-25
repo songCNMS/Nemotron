@@ -210,6 +210,9 @@ class SFTDataPrepConfig:
     chat_template: str = "super3"  # TODO: template may need to be created
     """Chat template: 'super3', path to .jinja file, or inline template"""
 
+    chat_template_kwargs: dict[str, Any] = field(default_factory=dict)
+    """Keyword arguments passed to tokenizer.apply_chat_template"""
+
     messages_field: str = "messages"
     """Field name for OpenAI-format messages in input records"""
 
@@ -320,6 +323,7 @@ def run_data_prep_main(
         messages_field_default=cfg.messages_field,
         tools_field_default=cfg.tools_field,
         chat_template=cfg.chat_template,
+        chat_template_kwargs=cfg.chat_template_kwargs,
         used_in_filter=cfg.used_in_filter,
         used_in_field=cfg.used_in_field,
         pack_size=cfg.pack_size,
