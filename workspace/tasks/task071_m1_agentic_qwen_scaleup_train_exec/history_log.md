@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
 
 ## Session 1
 
@@ -464,3 +464,11 @@
 - 使用 fast-forward refspec 将本地 `main` 从 `2ed4ad583375ef107e40a54bdb87c91fb6eabcc1` 对齐到 `9456469509539648a5a2ab4e4b36a16fa46a95dd`；验证本地 `main` 与 `origin/main` 均包含 supervisor 要求 commit。
 - 未遇到 fast-forward blocker；同步后仍停留在 PR 分支，未直接 push `main`。
 - 顺带复查远端训练：tmux session active，latest observed iter `4500/8774`，checkpoint marker `4000`，validation@4500 loss/PPL `0.3830723/1.466784`，最近训练行 skipped/nan `0/0`。
+
+## Session 44
+
+- 按用户要求停止 NemTron 上正在运行的 math-final-answer 30B retrain job；目标 tmux session 为 `task067_task071_qwen30b_a3b_math_final_answer_v1`，run root 为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_v1`。
+- 停止前确认训练 active，checkpoint marker `5000`，最近 validation@5000 loss/PPL `0.3791636/1.461062`，训练日志最后继续到 iter `5040/8774` 以上且 skipped/nan `0/0`。
+- 先向 tmux session 发送 Ctrl-C；25 秒后 session 仍 active 且 `torch.distributed.run` pid `2446332` 仍存在，因此执行 `tmux kill-session -t task067_task071_qwen30b_a3b_math_final_answer_v1` 并对匹配当前训练命令的残留 pid `2446332` 发送 TERM。
+- 停止后验证：tmux session inactive，匹配 `qwen3_30b_a3b_local_train.py` / 当前 train log 的进程列表为空，`nvidia-smi --query-compute-apps` 未返回 compute apps。
+- 最终状态：last saved checkpoint marker `5000`，checkpoint 目录包含 `iter_0005000`，远端 train log 最后训练行到 iter `5060/8774`；本地同步停止时日志快照到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/train_stopped_session44.log`。
