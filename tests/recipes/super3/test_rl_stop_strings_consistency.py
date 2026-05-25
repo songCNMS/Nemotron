@@ -1,5 +1,5 @@
-"""Regression: all 4 super3 RL stage configs must terminate generation
-at the super3 chat-template assistant-turn delimiter.
+"""Regression: all 4 super3 RL stage configs must terminate Qwen chat
+generation at the assistant-turn delimiter.
 
 Before PR A (chat-template consistency review follow-up), each of
 ``stage1_rlvr/default.yaml``, ``stage2_swe1/default.yaml``,
@@ -10,8 +10,8 @@ this was already biting: 234/300 AIME generations hit the 2048-token
 cap without ever emitting ``\\boxed{...}``.
 
 The fix pins ``stop_strings: ["<|im_end|>"]`` in all 4 configs so
-generation stops at the super3 chat-template assistant turn delimiter.
-This test locks the policy across the 4 stages.
+generation stops at the Qwen chat assistant-turn delimiter. This test
+locks the policy across the 4 stages.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ RL_STAGE_CONFIGS = (
     / "src/nemotron/recipes/super3/stage2_rl/stage3_rlhf/config/default.yaml",
 )
 
-CHAT_TEMPLATE_ASSISTANT_END = "<|im_end|>"
+QWEN_CHAT_ASSISTANT_END = "<|im_end|>"
 
 
 def _generation_block(config_path: Path) -> dict:
@@ -60,12 +60,12 @@ def test_rl_stage_config_terminates_at_chat_template_assistant_end(
     stop_strings = generation.get("stop_strings")
     assert isinstance(stop_strings, list) and stop_strings, (
         f"{config_path}: stop_strings must be a non-empty list "
-        "(PR A: pinned to ['<|im_end|>'] to terminate at the super3 "
+        "(PR A: pinned to ['<|im_end|>'] to terminate at the Qwen "
         "chat-template assistant turn delimiter)"
     )
-    assert CHAT_TEMPLATE_ASSISTANT_END in stop_strings, (
-        f"{config_path}: stop_strings must include {CHAT_TEMPLATE_ASSISTANT_END!r} "
-        "so vLLM does not over-run the assistant turn boundary"
+    assert QWEN_CHAT_ASSISTANT_END in stop_strings, (
+        f"{config_path}: stop_strings must include {QWEN_CHAT_ASSISTANT_END!r} "
+        "so vLLM does not over-run the Qwen assistant turn boundary"
     )
 
 
