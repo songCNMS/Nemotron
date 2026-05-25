@@ -31,6 +31,9 @@ from typing import Any
 JsonDict = dict[str, Any]
 
 POSTURES = ("clean", "informational", "blocker")
+# Per-prompt posture aggregation in `scan_prompt_corpus` keeps the worst
+# observed posture across all matched eval entries. Higher rank wins.
+_POSTURE_RANK = {posture: rank for rank, posture in enumerate(POSTURES)}
 DEFAULT_TEXT_FIELDS = (
     "prompt",
     "question",
@@ -210,7 +213,6 @@ def scan_prompt_corpus(
     }
 
     findings: list[JsonDict] = []
-    counts = {posture: 0 for posture in POSTURES}
     for prompt in prompt_index:
         prompt_ngrams = prompt["ngrams"]
         if not prompt_ngrams:
@@ -235,7 +237,6 @@ def scan_prompt_corpus(
                 )
                 if posture == "clean":
                     continue
-                counts[posture] += 1
                 findings.append(
                     {
                         "prompt_id": prompt["id"],
@@ -262,9 +263,26 @@ def scan_prompt_corpus(
             item["eval_id"],
         )
     )
-    contaminated_prompt_ids = {item["prompt_id"] for item in findings}
-    clean_prompts = max(len(prompt_index) - len(contaminated_prompt_ids), 0)
-    counts["clean"] = clean_prompts
+
+    # `counts` is per-prompt: each prompt contributes its WORST posture
+    # across all matched eval entries. `finding_counts` is per-pair:
+    # how many (prompt, eval) findings landed at each posture. These
+    # are different units and now reported as different fields so an
+    # operator reading the report sees both numbers unambiguously.
+    posture_by_prompt: dict[str, str] = {}
+    for finding in findings:
+        prompt_id = finding["prompt_id"]
+        current = posture_by_prompt.get(prompt_id, "clean")
+        if _POSTURE_RANK[finding["posture"]] > _POSTURE_RANK[current]:
+            posture_by_prompt[prompt_id] = finding["posture"]
+    counts = {posture: 0 for posture in POSTURES}
+    for prompt in prompt_index:
+        posture = posture_by_prompt.get(prompt["id"], "clean")
+        counts[posture] += 1
+    finding_counts = {posture: 0 for posture in POSTURES}
+    for finding in findings:
+        finding_counts[finding["posture"]] += 1
+
     return {
         "schema_version": 1,
         "scanner": "token_ngram_overlap",
@@ -277,6 +295,7 @@ def scan_prompt_corpus(
         "eval_set_count": len(eval_index_by_set),
         "eval_record_count": sum(len(records) for records in eval_index_by_set.values()),
         "counts": counts,
+        "finding_counts": finding_counts,
         "findings": findings,
         "blockers": [item for item in findings if item["posture"] == "blocker"],
         "informational": [

@@ -265,6 +265,41 @@ def test_tune_canary_policy_uses_local_calibration_scores() -> None:
     assert policy.default_min_score == 0.7
 
 
+def test_canary_policy_default_min_score_overrides_fallback_when_explicit() -> None:
+    """Regression: previously `threshold_for` skipped a user-set
+    `default_min_score` whenever it happened to equal the module
+    constant DEFAULT_CANARY_MIN_SCORE (1.0), letting the caller's
+    `fallback_min_score` silently override an explicit policy value.
+    Fix: `default_min_score: float | None = None` sentinel so the
+    policy's explicit value always wins over the caller's fallback
+    (even when that explicit value equals the module constant)."""
+    from nemotron.recipes.super3.milestones.shadow_eval.pipeline import (
+        CanaryPolicy,
+        ShadowEvalExample,
+    )
+
+    canary = ShadowEvalExample(
+        prompt_id="canary-explicit-1",
+        env_id="terminal_workplace",
+        benchmark_id="shadow_terminal_canary",
+        category="tool_use_terminal",
+        split="canary",
+        is_canary=True,
+    )
+    policy = CanaryPolicy(default_min_score=1.0)  # explicit, equals constant
+
+    # Caller passes fallback_min_score=0.5. Policy's explicit 1.0 must win.
+    assert policy.threshold_for(canary, fallback_min_score=0.5) == 1.0
+
+    # Policy with default_min_score=None means "no policy default"; then
+    # caller's fallback applies. With no caller fallback either, fall
+    # through to module DEFAULT_CANARY_MIN_SCORE (1.0).
+    sentinel_policy = CanaryPolicy()
+    assert sentinel_policy.default_min_score is None
+    assert sentinel_policy.threshold_for(canary, fallback_min_score=0.5) == 0.5
+    assert sentinel_policy.threshold_for(canary) == 1.0  # module default
+
+
 def test_format_shadow_eval_report_includes_gate_and_deferred_blockers(tmp_path: Path) -> None:
     store = LocalRolloutStore(tmp_path)
     plan = build_synthetic_shadow_plan(

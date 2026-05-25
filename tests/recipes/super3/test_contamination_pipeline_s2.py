@@ -157,6 +157,51 @@ def test_scan_prompt_corpus_files_supports_local_jsonl_and_json(tmp_path: Path) 
     assert report["blockers"][0]["eval_set"] == "structured_outputs"
 
 
+def test_scan_prompt_corpus_counts_are_per_prompt_not_per_pair() -> None:
+    """Regression: `counts` used to mix per-pair (blocker/informational)
+    and per-prompt (clean) units, so 1 prompt × N matching eval rows
+    inflated blocker/informational counts by N. Fix: `counts` is now
+    consistently per-prompt (worst posture wins); per-pair detail is
+    available under the new `finding_counts` field.
+    """
+    prompts = [
+        {
+            "id": "train_repeated_match",
+            "prompt": "Answer with the exact phrase alpha beta gamma delta",
+        }
+    ]
+    # Three eval rows all carry the same overlapping phrase.
+    eval_sets = {
+        "if_eval": [
+            {
+                "id": "if_a",
+                "prompt": "Answer with the exact phrase alpha beta gamma delta",
+            },
+            {
+                "id": "if_b",
+                "prompt": "Answer with the exact phrase alpha beta gamma delta",
+            },
+            {
+                "id": "if_c",
+                "prompt": "Answer with the exact phrase alpha beta gamma delta",
+            },
+        ]
+    }
+
+    report = scan_prompt_corpus(prompts, eval_sets, ngram_size=4)
+
+    # 3 (prompt, eval) findings — finding_counts captures per-pair.
+    assert len(report["findings"]) == 3
+    assert report["finding_counts"]["blocker"] == 3
+    assert report["finding_counts"]["informational"] == 0
+    assert report["finding_counts"]["clean"] == 0
+
+    # But only 1 prompt is contaminated — counts is per-prompt.
+    assert report["counts"]["blocker"] == 1
+    assert report["counts"]["informational"] == 0
+    assert report["counts"]["clean"] == 0
+
+
 def test_markdown_report_is_review_friendly() -> None:
     report = scan_prompt_corpus(
         [
