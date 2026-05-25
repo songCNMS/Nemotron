@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Notes
 
@@ -121,3 +121,4 @@
 - Math-final-answer 30B Session 42 metric fact: the refreshed plot `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/metric_curves_session42_iter4000.png` parsed train iter `4000/8774` with latest train loss `0.3749772`, recent-50 mean `0.377212`, and skipped/nan `0/0`. Validation improved through iter `3000` loss/PPL `0.3541151/1.424919`, regressed at iter `3500` to `0.3861476/1.471302`, then partially recovered at iter `4000` to `0.3747286/1.454597`; checkpoint marker reached `4000`.
 - Main sync fact: Session 43 fetched `origin/main` and fast-forwarded local `main` from `2ed4ad583375ef107e40a54bdb87c91fb6eabcc1` to supervisor-required `9456469509539648a5a2ab4e4b36a16fa46a95dd` while preserving PR branch `intern_nemontron_code_reading/task071_math_sidecar_data_session40`; no fast-forward blocker occurred.
 - Math-final-answer 30B stop fact: Session 44 stopped tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` on user request after it saved `iter_0005000`; final observed train log reached iter `5060/8774`, validation@5000 loss/PPL was `0.3791636/1.461062`, skipped/nan remained `0/0`, and post-stop verification found no matching training processes or GPU compute apps.
+- Main sync fact: Session 45 fetched `origin/main` and fast-forwarded local `main` from `9456469509539648a5a2ab4e4b36a16fa46a95dd` to `ab1fbbf64f892abda34582a7cfc18229fb6f1824` while preserving PR branch `intern_nemontron_code_reading/task071_math_sidecar_data_session40`; no fast-forward blocker occurred.
