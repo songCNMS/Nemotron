@@ -1,6 +1,22 @@
 # task072_qwen_eval_repro_gate - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
+
+## Session 7 - 2026-05-25 - intern_nem_dev_1
+
+- PM reported PR #174 merged and latest `origin/main` advanced to
+  `ab1fbbf64f892abda34582a7cfc18229fb6f1824`.
+- Preserved clean branch `intern_nem_dev_1/task072_qwen_eval_repro_gate_s1`
+  at `c2cece52fef62de1e2477e040fffb331ae3f60d6`.
+- Confirmed PR #173 merged at `2026-05-25T04:37:27Z` with merge commit
+  `b059ed47abc5bc6965ae65ec71c5bca0e740cca8`.
+- Switched to `main`, ran `git fetch origin main` and
+  `git pull --ff-only origin main`, and verified local `main` plus
+  `origin/main` at `ab1fbbf64f892abda34582a7cfc18229fb6f1824`.
+- Created bookkeeping branch
+  `intern_nem_dev_1/task072_qwen_eval_repro_gate_s7_closeout` from synced
+  `main` for status/history/task-knowledge closeout only.
+- No task072 implementation changes were made in Session 7.
 
 ## Session 6 - 2026-05-25 - intern_nem_dev_1
 

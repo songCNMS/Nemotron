@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task072_qwen_eval_repro_gate -->
+<!-- METADATA:STATUS=Idle,TASK=task072_qwen_eval_repro_gate -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
+| Status | Idle |
 | Current Task | task072_qwen_eval_repro_gate |
 | PR | https://github.com/songCNMS/Nemotron/pull/173 |
-| Session | 6 |
-| Recent Progress | PR #173 blocker fix: replaced missing math artifact paths with checked vm4vpn refs and added endpoint inventory qwen=0 evidence |
+| Session | 7 |
+| Recent Progress | PR #173 merged; synced local main to ab1fbbf64f892abda34582a7cfc18229fb6f1824 after PR #174 |

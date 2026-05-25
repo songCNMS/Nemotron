@@ -1,6 +1,6 @@
 # task072_qwen_eval_repro_gate - Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 
@@ -22,3 +22,5 @@
    paths are a gate failure.
 6. `/work-agents/endpoints.txt` can list reachable endpoint surfaces without
    Qwen. Record only sanitized counts/model-hit summaries, not credentials.
+7. Session 7 added no new gate logic; it recorded PR #173 merge closeout and
+   latest-main sync to `ab1fbbf64f892abda34582a7cfc18229fb6f1824`.
