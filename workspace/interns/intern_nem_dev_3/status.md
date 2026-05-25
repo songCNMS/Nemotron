@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task074_qwen_sft_eval_contract_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/174 |
 | Session | 1 |
-| Recent Progress | Started Qwen SFT/eval chat-contract audit/fix from `9456469509539648a5a2ab4e4b36a16fa46a95dd`; implemented explicit Qwen SFT data-prep template overrides, train tokenizer guards, and eval contract tests |
+| Recent Progress | Opened PR #174 for Qwen SFT/eval chat-contract fixes from base `9456469509539648a5a2ab4e4b36a16fa46a95dd`; focused tests and py_compile passed |

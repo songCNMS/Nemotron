@@ -12,3 +12,4 @@
 - Added Qwen train-entry tokenizer resolution guards so Qwen entrypoints do not silently use the Nemotron tokenizer fallback.
 - Added eval-side Qwen contract metadata and task audit caveats while stripping that audit block before launcher execution.
 - Verified focused pytest, py_compile for touched Python modules, and `git diff --check`.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/174 to `main`.
