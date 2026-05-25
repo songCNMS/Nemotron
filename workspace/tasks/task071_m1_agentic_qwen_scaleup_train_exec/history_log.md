@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Session 1
 
@@ -501,3 +501,10 @@
 - Corrected AIME25 full：`300` rows，original prompt，`max_tokens=8192`，exact-normalized accuracy `0.5333333333333333`，parsed rate `0.65`，correct rows `160`，finish reasons `stop=180`、`length=120`，old source-cache score mean `0.16`。
 - Corrected HMMT full：`30` rows，original prompt，`max_tokens=8192`，exact-normalized accuracy `0.43333333333333335` / correct percent `43.333333333333336`，parsed rate `0.6666666666666666`，correct rows `13`, finish reasons `stop=18`、`length=12`。
 - 清理资源：停止 NemTron `task071_qwen30b_original_session47_sglang`，确认 8 张 H200 无 compute apps；关闭 `vpn:13000` tunnel。
+
+## Session 48
+
+- 按“执行下一步”对 corrected original metrics 与已导出的 30B SFT checkpoints 做 same-protocol comparison；未重新启动 endpoint，因为 Sessions 35/38 已有完整 `iter0009119` 与 conservative `iter0010110` corrected artifacts。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/corrected_eval_comparison_session48.md`，对比 original、SFT `iter0009119`、conservative `iter0010110` 的 corrected MMLU-Pro、AIME25、HMMT metrics 与 parser coverage。
+- Comparison 结果：original Qwen3-30B-A3B 为 MMLU-Pro `0.562001329787234`、AIME25 `0.5333333333333333`、HMMT exact percent `43.333333333333336`；SFT `iter0009119` 相对 original 分别为 `-0.028008643617021267`、`-0.5333333333333333`、`-43.333333333333336`；conservative `iter0010110` 相对 original 分别为 `-0.03440824468085102`、`-0.5`、`-36.66666666666667`。
+- 结论：conservative checkpoint 显著恢复 AIME/HMMT parser coverage，但 corrected correctness 仍明显低于 original；当前 math-final-answer v1 `iter_0005000` 需要先 export/register 为 HF，再按 same corrected protocol 评测。

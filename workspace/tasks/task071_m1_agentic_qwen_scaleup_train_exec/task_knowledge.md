@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Notes
 
@@ -130,3 +130,6 @@
 - Corrected MMLU-Pro Session 47 fact: full chat JSON answer-only run over `12032` rows scored accuracy `0.562001329787234`, parsed rate `1.0`, and old same-row invalid rate `0.9998337765957447`; summary artifact is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47/mmlu_corrected_full/summary.json`.
 - Corrected math Session 47 fact: full original-prompt AIME/HMMT run with `max_tokens=8192` scored AIME exact-normalized accuracy `0.5333333333333333` with parsed rate `0.65` and finish `stop=180/length=120`; HMMT exact-normalized correct percent `43.333333333333336` with parsed rate `0.6666666666666666` and finish `stop=18/length=12`; summary artifact is `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_corrected_session47/math_corrected_full/summary.json`.
 - Original Qwen3-30B-A3B Session 47 cleanup fact: after corrected evals, `task071_qwen30b_original_session47_sglang` was stopped, H200 compute apps were empty, and the `vpn:13000` tunnel was closed.
+- Corrected comparison Session 48 fact: `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/corrected_eval_comparison_session48.md` compares original Session 47 corrected metrics with existing corrected SFT metrics from Sessions 35/38; original remains ahead of SFT `iter0009119` and conservative `iter0010110` on corrected MMLU-Pro, AIME25, and HMMT.
+- Corrected comparison Session 48 delta fact: SFT `iter0009119` deltas vs original are MMLU-Pro `-0.028008643617021267`, AIME25 `-0.5333333333333333`, HMMT exact percent `-43.333333333333336`; conservative `iter0010110` deltas vs original are MMLU-Pro `-0.03440824468085102`, AIME25 `-0.5`, HMMT exact percent `-36.66666666666667`.
+- Current checkpoint eval gap fact: math-final-answer v1 stopped at `iter_0005000`, but it is not in the Session 48 comparison because it has not been exported to HF and served for corrected eval.
