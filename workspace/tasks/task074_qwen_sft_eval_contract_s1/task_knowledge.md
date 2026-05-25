@@ -1,6 +1,6 @@
 # task074_qwen_sft_eval_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -10,3 +10,4 @@
 - The Qwen scale-up planner records a `qwen_chat_contract` manifest block and emits matching data-prep overrides in `run_local_data_prep.sh`.
 - Eval config carries audit-only `qwen_chat_contract` metadata; `normalize_evaluator_launcher_config` strips it before handing config to `nemo-evaluator-launcher`.
 - Eval task caveats are separated into valid Qwen-chat tasks, completion/non-chat prompt tasks, and short-generation-cap or parser-sensitive tasks.
+- Session 2 added no new implementation knowledge; it only confirmed PR #174 is merged and local `main` is synced to `ab1fbbf64f892abda34582a7cfc18229fb6f1824`.
