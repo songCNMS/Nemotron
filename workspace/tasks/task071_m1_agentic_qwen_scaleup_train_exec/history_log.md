@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
 
 ## Session 1
 
@@ -516,3 +516,13 @@
 - 扩展 `SFTDataArtifact` 与 `stage1_sft/data_prep.py`，把实际 packing 使用的 `chat_template` 和 `chat_template_kwargs` 写入 artifact metadata，避免旧数据无法被审计。
 - 在 `qwen_local_train.py` 与 `qwen3_30b_a3b_local_train.py` recipe builder 入口调用 Qwen contract guard；在 `plan_qwen_scaleup_run.py` 生成的 local data prep 脚本中加入同一 guard，使 local data prep -> planning -> remote training 链路提前失败而不是训练后才发现模板错配。
 - 新增/更新测试覆盖 artifact metadata、Qwen contract accept/reject、HF tokenizer URI normalize、scale-up script validation wiring；验证结果：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `73 passed, 1 skipped`；`ruff check ...` passed；`compileall` passed；`git diff --check` passed。
+
+## Session 50
+
+- 按用户要求继续下一步，先审计旧 `task071_qwen30b_a3b_math_final_answer_v1` packed artifact；`metadata.json` 缺少 chat-template 字段，且 `packed_qwen/runs/*/config.json` 明确记录 `chat_template=super3`、`chat_template_kwargs=null`，因此不能只修 metadata，必须重新 packing。
+- 生成新 run root `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`，保留 30B conservative 训练策略：Qwen3-30B-A3B entrypoint、8 GPUs、GBS 8、0.5 epoch、lr `1e-6`、min lr `1e-7`、warmup 100、eval/save interval 500。
+- 复用 Session 40 生成的全量 M1 JSONL blend，重新执行 Qwen tokenizer-template packing：`chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`；新 artifact 总 sequences `1,850,191`、tokens `1,144,606,843`、train rows `139,840`、valid rows `2,576`。
+- 新 packed artifact 本地和 NemTron 均通过 `validate_qwen_packed_sft_chat_contract`；重新生成 training manifest，`train_iters=8740`。
+- 同步最新 PR branch 代码和 6.7GB 新 run artifacts 到 NemTron `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`。
+- 启动 NemTron tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`；训练进入 loop，最新观察到 iter `80/8740`，lm loss `0.6876534`，step time 约 `2.34s`，8 张 H200 显存约 `81-88GB`/卡，skipped/nan `0/0`。
+- 记录报告 `qwen_chat_aligned_retrain_session50.md`，包含旧 Super3-template packing 证据、新 Qwen-template packed data、remote run root 与早期训练健康状态。
