@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=52 -->
+<!-- METADATA:SESSION=53 -->
 
 ## Notes
 
@@ -139,3 +139,5 @@
 - Qwen chat-template retrain comparison fact: early validation versus stopped Super3-template v1 is effectively neutral at iter `500` (`+0.0001782` loss) and slightly better at iter `1000` (`-0.0006877` loss), so the Qwen-chat aligned run should continue to the next eval/save points before export/eval decisions.
 - Qwen chat-template retrain Session 52 metric fact: refreshed logs reached train iter `2120/8740`, checkpoint marker `2000`, skipped/nan `0/0`; validation points are iter `500` `0.4614768/1.586415`, iter `1000` `0.3756810/1.455983`, iter `1500` `0.3804657/1.462966`, and iter `2000` `0.3635950/1.438491`, with iter `2000` best so far.
 - Qwen chat-template retrain Session 52 comparison fact: versus stopped Super3-template v1, qwen_chat_v2 is lower at iter `1000` and `1500`, nearly tied at iter `2000` (`+0.0005155` loss); versus conservative baseline, qwen_chat_v2 is lower at iter `1000/1500/2000`, but that comparison is only directional because the baseline used a different data blend and supervision recipe.
+- Qwen chat-template retrain Session 53 metric fact: refreshed logs reached train iter `3350/8740`, checkpoint marker `3000`, skipped/nan `0/0`; validation points added iter `2500` `0.3618866/1.436036` and iter `3000` `0.3531853/1.423595`, with iter `3000` best so far.
+- Qwen chat-template retrain Session 53 decision fact: validation improved from iter `2500` to `3000` and qwen_chat_v2 is slightly better than stopped Super3-template v1 at iter `3000` (`-0.0009298` loss), so continue through `3500/4000` to check whether the mid-run validation rebound seen in v1 appears again.
