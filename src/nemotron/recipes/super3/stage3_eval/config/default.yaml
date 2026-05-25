@@ -34,6 +34,38 @@ defaults:
   - deployment: generic
   - _self_
 
+# Audit-only contract metadata for Qwen SFT/RL/eval alignment. The CLI strips
+# this block before invoking nemo-evaluator-launcher; tests use it to keep SFT
+# packing, Qwen train launchers, and eval chat rendering from drifting apart.
+qwen_chat_contract:
+  target_family: qwen
+  sft:
+    tokenizer_source: explicit_qwen_model_or_path
+    chat_template: tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+  train:
+    tokenizer_env: SUPER3_M1_TOKENIZER_MODEL
+    qwen_model_env: SUPER3_M1_QWEN_HF_MODEL
+  eval:
+    extra_chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+  task_audit:
+    valid_qwen_chat_tasks:
+      - ifbench.ifbench
+      - ruler.ruler-256k-chat
+      - lm-evaluation-harness.mmlu_prox_chat
+    completion_or_non_chat_prompt_tasks:
+      - livecodebench.codegeneration_release_latest
+      - scicode.scicode
+    short_generation_cap_or_parser_sensitive_tasks:
+      - simple_evals.AIME_2025
+      - nemo_skills.ns_hmmt_feb2025
+      - simple_evals.gpqa_diamond
+      - lm-evaluation-harness.mmlu_pro
+
 # =============================================================================
 # Nemotron run section (artifact resolution + env.toml injection)
 # This section is used for interpolation and stripped before calling the launcher
@@ -160,6 +192,19 @@ evaluation:
         extra:
           tokenizer: ${deployment.checkpoint_path}/tokenizer
           tokenizer_backend: huggingface
+          # Qwen eval chat-template rendering contract — pin explicitly so
+          # eval doesn't silently inherit whatever the checkpoint's
+          # tokenizer config happens to carry. These values must match the
+          # qwen_chat_contract block and the Qwen SFT data-prep overrides:
+          #   - enable_thinking=false matches SFT-time rendering (auto-
+          #     injected `<think></think>` empty prefix; CoT lives in
+          #     content body, not inside `<think>...</think>` blocks).
+          #   - truncate_history_thinking=false matches SWE1/SWE2's
+          #     multi-turn agentic choice; no-op for single-turn evals.
+          # See docs/chat-template-consistency-review.md PR D.
+          chat_template_kwargs:
+            enable_thinking: false
+            truncate_history_thinking: false
         # Uncomment for quick testing:
         # limit_samples: 10
     target:

@@ -119,7 +119,12 @@ policy:
   model_name: "/path/to/checkpoint"
   tokenizer:
     name: ${policy.model_name}
-    chat_template_kwargs: null
+    # Qwen-chat contract shared with vLLM serving below. Keep this in
+    # lockstep with
+    # policy.generation.vllm_cfg.http_server_serving_chat_kwargs.chat_template_kwargs.
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
   hf_config_overrides: {}
   train_global_batch_size: 4096
   train_micro_batch_size: 1
@@ -254,7 +259,12 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    # Stop at the Qwen chat-template assistant-turn delimiter so vLLM
+    # doesn't burn budget past `<|im_end|>`. task071 math-eval audit
+    # (session 36) saw 234/300 AIME generations hit the 2048-token cap
+    # without emitting `\boxed{}` largely because nothing terminated
+    # generation. See docs/chat-template-consistency-review.md PR A.
+    stop_strings: ["<|im_end|>"]
     vllm_cfg:
       async_engine: true
       precision: ${policy.precision}
@@ -277,6 +287,24 @@ policy:
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        # Pin Qwen chat-template kwargs explicitly so every RL stage
+        # and tokenizer preprocessing path uses the same contract.
+        # enable_thinking=false matches what
+        # SFT actually trains against today: no M0/M1 converter sets
+        # `reasoning_content` and `assistant_for_reasoning` puts the
+        # CoT directly in content body (post PR #163) — not inside a
+        # `<think>...</think>` block — so the auto-injected
+        # `<think></think>` (closed empty) prefix is what the model
+        # learned to emit. With enable_thinking=false the generation
+        # prompt is `<|im_start|>assistant\n<think></think>`, the same
+        # prefix; with true it would be `<|im_start|>assistant\n<think>\n`
+        # which the SFT-trained model has never seen. PR D fix from
+        # docs/chat-template-consistency-review.md. Revisit if a future
+        # PR carries `reasoning_content` through M0/M1 builders so
+        # SFT actually trains on `<think>{cot}</think>{answer}` content.
+        chat_template_kwargs:
+          enable_thinking: false
+          truncate_history_thinking: false
 
 
     vllm_kwargs:

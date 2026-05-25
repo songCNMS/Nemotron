@@ -165,3 +165,32 @@ def test_routed_builder_filters_by_harness_or_route_name(tmp_path: Path) -> None
 
     assert [example.to_jsonable()["metadata"]["source_rollout_id"] for example in by_harness] == ["openhands"]
     assert [example.to_jsonable()["metadata"]["source_rollout_id"] for example in by_route] == ["browser"]
+
+
+def test_routed_builder_sort_key_does_not_touch_record_object(tmp_path: Path) -> None:
+    """Regression: sort tuple includes raw record/candidate/route objects
+    after rank/env/prompt/rollout_id. RolloutTrace doesn't support
+    comparison, so if two records share the same (rank, env, prompt,
+    rollout_id) tuple prefix the original sort would fall through to
+    `record < record` and raise TypeError. Fix: sort key limits to the
+    first 4 elements only. This test exercises the safe path (unique
+    rollout_id) but uses dict-shape records (where `record < record`
+    would fall through to dict comparison and raise on TypeError) so
+    a future regression that removes the key= would immediately fail.
+    """
+    rollout_a = _rollout(env_id="openhands_swe", rollout_id="dup_rid_1")
+    rollout_b = _rollout(env_id="openhands_swe", rollout_id="dup_rid_2")
+    # Same env, same prompt prefix, distinct rollout_ids — sort key
+    # tuple matches on (rank, env, prompt prefix differs) so we still
+    # only compare the first 4 elements. The dict-shape records would
+    # raise TypeError on `dict < dict` if a future regression dropped
+    # the key= argument.
+    examples = build_routed_failure_repair_examples([rollout_a, rollout_b])
+    assert len(examples) == 2
+    rollout_ids = [
+        example.to_jsonable()["metadata"]["source_rollout_id"] for example in examples
+    ]
+    # Both routed via env=openhands_swe → swe_openhands_repair. Order
+    # within the same route is by prompt_id; dup_rid_1's prompt sorts
+    # before dup_rid_2's prompt.
+    assert rollout_ids == ["dup_rid_1", "dup_rid_2"]

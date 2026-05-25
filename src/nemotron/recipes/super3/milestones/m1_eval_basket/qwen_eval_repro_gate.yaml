@@ -1,0 +1,232 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0.
+
+schema_version: 1
+milestone: M1
+gate_id: task072_qwen_eval_repro_gate_s1
+recorded_at_utc: "2026-05-25T03:53:38Z"
+description: |
+  Qwen-first reproduction gate for accepting further chat-template alignment
+  work. Matching super3.jinja across training and eval stages is not sufficient:
+  the gate requires base-Qwen checkpoint/tokenizer evidence through the intended
+  chat-completions eval path, plus an explicit ledger of legacy eval surfaces
+  that are completions-only, generation-capped, or parser-misaligned.
+super3_template_consistency_is_sufficient: false
+
+reference_model:
+  source_model: Qwen/Qwen3-30B-A3B-Instruct-2507
+  local_model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+  tokenizer_reference: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507/tokenizer
+  chat_template_reference: Qwen checkpoint tokenizer chat_template
+  qwen_first: true
+
+source_manifests:
+  - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+  - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml
+  - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_4b_instruct_2507_original.yaml
+
+intended_eval_path:
+  launcher_config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+  endpoint_type: openai_chat_completions
+  chat_route: /v1/chat/completions
+  completions_route: /v1/completions
+  endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+  tokenizer_backend: huggingface
+  chat_template_source: Qwen checkpoint tokenizer
+  chat_template_kwargs:
+    enable_thinking: false
+    truncate_history_thinking: false
+  parser_contract: benchmark-specific final-answer parser must match prompt format
+
+evidence_records:
+  - evidence_id: qwen30b_original_mmlu_pro_chat_json_calibration
+    benchmark_id: mmlu_pro
+    benchmark_name: MMLU-Pro
+    evidence_type: base_qwen_eval_reproduction_smoke
+    gate_status: valid_qwen_reproduction_smoke
+    source_manifest: src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+    model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    endpoint_model_id: qwen3-30b-a3b-instruct-2507-original
+    chat_template_source: Qwen checkpoint tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+    max_generation_tokens: 64
+    parser: chat_json_answer_key_exact_match
+    final_answer_format: JSON object with answer key only
+    sample_scope: 14 MMLU-Pro categories x 20 samples
+    baseline_numbers:
+      official_qwen_baseline_available: false
+      corrected_accuracy: 0.6178571428571429
+      corrected_parsed_rate: 1.0
+      corrected_finish_reason_stop_rate: 1.0
+      old_same_slice_accuracy: 0.0
+      old_same_slice_invalid_rate: 1.0
+      corrected_minus_old_same_slice_accuracy: 0.6178571428571429
+    raw_artifact_paths:
+      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json
+      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl
+    validity_notes: |
+      Smallest recorded base-Qwen chat-completions reproduction smoke with a
+      parser-compatible JSON answer contract. It demonstrates that the legacy
+      MMLU-Pro score was a harness/parser failure, not a Qwen baseline.
+
+  - evidence_id: qwen30b_original_math_probe_session37
+    benchmark_id: aime25_hmmt_probe
+    benchmark_name: AIME25/HMMT math probe
+    evidence_type: base_qwen_eval_reproduction_smoke
+    gate_status: valid_qwen_reproduction_smoke
+    source_manifest: src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+    model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-math-probe
+    chat_template_source: Qwen checkpoint tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+    max_generation_tokens: 8192
+    parser: boxed_answer_or_symbolic_final_answer_parser
+    final_answer_format: boxed final answer or symbolic normalized answer
+    sample_scope: 3 AIME25 prompts and 3 HMMT entries across original, concise_boxed, and answer_only prompt variants
+    baseline_numbers:
+      official_qwen_baseline_available: false
+      total_requests: 54
+      aime25_original_2048_parsed_rate: 0.3333333333333333
+      aime25_original_8192_parsed_rate: 1.0
+      hmmt_original_2048_parsed_rate: 0.6666666666666666
+      hmmt_original_4096_parsed_rate: 1.0
+      hmmt_original_8192_correct_rate: 0.6666666666666666
+    raw_artifact_paths:
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/aime_2025_nemo/aime_2025_nemo.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/eval-results/hmmt_feb25/output.jsonl
+    remote_artifact_check:
+      status: pm_verified
+      checked_at_utc: "2026-05-25T04:14:00Z"
+      checked_by: intern_nem_pm
+      check_result: |
+        PM verified `vpn:/tmp/task071_vpn_eval_qwen30b_original_full` exists
+        and contains usable AIME25 and HMMT artifacts. These remote references
+        replace missing local `math_probe_session37` paths.
+    validity_notes: |
+      Recorded base-Qwen endpoint smoke showing that math parser success depends
+      on the prompt/final-answer contract and generation budget. The original
+      local session37 debug paths are unavailable in this workspace, so the gate
+      keeps checked vm4vpn references for the reusable Qwen original math
+      artifacts instead of pretending missing local paths are valid.
+
+  - evidence_id: qwen30b_original_corrected_math_full_session38
+    benchmark_id: aime25_hmmt_full
+    benchmark_name: AIME25/HMMT corrected full math
+    evidence_type: base_qwen_eval_reproduction_full
+    gate_status: valid_qwen_reproduction_full
+    source_manifest: src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+    model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-corrected-math-full
+    chat_template_source: Qwen checkpoint tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+    max_generation_tokens: 8192
+    parser: exact_normalized_boxed_or_symbolic_parser
+    final_answer_format: original math prompt with scorer-normalized final answer
+    sample_scope: 300 AIME25 rows and 30 HMMT rows
+    baseline_numbers:
+      official_qwen_baseline_available: false
+      aime25_exact_normalized_accuracy: 0.5166666666666667
+      aime25_parsed_rate: 0.6133333333333333
+      hmmt_exact_normalized_accuracy: 0.26666666666666666
+      hmmt_parsed_rate: 0.5666666666666667
+      legacy_aime25_score: 0.16666666666666666
+      legacy_hmmt_symbolic_correct_percent: 6.666666666666667
+    raw_artifact_paths:
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/aime_2025_nemo/aime_2025_nemo.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/eval-results/hmmt_feb25/output.jsonl
+    remote_artifact_check:
+      status: pm_verified
+      checked_at_utc: "2026-05-25T04:14:00Z"
+      checked_by: intern_nem_pm
+      check_result: |
+        PM verified `vpn:/tmp/task071_vpn_eval_qwen30b_original_full` exists
+        and contains usable AIME25 and HMMT artifacts. These remote references
+        replace missing local `corrected_math_full_*_session38` paths.
+    validity_notes: |
+      Full recorded corrected-math run through the Qwen chat endpoint. It is
+      regression evidence for this repo's eval path, not an official Qwen score.
+      The original local session38 debug paths are unavailable in this
+      workspace, so checked vm4vpn references are used for the reusable Qwen
+      original math artifacts.
+
+invalid_task_findings:
+  - finding_id: legacy_mmlu_pro_completions_short_parser_mismatch
+    benchmark_id: mmlu_pro
+    issue_types:
+      - completions_only
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      Legacy MMLU-Pro used completions with max_gen_toks=32 while prompting for
+      step-by-step reasoning; 12030/12032 original responses were invalid under
+      the old parser. This cannot count as Qwen-chat reproduction.
+    required_remediation: Use /v1/chat/completions with JSON answer-only prompt, max_tokens=64, and the chat JSON answer-key parser.
+
+  - finding_id: legacy_aime25_short_generation_parser_mismatch
+    benchmark_id: aime25
+    issue_types:
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      Legacy AIME25 used 2048 generation tokens; 234/300 rows ended by length
+      and many outputs never reached a boxed answer. The score mixes model
+      ability with generation budget and final-answer contract failure.
+    required_remediation: Use /v1/chat/completions with 8192 max tokens and a scorer-compatible boxed or normalized final-answer parser.
+
+  - finding_id: legacy_hmmt_short_generation_parser_mismatch
+    benchmark_id: hmmt
+    issue_types:
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      Legacy HMMT used 2048 generation tokens; 28/30 rows ended by length and
+      only two predicted-answer rows were available to the symbolic scorer.
+    required_remediation: Use /v1/chat/completions with at least 4096/8192 max tokens and the symbolic final-answer parser.
+
+runtime_blockers:
+  - blocker_id: fresh_live_qwen_endpoint_unavailable
+    status: blocked_in_this_workspace
+    probe_commands:
+      - curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:13000/v1/models
+      - curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:13000/v1/health
+      - curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:30000/v1/models
+    observed_at_utc: "2026-05-25T03:53:38Z"
+    observed_result: connection refused on ports 13000 and 30000
+    impact: |
+      Could not run a fresh live base-Qwen endpoint smoke from this worktree.
+      The gate therefore records the existing smallest Qwen chat-completions
+      reproduction smoke and the exact endpoint blocker for PM/runtime follow-up.
+  - blocker_id: endpoint_inventory_has_no_qwen_surface
+    status: blocked_in_available_endpoint_inventory
+    probe_commands:
+      - awk 'NF && $1 !~ /^#/ {print $2}' /work-agents/endpoints.txt | grep -i qwen || true
+      - awk 'NF && $1 !~ /^#/ {print $2}' /work-agents/endpoints.txt | grep -ci qwen || true
+    observed_at_utc: "2026-05-25T04:14:00Z"
+    observed_result: 10 active endpoint rows checked; qwen_endpoint_hits=0
+    impact: |
+      `/work-agents/endpoints.txt` lists reachable non-Qwen model surfaces only.
+      No listed endpoint can serve as a fresh base-Qwen smoke target without
+      provisioning a new Qwen endpoint or remote forward.

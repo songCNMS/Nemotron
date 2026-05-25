@@ -121,7 +121,12 @@ policy:
   model_name: "/path/to/model"
   tokenizer:
     name: ${policy.model_name}
-    chat_template_kwargs: null
+    # Qwen-chat contract shared with vLLM serving below. Keep this in
+    # lockstep with
+    # policy.generation.vllm_cfg.http_server_serving_chat_kwargs.chat_template_kwargs.
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
   hf_config_overrides: {}
   train_global_batch_size: 1024
   train_micro_batch_size: 1
@@ -256,7 +261,11 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    # Stop at the Qwen chat-template assistant-turn delimiter so vLLM
+    # doesn't burn budget past `<|im_end|>`. Multi-turn tool loops
+    # terminate one turn here and the runtime iterates for the next
+    # turn. See docs/chat-template-consistency-review.md PR A.
+    stop_strings: ["<|im_end|>"]
     vllm_cfg:
       enable_prefix_caching: true
       async_engine: true
@@ -275,14 +284,20 @@ policy:
       vllm_metrics_logger_interval: 0.5
       expose_http_server: true
       skip_tokenizer_init: false
-      enable_thinking: true
       http_server_serving_chat_kwargs:
         enable_auto_tools: true
         tool_parser: qwen3_coder
         reasoning_parser: nano_v3
         reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        # PR D: flipped enable_thinking from true (original Super3
+        # release default) to false to match what SFT actually trains
+        # against today — SFT data has no `reasoning_content` and the
+        # CoT lives in content body, not inside `<think>...</think>`
+        # blocks. The generation prompt is then `<|im_start|>assistant
+        # \n<think></think>` (closed empty), same as SFT.
+        # docs/chat-template-consistency-review.md PR D.
         chat_template_kwargs:
-          enable_thinking: true
+          enable_thinking: false
           truncate_history_thinking: false
 
     vllm_kwargs:

@@ -49,6 +49,7 @@ test_ratio: 0.01
 
 # Chat template: 'nano3' / 'super3' / path to .jinja file / inline template
 chat_template: super3
+chat_template_kwargs: {}
 
 # Field name for OpenAI-format messages in input records
 messages_field: messages

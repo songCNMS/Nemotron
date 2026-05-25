@@ -72,7 +72,21 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "--dataset-id m0_search_hotpotqa" in local_script
     assert "--dataset-id m0_math_numinamath" in local_script
     assert "tokenizer.model=/models/qwen3-4b" in local_script
+    assert "chat_template=tokenizer" in local_script
+    assert "chat_template_kwargs.enable_thinking=false" in local_script
+    assert "chat_template_kwargs.truncate_history_thinking=false" in local_script
+    assert "chat_template=super3" not in local_script
     assert "pack_size=512" in local_script
+    assert manifest["packing"]["chat_template"] == "tokenizer"
+    assert manifest["packing"]["chat_template_kwargs"] == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+    assert manifest["qwen_chat_contract"]["sft_chat_template"] == "tokenizer"
+    assert (
+        manifest["qwen_chat_contract"]["eval_chat_template_kwargs"]
+        == manifest["packing"]["chat_template_kwargs"]
+    )
 
     assert "qwen_local_train.py" in remote_script
     assert "--nproc_per_node=2" in remote_script

@@ -30,9 +30,10 @@ Sandbox baseline: **829 passed + 7 skipped** (was 784).
   HF SHA pins (cluster-bound; 5.5 also needs Nemotron-Safety schema
   verification; 6.5 also needs NuminaMath source_id dedup index)
 
-## 下一步候选
+## 最近 sync
 
-按 roadmap §5b sandbox-runnable queue (剩余 sandbox 工作不多):
-- Other M1 sandbox work (see roadmap §5b)
-- 大量 cluster-bound work waiting on NemTron access — see roadmap
-  "Cluster-bound queue" section
+**main 拉到 `2ed4ad5`** (2026-05-25)，跨过 162 个 commit：M2 phase 1
+scaffolds (env scheduler / judge pool / shadow eval / reward
+calibration) + Qwen3-30B-A3B SFT + Agentic SFT v1 builder +
+math final-answer SFT supervision tweak。task009 / task057 之前的
+review 链全部已 merge；本次只是 worktree main `git pull`，无新代码。
