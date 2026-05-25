@@ -7,6 +7,8 @@
 - PM assigned critical Qwen-first chat-template gate from synced `main` at
   `9456469509539648a5a2ab4e4b36a16fa46a95dd`.
 - Created branch `intern_nem_dev_1/task072_qwen_eval_repro_gate_s1`.
+- PR: https://github.com/songCNMS/Nemotron/pull/173
+- Initial implementation SHA: `737ff393c0c585126bb7a5aa260d27052f92aa55`
 - Scope accepted: own base-Qwen eval reproduction gate/evidence and do not
   treat `super3.jinja` consistency as sufficient.
 - Probed known local Qwen endpoint routes:
