@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
 
 ## Session 1
 
@@ -537,3 +537,15 @@
 - 与旧 Super3-template v1 早期对比：iter `500` 当前 loss 比 v1 高 `0.0001782`，iter `1000` 当前 loss 比 v1 低 `0.0006877`；早期曲线显示 Qwen-chat aligned packing 没有引入训练健康回归。
 - 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过。
 - 记录报告 `qwen_chat_aligned_metrics_session51.md`，包含图表路径、早期 validation 对比与继续监控点。
+
+## Session 52
+
+- 按“执行下一步”继续监控 Qwen-chat aligned 30B retrain；远端 tmux session `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 仍 active，checkpoint marker 已到 `2000`。
+- 同步最新 NemTron `train.log` 并刷新 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json` 和 v1 comparison markdown。
+- 本轮 refreshed metrics 解析到 train iter `2120/8740`，progress `24.26%`，latest train lm loss `0.4114348`，recent-50 train loss mean `0.390227312`，latest lr `8.839769e-07`，skipped/nan `0/0`。
+- Validation 已过 `1500` 与 `2000` eval/save 点：iter `1500` loss/PPL `0.3804657/1.462966`，iter `2000` loss/PPL `0.3635950/1.438491`，其中 iter `2000` 是当前 best validation。
+- 与旧 Super3-template v1 同点对比：iter `1500` 当前 loss 低 `0.0026250`，iter `2000` 当前 loss 高 `0.0005155`，整体仍可视为同量级且训练健康正常。
+- 与 conservative baseline 同点对比：iter `1000/1500/2000` 当前 loss 分别低 `0.0269048/0.0266639/0.0311274`；该对比用于趋势参考，因为 conservative baseline 与当前 run 的数据 blend 和监督策略不同。
+- 结束前远端 spot-check 到 iter `2110/8740` 以上，tmux active，最近训练行 skipped/nan 仍为 `0/0`。
+- 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
+- 记录报告 `qwen_chat_aligned_metrics_session52.md`，包含 1500/2000 validation、v1/conservative 对比和下一监控点。

@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
 
 ## Notes
 
@@ -137,3 +137,5 @@
 - Qwen chat-template retrain fact: the stopped `task071_qwen30b_a3b_math_final_answer_v1` packed rows were rendered with `chat_template=super3` according to `packed_qwen/runs/*/config.json`; the corrected run is `task071_qwen30b_a3b_math_final_answer_qwen_chat_v2`, with `chat_template=tokenizer`, thinking disabled, train rows `139840`, valid rows `2576`, and `train_iters=8740`.
 - Qwen chat-template retrain metric fact: Session 51 parsed refreshed `task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` logs through train iter `1280/8740`; validation improved from iter `500` loss/PPL `0.4614768/1.586415` to iter `1000` `0.3756810/1.455983`, checkpoint marker reached `1000`, and skipped/nan remained `0/0`.
 - Qwen chat-template retrain comparison fact: early validation versus stopped Super3-template v1 is effectively neutral at iter `500` (`+0.0001782` loss) and slightly better at iter `1000` (`-0.0006877` loss), so the Qwen-chat aligned run should continue to the next eval/save points before export/eval decisions.
+- Qwen chat-template retrain Session 52 metric fact: refreshed logs reached train iter `2120/8740`, checkpoint marker `2000`, skipped/nan `0/0`; validation points are iter `500` `0.4614768/1.586415`, iter `1000` `0.3756810/1.455983`, iter `1500` `0.3804657/1.462966`, and iter `2000` `0.3635950/1.438491`, with iter `2000` best so far.
+- Qwen chat-template retrain Session 52 comparison fact: versus stopped Super3-template v1, qwen_chat_v2 is lower at iter `1000` and `1500`, nearly tied at iter `2000` (`+0.0005155` loss); versus conservative baseline, qwen_chat_v2 is lower at iter `1000/1500/2000`, but that comparison is only directional because the baseline used a different data blend and supervision recipe.
