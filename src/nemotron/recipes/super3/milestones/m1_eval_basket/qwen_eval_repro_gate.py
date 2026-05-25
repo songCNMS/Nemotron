@@ -76,6 +76,7 @@ VALID_INVALID_FINDING_TYPES = frozenset(
 VALID_EVIDENCE_STATUSES = frozenset(
     {"valid_qwen_reproduction_smoke", "valid_qwen_reproduction_full"}
 )
+REMOTE_ARTIFACT_PREFIXES = ("vm4vpn:", "vpn:")
 
 
 def _load_yaml(path: Path) -> JsonDict:
@@ -113,6 +114,50 @@ def _validate_chat_template_kwargs(
             issues.append(f"{context}.{key} must be present")
         elif not isinstance(value[key], bool):
             issues.append(f"{context}.{key} must be a bool")
+    return issues
+
+
+def is_remote_artifact_reference(path: str) -> bool:
+    """Return whether *path* is an explicitly remote artifact reference."""
+    return path.startswith(REMOTE_ARTIFACT_PREFIXES)
+
+
+def _validate_remote_artifact_check(value: Any, *, context: str) -> list[str]:
+    if not isinstance(value, Mapping):
+        return [f"{context} must be a mapping for remote raw artifact paths"]
+    issues: list[str] = []
+    if not _is_non_empty_string(value.get("status")):
+        issues.append(f"{context}.status must be a non-empty string")
+    if not _is_non_empty_string(value.get("checked_at_utc")):
+        issues.append(f"{context}.checked_at_utc must be a non-empty string")
+    if not _is_non_empty_string(value.get("checked_by")):
+        issues.append(f"{context}.checked_by must be a non-empty string")
+    return issues
+
+
+def validate_raw_artifact_paths(paths: Any, *, context: str) -> list[str]:
+    """Validate raw artifact paths used as gate evidence.
+
+    Local paths must exist in the current filesystem. Remote references are
+    allowed only when they use an explicit checked remote prefix such as
+    ``vm4vpn:``; the caller validates the corresponding check metadata.
+    """
+    if (
+        not isinstance(paths, list)
+        or not paths
+        or not all(_is_non_empty_string(path) for path in paths)
+    ):
+        return [f"{context} must be non-empty strings"]
+
+    issues: list[str] = []
+    for path in paths:
+        if is_remote_artifact_reference(path):
+            continue
+        if not Path(path).expanduser().exists():
+            issues.append(
+                f"{context} local path does not exist and is not a checked "
+                f"remote artifact reference: {path}"
+            )
     return issues
 
 
@@ -221,12 +266,22 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
             if not _is_positive_int(record.get("max_generation_tokens")):
                 issues.append(f"{prefix}.max_generation_tokens must be positive int")
             raw_paths = record.get("raw_artifact_paths")
-            if (
-                not isinstance(raw_paths, list)
-                or not raw_paths
-                or not all(_is_non_empty_string(path) for path in raw_paths)
+            issues.extend(
+                validate_raw_artifact_paths(
+                    raw_paths,
+                    context=f"{prefix}.raw_artifact_paths",
+                )
+            )
+            if isinstance(raw_paths, list) and any(
+                isinstance(path, str) and is_remote_artifact_reference(path)
+                for path in raw_paths
             ):
-                issues.append(f"{prefix}.raw_artifact_paths must be non-empty strings")
+                issues.extend(
+                    _validate_remote_artifact_check(
+                        record.get("remote_artifact_check"),
+                        context=f"{prefix}.remote_artifact_check",
+                    )
+                )
             if not _is_mapping(record.get("baseline_numbers")):
                 issues.append(f"{prefix}.baseline_numbers must be a mapping")
             if record.get("gate_status") in VALID_EVIDENCE_STATUSES:
@@ -362,7 +417,9 @@ __all__ = [
     "VALID_EVIDENCE_STATUSES",
     "VALID_INVALID_FINDING_TYPES",
     "format_qwen_eval_repro_gate_report",
+    "is_remote_artifact_reference",
     "load_qwen_eval_repro_gate",
     "qwen_repro_evidence_by_benchmark",
+    "validate_raw_artifact_paths",
     "validate_qwen_eval_repro_gate",
 ]

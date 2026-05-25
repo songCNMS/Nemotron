@@ -14,6 +14,7 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
     format_qwen_eval_repro_gate_report,
     load_qwen_eval_repro_gate,
     qwen_repro_evidence_by_benchmark,
+    validate_raw_artifact_paths,
     validate_qwen_eval_repro_gate,
 )
 
@@ -69,6 +70,44 @@ def test_qwen_eval_repro_gate_requires_raw_artifacts_for_evidence() -> None:
     assert any("raw_artifact_paths must be non-empty" in issue for issue in issues)
 
 
+def test_qwen_eval_repro_gate_rejects_missing_local_raw_artifacts() -> None:
+    data = _gate_data()
+    data["evidence_records"][0]["raw_artifact_paths"] = [
+        "/tmp/task072_missing_raw_artifact.json"
+    ]
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any("local path does not exist" in issue for issue in issues)
+
+
+def test_remote_raw_artifact_refs_require_check_metadata() -> None:
+    data = _gate_data()
+    data["evidence_records"][0]["raw_artifact_paths"] = [
+        "vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/results.yml"
+    ]
+    data["evidence_records"][0].pop("remote_artifact_check", None)
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any("remote_artifact_check must be a mapping" in issue for issue in issues)
+
+
+def test_gate_raw_artifacts_are_existing_local_or_checked_remote_refs() -> None:
+    gate = load_qwen_eval_repro_gate()
+
+    for record in gate["evidence_records"]:
+        assert (
+            validate_raw_artifact_paths(
+                record["raw_artifact_paths"],
+                context=record["evidence_id"],
+            )
+            == []
+        )
+        if any(path.startswith("vm4vpn:") for path in record["raw_artifact_paths"]):
+            assert record["remote_artifact_check"]["status"] == "pm_verified"
+
+
 def test_qwen_eval_repro_gate_groups_valid_evidence_by_benchmark() -> None:
     grouped = qwen_repro_evidence_by_benchmark()
 
@@ -117,6 +156,16 @@ def test_qwen_eval_repro_gate_records_live_endpoint_blocker_probe() -> None:
     assert blocker["status"] == "blocked_in_this_workspace"
     assert any("127.0.0.1:13000" in command for command in blocker["probe_commands"])
     assert "connection refused" in blocker["observed_result"]
+
+
+def test_qwen_eval_repro_gate_records_endpoint_inventory_without_qwen() -> None:
+    gate = load_qwen_eval_repro_gate()
+    blockers = {blocker["blocker_id"]: blocker for blocker in gate["runtime_blockers"]}
+
+    blocker = blockers["endpoint_inventory_has_no_qwen_surface"]
+    assert blocker["status"] == "blocked_in_available_endpoint_inventory"
+    assert "endpoints.txt" in " ".join(blocker["probe_commands"])
+    assert "qwen_endpoint_hits=0" in blocker["observed_result"]
 
 
 def test_qwen_eval_repro_gate_report_is_reviewable() -> None:

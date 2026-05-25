@@ -1,6 +1,6 @@
 # task072_qwen_eval_repro_gate - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 
@@ -17,3 +17,8 @@
    needs explicit max-token and final-answer parser contracts.
 4. Session 5 added no new gate logic; it recorded the PR-status durable entry
    required by the stop hook.
+5. Session 6 requires raw artifact evidence to be either an existing local path
+   or a deliberately checked remote reference such as `vm4vpn:`; missing local
+   paths are a gate failure.
+6. `/work-agents/endpoints.txt` can list reachable endpoint surfaces without
+   Qwen. Record only sanitized counts/model-hit summaries, not credentials.

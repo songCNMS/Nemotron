@@ -1,6 +1,25 @@
 # task072_qwen_eval_repro_gate - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
+
+## Session 6 - 2026-05-25 - intern_nem_dev_1
+
+- PM blocked PR #173 pending evidence-path fixes on head
+  `c5139ea68c6aac543901c721ee51808a7a5cec97`.
+- Replaced missing local math raw artifact paths for `math_probe_session37`
+  and `corrected_math_full_*_session38` with checked `vm4vpn:` references under
+  `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/...`.
+- Added validator coverage that missing local raw artifact paths fail unless
+  they are explicitly checked remote references.
+- Added `/work-agents/endpoints.txt` inventory blocker evidence:
+  `listed_endpoint_rows=10`, `qwen_endpoint_hits=0`; no keys were copied into
+  the repo or report.
+- Validation:
+  - `PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_eval_repro_gate.py tests/recipes/super3/test_eval_chat_template_kwargs.py tests/recipes/super3/test_m1_eval_full_basket.py`
+    -> 62 passed, 9 warnings.
+  - `python -m py_compile src/nemotron/recipes/super3/milestones/m1_eval_basket/__init__.py src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_eval_repro_gate.py`
+    -> passed.
+  - `git diff --check` -> passed.
 
 ## Session 5 - 2026-05-25 - intern_nem_dev_1
 

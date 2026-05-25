@@ -105,11 +105,24 @@ evidence_records:
       hmmt_original_4096_parsed_rate: 1.0
       hmmt_original_8192_correct_rate: 0.6666666666666666
     raw_artifact_paths:
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/summary.json
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_probe_session37/results.jsonl
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/aime_2025_nemo/aime_2025_nemo.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/eval-results/hmmt_feb25/output.jsonl
+    remote_artifact_check:
+      status: pm_verified
+      checked_at_utc: "2026-05-25T04:14:00Z"
+      checked_by: intern_nem_pm
+      check_result: |
+        PM verified `vpn:/tmp/task071_vpn_eval_qwen30b_original_full` exists
+        and contains usable AIME25 and HMMT artifacts. These remote references
+        replace missing local `math_probe_session37` paths.
     validity_notes: |
       Recorded base-Qwen endpoint smoke showing that math parser success depends
-      on the prompt/final-answer contract and generation budget.
+      on the prompt/final-answer contract and generation budget. The original
+      local session37 debug paths are unavailable in this workspace, so the gate
+      keeps checked vm4vpn references for the reusable Qwen original math
+      artifacts instead of pretending missing local paths are valid.
 
   - evidence_id: qwen30b_original_corrected_math_full_session38
     benchmark_id: aime25_hmmt_full
@@ -140,13 +153,24 @@ evidence_records:
       legacy_aime25_score: 0.16666666666666666
       legacy_hmmt_symbolic_correct_percent: 6.666666666666667
     raw_artifact_paths:
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/summary.json
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/results.jsonl
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/summary.json
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/results.jsonl
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/aime25_nemo/aime_2025_nemo/aime_2025_nemo.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/report.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/hmmt/eval-results/hmmt_feb25/output.jsonl
+    remote_artifact_check:
+      status: pm_verified
+      checked_at_utc: "2026-05-25T04:14:00Z"
+      checked_by: intern_nem_pm
+      check_result: |
+        PM verified `vpn:/tmp/task071_vpn_eval_qwen30b_original_full` exists
+        and contains usable AIME25 and HMMT artifacts. These remote references
+        replace missing local `corrected_math_full_*_session38` paths.
     validity_notes: |
       Full recorded corrected-math run through the Qwen chat endpoint. It is
       regression evidence for this repo's eval path, not an official Qwen score.
+      The original local session38 debug paths are unavailable in this
+      workspace, so checked vm4vpn references are used for the reusable Qwen
+      original math artifacts.
 
 invalid_task_findings:
   - finding_id: legacy_mmlu_pro_completions_short_parser_mismatch
@@ -195,3 +219,14 @@ runtime_blockers:
       Could not run a fresh live base-Qwen endpoint smoke from this worktree.
       The gate therefore records the existing smallest Qwen chat-completions
       reproduction smoke and the exact endpoint blocker for PM/runtime follow-up.
+  - blocker_id: endpoint_inventory_has_no_qwen_surface
+    status: blocked_in_available_endpoint_inventory
+    probe_commands:
+      - awk 'NF && $1 !~ /^#/ {print $2}' /work-agents/endpoints.txt | grep -i qwen || true
+      - awk 'NF && $1 !~ /^#/ {print $2}' /work-agents/endpoints.txt | grep -ci qwen || true
+    observed_at_utc: "2026-05-25T04:14:00Z"
+    observed_result: 10 active endpoint rows checked; qwen_endpoint_hits=0
+    impact: |
+      `/work-agents/endpoints.txt` lists reachable non-Qwen model surfaces only.
+      No listed endpoint can serve as a fresh base-Qwen smoke target without
+      provisioning a new Qwen endpoint or remote forward.
