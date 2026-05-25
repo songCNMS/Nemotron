@@ -451,8 +451,8 @@
 ## Session 42
 
 - 按“进行下一步”继续监控 math-final-answer 30B retrain；远端训练已越过 `2000/2500` 计划观察点，tmux session `task067_task071_qwen30b_a3b_math_final_answer_v1` 仍 active。
-- 同步 NemTron 最新 train log 并刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/metric_curves.png`、`metric_curves_session42.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
-- 本轮图表解析到 train iter `3850/8774`，progress `43.88%`，latest train lm loss `0.3580311`，recent-50 mean `0.380231`，skipped/nan `0/0`。
-- Validation 趋势：iter `2000` loss/PPL `0.3630795/1.437750`，iter `2500` `0.3616964/1.435763`，iter `3000` `0.3541151/1.424919` 为当前 best；iter `3500` 回升到 `0.3861476/1.471302`，说明最新 validation 点相对 best 明显回退，需以 `4000/4500` 点确认是否恢复。
-- 飞书发送成功：image message id `om_x100b6e0fc1700c88b4a0c6cb63dbd26`，follow-up text message id `om_x100b6e0fc12d64f4b3e50b6e4763d27`。
-- 结束前复查远端训练 latest observed iter `3920/8774`，latest checkpoint marker `3500`，最近训练行 skipped/nan 仍为 `0/0`。
+- 同步 NemTron 最新 train log 并刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_v1/metrics/metric_curves.png`、`metric_curves_session42.png`、`metric_curves_session42_iter4000.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 本轮最终图表解析到 train iter `4000/8774`，progress `45.59%`，latest train lm loss `0.3749772`，recent-50 mean `0.377212`，skipped/nan `0/0`。
+- Validation 趋势：iter `2000` loss/PPL `0.3630795/1.437750`，iter `2500` `0.3616964/1.435763`，iter `3000` `0.3541151/1.424919` 为当前 best；iter `3500` 回升到 `0.3861476/1.471302` 后，iter `4000` 恢复到 `0.3747286/1.454597`，但仍未回到当前 best。
+- 飞书发送成功：4000 点最终图 image message id `om_x100b6e0fe9882c8cc2de85b950cc03e`，follow-up text message id `om_x100b6e0fe9af7cb0b14a5b3d69882e1`；早前 3850 点临时图 image id `om_x100b6e0fc1700c88b4a0c6cb63dbd26`。
+- 结束前复查远端训练 tmux 仍 active，latest checkpoint marker `4000`，`iter_0004000` checkpoint 目录存在，最近训练行 skipped/nan 仍为 `0/0`。
