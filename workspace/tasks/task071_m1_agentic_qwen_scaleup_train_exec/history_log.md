@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
 
 ## Session 1
 
@@ -595,3 +595,14 @@
 - 远端 checkpoint 校验：`iter_0003000`、`iter_0004500`、`iter_0005000` 均存在，大小均约 `399G`，`latest_checkpointed_iteration.txt=5000`。
 - 验证：`python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过；`git diff --check` 通过。
 - 记录报告 `qwen_chat_aligned_metrics_session56.md`，包含 4500/5000 validation、checkpoint candidate 判断和 iter 3000 export/eval 准备清单。
+
+## Session 57
+
+- 按“执行下一步”围绕 best candidate `iter_0003000` 启动 HF export/register；远端训练仍 active，所有 8 张 H200 由 `task067_task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 占用，训练未中断。
+- 首次尝试 CPU-only export 失败，报错为 TransformerEngine attention 需要 CUDA；随后在 `CUDA_VISIBLE_DEVICES=5` 上启动 tmux session `task071_qwen_chat_iter3000_export_gpu5`，复用单卡空余显存完成 Megatron-Bridge 导出。
+- HF export 成功写入 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/hf_export_iter_0003000`，大小约 `57G`，包含 `16` 个 safetensors shards、`model.safetensors.index.json`、Qwen tokenizer/config/chat template 文件。
+- 写入并验证 manifest `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/hf_export_iter_0003000/task071_export_manifest.json`；model id 为 `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`，HF config 显示 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer class 为 `Qwen2TokenizerFast`。
+- 同步最新 train log 并刷新 metrics：本轮曲线解析到 train iter `5570/8740`，progress `63.73%`，latest train lm loss `0.3836812`，recent-50 train loss mean `0.378527694`，skipped/nan `0/0`。
+- Validation@5500 loss/PPL 为 `0.3557427/1.427240`，明显好于 validation@5000 `0.3781844/1.459632`，但仍高于 best validation@3000 `0.3531853/1.423595`；因此 `iter_0003000` 继续作为当前 eval 候选。
+- 刷新本地图表 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session57_iter5500.png`，并记录报告 `qwen_chat_iter3000_export_session57.md`。
+- 评测入口状态：当前没有 active SGLang endpoint，端口 `30000/30001` 未监听；由于 8 张 H200 均在训练进程中，未启动并发 SGLang 服务以避免训练显存与吞吐风险。可执行入口是分配 serving 窗口后用 `tp=4`、`dp=2`、`context_length=16384` 服务导出的 HF 目录，再跑 corrected MMLU-Pro/AIME25/HMMT comparison。

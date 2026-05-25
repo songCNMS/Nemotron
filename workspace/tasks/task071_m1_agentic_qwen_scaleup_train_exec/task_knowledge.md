@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
 
 ## Notes
 
@@ -147,3 +147,7 @@
 - Qwen chat-template retrain Session 55 decision fact: iter `3000` is the current export/eval candidate; keep the training run active through `4500/5000` to determine whether validation returns near best or remains in the higher-loss band.
 - Qwen chat-template retrain Session 56 metric fact: refreshed logs reached train iter `5000/8740`, checkpoint marker `5000`, skipped/nan `0/0`; validation@4500 is `0.3790836/1.460945`, validation@5000 is `0.3781844/1.459632`, and best remains iter `3000` `0.3531853/1.423595`.
 - Qwen chat-template retrain Session 56 decision fact: iter `3000` is the current export/eval candidate; iter `5000` is not a priority candidate because its validation loss is `+0.0249991` above iter `3000`, while `iter_0003000`, `iter_0004500`, and `iter_0005000` all exist at about `399G` each.
+- Qwen chat-template retrain export fact: Session 57 exported `task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` `iter_0003000` to HF path `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/hf_export_iter_0003000`; CPU-only export fails because TransformerEngine attention requires CUDA, while `CUDA_VISIBLE_DEVICES=5` export succeeds without stopping the active training run.
+- Qwen chat-template retrain HF artifact fact: the Session 57 export is about `57G`, contains `16` safetensors shards plus `model.safetensors.index.json`, validates with HF config/tokenizer as `model_type=qwen3_moe`, `num_hidden_layers=48`, `num_experts=128`, `num_experts_per_tok=8`, and is recorded in `task071_export_manifest.json` as model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`.
+- Qwen chat-template retrain Session 57 metric fact: refreshed logs reached train iter `5570/8740`, checkpoint marker `5500`, skipped/nan `0/0`; validation@5500 is `0.3557427/1.427240`, improving sharply from iter `5000` but still above best iter `3000` `0.3531853/1.423595`.
+- Qwen chat-template retrain eval-capacity fact: when the all-GPU training job is active, corrected 30B evaluation should either wait for a serving window or explicitly accept concurrent SGLang contention; the known corrected-eval serving shape is SGLang `tp=4`, `dp=2`, `context_length=16384`, model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`, exposed to `vm4vpn` via `127.0.0.1:13000`.
