@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Notes
 
@@ -154,3 +154,7 @@
 - Qwen chat-template retrain Session 58 serving fact: while training is active, SGLang `mem_fraction_static=0.25` with `max_total_tokens=16384` is too small after loading `iter_0003000` and fails during memory-pool init; `mem_fraction_static=0.35`, `max_total_tokens=12288`, `max_running_requests=1`, and `--disable-cuda-graph` starts successfully for smoke usage with 16k context.
 - Qwen chat-template retrain Session 58 smoke fact: `iter_0003000` endpoint smoke returned exact `ready`; corrected MMLU-Pro per-category-1 smoke scored `8/14` with parsed rate `1.0`; AIME25/HMMT 1-row math smoke with original prompts and `max_tokens=8192` had `2/2` parsed, `2/2` stop finishes, and `0/2` exact-normalized correctness.
 - Qwen chat-template retrain Session 58 cleanup fact: after endpoint smoke, `task071_qwen_chat_iter3000_sglang_smoke` was stopped, port `30000` was clear, GPU memory returned to training-only levels, and the active training run continued through at least iter `6230/8740` with skipped/nan `0/0`.
+- Qwen chat-template retrain Session 59 completion fact: training completed at iter `8740/8740` with final validation loss/PPL `0.3842467/1.468508`; best validation remains iter `3000` loss/PPL `0.3531853/1.423595`; final checkpoint `iter_0008740` exists but is not the eval candidate.
+- Qwen metric parser fact: final Megatron validation lines may include `on validation set` between the iteration and metric pipe; `plot_qwen_sft_metrics.py` must accept that optional phrase or it will miss final validation@8740.
+- Qwen chat-template retrain Session 59 corrected eval fact: iter3000 full corrected metrics are MMLU-Pro `0.5340757978723404` with parsed rate `1.0`, AIME25 `0.06666666666666667` with parsed rate `0.9266666666666666`, and HMMT exact-normalized correct percent `0.0` with parsed rate `1.0`; full artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session59`.
+- Qwen chat-template retrain Session 59 comparison fact: compared with original Session 47 corrected metrics, iter3000 deltas are MMLU-Pro `-0.027925531914893636`, AIME25 `-0.4666666666666667`, and HMMT exact percent `-43.333333333333336`; parser coverage is high, but math correctness remains far below original.

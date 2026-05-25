@@ -36,6 +36,7 @@ TRAIN_RE = re.compile(
 )
 VALID_RE = re.compile(
     rf"validation loss at iteration\s+(?P<iteration>\d+)"
+    rf"(?:\s+on\s+validation\s+set)?"
     rf"\s+\|\s+lm loss value:\s+(?P<lm_loss>{FLOAT})"
     rf"\s+\|\s+lm loss PPL:\s+(?P<ppl>{FLOAT})"
 )

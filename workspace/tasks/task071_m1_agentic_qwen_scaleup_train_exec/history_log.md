@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Session 1
 
@@ -618,3 +618,15 @@
 - 刷新训练 metrics 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session58_iter6000.png`；本轮解析到 train iter `6220/8740`，progress `71.17%`，latest validation@6000 比 validation@5500 回落，skipped/nan 仍为 `0/0`。
 - 资源清理：完成 smoke 后停止 `task071_qwen_chat_iter3000_sglang_smoke`，确认 port `30000` 释放，GPU 显存恢复为训练独占状态；训练继续到至少 iter `6230/8740`，skipped/nan 仍为 `0/0`。
 - 记录报告 `qwen_chat_iter3000_endpoint_smoke_session58.md`，包含 endpoint 参数、smoke metrics、训练影响和 full corrected eval 的执行入口。
+
+## Session 59
+
+- 按“执行下一步”接续远端状态，发现 `task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 已完成到 iter `8740/8740`；final checkpoint `iter_0008740` 已保存，tmux 训练 session 已退出，8 张 H200 无训练/serving compute apps。
+- 修复 `plot_qwen_sft_metrics.py` 的 validation regex，使最终日志格式 `validation loss at iteration 8740 on validation set` 能进入 CSV/plot/summary；重新生成最终图表 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_final_answer_qwen_chat_v2/metrics/metric_curves_session59_final.png`。
+- 最终训练指标：validation@8740 loss/PPL `0.3842467/1.468508`，validation@8500 loss/PPL `0.4024086/1.495422`，best validation 仍为 iter `3000` loss/PPL `0.3531853/1.423595`；训练全程 max skipped/nan 均为 `0/0`。
+- 启动 full corrected eval endpoint：tmux session `task071_qwen_chat_iter3000_sglang_full_eval`，model id `task071-qwen3-30b-a3b-agentic-sft-qwen-chat-iter0003000-hf`，`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`；`/v1/models` 返回 `max_model_len=16384`。
+- Corrected MMLU-Pro full 完成：`12032/12032` rows 全部 `status=ok`、parsed rate `1.0`、finish `stop=12032`、accuracy `0.5340757978723404`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session59/mmlu_corrected_full`。
+- Corrected math full 完成：AIME25 `300/300` rows 全部 `status=ok`，parsed rate `0.9266666666666666`，exact-normalized accuracy `0.06666666666666667`，finish `stop=278`、`length=22`；HMMT `30/30` rows 全部 `status=ok`，parsed rate `1.0`，exact-normalized correct percent `0.0`，finish `stop=30`。
+- Same-protocol comparison vs original Session 47：MMLU-Pro delta `-0.027925531914893636`，AIME25 delta `-0.4666666666666667`，HMMT exact-percent delta `-43.333333333333336`；iter3000 improves parser coverage on math but remains far below original on math correctness。
+- 资源清理：full corrected eval 后停止 `task071_qwen_chat_iter3000_sglang_full_eval`，确认 port `30000` 清空，8 张 H200 释放。
+- 记录报告 `qwen_chat_final_corrected_eval_session59.md`，包含最终训练指标、parser 修复、full corrected eval metrics、original 对比和资源清理状态。
