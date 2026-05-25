@@ -1,6 +1,6 @@
 # task072_qwen_eval_repro_gate - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 > Keep only durable cross-session facts that are not obvious from a quick diff.
 
@@ -15,3 +15,5 @@
 3. Existing task071 math records show old AIME25/HMMT scores were mixed with
    generation-budget and parser/final-answer failures; corrected Qwen evidence
    needs explicit max-token and final-answer parser contracts.
+4. Session 5 added no new gate logic; it recorded the PR-status durable entry
+   required by the stop hook.

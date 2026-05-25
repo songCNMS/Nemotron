@@ -1,6 +1,18 @@
 # task072_qwen_eval_repro_gate - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
+
+## Session 5 - 2026-05-25 - intern_nem_dev_1
+
+- Stop-hook correction required a Session 5 durable entry for task072 after
+  PR #173 was opened.
+- PR remains https://github.com/songCNMS/Nemotron/pull/173.
+- Current pushed head before this correction was
+  `96549cb84019cdfac6f3f236dfe9c9e1f6719492`; this entry records the PR
+  readiness metadata already reported to PM.
+- No implementation scope changed in this correction. The Qwen-first gate,
+  validator, manifest, focused tests, endpoint blocker ledger, and residual
+  blockers remain as recorded in Session 1.
 
 ## Session 1 - 2026-05-25 - intern_nem_dev_1
 
