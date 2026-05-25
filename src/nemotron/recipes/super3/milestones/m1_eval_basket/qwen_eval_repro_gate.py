@@ -1,0 +1,368 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+"""Qwen-first eval reproduction gate for chat-template changes.
+
+This gate is deliberately evidence-first. Matching the repo's
+``super3.jinja`` settings is not enough for Qwen-targeted work; a
+candidate must preserve or refresh base-Qwen eval reproduction evidence
+that records the checkpoint/tokenizer, endpoint route, prompt/parser
+contract, raw artifacts, and known harness mismatches.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any
+
+
+JsonDict = dict[str, Any]
+
+QWEN_EVAL_REPRO_GATE_PATH = Path(__file__).with_name(
+    "qwen_eval_repro_gate.yaml"
+)
+
+REQUIRED_REFERENCE_MODEL_FIELDS = (
+    "source_model",
+    "local_model_path",
+    "tokenizer_reference",
+    "chat_template_reference",
+    "qwen_first",
+)
+REQUIRED_EVAL_PATH_FIELDS = (
+    "endpoint_type",
+    "chat_route",
+    "endpoint_url_shape",
+    "chat_template_kwargs",
+    "parser_contract",
+)
+REQUIRED_EVIDENCE_FIELDS = (
+    "evidence_id",
+    "benchmark_id",
+    "benchmark_name",
+    "evidence_type",
+    "gate_status",
+    "source_manifest",
+    "model_id",
+    "model_path",
+    "endpoint_type",
+    "route",
+    "endpoint_url_shape",
+    "chat_template_source",
+    "chat_template_kwargs",
+    "max_generation_tokens",
+    "parser",
+    "final_answer_format",
+    "sample_scope",
+    "baseline_numbers",
+    "raw_artifact_paths",
+)
+REQUIRED_INVALID_FINDING_FIELDS = (
+    "finding_id",
+    "benchmark_id",
+    "issue_types",
+    "invalid_reason",
+    "required_remediation",
+)
+VALID_INVALID_FINDING_TYPES = frozenset(
+    {"completions_only", "short_generation_capped", "parser_misaligned"}
+)
+VALID_EVIDENCE_STATUSES = frozenset(
+    {"valid_qwen_reproduction_smoke", "valid_qwen_reproduction_full"}
+)
+
+
+def _load_yaml(path: Path) -> JsonDict:
+    import yaml
+
+    with path.open(encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        raise ValueError(f"{path}: expected YAML mapping at top level")
+    return data
+
+
+def _is_mapping(value: Any) -> bool:
+    return isinstance(value, Mapping)
+
+
+def _is_non_empty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _is_positive_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
+def _validate_chat_template_kwargs(
+    value: Any,
+    *,
+    context: str,
+) -> list[str]:
+    issues: list[str] = []
+    if not isinstance(value, Mapping):
+        return [f"{context} must be a mapping"]
+    for key in ("enable_thinking", "truncate_history_thinking"):
+        if key not in value:
+            issues.append(f"{context}.{key} must be present")
+        elif not isinstance(value[key], bool):
+            issues.append(f"{context}.{key} must be a bool")
+    return issues
+
+
+def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
+    """Return validation issues for the Qwen eval reproduction gate."""
+    issues: list[str] = []
+    if data.get("schema_version") != 1:
+        issues.append("gate schema_version must be 1")
+    if data.get("milestone") != "M1":
+        issues.append("gate milestone must be M1")
+    if data.get("gate_id") != "task072_qwen_eval_repro_gate_s1":
+        issues.append("gate_id must be task072_qwen_eval_repro_gate_s1")
+    if data.get("super3_template_consistency_is_sufficient") is not False:
+        issues.append(
+            "super3_template_consistency_is_sufficient must be false; "
+            "Qwen checkpoint/tokenizer reproduction evidence is required"
+        )
+
+    reference_model = data.get("reference_model")
+    if not _is_mapping(reference_model):
+        issues.append("reference_model must be a mapping")
+    else:
+        for field in REQUIRED_REFERENCE_MODEL_FIELDS:
+            if field not in reference_model:
+                issues.append(f"reference_model missing required field {field!r}")
+        source_model = reference_model.get("source_model")
+        if not _is_non_empty_string(source_model) or "Qwen" not in source_model:
+            issues.append("reference_model.source_model must name a Qwen model")
+        if reference_model.get("qwen_first") is not True:
+            issues.append("reference_model.qwen_first must be true")
+        for field in (
+            "local_model_path",
+            "tokenizer_reference",
+            "chat_template_reference",
+        ):
+            if field in reference_model and not _is_non_empty_string(
+                reference_model[field]
+            ):
+                issues.append(f"reference_model.{field} must be a non-empty string")
+
+    eval_path = data.get("intended_eval_path")
+    if not _is_mapping(eval_path):
+        issues.append("intended_eval_path must be a mapping")
+    else:
+        for field in REQUIRED_EVAL_PATH_FIELDS:
+            if field not in eval_path:
+                issues.append(f"intended_eval_path missing required field {field!r}")
+        if eval_path.get("endpoint_type") != "openai_chat_completions":
+            issues.append(
+                "intended_eval_path.endpoint_type must be openai_chat_completions"
+            )
+        if eval_path.get("chat_route") != "/v1/chat/completions":
+            issues.append(
+                "intended_eval_path.chat_route must be /v1/chat/completions"
+            )
+        issues.extend(
+            _validate_chat_template_kwargs(
+                eval_path.get("chat_template_kwargs"),
+                context="intended_eval_path.chat_template_kwargs",
+            )
+        )
+
+    source_manifests = data.get("source_manifests")
+    if (
+        not isinstance(source_manifests, list)
+        or not source_manifests
+        or not all(_is_non_empty_string(path) for path in source_manifests)
+    ):
+        issues.append("source_manifests must be non-empty strings")
+
+    evidence_records = data.get("evidence_records")
+    valid_evidence_count = 0
+    if not isinstance(evidence_records, list) or not evidence_records:
+        issues.append("evidence_records must be a non-empty list")
+    else:
+        seen: set[str] = set()
+        for index, record in enumerate(evidence_records):
+            prefix = f"evidence_records[{index}]"
+            if not isinstance(record, Mapping):
+                issues.append(f"{prefix} must be a mapping")
+                continue
+            for field in REQUIRED_EVIDENCE_FIELDS:
+                if field not in record:
+                    issues.append(f"{prefix} missing required field {field!r}")
+            evidence_id = record.get("evidence_id")
+            if _is_non_empty_string(evidence_id):
+                if evidence_id in seen:
+                    issues.append(f"{prefix} duplicate evidence_id {evidence_id!r}")
+                seen.add(str(evidence_id))
+            else:
+                issues.append(f"{prefix}.evidence_id must be a non-empty string")
+            if "Qwen" not in str(record.get("model_id", "")):
+                issues.append(f"{prefix}.model_id must name a Qwen model")
+            if record.get("endpoint_type") != "openai_chat_completions":
+                issues.append(
+                    f"{prefix}.endpoint_type must be openai_chat_completions"
+                )
+            if record.get("route") != "/v1/chat/completions":
+                issues.append(f"{prefix}.route must be /v1/chat/completions")
+            issues.extend(
+                _validate_chat_template_kwargs(
+                    record.get("chat_template_kwargs"),
+                    context=f"{prefix}.chat_template_kwargs",
+                )
+            )
+            if not _is_positive_int(record.get("max_generation_tokens")):
+                issues.append(f"{prefix}.max_generation_tokens must be positive int")
+            raw_paths = record.get("raw_artifact_paths")
+            if (
+                not isinstance(raw_paths, list)
+                or not raw_paths
+                or not all(_is_non_empty_string(path) for path in raw_paths)
+            ):
+                issues.append(f"{prefix}.raw_artifact_paths must be non-empty strings")
+            if not _is_mapping(record.get("baseline_numbers")):
+                issues.append(f"{prefix}.baseline_numbers must be a mapping")
+            if record.get("gate_status") in VALID_EVIDENCE_STATUSES:
+                valid_evidence_count += 1
+
+    if valid_evidence_count == 0:
+        issues.append(
+            "at least one evidence record must be a valid Qwen reproduction smoke"
+        )
+
+    invalid_findings = data.get("invalid_task_findings")
+    seen_issue_types: set[str] = set()
+    if not isinstance(invalid_findings, list) or not invalid_findings:
+        issues.append("invalid_task_findings must be a non-empty list")
+    else:
+        for index, finding in enumerate(invalid_findings):
+            prefix = f"invalid_task_findings[{index}]"
+            if not isinstance(finding, Mapping):
+                issues.append(f"{prefix} must be a mapping")
+                continue
+            for field in REQUIRED_INVALID_FINDING_FIELDS:
+                if field not in finding:
+                    issues.append(f"{prefix} missing required field {field!r}")
+            issue_types = finding.get("issue_types")
+            if (
+                not isinstance(issue_types, list)
+                or not issue_types
+                or not all(_is_non_empty_string(item) for item in issue_types)
+            ):
+                issues.append(f"{prefix}.issue_types must be non-empty strings")
+                continue
+            unknown = set(issue_types) - VALID_INVALID_FINDING_TYPES
+            if unknown:
+                issues.append(f"{prefix}.issue_types unknown values: {sorted(unknown)}")
+            seen_issue_types.update(str(item) for item in issue_types)
+    missing_issue_types = VALID_INVALID_FINDING_TYPES - seen_issue_types
+    if missing_issue_types:
+        issues.append(
+            "invalid_task_findings must cover issue types: "
+            f"{sorted(missing_issue_types)}"
+        )
+
+    blockers = data.get("runtime_blockers")
+    if not isinstance(blockers, list):
+        issues.append("runtime_blockers must be a list")
+    else:
+        for index, blocker in enumerate(blockers):
+            prefix = f"runtime_blockers[{index}]"
+            if not isinstance(blocker, Mapping):
+                issues.append(f"{prefix} must be a mapping")
+                continue
+            for field in ("blocker_id", "status", "probe_commands", "impact"):
+                if field not in blocker:
+                    issues.append(f"{prefix} missing required field {field!r}")
+            commands = blocker.get("probe_commands")
+            if (
+                not isinstance(commands, list)
+                or not commands
+                or not all(_is_non_empty_string(command) for command in commands)
+            ):
+                issues.append(f"{prefix}.probe_commands must be non-empty strings")
+    return issues
+
+
+def load_qwen_eval_repro_gate(path: Path | None = None) -> JsonDict:
+    """Load the Qwen eval reproduction gate, raising on invalid shape."""
+    target = path or QWEN_EVAL_REPRO_GATE_PATH
+    data = _load_yaml(target)
+    issues = validate_qwen_eval_repro_gate(data)
+    if issues:
+        raise ValueError(
+            f"{target}: invalid Qwen eval reproduction gate:\n- "
+            + "\n- ".join(issues)
+        )
+    return data
+
+
+def qwen_repro_evidence_by_benchmark(
+    data: Mapping[str, Any] | None = None,
+) -> dict[str, list[JsonDict]]:
+    """Group valid Qwen reproduction evidence by benchmark id."""
+    source = data if data is not None else load_qwen_eval_repro_gate()
+    grouped: dict[str, list[JsonDict]] = {}
+    for record in source["evidence_records"]:
+        if record["gate_status"] not in VALID_EVIDENCE_STATUSES:
+            continue
+        grouped.setdefault(str(record["benchmark_id"]), []).append(dict(record))
+    return {
+        benchmark_id: sorted(rows, key=lambda row: row["evidence_id"])
+        for benchmark_id, rows in sorted(grouped.items())
+    }
+
+
+def format_qwen_eval_repro_gate_report(
+    data: Mapping[str, Any] | None = None,
+) -> str:
+    """Render a compact human-readable gate report."""
+    source = data if data is not None else load_qwen_eval_repro_gate()
+    model = source["reference_model"]["source_model"]
+    lines = [
+        f"# Qwen eval reproduction gate: {source['gate_id']}",
+        "",
+        f"Reference model: `{model}`",
+        "Super3 template consistency sufficient: `false`",
+        "",
+        "## Valid Qwen Evidence",
+    ]
+    for record in sorted(source["evidence_records"], key=lambda row: row["evidence_id"]):
+        lines.append(
+            f"- `{record['benchmark_id']}` via `{record['route']}`: "
+            f"{record['evidence_id']} ({record['gate_status']}, "
+            f"max_generation_tokens={record['max_generation_tokens']})"
+        )
+
+    lines.extend(["", "## Invalid Legacy Surfaces"])
+    for finding in sorted(
+        source["invalid_task_findings"], key=lambda row: row["finding_id"]
+    ):
+        lines.append(
+            f"- `{finding['benchmark_id']}`: "
+            f"{', '.join(finding['issue_types'])}"
+        )
+
+    if source.get("runtime_blockers"):
+        lines.extend(["", "## Runtime Blockers"])
+        for blocker in source["runtime_blockers"]:
+            lines.append(f"- `{blocker['blocker_id']}`: {blocker['status']}")
+    return "\n".join(lines) + "\n"
+
+
+__all__ = [
+    "QWEN_EVAL_REPRO_GATE_PATH",
+    "VALID_EVIDENCE_STATUSES",
+    "VALID_INVALID_FINDING_TYPES",
+    "format_qwen_eval_repro_gate_report",
+    "load_qwen_eval_repro_gate",
+    "qwen_repro_evidence_by_benchmark",
+    "validate_qwen_eval_repro_gate",
+]
