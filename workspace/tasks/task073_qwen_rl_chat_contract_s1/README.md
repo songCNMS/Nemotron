@@ -1,6 +1,6 @@
 # task073_qwen_rl_chat_contract_s1 - Qwen RL chat contract audit/fix
 
-<!-- METADATA:STATUS=PR_OPEN,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=MERGED,ASSIGNEE=intern_nem_dev_2 -->
 
 ## Background
 
@@ -23,3 +23,4 @@ serving kwargs must share one explicit Qwen chat-template contract.
 - [x] Focused tests fail on missing tokenizer kwargs and sibling/nested `enable_thinking` conflicts.
 - [x] Stop strings stay aligned on the Qwen assistant-turn delimiter.
 - [x] PR opened: https://github.com/songCNMS/Nemotron/pull/172
+- [x] PR #172 merged through PR flow.
