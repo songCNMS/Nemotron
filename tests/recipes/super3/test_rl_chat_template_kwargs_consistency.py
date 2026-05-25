@@ -40,7 +40,14 @@ RL_STAGE_CONFIGS = (
 )
 
 EXPECTED_KWARGS = {
-    "enable_thinking": True,
+    # PR D: enable_thinking=false matches what SFT actually trains
+    # against — no M0/M1 converter sets `reasoning_content` and the
+    # CoT lives in content body, not inside `<think>...</think>`
+    # blocks. With this kwarg false, the generation prompt is
+    # `<|im_start|>assistant\n<think></think>` (closed empty), same as
+    # SFT. Flipping back to true requires PR-D-followup: carry
+    # reasoning_content through M0/M1 supervision builders.
+    "enable_thinking": False,
     "truncate_history_thinking": False,
 }
 

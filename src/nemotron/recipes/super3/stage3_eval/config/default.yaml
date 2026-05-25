@@ -162,15 +162,16 @@ evaluation:
           tokenizer_backend: huggingface
           # Eval chat-template rendering contract — pin explicitly so
           # eval doesn't silently inherit whatever the checkpoint's
-          # tokenizer config happens to carry. truncate_history_thinking
-          # flipped from True (PR B initial value) to False in PR C as
-          # part of the cross-stage unification: every super3 RL stage
-          # now uses {enable_thinking: true, truncate_history_thinking:
-          # false}, matching SWE1/SWE2's explicit multi-turn agentic
-          # choice. Single-turn benchmarks see no behavioral change.
-          # See docs/chat-template-consistency-review.md PR C.
+          # tokenizer config happens to carry. Values match every RL
+          # stage post-PR D:
+          #   - enable_thinking=false matches SFT-time rendering (auto-
+          #     injected `<think></think>` empty prefix; CoT lives in
+          #     content body, not inside `<think>...</think>` blocks).
+          #   - truncate_history_thinking=false matches SWE1/SWE2's
+          #     multi-turn agentic choice; no-op for single-turn evals.
+          # See docs/chat-template-consistency-review.md PR D.
           chat_template_kwargs:
-            enable_thinking: true
+            enable_thinking: false
             truncate_history_thinking: false
         # Uncomment for quick testing:
         # limit_samples: 10
