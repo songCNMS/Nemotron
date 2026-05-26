@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
 
 ## Session 1
 
@@ -771,3 +771,15 @@
 - 当前 summary：progress `34.15%`，latest train lm loss `0.4057285`，latest lr `2.53421e-7`，latest grad norm `0.834`，recent-50 train loss mean `0.46816005`，max skipped/nan `0/0`。
 - Validation 仍只有 iter `400` point：loss/PPL `0.4107993/1.508023`，current best 同为 iter `400`，trend 为 `not-enough-validation-points`。
 - Feishu image send 成功：chat `oc_85148c845ddf7f30b7d7d7944596cccc`，image message `om_x100b6e6cee22dcb4b32b39f4c72f0ca`，image key `img_v3_02122_2a9f64bd-8a70-46ab-8bc8-35e317d14cbg`；summary text message `om_x100b6e6cefdf04a4b26dd201a6dd5c9`。
+
+## Session 73
+
+- 按“continue the next step”继续监控 V4 hard-math recovery run，发现训练已完成到 final iter `1874/1874`；远端 tmux session 已退出，8 张 H200 GPU 均空闲。
+- 同步最终 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/train.log`，刷新最终 metrics artifacts。
+- 最终图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session73_final_iter1870.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- Validation points：iter `400` loss/PPL `0.4107993/1.508023`，iter `800` `0.358061/1.430553`，iter `1200` `0.3588206/1.43164`，iter `1600` `0.3642109/1.439378`，final iter `1874` `0.3586905/1.431454`。
+- Best validation 为 iter `800` loss/PPL `0.358061/1.430553`；final iter `1874` 相比 iter `1600` 改善，但略高于 iter `800`。
+- Checkpoint marker 为 `1874`，checkpoint directories 包含 `iter_0000400`、`iter_0000800`、`iter_0001200`、`iter_0001600`、`iter_0001874`；`iter_0000800` 和 `iter_0001874` 均约 `399G`。
+- 训练健康总结：max skipped/nan `0/0`，latest parsed train loss at iter `1870` 为 `0.4136352`，recent-50 train loss mean `0.400038992`，最终 LR 约 `8.000276e-8`。
+- Candidate decision：选择 `iter_0000800` 作为 primary HF export/corrected eval candidate；`iter_0001874` 作为 secondary candidate，用于需要 final checkpoint 对照时评估。
+- 新增报告 `qwen_v4_final_metrics_session73.md`，记录最终 metrics、checkpoint 状态、候选决策和推荐执行命令。
