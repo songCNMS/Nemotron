@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=68 -->
+<!-- METADATA:SESSION=69 -->
 
 ## Session 1
 
@@ -729,3 +729,16 @@
 - 新增单测覆盖 V4 hard-row classifier、focused bucket 写出、blend 数据集选择、final-answer/format-repair 禁用，以及 scale-up planner 的 v4 script flags。
 - 生成可执行 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4`：uncapped M0、Qwen tokenizer template、original Qwen3-30B-A3B checkpoint、0.2 epoch、GBS `8`、8 GPUs、lr `3e-7`、min lr `8e-8`、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
 - 验证：`python -m py_compile` 通过；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `79 passed, 1 skipped`；`/work-agents/.venv/bin/ruff check ...` 通过；`git diff --check` 通过；禁用词扫描无命中。
+
+## Session 69
+
+- 按“continue the next step”执行 V4 hard-math recovery run path：本地运行 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/run_local_data_prep.sh`，完成 uncapped M0、M1 V4 data prep、Qwen tokenizer packing 和训练计划生成。
+- M0 uncapped 产出 11 个 agentic slices；manifest 对 Hermes 无效行记录已知错误并继续使用有效行，其中 NuminaMath competition train rows `859494`、val rows `100`。
+- M1 V4 artifact 产出 `983397` train rows、`11354` val-shadow rows、`0` M1 errors；math strategy 为 `hard_math_recovery_v4`。
+- V4 bucket counts：hard verified full-solution source/written `184551/184551`，broad verified source/written `360416/90104`，final-answer aux `29/0`，format repair `321971/0`，heldout eval `1419/1419`。
+- Qwen packed artifact 位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/packed_qwen/splits`，metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`num_shards=32`、`total_sequences=1257879`、`total_tokens=822043015`。
+- 训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/training_plan/task071_qwen30b_a3b_hard_math_recovery_v4/training_manifest.json`，packed train rows `74922`、valid rows `287`、GBS `8`、0.2 epoch 对应 `train_iters=1874`。
+- 本地 planning 首次因 pretrained Megatron checkpoint path 只在 NemTron 存在而失败；重新以 `--allow-missing-checkpoint` 生成 script bundle 和训练计划，远端校验证实 checkpoint 路径存在。
+- 同步 repo 和 V4 data bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`；远端校验通过：32 个 train parquet shard、1 个 valid shard、checkpoint exists、8 张 H200 启动前 idle。
+- 启动 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4`，训练命令展开为 `train.train_iters=1874`、GBS `8`、lr `3e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy` 约 `1.14G`、`valid_4096_valid.npy` 约 `4.3M`、`packed_4096_metadata.json`；训练进入主循环并运行到至少 iter `90/1874`，latest observed lm loss `0.9541055`，skipped/nan `0/0`，8 张 H200 均 active。

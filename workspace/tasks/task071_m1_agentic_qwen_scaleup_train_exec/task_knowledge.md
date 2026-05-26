@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=68 -->
+<!-- METADATA:SESSION=69 -->
 
 ## Notes
 
@@ -180,3 +180,7 @@
 - M1 SFT math v4 data-prep fact: `prepare_m1_agentic_sft.py --math-supervision-strategy hard_math_recovery_v4` writes `hard_verified_full_solution`, `verified_full_solution`, `final_answer_aux`, `format_repair`, and `heldout_eval` buckets; default pre-pack sampling fractions are hard verified `1.0`, broad verified `0.25`, final-answer aux `0.0`, and format repair `0.0`.
 - Qwen v4 recovery script fact: generated scripts for `task071_qwen30b_a3b_hard_math_recovery_v4` live under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4` and target original Qwen3-30B-A3B, uncapped M0/M1, Qwen tokenizer template, 0.2 epoch, GBS `8`, all 8 H200 GPUs, lr `3e-7`, min lr `8e-8`, and eval/save interval `400`.
 - Qwen v4 gate fact: promote only after corrected metrics clear MMLU-Pro full accuracy `>=0.55`, AIME25 full accuracy `>=0.20`, and HMMT exact-normalized percent `>=10.0`; use failure clusters only as diagnostics and never train on AIME25/HMMT eval prompts or labels.
+- Qwen v4 prepared artifact fact: Session 69 produced M1 V4 train rows `983397`, val-shadow rows `11354`, hard verified full-solution `184551` rows, broad verified full-solution `90104` sampled rows from `360416`, final-answer aux `0` rows, format repair `0` rows, and heldout eval `1419` rows.
+- Qwen v4 packed artifact fact: Session 69 Qwen tokenizer packing wrote `1257879` total sequences, `822043015` total tokens, `32` train shards, `1` valid shard, packed train rows `74922`, valid rows `287`, `chat_template=tokenizer`, and thinking disabled.
+- Qwen v4 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`, uses all 8 H200 GPUs, `train_iters=1874`, GBS `8`, eval/save interval `400`, lr `3e-7`, min lr `8e-8`, and warmup `100`.
+- Qwen v4 startup health fact: bridge cache wrote `train_4096_train.npy`, `valid_4096_valid.npy`, and `packed_4096_metadata.json`; early training reached at least iter `90/1874` with latest observed lm loss `0.9541055`, skipped iterations `0`, nan iterations `0`, and all GPUs active.
