@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
 
 ## Notes
 
@@ -169,3 +169,4 @@
 - Qwen v3 full-data artifact fact: the Session 62 rerun for `task071_qwen30b_a3b_math_reasoning_replay_v3` produced M1 base rows `983397` train / `11354` val-shadow, v3 sidecar written rows verified `544967`, final-answer-aux `6`, format-repair `16099`, heldout `1419`, packed sequences `1544296`, packed tokens `945009362`, packed train rows `70399`, and `train_iters=2200` at GBS 8 for 0.25 epoch.
 - Megatron-Bridge packed startup fact: when `super3_packed_sft_dir` points at parquet split directories, each torchrun rank can enter lazy parquet -> `.npy` conversion at startup. The bridge conversion must use a file lock and atomic replace, or ranks can read a partially written `.npy` and fail with `_pickle.UnpicklingError: pickle data was truncated` or `EOFError: Ran out of input`.
 - Qwen v3 remote train fact: NemTron run `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` uses remote data under `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3`, all 8 H200 GPUs, `train_iters=2200`, GBS `8`, eval/save interval `500`, lr `5e-7`, min lr `1e-7`, and warmup `100`; Session 63 confirmed training healthy through iter `120/2200` with skipped/nan `0/0`.
+- Qwen v3 validation fact: Session 64 monitored the same run through iter `1500/2200`; validation loss/PPL improved from `0.4362881/1.546954` at iter `500` to `0.4158402/1.515644` at iter `1000` and `0.4110765/1.508441` at iter `1500`, with checkpoint marker `1500` and skipped/nan `0/0`.

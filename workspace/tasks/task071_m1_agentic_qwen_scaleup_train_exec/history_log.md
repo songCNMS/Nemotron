@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
 
 ## Session 1
 
@@ -674,3 +674,13 @@
 - 重启远端训练后成功越过失败点并进入主循环；日志显示 checkpoint 从 original Qwen3-30B-A3B Megatron checkpoint 加载成功，scheduler `lr_decay_iters=2200`、`train_iters=2200`、GBS `8`。
 - 早期健康检查到 iter `120/2200`：iter `80/90/100/110/120` 的 lm loss 分别约 `0.8492/0.7925/0.7125/0.6409/0.5917`，learning rate warmup 完成并处于约 `5.0e-7`，skipped/nan 均为 `0/0`，8 张 GPU 显存约 `81-89GB` 且在训练。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_stage1_sft_train_bridge.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 2 skipped`；`ruff check src/nemotron/recipes/super3/stage1_sft/train.py tests/recipes/super3/test_stage1_sft_train_bridge.py` 通过；`py_compile` 和 `git diff --check` 通过。
+
+## Session 64
+
+- 按“执行下一步”继续监控 NemTron tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3`；训练保持 active，8 张 H200 均在使用。
+- 同步远端 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/logs/train.log` 到本地 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/metrics/train.log`。
+- 使用 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 刷新 metrics artifacts：`metric_curves.png`、`metric_curves_session64_iter1500.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 训练已过 iter `500`、`1000`、`1500` eval/save 点；checkpoint marker 已更新到 `1500`，远端 checkpoints 目录包含 `iter_0000500`、`iter_0001000`、`iter_001500`，总量约 `798G`。
+- Validation 连续改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`；当前 best validation 为 iter `1500`。
+- 最新解析 summary 到 train iter `1500/2200`，progress `68.18%`，latest train lm loss `0.3878813`，recent-50 train loss mean `0.393932076`，learning rate `2.0e-7`，skipped/nan 仍为 `0/0`。
+- 训练健康判断：无 traceback、OOM、UnpicklingError 或 ChildFailedError；validation 维持改善趋势，可以继续监控到 iter `2000` eval/save 点和 final iter `2200`。
