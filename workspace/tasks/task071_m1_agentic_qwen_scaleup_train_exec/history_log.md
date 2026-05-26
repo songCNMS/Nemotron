@@ -741,4 +741,4 @@
 - 本地 planning 首次因 pretrained Megatron checkpoint path 只在 NemTron 存在而失败；重新以 `--allow-missing-checkpoint` 生成 script bundle 和训练计划，远端校验证实 checkpoint 路径存在。
 - 同步 repo 和 V4 data bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`；远端校验通过：32 个 train parquet shard、1 个 valid shard、checkpoint exists、8 张 H200 启动前 idle。
 - 启动 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4`，训练命令展开为 `train.train_iters=1874`、GBS `8`、lr `3e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
-- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy` 约 `1.14G`、`valid_4096_valid.npy` 约 `4.3M`、`packed_4096_metadata.json`；训练进入主循环并运行到至少 iter `90/1874`，latest observed lm loss `0.9541055`，skipped/nan `0/0`，8 张 H200 均 active。
+- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy` 约 `1.14G`、`valid_4096_valid.npy` 约 `4.3M`、`packed_4096_metadata.json`；训练进入主循环并运行到至少 iter `160/1874`，latest observed lm loss `0.6407578`，skipped/nan `0/0`，8 张 H200 均 active。

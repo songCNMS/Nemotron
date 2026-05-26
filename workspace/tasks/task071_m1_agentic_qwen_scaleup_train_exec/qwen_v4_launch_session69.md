@@ -39,8 +39,8 @@
 ## Startup Health
 
 - Bridge cache written: `train_4096_train.npy`, `valid_4096_valid.npy`, `packed_4096_metadata.json`
-- Latest observed iteration: `90/1874`
-- Latest observed lm loss: `0.9541055`
+- Latest observed iteration: `160/1874`
+- Latest observed lm loss: `0.6407578`
 - Skipped iterations: `0`
 - NaN iterations: `0`
 - GPU state: all 8 H200s active, roughly `81-88G` memory used per GPU during early train loop.
