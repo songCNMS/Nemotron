@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Notes
 
@@ -192,3 +192,6 @@
 - Qwen chat-template audit fact: Session 75 verified current Qwen3-30B-A3B-Instruct-2507 source tokenizer and V4 `iter_0000800` HF export render the checked chat prompt identically under default, direct `enable_thinking=false`, nested `chat_template_kwargs`, and direct `enable_thinking=true`; the saved template has no checked `enable_thinking` or `<think>` branches.
 - Qwen V4 data-pipeline audit fact: Session 75 counted non-empty `reasoning_content` in V4 SFT JSONLs and found `0` rows across base `983397`, hard verified full-solution `184551`, and broad verified full-solution `90104`; hard-math full-solution supervision lives in assistant `content`.
 - Chat-template helper fix fact: Session 75 changed `nemotron.data_prep.core.chat_template` to pass both top-level template kwargs and nested `chat_template_kwargs` into `tokenizer.apply_chat_template`, preserving `super3/nano3` behavior while making tokenizer-native Qwen templates receive `enable_thinking` and `truncate_history_thinking` directly.
+- Qwen V5 hard-math precision recipe fact: Session 76 added `hard_math_precision_v5`, which keeps base M1 agentic SFT coverage but only duplicates high-confidence `math_competition_numeric` verified full-solution rows that pass stricter prompt length, solution length, multi-line, boxed-tail, answer-seeking, non-proof, and topic filters; default sidecar fractions are hard `0.6`, broad verified `0.0`, final-answer aux `0.0`, and format repair `0.0`.
+- Qwen V5 sizing fact: applying the new V5 precision filter to existing V4 prepared data keeps `114305/184551` rows from `agentic_sft_v0_math_hard_verified_full_solution_train.jsonl` and `0/90104` rows from broad verified full-solution; at default hard fraction `0.6`, expected strict hard sidecar rows are about `68583` before packing.
+- Qwen V5 script fact: Session 76 generated scripts under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5` for run `task071_qwen30b_a3b_hard_math_precision_v5`, using Qwen tokenizer template kwargs `enable_thinking=false`, 0.2 epoch, GBS `8`, lr `2e-7`, min lr `8e-8`, eval/save interval `400`, and eval config `m1_full_basket_launcher_available`.

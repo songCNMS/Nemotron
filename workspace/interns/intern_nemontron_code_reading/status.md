@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 75 |
+| Session | 76 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Audited Qwen train/eval chat-template handling, fixed data-prep kwargs propagation for tokenizer-native templates, added regression coverage, and documented V4 artifact impact. |
+| Latest | Added hard_math_precision_v5 data-prep/planner strategy, sized it on V4 prepared rows, generated the V5 script bundle, and verified focused tests. |

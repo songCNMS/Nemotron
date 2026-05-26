@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Session 1
 
@@ -809,3 +809,14 @@
 - V4 data audit 结论：base train `983397` rows、hard verified full-solution `184551` rows、broad verified full-solution `90104` rows 均无 non-empty `reasoning_content`；math reasoning supervision 位于 assistant `content`。
 - 验证：targeted pytest `36 passed`，chat-template test file `5 passed`，patched files `ruff check` 通过，`py_compile` 通过，M1 smoke on 5 V4 rows 通过并生成 `1` packed row、`841` tokens、`298` loss tokens。
 - 新增审计报告 `qwen_chat_template_data_pipeline_audit_session75.md`，记录当前 V4 是否受影响、修复范围、evidence 和 verification。
+
+## Session 76
+
+- 按“执行下一步”在 Session 75 chat-template audit 后推进下一版 hard-math training recipe；保留 V4 可复现性，新增独立策略 `hard_math_precision_v5`。
+- 在 `prepare_m1_agentic_sft.py` 中新增 V5 高精度 hard-row filter：基于 V4 contamination-safe verified full-solution pool，额外要求 prompt 长度 `120..2400`、solution 长度 `1000..9000`、至少 `4` 个非空 solution lines、boxed final answer 位于末尾 `1800` chars 内，并默认禁用 broad verified、final-answer aux 和 format-repair sidecar。
+- 在 `plan_qwen_scaleup_run.py` 接入 V5 strategy 和 `--math-v5-*` flags；生成的 local data-prep script 会把 `hard_math_precision_v5` 和默认 fraction `0.6/0.0/0.0/0.0` 传入 M1 data prep，并继续使用 Qwen tokenizer chat-template contract。
+- 新增单测覆盖 V5 high-confidence hard rows、V5 broad replay disabled、manifest/report/blend 输出，以及 Qwen scale-up planner V5 script flags。
+- 使用现有 V4 prepared JSONL 做 sizing：V4 hard sidecar `184551` rows 中 `114305` rows 通过 V5 precision filter，V4 broad verified sidecar `90104` rows 中 `0` rows 通过；按默认 hard fraction `0.6` 估算约 `68583` strict hard rows 会进入 V5 sidecar。
+- 生成 V5 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5`；run name `task071_qwen30b_a3b_hard_math_precision_v5`，lr `2e-7`、min lr `8e-8`、0.2 epoch、GBS `8`、8 GPUs、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
+- 新增报告 `qwen_v5_hard_math_precision_plan_session76.md`，记录 V5 rationale、filter、sizing、script paths 和 verification。
+- 验证：`py_compile` 通过；`ruff check` 通过；focused V5/V4 tests `4 passed`；full M1 SFT + Qwen scale-up planner tests `81 passed, 1 skipped`。

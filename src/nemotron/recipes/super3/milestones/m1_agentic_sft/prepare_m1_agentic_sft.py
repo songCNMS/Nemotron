@@ -60,10 +60,21 @@ MATH_FINAL_ANSWER_SIDECAR_NAME = "m1-agentic-sft-v0-math-final-answer"
 MATH_SUPERVISION_STRATEGY_V1 = "final_answer_sidecar_v1"
 MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
 MATH_SUPERVISION_STRATEGY_V4 = "hard_math_recovery_v4"
+MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V4,
+    MATH_SUPERVISION_STRATEGY_V5,
+)
+MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
+    MATH_SUPERVISION_STRATEGY_V3,
+    MATH_SUPERVISION_STRATEGY_V4,
+    MATH_SUPERVISION_STRATEGY_V5,
+)
+MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
+    MATH_SUPERVISION_STRATEGY_V4,
+    MATH_SUPERVISION_STRATEGY_V5,
 )
 MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION = "hard_verified_full_solution"
 MATH_BUCKET_VERIFIED_FULL_SOLUTION = "verified_full_solution"
@@ -117,6 +128,10 @@ MATH_V4_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V4_VERIFIED_FULL_SOLUTION_WEIGHT = 0.25
 MATH_V4_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V4_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 0.6
+MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V5_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V5_FORMAT_REPAIR_WEIGHT = 0.0
 MATH_V4_ANSWER_SEEKING_PATTERNS = (
     "compute",
     "determine",
@@ -156,6 +171,12 @@ MATH_V4_TOPIC_KEYWORDS = (
     "triangle",
     "ways",
 )
+MATH_V5_MIN_PROMPT_CHARS = 120
+MATH_V5_MAX_PROMPT_CHARS = 2400
+MATH_V5_MIN_SOLUTION_CHARS = 1000
+MATH_V5_MAX_SOLUTION_CHARS = 9000
+MATH_V5_MIN_SOLUTION_LINES = 4
+MATH_V5_BOXED_TAIL_CHARS = 1800
 
 JsonDict = dict[str, Any]
 
@@ -406,6 +427,15 @@ def _remove_boxed_spans(text: str) -> str:
     return re.sub(r"\\+boxed\s*\{[^{}]*\}", " ", text)
 
 
+def _has_boxed_answer_near_end(text: str, *, tail_chars: int) -> bool:
+    tail = text[-tail_chars:] if tail_chars > 0 else text
+    return re.search(r"\\+boxed\s*\{[^{}]+\}", tail) is not None
+
+
+def _solution_line_count(text: str) -> int:
+    return len([line for line in text.splitlines() if line.strip()])
+
+
 def _has_reasoning_trace(reference_solution: str, expected_answer: str) -> bool:
     """Heuristic for separating real solution traces from answer-only rows."""
     content = _strip_gsm8k_marker(reference_solution).strip()
@@ -471,6 +501,35 @@ def is_hard_math_recovery_row(row: Mapping[str, Any]) -> bool:
         return False
     lower_text = f"{prompt}\n{solution}".lower()
     return any(keyword in lower_text for keyword in MATH_V4_TOPIC_KEYWORDS)
+
+
+def is_hard_math_precision_row(row: Mapping[str, Any]) -> bool:
+    """High-precision subset for the V5 hard-math replay recipe.
+
+    V4 improved general MMLU-Pro but still underperformed original Qwen on
+    AIME/HMMT. V5 keeps the same contamination-safe source pool but requires
+    longer, line-structured full solutions with a boxed final answer near the
+    end, and removes broad verified replay by default.
+    """
+    if not is_hard_math_recovery_row(row):
+        return False
+    prompt = _message_content(row, "user")
+    solution = _message_content(row, "assistant")
+    if not (MATH_V5_MIN_PROMPT_CHARS <= len(prompt) <= MATH_V5_MAX_PROMPT_CHARS):
+        return False
+    if not (MATH_V5_MIN_SOLUTION_CHARS <= len(solution) <= MATH_V5_MAX_SOLUTION_CHARS):
+        return False
+    if _solution_line_count(solution) < MATH_V5_MIN_SOLUTION_LINES:
+        return False
+    return _has_boxed_answer_near_end(solution, tail_chars=MATH_V5_BOXED_TAIL_CHARS)
+
+
+def is_hard_math_row_for_strategy(row: Mapping[str, Any], strategy: str) -> bool:
+    if strategy == MATH_SUPERVISION_STRATEGY_V5:
+        return is_hard_math_precision_row(row)
+    if strategy == MATH_SUPERVISION_STRATEGY_V4:
+        return is_hard_math_recovery_row(row)
+    return False
 
 
 def _reasoning_target_from_reference(reference_solution: str, expected_answer: str) -> str:
@@ -961,13 +1020,13 @@ def _math_supervision_bucket(row: Mapping[str, Any]) -> str | None:
 
 
 def _math_buckets_for_strategy(strategy: str) -> tuple[str, ...]:
-    if strategy == MATH_SUPERVISION_STRATEGY_V4:
+    if strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET:
         return MATH_V4_BUCKETS
     return MATH_V3_BUCKETS
 
 
 def _math_bucket_filenames_for_strategy(strategy: str) -> dict[str, str]:
-    if strategy == MATH_SUPERVISION_STRATEGY_V4:
+    if strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET:
         return dict(MATH_V4_BUCKET_FILENAMES)
     return dict(MATH_V3_BUCKET_FILENAMES)
 
@@ -1052,13 +1111,13 @@ def apply_math_supervision_strategy_metadata(
         if not isinstance(supervision, dict):
             continue
         supervision["strategy"] = strategy
-        if strategy not in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+        if strategy not in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
             continue
         bucket = (
             MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION
-            if strategy == MATH_SUPERVISION_STRATEGY_V4
+            if strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET
             and _math_supervision_bucket(row) == MATH_BUCKET_VERIFIED_FULL_SOLUTION
-            and is_hard_math_recovery_row(row)
+            and is_hard_math_row_for_strategy(row, strategy)
             else _math_supervision_bucket(row)
         )
         if isinstance(metadata, dict) and bucket is not None:
@@ -1145,7 +1204,34 @@ def _math_v4_weights(args: argparse.Namespace) -> dict[str, float]:
     }
 
 
+def _math_v5_weights(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v5_hard_verified_full_solution_weight",
+                MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v5_verified_full_solution_weight",
+                MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_FINAL_ANSWER_AUX: float(
+            getattr(args, "math_v5_final_answer_aux_weight", MATH_V5_FINAL_ANSWER_AUX_WEIGHT)
+        ),
+        MATH_BUCKET_FORMAT_REPAIR: float(
+            getattr(args, "math_v5_format_repair_weight", MATH_V5_FORMAT_REPAIR_WEIGHT)
+        ),
+    }
+
+
 def _math_weights_for_strategy(args: argparse.Namespace, strategy: str) -> dict[str, float]:
+    if strategy == MATH_SUPERVISION_STRATEGY_V5:
+        return _math_v5_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V4:
         return _math_v4_weights(args)
     return _math_v3_weights(args)
@@ -1162,7 +1248,7 @@ def build_math_strategy_blend(
     extra_datasets: list[JsonDict] = []
     bucket_names = (
         MATH_V4_BUCKET_DATASET_NAMES
-        if strategy == MATH_SUPERVISION_STRATEGY_V4
+        if strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET
         else MATH_V3_BUCKET_DATASET_NAMES
     )
     for bucket in _math_buckets_for_strategy(strategy):
@@ -1178,21 +1264,30 @@ def build_math_strategy_blend(
                 "weight": 1.0,
             }
         )
-    comment = (
-        "M1 Agentic SFT v0 hard_math_recovery_v4 blend. The base train JSONL "
-        "keeps agentic coverage; hard AIME/HMMT-style verified solution traces "
-        "are duplicated as a focused sidecar; broad verified math replay is "
-        "downsampled; final-answer-only and format-repair rows are disabled by "
-        "default because V3 failures were reasoning-correctness failures."
-        if strategy == MATH_SUPERVISION_STRATEGY_V4
-        else (
+    if strategy == MATH_SUPERVISION_STRATEGY_V5:
+        comment = (
+            "M1 Agentic SFT v0 hard_math_precision_v5 blend. The base train JSONL "
+            "keeps agentic coverage; only high-confidence AIME/HMMT-style "
+            "verified full-solution traces are duplicated as a sidecar; broad "
+            "verified replay, final-answer-only rows, and format-repair rows are "
+            "disabled by default."
+        )
+    elif strategy == MATH_SUPERVISION_STRATEGY_V4:
+        comment = (
+            "M1 Agentic SFT v0 hard_math_recovery_v4 blend. The base train JSONL "
+            "keeps agentic coverage; hard AIME/HMMT-style verified solution traces "
+            "are duplicated as a focused sidecar; broad verified math replay is "
+            "downsampled; final-answer-only and format-repair rows are disabled by "
+            "default because V3 failures were reasoning-correctness failures."
+        )
+    else:
+        comment = (
             "M1 Agentic SFT v0 reasoning_replay_v3 blend. The base train JSONL "
             "keeps normal agentic SFT coverage; verified math solution traces, "
             "low-weight final-answer auxiliary rows, and low-weight format-repair "
             "rows are separate sidecars. Held-out math rows are written for eval "
             "and excluded from the training blend."
         )
-    )
     return build_blend(
         train_path,
         extra_datasets=extra_datasets,
@@ -1315,7 +1410,7 @@ def check_output_paths(
         output_dir / "manifest.json",
         output_dir / "report.md",
     ]
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         targets.extend(
             output_dir / filename
             for filename in _math_bucket_filenames_for_strategy(math_supervision_strategy).values()
@@ -1369,17 +1464,22 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     f"`{info.get('path', '')}` |"
                 )
         lines.append("")
-    math_v4 = manifest.get("math_hard_recovery_v4")
-    if isinstance(math_v4, Mapping):
+    for hard_manifest_key, hard_title in (
+        ("math_hard_recovery_v4", "Math hard recovery v4 buckets"),
+        ("math_hard_precision_v5", "Math hard precision v5 buckets"),
+    ):
+        math_hard = manifest.get(hard_manifest_key)
+        if not isinstance(math_hard, Mapping):
+            continue
         lines.extend(
             [
-                "## Math hard recovery v4 buckets",
+                f"## {hard_title}",
                 "",
                 "| Bucket | Source rows | Written rows | Sample fraction | Blend weight | Path |",
                 "|---|---:|---:|---:|---:|---|",
             ]
         )
-        buckets = math_v4.get("buckets") or {}
+        buckets = math_hard.get("buckets") or {}
         if isinstance(buckets, Mapping):
             for bucket in MATH_V4_BUCKETS:
                 info = buckets.get(bucket) or {}
@@ -1470,7 +1570,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
 
     math_strategy_weights = _math_weights_for_strategy(args, math_supervision_strategy)
     math_strategy_heldout_train_rows: list[Mapping[str, Any]] = []
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         math_strategy_heldout_train_rows = [
             row for row in train_rows if _math_supervision_bucket(row) == MATH_BUCKET_HELDOUT_EVAL
         ]
@@ -1500,16 +1600,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     }
     math_bucket_rows: dict[str, list[Mapping[str, Any]]] = {}
     math_bucket_source_rows: dict[str, list[Mapping[str, Any]]] = {}
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         base_bucket_source_rows = split_math_supervision_buckets(
             train_rows,
             val_rows,
             buckets=MATH_V3_BUCKETS,
         )
-        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V4:
+        if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET:
             verified_source = base_bucket_source_rows[MATH_BUCKET_VERIFIED_FULL_SOLUTION]
             hard_verified_source = [
-                row for row in verified_source if is_hard_math_recovery_row(row)
+                row for row in verified_source if is_hard_math_row_for_strategy(row, math_supervision_strategy)
             ]
             hard_verified_ids = {id(row) for row in hard_verified_source}
             math_bucket_source_rows = {bucket: [] for bucket in MATH_V4_BUCKETS}
@@ -1558,7 +1658,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     write_jsonl(train_path, train_rows)
     write_jsonl(math_final_answer_train_path, math_final_answer_rows)
     write_jsonl(val_shadow_path, val_rows)
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         for bucket, path in math_bucket_paths.items():
             write_jsonl(path, math_bucket_rows.get(bucket, []))
     write_json(
@@ -1571,7 +1671,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 bucket_rows=math_bucket_rows,
                 bucket_weights=math_strategy_weights,
             )
-            if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}
+            if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS
             else build_blend(
                 train_path,
                 math_final_answer_train_path=(
@@ -1627,23 +1727,28 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         },
         "errors": [*train_errors, *val_errors],
     }
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
-        math_strategy_manifest_key = (
-            "math_hard_recovery_v4"
-            if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V4
-            else "math_reasoning_replay_v3"
-        )
-        math_strategy_description = (
-            "Separates hard AIME/HMMT-style verified full-solution rows, "
-            "broad verified full-solution replay, disabled final-answer auxiliary rows, "
-            "disabled format-repair rows, and held-out eval rows."
-            if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V4
-            else (
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
+        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5:
+            math_strategy_manifest_key = "math_hard_precision_v5"
+            math_strategy_description = (
+                "Separates high-precision AIME/HMMT-style verified full-solution rows, "
+                "disabled broad verified full-solution replay, disabled final-answer "
+                "auxiliary rows, disabled format-repair rows, and held-out eval rows."
+            )
+        elif math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V4:
+            math_strategy_manifest_key = "math_hard_recovery_v4"
+            math_strategy_description = (
+                "Separates hard AIME/HMMT-style verified full-solution rows, "
+                "broad verified full-solution replay, disabled final-answer auxiliary rows, "
+                "disabled format-repair rows, and held-out eval rows."
+            )
+        else:
+            math_strategy_manifest_key = "math_reasoning_replay_v3"
+            math_strategy_description = (
                 "Separates math rows into verified full-solution replay, "
                 "low-weight final-answer auxiliary rows, low-weight format-repair rows, "
                 "and held-out eval rows."
             )
-        )
         manifest[math_strategy_manifest_key] = {
             "description": (
                 math_strategy_description
@@ -1681,14 +1786,41 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 buckets=math_bucket_order,
             ),
         }
-        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V4:
+        if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET:
             manifest[math_strategy_manifest_key]["hard_filter"] = {
                 "environment": "math_competition_numeric",
                 "answer_seeking_patterns": list(MATH_V4_ANSWER_SEEKING_PATTERNS),
                 "proof_like_exclusions": list(MATH_V4_PROOF_LIKE_PATTERNS),
-                "min_prompt_chars": 80,
-                "min_solution_chars": 700,
-                "max_solution_chars": 12000,
+                "min_prompt_chars": (
+                    MATH_V5_MIN_PROMPT_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else 80
+                ),
+                "max_prompt_chars": (
+                    MATH_V5_MAX_PROMPT_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else None
+                ),
+                "min_solution_chars": (
+                    MATH_V5_MIN_SOLUTION_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else 700
+                ),
+                "max_solution_chars": (
+                    MATH_V5_MAX_SOLUTION_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else 12000
+                ),
+                "min_solution_lines": (
+                    MATH_V5_MIN_SOLUTION_LINES
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else None
+                ),
+                "boxed_tail_chars": (
+                    MATH_V5_BOXED_TAIL_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V5
+                    else None
+                ),
                 "topic_keywords": list(MATH_V4_TOPIC_KEYWORDS),
             }
 
@@ -1736,7 +1868,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             notes="`nemotron super3 data prep sft -c agentic_v0` consumes this",
         ),
     ]
-    if math_supervision_strategy in {MATH_SUPERVISION_STRATEGY_V3, MATH_SUPERVISION_STRATEGY_V4}:
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         for bucket in math_bucket_order:
             lineage_outputs.append(
                 LineageOutput(
@@ -1790,7 +1922,8 @@ def build_parser() -> argparse.ArgumentParser:
             "uses lower sidecar weights for answer-only formatting rows. "
             "`hard_math_recovery_v4` focuses sidecar replay on AIME/HMMT-style "
             "verified full solutions and disables answer-only/format-repair rows "
-            "by default."
+            "by default. `hard_math_precision_v5` further tightens the hard "
+            "full-solution filter and disables broad verified replay by default."
         ),
     )
     parser.add_argument(
@@ -1834,6 +1967,30 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V4_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for hard_math_recovery_v4 format-repair math rows.",
+    )
+    parser.add_argument(
+        "--math-v5-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_precision_v5 high-confidence full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v5-verified-full-solution-weight",
+        type=float,
+        default=MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_precision_v5 broad verified full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v5-final-answer-aux-weight",
+        type=float,
+        default=MATH_V5_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for hard_math_precision_v5 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v5-format-repair-weight",
+        type=float,
+        default=MATH_V5_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for hard_math_precision_v5 format-repair math rows.",
     )
     # task040 Session 2: W1 curriculum sampler wiring. Off by default
     # (as_is = passthrough). Operators opt in via --curriculum-policy.
