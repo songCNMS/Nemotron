@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Session 1
 
@@ -762,3 +762,12 @@
 - 当前 summary：latest train iter `560/1874`，progress `29.88%`，latest train lm loss `0.4218465`，latest lr `2.654761e-7`，latest grad norm `0.749`，recent-50 train loss mean `0.541491656`，max skipped/nan `0/0`。
 - Validation 仍只有首个 eval point：iter `400` loss/PPL `0.4107993/1.508023`，也是当前 best validation；validation trend 为 `not-enough-validation-points`，需要等待 iter `800` eval point 判断趋势。
 - 训练健康判断：当前日志未见 traceback、OOM、ChildFailedError、skipped iteration 或 NaN iteration；run 继续向 iter `800` eval/save 点推进。
+
+## Session 72
+
+- 按用户要求将 metric figure 发送给用户；先同步远端 V4 hard-math recovery train log 并刷新 metric curve。
+- 远端 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` 仍 active；checkpoint marker 为 `400`，日志已到 latest train iter `640/1874`。
+- 生成并发送图表 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session72_iter640.png`，同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 当前 summary：progress `34.15%`，latest train lm loss `0.4057285`，latest lr `2.53421e-7`，latest grad norm `0.834`，recent-50 train loss mean `0.46816005`，max skipped/nan `0/0`。
+- Validation 仍只有 iter `400` point：loss/PPL `0.4107993/1.508023`，current best 同为 iter `400`，trend 为 `not-enough-validation-points`。
+- Feishu image send 成功：chat `oc_85148c845ddf7f30b7d7d7944596cccc`，image message `om_x100b6e6cee22dcb4b32b39f4c72f0ca`，image key `img_v3_02122_2a9f64bd-8a70-46ab-8bc8-35e317d14cbg`；summary text message `om_x100b6e6cefdf04a4b26dd201a6dd5c9`。

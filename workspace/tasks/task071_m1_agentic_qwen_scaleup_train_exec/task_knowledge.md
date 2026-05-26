@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Notes
 
@@ -186,3 +186,4 @@
 - Qwen v4 startup health fact: bridge cache wrote `train_4096_train.npy`, `valid_4096_valid.npy`, and `packed_4096_metadata.json`; early training reached at least iter `160/1874` with latest observed lm loss `0.6407578`, skipped iterations `0`, nan iterations `0`, and all GPUs active.
 - Qwen v4 iter400 metric fact: Session 70 observed checkpoint marker `400`, latest train iter `410/1874`, latest train lm loss `0.483653`, first validation loss/PPL `0.4107993/1.508023`, max skipped/nan `0/0`, and metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session70_iter410.png`.
 - Qwen v4 iter560 metric fact: Session 71 observed the same active NemTron run through latest train iter `560/1874`, progress `29.88%`, latest train lm loss `0.4218465`, recent-50 train loss mean `0.541491656`, first validation loss/PPL `0.4107993/1.508023`, max skipped/nan `0/0`, checkpoint marker `400`, and metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session71_iter560.png`.
+- Qwen v4 iter640 metric send fact: Session 72 refreshed `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session72_iter640.png` and sent it to the project chat; image message id `om_x100b6e6cee22dcb4b32b39f4c72f0ca`, image key `img_v3_02122_2a9f64bd-8a70-46ab-8bc8-35e317d14cbg`. The run had latest train iter `640/1874`, train lm loss `0.4057285`, validation@400 loss/PPL `0.4107993/1.508023`, checkpoint marker `400`, and skipped/nan `0/0`.
