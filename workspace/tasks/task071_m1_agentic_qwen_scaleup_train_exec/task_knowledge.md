@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
 
 ## Notes
 
@@ -175,3 +175,8 @@
 - Qwen v3 iter2200 export fact: Session 67 exported `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/checkpoints/iter_0002200` to HF path `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200`; the export is about `57G`, contains `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-math-reasoning-replay-v3-iter0002200-hf`.
 - Qwen v3 iter2200 corrected eval fact: Session 67 served the HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; full corrected metrics are MMLU-Pro `0.5525265957446809` with parsed rate `1.0`, AIME25 `0.08666666666666667` with parsed rate `0.94`, and HMMT exact-normalized correct percent `0.0` with parsed rate `1.0`.
 - Qwen v3 iter2200 gate fact: compared with Session 47 original corrected metrics, v3 deltas are MMLU-Pro `-0.009474734042553168`, AIME25 `-0.44666666666666666`, and HMMT exact percent `-43.333333333333336`; compared with iter3000 qwen-chat, v3 improves MMLU-Pro by `+0.018450797872340496` and AIME25 by `+0.020000000000000004` but leaves HMMT at `0.0`. The MMLU-Pro gate passes, parser coverage passes, and hard-math correctness still fails promotion.
+- Qwen v3 hard-math cluster fact: Session 68 found AIME25 failures are dominated by deterministic wrong final answers (`17` problem groups / `170` rows) plus mixed wrong finals (`6/60`) and length/unparsed groups (`3/30`); HMMT is fully parsed but still `0/30`, with `29/30` rows in deterministic wrong-final clusters.
+- V3 data diagnostic fact: the existing v3 verified full-solution sidecar has `544967` rows; the Session 68 hard AIME/HMMT-style heuristic selects `196168` candidates (`35.9963%`) with topic counts algebra `56705`, combinatorics/probability `29255`, geometry `61663`, and number theory `48545`.
+- M1 SFT math v4 data-prep fact: `prepare_m1_agentic_sft.py --math-supervision-strategy hard_math_recovery_v4` writes `hard_verified_full_solution`, `verified_full_solution`, `final_answer_aux`, `format_repair`, and `heldout_eval` buckets; default pre-pack sampling fractions are hard verified `1.0`, broad verified `0.25`, final-answer aux `0.0`, and format repair `0.0`.
+- Qwen v4 recovery script fact: generated scripts for `task071_qwen30b_a3b_hard_math_recovery_v4` live under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4` and target original Qwen3-30B-A3B, uncapped M0/M1, Qwen tokenizer template, 0.2 epoch, GBS `8`, all 8 H200 GPUs, lr `3e-7`, min lr `8e-8`, and eval/save interval `400`.
+- Qwen v4 gate fact: promote only after corrected metrics clear MMLU-Pro full accuracy `>=0.55`, AIME25 full accuracy `>=0.20`, and HMMT exact-normalized percent `>=10.0`; use failure clusters only as diagnostics and never train on AIME25/HMMT eval prompts or labels.

@@ -201,6 +201,40 @@ def test_scaleup_planner_can_emit_math_reasoning_replay_v3_data_prep(tmp_path) -
     assert "--math-v3-format-repair-weight 0.04" in local_script
 
 
+def test_scaleup_planner_can_emit_hard_math_recovery_v4_data_prep(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_recovery_v4",
+            "--math-v4-verified-full-solution-weight",
+            "0.3",
+            "--math-v4-final-answer-aux-weight",
+            "0.0",
+            "--math-v4-format-repair-weight",
+            "0.0",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_supervision_strategy"] == "hard_math_recovery_v4"
+    assert manifest["data"]["math_v4_weights"]["hard_verified_full_solution"] == 1.0
+    assert manifest["data"]["math_v4_weights"]["verified_full_solution"] == 0.3
+    assert "--math-supervision-strategy hard_math_recovery_v4" in local_script
+    assert "--math-v4-hard-verified-full-solution-weight 1.0" in local_script
+    assert "--math-v4-verified-full-solution-weight 0.3" in local_script
+    assert "--math-v4-final-answer-aux-weight 0.0" in local_script
+    assert "--math-v4-format-repair-weight 0.0" in local_script
+
+
 def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
     manifest = build_manifest(_args(tmp_path))
     write_plan(manifest, overwrite=True)

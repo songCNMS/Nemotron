@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
 
 ## Session 1
 
@@ -716,3 +716,16 @@
 - Gate 结论：MMLU-Pro 达到 Session 60 gate，AIME/HMMT parser coverage 达标，但 AIME25 与 HMMT correctness 仍未达到 math promotion gate；问题主要是 hard-math reasoning correctness，不是 final-answer extraction。
 - 资源清理：评测后停止 SGLang tmux session 和本地 SSH tunnel，确认 NemTron port `30000` 清空，8 张 H200 回到 idle。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v3_iter2200_corrected_eval_session67.md`，记录 export artifact、serving 参数、full corrected eval metrics、same-protocol comparison 和 gate 结论。
+
+## Session 68
+
+- 按用户要求分析 V3 hard-math failure clusters，并新增脚本 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/analyze_qwen_v3_hard_math_failures.py`，输入为 Session 67 v3 `iter_0002200` corrected math results、Session 59 iter3000 comparison、AIME/HMMT source cache和 v3 M1 data artifact。
+- 生成分析产物 `qwen_v3_hard_math_failure_clusters_session68.json`、`qwen_v3_hard_math_failure_analysis_session68.md` 和 `qwen_v4_hard_math_recovery_recipe_session68.json`；V3 AIME25 为 `26/300=0.0866667`、parsed `0.94`，HMMT 为 `0/30`、parsed `1.0`。
+- Failure cluster 结论：AIME25 中 `deterministic_wrong_final` 覆盖 `17` 个 problem groups / `170` rows，`mixed_or_variable_wrong` 覆盖 `6/60`，`length_or_unparsed` 覆盖 `3/30`；HMMT 为 `29/29` deterministic wrong final 加 `1/1` expected-mentioned-final-wrong。
+- 训练数据诊断：v3 verified full-solution sidecar 读取 `544967` rows，其中 heuristic AIME/HMMT-style hard verified candidates 为 `196168` rows（`35.9963%`），topic 分布为 algebra `56705`、combinatorics/probability `29255`、geometry `61663`、number theory `48545`。
+- 在 `prepare_m1_agentic_sft.py` 新增 `hard_math_recovery_v4` strategy：按 prompt/solution 长度、answer-seeking prompt、proof-like 排除和 topic keywords 从 verified full-solution rows 中分出 `hard_verified_full_solution` bucket；默认 hard sidecar fraction `1.0`、broad verified fraction `0.25`、final-answer-aux `0.0`、format-repair `0.0`。
+- V4 数据准备保留 base agentic train JSONL 以维持 search/coding/tool/general coverage，训练 blend 只加入 hard verified full-solution 和抽样后的 broad verified full-solution sidecar；heldout eval 不入训练 blend，manifest/report/lineage 均记录 bucket rows、source rows、sample fraction 和 hard filter。
+- 在 `plan_qwen_scaleup_run.py` 接入 `--math-supervision-strategy hard_math_recovery_v4` 和 v4 四个采样参数；生成的 local data prep script 会把 v4 strategy 与权重传给 `prepare_m1_agentic_sft.py`。
+- 新增单测覆盖 V4 hard-row classifier、focused bucket 写出、blend 数据集选择、final-answer/format-repair 禁用，以及 scale-up planner 的 v4 script flags。
+- 生成可执行 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4`：uncapped M0、Qwen tokenizer template、original Qwen3-30B-A3B checkpoint、0.2 epoch、GBS `8`、8 GPUs、lr `3e-7`、min lr `8e-8`、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
+- 验证：`python -m py_compile` 通过；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `79 passed, 1 skipped`；`/work-agents/.venv/bin/ruff check ...` 通过；`git diff --check` 通过；禁用词扫描无命中。

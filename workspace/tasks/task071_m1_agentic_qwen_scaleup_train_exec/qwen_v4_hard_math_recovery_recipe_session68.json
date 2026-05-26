@@ -1,0 +1,135 @@
+{
+  "base_model": {
+    "hf_model": "/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "megatron_checkpoint": "/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507",
+    "start_from": "original_qwen3_30b_a3b_instruct_2507"
+  },
+  "data_strategy": {
+    "base_agentic_train_jsonl": "keep full M1 train blend for agentic coverage",
+    "hard_filter": {
+      "environment": "math_competition_numeric",
+      "exclude_proof_like_prompt": [
+        "prove",
+        "show that"
+      ],
+      "max_solution_chars": 12000,
+      "min_prompt_chars": 80,
+      "min_solution_chars": 700,
+      "require_answer_seeking_prompt": [
+        "compute",
+        "determine",
+        "evaluate",
+        "find",
+        "how many",
+        "what is"
+      ],
+      "topic_keywords": {
+        "algebra": [
+          "equation",
+          "function",
+          "log",
+          "polynomial",
+          "real numbers",
+          "sqrt",
+          "system",
+          "variable"
+        ],
+        "combinatorics_probability": [
+          "arrange",
+          "choose",
+          "color",
+          "combin",
+          "count",
+          "probability",
+          "sequence",
+          "ways"
+        ],
+        "geometry": [
+          "angle",
+          "area",
+          "circle",
+          "circum",
+          "diameter",
+          "geometric",
+          "inscribed",
+          "line",
+          "point",
+          "radius",
+          "rectangle",
+          "tangent",
+          "triangle"
+        ],
+        "number_theory": [
+          "congru",
+          "digit",
+          "divisor",
+          "factor",
+          "integer",
+          "mod",
+          "prime",
+          "remainder",
+          "unit"
+        ]
+      }
+    },
+    "name": "hard_math_recovery_v4",
+    "sidecars": {
+      "broad_verified_full_solution": {
+        "blend_weight_after_prepack_sampling": 1.0,
+        "sample_fraction": 0.25,
+        "source": "remaining verified_full_solution rows"
+      },
+      "final_answer_aux": {
+        "blend_weight_after_prepack_sampling": 0.0,
+        "reason": "V3 failure is hard-math correctness, not final-answer format.",
+        "sample_fraction": 0.0,
+        "source": "final_answer_aux rows"
+      },
+      "format_repair": {
+        "blend_weight_after_prepack_sampling": 0.0,
+        "reason": "V3 already has high parser coverage; these rows can carry noisy or malformed finals.",
+        "sample_fraction": 0.0,
+        "source": "format_repair rows"
+      },
+      "hard_verified_full_solution": {
+        "blend_weight_after_prepack_sampling": 1.0,
+        "estimated_rows_from_v3_artifacts": 196168,
+        "sample_fraction": 1.0,
+        "source": "verified_full_solution rows that pass AIME/HMMT-style answer-seeking hard filter"
+      }
+    }
+  },
+  "eval_gates": {
+    "candidate_checkpoints": [
+      "iter_0000400",
+      "iter_0000800",
+      "iter_0001200"
+    ],
+    "mini_gate": {
+      "aime25_300_min_accuracy": 0.15,
+      "hmmt_30_min_exact_percent": 3.3333333333333335,
+      "math_parsed_rate_min": 0.9,
+      "mmlu_pro_20_per_category_min_accuracy": 0.6
+    },
+    "promotion_gate": {
+      "aime25_full_min_accuracy": 0.2,
+      "hmmt_full_min_exact_percent": 10.0,
+      "mmlu_pro_full_min_accuracy": 0.55
+    }
+  },
+  "run_name": "task071_qwen30b_a3b_hard_math_recovery_v4",
+  "training": {
+    "cuda_visible_devices": "0,1,2,3,4,5,6,7",
+    "epochs": 0.2,
+    "eval_interval": 400,
+    "global_batch_size": 8,
+    "lr_warmup_iters": 100,
+    "micro_batch_size": 1,
+    "nproc_per_node": 8,
+    "optimizer_lr": 3e-07,
+    "save_interval": 400,
+    "scheduler_min_lr": 8e-08,
+    "seq_length": 4096,
+    "train_entrypoint": "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
+  }
+}
