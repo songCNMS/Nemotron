@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
 
 ## Session 1
 
@@ -693,3 +693,13 @@
 - 最新 summary 解析到 train iter `2020/2200`，progress `91.82%`，latest train lm loss `0.3772499`，recent-50 train loss mean `0.387682134`，skipped/nan `0/0`。
 - 图片发送成功：image message id `om_x100b6e6587201c98b36c4ce7a5d19d6`，image key `img_v3_02122_28316bfd-300d-49b1-862a-ce422480d75g`；说明文本 message id `om_x100b6e6584c4e4b0b3e7d37eb565f8b`。
 - 结束前远端训练仍 active，checkpoint marker 已到 `2000`，tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` 仍存在，无 traceback、OOM、UnpicklingError 或 ChildFailedError。
+
+## Session 66
+
+- 按“执行下一步”检查 NemTron v3 30B run，确认 tmux session 已退出、训练完成到 iter `2200/2200`，8 张 H200 已释放。
+- 同步最终远端 train log 并刷新 metrics artifacts：`metric_curves.png`、`metric_curves_session66_final_iter2200.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 最终 validation 继续单调改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`，iter `2000` `0.4093007/1.505765`，iter `2200` `0.4087007/1.504861`。
+- 最终 summary：latest train lm loss `0.3919607`，recent-50 train loss mean `0.386122228`，learning rate `1e-7`，max skipped/nan `0/0`，validation trend `latest-validation-improved-vs-previous`。
+- Checkpoint state：marker `2200`；remote checkpoint directories include `iter_0000500`、`iter_0001000`、`iter_0001500`、`iter_0002000`、`iter_0002200`；each checkpoint is about `399G` and total checkpoint directory is about `2.0T`。
+- Added final report `qwen_v3_final_metrics_session66.md` with metric table, artifact paths, and candidate decision.
+- Candidate decision：select `iter_0002200` as primary HF export and corrected mini-eval candidate because it has the best observed validation loss and the run ended cleanly.
