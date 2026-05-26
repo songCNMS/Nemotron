@@ -10,6 +10,7 @@ import pytest
 yaml = pytest.importorskip("yaml")
 
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (  # noqa: E402
+    QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS,
     QWEN_EVAL_REPRO_GATE_PATH,
     format_qwen_eval_repro_gate_report,
     load_qwen_eval_repro_gate,
@@ -214,3 +215,37 @@ def test_qwen_eval_repro_gate_validator_rejects_non_chat_evidence_route() -> Non
     issues = validate_qwen_eval_repro_gate(data)
 
     assert any("route must be /v1/chat/completions" in issue for issue in issues)
+
+
+def test_qwen_eval_repro_gate_validator_pins_chat_template_kwarg_values() -> None:
+    """Regression: `_validate_chat_template_kwargs` previously only
+    type-checked (bool present). A YAML edit re-introducing
+    `enable_thinking: true` — undoing PR D's SFT/RL alignment — would
+    silently pass. The Qwen reproduction gate exists to enforce the
+    Qwen chat-template contract; it must enforce the contract
+    VALUES, not just types.
+    """
+    # Contract sanity: both kwargs must be False.
+    assert QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+
+    # Flip enable_thinking to True on the intended eval path — validator
+    # must surface the contract violation, not silently accept it.
+    data = deepcopy(_gate_data())
+    data["intended_eval_path"]["chat_template_kwargs"]["enable_thinking"] = True
+    issues = validate_qwen_eval_repro_gate(data)
+    assert any(
+        "intended_eval_path.chat_template_kwargs.enable_thinking must be False" in issue
+        for issue in issues
+    ), f"expected enable_thinking value violation, got: {issues}"
+
+    # Same protection at the per-evidence level — task072 evidence
+    # records are part of the Qwen contract too.
+    data = deepcopy(_gate_data())
+    data["evidence_records"][0]["chat_template_kwargs"]["truncate_history_thinking"] = True
+    issues = validate_qwen_eval_repro_gate(data)
+    assert any(
+        "truncate_history_thinking must be False" in issue for issue in issues
+    ), f"expected truncate_history_thinking value violation, got: {issues}"
