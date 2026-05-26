@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=71 -->
 
 ## Notes
 
@@ -184,3 +184,5 @@
 - Qwen v4 packed artifact fact: Session 69 Qwen tokenizer packing wrote `1257879` total sequences, `822043015` total tokens, `32` train shards, `1` valid shard, packed train rows `74922`, valid rows `287`, `chat_template=tokenizer`, and thinking disabled.
 - Qwen v4 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`, uses all 8 H200 GPUs, `train_iters=1874`, GBS `8`, eval/save interval `400`, lr `3e-7`, min lr `8e-8`, and warmup `100`.
 - Qwen v4 startup health fact: bridge cache wrote `train_4096_train.npy`, `valid_4096_valid.npy`, and `packed_4096_metadata.json`; early training reached at least iter `160/1874` with latest observed lm loss `0.6407578`, skipped iterations `0`, nan iterations `0`, and all GPUs active.
+- Qwen v4 iter400 metric fact: Session 70 observed checkpoint marker `400`, latest train iter `410/1874`, latest train lm loss `0.483653`, first validation loss/PPL `0.4107993/1.508023`, max skipped/nan `0/0`, and metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session70_iter410.png`.
+- Qwen v4 iter500 metric fact: Session 71 observed the same active NemTron run through latest train iter `500/1874`, progress `26.68%`, latest train lm loss `0.4296726`, recent-50 train loss mean `0.615502132`, first validation loss/PPL `0.4107993/1.508023`, max skipped/nan `0/0`, checkpoint marker `400`, and metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session71_iter500.png`.
