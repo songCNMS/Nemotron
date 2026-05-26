@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 62 |
+| Session | 63 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Ran M1 SFT `reasoning_replay_v3` uncapped data prep and Qwen-chat packing, fixed v3 sidecar scale control to deterministic pre-pack sampling, and verified the new packed artifact at 1,544,296 sequences / 2,200 train iters. |
+| Latest | Synced v3 prepared data/code to NemTron, fixed a Megatron-Bridge packed `.npy` startup race, prebuilt bridge artifacts, and restarted the 30B v3 train run healthy through iter 80/2200 with skipped/nan 0/0. |

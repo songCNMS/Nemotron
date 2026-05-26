@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
 
 ## Session 1
 
@@ -662,3 +662,15 @@
 - 新 packed artifact 位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/packed_qwen/splits`，metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`num_shards=64`、`total_sequences=1544296`、`total_tokens=945009362`。
 - 新训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/training_plan/task071_qwen30b_a3b_math_reasoning_replay_v3`，packed train rows `70399`、valid rows `43`、GBS `8`、0.25 epoch 对应 `train_iters=2200`。
 - 验证：Qwen packed chat contract 通过；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 1 skipped`；`ruff check` 通过；`py_compile` 通过；`git diff --check` 通过。
+
+## Session 63
+
+- 按“执行下一步”将本地 v3 code 和 prepared artifacts 同步到 NemTron；远端目标目录为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3`，代码目录为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/Nemotron`。
+- 远端校验通过：v3 packed metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、packed train shards `64`、valid shards `1`、packed train rows `70399`、valid rows `43`、`train_iters=2200`；pretrained checkpoint 和 Qwen tokenizer 路径均存在，8 张 H200 启动前空闲。
+- 第一次启动 tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` 后在训练配置构建阶段失败，报 `_pickle.UnpicklingError: pickle data was truncated` / `EOFError: Ran out of input`，定位为 8 个 torchrun ranks 并发把 packed parquet 转 Megatron-Bridge `.npy` 时读到未完整写入的文件。
+- 修复 `src/nemotron/recipes/super3/stage1_sft/train.py`：packed parquet -> `.npy` 和 packed metadata 生成改为 lock + temp file + atomic replace，并在发现 corrupt `.npy` / invalid metadata 时删除重建；同时清理该文件的 ruff import/line-length 问题。
+- 新增 `tests/recipes/super3/test_stage1_sft_train_bridge.py` 覆盖 corrupt `.npy` 被重建、metadata 写入和 lock 清理；本地单测因本地环境缺 Megatron Bridge 对该新测试 skip，但远端实际环境执行了同一路径。
+- 在 NemTron 单进程预构建 bridge artifacts 成功：`train_4096_train.npy` 大小 `1072320400` bytes、rows `70399`；`valid_4096_valid.npy` 大小 `636577` bytes、rows `43`；`packed_4096_metadata.json` 大小 `307` bytes、entries `2`。
+- 重启远端训练后成功越过失败点并进入主循环；日志显示 checkpoint 从 original Qwen3-30B-A3B Megatron checkpoint 加载成功，scheduler `lr_decay_iters=2200`、`train_iters=2200`、GBS `8`。
+- 早期健康检查到 iter `80/2200`：iter `10/20/30/40/50/60/70/80` 的 lm loss 分别约 `0.9928/0.9423/1.0209/0.9708/0.9787/0.9568/0.8802/0.8492`，learning rate warmup 到 `4.0e-7`，skipped/nan 均为 `0/0`，8 张 GPU 显存约 `81-89GB` 且在训练。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_stage1_sft_train_bridge.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 2 skipped`；`ruff check src/nemotron/recipes/super3/stage1_sft/train.py tests/recipes/super3/test_stage1_sft_train_bridge.py` 通过；`py_compile` 和 `git diff --check` 通过。
