@@ -73,6 +73,10 @@ and writes:
 <output-dir>/
 ├── agentic_sft_v0_train.jsonl
 ├── agentic_sft_v0_math_final_answer_train.jsonl
+├── agentic_sft_v0_math_verified_full_solution_train.jsonl
+├── agentic_sft_v0_math_final_answer_aux_train.jsonl
+├── agentic_sft_v0_math_format_repair_train.jsonl
+├── agentic_sft_v0_math_heldout_eval.jsonl
 ├── agentic_sft_v0_val_shadow.jsonl
 ├── data_blend_agentic_sft_v0.json
 ├── manifest.json
@@ -99,6 +103,19 @@ Numeric math rows are also duplicated into
 with weight `1.0`, in addition to the base train JSONL weight `1.0`, so
 `math_reasoning_numeric` and `math_competition_numeric` receive an effective
 2x exposure for boxed final-answer supervision during packed SFT data prep.
+
+For the Qwen math recovery path, pass
+`--math-supervision-strategy reasoning_replay_v3`. This keeps the base
+agentic SFT train JSONL, but writes separate math bucket files:
+
+- `verified_full_solution`: rows with trusted solution traces and boxed final answers.
+- `final_answer_aux`: answer-only rows, included as a low-weight formatting auxiliary.
+- `format_repair`: solution-trace rows that needed an appended boxed final answer.
+- `heldout_eval`: math rows reserved for corrected eval/dev, excluded from the training blend.
+
+The v3 blend includes the first three sidecars only; default weights are `1.0`,
+`0.2`, and `0.05` respectively. The legacy `final_answer_sidecar_v1` strategy
+remains the default for reproducibility of earlier runs.
 
 ## Difficulty signal (optional)
 

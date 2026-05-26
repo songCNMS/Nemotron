@@ -12,12 +12,21 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     DIFFICULTY_TRIVIAL,
     DIFFICULTY_UNKNOWN,
     M1_USE_BY_ENV,
+    MATH_BUCKET_FINAL_ANSWER_AUX,
+    MATH_BUCKET_FORMAT_REPAIR,
+    MATH_BUCKET_HELDOUT_EVAL,
+    MATH_BUCKET_VERIFIED_FULL_SOLUTION,
     MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
     MATH_FINAL_ANSWER_SIDECAR_NAME,
     MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+    MATH_SUPERVISION_STRATEGY_V3,
+    MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V3_FORMAT_REPAIR_WEIGHT,
+    MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
+    classify_math_supervision_bucket,
     convert_m0_record,
     load_difficulty_signal,
     prepare,
@@ -116,6 +125,24 @@ def test_convert_reasoning_record_does_not_double_box_expected_answer() -> None:
     converted = convert_m0_record(record, split="train")
 
     assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
+
+
+def test_classify_math_supervision_bucket_for_v3_rows() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = "We compute 40 + 2 = 42. Therefore \\boxed{42}."
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_VERIFIED_FULL_SOLUTION
+
+    record["extra_env_info"]["reference_solution"] = "We compute 40 + 2 = 42."
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_FORMAT_REPAIR
+
+    record["extra_env_info"].pop("reference_solution")
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_FINAL_ANSWER_AUX
+
+    competition = _base_record("math_competition_numeric")
+    competition["expected_answer"] = "42"
+    competition["extra_env_info"].pop("reference_solution", None)
+    assert classify_math_supervision_bucket(competition) == MATH_BUCKET_HELDOUT_EVAL
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -412,6 +439,103 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     # No M0 baseline supplied → every row falls into the unknown bucket.
     assert manifest["difficulty_buckets"]["train"] == {"unknown": 1}
     assert manifest["difficulty_buckets"]["val_shadow"] == {"unknown": 1}
+
+
+def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    verified = _base_record("math_reasoning_numeric")
+    verified["expected_answer"] = "42"
+    verified["extra_env_info"]["reference_solution"] = (
+        "We compute 40 + 2 = 42. Therefore the answer is \\boxed{42}."
+    )
+    repaired = _base_record("math_reasoning_numeric")
+    repaired["expected_answer"] = "7"
+    repaired["extra_env_info"]["reference_solution"] = "Add 3 and 4 to obtain 7."
+    answer_only = _base_record("math_reasoning_numeric")
+    answer_only["expected_answer"] = "5"
+    answer_only["extra_env_info"].pop("reference_solution", None)
+    heldout = _base_record("math_competition_numeric")
+    heldout["expected_answer"] = "11"
+    heldout["extra_env_info"].pop("reference_solution", None)
+    search = _base_record("search_grounded_qa")
+    search["expected_answer"] = "Paris"
+
+    write_split("math_reasoning_numeric", "train", [verified, repaired, answer_only])
+    write_split("math_reasoning_numeric", "val", [verified])
+    write_split("math_competition_numeric", "train", [heldout])
+    write_split("math_competition_numeric", "val", [])
+    write_split("search_grounded_qa", "train", [search])
+    write_split("search_grounded_qa", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V3
+        math_v3_verified_full_solution_weight = MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v3_final_answer_aux_weight = MATH_V3_FINAL_ANSWER_AUX_WEIGHT
+        math_v3_format_repair_weight = MATH_V3_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V3
+    assert manifest["counts"]["train"] == {
+        "math_reasoning_numeric": 3,
+        "search_grounded_qa": 1,
+    }
+    assert manifest["math_final_answer_supervision"]["sidecar_in_blend"] is False
+    assert manifest["math_final_answer_supervision"]["effective_weight"] == 1.0
+
+    bucket_info = manifest["math_reasoning_replay_v3"]["buckets"]
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["rows"] == 2
+    assert manifest["math_reasoning_replay_v3"]["train_rows_excluded_as_heldout"] == 1
+
+    blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
+    blend_by_name = {dataset["name"]: dataset for dataset in blend["datasets"]}
+    assert "m1-agentic-sft-v0-math-final-answer" not in blend_by_name
+    assert blend_by_name["m1-agentic-sft-v0-math-verified-full-solution"]["weight"] == 1.0
+    assert blend_by_name["m1-agentic-sft-v0-math-final-answer-aux"]["weight"] == 0.2
+    assert blend_by_name["m1-agentic-sft-v0-math-format-repair"]["weight"] == 0.05
+
+    aux_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_final_answer_aux_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert aux_rows[0]["metadata"]["final_answer_supervision"]["strategy"] == MATH_SUPERVISION_STRATEGY_V3
+    assert aux_rows[0]["metadata"]["final_answer_supervision"]["sidecar_blend_weight"] == 0.2
+
+    heldout_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_heldout_eval.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert len(heldout_rows) == 2
+    assert all(
+        row["metadata"]["final_answer_supervision"]["sidecar_blend_weight"] == 0.0
+        for row in heldout_rows
+    )
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math reasoning replay v3 buckets" in report_md
+    assert "| heldout_eval | 2 | 0.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:

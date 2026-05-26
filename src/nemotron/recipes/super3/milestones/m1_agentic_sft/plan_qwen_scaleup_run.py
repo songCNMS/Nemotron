@@ -42,6 +42,15 @@ QWEN_CHAT_TEMPLATE_KWARGS: dict[str, Any] = {
     "enable_thinking": False,
     "truncate_history_thinking": False,
 }
+MATH_SUPERVISION_STRATEGY_V1 = "final_answer_sidecar_v1"
+MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
+MATH_SUPERVISION_STRATEGIES = (
+    MATH_SUPERVISION_STRATEGY_V1,
+    MATH_SUPERVISION_STRATEGY_V3,
+)
+MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
+MATH_V3_FORMAT_REPAIR_WEIGHT = 0.05
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -158,6 +167,12 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "max_train_per_dataset": None if args.uncapped_data else args.max_train_per_dataset,
             "max_val_per_dataset": None if args.uncapped_data else args.max_val_per_dataset,
             "expected_agentic_environments": 11,
+            "math_supervision_strategy": args.math_supervision_strategy,
+            "math_v3_weights": {
+                "verified_full_solution": args.math_v3_verified_full_solution_weight,
+                "final_answer_aux": args.math_v3_final_answer_aux_weight,
+                "format_repair": args.math_v3_format_repair_weight,
+            },
         },
         "packing": {
             "tokenizer_model": qwen_hf_model,
@@ -231,6 +246,19 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f"  --max-val-per-dataset {int(data['max_val_per_dataset'])}"
         )
     )
+    math_supervision_flag_lines = (
+        f" \\\n  --math-supervision-strategy {_q(data['math_supervision_strategy'])}"
+    )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V3:
+        math_v3_weights = data["math_v3_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v3-verified-full-solution-weight "
+            f"{float(math_v3_weights['verified_full_solution'])}"
+            f" \\\n  --math-v3-final-answer-aux-weight "
+            f"{float(math_v3_weights['final_answer_aux'])}"
+            f" \\\n  --math-v3-format-repair-weight "
+            f"{float(math_v3_weights['format_repair'])}"
+        )
     optional_training_flags = _optional_training_flags(training)
     optional_training_flag_lines = (
         "".join(f" \\\n  {_q(flag)}" for flag in optional_training_flags)
@@ -271,7 +299,7 @@ fi
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \\
   --m0-input-dir {_q(paths["m0_dir"])} \\
   --output-dir {_q(paths["m1_dir"])} \\
-  --overwrite
+  --overwrite{math_supervision_flag_lines}
 
 python src/nemotron/recipes/super3/stage1_sft/data_prep.py \\
   --config src/nemotron/recipes/super3/stage1_sft/config/data_prep/agentic_v0.yaml \\
@@ -462,6 +490,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Run name: `{manifest['run_name']}`",
             f"- M0 datasets: {len(data['m0_dataset_ids'])} agentic SFT slices",
             f"- Rows per dataset: {row_scope}",
+            f"- Math supervision strategy: `{data['math_supervision_strategy']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
                 f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
@@ -527,6 +556,30 @@ def build_parser() -> argparse.ArgumentParser:
         "--uncapped-data",
         action="store_true",
         help="Generate M0 data with prepare_m0_assets.py --uncapped instead of per-dataset row caps.",
+    )
+    parser.add_argument(
+        "--math-supervision-strategy",
+        choices=MATH_SUPERVISION_STRATEGIES,
+        default=MATH_SUPERVISION_STRATEGY_V1,
+        help="Math SFT sidecar strategy passed to prepare_m1_agentic_sft.py.",
+    )
+    parser.add_argument(
+        "--math-v3-verified-full-solution-weight",
+        type=float,
+        default=MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Blend weight for v3 verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v3-final-answer-aux-weight",
+        type=float,
+        default=MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
+        help="Blend weight for v3 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v3-format-repair-weight",
+        type=float,
+        default=MATH_V3_FORMAT_REPAIR_WEIGHT,
+        help="Blend weight for v3 math format-repair rows.",
     )
     parser.add_argument("--num-shards", type=int, default=32)
     parser.add_argument("--pack-size", type=int, default=4096)

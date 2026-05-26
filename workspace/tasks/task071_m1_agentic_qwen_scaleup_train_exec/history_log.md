@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=60 -->
+<!-- METADATA:SESSION=61 -->
 
 ## Session 1
 
@@ -639,3 +639,13 @@
 - 分析 math 错误形态：AIME25 `300` rows 中 parsed `278`、correct `20`、contains expected `39`、length `22`；HMMT `30` rows 中 parsed `30`、correct `0`、contains expected `1`、全部 stop，说明主要问题是数学推理正确率而不是 parser 或停止符。
 - 形成下一版策略：从 original Qwen3-30B-A3B-Instruct-2507 重新开始，降低 final-answer-only sidecar 到 `0.15-0.25` 有效权重并 cap 到 math tokens 的 `10-15%`，加入 verified full-solution math reasoning replay，用 corrected mini eval gates 选择候选 checkpoint。
 - 验证：本轮新增文档和记录通过 `git diff --check`；无训练或 serving 进程需要清理。
+
+## Session 61
+
+- 按“执行下一步”实现 M1 Agentic SFT math `reasoning_replay_v3` 数据准备入口；默认仍保留 legacy `final_answer_sidecar_v1`，因此既有 v1/v2 复现实验不受默认行为影响。
+- 在 `prepare_m1_agentic_sft.py` 中新增 math bucket 分类：`verified_full_solution`、`final_answer_aux`、`format_repair`、`heldout_eval`；v3 会写出对应 JSONL bucket 文件，并从训练主 JSONL 中排除 unverified competition heldout 行。
+- v3 blend 改为 base train JSONL + verified full-solution sidecar weight `1.0` + final-answer-aux weight `0.2` + format-repair weight `0.05`；`heldout_eval` 只写文件和 manifest，不进入训练 blend。
+- 在 manifest/report/lineage/row metadata 中记录 `math_supervision_strategy`、bucket path、bucket rows、blend weights 和 per-row `final_answer_supervision.strategy/effective_weight`。
+- 将 `plan_qwen_scaleup_run.py` 接入 `--math-supervision-strategy reasoning_replay_v3` 与 v3 权重参数，生成的 local data prep script 会把同一策略传给 `prepare_m1_agentic_sft.py`。
+- 生成 v3 30B scale-up script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3`，配置为 original Qwen3-30B-A3B checkpoint、uncapped data、Qwen chat template、0.25 epoch、GBS 8、8 GPUs、lr `5e-7`、min lr `1e-7`、eval/save interval `500`。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `76 passed, 1 skipped`；`ruff check` 通过；`py_compile` 通过。

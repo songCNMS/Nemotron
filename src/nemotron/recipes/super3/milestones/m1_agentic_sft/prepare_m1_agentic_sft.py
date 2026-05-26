@@ -56,6 +56,36 @@ MATH_FINAL_ANSWER_FORMAT = "boxed_final_line"
 MATH_FINAL_ANSWER_SIDECAR_WEIGHT = 1.0
 MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT = 2.0
 MATH_FINAL_ANSWER_SIDECAR_NAME = "m1-agentic-sft-v0-math-final-answer"
+MATH_SUPERVISION_STRATEGY_V1 = "final_answer_sidecar_v1"
+MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
+MATH_SUPERVISION_STRATEGIES = (
+    MATH_SUPERVISION_STRATEGY_V1,
+    MATH_SUPERVISION_STRATEGY_V3,
+)
+MATH_BUCKET_VERIFIED_FULL_SOLUTION = "verified_full_solution"
+MATH_BUCKET_FINAL_ANSWER_AUX = "final_answer_aux"
+MATH_BUCKET_FORMAT_REPAIR = "format_repair"
+MATH_BUCKET_HELDOUT_EVAL = "heldout_eval"
+MATH_V3_BUCKETS = (
+    MATH_BUCKET_VERIFIED_FULL_SOLUTION,
+    MATH_BUCKET_FINAL_ANSWER_AUX,
+    MATH_BUCKET_FORMAT_REPAIR,
+    MATH_BUCKET_HELDOUT_EVAL,
+)
+MATH_V3_BUCKET_FILENAMES = {
+    MATH_BUCKET_VERIFIED_FULL_SOLUTION: "agentic_sft_v0_math_verified_full_solution_train.jsonl",
+    MATH_BUCKET_FINAL_ANSWER_AUX: "agentic_sft_v0_math_final_answer_aux_train.jsonl",
+    MATH_BUCKET_FORMAT_REPAIR: "agentic_sft_v0_math_format_repair_train.jsonl",
+    MATH_BUCKET_HELDOUT_EVAL: "agentic_sft_v0_math_heldout_eval.jsonl",
+}
+MATH_V3_BUCKET_DATASET_NAMES = {
+    MATH_BUCKET_VERIFIED_FULL_SOLUTION: "m1-agentic-sft-v0-math-verified-full-solution",
+    MATH_BUCKET_FINAL_ANSWER_AUX: "m1-agentic-sft-v0-math-final-answer-aux",
+    MATH_BUCKET_FORMAT_REPAIR: "m1-agentic-sft-v0-math-format-repair",
+}
+MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
+MATH_V3_FORMAT_REPAIR_WEIGHT = 0.05
 
 JsonDict = dict[str, Any]
 
@@ -300,6 +330,48 @@ def _contains_boxed_expected_answer(content: str, expected_answer: str) -> bool:
     compact_content = _compact_math_text(content)
     compact_boxed = _compact_math_text(_boxed_final_answer(expected_answer))
     return compact_boxed in compact_content
+
+
+def _remove_boxed_spans(text: str) -> str:
+    return re.sub(r"\\+boxed\s*\{[^{}]*\}", " ", text)
+
+
+def _has_reasoning_trace(reference_solution: str, expected_answer: str) -> bool:
+    """Heuristic for separating real solution traces from answer-only rows."""
+    content = _strip_gsm8k_marker(reference_solution).strip()
+    if not content:
+        return False
+    reduced = _remove_boxed_spans(content)
+    for value in {
+        expected_answer,
+        _unbox_expected_answer(expected_answer),
+        _boxed_final_answer(expected_answer),
+    }:
+        value = value.strip()
+        if value:
+            reduced = reduced.replace(value, " ")
+    reduced = re.sub(r"(?i)\bfinal\s+answer\b\s*:?", " ", reduced)
+    reduced = re.sub(r"\s+", " ", reduced).strip()
+    if not reduced:
+        return False
+    if len(reduced) >= 32:
+        return True
+    return len(re.findall(r"[A-Za-z]{2,}|[=+\-*/^]", reduced)) >= 3
+
+
+def classify_math_supervision_bucket(record: Mapping[str, Any]) -> str | None:
+    env_id = str(record.get("environment", ""))
+    if env_id not in MATH_FINAL_ANSWER_ENVIRONMENTS:
+        return None
+    expected_answer = str(record.get("expected_answer", "")).strip()
+    reference = str(record.get("extra_env_info", {}).get("reference_solution") or "").strip()
+    if reference and _has_reasoning_trace(reference, expected_answer):
+        if expected_answer and _contains_boxed_expected_answer(reference, expected_answer):
+            return MATH_BUCKET_VERIFIED_FULL_SOLUTION
+        return MATH_BUCKET_FORMAT_REPAIR
+    if env_id == "math_competition_numeric" and not reference:
+        return MATH_BUCKET_HELDOUT_EVAL
+    return MATH_BUCKET_FINAL_ANSWER_AUX
 
 
 def _reasoning_target_from_reference(reference_solution: str, expected_answer: str) -> str:
@@ -610,7 +682,7 @@ def _difficulty_for(
     env_id = str(record.get("environment", ""))
     # `difficulty_signal` is keyed by M0 split names (`train` / `val`). The
     # converter passes the M0 split verbatim (`"train"` or `"val"`); the
-    # `"val_shadow"` tag is applied later when summarizing into the manifest,
+    # `"val_shadow"` tag is applied during manifest summarization,
     # so we never look up by `"val_shadow"` here.
     return difficulty_signal.get((env_id, split, row_index), DIFFICULTY_UNKNOWN)
 
@@ -621,6 +693,7 @@ def m1_metadata(
     *,
     row_index: int | None = None,
     difficulty_signal: Mapping[tuple[str, str, int], str] | None = None,
+    math_supervision_bucket: str | None = None,
 ) -> JsonDict:
     source_metadata = record.get("metadata", {})
     env_id = str(record.get("environment", ""))
@@ -656,6 +729,8 @@ def m1_metadata(
     final_answer_supervision = _math_final_answer_supervision(env_id)
     if final_answer_supervision is not None:
         metadata["final_answer_supervision"] = final_answer_supervision
+    if math_supervision_bucket is not None:
+        metadata["math_supervision_bucket"] = math_supervision_bucket
     return metadata
 
 
@@ -668,6 +743,7 @@ def convert_m0_record(
 ) -> JsonDict:
     environment = record.get("environment")
     environment_id = str(environment)
+    math_supervision_bucket = classify_math_supervision_bucket(record)
     if environment_id in _TOOL_CALLING_ENVIRONMENTS:
         supervision_messages = trajectory_for_tool_calling(record)
     else:
@@ -684,7 +760,13 @@ def convert_m0_record(
         "messages": messages,
         "tools": tools,
         "used_in": ["super3", USED_IN_TAG, "m1_agentic_sft_v0"],
-        "metadata": m1_metadata(record, split, row_index=row_index, difficulty_signal=difficulty_signal),
+        "metadata": m1_metadata(
+            record,
+            split,
+            row_index=row_index,
+            difficulty_signal=difficulty_signal,
+            math_supervision_bucket=math_supervision_bucket,
+        ),
     }
     return output
 
@@ -772,11 +854,79 @@ def _is_math_final_answer_row(row: Mapping[str, Any]) -> bool:
     return env in MATH_FINAL_ANSWER_ENVIRONMENTS
 
 
+def _math_supervision_bucket(row: Mapping[str, Any]) -> str | None:
+    bucket = row.get("metadata", {}).get("math_supervision_bucket")
+    if isinstance(bucket, str) and bucket in MATH_V3_BUCKETS:
+        return bucket
+    return None
+
+
+def split_math_supervision_buckets(
+    train_rows: Sequence[Mapping[str, Any]],
+    val_rows: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, list[Mapping[str, Any]]]:
+    buckets: dict[str, list[Mapping[str, Any]]] = {bucket: [] for bucket in MATH_V3_BUCKETS}
+    for row in train_rows:
+        bucket = _math_supervision_bucket(row)
+        if bucket is not None:
+            buckets[bucket].append(row)
+    for row in val_rows:
+        if _is_math_final_answer_row(row):
+            buckets[MATH_BUCKET_HELDOUT_EVAL].append(row)
+    return buckets
+
+
+def filter_v3_training_rows(rows: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    return [
+        row
+        for row in rows
+        if _math_supervision_bucket(row) != MATH_BUCKET_HELDOUT_EVAL
+    ]
+
+
+def count_math_supervision_buckets(
+    rows: Sequence[Mapping[str, Any]],
+) -> dict[str, int]:
+    counts: dict[str, int] = {bucket: 0 for bucket in MATH_V3_BUCKETS}
+    for row in rows:
+        bucket = _math_supervision_bucket(row)
+        if bucket is not None:
+            counts[bucket] += 1
+    return {bucket: count for bucket, count in counts.items() if count}
+
+
+def apply_math_supervision_strategy_metadata(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    strategy: str,
+    bucket_weights: Mapping[str, float] | None = None,
+) -> None:
+    bucket_weights = bucket_weights or {}
+    for row in rows:
+        metadata = row.get("metadata")
+        if not isinstance(metadata, dict):
+            continue
+        supervision = metadata.get("final_answer_supervision")
+        if not isinstance(supervision, dict):
+            continue
+        supervision["strategy"] = strategy
+        if strategy != MATH_SUPERVISION_STRATEGY_V3:
+            continue
+        bucket = _math_supervision_bucket(row)
+        sidecar_weight = float(bucket_weights.get(bucket or "", 0.0))
+        if bucket == MATH_BUCKET_HELDOUT_EVAL or metadata.get("m0_split") != "train":
+            sidecar_weight = 0.0
+        supervision["sidecar_blend_weight"] = sidecar_weight
+        supervision["effective_weight"] = 1.0 + sidecar_weight
+
+
 def build_blend(
     train_path: Path,
     *,
     math_final_answer_train_path: Path | None = None,
     math_final_answer_weight: float = MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+    extra_datasets: Sequence[Mapping[str, Any]] = (),
+    comment: str | None = None,
 ) -> JsonDict:
     datasets: list[JsonDict] = [
         {
@@ -793,8 +943,10 @@ def build_blend(
                 "weight": float(math_final_answer_weight),
             }
         )
+    for dataset in extra_datasets:
+        datasets.append(dict(dataset))
     return {
-        "_comment": (
+        "_comment": comment or (
             "M1 Agentic SFT v0 blend generated from M0 public data. "
             "M0 val shadow is not included. Numeric math rows are duplicated "
             "into the math-final-answer sidecar when present so boxed final-answer "
@@ -802,6 +954,57 @@ def build_blend(
         ),
         "datasets": datasets,
     }
+
+
+def _math_v3_weights(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION: float(
+            getattr(args, "math_v3_verified_full_solution_weight", MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT)
+        ),
+        MATH_BUCKET_FINAL_ANSWER_AUX: float(
+            getattr(args, "math_v3_final_answer_aux_weight", MATH_V3_FINAL_ANSWER_AUX_WEIGHT)
+        ),
+        MATH_BUCKET_FORMAT_REPAIR: float(
+            getattr(args, "math_v3_format_repair_weight", MATH_V3_FORMAT_REPAIR_WEIGHT)
+        ),
+    }
+
+
+def build_math_v3_blend(
+    train_path: Path,
+    *,
+    bucket_paths: Mapping[str, Path],
+    bucket_rows: Mapping[str, Sequence[Mapping[str, Any]]],
+    bucket_weights: Mapping[str, float],
+) -> JsonDict:
+    extra_datasets: list[JsonDict] = []
+    for bucket in (
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION,
+        MATH_BUCKET_FINAL_ANSWER_AUX,
+        MATH_BUCKET_FORMAT_REPAIR,
+    ):
+        rows = bucket_rows.get(bucket, ())
+        weight = float(bucket_weights.get(bucket, 0.0))
+        if not rows or weight <= 0.0:
+            continue
+        extra_datasets.append(
+            {
+                "name": MATH_V3_BUCKET_DATASET_NAMES[bucket],
+                "path": str(bucket_paths[bucket]),
+                "weight": weight,
+            }
+        )
+    return build_blend(
+        train_path,
+        extra_datasets=extra_datasets,
+        comment=(
+            "M1 Agentic SFT v0 reasoning_replay_v3 blend. The base train JSONL "
+            "keeps normal agentic SFT coverage; verified math solution traces, "
+            "low-weight final-answer auxiliary rows, and low-weight format-repair "
+            "rows are separate sidecars. Held-out math rows are written for eval "
+            "and excluded from the training blend."
+        ),
+    )
 
 
 def count_by_environment(rows: Sequence[Mapping[str, Any]]) -> dict[str, int]:
@@ -889,7 +1092,12 @@ def _apply_curriculum_to_train(
     return reordered, audit
 
 
-def check_output_paths(output_dir: Path, overwrite: bool) -> None:
+def check_output_paths(
+    output_dir: Path,
+    overwrite: bool,
+    *,
+    math_supervision_strategy: str = MATH_SUPERVISION_STRATEGY_V1,
+) -> None:
     targets = [
         output_dir / "agentic_sft_v0_train.jsonl",
         output_dir / "agentic_sft_v0_math_final_answer_train.jsonl",
@@ -898,6 +1106,8 @@ def check_output_paths(output_dir: Path, overwrite: bool) -> None:
         output_dir / "manifest.json",
         output_dir / "report.md",
     ]
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        targets.extend(output_dir / filename for filename in MATH_V3_BUCKET_FILENAMES.values())
     existing = [path for path in targets if path.exists()]
     if existing and not overwrite:
         formatted = "\n".join(f"  - {path}" for path in existing)
@@ -914,6 +1124,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         f"- Output directory: `{manifest['output_dir']}`",
         f"- Training blend: `{manifest['blend_path']}`",
         f"- M0 health baseline: `{health_baseline}`",
+        f"- Math supervision strategy: `{manifest.get('math_supervision_strategy', MATH_SUPERVISION_STRATEGY_V1)}`",
         "",
         "## Math final-answer supervision",
         "",
@@ -922,11 +1133,29 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         f"- Effective weight: `{manifest['math_final_answer_supervision']['effective_weight']}`",
         f"- Sidecar path: `{manifest['math_final_answer_supervision']['sidecar_path']}`",
         "",
-        "## Counts",
-        "",
-        "| Split | Environment | Rows |",
-        "|---|---|---:|",
     ]
+    math_v3 = manifest.get("math_reasoning_replay_v3")
+    if isinstance(math_v3, Mapping):
+        lines.extend(
+            [
+                "## Math reasoning replay v3 buckets",
+                "",
+                "| Bucket | Rows | Blend weight | Path |",
+                "|---|---:|---:|---|",
+            ]
+        )
+        buckets = math_v3.get("buckets") or {}
+        if isinstance(buckets, Mapping):
+            for bucket in MATH_V3_BUCKETS:
+                info = buckets.get(bucket) or {}
+                if not isinstance(info, Mapping):
+                    continue
+                lines.append(
+                    f"| {bucket} | {info.get('rows', 0)} | {info.get('blend_weight', 0.0)} | "
+                    f"`{info.get('path', '')}` |"
+                )
+        lines.append("")
+    lines.extend(["## Counts", "", "| Split | Environment | Rows |", "|---|---|---:|"])
     for split in ("train", "val_shadow"):
         for environment, count in manifest["counts"][split].items():
             lines.append(f"| {split} | {environment} | {count} |")
@@ -961,7 +1190,21 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
 def prepare(args: argparse.Namespace) -> JsonDict:
     if args.m0_input_dir is None:
         raise ValueError("--m0-input-dir is required")
-    check_output_paths(args.output_dir, args.overwrite)
+    math_supervision_strategy = getattr(
+        args,
+        "math_supervision_strategy",
+        MATH_SUPERVISION_STRATEGY_V1,
+    )
+    if math_supervision_strategy not in MATH_SUPERVISION_STRATEGIES:
+        raise ValueError(
+            f"--math-supervision-strategy must be one of {MATH_SUPERVISION_STRATEGIES}, "
+            f"got {math_supervision_strategy!r}"
+        )
+    check_output_paths(
+        args.output_dir,
+        args.overwrite,
+        math_supervision_strategy=math_supervision_strategy,
+    )
     files_by_env = discover_m0_files(args.m0_input_dir)
     if not files_by_env:
         raise ValueError(f"no M0 split files found under {args.m0_input_dir}")
@@ -988,6 +1231,14 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         difficulty_signal=difficulty_signal,
     )
 
+    math_v3_weights = _math_v3_weights(args)
+    math_v3_heldout_train_rows: list[Mapping[str, Any]] = []
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        math_v3_heldout_train_rows = [
+            row for row in train_rows if _math_supervision_bucket(row) == MATH_BUCKET_HELDOUT_EVAL
+        ]
+        train_rows = filter_v3_training_rows(train_rows)
+
     # task040 Session 2: W1 curriculum sampler wiring. Applies to TRAIN
     # only — val rows stay in stable order so shadow eval is reproducible.
     train_rows, curriculum_audit = _apply_curriculum_to_train(
@@ -1003,18 +1254,59 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     val_shadow_path = args.output_dir / "agentic_sft_v0_val_shadow.jsonl"
     blend_path = args.output_dir / "data_blend_agentic_sft_v0.json"
     math_final_answer_rows = [row for row in train_rows if _is_math_final_answer_row(row)]
+    math_v3_bucket_paths = {
+        bucket: args.output_dir / filename
+        for bucket, filename in MATH_V3_BUCKET_FILENAMES.items()
+    }
+    math_v3_bucket_rows: dict[str, list[Mapping[str, Any]]] = {}
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        math_v3_bucket_rows = split_math_supervision_buckets(train_rows, val_rows)
+        math_v3_bucket_rows[MATH_BUCKET_HELDOUT_EVAL] = [
+            *math_v3_heldout_train_rows,
+            *math_v3_bucket_rows[MATH_BUCKET_HELDOUT_EVAL],
+        ]
+        apply_math_supervision_strategy_metadata(
+            [*train_rows, *val_rows, *math_v3_heldout_train_rows],
+            strategy=math_supervision_strategy,
+            bucket_weights=math_v3_weights,
+        )
+    else:
+        apply_math_supervision_strategy_metadata(
+            [*train_rows, *val_rows],
+            strategy=math_supervision_strategy,
+        )
     write_jsonl(train_path, train_rows)
     write_jsonl(math_final_answer_train_path, math_final_answer_rows)
     write_jsonl(val_shadow_path, val_rows)
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        for bucket, path in math_v3_bucket_paths.items():
+            write_jsonl(path, math_v3_bucket_rows.get(bucket, []))
     write_json(
         blend_path,
-        build_blend(
-            train_path,
-            math_final_answer_train_path=(
-                math_final_answer_train_path if math_final_answer_rows else None
-            ),
-            math_final_answer_weight=MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+        (
+            build_math_v3_blend(
+                train_path,
+                bucket_paths=math_v3_bucket_paths,
+                bucket_rows=math_v3_bucket_rows,
+                bucket_weights=math_v3_weights,
+            )
+            if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3
+            else build_blend(
+                train_path,
+                math_final_answer_train_path=(
+                    math_final_answer_train_path if math_final_answer_rows else None
+                ),
+                math_final_answer_weight=MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+            )
         ),
+    )
+
+    legacy_sidecar_in_blend = (
+        math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V1
+        and bool(math_final_answer_rows)
+    )
+    legacy_sidecar_weight = (
+        MATH_FINAL_ANSWER_SIDECAR_WEIGHT if legacy_sidecar_in_blend else 0.0
     )
 
     manifest = {
@@ -1022,6 +1314,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "milestone": MILESTONE,
         "stage": "Agentic SFT v0",
         "used_in_tag": USED_IN_TAG,
+        "math_supervision_strategy": math_supervision_strategy,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "m0_input_dir": str(args.m0_input_dir),
         "output_dir": str(args.output_dir),
@@ -1044,15 +1337,40 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "format": MATH_FINAL_ANSWER_FORMAT,
             "target_template": "Final answer: \\boxed{expected_answer}",
             "base_blend_weight": 1.0,
-            "sidecar_blend_weight": MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
-            "effective_weight": MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
+            "sidecar_blend_weight": legacy_sidecar_weight,
+            "effective_weight": 1.0 + legacy_sidecar_weight,
             "sidecar_dataset_name": MATH_FINAL_ANSWER_SIDECAR_NAME,
             "sidecar_path": str(math_final_answer_train_path),
-            "sidecar_in_blend": bool(math_final_answer_rows),
+            "sidecar_in_blend": legacy_sidecar_in_blend,
             "train_rows": len(math_final_answer_rows),
         },
         "errors": [*train_errors, *val_errors],
     }
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        manifest["math_reasoning_replay_v3"] = {
+            "description": (
+                "Separates math rows into verified full-solution replay, "
+                "low-weight final-answer auxiliary rows, low-weight format-repair rows, "
+                "and held-out eval rows."
+            ),
+            "buckets": {
+                bucket: {
+                    "rows": len(math_v3_bucket_rows.get(bucket, [])),
+                    "path": str(math_v3_bucket_paths[bucket]),
+                    "blend_weight": float(math_v3_weights.get(bucket, 0.0)),
+                    "in_training_blend": (
+                        bucket != MATH_BUCKET_HELDOUT_EVAL
+                        and bool(math_v3_bucket_rows.get(bucket))
+                        and float(math_v3_weights.get(bucket, 0.0)) > 0.0
+                    ),
+                }
+                for bucket in MATH_V3_BUCKETS
+            },
+            "train_rows_excluded_as_heldout": len(math_v3_heldout_train_rows),
+            "bucket_counts": count_math_supervision_buckets(
+                [*train_rows, *math_v3_heldout_train_rows]
+            ),
+        }
 
     # task021 Session 2: cross-stage lineage block. M1 declares the M0
     # manifest as its single upstream manifest input plus the optional
@@ -1098,6 +1416,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             notes="`nemotron super3 data prep sft -c agentic_v0` consumes this",
         ),
     ]
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
+        for bucket in MATH_V3_BUCKETS:
+            lineage_outputs.append(
+                LineageOutput(
+                    kind=f"m1_sft_math_{bucket}_jsonl",
+                    ref=str(math_v3_bucket_paths[bucket].relative_to(args.output_dir)),
+                    rows=len(math_v3_bucket_rows.get(bucket, [])),
+                    notes="reasoning_replay_v3 math supervision bucket",
+                )
+            )
     lineage_record = make_lineage_record(
         stage=f"{MILESTONE} Agentic SFT v0",
         produced_by="prepare_m1_agentic_sft.py",
@@ -1131,6 +1459,35 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-shadow-per-env", type=int, default=None)
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--math-supervision-strategy",
+        choices=MATH_SUPERVISION_STRATEGIES,
+        default=MATH_SUPERVISION_STRATEGY_V1,
+        help=(
+            "`final_answer_sidecar_v1` preserves the legacy 1.0-weight boxed-answer "
+            "sidecar. `reasoning_replay_v3` writes separate verified-solution, "
+            "final-answer-aux, format-repair, and heldout-eval math buckets and "
+            "uses lower sidecar weights for answer-only formatting rows."
+        ),
+    )
+    parser.add_argument(
+        "--math-v3-verified-full-solution-weight",
+        type=float,
+        default=MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Blend weight for the reasoning_replay_v3 verified full-solution math sidecar.",
+    )
+    parser.add_argument(
+        "--math-v3-final-answer-aux-weight",
+        type=float,
+        default=MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
+        help="Blend weight for reasoning_replay_v3 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v3-format-repair-weight",
+        type=float,
+        default=MATH_V3_FORMAT_REPAIR_WEIGHT,
+        help="Blend weight for reasoning_replay_v3 rows whose reference solution needed boxed-final repair.",
+    )
     # task040 Session 2: W1 curriculum sampler wiring. Off by default
     # (as_is = passthrough). Operators opt in via --curriculum-policy.
     parser.add_argument(
@@ -1194,6 +1551,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "train_rows": sum(manifest["counts"]["train"].values()),
                 "val_shadow_rows": sum(manifest["counts"]["val_shadow"].values()),
                 "blend_path": manifest["blend_path"],
+                "math_supervision_strategy": manifest["math_supervision_strategy"],
                 "errors": len(manifest["errors"]),
             },
             indent=2,

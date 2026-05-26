@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=60 -->
+<!-- METADATA:SESSION=61 -->
 
 ## Notes
 
@@ -161,3 +161,6 @@
 - Qwen chat-template retrain Session 60 error-shape fact: iter3000 AIME25 has `278/300` parsed, `20/300` correct, `39/300` contains the expected answer, and `22/300` length finishes; iter3000 HMMT has `30/30` parsed, `0/30` correct, `1/30` contains expected answer, and `30/30` stop finishes. This points to reasoning-quality regression rather than a parser-only failure.
 - Qwen math strategy fact: the next 30B recovery run should start from original Qwen3-30B-A3B-Instruct-2507, keep Qwen tokenizer chat-template packing, add verified full-solution math reasoning replay, and reduce final-answer-only sidecar rows to `0.15-0.25` effective weight capped at `10-15%` of math tokens.
 - Qwen checkpoint-selection fact: validation loss alone is not enough for this objective; export candidates around `iter_2000`, `iter_3000`, and `iter_3500` and gate them with corrected MMLU-Pro mini plus corrected AIME/HMMT mini before any full corrected eval.
+- M1 SFT math v3 data-prep fact: `prepare_m1_agentic_sft.py --math-supervision-strategy reasoning_replay_v3` writes `verified_full_solution`, `final_answer_aux`, `format_repair`, and `heldout_eval` bucket JSONLs; only the first three can enter the training blend, while `heldout_eval` is excluded from training.
+- M1 SFT math v3 weight fact: default v3 sidecar weights are `verified_full_solution=1.0`, `final_answer_aux=0.2`, and `format_repair=0.05`; legacy `final_answer_sidecar_v1` remains the default strategy and keeps the old 1.0-weight math final-answer sidecar.
+- Qwen v3 script fact: generated scripts for `task071_qwen30b_a3b_math_reasoning_replay_v3` live under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3` and target original Qwen3-30B-A3B, uncapped M0/M1, Qwen chat-template packing, 0.25 epoch, GBS 8, and lr `5e-7`.
