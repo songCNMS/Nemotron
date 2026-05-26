@@ -53,11 +53,22 @@ def resolve_qwen_tokenizer_model(config: DictConfig, hf_model: str) -> str:
 
 def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     """Build a Qwen3 4B SFT config from a local HF model directory."""
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    hf_model = resolve_qwen_hf_model()
+    tokenizer_model = resolve_qwen_tokenizer_model(config, hf_model)
+    packed_sft_dir = OmegaConf.select(config, "dataset.super3_packed_sft_dir", default=None)
+    if packed_sft_dir:
+        metadata_path = validate_qwen_packed_sft_chat_contract(
+            str(packed_sft_dir),
+            tokenizer_model=tokenizer_model,
+        )
+        logger.info("Validated Qwen SFT chat contract in %s", metadata_path)
+
     import torch
     from megatron.bridge.recipes.qwen.qwen3 import qwen3_4b_finetune_config
     from megatron.bridge.training.config import ConfigContainer  # noqa: F401
 
-    hf_model = resolve_qwen_hf_model()
     seq_length = int(OmegaConf.select(config, "dataset.seq_length", default=4096))
     cfg = qwen3_4b_finetune_config(
         hf_path=hf_model,
@@ -70,7 +81,7 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
         eval_interval=int(OmegaConf.select(config, "train.eval_interval", default=100)),
         save_interval=int(OmegaConf.select(config, "checkpoint.save_interval", default=100)),
     )
-    cfg.tokenizer.tokenizer_model = resolve_qwen_tokenizer_model(config, hf_model)
+    cfg.tokenizer.tokenizer_model = tokenizer_model
 
     cfg.model.seq_length = seq_length
     cfg.model.tensor_model_parallel_size = 2

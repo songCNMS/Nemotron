@@ -54,7 +54,10 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import pickle
 import sys
+import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -65,12 +68,6 @@ from megatron.bridge.training.config import ConfigContainer, FinetuningDatasetCo
 from megatron.bridge.training.finetune import finetune
 from megatron.bridge.training.gpt_step import forward_step as _gpt_step_forward_step
 from megatron.bridge.training.pretrain import pretrain
-
-from nemotron.recipes.super3.stage1_sft.step_dispatch import (
-    _STEP_FUNCTIONS,
-    _import_attr,
-    _load_forward_step,
-)
 from megatron.bridge.training.utils.omegaconf_utils import (
     apply_overrides,
     create_omegaconf_dict_config,
@@ -78,8 +75,8 @@ from megatron.bridge.training.utils.omegaconf_utils import (
 )
 from omegaconf import DictConfig, OmegaConf
 
-from nemotron.kit.recipe_loader import extract_recipe_config, import_recipe_function
 from nemo_runspec.artifacts import setup_artifact_tracking
+from nemotron.kit.recipe_loader import extract_recipe_config, import_recipe_function
 from nemotron.kit.train_script import load_omegaconf_yaml, parse_config_and_overrides
 from nemotron.kit.wandb_kit import (
     _get_manifest_tracker,
@@ -92,6 +89,7 @@ from nemotron.kit.wandb_kit import (
     patch_wandb_local_file_handler_skip_digest_verification,
     patch_wandb_runid_for_seeded_random,
 )
+from nemotron.recipes.super3.stage1_sft.step_dispatch import _load_forward_step
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -144,7 +142,7 @@ def convert_megatron_to_hf(
         logger.info(f"HF checkpoint already exists at {output_path}, skipping conversion")
         return str(output_path)
 
-    logger.info(f"Converting Megatron checkpoint to HuggingFace format...")
+    logger.info("Converting Megatron checkpoint to HuggingFace format...")
     logger.info(f"  Source: {megatron_path}")
     logger.info(f"  HF model ID: {hf_model_id}")
     logger.info(f"  Output: {output_path}")
@@ -237,6 +235,43 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
         A FinetuningDatasetConfig instance
     """
 
+    def _is_valid_npy(path: Path) -> bool:
+        import numpy as np
+
+        try:
+            np.load(path, allow_pickle=True)
+        except (EOFError, OSError, ValueError, pickle.UnpicklingError):
+            return False
+        return True
+
+    def _acquire_output_lock(output_path: Path) -> Path:
+        lock_path = output_path.with_name(f"{output_path.name}.lock")
+        while True:
+            try:
+                fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            except FileExistsError:
+                try:
+                    lock_age = time.time() - lock_path.stat().st_mtime
+                except FileNotFoundError:
+                    continue
+                if lock_age > 3600:
+                    logger.warning("Removing stale packed bridge lock: %s", lock_path)
+                    lock_path.unlink(missing_ok=True)
+                    continue
+                time.sleep(1.0)
+                continue
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                handle.write(f"pid={os.getpid()}\n")
+            return lock_path
+
+    def _atomic_save_npy(path: Path, rows: list[dict[str, list[int] | list[bool]]]) -> None:
+        import numpy as np
+
+        tmp_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+        with tmp_path.open("wb") as handle:
+            np.save(handle, np.array(rows, dtype=object), allow_pickle=True)
+        tmp_path.replace(path)
+
     def _bridge_packed_npy_path(path_value: str | None, split_name: str, pack_size: int) -> str | None:
         """Return a Megatron-Bridge readable packed .npy path.
 
@@ -270,41 +305,70 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
 
         newest_parquet_mtime = max(p.stat().st_mtime for p in parquet_files)
         if output_path.exists() and output_path.stat().st_mtime >= newest_parquet_mtime:
-            return str(output_path)
+            if _is_valid_npy(output_path):
+                return str(output_path)
+            logger.warning("Removing invalid packed %s bridge npy: %s", split_name, output_path)
+            output_path.unlink(missing_ok=True)
 
-        import numpy as np
         import pyarrow.parquet as pq
 
-        rows: list[dict[str, list[int] | list[bool]]] = []
-        for parquet_file in parquet_files:
-            table = pq.read_table(parquet_file, columns=["input_ids", "loss_mask", "seq_start_id"])
-            columns = table.to_pydict()
-            for input_ids, loss_mask, seq_start_id in zip(
-                columns["input_ids"],
-                columns["loss_mask"],
-                columns["seq_start_id"],
-                strict=True,
-            ):
-                rows.append(
-                    {
-                        "input_ids": [int(x) for x in input_ids],
-                        "loss_mask": [bool(x) for x in loss_mask],
-                        "seq_start_id": [int(x) for x in seq_start_id],
-                    }
-                )
+        lock_path = _acquire_output_lock(output_path)
+        try:
+            if output_path.exists() and output_path.stat().st_mtime >= newest_parquet_mtime:
+                if _is_valid_npy(output_path):
+                    return str(output_path)
+                logger.warning("Removing invalid packed %s bridge npy: %s", split_name, output_path)
+                output_path.unlink(missing_ok=True)
 
-        if not rows:
-            raise ValueError(f"Packed {split_name} parquet data produced zero rows: {path}")
+            rows: list[dict[str, list[int] | list[bool]]] = []
+            for parquet_file in parquet_files:
+                table = pq.read_table(parquet_file, columns=["input_ids", "loss_mask", "seq_start_id"])
+                columns = table.to_pydict()
+                for input_ids, loss_mask, seq_start_id in zip(
+                    columns["input_ids"],
+                    columns["loss_mask"],
+                    columns["seq_start_id"],
+                    strict=True,
+                ):
+                    rows.append(
+                        {
+                            "input_ids": [int(x) for x in input_ids],
+                            "loss_mask": [bool(x) for x in loss_mask],
+                            "seq_start_id": [int(x) for x in seq_start_id],
+                        }
+                    )
 
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        np.save(output_path, np.array(rows, dtype=object), allow_pickle=True)
-        logger.info(
-            "Converted packed %s parquet shards to Megatron-Bridge npy: %s (%d rows)",
-            split_name,
-            output_path,
-            len(rows),
-        )
-        return str(output_path)
+            if not rows:
+                raise ValueError(f"Packed {split_name} parquet data produced zero rows: {path}")
+
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            _atomic_save_npy(output_path, rows)
+            logger.info(
+                "Converted packed %s parquet shards to Megatron-Bridge npy: %s (%d rows)",
+                split_name,
+                output_path,
+                len(rows),
+            )
+            return str(output_path)
+        finally:
+            lock_path.unlink(missing_ok=True)
+
+    def _load_bridge_rows(path: Path) -> Any:
+        import numpy as np
+
+        return np.load(path, allow_pickle=True)
+
+    def _atomic_write_text(path: Path, text: str) -> None:
+        tmp_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+        tmp_path.write_text(text, encoding="utf-8")
+        tmp_path.replace(path)
+
+    def _is_valid_json(path: Path) -> bool:
+        try:
+            json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+            return False
+        return True
 
     def _bridge_packed_metadata_path(
         train_path_value: str | None,
@@ -319,41 +383,52 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
         output_path = packed_paths[0].parent / f"packed_{pack_size}_metadata.json"
         newest_data_mtime = max(p.stat().st_mtime for p in packed_paths)
         if output_path.exists() and output_path.stat().st_mtime >= newest_data_mtime:
+            if _is_valid_json(output_path):
+                return str(output_path)
+            logger.warning("Removing invalid Megatron-Bridge packed metadata: %s", output_path)
+            output_path.unlink(missing_ok=True)
+
+        lock_path = _acquire_output_lock(output_path)
+        try:
+            if output_path.exists() and output_path.stat().st_mtime >= newest_data_mtime:
+                if _is_valid_json(output_path):
+                    return str(output_path)
+                logger.warning("Removing invalid Megatron-Bridge packed metadata: %s", output_path)
+                output_path.unlink(missing_ok=True)
+
+            metadata = []
+            for packed_path in packed_paths:
+                rows = _load_bridge_rows(packed_path)
+                if len(rows) == 0:
+                    continue
+
+                sample_counts = []
+                packed_lengths = []
+                max_sequence_length = 0
+                for row in rows:
+                    input_ids = row["input_ids"]
+                    seq_start_id = list(row["seq_start_id"]) + [len(input_ids)]
+                    sample_counts.append(len(seq_start_id) - 1)
+                    packed_lengths.append(max(0, len(input_ids) - 1))
+                    for start, end in zip(seq_start_id[:-1], seq_start_id[1:], strict=True):
+                        max_sequence_length = max(max_sequence_length, max(0, end - start - 1))
+
+                metadata.append(
+                    {
+                        "dataset_max_seqlen": max_sequence_length,
+                        "max_samples_per_bin": max(sample_counts),
+                        "packing_factor": round(sum(sample_counts) / len(sample_counts), 2),
+                        "packing_efficiency": round(sum(packed_lengths) / len(packed_lengths) / pack_size * 100, 2),
+                        "pack_size": pack_size,
+                        "min_packed_seqlen": min(packed_lengths),
+                    }
+                )
+
+            _atomic_write_text(output_path, json.dumps(metadata))
+            logger.info("Wrote Megatron-Bridge packed metadata: %s", output_path)
             return str(output_path)
-
-        import numpy as np
-
-        metadata = []
-        for packed_path in packed_paths:
-            rows = np.load(packed_path, allow_pickle=True)
-            if len(rows) == 0:
-                continue
-
-            sample_counts = []
-            packed_lengths = []
-            max_sequence_length = 0
-            for row in rows:
-                input_ids = row["input_ids"]
-                seq_start_id = list(row["seq_start_id"]) + [len(input_ids)]
-                sample_counts.append(len(seq_start_id) - 1)
-                packed_lengths.append(max(0, len(input_ids) - 1))
-                for start, end in zip(seq_start_id[:-1], seq_start_id[1:], strict=True):
-                    max_sequence_length = max(max_sequence_length, max(0, end - start - 1))
-
-            metadata.append(
-                {
-                    "dataset_max_seqlen": max_sequence_length,
-                    "max_samples_per_bin": max(sample_counts),
-                    "packing_factor": round(sum(sample_counts) / len(sample_counts), 2),
-                    "packing_efficiency": round(sum(packed_lengths) / len(packed_lengths) / pack_size * 100, 2),
-                    "pack_size": pack_size,
-                    "min_packed_seqlen": min(packed_lengths),
-                }
-            )
-
-        output_path.write_text(json.dumps(metadata), encoding="utf-8")
-        logger.info("Wrote Megatron-Bridge packed metadata: %s", output_path)
-        return str(output_path)
+        finally:
+            lock_path.unlink(missing_ok=True)
 
     # Build PackedSequenceSpecs if provided
     packed_specs = None
@@ -380,7 +455,11 @@ def _build_dataset_config(dataset_config: DictConfig, current_dataset: Any) -> F
                 else:
                     logger.info(f"No validation data found in {valid_dir}, skipping validation split")
                     has_validation_data = False
-            logger.info(f"Resolved super3_packed_sft_dir: train={specs_dict.get('packed_train_data_path')}, valid={specs_dict.get('packed_val_data_path')}")
+            logger.info(
+                "Resolved super3_packed_sft_dir: train=%s, valid=%s",
+                specs_dict.get("packed_train_data_path"),
+                specs_dict.get("packed_val_data_path"),
+            )
 
         specs_dict["packed_train_data_path"] = _bridge_packed_npy_path(
             specs_dict.get("packed_train_data_path"),
@@ -420,7 +499,7 @@ RecipeBuilder = Callable[["DictConfig"], ConfigContainer]
 """Signature for a function that builds a ConfigContainer from a loaded config."""
 
 
-def _default_recipe_builder(config: "DictConfig") -> ConfigContainer:
+def _default_recipe_builder(config: DictConfig) -> ConfigContainer:
     """Build recipe from YAML ``recipe._target_`` (production path)."""
     recipe_target, recipe_kwargs = extract_recipe_config(
         config,
@@ -528,7 +607,10 @@ def run_finetune(
     logger.debug(f"checkpoint.pretrained_checkpoint = {cfg.checkpoint.pretrained_checkpoint}")
     logger.debug(f"dataset type = {type(cfg.dataset).__name__}")
     if hasattr(cfg.dataset, "packed_sequence_specs") and cfg.dataset.packed_sequence_specs:
-        logger.debug(f"packed_sequence_specs.packed_train_data_path = {cfg.dataset.packed_sequence_specs.packed_train_data_path}")
+        logger.debug(
+            "packed_sequence_specs.packed_train_data_path = %s",
+            cfg.dataset.packed_sequence_specs.packed_train_data_path,
+        )
 
     # task013: select forward_step via YAML `step_function:` key
     # (defaults to gpt_step → byte-for-byte identical to pre-task013).

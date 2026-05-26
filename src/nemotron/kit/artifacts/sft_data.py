@@ -16,8 +16,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import Field
 
@@ -87,6 +88,14 @@ class SFTDataArtifact(Artifact):
         Field(default_factory=list, description="Input datasets with metadata"),
     ]
     tokenizer_uri: Annotated[str | None, Field(default=None, description="URI of tokenizer model")]
+    chat_template: Annotated[
+        str | None,
+        Field(default=None, description="Chat template used to render SFT messages before packing"),
+    ]
+    chat_template_kwargs: Annotated[
+        dict[str, Any],
+        Field(default_factory=dict, description="Keyword arguments used for tokenizer.apply_chat_template"),
+    ]
 
     def get_wandb_files(self) -> list[tuple[str, str]]:
         """Return metadata files for upload (small files with artifact info)."""
@@ -128,16 +137,18 @@ class SFTDataArtifact(Artifact):
     @classmethod
     def from_result(
         cls,
-        format_result: "FormatResult",
-        blend: "DataBlend",
+        format_result: FormatResult,
+        blend: DataBlend,
         tokenizer_model: str,
         blend_json_path: str | Path,
         pack_size: int,
         *,
         messages_field_default: str = "messages",
+        chat_template: str | None = None,
+        chat_template_kwargs: Mapping[str, Any] | None = None,
         elapsed_sec: float = 0.0,
         name: str | None = None,
-    ) -> "SFTDataArtifact":
+    ) -> SFTDataArtifact:
         """Create artifact from xenna-native pipeline format result.
 
         This is a convenience constructor that builds the source_datasets
@@ -179,6 +190,8 @@ class SFTDataArtifact(Artifact):
             pack_size=pack_size,
             source_datasets=source_datasets,
             tokenizer_uri=tokenizer_to_uri(tokenizer_model),
+            chat_template=chat_template,
+            chat_template_kwargs=dict(chat_template_kwargs or {}),
             # Xenna-native output fields
             blend_path=str(blend_json_path),
             num_shards=format_result.num_shards,

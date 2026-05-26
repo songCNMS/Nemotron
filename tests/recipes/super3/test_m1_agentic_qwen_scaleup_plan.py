@@ -75,6 +75,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "chat_template=tokenizer" in local_script
     assert "chat_template_kwargs.enable_thinking=false" in local_script
     assert "chat_template_kwargs.truncate_history_thinking=false" in local_script
+    assert "validate_qwen_packed_sft_chat_contract" in local_script
     assert "chat_template=super3" not in local_script
     assert "pack_size=512" in local_script
     assert manifest["packing"]["chat_template"] == "tokenizer"
@@ -168,6 +169,36 @@ def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
     assert "--uncapped" in local_script
     assert "--max-train-per-dataset" not in local_script
     assert "--max-val-per-dataset" not in local_script
+
+
+def test_scaleup_planner_can_emit_math_reasoning_replay_v3_data_prep(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "reasoning_replay_v3",
+            "--math-v3-final-answer-aux-weight",
+            "0.15",
+            "--math-v3-format-repair-weight",
+            "0.04",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_supervision_strategy"] == "reasoning_replay_v3"
+    assert manifest["data"]["math_v3_weights"]["final_answer_aux"] == 0.15
+    assert "--math-supervision-strategy reasoning_replay_v3" in local_script
+    assert "--math-v3-verified-full-solution-weight 1.0" in local_script
+    assert "--math-v3-final-answer-aux-weight 0.15" in local_script
+    assert "--math-v3-format-repair-weight 0.04" in local_script
 
 
 def test_write_plan_outputs_executable_scripts(tmp_path) -> None:

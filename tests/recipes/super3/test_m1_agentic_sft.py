@@ -12,15 +12,25 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     DIFFICULTY_TRIVIAL,
     DIFFICULTY_UNKNOWN,
     M1_USE_BY_ENV,
+    MATH_BUCKET_FINAL_ANSWER_AUX,
+    MATH_BUCKET_FORMAT_REPAIR,
+    MATH_BUCKET_HELDOUT_EVAL,
+    MATH_BUCKET_VERIFIED_FULL_SOLUTION,
     MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT,
     MATH_FINAL_ANSWER_SIDECAR_NAME,
     MATH_FINAL_ANSWER_SIDECAR_WEIGHT,
+    MATH_SUPERVISION_STRATEGY_V3,
+    MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V3_FORMAT_REPAIR_WEIGHT,
+    MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
+    classify_math_supervision_bucket,
     convert_m0_record,
     load_difficulty_signal,
     prepare,
+    sample_rows_by_fraction,
 )
 from nemotron.recipes.super3.milestones.m1_agentic_sft.run_m1_sft_roundtrip_smoke import (
     run as run_m1_sft_roundtrip_smoke,
@@ -116,6 +126,36 @@ def test_convert_reasoning_record_does_not_double_box_expected_answer() -> None:
     converted = convert_m0_record(record, split="train")
 
     assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
+
+
+def test_classify_math_supervision_bucket_for_v3_rows() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = "We compute 40 + 2 = 42. Therefore \\boxed{42}."
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_VERIFIED_FULL_SOLUTION
+
+    record["extra_env_info"]["reference_solution"] = "We compute 40 + 2 = 42."
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_FORMAT_REPAIR
+
+    record["extra_env_info"].pop("reference_solution")
+    assert classify_math_supervision_bucket(record) == MATH_BUCKET_FINAL_ANSWER_AUX
+
+    competition = _base_record("math_competition_numeric")
+    competition["expected_answer"] = "42"
+    competition["extra_env_info"].pop("reference_solution", None)
+    assert classify_math_supervision_bucket(competition) == MATH_BUCKET_HELDOUT_EVAL
+
+
+def test_sample_rows_by_fraction_reduces_sidecar_rows_deterministically() -> None:
+    rows = [{"metadata": {"m0_source_id": f"row-{i}", "m0_source_row_index": i}} for i in range(20)]
+
+    sampled_once = sample_rows_by_fraction(rows, fraction=0.05, salt="unit")
+    sampled_twice = sample_rows_by_fraction(rows, fraction=0.05, salt="unit")
+
+    assert len(sampled_once) == 1
+    assert sampled_once == sampled_twice
+    assert sample_rows_by_fraction(rows, fraction=0.0, salt="unit") == []
+    assert sample_rows_by_fraction(rows, fraction=1.0, salt="unit") == rows
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -412,6 +452,106 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     # No M0 baseline supplied → every row falls into the unknown bucket.
     assert manifest["difficulty_buckets"]["train"] == {"unknown": 1}
     assert manifest["difficulty_buckets"]["val_shadow"] == {"unknown": 1}
+
+
+def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    verified = _base_record("math_reasoning_numeric")
+    verified["expected_answer"] = "42"
+    verified["extra_env_info"]["reference_solution"] = (
+        "We compute 40 + 2 = 42. Therefore the answer is \\boxed{42}."
+    )
+    repaired = _base_record("math_reasoning_numeric")
+    repaired["expected_answer"] = "7"
+    repaired["extra_env_info"]["reference_solution"] = "Add 3 and 4 to obtain 7."
+    answer_only = _base_record("math_reasoning_numeric")
+    answer_only["expected_answer"] = "5"
+    answer_only["extra_env_info"].pop("reference_solution", None)
+    heldout = _base_record("math_competition_numeric")
+    heldout["expected_answer"] = "11"
+    heldout["extra_env_info"].pop("reference_solution", None)
+    search = _base_record("search_grounded_qa")
+    search["expected_answer"] = "Paris"
+
+    write_split("math_reasoning_numeric", "train", [verified, repaired, answer_only])
+    write_split("math_reasoning_numeric", "val", [verified])
+    write_split("math_competition_numeric", "train", [heldout])
+    write_split("math_competition_numeric", "val", [])
+    write_split("search_grounded_qa", "train", [search])
+    write_split("search_grounded_qa", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V3
+        math_v3_verified_full_solution_weight = MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v3_final_answer_aux_weight = MATH_V3_FINAL_ANSWER_AUX_WEIGHT
+        math_v3_format_repair_weight = MATH_V3_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V3
+    assert manifest["counts"]["train"] == {
+        "math_reasoning_numeric": 3,
+        "search_grounded_qa": 1,
+    }
+    assert manifest["math_final_answer_supervision"]["sidecar_in_blend"] is False
+    assert manifest["math_final_answer_supervision"]["effective_weight"] == 1.0
+
+    bucket_info = manifest["math_reasoning_replay_v3"]["buckets"]
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["sample_fraction"] == 0.2
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["rows"] == 2
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["blend_weight"] == 0.0
+    assert manifest["math_reasoning_replay_v3"]["train_rows_excluded_as_heldout"] == 1
+
+    blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
+    blend_by_name = {dataset["name"]: dataset for dataset in blend["datasets"]}
+    assert "m1-agentic-sft-v0-math-final-answer" not in blend_by_name
+    assert blend_by_name["m1-agentic-sft-v0-math-verified-full-solution"]["weight"] == 1.0
+    assert blend_by_name["m1-agentic-sft-v0-math-final-answer-aux"]["weight"] == 1.0
+    assert blend_by_name["m1-agentic-sft-v0-math-format-repair"]["weight"] == 1.0
+
+    aux_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_final_answer_aux_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert aux_rows[0]["metadata"]["final_answer_supervision"]["strategy"] == MATH_SUPERVISION_STRATEGY_V3
+    assert aux_rows[0]["metadata"]["final_answer_supervision"]["sidecar_blend_weight"] == 0.2
+
+    heldout_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_heldout_eval.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert len(heldout_rows) == 2
+    assert all(
+        row["metadata"]["final_answer_supervision"]["sidecar_blend_weight"] == 0.0
+        for row in heldout_rows
+    )
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math reasoning replay v3 buckets" in report_md
+    assert "| heldout_eval | 2 | 2 | 0.0 | 0.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:
@@ -872,6 +1012,178 @@ def test_qwen_sft_data_prep_contract_can_use_tokenizer_template() -> None:
     tokenizer = _Tokenizer()
     _apply_chat_template(tokenizer, "tokenizer")
     assert tokenizer.chat_template == "qwen tokenizer template"
+
+
+def test_sft_data_artifact_records_chat_template_contract(tmp_path) -> None:
+    from nemotron.data_prep.blend import DataBlend, Dataset
+    from nemotron.data_prep.config import FormatResult
+    from nemotron.kit.artifacts.sft_data import SFTDataArtifact
+
+    output_dir = tmp_path / "packed_qwen"
+    (output_dir / "splits").mkdir(parents=True)
+    format_result = FormatResult(
+        run_hash="abc123",
+        run_dir=str(output_dir / "runs" / "abc123"),
+        output_dir=output_dir,
+        num_shards=1,
+        data_paths=[],
+        dataset_stats={},
+        from_cache=False,
+        total_tokens=32,
+        total_sequences=4,
+    )
+    blend = DataBlend.from_datasets(
+        Dataset(name="unit", path=str(tmp_path / "unit.jsonl"), split="train", text_field="messages")
+    )
+
+    artifact = SFTDataArtifact.from_result(
+        format_result=format_result,
+        blend=blend,
+        tokenizer_model=str(tmp_path / "qwen-tokenizer"),
+        blend_json_path=tmp_path / "blend.json",
+        pack_size=4096,
+        chat_template="tokenizer",
+        chat_template_kwargs={
+            "enable_thinking": False,
+            "truncate_history_thinking": False,
+        },
+    )
+
+    assert artifact.path == (output_dir / "splits").resolve()
+    assert artifact.chat_template == "tokenizer"
+    assert artifact.chat_template_kwargs == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+
+
+def test_qwen_packed_sft_chat_contract_accepts_tokenizer_template(tmp_path) -> None:
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    tokenizer_dir = tmp_path / "qwen"
+    tokenizer_dir.mkdir()
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": f"file://{tokenizer_dir}",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model=str(tokenizer_dir)) == (
+        splits_dir / "metadata.json"
+    )
+
+
+def test_qwen_packed_sft_chat_contract_accepts_hf_tokenizer_uri(tmp_path) -> None:
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "https://huggingface.co/Qwen/Qwen3-4B",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3-4B")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_super3_template(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "hf://models/Qwen/Qwen3",
+                "chat_template": "super3",
+                "chat_template_kwargs": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="chat_template=tokenizer"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_enabled_thinking(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": "hf://models/Qwen/Qwen3",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": True,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="enable_thinking"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model="Qwen/Qwen3")
+
+
+def test_qwen_packed_sft_chat_contract_rejects_tokenizer_mismatch(tmp_path) -> None:
+    import pytest
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
+
+    packed_tokenizer = tmp_path / "qwen-packed"
+    train_tokenizer = tmp_path / "qwen-train"
+    packed_tokenizer.mkdir()
+    train_tokenizer.mkdir()
+    splits_dir = tmp_path / "packed_qwen" / "splits"
+    splits_dir.mkdir(parents=True)
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": f"file://{packed_tokenizer}",
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "truncate_history_thinking": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="tokenizer mismatch"):
+        validate_qwen_packed_sft_chat_contract(splits_dir, tokenizer_model=str(train_tokenizer))
 
 
 def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:
