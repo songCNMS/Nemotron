@@ -758,7 +758,7 @@
 - 按用户要求继续监控 V4 hard-math recovery training 并返回最新 training metrics figure；远端 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` 仍 active。
 - 远端 checkpoint marker 仍为 `400`；GPU 状态显示 8 张 H200 均 active，显存约 `81-88G`，util 约 `45-95%`。
 - 同步远端 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/train.log`，重新运行 `plot_qwen_sft_metrics.py` 刷新 metrics artifacts。
-- 最新图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session71_iter500.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
-- 当前 summary：latest train iter `500/1874`，progress `26.68%`，latest train lm loss `0.4296726`，latest lr `2.73537e-7`，latest grad norm `0.944`，recent-50 train loss mean `0.615502132`，max skipped/nan `0/0`。
+- 最新图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session71_iter560.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 当前 summary：latest train iter `560/1874`，progress `29.88%`，latest train lm loss `0.4218465`，latest lr `2.654761e-7`，latest grad norm `0.749`，recent-50 train loss mean `0.541491656`，max skipped/nan `0/0`。
 - Validation 仍只有首个 eval point：iter `400` loss/PPL `0.4107993/1.508023`，也是当前 best validation；validation trend 为 `not-enough-validation-points`，需要等待 iter `800` eval point 判断趋势。
 - 训练健康判断：当前日志未见 traceback、OOM、ChildFailedError、skipped iteration 或 NaN iteration；run 继续向 iter `800` eval/save 点推进。
