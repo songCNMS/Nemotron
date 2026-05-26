@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 73 |
+| Session | 74 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Confirmed V4 hard-math recovery training completed, refreshed final metrics, selected iter_0000800 as primary export/eval candidate, skipped/nan 0/0. |
+| Latest | Exported V4 iter_0000800, ran full corrected MMLU-Pro/AIME/HMMT eval, compared with original and V3, and cleaned up serving resources. |
