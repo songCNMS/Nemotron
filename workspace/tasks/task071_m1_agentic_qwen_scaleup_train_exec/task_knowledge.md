@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
 
 ## Notes
 
@@ -199,3 +199,5 @@
 - Qwen V5 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_precision_v5` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5`, uses all 8 H200 GPUs, `train_iters=1744`, GBS `8`, eval/save interval `400`, lr `2e-7`, min lr `8e-8`, and warmup `100`.
 - Qwen V5 iter400 metric fact: Session 77 observed checkpoint marker `400`, checkpoint `iter_0000400` saved successfully, latest monitored train iter `410/1744`, train loss at iter `400` `0.4834876`, validation loss/PPL `0.4572022/1.579648`, max skipped/nan `0/0`, and metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/metric_curves_session77_iter400.png`.
 - Qwen metric parser startup fact: `plot_qwen_sft_metrics.py` now supports train-only startup curves before the first validation point; it still fails hard when no train points are parsed or any parsed train loss is NaN.
+- Qwen V5 final metric fact: Session 78 confirmed `task067_task071_qwen30b_a3b_hard_math_precision_v5` completed at iter `1744/1744`; validation loss/PPL points were `400:0.4572022/1.579648`, `800:0.4302812/1.53769`, `1200:0.4130655/1.511444`, `1600:0.4324673/1.541055`, and `1744:0.4126904/1.510877`. Best validation checkpoint is `iter_0001744`, final checkpoint exists, and max skipped/nan remained `0/0`.
+- Qwen V5 iter1744 export fact: Session 78 exported `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/checkpoints/iter_0001744` to HF path `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744`; the export is about `57G`, contains `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`.

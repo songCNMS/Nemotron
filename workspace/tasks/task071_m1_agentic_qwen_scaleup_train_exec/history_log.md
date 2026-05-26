@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
 
 ## Session 1
 
@@ -836,3 +836,17 @@
 - 修复 `plot_qwen_sft_metrics.py` 的启动阶段行为：无 validation point 时仍可生成 train-only startup curve 和 health summary；仍保留 no-train 与 NaN train loss 的硬失败。
 - 新增报告 `qwen_v5_launch_session77.md`，记录 V5 launch evidence、iter400 metrics、checkpoint state、artifact paths 和验证项。
 - 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过。
+
+## Session 78
+
+- 按“执行下一步”继续监控 V5 hard-math precision run；发现远端 tmux 已退出、8 张 H200 GPU 空闲，训练已完成到 final iter `1744/1744`。
+- 同步最终 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/train.log`，刷新最终 metrics artifacts。
+- 最终图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/metric_curves_session78_final_iter1744.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- Validation points：iter `400` loss/PPL `0.4572022/1.579648`，iter `800` `0.4302812/1.53769`，iter `1200` `0.4130655/1.511444`，iter `1600` `0.4324673/1.541055`，final iter `1744` `0.4126904/1.510877`。
+- Best validation 为 final checkpoint `iter_0001744`；final iter 相比 iter `1600` 改善，并略优于 iter `1200`。
+- Checkpoint marker 为 `1744`，checkpoint directories 包含 `iter_0000400`、`iter_0000800`、`iter_0001200`、`iter_0001600`、`iter_0001744`；每个 checkpoint 约 `399G`。
+- 训练健康总结：max skipped/nan `0/0`，latest parsed train loss at iter `1740` 为 `0.4072204`，recent-50 train loss mean `0.41530171`，最终 LR 约 `8.000175e-8`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 `CUDA_VISIBLE_DEVICES=5` 上将 `checkpoints/iter_0001744` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744`；导出大小约 `57G`，包含 `16` 个 safetensors shards，日志出现 `EXPORT_DONE`。
+- 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744/task071_export_manifest.json`；model id 为 `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`，HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
+- 新增报告 `qwen_v5_final_export_session78.md`，记录最终 metrics、checkpoint 状态、HF export manifest 和推荐评测入口。
+- 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && git diff --check` 通过。
