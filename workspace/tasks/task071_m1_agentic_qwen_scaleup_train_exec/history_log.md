@@ -672,5 +672,5 @@
 - 新增 `tests/recipes/super3/test_stage1_sft_train_bridge.py` 覆盖 corrupt `.npy` 被重建、metadata 写入和 lock 清理；本地单测因本地环境缺 Megatron Bridge 对该新测试 skip，但远端实际环境执行了同一路径。
 - 在 NemTron 单进程预构建 bridge artifacts 成功：`train_4096_train.npy` 大小 `1072320400` bytes、rows `70399`；`valid_4096_valid.npy` 大小 `636577` bytes、rows `43`；`packed_4096_metadata.json` 大小 `307` bytes、entries `2`。
 - 重启远端训练后成功越过失败点并进入主循环；日志显示 checkpoint 从 original Qwen3-30B-A3B Megatron checkpoint 加载成功，scheduler `lr_decay_iters=2200`、`train_iters=2200`、GBS `8`。
-- 早期健康检查到 iter `80/2200`：iter `10/20/30/40/50/60/70/80` 的 lm loss 分别约 `0.9928/0.9423/1.0209/0.9708/0.9787/0.9568/0.8802/0.8492`，learning rate warmup 到 `4.0e-7`，skipped/nan 均为 `0/0`，8 张 GPU 显存约 `81-89GB` 且在训练。
+- 早期健康检查到 iter `120/2200`：iter `80/90/100/110/120` 的 lm loss 分别约 `0.8492/0.7925/0.7125/0.6409/0.5917`，learning rate warmup 完成并处于约 `5.0e-7`，skipped/nan 均为 `0/0`，8 张 GPU 显存约 `81-89GB` 且在训练。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_stage1_sft_train_bridge.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 2 skipped`；`ruff check src/nemotron/recipes/super3/stage1_sft/train.py tests/recipes/super3/test_stage1_sft_train_bridge.py` 通过；`py_compile` 和 `git diff --check` 通过。
