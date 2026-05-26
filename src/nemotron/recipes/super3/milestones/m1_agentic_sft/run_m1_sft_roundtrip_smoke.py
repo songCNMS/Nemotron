@@ -21,7 +21,7 @@ import re
 import shutil
 import sys
 from collections import Counter
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -62,12 +62,16 @@ class SmokeTokenizer:
         add_generation_prompt: bool = False,
         tools: Sequence[Mapping[str, Any]] | None = None,
         chat_template_kwargs: Mapping[str, Any] | None = None,
+        **template_kwargs: Any,
     ) -> str | list[int]:
+        resolved_chat_template_kwargs = dict(chat_template_kwargs or {})
+        resolved_chat_template_kwargs.update(template_kwargs)
         rendered = self._template.render(
             messages=list(messages),
             tools=list(tools or []),
             add_generation_prompt=add_generation_prompt,
-            chat_template_kwargs=dict(chat_template_kwargs or {}),
+            chat_template_kwargs=resolved_chat_template_kwargs,
+            **template_kwargs,
         )
         return self.encode(rendered, add_special_tokens=False) if tokenize else rendered
 

@@ -43,6 +43,19 @@ def _resolve_chat_template_kwargs(
     return kwargs
 
 
+def _render_chat_template_kwargs(template_kwargs: Mapping[str, Any]) -> dict[str, Any]:
+    """Return kwargs for HF tokenizers and local Super3/Nano3 templates.
+
+    HuggingFace tokenizer-native templates read variables such as
+    ``enable_thinking`` at top level, while Super3/Nano3 read the nested
+    ``chat_template_kwargs`` object. Supplying both keeps the two contracts
+    aligned.
+    """
+    kwargs = dict(template_kwargs)
+    kwargs["chat_template_kwargs"] = dict(template_kwargs)
+    return kwargs
+
+
 def replace_json_args(messages: list[dict]) -> list[dict]:
     """Convert JSON string arguments to dict objects in tool calls.
 
@@ -114,7 +127,7 @@ def find_last_user_message_end(
             tokenize=False,
             add_generation_prompt=False,
             tools=tools,
-            chat_template_kwargs=template_kwargs,
+            **_render_chat_template_kwargs(template_kwargs),
         )
         template_up_to_last_user += "<|im_start|>assistant\n<think></think>"
     else:
@@ -122,8 +135,8 @@ def find_last_user_message_end(
             messages[: last_user_idx + 1],
             tokenize=False,
             add_generation_prompt=True,
-            chat_template_kwargs=template_kwargs,
             tools=tools,
+            **_render_chat_template_kwargs(template_kwargs),
         )
 
     return len(template_up_to_last_user)
@@ -171,7 +184,7 @@ def split_template_into_messages(
         tokenize=False,
         add_generation_prompt=False,
         tools=tools,
-        chat_template_kwargs=template_kwargs,
+        **_render_chat_template_kwargs(template_kwargs),
     )
 
     # Get first "message": if starting from last user, this includes all prior turns
@@ -222,7 +235,7 @@ def split_template_into_messages(
                 tokenize=False,
                 add_generation_prompt=False,
                 tools=tools,
-                chat_template_kwargs=template_kwargs,
+                **_render_chat_template_kwargs(template_kwargs),
             )
             template_up_to_here += "<|im_start|>assistant\n<think></think>"
         else:
@@ -233,7 +246,7 @@ def split_template_into_messages(
                 tokenize=False,
                 add_generation_prompt=add_gen_prompt,
                 tools=tools,
-                chat_template_kwargs=template_kwargs,
+                **_render_chat_template_kwargs(template_kwargs),
             )
 
         current_pos = len(template_up_to_here)

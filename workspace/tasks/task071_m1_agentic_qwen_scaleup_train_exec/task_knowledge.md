@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Notes
 
@@ -189,3 +189,6 @@
 - Qwen v4 iter640 metric send fact: Session 72 refreshed `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session72_iter640.png` and sent it to the project chat; image message id `om_x100b6e6cee22dcb4b32b39f4c72f0ca`, image key `img_v3_02122_2a9f64bd-8a70-46ab-8bc8-35e317d14cbg`. The run had latest train iter `640/1874`, train lm loss `0.4057285`, validation@400 loss/PPL `0.4107993/1.508023`, checkpoint marker `400`, and skipped/nan `0/0`.
 - Qwen v4 final metric fact: Session 73 confirmed `task067_task071_qwen30b_a3b_hard_math_recovery_v4` completed at iter `1874/1874`; validation loss/PPL points were `400:0.4107993/1.508023`, `800:0.358061/1.430553`, `1200:0.3588206/1.43164`, `1600:0.3642109/1.439378`, and `1874:0.3586905/1.431454`. Best validation checkpoint is `iter_0000800`, final checkpoint `iter_0001874` exists, and max skipped/nan remained `0/0`.
 - Qwen v4 iter0800 export/eval fact: Session 74 exported `iter_0000800` to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4/hf_export_iter_0000800` as model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-recovery-v4-iter0000800-hf`; full corrected metrics are MMLU-Pro `0.5587599734042553`, AIME25 `0.08333333333333333`, and HMMT exact-normalized correct percent `3.3333333333333335`. Compared with V3 iter2200, V4 is `+0.006233377659574435` on MMLU-Pro, `-0.003333333333333341` on AIME25, and `+3.3333333333333335` on HMMT.
+- Qwen chat-template audit fact: Session 75 verified current Qwen3-30B-A3B-Instruct-2507 source tokenizer and V4 `iter_0000800` HF export render the checked chat prompt identically under default, direct `enable_thinking=false`, nested `chat_template_kwargs`, and direct `enable_thinking=true`; the saved template has no checked `enable_thinking` or `<think>` branches.
+- Qwen V4 data-pipeline audit fact: Session 75 counted non-empty `reasoning_content` in V4 SFT JSONLs and found `0` rows across base `983397`, hard verified full-solution `184551`, and broad verified full-solution `90104`; hard-math full-solution supervision lives in assistant `content`.
+- Chat-template helper fix fact: Session 75 changed `nemotron.data_prep.core.chat_template` to pass both top-level template kwargs and nested `chat_template_kwargs` into `tokenizer.apply_chat_template`, preserving `super3/nano3` behavior while making tokenizer-native Qwen templates receive `enable_thinking` and `truncate_history_thinking` directly.

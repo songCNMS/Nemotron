@@ -21,7 +21,9 @@ header comment for lineage. These tests pin the contract:
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from pathlib import Path
+from typing import Any
 
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
@@ -66,6 +68,65 @@ def test_apply_chat_template_resolves_super3_name() -> None:
     nano = _StubTokenizer()
     _apply_chat_template(nano, "nano3")
     assert nano.chat_template == NANO3_PATH.read_text(encoding="utf-8")
+
+
+def test_chat_template_kwargs_are_expanded_for_tokenizer_native_templates() -> None:
+    """Tokenizer-native Qwen templates receive top-level kwargs.
+
+    Super3/Nano3 read the nested ``chat_template_kwargs`` object, but
+    HuggingFace tokenizer-native templates commonly read variables such as
+    ``enable_thinking`` directly. The data-prep helper must provide both
+    shapes when it renders messages.
+    """
+    from nemotron.data_prep.core.chat_template import split_template_into_messages
+
+    class _RecordingTokenizer:
+        def __init__(self) -> None:
+            self.calls: list[dict[str, Any]] = []
+
+        def apply_chat_template(
+            self,
+            messages: Sequence[Mapping[str, Any]],
+            *,
+            tokenize: bool = False,
+            add_generation_prompt: bool = False,
+            tools: Sequence[Mapping[str, Any]] | None = None,
+            **kwargs: Any,
+        ) -> str | list[int]:
+            assert tokenize is False
+            assert tools is None
+            self.calls.append(dict(kwargs))
+            rendered = ""
+            for message in messages:
+                rendered += (
+                    f"<|im_start|>{message['role']}\n"
+                    f"{message.get('content', '')}<|im_end|>\n"
+                )
+            if add_generation_prompt:
+                rendered += "<|im_start|>assistant\n"
+            return rendered
+
+    template_kwargs = {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+    tokenizer = _RecordingTokenizer()
+    chunks = split_template_into_messages(
+        [
+            {"role": "user", "content": "Solve 1+1."},
+            {"role": "assistant", "content": "2"},
+        ],
+        tokenizer,
+        start_from_last_user=False,
+        chat_template_kwargs=template_kwargs,
+    )
+
+    assert [chunk["role"] for chunk in chunks] == ["user", "assistant"]
+    assert tokenizer.calls
+    for call in tokenizer.calls:
+        assert call["enable_thinking"] is False
+        assert call["truncate_history_thinking"] is False
+        assert call["chat_template_kwargs"] == template_kwargs
 
 
 def test_super3_template_renders_four_role_conversation() -> None:

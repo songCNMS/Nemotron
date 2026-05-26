@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Session 1
 
@@ -798,3 +798,14 @@
 - Gate 结论：MMLU-Pro passes the `>=0.55` gate and is close to original; AIME25 remains below the `>=0.20` hard-math gate; HMMT improves from V3 zero but remains below the `>=10.0` gate。
 - 资源清理：评测完成后停止 SGLang tmux session 和 local SSH tunnel，确认 NemTron port `30000` clear，8 张 H200 GPU 均 idle。
 - 新增报告 `qwen_v4_iter0800_corrected_eval_session74.md`，记录 export artifact、serving 参数、mini/full corrected eval metrics、comparison 和 gate 结论。
+
+## Session 75
+
+- 按用户要求重新审计 train/eval chat template 与 M1 data pipeline，重点检查 Qwen tokenizer-native rendering、packed metadata、V4 JSONL reasoning fields、SGLang eval serving path 和 existing eval/RL config contract。
+- 发现并修复 generic SFT data-prep helper 的 kwargs 传播问题：原实现只把 `enable_thinking` 等配置放进 nested `chat_template_kwargs`，现在同时传 top-level kwargs 和 nested object，兼容 HuggingFace tokenizer-native templates 与本仓库 `super3/nano3` templates。
+- 更新 `run_m1_sft_roundtrip_smoke.py` 的 `SmokeTokenizer`，让 smoke pipeline 接受 top-level template kwargs 并合并回 nested Super3 kwargs，避免 smoke 与真实 helper 行为分叉。
+- 新增 `test_chat_template_kwargs_are_expanded_for_tokenizer_native_templates`，验证每次 `apply_chat_template` render call 都能收到 top-level `enable_thinking=false`、`truncate_history_thinking=false` 和 nested `chat_template_kwargs`。
+- Artifact audit 结论：当前 V4 packed metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`，source Qwen tokenizer 与 V4 export tokenizer 的 checked prompt render 完全一致，且模板不包含 `enable_thinking` 或 `<think>` branches。
+- V4 data audit 结论：base train `983397` rows、hard verified full-solution `184551` rows、broad verified full-solution `90104` rows 均无 non-empty `reasoning_content`；math reasoning supervision 位于 assistant `content`。
+- 验证：targeted pytest `36 passed`，chat-template test file `5 passed`，patched files `ruff check` 通过，`py_compile` 通过，M1 smoke on 5 V4 rows 通过并生成 `1` packed row、`841` tokens、`298` loss tokens。
+- 新增审计报告 `qwen_chat_template_data_pipeline_audit_session75.md`，记录当前 V4 是否受影响、修复范围、evidence 和 verification。
