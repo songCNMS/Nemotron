@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 ## Session 1
 
@@ -850,3 +850,16 @@
 - 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744/task071_export_manifest.json`；model id 为 `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`，HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
 - 新增报告 `qwen_v5_final_export_session78.md`，记录最终 metrics、checkpoint 状态、HF export manifest 和推荐评测入口。
 - 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && git diff --check` 通过。
+
+## Session 79
+
+- 按“执行下一步”基于 V5 final HF export `hf_export_iter_0001744` 启动 NemTron SGLang endpoint，服务参数为 `tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`，model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`。
+- 本地 SSH tunnel 在 `/v1/models` 后出现 connection refused；未使用这些失败 smoke rows 作为分数，改为将 corrected-eval runners 和输入 artifacts 复制到 NemTron，直接访问 `127.0.0.1:30000` 跑 eval。
+- NemTron smoke 通过：MMLU-Pro per-category 1 为 `14` rows accuracy `0.6428571428571429`、parsed rate `1.0`；AIME/HMMT 1 row each 共 `2` rows 均 parsed，exact-normalized correct `0/2`。
+- 中等规模 sanity 通过：MMLU-Pro per-category 20 为 `280` rows accuracy `0.6214285714285714`、parsed rate `1.0`；AIME25 30 rows accuracy `0.0`、parsed rate `1.0`；HMMT 30 rows exact-normalized correct percent `6.666666666666667`、parsed rate `0.8333333333333334`。
+- Full corrected MMLU-Pro 完成：`12032/12032` rows 全部 `status=ok`，parsed rate `1.0`，finish `stop=12032`，accuracy `0.5581781914893617`。
+- Full corrected math 完成：AIME25 `300` rows accuracy `0.06666666666666667`、parsed rate `0.94`、finish `stop=282/length=18`；HMMT `30` rows exact-normalized correct percent `0.0`、parsed rate `0.9`、finish `stop=27/length=3`。
+- Same-protocol comparison：V5 vs original Session 47 deltas 为 MMLU-Pro `-0.0038231382978723397`、AIME25 `-0.4666666666666667`、HMMT exact percent `-43.333333333333336`；vs V4 iter0800 deltas 为 MMLU-Pro `-0.0005817819148936128`、AIME25 `-0.016666666666666663`、HMMT exact percent `-3.3333333333333335`。
+- Gate 结论：MMLU-Pro `>=0.55` pass；AIME25 `>=0.20` fail；HMMT exact percent `>=10.0` fail。V5 保住 MMLU-Pro，但 stricter hard-math precision sidecar 未恢复 AIME/HMMT。
+- 资源清理：评测完成后停止 SGLang tmux session `task071_qwen_v5_iter1744_sglang_full_eval`，复制 remote outputs 到 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v5_iter1744_session79/remote_corrected_eval_outputs`。
+- 新增报告 `qwen_v5_iter1744_corrected_eval_session79.md`，记录 serving、smoke/mid/full corrected eval、same-protocol comparison、gate 结论和 cleanup。

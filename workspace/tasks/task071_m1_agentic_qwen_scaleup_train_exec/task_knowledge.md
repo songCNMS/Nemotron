@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 ## Notes
 
@@ -201,3 +201,7 @@
 - Qwen metric parser startup fact: `plot_qwen_sft_metrics.py` now supports train-only startup curves before the first validation point; it still fails hard when no train points are parsed or any parsed train loss is NaN.
 - Qwen V5 final metric fact: Session 78 confirmed `task067_task071_qwen30b_a3b_hard_math_precision_v5` completed at iter `1744/1744`; validation loss/PPL points were `400:0.4572022/1.579648`, `800:0.4302812/1.53769`, `1200:0.4130655/1.511444`, `1600:0.4324673/1.541055`, and `1744:0.4126904/1.510877`. Best validation checkpoint is `iter_0001744`, final checkpoint exists, and max skipped/nan remained `0/0`.
 - Qwen V5 iter1744 export fact: Session 78 exported `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/checkpoints/iter_0001744` to HF path `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744`; the export is about `57G`, contains `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`.
+- Qwen V5 corrected eval serving fact: Session 79 served `hf_export_iter_0001744` on NemTron with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`, and model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`; direct NemTron-local eval was used after local SSH tunnel instability.
+- Qwen V5 iter1744 corrected full eval fact: Session 79 full corrected metrics are MMLU-Pro `0.5581781914893617` with parsed rate `1.0`, AIME25 `0.06666666666666667` with parsed rate `0.94`, and HMMT exact-normalized correct percent `0.0` with parsed rate `0.9`; copied artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v5_iter1744_session79/remote_corrected_eval_outputs`.
+- Qwen V5 gate fact: Session 79 V5 passes the MMLU-Pro `>=0.55` gate but fails AIME25 `>=0.20` and HMMT exact percent `>=10.0`; compared with V4 iter0800, V5 is `-0.0005817819148936128` on MMLU-Pro, `-0.016666666666666663` on AIME25, and `-3.3333333333333335` HMMT exact percent.
+- Qwen hard-math strategy fact: V5 strict high-confidence hard sidecar preserved broad MMLU-Pro quality but did not recover AIME/HMMT; the next recipe should keep tokenizer-native Qwen chat-template packing while reintroducing broader verified full-solution diversity and improving final-answer extraction supervision without using heldout AIME25/HMMT labels.
