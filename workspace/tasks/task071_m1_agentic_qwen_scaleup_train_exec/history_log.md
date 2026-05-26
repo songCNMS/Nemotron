@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
 
 ## Session 1
 
@@ -820,3 +820,19 @@
 - 生成 V5 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5`；run name `task071_qwen30b_a3b_hard_math_precision_v5`，lr `2e-7`、min lr `8e-8`、0.2 epoch、GBS `8`、8 GPUs、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
 - 新增报告 `qwen_v5_hard_math_precision_plan_session76.md`，记录 V5 rationale、filter、sizing、script paths 和 verification。
 - 验证：`py_compile` 通过；`ruff check` 通过；focused V5/V4 tests `4 passed`；full M1 SFT + Qwen scale-up planner tests `81 passed, 1 skipped`。
+
+## Session 77
+
+- 按“继续下一步”执行 V5 hard-math precision run path：本地运行 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/run_local_data_prep.sh`，完成 uncapped M0、M1 V5 data prep、Qwen tokenizer packing 和训练计划生成。
+- M1 V5 artifact 产出 base train rows：`code_execution_python=374`、`general_tool_calling=1100`、`math_competition_numeric=859494`、`math_reasoning_numeric=7473`、`multi_turn_tool_use=1100`、`search_grounded_qa=90447`、`search_multihop_qa=19938`、`structured_outputs_json=1241`、`swe_pivot_patch_supervision=300`、`terminal_basic_shell=840`、`tool_call_repair_negative=1090`。
+- V5 math bucket counts：hard verified full-solution source/written `114305/68583`，broad verified `430662/0`，final-answer aux `29/0`，format repair `321971/0`，heldout eval `1419/1419`。
+- Qwen packed artifact metadata：`chat_template=tokenizer`，`enable_thinking=false`，`truncate_history_thinking=false`，`num_shards=32`，`total_sequences=1051807`，`total_tokens=717870803`。
+- 训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/training_plan/task071_qwen30b_a3b_hard_math_precision_v5/training_manifest.json`，packed train rows `69750`，valid rows `5116`，GBS `8`，0.2 epoch 对应 `train_iters=1744`。
+- 同步 V5 bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5`；远端校验通过：32 个 train symlink shards、source Qwen path exists、pretrained Megatron checkpoint exists、启动前 8 张 H200 idle。
+- 启动 tmux session `task067_task071_qwen30b_a3b_hard_math_precision_v5`，训练参数展开为 `train_iters=1744`、GBS `8`、lr `2e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy`、`valid_4096_valid.npy` 和 `packed_4096_metadata.json`；checkpoint 从 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507` 成功加载并进入 training loop。
+- 监控到首个 eval/save 点：iter `400/1744` train lm loss `0.4834876`，validation loss/PPL `0.4572022/1.579648`，max skipped/nan `0/0`，checkpoint `iter_0000400` 保存成功，`latest_checkpointed_iteration.txt=400`；训练继续运行到至少 iter `410/1744`。
+- 同步远端 train log 并刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/metric_curves_session77_iter400.png`、`metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 修复 `plot_qwen_sft_metrics.py` 的启动阶段行为：无 validation point 时仍可生成 train-only startup curve 和 health summary；仍保留 no-train 与 NaN train loss 的硬失败。
+- 新增报告 `qwen_v5_launch_session77.md`，记录 V5 launch evidence、iter400 metrics、checkpoint state、artifact paths 和验证项。
+- 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过。

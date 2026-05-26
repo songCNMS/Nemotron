@@ -302,6 +302,11 @@ def main() -> int:
     args = parser.parse_args()
 
     train, validation = parse_log(args.log)
+    if not train:
+        raise ValueError(f"no train points parsed from {args.log}")
+    if any(math.isnan(p.lm_loss) for p in train):
+        raise ValueError("parsed NaN train loss")
+
     args.out_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.out_dir / "train_loss_points.csv", train)
     write_csv(args.out_dir / "validation_points.csv", validation)
@@ -322,13 +327,6 @@ def main() -> int:
         )
     (args.out_dir / "health_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     plot_metrics(args.out_dir / "metric_curves.png", args.run_name, train, validation)
-
-    if not train:
-        raise ValueError(f"no train points parsed from {args.log}")
-    if not validation:
-        raise ValueError(f"no validation points parsed from {args.log}")
-    if any(math.isnan(p.lm_loss) for p in train):
-        raise ValueError("parsed NaN train loss")
     return 0
 
 
