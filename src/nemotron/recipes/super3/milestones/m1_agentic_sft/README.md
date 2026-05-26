@@ -113,9 +113,13 @@ agentic SFT train JSONL, but writes separate math bucket files:
 - `format_repair`: solution-trace rows that needed an appended boxed final answer.
 - `heldout_eval`: math rows reserved for corrected eval/dev, excluded from the training blend.
 
-The v3 blend includes the first three sidecars only; default weights are `1.0`,
-`0.2`, and `0.05` respectively. The legacy `final_answer_sidecar_v1` strategy
-remains the default for reproducibility of earlier runs.
+The v3 path applies those values as deterministic sidecar sampling fractions
+before packing, because downstream SFT training consumes packed split
+directories and may not preserve JSONL blend weights. Default fractions are
+`1.0`, `0.2`, and `0.05` respectively; emitted sidecars use blend weight `1.0`
+so their scale is controlled by row count. The legacy
+`final_answer_sidecar_v1` strategy remains the default for reproducibility of
+earlier runs.
 
 ## Difficulty signal (optional)
 

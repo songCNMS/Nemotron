@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 61 |
+| Session | 62 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Implemented M1 SFT math `reasoning_replay_v3` data-prep strategy with verified-solution/final-answer/format-repair/heldout buckets, wired Qwen scale-up scripts, generated v3 30B script bundle, and verified tests. |
+| Latest | Ran M1 SFT `reasoning_replay_v3` uncapped data prep and Qwen-chat packing, fixed v3 sidecar scale control to deterministic pre-pack sampling, and verified the new packed artifact at 1,544,296 sequences / 2,200 train iters. |

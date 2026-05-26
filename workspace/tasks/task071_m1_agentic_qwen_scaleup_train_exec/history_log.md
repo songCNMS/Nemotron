@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Session 1
 
@@ -649,3 +649,16 @@
 - 将 `plan_qwen_scaleup_run.py` 接入 `--math-supervision-strategy reasoning_replay_v3` 与 v3 权重参数，生成的 local data prep script 会把同一策略传给 `prepare_m1_agentic_sft.py`。
 - 生成 v3 30B scale-up script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3`，配置为 original Qwen3-30B-A3B checkpoint、uncapped data、Qwen chat template、0.25 epoch、GBS 8、8 GPUs、lr `5e-7`、min lr `1e-7`、eval/save interval `500`。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `76 passed, 1 skipped`；`ruff check` 通过；`py_compile` 通过。
+
+## Session 62
+
+- 按“执行下一步”执行 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/run_local_data_prep.sh`，完成 uncapped M0、M1 `reasoning_replay_v3`、Qwen tokenizer chat-template packing、contract check 和训练计划生成。
+- M0 uncapped 产出 11 个 configured env 数据切片；manifest 记录 `2389` 条 Hermes 无有效 assistant/tool-call 的转换错误并跳过，脚本按约定继续使用有效行。
+- M1 v3 base artifact 产出 `983397` train rows、`11354` val-shadow rows、`0` M1 errors；train env 覆盖 search、coding、terminal、tool calling、structured output、math reasoning 和 competition math。
+- 检查 packed artifact 后发现关键问题：SFT packing 会把 blend JSONL 中每个 sidecar 文件的所有 rows 写入 split parquet，训练入口消费 `packed_qwen/splits` 时不会再按 JSONL blend `weight` 下采样；因此仅写 `weight=0.2/0.05` 不能真实降低 sidecar 规模。
+- 修复 `prepare_m1_agentic_sft.py`：v3 对 `verified_full_solution`、`final_answer_aux`、`format_repair` 在 packing 前做 deterministic row sampling，采样 fraction 分别使用 `1.0/0.2/0.05`；写出的 sidecar blend weight 统一为 `1.0`，由文件行数控制实际规模。
+- 更新 README 与单测，manifest/report 现在同时记录 source rows、written rows、sample fraction、emitted blend weight 和 sampled bucket counts。
+- 重新跑 M1 与 Qwen packing 后，v3 bucket source rows 为 verified `544967`、aux `29`、format repair `321971`、heldout `1419`；实际写入 rows 为 verified `544967`、aux `6`、format repair `16099`、heldout `1419`。
+- 新 packed artifact 位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/packed_qwen/splits`，metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`num_shards=64`、`total_sequences=1544296`、`total_tokens=945009362`。
+- 新训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/training_plan/task071_qwen30b_a3b_math_reasoning_replay_v3`，packed train rows `70399`、valid rows `43`、GBS `8`、0.25 epoch 对应 `train_iters=2200`。
+- 验证：Qwen packed chat contract 通过；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 1 skipped`；`ruff check` 通过；`py_compile` 通过；`git diff --check` 通过。

@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import re
@@ -895,6 +896,33 @@ def count_math_supervision_buckets(
     return {bucket: count for bucket, count in counts.items() if count}
 
 
+def sample_rows_by_fraction(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    fraction: float,
+    salt: str,
+) -> list[Mapping[str, Any]]:
+    if not rows or fraction <= 0.0:
+        return []
+    if fraction >= 1.0:
+        return list(rows)
+    target = max(1, round(len(rows) * fraction))
+    ranked: list[tuple[str, int]] = []
+    for index, row in enumerate(rows):
+        metadata = row.get("metadata", {})
+        identity = {
+            "salt": salt,
+            "index": index,
+            "source_id": metadata.get("m0_source_id") if isinstance(metadata, Mapping) else None,
+            "source_row_index": metadata.get("m0_source_row_index") if isinstance(metadata, Mapping) else None,
+            "environment": metadata.get("m0_environment") if isinstance(metadata, Mapping) else None,
+        }
+        digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+        ranked.append((digest, index))
+    selected = {index for _, index in sorted(ranked)[:target]}
+    return [row for index, row in enumerate(rows) if index in selected]
+
+
 def apply_math_supervision_strategy_metadata(
     rows: Sequence[Mapping[str, Any]],
     *,
@@ -984,14 +1012,13 @@ def build_math_v3_blend(
         MATH_BUCKET_FORMAT_REPAIR,
     ):
         rows = bucket_rows.get(bucket, ())
-        weight = float(bucket_weights.get(bucket, 0.0))
-        if not rows or weight <= 0.0:
+        if not rows:
             continue
         extra_datasets.append(
             {
                 "name": MATH_V3_BUCKET_DATASET_NAMES[bucket],
                 "path": str(bucket_paths[bucket]),
-                "weight": weight,
+                "weight": 1.0,
             }
         )
     return build_blend(
@@ -1140,8 +1167,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
             [
                 "## Math reasoning replay v3 buckets",
                 "",
-                "| Bucket | Rows | Blend weight | Path |",
-                "|---|---:|---:|---|",
+                "| Bucket | Source rows | Written rows | Sample fraction | Blend weight | Path |",
+                "|---|---:|---:|---:|---:|---|",
             ]
         )
         buckets = math_v3.get("buckets") or {}
@@ -1151,7 +1178,9 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                 if not isinstance(info, Mapping):
                     continue
                 lines.append(
-                    f"| {bucket} | {info.get('rows', 0)} | {info.get('blend_weight', 0.0)} | "
+                    f"| {bucket} | {info.get('source_rows', info.get('rows', 0))} | "
+                    f"{info.get('rows', 0)} | {info.get('sample_fraction', 0.0)} | "
+                    f"{info.get('blend_weight', 0.0)} | "
                     f"`{info.get('path', '')}` |"
                 )
         lines.append("")
@@ -1259,12 +1288,26 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         for bucket, filename in MATH_V3_BUCKET_FILENAMES.items()
     }
     math_v3_bucket_rows: dict[str, list[Mapping[str, Any]]] = {}
+    math_v3_bucket_source_rows: dict[str, list[Mapping[str, Any]]] = {}
     if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V3:
-        math_v3_bucket_rows = split_math_supervision_buckets(train_rows, val_rows)
-        math_v3_bucket_rows[MATH_BUCKET_HELDOUT_EVAL] = [
+        math_v3_bucket_source_rows = split_math_supervision_buckets(train_rows, val_rows)
+        math_v3_bucket_source_rows[MATH_BUCKET_HELDOUT_EVAL] = [
             *math_v3_heldout_train_rows,
-            *math_v3_bucket_rows[MATH_BUCKET_HELDOUT_EVAL],
+            *math_v3_bucket_source_rows[MATH_BUCKET_HELDOUT_EVAL],
         ]
+        math_v3_bucket_rows = {
+            MATH_BUCKET_HELDOUT_EVAL: list(math_v3_bucket_source_rows[MATH_BUCKET_HELDOUT_EVAL])
+        }
+        for bucket in (
+            MATH_BUCKET_VERIFIED_FULL_SOLUTION,
+            MATH_BUCKET_FINAL_ANSWER_AUX,
+            MATH_BUCKET_FORMAT_REPAIR,
+        ):
+            math_v3_bucket_rows[bucket] = sample_rows_by_fraction(
+                math_v3_bucket_source_rows[bucket],
+                fraction=float(math_v3_weights.get(bucket, 0.0)),
+                salt=f"{math_supervision_strategy}:{bucket}",
+            )
         apply_math_supervision_strategy_metadata(
             [*train_rows, *val_rows, *math_v3_heldout_train_rows],
             strategy=math_supervision_strategy,
@@ -1356,12 +1399,17 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "buckets": {
                 bucket: {
                     "rows": len(math_v3_bucket_rows.get(bucket, [])),
+                    "source_rows": len(math_v3_bucket_source_rows.get(bucket, [])),
                     "path": str(math_v3_bucket_paths[bucket]),
-                    "blend_weight": float(math_v3_weights.get(bucket, 0.0)),
+                    "sample_fraction": float(math_v3_weights.get(bucket, 0.0)),
+                    "blend_weight": (
+                        0.0
+                        if bucket == MATH_BUCKET_HELDOUT_EVAL
+                        else (1.0 if math_v3_bucket_rows.get(bucket) else 0.0)
+                    ),
                     "in_training_blend": (
                         bucket != MATH_BUCKET_HELDOUT_EVAL
                         and bool(math_v3_bucket_rows.get(bucket))
-                        and float(math_v3_weights.get(bucket, 0.0)) > 0.0
                     ),
                 }
                 for bucket in MATH_V3_BUCKETS
@@ -1369,6 +1417,17 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "train_rows_excluded_as_heldout": len(math_v3_heldout_train_rows),
             "bucket_counts": count_math_supervision_buckets(
                 [*train_rows, *math_v3_heldout_train_rows]
+            ),
+            "sampled_bucket_counts": count_math_supervision_buckets(
+                [
+                    row
+                    for bucket in (
+                        MATH_BUCKET_VERIFIED_FULL_SOLUTION,
+                        MATH_BUCKET_FINAL_ANSWER_AUX,
+                        MATH_BUCKET_FORMAT_REPAIR,
+                    )
+                    for row in math_v3_bucket_rows.get(bucket, [])
+                ]
             ),
         }
 

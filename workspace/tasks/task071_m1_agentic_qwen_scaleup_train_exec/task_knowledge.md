@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Notes
 
@@ -164,3 +164,6 @@
 - M1 SFT math v3 data-prep fact: `prepare_m1_agentic_sft.py --math-supervision-strategy reasoning_replay_v3` writes `verified_full_solution`, `final_answer_aux`, `format_repair`, and `heldout_eval` bucket JSONLs; only the first three can enter the training blend, while `heldout_eval` is excluded from training.
 - M1 SFT math v3 weight fact: default v3 sidecar weights are `verified_full_solution=1.0`, `final_answer_aux=0.2`, and `format_repair=0.05`; legacy `final_answer_sidecar_v1` remains the default strategy and keeps the old 1.0-weight math final-answer sidecar.
 - Qwen v3 script fact: generated scripts for `task071_qwen30b_a3b_math_reasoning_replay_v3` live under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3` and target original Qwen3-30B-A3B, uncapped M0/M1, Qwen chat-template packing, 0.25 epoch, GBS 8, and lr `5e-7`.
+- M1 SFT packing scale fact: packed split generation includes all rows from each JSONL dataset listed in the blend; the downstream train script consumes `packed_qwen/splits` and does not apply JSONL blend weights as a second-stage sampler. To reduce a sidecar in real training, sample the sidecar JSONL before packing.
+- M1 SFT math v3 sampling fact: `reasoning_replay_v3` now treats the v3 numeric parameters as deterministic pre-pack sampling fractions. The emitted sidecar files use blend weight `1.0`; source rows versus written rows are recorded in manifest/report to make the effective scale auditable.
+- Qwen v3 full-data artifact fact: the Session 62 rerun for `task071_qwen30b_a3b_math_reasoning_replay_v3` produced M1 base rows `983397` train / `11354` val-shadow, v3 sidecar written rows verified `544967`, final-answer-aux `6`, format-repair `16099`, heldout `1419`, packed sequences `1544296`, packed tokens `945009362`, packed train rows `70399`, and `train_iters=2200` at GBS 8 for 0.25 epoch.

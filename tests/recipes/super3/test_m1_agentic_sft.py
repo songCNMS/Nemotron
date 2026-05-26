@@ -30,6 +30,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     convert_m0_record,
     load_difficulty_signal,
     prepare,
+    sample_rows_by_fraction,
 )
 from nemotron.recipes.super3.milestones.m1_agentic_sft.run_m1_sft_roundtrip_smoke import (
     run as run_m1_sft_roundtrip_smoke,
@@ -143,6 +144,18 @@ def test_classify_math_supervision_bucket_for_v3_rows() -> None:
     competition["expected_answer"] = "42"
     competition["extra_env_info"].pop("reference_solution", None)
     assert classify_math_supervision_bucket(competition) == MATH_BUCKET_HELDOUT_EVAL
+
+
+def test_sample_rows_by_fraction_reduces_sidecar_rows_deterministically() -> None:
+    rows = [{"metadata": {"m0_source_id": f"row-{i}", "m0_source_row_index": i}} for i in range(20)]
+
+    sampled_once = sample_rows_by_fraction(rows, fraction=0.05, salt="unit")
+    sampled_twice = sample_rows_by_fraction(rows, fraction=0.05, salt="unit")
+
+    assert len(sampled_once) == 1
+    assert sampled_once == sampled_twice
+    assert sample_rows_by_fraction(rows, fraction=0.0, salt="unit") == []
+    assert sample_rows_by_fraction(rows, fraction=1.0, salt="unit") == rows
 
 
 def test_convert_code_record_uses_reference_code() -> None:
@@ -500,17 +513,20 @@ def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> 
 
     bucket_info = manifest["math_reasoning_replay_v3"]["buckets"]
     assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
     assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["sample_fraction"] == 0.2
     assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 1
     assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["rows"] == 2
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["blend_weight"] == 0.0
     assert manifest["math_reasoning_replay_v3"]["train_rows_excluded_as_heldout"] == 1
 
     blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
     blend_by_name = {dataset["name"]: dataset for dataset in blend["datasets"]}
     assert "m1-agentic-sft-v0-math-final-answer" not in blend_by_name
     assert blend_by_name["m1-agentic-sft-v0-math-verified-full-solution"]["weight"] == 1.0
-    assert blend_by_name["m1-agentic-sft-v0-math-final-answer-aux"]["weight"] == 0.2
-    assert blend_by_name["m1-agentic-sft-v0-math-format-repair"]["weight"] == 0.05
+    assert blend_by_name["m1-agentic-sft-v0-math-final-answer-aux"]["weight"] == 1.0
+    assert blend_by_name["m1-agentic-sft-v0-math-format-repair"]["weight"] == 1.0
 
     aux_rows = [
         json.loads(line)
@@ -535,7 +551,7 @@ def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> 
 
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math reasoning replay v3 buckets" in report_md
-    assert "| heldout_eval | 2 | 0.0 |" in report_md
+    assert "| heldout_eval | 2 | 2 | 0.0 | 0.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:
