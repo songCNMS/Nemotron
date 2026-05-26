@@ -101,19 +101,44 @@ def _is_positive_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value > 0
 
 
+QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS: dict[str, bool] = {
+    "enable_thinking": False,
+    "truncate_history_thinking": False,
+}
+
+
 def _validate_chat_template_kwargs(
     value: Any,
     *,
     context: str,
 ) -> list[str]:
+    """Validate the Qwen chat-template kwargs at a fixed contract.
+
+    The gate exists to certify that Qwen reproduction evidence and the
+    intended eval path actually use the Qwen contract — false/false for
+    both `enable_thinking` and `truncate_history_thinking` (the values
+    SFT trains against; see docs/chat-template-consistency-review.md
+    PRs C+D). A type-only check would let a future YAML edit silently
+    flip a value and still pass validation; pin the contract values
+    here so any drift surfaces immediately.
+    """
     issues: list[str] = []
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping"]
-    for key in ("enable_thinking", "truncate_history_thinking"):
+    for key, expected in QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS.items():
         if key not in value:
             issues.append(f"{context}.{key} must be present")
-        elif not isinstance(value[key], bool):
+            continue
+        actual = value[key]
+        if not isinstance(actual, bool):
             issues.append(f"{context}.{key} must be a bool")
+            continue
+        if actual is not expected:
+            issues.append(
+                f"{context}.{key} must be {expected!s} for the Qwen "
+                "chat-template contract (matches SFT-time rendering); "
+                f"got {actual!s}"
+            )
     return issues
 
 
@@ -413,6 +438,7 @@ def format_qwen_eval_repro_gate_report(
 
 
 __all__ = [
+    "QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS",
     "QWEN_EVAL_REPRO_GATE_PATH",
     "VALID_EVIDENCE_STATUSES",
     "VALID_INVALID_FINDING_TYPES",
