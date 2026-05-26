@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
 
 ## Session 1
 
@@ -684,3 +684,12 @@
 - Validation 连续改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`；当前 best validation 为 iter `1500`。
 - 最新解析 summary 到 train iter `1500/2200`，progress `68.18%`，latest train lm loss `0.3878813`，recent-50 train loss mean `0.393932076`，learning rate `2.0e-7`，skipped/nan 仍为 `0/0`。
 - 训练健康判断：无 traceback、OOM、UnpicklingError 或 ChildFailedError；validation 维持改善趋势，可以继续监控到 iter `2000` eval/save 点和 final iter `2200`。
+
+## Session 65
+
+- 按用户要求将 metric figure 返回到当前项目聊天；先同步远端最新 train log 并刷新 v3 metric 曲线到 iter `2000/2200`。
+- 最新 metrics artifact 为 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/metrics/metric_curves_session65_iter2000.png`，同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- Validation 继续改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`，iter `2000` `0.4093007/1.505765`；current best 为 iter `2000`。
+- 最新 summary 解析到 train iter `2020/2200`，progress `91.82%`，latest train lm loss `0.3772499`，recent-50 train loss mean `0.387682134`，skipped/nan `0/0`。
+- 图片发送成功：image message id `om_x100b6e6587201c98b36c4ce7a5d19d6`，image key `img_v3_02122_28316bfd-300d-49b1-862a-ce422480d75g`；说明文本 message id `om_x100b6e6584c4e4b0b3e7d37eb565f8b`。
+- 结束前远端训练仍 active，checkpoint marker 已到 `2000`，tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` 仍存在，无 traceback、OOM、UnpicklingError 或 ChildFailedError。
