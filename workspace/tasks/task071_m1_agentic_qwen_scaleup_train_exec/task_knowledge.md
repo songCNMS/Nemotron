@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
 
 ## Notes
 
@@ -172,3 +172,6 @@
 - Qwen v3 validation fact: Session 64 monitored the same run through iter `1500/2200`; validation loss/PPL improved from `0.4362881/1.546954` at iter `500` to `0.4158402/1.515644` at iter `1000` and `0.4110765/1.508441` at iter `1500`, with checkpoint marker `1500` and skipped/nan `0/0`.
 - Qwen v3 metric return fact: Session 65 refreshed `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/metrics/metric_curves_session65_iter2000.png` and sent it to the project chat; image message id `om_x100b6e6587201c98b36c4ce7a5d19d6`. The run had validation@2000 loss/PPL `0.4093007/1.505765`, checkpoint marker `2000`, and skipped/nan `0/0`.
 - Qwen v3 final checkpoint fact: Session 66 confirmed `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` completed at iter `2200/2200`; final validation loss/PPL is `0.4087007/1.504861`, best observed checkpoint is `iter_0002200`, checkpoint size is about `399G`, and GPUs were idle after completion.
+- Qwen v3 iter2200 export fact: Session 67 exported `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/checkpoints/iter_0002200` to HF path `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200`; the export is about `57G`, contains `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, and is recorded as model id `task071-qwen3-30b-a3b-agentic-sft-math-reasoning-replay-v3-iter0002200-hf`.
+- Qwen v3 iter2200 corrected eval fact: Session 67 served the HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; full corrected metrics are MMLU-Pro `0.5525265957446809` with parsed rate `1.0`, AIME25 `0.08666666666666667` with parsed rate `0.94`, and HMMT exact-normalized correct percent `0.0` with parsed rate `1.0`.
+- Qwen v3 iter2200 gate fact: compared with Session 47 original corrected metrics, v3 deltas are MMLU-Pro `-0.009474734042553168`, AIME25 `-0.44666666666666666`, and HMMT exact percent `-43.333333333333336`; compared with iter3000 qwen-chat, v3 improves MMLU-Pro by `+0.018450797872340496` and AIME25 by `+0.020000000000000004` but leaves HMMT at `0.0`. The MMLU-Pro gate passes, parser coverage passes, and hard-math correctness still fails promotion.

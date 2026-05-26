@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
 
 ## Session 1
 
@@ -703,3 +703,16 @@
 - Checkpoint state：marker `2200`；remote checkpoint directories include `iter_0000500`、`iter_0001000`、`iter_0001500`、`iter_0002000`、`iter_0002200`；each checkpoint is about `399G` and total checkpoint directory is about `2.0T`。
 - Added final report `qwen_v3_final_metrics_session66.md` with metric table, artifact paths, and candidate decision.
 - Candidate decision：select `iter_0002200` as primary HF export and corrected mini-eval candidate because it has the best observed validation loss and the run ended cleanly.
+
+## Session 67
+
+- 按“执行下一步”导出并评测 v3 best checkpoint `iter_0002200`；远端 run root 为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 `CUDA_VISIBLE_DEVICES=5` 上将 `checkpoints/iter_0002200` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200`；导出大小约 `57G`，包含 `16` 个 safetensors shards，日志出现 `EXPORT_DONE`。
+- 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200/task071_export_manifest.json`；HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
+- 启动 SGLang endpoint `task071_qwen_v3_iter2200_sglang_full_eval`：`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`，model id `task071-qwen3-30b-a3b-agentic-sft-math-reasoning-replay-v3-iter0002200-hf`；`/v1/models` 返回 `max_model_len=16384`，chat smoke 返回 exact `ready`。
+- Corrected MMLU-Pro full 完成：`12032/12032` rows，`status=ok`、parsed rate `1.0`、finish `stop=12032`、accuracy `0.5525265957446809`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v3_iter2200_session67/mmlu_corrected_full`。
+- Corrected math full 完成：AIME25 `300` rows，accuracy `0.08666666666666667`、parsed rate `0.94`、finish `stop=282/length=18`；HMMT `30` rows，exact-normalized correct percent `0.0`、parsed rate `1.0`、finish `stop=30`；输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v3_iter2200_session67/math_corrected_full`。
+- Same-protocol comparison vs Session 47 original：V3 MMLU-Pro delta `-0.009474734042553168`，AIME25 delta `-0.44666666666666666`，HMMT exact-percent delta `-43.333333333333336`；相对 iter3000 qwen-chat，MMLU-Pro 提升 `+0.018450797872340496`，AIME25 提升 `+0.020000000000000004`，HMMT 持平 `0.0`。
+- Gate 结论：MMLU-Pro 达到 Session 60 gate，AIME/HMMT parser coverage 达标，但 AIME25 与 HMMT correctness 仍未达到 math promotion gate；问题主要是 hard-math reasoning correctness，不是 final-answer extraction。
+- 资源清理：评测后停止 SGLang tmux session 和本地 SSH tunnel，确认 NemTron port `30000` 清空，8 张 H200 回到 idle。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v3_iter2200_corrected_eval_session67.md`，记录 export artifact、serving 参数、full corrected eval metrics、same-protocol comparison 和 gate 结论。

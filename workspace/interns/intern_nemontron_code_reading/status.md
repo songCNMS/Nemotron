@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 66 |
+| Session | 67 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Confirmed v3 30B training completed at iter 2200/2200, refreshed final metrics, and selected `iter_0002200` as the export/corrected mini-eval candidate. |
+| Latest | Exported v3 `iter_0002200` to HF, ran full corrected MMLU-Pro/AIME25/HMMT eval, and recorded that MMLU-Pro recovered near original while hard math remains below gate. |
