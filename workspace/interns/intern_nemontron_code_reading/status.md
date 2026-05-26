@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 59 |
+| Session | 60 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Qwen-chat v2 training completed at iter 8740; final validation is 0.3842467/1.468508, best remains iter3000. Ran full corrected eval for iter3000: MMLU-Pro 0.5340758, AIME25 0.0666667, HMMT 0.0, then released all GPUs. |
+| Latest | Reviewed Qwen-chat v2 full eval failure modes: parser coverage is high but math correctness regressed; added a v3 strategy report that shifts from final-answer-only exposure to verified math reasoning replay with corrected eval gates. |

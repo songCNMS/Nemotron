@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=60 -->
 
 ## Session 1
 
@@ -630,3 +630,12 @@
 - Same-protocol comparison vs original Session 47：MMLU-Pro delta `-0.027925531914893636`，AIME25 delta `-0.4666666666666667`，HMMT exact-percent delta `-43.333333333333336`；iter3000 improves parser coverage on math but remains far below original on math correctness。
 - 资源清理：full corrected eval 后停止 `task071_qwen_chat_iter3000_sglang_full_eval`，确认 port `30000` 清空，8 张 H200 释放。
 - 记录报告 `qwen_chat_final_corrected_eval_session59.md`，包含最终训练指标、parser 修复、full corrected eval metrics、original 对比和资源清理状态。
+
+## Session 60
+
+- 按“执行下一步”基于 Session 59 full corrected eval 做训练策略复盘，新增报告 `qwen_chat_math_strategy_review_session60.md`。
+- 复核训练证据：`task071_qwen30b_a3b_math_final_answer_qwen_chat_v2` 最终完成到 iter `8740/8740`，final validation loss/PPL 为 `0.3842467/1.468508`，best 仍为 iter `3000` 的 `0.3531853/1.423595`，因此 final checkpoint 不作为优先候选。
+- 复核 full eval 对比：iter3000 corrected MMLU-Pro `0.5340757978723404`，AIME25 `0.06666666666666667`，HMMT `0.0`；相对 original Session 47 分别低 `0.027925531914893636`、`0.4666666666666667`、`43.333333333333336`。
+- 分析 math 错误形态：AIME25 `300` rows 中 parsed `278`、correct `20`、contains expected `39`、length `22`；HMMT `30` rows 中 parsed `30`、correct `0`、contains expected `1`、全部 stop，说明主要问题是数学推理正确率而不是 parser 或停止符。
+- 形成下一版策略：从 original Qwen3-30B-A3B-Instruct-2507 重新开始，降低 final-answer-only sidecar 到 `0.15-0.25` 有效权重并 cap 到 math tokens 的 `10-15%`，加入 verified full-solution math reasoning replay，用 corrected mini eval gates 选择候选 checkpoint。
+- 验证：本轮新增文档和记录通过 `git diff --check`；无训练或 serving 进程需要清理。

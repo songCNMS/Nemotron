@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=60 -->
 
 ## Notes
 
@@ -158,3 +158,6 @@
 - Qwen metric parser fact: final Megatron validation lines may include `on validation set` between the iteration and metric pipe; `plot_qwen_sft_metrics.py` must accept that optional phrase or it will miss final validation@8740.
 - Qwen chat-template retrain Session 59 corrected eval fact: iter3000 full corrected metrics are MMLU-Pro `0.5340757978723404` with parsed rate `1.0`, AIME25 `0.06666666666666667` with parsed rate `0.9266666666666666`, and HMMT exact-normalized correct percent `0.0` with parsed rate `1.0`; full artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session59`.
 - Qwen chat-template retrain Session 59 comparison fact: compared with original Session 47 corrected metrics, iter3000 deltas are MMLU-Pro `-0.027925531914893636`, AIME25 `-0.4666666666666667`, and HMMT exact percent `-43.333333333333336`; parser coverage is high, but math correctness remains far below original.
+- Qwen chat-template retrain Session 60 error-shape fact: iter3000 AIME25 has `278/300` parsed, `20/300` correct, `39/300` contains the expected answer, and `22/300` length finishes; iter3000 HMMT has `30/30` parsed, `0/30` correct, `1/30` contains expected answer, and `30/30` stop finishes. This points to reasoning-quality regression rather than a parser-only failure.
+- Qwen math strategy fact: the next 30B recovery run should start from original Qwen3-30B-A3B-Instruct-2507, keep Qwen tokenizer chat-template packing, add verified full-solution math reasoning replay, and reduce final-answer-only sidecar rows to `0.15-0.25` effective weight capped at `10-15%` of math tokens.
+- Qwen checkpoint-selection fact: validation loss alone is not enough for this objective; export candidates around `iter_2000`, `iter_3000`, and `iter_3500` and gate them with corrected MMLU-Pro mini plus corrected AIME/HMMT mini before any full corrected eval.
