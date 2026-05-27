@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
 
 ## Session 1
 
@@ -940,3 +940,14 @@
 - 在 `plan_qwen_scaleup_run.py` 中接入 V7 strategy、`math_v7_weights` manifest、local data-prep script flags、planner CLI 参数和 report weight summary；测试覆盖 8192 pack/seq length 的 V7 pilot planning。
 - 新增单测 `test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows`，覆盖 V7 只保留长 verified hard row、排除短 row、只把 hard sidecar 放入 blend，并写出 report。
 - 验证：`py_compile` 通过；`ruff check` 通过；focused M1 SFT tests `2 passed, 73 deselected`；focused Qwen planner tests `2 passed, 10 deselected`。
+
+## Session 87
+
+- 按“continue the next step”生成并执行 V7 Qwen4B pilot：run name `task071_qwen4b_hard_math_long_reasoning_v7_pilot`，每 M0 dataset `100/25` train/val rows，`pack_size=8192`，`seq_length=8192`，GBS `2`，2 GPUs。
+- 本地 data prep 完成：M1 train `1100` rows、val-shadow `273` rows；V7 hard verified source/written `3/3`，broad verified `63/0`，format repair `134/0`，heldout eval `50`；Qwen packed artifact `1088` sequences、`946089` tokens、8 shards、packed train rows `76`。
+- 同步到 NemTron 并完成训练：`train_iters=12`，final checkpoint `iter_0000012`，validation loss/PPL `1.139335/3.124691`，skipped/nan `0/0`，GPU 训练后释放。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_pilot/hf_export_iter_0000012`，3 个 safetensors shards，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-pilot-iter0000012-hf`。
+- 启动 SGLang endpoint 成功，`max_model_len=8192`；corrected smoke eval 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`、parsed rate `1.0`。
+- Corrected math smoke 完成：AIME25 5 rows 全部 `length`，parsed/correct `0/5`，avg completion tokens `4096`；HMMT 5 rows parsed/correct `2/5`，exact-normalized accuracy `0.4`，avg completion tokens `3460.4`。
+- 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 已复制到 `debug/task071_eval_logic_debug/qwen4b_v7_iter12_session87/corrected_eval_smoke`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot/metrics/metric_curves_session87_final_iter12.png`。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_pilot_session87.md`，记录 data prep、training、export、smoke eval 和 gate decision。

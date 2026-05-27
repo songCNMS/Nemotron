@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
 
 ## Notes
 
@@ -226,3 +226,4 @@
 - Loss-mask implication fact: current AIME/HMMT regression should be treated as short/noisy visible-reasoning supervision under loss, not missing reasoning from loss. Bad or shortcut reasoning in assistant `content` is also supervised unless filtered before packing.
 - Regression guard fact: Session 85 added `test_packed_math_reasoning_tokens_before_box_are_supervised`, which decodes supervised labels from a synthetic packed Qwen-style math row and asserts the reasoning tokens before `\boxed{42}` are covered by shifted-label SFT loss while system/user prompt tokens remain masked.
 - Qwen V7 hard-math pilot recipe fact: Session 86 added `hard_math_long_reasoning_v7`, which filters for long, line-structured AIME/HMMT-style verified full-solution rows and defaults to a hard verified sidecar fraction of `1.0` with broad verified, final-answer aux, and format-repair sidecars disabled.
+- Qwen4B V7 pilot fact: Session 87 completed a 12-iter Qwen4B pilot with `8192` pack/seq length. Smoke eval scored MMLU-Pro per-category-5 accuracy `0.5`, AIME25 `0/5` with all rows hitting the `4096` generation cap, and HMMT `2/5` exact-normalized correct.

@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 86 |
+| Session | 87 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Added hard_math_long_reasoning_v7 data strategy and Qwen planner flags for long verified hard-math pilot preparation. |
+| Latest | Ran the Qwen4B V7 long-reasoning pilot through local prep, NemTron training, HF export, and corrected MMLU/AIME/HMMT smoke eval. |
