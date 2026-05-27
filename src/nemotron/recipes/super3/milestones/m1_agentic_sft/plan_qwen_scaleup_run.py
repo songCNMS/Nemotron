@@ -253,6 +253,20 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             ),
             "math_sidecar_max_records_per_env": args.math_sidecar_max_records_per_env,
             "math_sidecar_max_val_shadow_per_env": args.math_sidecar_max_val_shadow_per_env,
+            "math_decontaminate_against_corpus": (
+                str(args.math_decontaminate_against_corpus)
+                if getattr(args, "math_decontaminate_against_corpus", None) is not None
+                else None
+            ),
+            "math_decontaminate_ngram_size": getattr(
+                args, "math_decontaminate_ngram_size", None
+            ),
+            "math_decontaminate_blocker_threshold": getattr(
+                args, "math_decontaminate_blocker_threshold", None
+            ),
+            "math_skip_decontamination_check": bool(
+                getattr(args, "math_skip_decontamination_check", False)
+            ),
         },
         "packing": {
             "tokenizer_model": qwen_hf_model,
@@ -414,6 +428,28 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
                 f" \\\n  --math-sidecar-max-val-shadow-per-env "
                 f"{int(data['math_sidecar_max_val_shadow_per_env'])}"
             )
+    # AIME-25 / HMMT decontamination flags. prepare_m1_agentic_sft.py refuses
+    # to run hard_math_long_reasoning_v7 / hard_math_clean_final_v8 without
+    # either --decontaminate-math-against-corpus or
+    # --skip-math-decontamination-check; both are plumbed through the planner
+    # so V7/V8 scaleup bundles fail fast or get the operator-confirmed flag.
+    if data.get("math_decontaminate_against_corpus"):
+        math_supervision_flag_lines += (
+            f" \\\n  --decontaminate-math-against-corpus "
+            f"{_q(data['math_decontaminate_against_corpus'])}"
+        )
+        if data.get("math_decontaminate_ngram_size") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --decontaminate-math-ngram-size "
+                f"{int(data['math_decontaminate_ngram_size'])}"
+            )
+        if data.get("math_decontaminate_blocker_threshold") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --decontaminate-math-blocker-threshold "
+                f"{float(data['math_decontaminate_blocker_threshold'])}"
+            )
+    if data.get("math_skip_decontamination_check"):
+        math_supervision_flag_lines += " \\\n  --skip-math-decontamination-check"
     optional_training_flags = _optional_training_flags(training)
     optional_training_flag_lines = (
         "".join(f" \\\n  {_q(flag)}" for flag in optional_training_flags)
@@ -890,6 +926,40 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help="Optional val cap for math sidecar source environments.",
+    )
+    parser.add_argument(
+        "--math-decontaminate-against-corpus",
+        type=Path,
+        default=None,
+        help=(
+            "Path to the AIME-25 / HMMT eval prompt corpus used to drop "
+            "contaminated NuminaMath rows at SFT prep time. Required for "
+            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 unless "
+            "--math-skip-decontamination-check is also set (NOT "
+            "recommended for production). See prepare_m1_agentic_sft.py "
+            "--decontaminate-math-against-corpus."
+        ),
+    )
+    parser.add_argument(
+        "--math-decontaminate-ngram-size",
+        type=int,
+        default=None,
+        help="Override prepare_m1_agentic_sft.py --decontaminate-math-ngram-size.",
+    )
+    parser.add_argument(
+        "--math-decontaminate-blocker-threshold",
+        type=float,
+        default=None,
+        help="Override prepare_m1_agentic_sft.py --decontaminate-math-blocker-threshold.",
+    )
+    parser.add_argument(
+        "--math-skip-decontamination-check",
+        action="store_true",
+        help=(
+            "Acknowledge AIME-25 / HMMT contamination risk and bundle V7/V8 "
+            "without a decontamination corpus. NOT recommended for production "
+            "training; intended only for smoke/dry-run paths."
+        ),
     )
     parser.add_argument("--num-shards", type=int, default=32)
     parser.add_argument("--pack-size", type=int, default=4096)
