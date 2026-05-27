@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Notes
 
@@ -244,3 +244,5 @@
 - Qwen 30B V7 gate fact: Session 91 V7 passes the corrected gates MMLU-Pro `>=0.55`, AIME25 `>=0.20`, and HMMT exact percent `>=10.0`; compared with original Qwen corrected metrics it remains lower on AIME/HMMT, but compared with V5 it improves AIME by `+0.14333333333333334` and HMMT exact percent by `+16.666666666666668`.
 - Qwen 30B V7 AIME error fact: Session 92 found V7 AIME recovery is concentrated in six fully solved unique problems `06/10/15/26/27/29` plus partial problems `13` and `23`; 17 unique problems are fully parsed but wrong, so the remaining AIME gap is mostly stable incorrect reasoning rather than parser failure.
 - Qwen 30B V7 HMMT eval-policy fact: Session 92 HMMT-only probes scored `4/30` at both `8192` repeat and `12288` max tokens under `parallelism=8`; `12288` improved parsed rows from `18/30` to `20/30` but did not improve exact score, so the default corrected HMMT gate should stay at `8192` max tokens while reporting the observed `13.3%-16.7%` small-sample band for V7.
+- Qwen V8 recipe fact: Session 93 added `hard_math_clean_final_v8`, a V7-derived strategy that only duplicates long hard-math rows whose single boxed scalar final answer matches the source M0 expected answer and is not followed by explanatory text; it preserves existing V7 behavior as a separate strategy.
+- Qwen V8 planning fact: Session 93 generated `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8` with uncapped base data, V7 full M0 cache as math sidecar source, pack/seq `8192/8192`, 0.2 epoch, GBS `8`, lr `2e-7`, min lr `8e-8`, and 8-H200 30B-A3B train entrypoint.

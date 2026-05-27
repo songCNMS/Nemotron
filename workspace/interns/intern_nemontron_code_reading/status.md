@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 92 |
+| Session | 93 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Analyzed V7 iter 782 AIME/HMMT failure clusters and ran HMMT 8192/12288 probes; AIME failures are mostly stable wrong answers, and HMMT remains 13.3-16.7% with token-budget and run variance. |
+| Latest | Added hard_math_clean_final_v8 data recipe and planner wiring, smoke-validated V8 prep, and generated 30B V8 scale-up scripts for the next train-to-eval run. |

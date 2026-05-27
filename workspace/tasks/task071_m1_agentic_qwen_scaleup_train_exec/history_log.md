@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Session 1
 
@@ -1012,3 +1012,15 @@
 - HMMT 结论：不要把 default eval max tokens 从 `8192` 直接改到 `12288`；更大的 token budget 只提高 parsed rate，没有提高 exact score，还会让 `hmmt_16` 这类原本正确行变错。
 - Copied Session 92 remote probe outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session92_error_analysis/remote_error_analysis` and stopped SGLang/tmux sessions after probes.
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_math_error_analysis_session92.md`，记录 AIME/HMMT clusters、HMMT generation-policy probes 和 recommended recipe/eval actions.
+
+## Session 93
+
+- 按“执行下一步”把 Session 92 的 hard-math 诊断落到数据 recipe：新增 `hard_math_clean_final_v8`，不改变已有 V7 语义，作为新的可选策略。
+- V8 继承 V7 的 long hard-math trace 约束，并新增 clean final-answer 过滤：训练行必须只有一个 `\boxed{...}`，boxed payload 必须是 scalar numeric，必须匹配源 M0 `expected_answer`，boxed 后只允许短的非文字尾巴。
+- `prepare_m1_agentic_sft.py` 现在在 math row metadata 中保留 `m0_expected_answer`，供 V8 做最后 boxed answer 与源 label 的一致性检查；metadata 不进入模型训练文本。
+- `plan_qwen_scaleup_run.py` 接入 V8 strategy、V8 weights、local data-prep script flags 和 report 输出；生成的 30B-A3B plan 仍自动使用 `qwen3_30b_a3b_local_train.py`。
+- 新增单测覆盖：V8 保留 clean single-box expected final row，排除多 boxed row、boxed 后继续解释的 row、最后 boxed 与 expected 不一致的 row；planner 可生成 V8 data-prep flags。
+- 在现有 V7 M0 cache 上做 V8 data-prep smoke：base rows `110`，math sidecar source train rows `math_competition_numeric=5000`、`math_reasoning_numeric=5000`，V8 hard source/written rows `29/29`，errors `0`。
+- 生成 30B V8 scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8`，配置为 uncapped base data、V7 full M0 cache as math sidecar source、pack/seq `8192/8192`、GBS `8`、0.2 epoch、lr `2e-7`、min lr `8e-8`、8 H200。
+- 验证：focused V7/V8 tests `3 passed, 74 deselected`；focused planner tests `3 passed, 11 deselected`；full related test files `90 passed, 1 skipped`；ruff passed；`git diff --check` passed。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_recipe_session93.md`，记录 V8 design、smoke evidence、script bundle 和 validation.

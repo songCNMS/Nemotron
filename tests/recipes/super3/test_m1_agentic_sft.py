@@ -26,6 +26,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
+    MATH_SUPERVISION_STRATEGY_V8,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -45,11 +46,16 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V7_FORMAT_REPAIR_WEIGHT,
     MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
     MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V8_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V8_FORMAT_REPAIR_WEIGHT,
+    MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
     classify_math_supervision_bucket,
     convert_m0_record,
+    is_hard_math_clean_final_row,
     is_hard_math_long_reasoning_row,
     is_hard_math_precision_row,
     is_hard_math_recovery_row,
@@ -104,6 +110,7 @@ def test_convert_reasoning_record_preserves_reference_solution_without_gsm8k_mar
     assert content.endswith(r"Final answer: \boxed{42}")
     assert USED_IN_TAG in converted["used_in"]
     assert converted["metadata"]["m0_environment"] == "math_reasoning_numeric"
+    assert converted["metadata"]["m0_expected_answer"] == "42"
     assert converted["metadata"]["m1_stage"] == "Agentic SFT v0"
     assert converted["metadata"]["final_answer_supervision"]["format"] == "boxed_final_line"
     assert converted["metadata"]["final_answer_supervision"]["effective_weight"] == MATH_FINAL_ANSWER_EFFECTIVE_WEIGHT
@@ -1118,6 +1125,115 @@ def test_prepare_math_sidecar_can_use_uncapped_m0_source(tmp_path) -> None:
 
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math sidecar source" in report_md
+
+
+def test_prepare_hard_math_clean_final_v8_requires_single_expected_final_box(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    prompt = (
+        "Determine the number of integer triples satisfying modular equations, "
+        "divisor constraints, triangle conditions, and remainder case splits."
+    )
+    long_body = "\n".join(
+        [
+            "Split the modular equation into residue classes.",
+            "Translate each residue class into a divisor condition.",
+            "Use the triangle inequality to remove boundary cases.",
+            "Count each remaining integer family without overlap.",
+            "Sum the compatible families.",
+            ("The enumeration keeps every residue class and divisor case explicit. " * 42).strip(),
+        ]
+    )
+
+    clean = _base_record("math_competition_numeric")
+    clean["expected_answer"] = "293"
+    clean["responses_create_params"]["input"][-1]["content"] = prompt
+    clean["extra_env_info"]["reference_solution"] = long_body + "\n\nThus the answer is \\boxed{293}."
+
+    multiple_boxes = _base_record("math_competition_numeric")
+    multiple_boxes["expected_answer"] = "293"
+    multiple_boxes["responses_create_params"]["input"][-1]["content"] = prompt
+    multiple_boxes["extra_env_info"]["reference_solution"] = (
+        long_body + "\n\nAn intermediate block gives \\boxed{12}.\nThus the answer is \\boxed{293}."
+    )
+
+    trailing_text = _base_record("math_competition_numeric")
+    trailing_text["expected_answer"] = "293"
+    trailing_text["responses_create_params"]["input"][-1]["content"] = prompt
+    trailing_text["extra_env_info"]["reference_solution"] = (
+        long_body
+        + "\n\nThus the answer is \\boxed{293}. This completes the modular enumeration."
+    )
+
+    mismatched = _base_record("math_competition_numeric")
+    mismatched["expected_answer"] = "293"
+    mismatched["responses_create_params"]["input"][-1]["content"] = prompt
+    mismatched["extra_env_info"]["reference_solution"] = long_body + "\n\nThus the answer is \\boxed{294}."
+
+    converted_clean = convert_m0_record(clean, split="train")
+    converted_multiple = convert_m0_record(multiple_boxes, split="train")
+    converted_trailing = convert_m0_record(trailing_text, split="train")
+    converted_mismatched = convert_m0_record(mismatched, split="train")
+
+    assert is_hard_math_long_reasoning_row(converted_clean) is True
+    assert is_hard_math_clean_final_row(converted_clean) is True
+    assert is_hard_math_long_reasoning_row(converted_multiple) is True
+    assert is_hard_math_clean_final_row(converted_multiple) is False
+    assert is_hard_math_clean_final_row(converted_trailing) is False
+    assert is_hard_math_clean_final_row(converted_mismatched) is False
+
+    write_split(
+        "math_competition_numeric",
+        "train",
+        [clean, multiple_boxes, trailing_text, mismatched],
+    )
+    write_split("math_competition_numeric", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V8
+        math_v8_hard_verified_full_solution_weight = MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v8_verified_full_solution_weight = MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v8_final_answer_aux_weight = MATH_V8_FINAL_ANSWER_AUX_WEIGHT
+        math_v8_format_repair_weight = MATH_V8_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V8
+    bucket_info = manifest["math_hard_clean_final_v8"]["buckets"]
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 2
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 0
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 0
+
+    hard_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert len(hard_rows) == 1
+    assert hard_rows[0]["metadata"]["m0_expected_answer"] == "293"
+    assert hard_rows[0]["metadata"]["final_answer_supervision"]["strategy"] == MATH_SUPERVISION_STRATEGY_V8
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math hard clean final v8 buckets" in report_md
+    assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:

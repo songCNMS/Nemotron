@@ -49,6 +49,7 @@ MATH_SUPERVISION_STRATEGY_V4 = "hard_math_recovery_v4"
 MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
 MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
 MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
+MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
@@ -56,6 +57,7 @@ MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
+    MATH_SUPERVISION_STRATEGY_V8,
 )
 MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
@@ -76,6 +78,10 @@ MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V7_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V7_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V8_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -234,6 +240,12 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
                 "final_answer_aux": args.math_v7_final_answer_aux_weight,
                 "format_repair": args.math_v7_format_repair_weight,
             },
+            "math_v8_weights": {
+                "hard_verified_full_solution": args.math_v8_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v8_verified_full_solution_weight,
+                "final_answer_aux": args.math_v8_final_answer_aux_weight,
+                "format_repair": args.math_v8_format_repair_weight,
+            },
             "math_sidecar_m0_input_dir": (
                 str(args.math_sidecar_m0_input_dir)
                 if args.math_sidecar_m0_input_dir is not None
@@ -374,6 +386,18 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f"{float(math_v7_weights['final_answer_aux'])}"
             f" \\\n  --math-v7-format-repair-weight "
             f"{float(math_v7_weights['format_repair'])}"
+        )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V8:
+        math_v8_weights = data["math_v8_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v8-hard-verified-full-solution-weight "
+            f"{float(math_v8_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v8-verified-full-solution-weight "
+            f"{float(math_v8_weights['verified_full_solution'])}"
+            f" \\\n  --math-v8-final-answer-aux-weight "
+            f"{float(math_v8_weights['final_answer_aux'])}"
+            f" \\\n  --math-v8-format-repair-weight "
+            f"{float(math_v8_weights['format_repair'])}"
         )
     if data.get("math_sidecar_m0_input_dir"):
         math_supervision_flag_lines += (
@@ -627,6 +651,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Math v5 weights: `{data['math_v5_weights']}`",
             f"- Math v6 weights: `{data['math_v6_weights']}`",
             f"- Math v7 weights: `{data['math_v7_weights']}`",
+            f"- Math v8 weights: `{data['math_v8_weights']}`",
             f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
@@ -820,6 +845,30 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V7_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for v7 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v8-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v8 clean final full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v8-verified-full-solution-weight",
+        type=float,
+        default=MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v8 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v8-final-answer-aux-weight",
+        type=float,
+        default=MATH_V8_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v8 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v8-format-repair-weight",
+        type=float,
+        default=MATH_V8_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v8 math format-repair rows.",
     )
     parser.add_argument(
         "--math-sidecar-m0-input-dir",
