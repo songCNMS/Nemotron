@@ -24,6 +24,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V4,
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
+    MATH_SUPERVISION_STRATEGY_V7,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -39,11 +40,16 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V6_FORMAT_REPAIR_WEIGHT,
     MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
     MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V7_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V7_FORMAT_REPAIR_WEIGHT,
+    MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
     classify_math_supervision_bucket,
     convert_m0_record,
+    is_hard_math_long_reasoning_row,
     is_hard_math_precision_row,
     is_hard_math_recovery_row,
     load_difficulty_signal,
@@ -907,6 +913,111 @@ def test_prepare_hard_math_balanced_v6_restores_diversity_and_final_answer_rows(
     assert "## Math hard balanced v6 buckets" in report_md
     assert "| final_answer_aux | 1 | 1 | 0.05 | 1.0 |" in report_md
     assert "| format_repair | 1 | 1 | 0.03 | 1.0 |" in report_md
+
+
+def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    long_trace = _base_record("math_competition_numeric")
+    long_trace["expected_answer"] = "293"
+    long_trace["responses_create_params"]["input"][-1]["content"] = (
+        "Determine the number of ordered integer triples satisfying a modular "
+        "system where triangle side lengths, divisor cases, remainder "
+        "conditions, and integer choices force a unique AIME-style numeric answer."
+    )
+    long_trace["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "We start by sorting the possible remainders into compatible residue classes.",
+            "For each residue class, the modular system factors into divisor constraints.",
+            "The triangle side-length condition removes the boundary cases from each class.",
+            "The integer choices can then be counted by summing the compatible factor pairs.",
+            "The repeated congruence pattern contributes the same count over each reduced class.",
+            ("Carrying the enumeration carefully gives one block of valid triples. " * 34).strip(),
+            r"Adding every block gives the final count \boxed{293}.",
+        ]
+    )
+
+    short_trace = _base_record("math_competition_numeric")
+    short_trace["expected_answer"] = "101"
+    short_trace["responses_create_params"]["input"][-1]["content"] = long_trace["responses_create_params"][
+        "input"
+    ][-1]["content"]
+    short_trace["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Split the cases by residue class.",
+            "Count the compatible divisor pairs.",
+            "The resulting total is \\boxed{101}.",
+        ]
+    )
+
+    heldout = _base_record("math_competition_numeric")
+    heldout["expected_answer"] = "11"
+    heldout["extra_env_info"].pop("reference_solution", None)
+
+    converted_long = convert_m0_record(long_trace, split="train")
+    converted_short = convert_m0_record(short_trace, split="train")
+    assert is_hard_math_long_reasoning_row(converted_long) is True
+    assert is_hard_math_precision_row(converted_long) is True
+    assert is_hard_math_long_reasoning_row(converted_short) is False
+
+    write_split("math_competition_numeric", "train", [long_trace, short_trace, heldout])
+    write_split("math_competition_numeric", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V7
+        math_v7_hard_verified_full_solution_weight = MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
+        math_v7_format_repair_weight = MATH_V7_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V7
+    bucket_info = manifest["math_hard_long_reasoning_v7"]["buckets"]
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["sample_fraction"] == 1.0
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 0
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 0
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 0
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["rows"] == 1
+
+    blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
+    blend_names = [dataset["name"] for dataset in blend["datasets"]]
+    assert blend_names == [
+        "m1-agentic-sft-v0-from-m0",
+        "m1-agentic-sft-v0-math-hard-verified-full-solution",
+    ]
+
+    hard_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    supervision = hard_rows[0]["metadata"]["final_answer_supervision"]
+    assert supervision["strategy"] == MATH_SUPERVISION_STRATEGY_V7
+    assert supervision["sidecar_blend_weight"] == 1.0
+    assert supervision["effective_weight"] == 2.0
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math hard long reasoning v7 buckets" in report_md
+    assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:

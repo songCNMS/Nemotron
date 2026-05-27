@@ -309,6 +309,51 @@ def test_scaleup_planner_can_emit_hard_math_balanced_v6_data_prep(tmp_path) -> N
     assert "--math-v6-format-repair-weight 0.02" in local_script
 
 
+def test_scaleup_planner_can_emit_hard_math_long_reasoning_v7_data_prep(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_long_reasoning_v7",
+            "--math-v7-hard-verified-full-solution-weight",
+            "0.8",
+            "--math-v7-verified-full-solution-weight",
+            "0.0",
+            "--math-v7-final-answer-aux-weight",
+            "0.0",
+            "--math-v7-format-repair-weight",
+            "0.0",
+            "--pack-size",
+            "8192",
+            "--seq-length",
+            "8192",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_supervision_strategy"] == "hard_math_long_reasoning_v7"
+    assert manifest["data"]["math_v7_weights"]["hard_verified_full_solution"] == 0.8
+    assert manifest["data"]["math_v7_weights"]["verified_full_solution"] == 0.0
+    assert manifest["data"]["math_v7_weights"]["final_answer_aux"] == 0.0
+    assert manifest["data"]["math_v7_weights"]["format_repair"] == 0.0
+    assert manifest["packing"]["pack_size"] == 8192
+    assert manifest["training"]["seq_length"] == 8192
+    assert "--math-supervision-strategy hard_math_long_reasoning_v7" in local_script
+    assert "--math-v7-hard-verified-full-solution-weight 0.8" in local_script
+    assert "--math-v7-verified-full-solution-weight 0.0" in local_script
+    assert "--math-v7-final-answer-aux-weight 0.0" in local_script
+    assert "--math-v7-format-repair-weight 0.0" in local_script
+    assert "pack_size=8192" in local_script
+
+
 def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
     manifest = build_manifest(_args(tmp_path))
     write_plan(manifest, overwrite=True)

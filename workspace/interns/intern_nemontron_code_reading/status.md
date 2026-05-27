@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 85 |
+| Session | 86 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Added a regression test proving Qwen-style packed math rows supervise boxed-answer reasoning tokens under Megatron-Bridge shifted label semantics. |
+| Latest | Added hard_math_long_reasoning_v7 data strategy and Qwen planner flags for long verified hard-math pilot preparation. |

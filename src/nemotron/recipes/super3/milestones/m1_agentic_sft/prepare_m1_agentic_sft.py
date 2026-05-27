@@ -62,23 +62,27 @@ MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
 MATH_SUPERVISION_STRATEGY_V4 = "hard_math_recovery_v4"
 MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
 MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
+MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V4,
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
+    MATH_SUPERVISION_STRATEGY_V7,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V4,
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
+    MATH_SUPERVISION_STRATEGY_V7,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
     MATH_SUPERVISION_STRATEGY_V4,
     MATH_SUPERVISION_STRATEGY_V5,
     MATH_SUPERVISION_STRATEGY_V6,
+    MATH_SUPERVISION_STRATEGY_V7,
 )
 MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION = "hard_verified_full_solution"
 MATH_BUCKET_VERIFIED_FULL_SOLUTION = "verified_full_solution"
@@ -140,6 +144,10 @@ MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 0.6
 MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT = 0.25
 MATH_V6_FINAL_ANSWER_AUX_WEIGHT = 0.05
 MATH_V6_FORMAT_REPAIR_WEIGHT = 0.03
+MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V7_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V7_FORMAT_REPAIR_WEIGHT = 0.0
 MATH_V4_ANSWER_SEEKING_PATTERNS = (
     "compute",
     "determine",
@@ -185,6 +193,12 @@ MATH_V5_MIN_SOLUTION_CHARS = 1000
 MATH_V5_MAX_SOLUTION_CHARS = 9000
 MATH_V5_MIN_SOLUTION_LINES = 4
 MATH_V5_BOXED_TAIL_CHARS = 1800
+MATH_V7_MIN_PROMPT_CHARS = 120
+MATH_V7_MAX_PROMPT_CHARS = 2400
+MATH_V7_MIN_SOLUTION_CHARS = 2500
+MATH_V7_MAX_SOLUTION_CHARS = 16000
+MATH_V7_MIN_SOLUTION_LINES = 6
+MATH_V7_BOXED_TAIL_CHARS = 3000
 
 JsonDict = dict[str, Any]
 
@@ -532,7 +546,35 @@ def is_hard_math_precision_row(row: Mapping[str, Any]) -> bool:
     return _has_boxed_answer_near_end(solution, tail_chars=MATH_V5_BOXED_TAIL_CHARS)
 
 
+def is_hard_math_long_reasoning_row(row: Mapping[str, Any]) -> bool:
+    """Long verified hard-math traces for the V7 pilot recipe."""
+    metadata = row.get("metadata")
+    if not isinstance(metadata, Mapping):
+        return False
+    if metadata.get("m0_environment") != "math_competition_numeric":
+        return False
+    prompt = _message_content(row, "user")
+    solution = _message_content(row, "assistant")
+    lower_prompt = prompt.lower()
+    if any(pattern in lower_prompt for pattern in MATH_V4_PROOF_LIKE_PATTERNS):
+        return False
+    if not any(pattern in lower_prompt for pattern in MATH_V4_ANSWER_SEEKING_PATTERNS):
+        return False
+    if not (MATH_V7_MIN_PROMPT_CHARS <= len(prompt) <= MATH_V7_MAX_PROMPT_CHARS):
+        return False
+    if not (MATH_V7_MIN_SOLUTION_CHARS <= len(solution) <= MATH_V7_MAX_SOLUTION_CHARS):
+        return False
+    if _solution_line_count(solution) < MATH_V7_MIN_SOLUTION_LINES:
+        return False
+    lower_text = f"{prompt}\n{solution}".lower()
+    if not any(keyword in lower_text for keyword in MATH_V4_TOPIC_KEYWORDS):
+        return False
+    return _has_boxed_answer_near_end(solution, tail_chars=MATH_V7_BOXED_TAIL_CHARS)
+
+
 def is_hard_math_row_for_strategy(row: Mapping[str, Any], strategy: str) -> bool:
+    if strategy == MATH_SUPERVISION_STRATEGY_V7:
+        return is_hard_math_long_reasoning_row(row)
     if strategy in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6):
         return is_hard_math_precision_row(row)
     if strategy == MATH_SUPERVISION_STRATEGY_V4:
@@ -1262,7 +1304,34 @@ def _math_v6_weights(args: argparse.Namespace) -> dict[str, float]:
     }
 
 
+def _math_v7_weights(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v7_hard_verified_full_solution_weight",
+                MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v7_verified_full_solution_weight",
+                MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_FINAL_ANSWER_AUX: float(
+            getattr(args, "math_v7_final_answer_aux_weight", MATH_V7_FINAL_ANSWER_AUX_WEIGHT)
+        ),
+        MATH_BUCKET_FORMAT_REPAIR: float(
+            getattr(args, "math_v7_format_repair_weight", MATH_V7_FORMAT_REPAIR_WEIGHT)
+        ),
+    }
+
+
 def _math_weights_for_strategy(args: argparse.Namespace, strategy: str) -> dict[str, float]:
+    if strategy == MATH_SUPERVISION_STRATEGY_V7:
+        return _math_v7_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V6:
         return _math_v6_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V5:
@@ -1299,7 +1368,15 @@ def build_math_strategy_blend(
                 "weight": 1.0,
             }
         )
-    if strategy == MATH_SUPERVISION_STRATEGY_V6:
+    if strategy == MATH_SUPERVISION_STRATEGY_V7:
+        comment = (
+            "M1 Agentic SFT v0 hard_math_long_reasoning_v7 blend. The base "
+            "train JSONL keeps agentic coverage; only long, line-structured "
+            "AIME/HMMT-style verified full-solution traces are duplicated as "
+            "the hard sidecar; broad verified replay, final-answer-only rows, "
+            "and format-repair rows are disabled by default."
+        )
+    elif strategy == MATH_SUPERVISION_STRATEGY_V6:
         comment = (
             "M1 Agentic SFT v0 hard_math_balanced_v6 blend. The base train JSONL "
             "keeps agentic coverage; V5 high-confidence full-solution traces are "
@@ -1511,6 +1588,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         ("math_hard_recovery_v4", "Math hard recovery v4 buckets"),
         ("math_hard_precision_v5", "Math hard precision v5 buckets"),
         ("math_hard_balanced_v6", "Math hard balanced v6 buckets"),
+        ("math_hard_long_reasoning_v7", "Math hard long reasoning v7 buckets"),
     ):
         math_hard = manifest.get(hard_manifest_key)
         if not isinstance(math_hard, Mapping):
@@ -1772,7 +1850,14 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "errors": [*train_errors, *val_errors],
     }
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
-        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V6:
+        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7:
+            math_strategy_manifest_key = "math_hard_long_reasoning_v7"
+            math_strategy_description = (
+                "Separates long, line-structured AIME/HMMT-style verified full-solution rows, "
+                "disabled broad verified full-solution replay, disabled final-answer "
+                "auxiliary rows, disabled format-repair rows, and held-out eval rows."
+            )
+        elif math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V6:
             math_strategy_manifest_key = "math_hard_balanced_v6"
             math_strategy_description = (
                 "Separates V5 high-precision AIME/HMMT-style verified full-solution rows, "
@@ -1843,36 +1928,54 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "answer_seeking_patterns": list(MATH_V4_ANSWER_SEEKING_PATTERNS),
                 "proof_like_exclusions": list(MATH_V4_PROOF_LIKE_PATTERNS),
                 "min_prompt_chars": (
+                    MATH_V7_MIN_PROMPT_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_MIN_PROMPT_CHARS
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else 80
                 ),
                 "max_prompt_chars": (
+                    MATH_V7_MAX_PROMPT_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_MAX_PROMPT_CHARS
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else None
                 ),
                 "min_solution_chars": (
+                    MATH_V7_MIN_SOLUTION_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_MIN_SOLUTION_CHARS
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else 700
                 ),
                 "max_solution_chars": (
+                    MATH_V7_MAX_SOLUTION_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_MAX_SOLUTION_CHARS
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else 12000
                 ),
                 "min_solution_lines": (
+                    MATH_V7_MIN_SOLUTION_LINES
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_MIN_SOLUTION_LINES
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else None
                 ),
                 "boxed_tail_chars": (
+                    MATH_V7_BOXED_TAIL_CHARS
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else
                     MATH_V5_BOXED_TAIL_CHARS
                     if math_supervision_strategy
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
@@ -1982,7 +2085,9 @@ def build_parser() -> argparse.ArgumentParser:
             "by default. `hard_math_precision_v5` further tightens the hard "
             "full-solution filter and disables broad verified replay by default. "
             "`hard_math_balanced_v6` keeps the V5 hard filter, restores broad "
-            "verified replay, and adds small final-answer/format-repair sidecars."
+            "verified replay, and adds small final-answer/format-repair sidecars. "
+            "`hard_math_long_reasoning_v7` keeps only longer verified hard-math "
+            "full solutions for pilot runs."
         ),
     )
     parser.add_argument(
@@ -2074,6 +2179,30 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V6_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for hard_math_balanced_v6 format-repair math rows.",
+    )
+    parser.add_argument(
+        "--math-v7-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_long_reasoning_v7 long verified full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v7-verified-full-solution-weight",
+        type=float,
+        default=MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_long_reasoning_v7 broad verified full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v7-final-answer-aux-weight",
+        type=float,
+        default=MATH_V7_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for hard_math_long_reasoning_v7 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v7-format-repair-weight",
+        type=float,
+        default=MATH_V7_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for hard_math_long_reasoning_v7 format-repair math rows.",
     )
     # task040 Session 2: W1 curriculum sampler wiring. Off by default
     # (as_is = passthrough). Operators opt in via --curriculum-policy.

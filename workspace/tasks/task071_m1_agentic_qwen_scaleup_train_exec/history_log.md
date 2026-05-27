@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
 
 ## Session 1
 
@@ -931,3 +931,12 @@
 - 新增 `test_packed_math_reasoning_tokens_before_box_are_supervised`：构造 system/user/assistant math sample，确认 system/user token 不进入 supervised labels，且 `\boxed{42}` 前的 assistant 推导文字在 Megatron-Bridge shifted label loss 中被监督。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py -k "packed_math_reasoning_tokens_before_box_are_supervised or tokenize_chunks_with_mask_pins_tool_role_to_zero"` 通过，结果 `2 passed, 72 deselected`。
 - 验证：`ruff check tests/recipes/super3/test_m1_agentic_sft.py` 和 `git diff --check` 通过。
+
+## Session 86
+
+- 按“continue the next step”推进 hard-math pilot recipe：新增 `hard_math_long_reasoning_v7`，面向小型 Qwen pilot 只复制更长、行结构更完整、boxed final answer 位于尾部的 AIME/HMMT-style verified full-solution rows。
+- V7 默认只启用 `hard_verified_full_solution` sidecar，sample fraction `1.0`；broad verified、final-answer aux、format repair 默认均为 `0.0`，避免在 pilot 中混入短解或 answer-only supervision。
+- 在 `prepare_m1_agentic_sft.py` 中新增 V7 strategy、filter、weights、manifest/report hard bucket 标题、CLI 参数和 lineage bucket 输出；hard filter 记录 V7 prompt/solution length、line count、boxed-tail thresholds。
+- 在 `plan_qwen_scaleup_run.py` 中接入 V7 strategy、`math_v7_weights` manifest、local data-prep script flags、planner CLI 参数和 report weight summary；测试覆盖 8192 pack/seq length 的 V7 pilot planning。
+- 新增单测 `test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows`，覆盖 V7 只保留长 verified hard row、排除短 row、只把 hard sidecar 放入 blend，并写出 report。
+- 验证：`py_compile` 通过；`ruff check` 通过；focused M1 SFT tests `2 passed, 73 deselected`；focused Qwen planner tests `2 passed, 10 deselected`。
