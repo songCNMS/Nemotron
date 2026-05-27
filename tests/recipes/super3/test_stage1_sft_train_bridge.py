@@ -3,13 +3,10 @@ import os
 from pathlib import Path
 from types import SimpleNamespace
 
+import numpy as np
 import pytest
+from omegaconf import OmegaConf
 
-# Optional heavy deps — skip collection on sandboxes that don't have
-# numpy / omegaconf / pyarrow / megatron-bridge installed. Without this
-# the entire super3 test suite fails to collect on a clean sandbox.
-np = pytest.importorskip("numpy")
-OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 pa = pytest.importorskip("pyarrow")
 pq = pytest.importorskip("pyarrow.parquet")
 pytest.importorskip("megatron.bridge.training.config")

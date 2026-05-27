@@ -1,0 +1,1487 @@
+{
+  "cluster_counts": {
+    "aime25": {
+      "all_repeats_correct": {
+        "problems": 2,
+        "rows": 20
+      },
+      "deterministic_wrong_final": {
+        "problems": 17,
+        "rows": 170
+      },
+      "expected_mentioned_final_wrong": {
+        "problems": 2,
+        "rows": 20
+      },
+      "length_or_unparsed": {
+        "problems": 3,
+        "rows": 30
+      },
+      "mixed_or_variable_wrong": {
+        "problems": 6,
+        "rows": 60
+      }
+    },
+    "hmmt": {
+      "deterministic_wrong_final": {
+        "problems": 29,
+        "rows": 29
+      },
+      "expected_mentioned_final_wrong": {
+        "problems": 1,
+        "rows": 1
+      }
+    }
+  },
+  "inputs": {
+    "aime_score_cache": "/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db",
+    "hmmt_jsonl": "/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/hmmt_output.jsonl",
+    "iter3000_results": "/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_chat_iter3000_session59/math_corrected_full/results.jsonl",
+    "m1_dir": "/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/m1_agentic_sft",
+    "v3_results": "/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v3_iter2200_session67/math_corrected_full/results.jsonl"
+  },
+  "problem_summaries": [
+    {
+      "avg_completion_tokens": 591,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "293",
+      "length_rows": 0,
+      "modal_prediction": "73",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_01",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 613.9,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "237",
+      "length_rows": 0,
+      "modal_prediction": "32812",
+      "modal_prediction_rows": 7,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_02",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 366.1,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "204",
+      "length_rows": 0,
+      "modal_prediction": "27",
+      "modal_prediction_rows": 9,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_03",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 510.2,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "610",
+      "length_rows": 0,
+      "modal_prediction": "1000",
+      "modal_prediction_rows": 4,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_04",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 4
+    },
+    {
+      "avg_completion_tokens": 535,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "149",
+      "length_rows": 0,
+      "modal_prediction": "159",
+      "modal_prediction_rows": 4,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_05",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 3
+    },
+    {
+      "avg_completion_tokens": 1037.8,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "907",
+      "length_rows": 0,
+      "modal_prediction": "513",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_06",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 656.5,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "113",
+      "length_rows": 0,
+      "modal_prediction": "Thefinalansweris\\binom{24}{12}\\times\\binom{12}{6}\\times\\binom{8}{4}",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_07",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 773.5,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "19",
+      "length_rows": 0,
+      "modal_prediction": "100",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_08",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 7514,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "length_or_unparsed",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "248",
+      "length_rows": 9,
+      "modal_prediction": "36",
+      "modal_prediction_rows": 1,
+      "old_score_mean": 0.0,
+      "parsed_rows": 1,
+      "problem_id": "aime_09",
+      "row_clusters": {
+        "length_or_unparsed": 9,
+        "parsed_wrong_final": 1
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 406.3,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "all_repeats_correct",
+      "contains_expected_rows": 10,
+      "correct_delta_vs_iter3000": 10,
+      "correct_rows": 10,
+      "expected_answer": "70",
+      "length_rows": 0,
+      "modal_prediction": "70",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 1.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_10",
+      "row_clusters": {
+        "correct": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 528.5,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "104",
+      "length_rows": 0,
+      "modal_prediction": "147",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_11",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 828.1,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "240",
+      "length_rows": 0,
+      "modal_prediction": "188",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_12",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 546.2,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "588",
+      "length_rows": 0,
+      "modal_prediction": "540",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_13",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 3
+    },
+    {
+      "avg_completion_tokens": 780,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "expected_mentioned_final_wrong",
+      "contains_expected_rows": 10,
+      "correct_delta_vs_iter3000": 5,
+      "correct_rows": 5,
+      "expected_answer": "16",
+      "length_rows": 0,
+      "modal_prediction": "16",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.5,
+      "parsed_rows": 10,
+      "problem_id": "aime_14",
+      "row_clusters": {
+        "correct": 5,
+        "expected_mentioned_final_wrong": 5
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 420,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "117",
+      "length_rows": 0,
+      "modal_prediction": "118",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_15",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 541.4,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "279",
+      "length_rows": 0,
+      "modal_prediction": "1985",
+      "modal_prediction_rows": 4,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_16",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 4
+    },
+    {
+      "avg_completion_tokens": 6114.2,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "length_or_unparsed",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "504",
+      "length_rows": 7,
+      "modal_prediction": "306",
+      "modal_prediction_rows": 3,
+      "old_score_mean": 1.0,
+      "parsed_rows": 3,
+      "problem_id": "aime_17",
+      "row_clusters": {
+        "length_or_unparsed": 7,
+        "parsed_wrong_final": 3
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1007.9,
+      "baseline_iter3000_correct_rows": 10,
+      "cluster": "all_repeats_correct",
+      "contains_expected_rows": 10,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 10,
+      "expected_answer": "62",
+      "length_rows": 0,
+      "modal_prediction": "62",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_18",
+      "row_clusters": {
+        "correct": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 376.3,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "821",
+      "length_rows": 0,
+      "modal_prediction": "2",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_19",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 414,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "81",
+      "length_rows": 0,
+      "modal_prediction": "114",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_20",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 539.9,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "77",
+      "length_rows": 0,
+      "modal_prediction": "m+n",
+      "modal_prediction_rows": 6,
+      "old_score_mean": 0.5,
+      "parsed_rows": 10,
+      "problem_id": "aime_21",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "algebra",
+      "unique_predictions": 5
+    },
+    {
+      "avg_completion_tokens": 518.5,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "259",
+      "length_rows": 0,
+      "modal_prediction": "53",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_22",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 438,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "510",
+      "length_rows": 0,
+      "modal_prediction": "125",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_23",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 868.4,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "expected_mentioned_final_wrong",
+      "contains_expected_rows": 10,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "60",
+      "length_rows": 0,
+      "modal_prediction": "94",
+      "modal_prediction_rows": 4,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_24",
+      "row_clusters": {
+        "expected_mentioned_final_wrong": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 4
+    },
+    {
+      "avg_completion_tokens": 469.9,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "735",
+      "length_rows": 0,
+      "modal_prediction": "123",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_25",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 2161.4,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "length_or_unparsed",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "468",
+      "length_rows": 2,
+      "modal_prediction": "120",
+      "modal_prediction_rows": 6,
+      "old_score_mean": 1.0,
+      "parsed_rows": 8,
+      "problem_id": "aime_26",
+      "row_clusters": {
+        "length_or_unparsed": 2,
+        "parsed_wrong_final": 8
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 549,
+      "baseline_iter3000_correct_rows": 10,
+      "cluster": "mixed_or_variable_wrong",
+      "contains_expected_rows": 1,
+      "correct_delta_vs_iter3000": -9,
+      "correct_rows": 1,
+      "expected_answer": "49",
+      "length_rows": 0,
+      "modal_prediction": "\\boxed{12}",
+      "modal_prediction_rows": 9,
+      "old_score_mean": 1.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_27",
+      "row_clusters": {
+        "correct": 1,
+        "multi_boxed_wrong_final": 9
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 295.2,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "82",
+      "length_rows": 0,
+      "modal_prediction": "\\]",
+      "modal_prediction_rows": 6,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_28",
+      "row_clusters": {
+        "multi_boxed_wrong_final": 6,
+        "parsed_wrong_final": 4
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 752,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "106",
+      "length_rows": 0,
+      "modal_prediction": "353",
+      "modal_prediction_rows": 10,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_29",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "number_theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 483.5,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "336^\\circ",
+      "length_rows": 0,
+      "modal_prediction": "816^\\circ",
+      "modal_prediction_rows": 5,
+      "old_score_mean": 0.0,
+      "parsed_rows": 10,
+      "problem_id": "aime_30",
+      "row_clusters": {
+        "parsed_wrong_final": 10
+      },
+      "rows": 10,
+      "task": "aime25",
+      "topic": "geometry",
+      "unique_predictions": 2
+    },
+    {
+      "avg_completion_tokens": 1114,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "103",
+      "length_rows": 0,
+      "modal_prediction": "10000",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_01",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Number Theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1249,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "3375",
+      "length_rows": 0,
+      "modal_prediction": "375",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_02",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Number Theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1082,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{1}{576}",
+      "length_rows": 0,
+      "modal_prediction": "2^{11}\\cdot3^{10}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_03",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 762,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "-984",
+      "length_rows": 0,
+      "modal_prediction": "-1000",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_04",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 593,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "890",
+      "length_rows": 0,
+      "modal_prediction": "9000",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_05",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 726,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{1311}{2017}",
+      "length_rows": 0,
+      "modal_prediction": "\\frac{2017}{2025!}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_06",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Number Theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1208,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{9 \\sqrt{23}}{23}",
+      "length_rows": 0,
+      "modal_prediction": "\\frac{1}{\\sqrt{2}}+\\frac{1}{\\sqrt{3}}+\\frac{1}{\\sqrt{6}}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_07",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 506,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "1-\\frac{2}{\\pi}",
+      "length_rows": 0,
+      "modal_prediction": "0",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_08",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1145,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "1037",
+      "length_rows": 0,
+      "modal_prediction": "0",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_09",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra,Number Theory",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 578,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{-1+\\sqrt{17}}{2}, \\frac{-1-\\sqrt{17}}{2}",
+      "length_rows": 0,
+      "modal_prediction": "3,-2",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_10",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Algebra",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 455,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "56",
+      "length_rows": 0,
+      "modal_prediction": "36",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_11",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1012,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "29",
+      "length_rows": 0,
+      "modal_prediction": "5",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_12",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 591,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "105",
+      "length_rows": 0,
+      "modal_prediction": "715",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_13",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 513,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "2304",
+      "length_rows": 0,
+      "modal_prediction": "5",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_14",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 662,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "200",
+      "length_rows": 0,
+      "modal_prediction": "220",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_15",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 718,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "6300",
+      "length_rows": 0,
+      "modal_prediction": "100",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_16",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 337,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "2^{25} \\cdot 26!",
+      "length_rows": 0,
+      "modal_prediction": "26!",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_17",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 537,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{2025}{101}",
+      "length_rows": 0,
+      "modal_prediction": "201",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_18",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 429,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{4}{9}",
+      "length_rows": 0,
+      "modal_prediction": "\\frac{1}{2}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_19",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics,Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 515,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{448}{3}",
+      "length_rows": 0,
+      "modal_prediction": "1015",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_20",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Combinatorics",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 473,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "26",
+      "length_rows": 0,
+      "modal_prediction": "15",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_21",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 387,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "63",
+      "length_rows": 0,
+      "modal_prediction": "41",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_22",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 921,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "8\\sqrt{10}",
+      "length_rows": 0,
+      "modal_prediction": "8\\sqrt{6}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_23",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 462,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "expected_mentioned_final_wrong",
+      "contains_expected_rows": 1,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "20",
+      "length_rows": 0,
+      "modal_prediction": "96",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_24",
+      "row_clusters": {
+        "expected_mentioned_final_wrong": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 1105,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\sqrt{23}-2 \\sqrt{3}",
+      "length_rows": 0,
+      "modal_prediction": "\\frac{18+\\sqrt{347}}{5}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_25",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 625,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "9\\sqrt{15}",
+      "length_rows": 0,
+      "modal_prediction": "88",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_26",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 575,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\frac{7}{18}",
+      "length_rows": 0,
+      "modal_prediction": "\\frac{1}{3}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_27",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 926,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\sqrt{6}",
+      "length_rows": 0,
+      "modal_prediction": "5",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_28",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 974,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "14+4\\sqrt{37}",
+      "length_rows": 0,
+      "modal_prediction": "2\\sqrt{394}",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_29",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    },
+    {
+      "avg_completion_tokens": 411,
+      "baseline_iter3000_correct_rows": 0,
+      "cluster": "deterministic_wrong_final",
+      "contains_expected_rows": 0,
+      "correct_delta_vs_iter3000": 0,
+      "correct_rows": 0,
+      "expected_answer": "\\sqrt{\\frac{95}{24}}",
+      "length_rows": 0,
+      "modal_prediction": "Notenoughinformation",
+      "modal_prediction_rows": 1,
+      "old_score_mean": null,
+      "parsed_rows": 1,
+      "problem_id": "hmmt_30",
+      "row_clusters": {
+        "parsed_wrong_final": 1
+      },
+      "rows": 1,
+      "task": "hmmt",
+      "topic": "Geometry",
+      "unique_predictions": 1
+    }
+  ],
+  "task_summary": {
+    "aime25": {
+      "accuracy": 0.08666666666666667,
+      "avg_completion_tokens": 1054.5566666666666,
+      "contains_expected_rows": 41,
+      "correct_rows": 26,
+      "finish_reason_counts": {
+        "length": 18,
+        "stop": 282
+      },
+      "parsed_rate": 0.94,
+      "parsed_rows": 282,
+      "rows": 300,
+      "status_counts": {
+        "ok": 300
+      }
+    },
+    "hmmt": {
+      "accuracy": 0.0,
+      "avg_completion_tokens": 719.7,
+      "contains_expected_rows": 1,
+      "correct_rows": 0,
+      "finish_reason_counts": {
+        "stop": 30
+      },
+      "parsed_rate": 1.0,
+      "parsed_rows": 30,
+      "rows": 30,
+      "status_counts": {
+        "ok": 30
+      }
+    }
+  },
+  "topic_counts": {
+    "aime25": {
+      "algebra": 2,
+      "geometry": 13,
+      "number_theory": 15
+    },
+    "hmmt": {
+      "Algebra": 6,
+      "Algebra,Number Theory": 1,
+      "Combinatorics": 9,
+      "Combinatorics,Geometry": 1,
+      "Geometry": 10,
+      "Number Theory": 3
+    }
+  },
+  "training_data_scan": {
+    "existing_manifest_math_counts": {
+      "bucket_counts": {
+        "final_answer_aux": 29,
+        "format_repair": 321971,
+        "verified_full_solution": 544967
+      },
+      "buckets": {
+        "final_answer_aux": {
+          "blend_weight": 1.0,
+          "in_training_blend": true,
+          "path": "/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/m1_agentic_sft/agentic_sft_v0_math_final_answer_aux_train.jsonl",
+          "rows": 6,
+          "sample_fraction": 0.2,
+          "source_rows": 29
+        },
+        "format_repair": {
+          "blend_weight": 1.0,
+          "in_training_blend": true,
+          "path": "/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/m1_agentic_sft/agentic_sft_v0_math_format_repair_train.jsonl",
+          "rows": 16099,
+          "sample_fraction": 0.05,
+          "source_rows": 321971
+        },
+        "heldout_eval": {
+          "blend_weight": 0.0,
+          "in_training_blend": false,
+          "path": "/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/m1_agentic_sft/agentic_sft_v0_math_heldout_eval.jsonl",
+          "rows": 1419,
+          "sample_fraction": 0.0,
+          "source_rows": 1419
+        },
+        "verified_full_solution": {
+          "blend_weight": 1.0,
+          "in_training_blend": true,
+          "path": "/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/m1_agentic_sft/agentic_sft_v0_math_verified_full_solution_train.jsonl",
+          "rows": 544967,
+          "sample_fraction": 1.0,
+          "source_rows": 544967
+        }
+      },
+      "description": "Separates math rows into verified full-solution replay, low-weight final-answer auxiliary rows, low-weight format-repair rows, and held-out eval rows.",
+      "sampled_bucket_counts": {
+        "final_answer_aux": 6,
+        "format_repair": 16099,
+        "verified_full_solution": 544967
+      },
+      "train_rows_excluded_as_heldout": 0
+    },
+    "format_repair_rows_read": 16099,
+    "format_repair_unparseable_final_segment_count": 0,
+    "hard_verified_candidate_rate": 0.3599630803333046,
+    "hard_verified_candidate_rows": 196168,
+    "hard_verified_reject_counts": {
+      "not_answer_seeking": 180100,
+      "proof_like_prompt": 17128,
+      "short_prompt": 27115,
+      "short_solution": 97696,
+      "unknown_topic": 26760
+    },
+    "hard_verified_topic_counts": {
+      "algebra": 56705,
+      "combinatorics_probability": 29255,
+      "geometry": 61663,
+      "number_theory": 48545
+    },
+    "verified_full_solution_rows_read": 544967
+  }
+}

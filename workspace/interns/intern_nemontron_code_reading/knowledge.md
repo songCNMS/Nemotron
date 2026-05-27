@@ -1,6 +1,6 @@
 # intern_nemontron_code_reading - personal knowledge base
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=97 -->
 
 ---
 
@@ -17,6 +17,10 @@ On 2026-05-20 in this workspace, `/root/nemotron_session5_venv/bin/python` no lo
 ### Task066 NemTron Qwen SFT run
 
 NemTron host `lg-cmc-b7r202-e09u26-h200-000459` has 8x H200 and `/root/nemotron_session5_venv` with `torch`/`megatron.bridge`, but no `cosmos_xenna`. For task066 Session 2, sync code/artifacts via `tar | ssh tar` because GitHub 443 was unreachable from NemTron. Final Qwen3 4B M1 Agentic SFT smoke used GPUs 0/1, TP=2, 13 iterations, final validation loss `3.309570E-01`, PPL `1.392300E+00`, and saved checkpoint `/work-agents/intern_nemontron_code_reading/outputs/task066_qwen_sft/checkpoints/iter_0000013`.
+
+### Task071 Qwen hard-math SFT workflow
+
+For Qwen3-30B-A3B hard-math SFT, use tokenizer-native Qwen chat packing with visible reasoning in assistant `content`, not hidden `reasoning_content`. The stable scale-up path is local M0/M1 prep and packing in `/work-agents/.venv`, sync packed artifacts to NemTron, train with `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, then export the Megatron checkpoint to HF and run corrected eval with SGLang `context_length=16384`. Promotion gates should use full MMLU-Pro, AIME25 with `max_tokens=8192`, and HMMT with `max_tokens=8192`; parsed rate alone is not enough for hard-math promotion.
 
 ### Live HF checks in PR tests
 

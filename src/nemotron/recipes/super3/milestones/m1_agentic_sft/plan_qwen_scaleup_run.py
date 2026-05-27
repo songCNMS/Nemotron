@@ -34,6 +34,7 @@ DEFAULT_NEMTRON_VENV = Path("/root/nemotron_session5_venv")
 DEFAULT_REMOTE_ROOT = Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup")
 DEFAULT_RUN_NAME = "qwen_m1_agentic_sft_scaleup"
 DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py"
+QWEN30B_A3B_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
 
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 QWEN_CHECKPOINT_ENV_VAR = "SUPER3_M1_PRETRAINED_CHECKPOINT"
@@ -44,13 +45,43 @@ QWEN_CHAT_TEMPLATE_KWARGS: dict[str, Any] = {
 }
 MATH_SUPERVISION_STRATEGY_V1 = "final_answer_sidecar_v1"
 MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
+MATH_SUPERVISION_STRATEGY_V4 = "hard_math_recovery_v4"
+MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
+MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
+MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
+MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
+    MATH_SUPERVISION_STRATEGY_V4,
+    MATH_SUPERVISION_STRATEGY_V5,
+    MATH_SUPERVISION_STRATEGY_V6,
+    MATH_SUPERVISION_STRATEGY_V7,
+    MATH_SUPERVISION_STRATEGY_V8,
 )
 MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
 MATH_V3_FORMAT_REPAIR_WEIGHT = 0.05
+MATH_V4_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V4_VERIFIED_FULL_SOLUTION_WEIGHT = 0.25
+MATH_V4_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V4_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 0.6
+MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V5_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V5_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 0.6
+MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT = 0.25
+MATH_V6_FINAL_ANSWER_AUX_WEIGHT = 0.05
+MATH_V6_FORMAT_REPAIR_WEIGHT = 0.03
+MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V7_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V7_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V8_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -79,6 +110,17 @@ def _env_or_arg(value: str | None, env_var: str, flag: str) -> str:
     if not resolved:
         raise ValueError(f"{flag} is required, or set {env_var}")
     return resolved
+
+
+def resolve_train_entrypoint(explicit: str | None, qwen_hf_model: str) -> str:
+    """Pick the Qwen train entrypoint that matches the model family."""
+
+    if explicit:
+        return explicit
+    normalized_model = qwen_hf_model.lower()
+    if "30b-a3b" in normalized_model:
+        return QWEN30B_A3B_TRAIN_ENTRYPOINT
+    return DEFAULT_TRAIN_ENTRYPOINT
 
 
 def _write_executable(path: Path, content: str) -> None:
@@ -138,6 +180,7 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
     qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
+    train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
     pretrained_checkpoint = _env_or_arg(
         args.pretrained_checkpoint,
         QWEN_CHECKPOINT_ENV_VAR,
@@ -173,6 +216,43 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
                 "final_answer_aux": args.math_v3_final_answer_aux_weight,
                 "format_repair": args.math_v3_format_repair_weight,
             },
+            "math_v4_weights": {
+                "hard_verified_full_solution": args.math_v4_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v4_verified_full_solution_weight,
+                "final_answer_aux": args.math_v4_final_answer_aux_weight,
+                "format_repair": args.math_v4_format_repair_weight,
+            },
+            "math_v5_weights": {
+                "hard_verified_full_solution": args.math_v5_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v5_verified_full_solution_weight,
+                "final_answer_aux": args.math_v5_final_answer_aux_weight,
+                "format_repair": args.math_v5_format_repair_weight,
+            },
+            "math_v6_weights": {
+                "hard_verified_full_solution": args.math_v6_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v6_verified_full_solution_weight,
+                "final_answer_aux": args.math_v6_final_answer_aux_weight,
+                "format_repair": args.math_v6_format_repair_weight,
+            },
+            "math_v7_weights": {
+                "hard_verified_full_solution": args.math_v7_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v7_verified_full_solution_weight,
+                "final_answer_aux": args.math_v7_final_answer_aux_weight,
+                "format_repair": args.math_v7_format_repair_weight,
+            },
+            "math_v8_weights": {
+                "hard_verified_full_solution": args.math_v8_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v8_verified_full_solution_weight,
+                "final_answer_aux": args.math_v8_final_answer_aux_weight,
+                "format_repair": args.math_v8_format_repair_weight,
+            },
+            "math_sidecar_m0_input_dir": (
+                str(args.math_sidecar_m0_input_dir)
+                if args.math_sidecar_m0_input_dir is not None
+                else None
+            ),
+            "math_sidecar_max_records_per_env": args.math_sidecar_max_records_per_env,
+            "math_sidecar_max_val_shadow_per_env": args.math_sidecar_max_val_shadow_per_env,
         },
         "packing": {
             "tokenizer_model": qwen_hf_model,
@@ -186,7 +266,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         },
         "training": {
             "pretrained_checkpoint": pretrained_checkpoint,
-            "train_entrypoint": args.train_entrypoint,
+            "train_entrypoint": train_entrypoint,
             "epochs": args.epochs,
             "global_batch_size": args.global_batch_size,
             "micro_batch_size": args.micro_batch_size,
@@ -259,6 +339,81 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f" \\\n  --math-v3-format-repair-weight "
             f"{float(math_v3_weights['format_repair'])}"
         )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V4:
+        math_v4_weights = data["math_v4_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v4-hard-verified-full-solution-weight "
+            f"{float(math_v4_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v4-verified-full-solution-weight "
+            f"{float(math_v4_weights['verified_full_solution'])}"
+            f" \\\n  --math-v4-final-answer-aux-weight "
+            f"{float(math_v4_weights['final_answer_aux'])}"
+            f" \\\n  --math-v4-format-repair-weight "
+            f"{float(math_v4_weights['format_repair'])}"
+        )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V5:
+        math_v5_weights = data["math_v5_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v5-hard-verified-full-solution-weight "
+            f"{float(math_v5_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v5-verified-full-solution-weight "
+            f"{float(math_v5_weights['verified_full_solution'])}"
+            f" \\\n  --math-v5-final-answer-aux-weight "
+            f"{float(math_v5_weights['final_answer_aux'])}"
+            f" \\\n  --math-v5-format-repair-weight "
+            f"{float(math_v5_weights['format_repair'])}"
+        )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V6:
+        math_v6_weights = data["math_v6_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v6-hard-verified-full-solution-weight "
+            f"{float(math_v6_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v6-verified-full-solution-weight "
+            f"{float(math_v6_weights['verified_full_solution'])}"
+            f" \\\n  --math-v6-final-answer-aux-weight "
+            f"{float(math_v6_weights['final_answer_aux'])}"
+            f" \\\n  --math-v6-format-repair-weight "
+            f"{float(math_v6_weights['format_repair'])}"
+        )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V7:
+        math_v7_weights = data["math_v7_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v7-hard-verified-full-solution-weight "
+            f"{float(math_v7_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v7-verified-full-solution-weight "
+            f"{float(math_v7_weights['verified_full_solution'])}"
+            f" \\\n  --math-v7-final-answer-aux-weight "
+            f"{float(math_v7_weights['final_answer_aux'])}"
+            f" \\\n  --math-v7-format-repair-weight "
+            f"{float(math_v7_weights['format_repair'])}"
+        )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V8:
+        math_v8_weights = data["math_v8_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v8-hard-verified-full-solution-weight "
+            f"{float(math_v8_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v8-verified-full-solution-weight "
+            f"{float(math_v8_weights['verified_full_solution'])}"
+            f" \\\n  --math-v8-final-answer-aux-weight "
+            f"{float(math_v8_weights['final_answer_aux'])}"
+            f" \\\n  --math-v8-format-repair-weight "
+            f"{float(math_v8_weights['format_repair'])}"
+        )
+    if data.get("math_sidecar_m0_input_dir"):
+        math_supervision_flag_lines += (
+            f" \\\n  --math-sidecar-m0-input-dir "
+            f"{_q(data['math_sidecar_m0_input_dir'])}"
+        )
+        if data.get("math_sidecar_max_records_per_env") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --math-sidecar-max-records-per-env "
+                f"{int(data['math_sidecar_max_records_per_env'])}"
+            )
+        if data.get("math_sidecar_max_val_shadow_per_env") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --math-sidecar-max-val-shadow-per-env "
+                f"{int(data['math_sidecar_max_val_shadow_per_env'])}"
+            )
     optional_training_flags = _optional_training_flags(training)
     optional_training_flag_lines = (
         "".join(f" \\\n  {_q(flag)}" for flag in optional_training_flags)
@@ -491,6 +646,13 @@ def render_report(manifest: JsonDict) -> str:
             f"- M0 datasets: {len(data['m0_dataset_ids'])} agentic SFT slices",
             f"- Rows per dataset: {row_scope}",
             f"- Math supervision strategy: `{data['math_supervision_strategy']}`",
+            f"- Math v3 weights: `{data['math_v3_weights']}`",
+            f"- Math v4 weights: `{data['math_v4_weights']}`",
+            f"- Math v5 weights: `{data['math_v5_weights']}`",
+            f"- Math v6 weights: `{data['math_v6_weights']}`",
+            f"- Math v7 weights: `{data['math_v7_weights']}`",
+            f"- Math v8 weights: `{data['math_v8_weights']}`",
+            f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
                 f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
@@ -549,7 +711,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--run-name", default=DEFAULT_RUN_NAME)
     parser.add_argument("--qwen-hf-model", default=None)
     parser.add_argument("--pretrained-checkpoint", default=None)
-    parser.add_argument("--train-entrypoint", default=DEFAULT_TRAIN_ENTRYPOINT)
+    parser.add_argument(
+        "--train-entrypoint",
+        default=None,
+        help=(
+            "Training entrypoint script. Defaults to the 30B-A3B MoE entrypoint "
+            "when --qwen-hf-model contains 30B-A3B, otherwise the 4B Qwen entrypoint."
+        ),
+    )
     parser.add_argument("--max-train-per-dataset", type=int, default=100)
     parser.add_argument("--max-val-per-dataset", type=int, default=25)
     parser.add_argument(
@@ -580,6 +749,147 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V3_FORMAT_REPAIR_WEIGHT,
         help="Blend weight for v3 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v4-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V4_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v4 AIME/HMMT-style verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v4-verified-full-solution-weight",
+        type=float,
+        default=MATH_V4_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v4 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v4-final-answer-aux-weight",
+        type=float,
+        default=MATH_V4_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v4 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v4-format-repair-weight",
+        type=float,
+        default=MATH_V4_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v4 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v5-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v5 high-confidence verified full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v5-verified-full-solution-weight",
+        type=float,
+        default=MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v5 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v5-final-answer-aux-weight",
+        type=float,
+        default=MATH_V5_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v5 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v5-format-repair-weight",
+        type=float,
+        default=MATH_V5_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v5 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v6-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v6 high-confidence verified full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v6-verified-full-solution-weight",
+        type=float,
+        default=MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v6 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v6-final-answer-aux-weight",
+        type=float,
+        default=MATH_V6_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v6 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v6-format-repair-weight",
+        type=float,
+        default=MATH_V6_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v6 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v7-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v7 long verified full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v7-verified-full-solution-weight",
+        type=float,
+        default=MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v7 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v7-final-answer-aux-weight",
+        type=float,
+        default=MATH_V7_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v7 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v7-format-repair-weight",
+        type=float,
+        default=MATH_V7_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v7 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-v8-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v8 clean final full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v8-verified-full-solution-weight",
+        type=float,
+        default=MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v8 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v8-final-answer-aux-weight",
+        type=float,
+        default=MATH_V8_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v8 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v8-format-repair-weight",
+        type=float,
+        default=MATH_V8_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v8 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-sidecar-m0-input-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional M0 cache used only for math supervision sidecar buckets. "
+            "Base rows still use the planner-generated M0 cache."
+        ),
+    )
+    parser.add_argument(
+        "--math-sidecar-max-records-per-env",
+        type=int,
+        default=None,
+        help="Optional train cap for math sidecar source environments.",
+    )
+    parser.add_argument(
+        "--math-sidecar-max-val-shadow-per-env",
+        type=int,
+        default=None,
+        help="Optional val cap for math sidecar source environments.",
     )
     parser.add_argument("--num-shards", type=int, default=32)
     parser.add_argument("--pack-size", type=int, default=4096)

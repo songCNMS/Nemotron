@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Session 1
 
@@ -674,3 +674,388 @@
 - 重启远端训练后成功越过失败点并进入主循环；日志显示 checkpoint 从 original Qwen3-30B-A3B Megatron checkpoint 加载成功，scheduler `lr_decay_iters=2200`、`train_iters=2200`、GBS `8`。
 - 早期健康检查到 iter `120/2200`：iter `80/90/100/110/120` 的 lm loss 分别约 `0.8492/0.7925/0.7125/0.6409/0.5917`，learning rate warmup 完成并处于约 `5.0e-7`，skipped/nan 均为 `0/0`，8 张 GPU 显存约 `81-89GB` 且在训练。
 - 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_stage1_sft_train_bridge.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `77 passed, 2 skipped`；`ruff check src/nemotron/recipes/super3/stage1_sft/train.py tests/recipes/super3/test_stage1_sft_train_bridge.py` 通过；`py_compile` 和 `git diff --check` 通过。
+
+## Session 64
+
+- 按“执行下一步”继续监控 NemTron tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3`；训练保持 active，8 张 H200 均在使用。
+- 同步远端 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/logs/train.log` 到本地 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/metrics/train.log`。
+- 使用 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 刷新 metrics artifacts：`metric_curves.png`、`metric_curves_session64_iter1500.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 训练已过 iter `500`、`1000`、`1500` eval/save 点；checkpoint marker 已更新到 `1500`，远端 checkpoints 目录包含 `iter_0000500`、`iter_0001000`、`iter_001500`，总量约 `798G`。
+- Validation 连续改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`；当前 best validation 为 iter `1500`。
+- 最新解析 summary 到 train iter `1500/2200`，progress `68.18%`，latest train lm loss `0.3878813`，recent-50 train loss mean `0.393932076`，learning rate `2.0e-7`，skipped/nan 仍为 `0/0`。
+- 训练健康判断：无 traceback、OOM、UnpicklingError 或 ChildFailedError；validation 维持改善趋势，可以继续监控到 iter `2000` eval/save 点和 final iter `2200`。
+
+## Session 65
+
+- 按用户要求将 metric figure 返回到当前项目聊天；先同步远端最新 train log 并刷新 v3 metric 曲线到 iter `2000/2200`。
+- 最新 metrics artifact 为 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_math_reasoning_replay_v3/metrics/metric_curves_session65_iter2000.png`，同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- Validation 继续改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`，iter `2000` `0.4093007/1.505765`；current best 为 iter `2000`。
+- 最新 summary 解析到 train iter `2020/2200`，progress `91.82%`，latest train lm loss `0.3772499`，recent-50 train loss mean `0.387682134`，skipped/nan `0/0`。
+- 图片发送成功：image message id `om_x100b6e6587201c98b36c4ce7a5d19d6`，image key `img_v3_02122_28316bfd-300d-49b1-862a-ce422480d75g`；说明文本 message id `om_x100b6e6584c4e4b0b3e7d37eb565f8b`。
+- 结束前远端训练仍 active，checkpoint marker 已到 `2000`，tmux session `task067_task071_qwen30b_a3b_math_reasoning_replay_v3` 仍存在，无 traceback、OOM、UnpicklingError 或 ChildFailedError。
+
+## Session 66
+
+- 按“执行下一步”检查 NemTron v3 30B run，确认 tmux session 已退出、训练完成到 iter `2200/2200`，8 张 H200 已释放。
+- 同步最终远端 train log 并刷新 metrics artifacts：`metric_curves.png`、`metric_curves_session66_final_iter2200.png`、`train_loss_points.csv`、`validation_points.csv`、`health_summary.json`。
+- 最终 validation 继续单调改善：iter `500` loss/PPL `0.4362881/1.546954`，iter `1000` `0.4158402/1.515644`，iter `1500` `0.4110765/1.508441`，iter `2000` `0.4093007/1.505765`，iter `2200` `0.4087007/1.504861`。
+- 最终 summary：latest train lm loss `0.3919607`，recent-50 train loss mean `0.386122228`，learning rate `1e-7`，max skipped/nan `0/0`，validation trend `latest-validation-improved-vs-previous`。
+- Checkpoint state：marker `2200`；remote checkpoint directories include `iter_0000500`、`iter_0001000`、`iter_0001500`、`iter_0002000`、`iter_0002200`；each checkpoint is about `399G` and total checkpoint directory is about `2.0T`。
+- Added final report `qwen_v3_final_metrics_session66.md` with metric table, artifact paths, and candidate decision.
+- Candidate decision：select `iter_0002200` as primary HF export and corrected mini-eval candidate because it has the best observed validation loss and the run ended cleanly.
+
+## Session 67
+
+- 按“执行下一步”导出并评测 v3 best checkpoint `iter_0002200`；远端 run root 为 `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 `CUDA_VISIBLE_DEVICES=5` 上将 `checkpoints/iter_0002200` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200`；导出大小约 `57G`，包含 `16` 个 safetensors shards，日志出现 `EXPORT_DONE`。
+- 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task071_sft_strategy_runs/task071_qwen30b_a3b_math_reasoning_replay_v3/hf_export_iter_0002200/task071_export_manifest.json`；HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
+- 启动 SGLang endpoint `task071_qwen_v3_iter2200_sglang_full_eval`：`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`，model id `task071-qwen3-30b-a3b-agentic-sft-math-reasoning-replay-v3-iter0002200-hf`；`/v1/models` 返回 `max_model_len=16384`，chat smoke 返回 exact `ready`。
+- Corrected MMLU-Pro full 完成：`12032/12032` rows，`status=ok`、parsed rate `1.0`、finish `stop=12032`、accuracy `0.5525265957446809`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v3_iter2200_session67/mmlu_corrected_full`。
+- Corrected math full 完成：AIME25 `300` rows，accuracy `0.08666666666666667`、parsed rate `0.94`、finish `stop=282/length=18`；HMMT `30` rows，exact-normalized correct percent `0.0`、parsed rate `1.0`、finish `stop=30`；输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v3_iter2200_session67/math_corrected_full`。
+- Same-protocol comparison vs Session 47 original：V3 MMLU-Pro delta `-0.009474734042553168`，AIME25 delta `-0.44666666666666666`，HMMT exact-percent delta `-43.333333333333336`；相对 iter3000 qwen-chat，MMLU-Pro 提升 `+0.018450797872340496`，AIME25 提升 `+0.020000000000000004`，HMMT 持平 `0.0`。
+- Gate 结论：MMLU-Pro 达到 Session 60 gate，AIME/HMMT parser coverage 达标，但 AIME25 与 HMMT correctness 仍未达到 math promotion gate；问题主要是 hard-math reasoning correctness，不是 final-answer extraction。
+- 资源清理：评测后停止 SGLang tmux session 和本地 SSH tunnel，确认 NemTron port `30000` 清空，8 张 H200 回到 idle。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v3_iter2200_corrected_eval_session67.md`，记录 export artifact、serving 参数、full corrected eval metrics、same-protocol comparison 和 gate 结论。
+
+## Session 68
+
+- 按用户要求分析 V3 hard-math failure clusters，并新增脚本 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/analyze_qwen_v3_hard_math_failures.py`，输入为 Session 67 v3 `iter_0002200` corrected math results、Session 59 iter3000 comparison、AIME/HMMT source cache和 v3 M1 data artifact。
+- 生成分析产物 `qwen_v3_hard_math_failure_clusters_session68.json`、`qwen_v3_hard_math_failure_analysis_session68.md` 和 `qwen_v4_hard_math_recovery_recipe_session68.json`；V3 AIME25 为 `26/300=0.0866667`、parsed `0.94`，HMMT 为 `0/30`、parsed `1.0`。
+- Failure cluster 结论：AIME25 中 `deterministic_wrong_final` 覆盖 `17` 个 problem groups / `170` rows，`mixed_or_variable_wrong` 覆盖 `6/60`，`length_or_unparsed` 覆盖 `3/30`；HMMT 为 `29/29` deterministic wrong final 加 `1/1` expected-mentioned-final-wrong。
+- 训练数据诊断：v3 verified full-solution sidecar 读取 `544967` rows，其中 heuristic AIME/HMMT-style hard verified candidates 为 `196168` rows（`35.9963%`），topic 分布为 algebra `56705`、combinatorics/probability `29255`、geometry `61663`、number theory `48545`。
+- 在 `prepare_m1_agentic_sft.py` 新增 `hard_math_recovery_v4` strategy：按 prompt/solution 长度、answer-seeking prompt、proof-like 排除和 topic keywords 从 verified full-solution rows 中分出 `hard_verified_full_solution` bucket；默认 hard sidecar fraction `1.0`、broad verified fraction `0.25`、final-answer-aux `0.0`、format-repair `0.0`。
+- V4 数据准备保留 base agentic train JSONL 以维持 search/coding/tool/general coverage，训练 blend 只加入 hard verified full-solution 和抽样后的 broad verified full-solution sidecar；heldout eval 不入训练 blend，manifest/report/lineage 均记录 bucket rows、source rows、sample fraction 和 hard filter。
+- 在 `plan_qwen_scaleup_run.py` 接入 `--math-supervision-strategy hard_math_recovery_v4` 和 v4 四个采样参数；生成的 local data prep script 会把 v4 strategy 与权重传给 `prepare_m1_agentic_sft.py`。
+- 新增单测覆盖 V4 hard-row classifier、focused bucket 写出、blend 数据集选择、final-answer/format-repair 禁用，以及 scale-up planner 的 v4 script flags。
+- 生成可执行 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4`：uncapped M0、Qwen tokenizer template、original Qwen3-30B-A3B checkpoint、0.2 epoch、GBS `8`、8 GPUs、lr `3e-7`、min lr `8e-8`、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
+- 验证：`python -m py_compile` 通过；`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py` -> `79 passed, 1 skipped`；`/work-agents/.venv/bin/ruff check ...` 通过；`git diff --check` 通过；禁用词扫描无命中。
+
+## Session 69
+
+- 按“continue the next step”执行 V4 hard-math recovery run path：本地运行 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/run_local_data_prep.sh`，完成 uncapped M0、M1 V4 data prep、Qwen tokenizer packing 和训练计划生成。
+- M0 uncapped 产出 11 个 agentic slices；manifest 对 Hermes 无效行记录已知错误并继续使用有效行，其中 NuminaMath competition train rows `859494`、val rows `100`。
+- M1 V4 artifact 产出 `983397` train rows、`11354` val-shadow rows、`0` M1 errors；math strategy 为 `hard_math_recovery_v4`。
+- V4 bucket counts：hard verified full-solution source/written `184551/184551`，broad verified source/written `360416/90104`，final-answer aux `29/0`，format repair `321971/0`，heldout eval `1419/1419`。
+- Qwen packed artifact 位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/packed_qwen/splits`，metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`num_shards=32`、`total_sequences=1257879`、`total_tokens=822043015`。
+- 训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/training_plan/task071_qwen30b_a3b_hard_math_recovery_v4/training_manifest.json`，packed train rows `74922`、valid rows `287`、GBS `8`、0.2 epoch 对应 `train_iters=1874`。
+- 本地 planning 首次因 pretrained Megatron checkpoint path 只在 NemTron 存在而失败；重新以 `--allow-missing-checkpoint` 生成 script bundle 和训练计划，远端校验证实 checkpoint 路径存在。
+- 同步 repo 和 V4 data bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`；远端校验通过：32 个 train parquet shard、1 个 valid shard、checkpoint exists、8 张 H200 启动前 idle。
+- 启动 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4`，训练命令展开为 `train.train_iters=1874`、GBS `8`、lr `3e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy` 约 `1.14G`、`valid_4096_valid.npy` 约 `4.3M`、`packed_4096_metadata.json`；训练进入主循环并运行到至少 iter `160/1874`，latest observed lm loss `0.6407578`，skipped/nan `0/0`，8 张 H200 均 active。
+
+## Session 70
+
+- 按用户要求监控 V4 hard-math recovery training 并返回最新 training metrics figure；远端 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` 仍 active。
+- 远端训练已越过首个 eval/save 点：`latest_checkpointed_iteration.txt=400`，checkpoint `iter_0000400` 保存成功，保存耗时约 `130.8s`。
+- 同步远端 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/train.log`，并运行 `plot_qwen_sft_metrics.py` 生成最新图表。
+- 最新图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session70_iter410.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 当前 summary：latest train iter `410/1874`，progress `21.88%`，latest train lm loss `0.483653`，latest lr `2.838362e-7`，recent-50 train loss mean `0.655787587804878`，max skipped/nan `0/0`。
+- 首个 validation point 为 iter `400` loss/PPL `0.4107993/1.508023`，也是当前 best validation；validation trend 为 `not-enough-validation-points`。
+- GPU 状态：8 张 H200 均 active，显存约 `81-88G`，util 正常；训练继续运行到至少 iter `410/1874`。
+
+## Session 71
+
+- 按用户要求继续监控 V4 hard-math recovery training 并返回最新 training metrics figure；远端 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` 仍 active。
+- 远端 checkpoint marker 仍为 `400`；GPU 状态显示 8 张 H200 均 active，显存约 `81-88G`，util 约 `45-95%`。
+- 同步远端 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/train.log`，重新运行 `plot_qwen_sft_metrics.py` 刷新 metrics artifacts。
+- 最新图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session71_iter560.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 当前 summary：latest train iter `560/1874`，progress `29.88%`，latest train lm loss `0.4218465`，latest lr `2.654761e-7`，latest grad norm `0.749`，recent-50 train loss mean `0.541491656`，max skipped/nan `0/0`。
+- Validation 仍只有首个 eval point：iter `400` loss/PPL `0.4107993/1.508023`，也是当前 best validation；validation trend 为 `not-enough-validation-points`，需要等待 iter `800` eval point 判断趋势。
+- 训练健康判断：当前日志未见 traceback、OOM、ChildFailedError、skipped iteration 或 NaN iteration；run 继续向 iter `800` eval/save 点推进。
+
+## Session 72
+
+- 按用户要求将 metric figure 发送给用户；先同步远端 V4 hard-math recovery train log 并刷新 metric curve。
+- 远端 tmux session `task067_task071_qwen30b_a3b_hard_math_recovery_v4` 仍 active；checkpoint marker 为 `400`，日志已到 latest train iter `640/1874`。
+- 生成并发送图表 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session72_iter640.png`，同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 当前 summary：progress `34.15%`，latest train lm loss `0.4057285`，latest lr `2.53421e-7`，latest grad norm `0.834`，recent-50 train loss mean `0.46816005`，max skipped/nan `0/0`。
+- Validation 仍只有 iter `400` point：loss/PPL `0.4107993/1.508023`，current best 同为 iter `400`，trend 为 `not-enough-validation-points`。
+- Feishu image send 成功：chat `oc_85148c845ddf7f30b7d7d7944596cccc`，image message `om_x100b6e6cee22dcb4b32b39f4c72f0ca`，image key `img_v3_02122_2a9f64bd-8a70-46ab-8bc8-35e317d14cbg`；summary text message `om_x100b6e6cefdf04a4b26dd201a6dd5c9`。
+
+## Session 73
+
+- 按“continue the next step”继续监控 V4 hard-math recovery run，发现训练已完成到 final iter `1874/1874`；远端 tmux session 已退出，8 张 H200 GPU 均空闲。
+- 同步最终 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/train.log`，刷新最终 metrics artifacts。
+- 最终图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_recovery_v4/metrics/metric_curves_session73_final_iter1870.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- Validation points：iter `400` loss/PPL `0.4107993/1.508023`，iter `800` `0.358061/1.430553`，iter `1200` `0.3588206/1.43164`，iter `1600` `0.3642109/1.439378`，final iter `1874` `0.3586905/1.431454`。
+- Best validation 为 iter `800` loss/PPL `0.358061/1.430553`；final iter `1874` 相比 iter `1600` 改善，但略高于 iter `800`。
+- Checkpoint marker 为 `1874`，checkpoint directories 包含 `iter_0000400`、`iter_0000800`、`iter_0001200`、`iter_0001600`、`iter_0001874`；`iter_0000800` 和 `iter_0001874` 均约 `399G`。
+- 训练健康总结：max skipped/nan `0/0`，latest parsed train loss at iter `1870` 为 `0.4136352`，recent-50 train loss mean `0.400038992`，最终 LR 约 `8.000276e-8`。
+- Candidate decision：选择 `iter_0000800` 作为 primary HF export/corrected eval candidate；`iter_0001874` 作为 secondary candidate，用于需要 final checkpoint 对照时评估。
+- 新增报告 `qwen_v4_final_metrics_session73.md`，记录最终 metrics、checkpoint 状态、候选决策和推荐执行命令。
+
+## Session 74
+
+- 按“continue the next step”导出并评测 V4 best-validation checkpoint `iter_0000800`；远端 run root 为 `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 `CUDA_VISIBLE_DEVICES=5` 上将 `checkpoints/iter_0000800` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4/hf_export_iter_0000800`；导出大小约 `57G`，包含 `16` 个 safetensors shards，日志出现 `EXPORT_DONE`。
+- 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_recovery_v4/hf_export_iter_0000800/task071_export_manifest.json`；HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
+- 启动 SGLang endpoint `task071_qwen_v4_iter0800_sglang_full_eval`：`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`，model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-recovery-v4-iter0000800-hf`；`/v1/models` 返回 `max_model_len=16384`，chat smoke 返回 exact `ready`。
+- Corrected mini eval 通过 live SSH tunnel 后完成：MMLU-Pro 20-per-category `280` rows accuracy `0.6321428571428571`、parsed rate `1.0`；AIME25 30 rows `0.0`、parsed rate `1.0`；HMMT 30 rows exact percent `3.3333333333333335`、parsed rate `0.9666666666666667`。
+- Corrected MMLU-Pro full 完成：`12032/12032` rows 全部 `status=ok`、parsed rate `1.0`、finish `stop=12032`、accuracy `0.5587599734042553`，输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v4_iter0800_session74/mmlu_corrected_full`。
+- Corrected math full 完成：AIME25 `300` rows accuracy `0.08333333333333333`、parsed rate `0.9466666666666667`、finish `stop=284/length=16`；HMMT `30` rows exact-normalized correct percent `3.3333333333333335`、parsed rate `0.9666666666666667`、finish `stop=29/length=1`；输出在 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v4_iter0800_session74/math_corrected_full`。
+- Same-protocol comparison vs Session 47 original：V4 deltas are MMLU-Pro `-0.003241356382978733`，AIME25 `-0.45`，HMMT exact percent `-40.0`。
+- Same-protocol comparison vs V3 iter2200：V4 deltas are MMLU-Pro `+0.006233377659574435`，AIME25 `-0.003333333333333341`，HMMT exact percent `+3.3333333333333335`。
+- Gate 结论：MMLU-Pro passes the `>=0.55` gate and is close to original; AIME25 remains below the `>=0.20` hard-math gate; HMMT improves from V3 zero but remains below the `>=10.0` gate。
+- 资源清理：评测完成后停止 SGLang tmux session 和 local SSH tunnel，确认 NemTron port `30000` clear，8 张 H200 GPU 均 idle。
+- 新增报告 `qwen_v4_iter0800_corrected_eval_session74.md`，记录 export artifact、serving 参数、mini/full corrected eval metrics、comparison 和 gate 结论。
+
+## Session 75
+
+- 按用户要求重新审计 train/eval chat template 与 M1 data pipeline，重点检查 Qwen tokenizer-native rendering、packed metadata、V4 JSONL reasoning fields、SGLang eval serving path 和 existing eval/RL config contract。
+- 发现并修复 generic SFT data-prep helper 的 kwargs 传播问题：原实现只把 `enable_thinking` 等配置放进 nested `chat_template_kwargs`，现在同时传 top-level kwargs 和 nested object，兼容 HuggingFace tokenizer-native templates 与本仓库 `super3/nano3` templates。
+- 更新 `run_m1_sft_roundtrip_smoke.py` 的 `SmokeTokenizer`，让 smoke pipeline 接受 top-level template kwargs 并合并回 nested Super3 kwargs，避免 smoke 与真实 helper 行为分叉。
+- 新增 `test_chat_template_kwargs_are_expanded_for_tokenizer_native_templates`，验证每次 `apply_chat_template` render call 都能收到 top-level `enable_thinking=false`、`truncate_history_thinking=false` 和 nested `chat_template_kwargs`。
+- Artifact audit 结论：当前 V4 packed metadata 为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`，source Qwen tokenizer 与 V4 export tokenizer 的 checked prompt render 完全一致，且模板不包含 `enable_thinking` 或 `<think>` branches。
+- V4 data audit 结论：base train `983397` rows、hard verified full-solution `184551` rows、broad verified full-solution `90104` rows 均无 non-empty `reasoning_content`；math reasoning supervision 位于 assistant `content`。
+- 验证：targeted pytest `36 passed`，chat-template test file `5 passed`，patched files `ruff check` 通过，`py_compile` 通过，M1 smoke on 5 V4 rows 通过并生成 `1` packed row、`841` tokens、`298` loss tokens。
+- 新增审计报告 `qwen_chat_template_data_pipeline_audit_session75.md`，记录当前 V4 是否受影响、修复范围、evidence 和 verification。
+
+## Session 76
+
+- 按“执行下一步”在 Session 75 chat-template audit 后推进下一版 hard-math training recipe；保留 V4 可复现性，新增独立策略 `hard_math_precision_v5`。
+- 在 `prepare_m1_agentic_sft.py` 中新增 V5 高精度 hard-row filter：基于 V4 contamination-safe verified full-solution pool，额外要求 prompt 长度 `120..2400`、solution 长度 `1000..9000`、至少 `4` 个非空 solution lines、boxed final answer 位于末尾 `1800` chars 内，并默认禁用 broad verified、final-answer aux 和 format-repair sidecar。
+- 在 `plan_qwen_scaleup_run.py` 接入 V5 strategy 和 `--math-v5-*` flags；生成的 local data-prep script 会把 `hard_math_precision_v5` 和默认 fraction `0.6/0.0/0.0/0.0` 传入 M1 data prep，并继续使用 Qwen tokenizer chat-template contract。
+- 新增单测覆盖 V5 high-confidence hard rows、V5 broad replay disabled、manifest/report/blend 输出，以及 Qwen scale-up planner V5 script flags。
+- 使用现有 V4 prepared JSONL 做 sizing：V4 hard sidecar `184551` rows 中 `114305` rows 通过 V5 precision filter，V4 broad verified sidecar `90104` rows 中 `0` rows 通过；按默认 hard fraction `0.6` 估算约 `68583` strict hard rows 会进入 V5 sidecar。
+- 生成 V5 script bundle 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5`；run name `task071_qwen30b_a3b_hard_math_precision_v5`，lr `2e-7`、min lr `8e-8`、0.2 epoch、GBS `8`、8 GPUs、eval/save interval `400`、eval config `m1_full_basket_launcher_available`。
+- 新增报告 `qwen_v5_hard_math_precision_plan_session76.md`，记录 V5 rationale、filter、sizing、script paths 和 verification。
+- 验证：`py_compile` 通过；`ruff check` 通过；focused V5/V4 tests `4 passed`；full M1 SFT + Qwen scale-up planner tests `81 passed, 1 skipped`。
+
+## Session 77
+
+- 按“继续下一步”执行 V5 hard-math precision run path：本地运行 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/run_local_data_prep.sh`，完成 uncapped M0、M1 V5 data prep、Qwen tokenizer packing 和训练计划生成。
+- M1 V5 artifact 产出 base train rows：`code_execution_python=374`、`general_tool_calling=1100`、`math_competition_numeric=859494`、`math_reasoning_numeric=7473`、`multi_turn_tool_use=1100`、`search_grounded_qa=90447`、`search_multihop_qa=19938`、`structured_outputs_json=1241`、`swe_pivot_patch_supervision=300`、`terminal_basic_shell=840`、`tool_call_repair_negative=1090`。
+- V5 math bucket counts：hard verified full-solution source/written `114305/68583`，broad verified `430662/0`，final-answer aux `29/0`，format repair `321971/0`，heldout eval `1419/1419`。
+- Qwen packed artifact metadata：`chat_template=tokenizer`，`enable_thinking=false`，`truncate_history_thinking=false`，`num_shards=32`，`total_sequences=1051807`，`total_tokens=717870803`。
+- 训练计划位于 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/training_plan/task071_qwen30b_a3b_hard_math_precision_v5/training_manifest.json`，packed train rows `69750`，valid rows `5116`，GBS `8`，0.2 epoch 对应 `train_iters=1744`。
+- 同步 V5 bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5`；远端校验通过：32 个 train symlink shards、source Qwen path exists、pretrained Megatron checkpoint exists、启动前 8 张 H200 idle。
+- 启动 tmux session `task067_task071_qwen30b_a3b_hard_math_precision_v5`，训练参数展开为 `train_iters=1744`、GBS `8`、lr `2e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：bridge cache 成功写出 `train_4096_train.npy`、`valid_4096_valid.npy` 和 `packed_4096_metadata.json`；checkpoint 从 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507` 成功加载并进入 training loop。
+- 监控到首个 eval/save 点：iter `400/1744` train lm loss `0.4834876`，validation loss/PPL `0.4572022/1.579648`，max skipped/nan `0/0`，checkpoint `iter_0000400` 保存成功，`latest_checkpointed_iteration.txt=400`；训练继续运行到至少 iter `410/1744`。
+- 同步远端 train log 并刷新 metrics artifacts：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/metric_curves_session77_iter400.png`、`metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- 修复 `plot_qwen_sft_metrics.py` 的启动阶段行为：无 validation point 时仍可生成 train-only startup curve 和 health summary；仍保留 no-train 与 NaN train loss 的硬失败。
+- 新增报告 `qwen_v5_launch_session77.md`，记录 V5 launch evidence、iter400 metrics、checkpoint state、artifact paths 和验证项。
+- 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py` 通过。
+
+## Session 78
+
+- 按“执行下一步”继续监控 V5 hard-math precision run；发现远端 tmux 已退出、8 张 H200 GPU 空闲，训练已完成到 final iter `1744/1744`。
+- 同步最终 train log 到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/train.log`，刷新最终 metrics artifacts。
+- 最终图表路径：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_precision_v5/metrics/metric_curves_session78_final_iter1744.png`；同时刷新 `metric_curves.png`、`train_loss_points.csv`、`validation_points.csv` 和 `health_summary.json`。
+- Validation points：iter `400` loss/PPL `0.4572022/1.579648`，iter `800` `0.4302812/1.53769`，iter `1200` `0.4130655/1.511444`，iter `1600` `0.4324673/1.541055`，final iter `1744` `0.4126904/1.510877`。
+- Best validation 为 final checkpoint `iter_0001744`；final iter 相比 iter `1600` 改善，并略优于 iter `1200`。
+- Checkpoint marker 为 `1744`，checkpoint directories 包含 `iter_0000400`、`iter_0000800`、`iter_0001200`、`iter_0001600`、`iter_0001744`；每个 checkpoint 约 `399G`。
+- 训练健康总结：max skipped/nan `0/0`，latest parsed train loss at iter `1740` 为 `0.4072204`，recent-50 train loss mean `0.41530171`，最终 LR 约 `8.000175e-8`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 `CUDA_VISIBLE_DEVICES=5` 上将 `checkpoints/iter_0001744` 导出为 HF checkpoint：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744`；导出大小约 `57G`，包含 `16` 个 safetensors shards，日志出现 `EXPORT_DONE`。
+- 写入并校验 manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_precision_v5/hf_export_iter_0001744/task071_export_manifest.json`；model id 为 `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`，HF config 为 `model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`，tokenizer 为 `Qwen2TokenizerFast`。
+- 新增报告 `qwen_v5_final_export_session78.md`，记录最终 metrics、checkpoint 状态、HF export manifest 和推荐评测入口。
+- 验证：`source /work-agents/.venv/bin/activate && python -m py_compile workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && python -m ruff check workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/plot_qwen_sft_metrics.py && git diff --check` 通过。
+
+## Session 79
+
+- 按“执行下一步”基于 V5 final HF export `hf_export_iter_0001744` 启动 NemTron SGLang endpoint，服务参数为 `tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`，model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-precision-v5-iter0001744-hf`。
+- 本地 SSH tunnel 在 `/v1/models` 后出现 connection refused；未使用这些失败 smoke rows 作为分数，改为将 corrected-eval runners 和输入 artifacts 复制到 NemTron，直接访问 `127.0.0.1:30000` 跑 eval。
+- NemTron smoke 通过：MMLU-Pro per-category 1 为 `14` rows accuracy `0.6428571428571429`、parsed rate `1.0`；AIME/HMMT 1 row each 共 `2` rows 均 parsed，exact-normalized correct `0/2`。
+- 中等规模 sanity 通过：MMLU-Pro per-category 20 为 `280` rows accuracy `0.6214285714285714`、parsed rate `1.0`；AIME25 30 rows accuracy `0.0`、parsed rate `1.0`；HMMT 30 rows exact-normalized correct percent `6.666666666666667`、parsed rate `0.8333333333333334`。
+- Full corrected MMLU-Pro 完成：`12032/12032` rows 全部 `status=ok`，parsed rate `1.0`，finish `stop=12032`，accuracy `0.5581781914893617`。
+- Full corrected math 完成：AIME25 `300` rows accuracy `0.06666666666666667`、parsed rate `0.94`、finish `stop=282/length=18`；HMMT `30` rows exact-normalized correct percent `0.0`、parsed rate `0.9`、finish `stop=27/length=3`。
+- Same-protocol comparison：V5 vs original Session 47 deltas 为 MMLU-Pro `-0.0038231382978723397`、AIME25 `-0.4666666666666667`、HMMT exact percent `-43.333333333333336`；vs V4 iter0800 deltas 为 MMLU-Pro `-0.0005817819148936128`、AIME25 `-0.016666666666666663`、HMMT exact percent `-3.3333333333333335`。
+- Gate 结论：MMLU-Pro `>=0.55` pass；AIME25 `>=0.20` fail；HMMT exact percent `>=10.0` fail。V5 保住 MMLU-Pro，但 stricter hard-math precision sidecar 未恢复 AIME/HMMT。
+- 资源清理：评测完成后停止 SGLang tmux session `task071_qwen_v5_iter1744_sglang_full_eval`，复制 remote outputs 到 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v5_iter1744_session79/remote_corrected_eval_outputs`。
+- 新增报告 `qwen_v5_iter1744_corrected_eval_session79.md`，记录 serving、smoke/mid/full corrected eval、same-protocol comparison、gate 结论和 cleanup。
+
+## Session 80
+
+- 按用户要求先用小数据验证完整 pipeline，再进入全量数据；新增 M1 math strategy `hard_math_balanced_v6`，保留 V5 high-precision hard filter，同时恢复 broad verified full-solution diversity，并加入小比例 final-answer aux 与 format-repair sidecars。
+- V6 默认采样比例：hard verified full-solution `0.6`、broad verified full-solution `0.25`、final-answer aux `0.05`、format repair `0.03`；planner 新增 `--math-v6-*` flags，manifest/report 新增 `math_hard_balanced_v6`。
+- 修复 `plot_qwen_sft_metrics.py`：`load_balancing_loss` 变为 optional，使 parser 同时兼容 Qwen4B dense 日志和 30B MoE 日志；dense 日志 summary 中该字段写为 `null`，MoE 日志继续绘制 load-balancing curve。
+- Qwen4B pilot 数据准备使用 `max_train_per_dataset=100`、`max_val_per_dataset=25`、`train_ratio=0.95`、`valid_ratio=0.05`；M1 train rows `1100`、val-shadow rows `273`、V6 hard/broad/format sidecar written rows分别为 `11/12/4`，packed train rows `106`、valid rows `9`，计划 `train_iters=53`。
+- Qwen4B pilot 训练完成：remote run root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_balanced_v6_pilot`，final checkpoint `iter_0000053`；validation loss/PPL 从 iter `40` 的 `0.4337248/1.542994` 改善到 final `0.4315846/1.539695`，skipped/nan `0/0`。
+- Qwen4B pilot HF export 成功：`hf_export_iter_0000053` 约 `7.6G`，3 个 safetensors shards，model id `task071-qwen3-4b-agentic-sft-hard-math-balanced-v6-pilot-iter0000053-hf`，tokenizer chat template present。
+- Qwen4B pilot corrected eval 跑通：MMLU-Pro per-category 5 共 `70` rows accuracy `0.5142857142857142`、parsed rate `1.0`；AIME25/HMMT 各 `5` rows 在 `max_tokens=2048` 下 `10/10` requests status ok，AIME parsed rate `0.8`、HMMT parsed rate `0.2`，exact-normalized correct 均 `0.0`。
+- 发现 eval protocol sizing issue：Qwen4B endpoint `max_model_len=4096` 时，math runner 默认 `max_tokens=8192` 会触发 HTTP 400；将 AIME/HMMT cap 降到 `2048` 后同一 runner 可真实请求模型并产出 summary。
+- 全量 V6 本地数据准备完成：M0 uncapped 包含 HotpotQA `90447`、MuSiQue `19938`、MBPP `374`、terminal `840`、SWE Lite `300`、Hermes tool/repair/JSON rows `1100/1100/1090/1241`、GSM8K `7473`、NuminaMath `859494` train rows。
+- 全量 V6 M1 artifact：base train rows `983397`、val-shadow rows `11354`、errors `0`；hard verified source/written `114305/68583`，broad verified `430662/107666`，final-answer aux `29/1`，format repair `321971/9659`，heldout eval `1419`。
+- 全量 V6 Qwen tokenizer packing 完成：`chat_template=tokenizer`，thinking disabled，packed `total_sequences=1169133`、`total_tokens=769769392`、train rows `61129`、valid rows `398`、train shards `32`，GBS `8` 和 `0.2` epoch 对应 `train_iters=1529`。
+- 同步全量 V6 bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_balanced_v6`，远端 manifest 校验通过，启动前 8 张 H200 idle。
+- 启动正式训练 tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6`，参数为 all 8 H200、`train_iters=1529`、GBS `8`、lr `2e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：checkpoint 从 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507` 加载，显存上升到约 `81-88G`，训练进入 iteration；最新同步日志到 iter `130/1529`，latest train lm loss `0.8720737`，load-balancing loss `1.476049`，skipped/nan `0/0`。
+- 刷新正式 V6 startup metrics：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_balanced_v6/metrics/metric_curves_session80_iter130.png`，同时生成 `train_loss_points.csv` 和 `health_summary.json`；首个 validation 将在 iter `400`。
+- 新增报告 `qwen_v6_pilot_and_full_launch_session80.md`，记录 pilot train/export/eval、全量数据规模、训练启动状态和后续监控入口。
+
+## Session 81
+
+- 用户质疑：Qwen4B pilot 在 AIME/HMMT 小篮子上 accuracy `0.0`，为什么仍启动 30B 全量 V6 训练。
+- 复核结论：启动 30B V6 是决策错误；我把 pilot 当成 pipeline smoke 通过标准，但当前任务目标是恢复 hard-math benchmark，AIME/HMMT pilot `0.0` 应该触发 scale-up stop gate。
+- 解释：4B、10-row pilot 的分数不能可靠预测 30B full-run 最终 benchmark，但它已经证明当前 V6 recipe 没有产生正向 hard-math signal；在此目标下，不应继续占用 8-GPU 训练资源。
+- 已停止 NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6`；停止前日志已到 iter `260/1529`，latest train lm loss `0.5426581`，load-balancing loss `1.453394`，skipped/nan `0/0`。
+- 停止后确认：NemTron tmux server 无该 session，8 张 H200 均回到 `1 MiB` 显存占用、util `0%`，且 run 未到 iter `400` save/eval 点，没有 `latest_checkpointed_iteration.txt`。
+- 修正后的 gate：任何 hard-math recovery recipe 在放大到 30B 全量训练前，应在 small pilot 上至少满足 hard-math smoke 的非零 correctness 或给出明确诊断解释；仅 MMLU-Pro parsed/accuracy 和 pipeline 成功不够。
+- 推荐下一步：先在小型数据和小模型/短 30B slice 上验证 math prompt cap、final-answer format、verified full-solution rows 的 answer extraction coverage；只有 AIME/HMMT smoke 出现非零 correctness 或明确修复 parser/protocol bug 后，再启动 8-GPU full run。
+
+## Session 82
+
+- 按用户要求 review 原始 Qwen 与 fine-tuned checkpoint 在 AIME/HMMT 上分数差异的完整 pipeline，覆盖 corrected math eval runner、raw result artifacts、same-row samples、Qwen chat-template contract、packed metadata 和 M1 hard-math sidecar 数据形态。
+- 从 NemTron 同步并复核 Session 38 原始模型 corrected math raw artifacts：original AIME25 `300` rows 中 parsed `184`、correct `155`、avg completion tokens `5736.9`；original HMMT 8192 run `30` rows 中 parsed `17`、correct `8`、avg completion tokens `6860.8`。
+- 对比 SFT raw artifacts：`iter0009119` AIME/HMMT 几乎立即停止且 correct `0`；conservative、iter3000、V3、V4、V5 的 parsed rate 明显更高，但 AIME correct 只有 `10/20/26/25/20`，HMMT correct 只有 `2/0/0/1/0`。
+- Same-row check `aime_01_r01`：original 用 `4821` completion tokens 得到正确 `\boxed{293}`；SFT variants 用 `551-795` tokens 输出稳定错误 `145` 或 `73`，说明主要问题是 reasoning/output-policy regression，而不是 parser 漏判。
+- 复核当前 Qwen data pipeline：V3/V4/V5/V6 packed metadata 均为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`；Session 75 已确认 source/export tokenizer rendering 一致，所以当前问题不是旧 Super3-template mismatch。
+- 数据侧诊断：M1 hard-math sidecar assistant responses 主要为短 full-solution 或 boxed-answer supervision，p50 大约 `0.9k-1.5k` chars，远短于 original eval 中成功 hard-math traces 的 `5k-7k` completion tokens；部分 sidecar 仍有 malformed boxed/final-answer 风险。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_original_vs_sft_math_pipeline_review_session82.md`，记录 verdict、raw metrics、sample evidence、root causes 和 revised hard-math gates。
+- 结论：AIME/HMMT 差异不是 eval metric 或 current chat-template bug；SFT 学到了更短、更易 parse 的 boxed answer 输出策略，但压缩了 hard-math long reasoning/self-correction 行为。下一步应先做小型端到端 pilot，加入 long-solution retention / stronger verification，并以 AIME/HMMT 非零 correctness 作为 scale-up gate。
+
+## Session 83
+
+- 按用户要求重点复核是否存在 data/template misuse，例如遗漏 thinking tokens、错误 chat template 或 `enable_thinking=false` 使 fine-tuned model 在 AIME/HMMT 上停止思考并直接给错答案。
+- 代码路径复核：`chat_sft_shard_core._tokenize_chunks_with_mask` 只对 assistant chunks 置 loss mask `1`，system/user/tool 为 `0`；Qwen 4B/30B train entrypoints 在构建 recipe 前调用 `validate_qwen_packed_sft_chat_contract`，要求 packed metadata 为 `chat_template=tokenizer`、thinking kwargs 显式 false，且 tokenizer URI 匹配。
+- 实际 artifact 复核：Qwen chat v2、V3、V4、V5、V6 的 packed metadata 均为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`pack_size=4096`；旧 `task071_qwen30b_a3b_math_final_answer_v1` 确认为历史坏例，packed run config 记录 `chat_template=super3`，已在 Session 50 后改用 Qwen tokenizer packing。
+- Tokenizer probe：当前 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507/tokenizer_config.json` 的 chat template 不包含 `enable_thinking`、`reasoning_content` 或 `<think>`/`</think>` 分支；同一 prompt 在 `{}`、`enable_thinking=false`、`enable_thinking=true` 下 render 完全一致。
+- 远端 export probe：V4/V5 HF export 的 `chat_template.jinja` 也不含 thinking branches；NemTron packed metadata 对 V4/V5/V6 与本地一致。V3 远端 export path 缺 tokenizer files，但本地 packed artifact 仍证实训练数据使用 tokenizer 模板。
+- M0/M1 数据字段复核：GSM8K/NuminaMath converters 将 source full solution 保存到 `extra_env_info.reference_solution`；M1 `assistant_for_reasoning` 将该 solution 放进 assistant `content`。当前 V3/V4/V5/V6 M1 JSONL 扫描均为 non-empty `reasoning_content=0`、`<think>` tag `0`，所以没有 hidden thinking 字段被当前 pipeline 丢弃。
+- 当前 recipe 诊断：V4/V5/V6 不是 final-answer-only aux 主导，V4 final-answer aux `0` rows、V5 `0` rows、V6 `1` row；主要问题是 visible full-solution traces 太短，V3/V4/V5/V6 hard/broad sidecar p50 约 `0.8k-1.5k` chars，而 original AIME/HMMT 成功 eval 常用 `5k-7k` completion tokens。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_thinking_template_data_recipe_audit_session83.md`，记录 ruled-out hypotheses、confirmed historical issue、current likely recipe issue 和 recommendation。
+- 结论：不要把当前 AIME/HMMT 失败当作 live chat-template bug 修；应作为 long hard-math reasoning retention / sequence-length / sidecar quality 问题处理，并增加 future tokenizer-thinking branch guard。
+
+## Session 84
+
+- 按用户要求 double check training loss 是否包含 thinking / step-by-step content，而不是只包含 final answer。
+- 复核 pipeline 代码路径：M0 GSM8K/NuminaMath converters 将 full solution 存入 `extra_env_info.reference_solution`；M1 `assistant_for_reasoning` 将 full solution 放进 assistant `content`；`_tokenize_chunks_with_mask` 对整个 assistant chunk 置 raw loss mask `1`。
+- 用真实 Qwen tokenizer 和当前 helper 对 V3 verified、V4 hard、V5 hard、V6 hard、V6 broad 各抽一条 full-solution math row 重跑 raw tokenization：assistant tokens 与 assistant raw loss tokens 完全相等，分别为 `664/664`、`664/664`、`664/664`、`429/429`、`562/562`，且 boxed answer 前有明显推导文字。
+- 复核实际 packed train parquet：根据 Megatron-Bridge shifted label semantics 用 `loss_mask[j]` 对应 label `input_ids[j+1]` 还原 supervised text；V3/V4/V5/V6 首个 boxed math segment 的 boxed 前 supervised chars 分别为 `3483`、`2585`、`328`、`759`，均包含 derivation/reasoning。
+- 结论：当前 Qwen SFT 并不是 only-final-answer loss；visible reasoning trace 和 final boxed answer 都在训练 loss 中。更准确的问题是这些 visible traces 偏短、质量/格式有噪声、受 `4096` seq length 限制，可能训练出短而错误的 reasoning。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_training_loss_reasoning_content_check_session84.md`，记录 raw tokenization evidence、packed parquet evidence 和 practical conclusion。
+
+## Session 85
+
+- 按“执行下一步”把 Session 84 的 loss-mask 结论固化为回归测试，覆盖 Qwen-style math chunks 经过 `_tokenize_chunks_with_mask` 与 `PackedSequenceBuilder` 后的监督语义。
+- 新增 `test_packed_math_reasoning_tokens_before_box_are_supervised`：构造 system/user/assistant math sample，确认 system/user token 不进入 supervised labels，且 `\boxed{42}` 前的 assistant 推导文字在 Megatron-Bridge shifted label loss 中被监督。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py -k "packed_math_reasoning_tokens_before_box_are_supervised or tokenize_chunks_with_mask_pins_tool_role_to_zero"` 通过，结果 `2 passed, 72 deselected`。
+- 验证：`ruff check tests/recipes/super3/test_m1_agentic_sft.py` 和 `git diff --check` 通过。
+
+## Session 86
+
+- 按“continue the next step”推进 hard-math pilot recipe：新增 `hard_math_long_reasoning_v7`，面向小型 Qwen pilot 只复制更长、行结构更完整、boxed final answer 位于尾部的 AIME/HMMT-style verified full-solution rows。
+- V7 默认只启用 `hard_verified_full_solution` sidecar，sample fraction `1.0`；broad verified、final-answer aux、format repair 默认均为 `0.0`，避免在 pilot 中混入短解或 answer-only supervision。
+- 在 `prepare_m1_agentic_sft.py` 中新增 V7 strategy、filter、weights、manifest/report hard bucket 标题、CLI 参数和 lineage bucket 输出；hard filter 记录 V7 prompt/solution length、line count、boxed-tail thresholds。
+- 在 `plan_qwen_scaleup_run.py` 中接入 V7 strategy、`math_v7_weights` manifest、local data-prep script flags、planner CLI 参数和 report weight summary；测试覆盖 8192 pack/seq length 的 V7 pilot planning。
+- 新增单测 `test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows`，覆盖 V7 只保留长 verified hard row、排除短 row、只把 hard sidecar 放入 blend，并写出 report。
+- 验证：`py_compile` 通过；`ruff check` 通过；focused M1 SFT tests `2 passed, 73 deselected`；focused Qwen planner tests `2 passed, 10 deselected`。
+
+## Session 87
+
+- 按“continue the next step”生成并执行 V7 Qwen4B pilot：run name `task071_qwen4b_hard_math_long_reasoning_v7_pilot`，每 M0 dataset `100/25` train/val rows，`pack_size=8192`，`seq_length=8192`，GBS `2`，2 GPUs。
+- 本地 data prep 完成：M1 train `1100` rows、val-shadow `273` rows；V7 hard verified source/written `3/3`，broad verified `63/0`，format repair `134/0`，heldout eval `50`；Qwen packed artifact `1088` sequences、`946089` tokens、8 shards、packed train rows `76`。
+- 同步到 NemTron 并完成训练：`train_iters=12`，final checkpoint `iter_0000012`，validation loss/PPL `1.139335/3.124691`，skipped/nan `0/0`，GPU 训练后释放。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_pilot/hf_export_iter_0000012`，3 个 safetensors shards，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-pilot-iter0000012-hf`。
+- 启动 SGLang endpoint 成功，`max_model_len=8192`；corrected smoke eval 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`、parsed rate `1.0`。
+- Corrected math smoke 完成：AIME25 5 rows 全部 `length`，parsed/correct `0/5`，avg completion tokens `4096`；HMMT 5 rows parsed/correct `2/5`，exact-normalized accuracy `0.4`，avg completion tokens `3460.4`。
+- 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 已复制到 `debug/task071_eval_logic_debug/qwen4b_v7_iter12_session87/corrected_eval_smoke`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot/metrics/metric_curves_session87_final_iter12.png`。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_pilot_session87.md`，记录 data prep、training、export、smoke eval 和 gate decision。
+
+## Session 88
+
+- 按用户要求运行更大的 V7 Qwen4B pilot：run name `task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k`，每 M0 dataset cap `2000/100` train/val rows，`pack_size=8192`，`seq_length=8192`，GBS `2`，2 GPUs。
+- 本地 data prep 完成：M1 train `14045` rows、val-shadow `513` rows；V7 hard verified source/written `29/29`，broad verified `1262/0`，final-answer aux `1/0`，format repair `2708/0`，heldout eval `200`。
+- Qwen tokenizer packed artifact 完成：`chat_template=tokenizer`、thinking kwargs false、`13901` sequences、`13960245` tokens、8 shards、packed train/valid rows `1070/211`，planner 给出 `train_iters=428`。
+- 同步到 NemTron 并完成训练：final checkpoint `iter_0000428`，validation loss/PPL 从 iter `200` 的 `0.6374835/1.891714` 改善到 iter `428` 的 `0.4411893/1.554555`，skipped/nan `0/0`。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k/hf_export_iter_0000428`，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-pilot-2k-iter0000428-hf`，3 个 safetensors shards，tokenizer chat template present。
+- Corrected eval gate 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`、parsed rate `1.0`；AIME25 10 rows at `6144` max tokens parsed `6/10`、correct `0/10`；HMMT 10 rows parsed `6/10`、correct `1/10`、exact-normalized accuracy `0.1`。
+- Gate decision：AIME parsed recovery 有改善，但 AIME correct recovery 仍为 `0`，因此不允许启动 30B V7 scale-up；需先增加和清洗 verified AIME/HMMT-style long-solution rows，并保留 pilot AIME `correct_rows > 0` 作为 30B 前置门槛。
+- 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_2k_iter428_session88/corrected_eval_gate`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k/metrics/metric_curves_session88_final_iter428.png`。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_2k_pilot_session88.md`，记录 data prep、training、export、corrected eval 和 no-scale-up decision。
+
+## Session 89
+
+- 按“执行下一步”实现 V7 数据扩量修正：`prepare_m1_agentic_sft.py` 新增 `--math-sidecar-m0-input-dir`，允许 pilot 保持 capped base agentic rows，同时从 uncapped M0 cache 扫描 math sidecar buckets；`plan_qwen_scaleup_run.py` 同步新增 planner flags。
+- V7 hard filter 新增 last boxed scalar numeric answer 约束，排除集合、函数、区间、文本结论等不匹配 AIME/HMMT numeric scoring 的 boxed supervision。
+- 本地验证全量 math cache 规模：uncapped sidecar source math competition `859494` rows、math reasoning `7473` rows；Qwen4B full-sidecar pilot 的 V7 hard verified source/written rows 从 Session 88 的 `29/29` 提升到 `5702/5702`。
+- 完成 Qwen4B full-sidecar pilot local prep/packing：base M1 train `14045` rows、val-shadow `513` rows，packed `19574` sequences、`20958271` tokens、train/valid rows `1402/211`，planner 给出 `train_iters=561`。
+- 同步到 NemTron 并完成 2-GPU Qwen4B train：final checkpoint `iter_0000561`，validation loss/PPL `200:0.6158555/1.851240`、`400:0.4428872/1.557197`、`561:0.3993315/1.490828`，skipped/nan `0/0`。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_full_sidecar_pilot/hf_export_iter_0000561`，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-pilot-iter0000561-hf`，3 个 safetensors shards，tokenizer chat template present。
+- Corrected eval 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`；8k serving context + `6144` max tokens 下 AIME25 parsed/correct `3/10`、`0/10`，HMMT parsed/correct `5/10`、`3/10`。
+- 关键诊断：切到 16k serving context + AIME `8192` max tokens 后，AIME25 parsed/correct 恢复为 `7/10`、`3/10`，说明 30B promotion gate 必须使用 16k/8192 corrected math protocol，不能沿用 8k/6144 gate。
+- 生成但未启动 30B scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar`，配置为 original Qwen3-30B-A3B、uncapped data、V7 full sidecar、pack/seq `8192/8192`、GBS `8`、0.2 epoch、8 H200。
+- 清理：停止 SGLang endpoint，NemTron 8 张 H200 回到 idle；eval summaries 和 export manifest 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_full_sidecar_iter561_session89`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_full_sidecar_pilot/metrics/metric_curves_session89_final_iter561.png`。
+- 验证：py_compile passed；focused M1 SFT tests `3 passed, 73 deselected`；focused Qwen planner test `1 passed, 11 deselected`；ruff passed。
+
+## Session 90
+
+- 按“continue to the next step”启动 30B V7 full-sidecar scale-up：本地 uncapped M0/M1 data prep 完成，M1 train rows `983397`、val-shadow `11354`，Qwen packed artifact `988926` sequences、`674237679` tokens、32 shards。
+- 训练计划基于 packed rows 计算 `train_iters=782`，packed train/valid rows `31258/2546`，GBS `8`，pack/seq `8192/8192`，eval/save interval `400`。
+- 首次远端训练使用了默认 `qwen_local_train.py`，在第一步 forward 报错：Qwen3-30B-A3B MoE + tensor parallel training 必须启用 sequence parallel。根因是 scale-up planner 未自动选择 30B-A3B 专用入口。
+- 修复 `plan_qwen_scaleup_run.py`：当 `--qwen-hf-model` 包含 `30B-A3B` 且未显式传 `--train-entrypoint` 时，自动使用 `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`；补充 planner 单测覆盖 auto-selection。
+- 重新同步 NemTron 并用 30B-A3B 专用入口完成训练：final checkpoint `iter_0000782`，checkpoint marker `782`，skipped/nan `0/0`，8 张 H200 训练结束后释放。
+- 训练指标：iter `400` validation loss/PPL `0.4646536/1.591463`，final iter `782` validation loss/PPL `0.4461341/1.562261`，best validation 为 final iter `782`。
+- 本地 metric artifacts 刷新到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/metrics`，最终曲线为 `metric_curves_session90_final_iter782.png`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 NemTron GPU5 上导出 final checkpoint 到 HF：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`，日志包含 `EXPORT_DONE`。
+- HF export 校验通过：`model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`、tokenizer `Qwen2TokenizerFast`、chat template present、16 个 safetensors shards，总大小 `61084232276` bytes；manifest 写到 `task071_export_manifest.json`。
+- 验证：focused planner tests `2 passed, 11 deselected`；ruff passed；`py_compile` passed。
+
+## Session 91
+
+- 按“执行下一步”在 NemTron 上启动 30B V7 full-sidecar `iter_0000782` HF export 的 SGLang endpoint：model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-iter0000782-hf`，`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`。
+- Endpoint smoke 通过：`/v1/models` 返回 `max_model_len=16384`，chat smoke 对 `Reply exactly: ready` 返回 exact `ready`。
+- 复用 Session 79 corrected eval input artifacts，在 NemTron 本机执行 runner，避免本地 SSH tunnel 抖动；MMLU-Pro input 共 `12032` rows，AIME/HMMT corrected math input 共 `300/30` rows。
+- Full corrected MMLU-Pro 完成：`12032/12032` status ok，parsed rate `1.0`，accuracy `0.5601728723404256`，correct `6740/12032`，runtime `79.386s`。
+- Full corrected math 完成：AIME25 `63/300` exact-normalized correct，accuracy `0.21`，parsed rate `0.91`，finish `stop=273/length=27`；HMMT `5/30` exact-normalized correct，exact percent `16.666666666666668`，parsed rate `0.5666666666666667`，finish `stop=15/length=15`。
+- Gate result：MMLU-Pro `>=0.55` pass，AIME25 `>=0.20` pass，HMMT exact percent `>=10.0` pass；AIME margin is narrow, but V7 is the first 30B SFT candidate in this sequence to pass all three corrected gates.
+- Copied remote corrected eval outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session91/remote_corrected_eval_outputs` and stopped the SGLang/tmux eval sessions after completion.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_corrected_eval_session91.md`，记录 endpoint、full metrics、same-protocol comparison、gate result 和 recommended follow-up.
+
+## Session 92
+
+- 按“继续下一步”分析 Session 91 V7 `iter_0000782` corrected math full results，按 AIME unique problem、HMMT row、finish reason、parsed/correct、completion tokens 和 prediction 聚合 failure clusters。
+- AIME25 cluster：30 个 unique problems 中，`06/10/15/26/27/29` 为 `10/10` 全中，`13` 为 `2/10`、`23` 为 `1/10` 部分命中；17 个题为 `10/10` parsed but wrong，`09` 为 `10/10` length wrong，另有 `17/22/25/28` 为部分解析但无正确。
+- AIME25 结论：V7 相比 V5 的 `20/300` 提升到 `63/300` 是真实恢复，但主要剩余缺口来自稳定错误推理，而不是 parser failure；全 length 的问题集中在 `09`，length-heavy 的问题集中在 `25`。
+- 为拆解 HMMT length cap，重启 V7 SGLang endpoint 并运行 HMMT-only `max_tokens=12288` probe：parsed `20/30`、correct `4/30`、finish `stop=19/length=11`，相比 Session 91 的 8192 full run parsed 增加但 correct 未提升。
+- 为对齐并发条件，又运行 HMMT-only `max_tokens=8192`、`parallelism=8` repeat：parsed `18/30`、correct `4/30`、finish `stop=17/length=13`，说明 HMMT 这个 30-row benchmark 有约 1 题级别的运行波动；V7 HMMT 恢复可按 `13.3%-16.7%` 区间解读。
+- HMMT 结论：不要把 default eval max tokens 从 `8192` 直接改到 `12288`；更大的 token budget 只提高 parsed rate，没有提高 exact score，还会让 `hmmt_16` 这类原本正确行变错。
+- Copied Session 92 remote probe outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session92_error_analysis/remote_error_analysis` and stopped SGLang/tmux sessions after probes.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_math_error_analysis_session92.md`，记录 AIME/HMMT clusters、HMMT generation-policy probes 和 recommended recipe/eval actions.
+
+## Session 93
+
+- 按“执行下一步”把 Session 92 的 hard-math 诊断落到数据 recipe：新增 `hard_math_clean_final_v8`，不改变已有 V7 语义，作为新的可选策略。
+- V8 继承 V7 的 long hard-math trace 约束，并新增 clean final-answer 过滤：训练行必须只有一个 `\boxed{...}`，boxed payload 必须是 scalar numeric，必须匹配源 M0 `expected_answer`，boxed 后只允许短的非文字尾巴。
+- `prepare_m1_agentic_sft.py` 现在在 math row metadata 中保留 `m0_expected_answer`，供 V8 做最后 boxed answer 与源 label 的一致性检查；metadata 不进入模型训练文本。
+- `plan_qwen_scaleup_run.py` 接入 V8 strategy、V8 weights、local data-prep script flags 和 report 输出；生成的 30B-A3B plan 仍自动使用 `qwen3_30b_a3b_local_train.py`。
+- 新增单测覆盖：V8 保留 clean single-box expected final row，排除多 boxed row、boxed 后继续解释的 row、最后 boxed 与 expected 不一致的 row；planner 可生成 V8 data-prep flags。
+- 在现有 V7 M0 cache 上做 V8 data-prep smoke：base rows `110`，math sidecar source train rows `math_competition_numeric=5000`、`math_reasoning_numeric=5000`，V8 hard source/written rows `29/29`，errors `0`。
+- 生成 30B V8 scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8`，配置为 uncapped base data、V7 full M0 cache as math sidecar source、pack/seq `8192/8192`、GBS `8`、0.2 epoch、lr `2e-7`、min lr `8e-8`、8 H200。
+- 验证：focused V7/V8 tests `3 passed, 74 deselected`；focused planner tests `3 passed, 11 deselected`；full related test files `90 passed, 1 skipped`；ruff passed；`git diff --check` passed。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_recipe_session93.md`，记录 V8 design、smoke evidence、script bundle 和 validation.
+
+## Session 94
+
+- 按用户要求执行 V8 full path：本地运行 `run_local_data_prep.sh`，完成 uncapped M0/M1 data prep、Qwen tokenizer packing 和 training plan 生成。
+- V8 M1 数据规模：base M1 train rows `983397`、val-shadow rows `11354`；V8 hard clean final source/written rows `4546/4546`，errors `0`。
+- V8 base train env counts：`math_competition_numeric=859494`、`search_grounded_qa=90447`、`search_multihop_qa=19938`、`math_reasoning_numeric=7473`、`structured_outputs_json=1241`、`general_tool_calling=1100`、`multi_turn_tool_use=1100`、`tool_call_repair_negative=1090`、`terminal_basic_shell=840`、`code_execution_python=374`、`swe_pivot_patch_supervision=300`。
+- Packed artifact：`987770` total sequences、`672788411` total tokens、pack/seq `8192/8192`、`32` train parquet shards、`1` valid shard；planner gave `train_iters=779` at GBS `8` for `0.2` epoch.
+- Local planner initially failed because the local Megatron pretrained checkpoint path was absent; regenerated the V8 script bundle with `--allow-missing-checkpoint`, matching prior remote-checkpoint workflow while preserving the 30B-A3B train entrypoint.
+- Synced the V8 output bundle to NemTron under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8`; remote size after sync was about `14G`, and remote manifest matched `train_iters=779`, `train_rows=31144`, `valid_rows=2546`.
+- Launched and completed the bounded 8-H200 training run via tmux session `task067_task071_qwen30b_a3b_hard_math_clean_final_v8`; the session exited cleanly with no remaining train workers.
+- Training health: first gate iter `400` train loss `0.4720876`, validation loss/PPL `0.4647015/1.591539`, checkpoint `iter_0000400` saved; final checkpoint `iter_0000779` saved, final validation loss/PPL `0.4463005/1.562521`.
+- Max skipped/nan iterations remained `0/0`; final parsed train point was iter `770` with train loss `0.4295896`, lr `8.005201e-08`, grad norm `0.597`.
+- Generated metrics artifacts under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/metrics`, including `metric_curves_session94_final_iter779.png`, `train_loss_points.csv`, `validation_points.csv`, and `health_summary.json`.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_train_session94.md`，记录 V8 data scale、remote training、validation metrics、checkpoint paths 和 eval handoff.
+
+## Session 95
+
+- 回答用户 “any code changes to open an PR”：先检查本地 branch 状态、fetch `origin/main`，并查询 GitHub PR #164 状态。
+- `gh pr view 164` 显示 PR #164 已经 `MERGED`，head branch 是 `intern_nemontron_code_reading/task071_math_sidecar_data_session40`，base 是 `main`。
+- `git diff --name-only origin/main...HEAD` 仍显示 source files ahead of `origin/main`，包括 M1 SFT data prep/planner、Qwen stage1 SFT train/contract/data-prep files 和对应 tests。
+- 结论：若要提交当前 branch 的新增工作，需要开 fresh PR；本轮未新增实现代码，只更新 task bookkeeping 和答复 PR 状态判断。
+
+## Session 96
+
+- 按用户 “continue the next” 执行 fresh PR 创建流程：检查 head branch 当前无 open PR，确认工作树 clean。
+- 创建 PR #178：`https://github.com/songCNMS/Nemotron/pull/178`，base `main`，head `intern_nemontron_code_reading/task071_math_sidecar_data_session40`。
+- PR 标题：`Add Qwen hard-math SFT recipes and V8 training records`；body 概述 hard-math SFT recipes through V8、Qwen3-30B-A3B planner/train entrypoint support、chat-template/loss-mask regression coverage 和 V8 train validation evidence。
+- 本轮没有新增 source implementation；只创建 PR 并更新 task/status bookkeeping。
+
+## Session 97
+
+- 按用户 “merge the PR” 执行合并流程；检查 PR #178 时 GitHub 报 `CONFLICTING/DIRTY`，因此先在本分支执行 `git merge origin/main`。
+- 解决 merge conflicts：对 M1 Agentic SFT planner/prep、Qwen SFT bridge tests、scale-up planner tests、M1 SFT tests 和 metrics parser 保留本分支 V4-V8/Qwen30B-A3B 语义；保留 `origin/main` clean auto-merged 的 Qwen eval repro gate 文件更新。
+- 按 playbook 执行 pre-merge bookkeeping：`status.md` 切到 Idle、task README 已为 Completed、task metadata bumped to Session 97，并将 Qwen hard-math SFT workflow 经验写入个人 knowledge base。
+- 准备提交 conflict-resolution/completion commit 后推送，再通过 GitHub PR merge 合并 PR #178。
