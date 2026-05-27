@@ -1,5 +1,6 @@
 import json
 from argparse import Namespace
+from pathlib import Path
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
     build_plan,
@@ -958,17 +959,40 @@ def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_p
         ]
     )
 
+    symbolic_trace = _base_record("math_competition_numeric")
+    symbolic_trace["expected_answer"] = "f(y) = y"
+    symbolic_trace["responses_create_params"]["input"][-1]["content"] = (
+        "Determine all functions satisfying an equation with integer, system, "
+        "equation, and polynomial conditions."
+    )
+    symbolic_trace["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "We substitute special values and derive a system of identities.",
+            "The first identity forces additivity over the required domain.",
+            "The second identity rules out every shifted solution.",
+            "The remaining functional equation is checked directly.",
+            ("The consistency check repeats over the same polynomial relation. " * 45).strip(),
+            r"Therefore the final boxed form is \boxed{f(y) = y}.",
+        ]
+    )
+
     heldout = _base_record("math_competition_numeric")
     heldout["expected_answer"] = "11"
     heldout["extra_env_info"].pop("reference_solution", None)
 
     converted_long = convert_m0_record(long_trace, split="train")
     converted_short = convert_m0_record(short_trace, split="train")
+    converted_symbolic = convert_m0_record(symbolic_trace, split="train")
     assert is_hard_math_long_reasoning_row(converted_long) is True
     assert is_hard_math_precision_row(converted_long) is True
     assert is_hard_math_long_reasoning_row(converted_short) is False
+    assert is_hard_math_long_reasoning_row(converted_symbolic) is False
 
-    write_split("math_competition_numeric", "train", [long_trace, short_trace, heldout])
+    write_split(
+        "math_competition_numeric",
+        "train",
+        [long_trace, short_trace, symbolic_trace, heldout],
+    )
     write_split("math_competition_numeric", "val", [])
 
     class Args:
@@ -991,7 +1015,7 @@ def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_p
     assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
     assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
     assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["sample_fraction"] == 1.0
-    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 2
     assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 0
     assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 0
     assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 0
@@ -1018,6 +1042,82 @@ def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_p
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math hard long reasoning v7 buckets" in report_md
     assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
+
+
+def test_prepare_math_sidecar_can_use_uncapped_m0_source(tmp_path) -> None:
+    base_m0_root = tmp_path / "base_m0"
+    sidecar_m0_root = tmp_path / "sidecar_m0"
+
+    def write_split(root: Path, environment: str, split: str, records: list[dict]) -> None:
+        env_dir = root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    base_math = _base_record("math_competition_numeric")
+    base_math["expected_answer"] = "7"
+    base_math["extra_env_info"]["reference_solution"] = "Short solution. \\boxed{7}"
+
+    sidecar_long = _base_record("math_competition_numeric")
+    sidecar_long["expected_answer"] = "293"
+    sidecar_long["responses_create_params"]["input"][-1]["content"] = (
+        "Find the number of integer triples satisfying a modular equation, "
+        "divisor condition, triangle condition, remainder case split, and "
+        "probability-style count."
+    )
+    sidecar_long["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Start by splitting the modular equation into residue classes.",
+            "Each residue class yields a divisor condition.",
+            "The triangle inequality removes boundary cases.",
+            "The remainder cases combine into disjoint families.",
+            "The probability-style count is then a finite sum.",
+            ("Summing the families gives the same intermediate total after every consistency check. " * 34).strip(),
+            r"The final numeric answer is \boxed{293}.",
+        ]
+    )
+
+    write_split(base_m0_root, "math_competition_numeric", "train", [base_math])
+    write_split(base_m0_root, "math_competition_numeric", "val", [])
+    write_split(sidecar_m0_root, "math_competition_numeric", "train", [sidecar_long])
+    write_split(sidecar_m0_root, "math_competition_numeric", "val", [])
+
+    class Args:
+        m0_input_dir = base_m0_root
+        math_sidecar_m0_input_dir = sidecar_m0_root
+        math_sidecar_max_records_per_env = None
+        math_sidecar_max_val_shadow_per_env = None
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V7
+        math_v7_hard_verified_full_solution_weight = MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
+        math_v7_format_repair_weight = MATH_V7_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    bucket_info = manifest["math_hard_long_reasoning_v7"]["buckets"]
+    assert manifest["counts"]["train"]["math_competition_numeric"] == 1
+    assert manifest["math_sidecar_source"]["counts"]["train"]["math_competition_numeric"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
+
+    hard_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert "293" in hard_rows[0]["messages"][-1]["content"]
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math sidecar source" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:

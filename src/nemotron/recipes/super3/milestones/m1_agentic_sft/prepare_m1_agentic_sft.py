@@ -199,6 +199,7 @@ MATH_V7_MIN_SOLUTION_CHARS = 2500
 MATH_V7_MAX_SOLUTION_CHARS = 16000
 MATH_V7_MIN_SOLUTION_LINES = 6
 MATH_V7_BOXED_TAIL_CHARS = 3000
+MATH_SIDECAR_SOURCE_ENVIRONMENTS = frozenset(MATH_FINAL_ANSWER_ENVIRONMENTS)
 
 JsonDict = dict[str, Any]
 
@@ -454,6 +455,40 @@ def _has_boxed_answer_near_end(text: str, *, tail_chars: int) -> bool:
     return re.search(r"\\+boxed\s*\{[^{}]+\}", tail) is not None
 
 
+def _last_boxed_answer_text(text: str) -> str | None:
+    """Return the final boxed payload, handling one or more nested brace pairs."""
+    last_start = None
+    for match in re.finditer(r"\\+boxed\s*\{", text):
+        last_start = match.end()
+    if last_start is None:
+        return None
+    depth = 1
+    position = last_start
+    while position < len(text):
+        char = text[position]
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0:
+                return text[last_start:position].strip()
+        position += 1
+    return None
+
+
+def _is_scalar_numeric_answer_text(text: str | None) -> bool:
+    if text is None:
+        return False
+    value = re.sub(r"\s+", "", text.strip())
+    if not value:
+        return False
+    integer = r"[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)"
+    decimal = rf"{integer}\.\d+"
+    fraction = rf"{integer}/{integer}"
+    latex_fraction = rf"\\frac\{{{integer}\}}\{{{integer}\}}"
+    return re.fullmatch(rf"(?:{integer}|{decimal}|{fraction}|{latex_fraction})", value) is not None
+
+
 def _solution_line_count(text: str) -> int:
     return len([line for line in text.splitlines() if line.strip()])
 
@@ -568,6 +603,8 @@ def is_hard_math_long_reasoning_row(row: Mapping[str, Any]) -> bool:
         return False
     lower_text = f"{prompt}\n{solution}".lower()
     if not any(keyword in lower_text for keyword in MATH_V4_TOPIC_KEYWORDS):
+        return False
+    if not _is_scalar_numeric_answer_text(_last_boxed_answer_text(solution)):
         return False
     return _has_boxed_answer_near_end(solution, tail_chars=MATH_V7_BOXED_TAIL_CHARS)
 
@@ -1016,6 +1053,18 @@ def discover_m0_files(input_dir: Path) -> dict[str, dict[str, Path]]:
         split = path.name.replace("-split.jsonl", "")
         files[environment][split] = path
     return dict(files)
+
+
+def filter_m0_files_by_environment(
+    files_by_env: Mapping[str, Mapping[str, Path]],
+    *,
+    environments: set[str] | frozenset[str],
+) -> dict[str, dict[str, Path]]:
+    return {
+        environment: dict(split_files)
+        for environment, split_files in files_by_env.items()
+        if environment in environments
+    }
 
 
 def convert_split(
@@ -1614,6 +1663,28 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     f"`{info.get('path', '')}` |"
                 )
         lines.append("")
+    sidecar_source = manifest.get("math_sidecar_source")
+    if isinstance(sidecar_source, Mapping) and sidecar_source.get("enabled"):
+        lines.extend(
+            [
+                "## Math sidecar source",
+                "",
+                f"- M0 input dir: `{sidecar_source.get('m0_input_dir')}`",
+                f"- Environments: `{', '.join(sidecar_source.get('environments') or [])}`",
+                "",
+                "| Split | Environment | Rows |",
+                "|---|---|---:|",
+            ]
+        )
+        counts = sidecar_source.get("counts") or {}
+        if isinstance(counts, Mapping):
+            for split in ("train", "val_shadow", "heldout_train"):
+                split_counts = counts.get(split) or {}
+                if not isinstance(split_counts, Mapping):
+                    continue
+                for environment, count in split_counts.items():
+                    lines.append(f"| {split} | {environment} | {count} |")
+        lines.append("")
     lines.extend(["## Counts", "", "| Split | Environment | Rows |", "|---|---|---:|"])
     for split in ("train", "val_shadow"):
         for environment, count in manifest["counts"][split].items():
@@ -1692,11 +1763,50 @@ def prepare(args: argparse.Namespace) -> JsonDict:
 
     math_strategy_weights = _math_weights_for_strategy(args, math_supervision_strategy)
     math_strategy_heldout_train_rows: list[Mapping[str, Any]] = []
+    math_sidecar_input_dir = getattr(args, "math_sidecar_m0_input_dir", None)
+    math_sidecar_train_rows: list[Mapping[str, Any]] | None = None
+    math_sidecar_val_rows: list[Mapping[str, Any]] | None = None
+    math_sidecar_heldout_train_rows: list[Mapping[str, Any]] = []
+    math_sidecar_train_errors: list[JsonDict] = []
+    math_sidecar_val_errors: list[JsonDict] = []
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         math_strategy_heldout_train_rows = [
             row for row in train_rows if _math_supervision_bucket(row) == MATH_BUCKET_HELDOUT_EVAL
         ]
         train_rows = filter_v3_training_rows(train_rows)
+        if math_sidecar_input_dir is not None:
+            math_sidecar_files_by_env = filter_m0_files_by_environment(
+                discover_m0_files(math_sidecar_input_dir),
+                environments=MATH_SIDECAR_SOURCE_ENVIRONMENTS,
+            )
+            if not math_sidecar_files_by_env:
+                raise ValueError(
+                    f"no math M0 split files found under --math-sidecar-m0-input-dir {math_sidecar_input_dir}"
+                )
+            math_sidecar_health_path = (
+                math_sidecar_input_dir / "health_baseline" / "health_baseline_report.json"
+            )
+            math_sidecar_difficulty_signal = load_difficulty_signal(
+                math_sidecar_health_path if math_sidecar_health_path.is_file() else None
+            )
+            math_sidecar_train_rows, math_sidecar_train_errors = convert_split(
+                math_sidecar_files_by_env,
+                split="train",
+                max_records_per_env=getattr(args, "math_sidecar_max_records_per_env", None),
+                difficulty_signal=math_sidecar_difficulty_signal,
+            )
+            math_sidecar_val_rows, math_sidecar_val_errors = convert_split(
+                math_sidecar_files_by_env,
+                split="val",
+                max_records_per_env=getattr(args, "math_sidecar_max_val_shadow_per_env", None),
+                difficulty_signal=math_sidecar_difficulty_signal,
+            )
+            math_sidecar_heldout_train_rows = [
+                row
+                for row in math_sidecar_train_rows
+                if _math_supervision_bucket(row) == MATH_BUCKET_HELDOUT_EVAL
+            ]
+            math_sidecar_train_rows = filter_v3_training_rows(math_sidecar_train_rows)
 
     # task040 Session 2: W1 curriculum sampler wiring. Applies to TRAIN
     # only — val rows stay in stable order so shadow eval is reproducible.
@@ -1723,9 +1833,20 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     math_bucket_rows: dict[str, list[Mapping[str, Any]]] = {}
     math_bucket_source_rows: dict[str, list[Mapping[str, Any]]] = {}
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
+        bucket_train_source_rows = (
+            math_sidecar_train_rows if math_sidecar_train_rows is not None else train_rows
+        )
+        bucket_val_source_rows = (
+            math_sidecar_val_rows if math_sidecar_val_rows is not None else val_rows
+        )
+        bucket_heldout_train_rows = (
+            math_sidecar_heldout_train_rows
+            if math_sidecar_train_rows is not None
+            else math_strategy_heldout_train_rows
+        )
         base_bucket_source_rows = split_math_supervision_buckets(
-            train_rows,
-            val_rows,
+            bucket_train_source_rows,
+            bucket_val_source_rows,
             buckets=MATH_V3_BUCKETS,
         )
         if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET:
@@ -1753,7 +1874,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         else:
             math_bucket_source_rows = base_bucket_source_rows
         math_bucket_source_rows[MATH_BUCKET_HELDOUT_EVAL] = [
-            *math_strategy_heldout_train_rows,
+            *bucket_heldout_train_rows,
             *math_bucket_source_rows[MATH_BUCKET_HELDOUT_EVAL],
         ]
         math_bucket_rows = {
@@ -1772,6 +1893,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             strategy=math_supervision_strategy,
             bucket_weights=math_strategy_weights,
         )
+        if math_sidecar_train_rows is not None:
+            apply_math_supervision_strategy_metadata(
+                [
+                    *math_sidecar_train_rows,
+                    *(math_sidecar_val_rows or []),
+                    *math_sidecar_heldout_train_rows,
+                ],
+                strategy=math_supervision_strategy,
+                bucket_weights=math_strategy_weights,
+            )
     else:
         apply_math_supervision_strategy_metadata(
             [*train_rows, *val_rows],
@@ -1820,6 +1951,9 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "math_supervision_strategy": math_supervision_strategy,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "m0_input_dir": str(args.m0_input_dir),
+        "math_sidecar_m0_input_dir": (
+            str(math_sidecar_input_dir) if math_sidecar_input_dir is not None else None
+        ),
         "output_dir": str(args.output_dir),
         "train_path": str(train_path),
         "math_final_answer_train_path": str(math_final_answer_train_path),
@@ -1847,8 +1981,27 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "sidecar_in_blend": legacy_sidecar_in_blend,
             "train_rows": len(math_final_answer_rows),
         },
-        "errors": [*train_errors, *val_errors],
+        "errors": [
+            *train_errors,
+            *val_errors,
+            *math_sidecar_train_errors,
+            *math_sidecar_val_errors,
+        ],
     }
+    if math_sidecar_input_dir is not None:
+        manifest["math_sidecar_source"] = {
+            "enabled": True,
+            "m0_input_dir": str(math_sidecar_input_dir),
+            "environments": sorted(MATH_SIDECAR_SOURCE_ENVIRONMENTS),
+            "max_records_per_env": getattr(args, "math_sidecar_max_records_per_env", None),
+            "max_val_shadow_per_env": getattr(args, "math_sidecar_max_val_shadow_per_env", None),
+            "counts": {
+                "train": count_by_environment(math_sidecar_train_rows or []),
+                "val_shadow": count_by_environment(math_sidecar_val_rows or []),
+                "heldout_train": count_by_environment(math_sidecar_heldout_train_rows),
+            },
+            "errors": [*math_sidecar_train_errors, *math_sidecar_val_errors],
+        }
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
         if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7:
             math_strategy_manifest_key = "math_hard_long_reasoning_v7"
@@ -1981,6 +2134,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                     in (MATH_SUPERVISION_STRATEGY_V5, MATH_SUPERVISION_STRATEGY_V6)
                     else None
                 ),
+                "final_answer_filter": (
+                    "last_boxed_scalar_numeric"
+                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
+                    else None
+                ),
                 "topic_keywords": list(MATH_V4_TOPIC_KEYWORDS),
             }
 
@@ -1995,6 +2153,14 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             notes="M0 RawDataArtifact",
         ),
     ]
+    if math_sidecar_input_dir is not None:
+        lineage_inputs.append(
+            LineageInput(
+                kind="manifest",
+                ref=str(math_sidecar_input_dir / "manifest.json"),
+                notes="M0 RawDataArtifact for math sidecar buckets",
+            )
+        )
     if health_baseline_path is not None:
         lineage_inputs.append(
             LineageInput(
@@ -2070,6 +2236,29 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-shadow-per-env", type=int, default=None)
+    parser.add_argument(
+        "--math-sidecar-m0-input-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional M0 cache used only for math supervision sidecar buckets. "
+            "Base Agentic SFT rows still come from --m0-input-dir, which lets "
+            "pilot runs keep small base data while sourcing hard math rows from "
+            "an uncapped cache."
+        ),
+    )
+    parser.add_argument(
+        "--math-sidecar-max-records-per-env",
+        type=int,
+        default=None,
+        help="Optional per-math-environment train cap for --math-sidecar-m0-input-dir.",
+    )
+    parser.add_argument(
+        "--math-sidecar-max-val-shadow-per-env",
+        type=int,
+        default=None,
+        help="Optional per-math-environment val cap for --math-sidecar-m0-input-dir.",
+    )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument(
         "--math-supervision-strategy",

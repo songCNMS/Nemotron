@@ -330,6 +330,10 @@ def test_scaleup_planner_can_emit_hard_math_long_reasoning_v7_data_prep(tmp_path
             "0.0",
             "--math-v7-format-repair-weight",
             "0.0",
+            "--math-sidecar-m0-input-dir",
+            "/data/full_m0",
+            "--math-sidecar-max-records-per-env",
+            "50000",
             "--pack-size",
             "8192",
             "--seq-length",
@@ -344,6 +348,8 @@ def test_scaleup_planner_can_emit_hard_math_long_reasoning_v7_data_prep(tmp_path
     assert manifest["data"]["math_v7_weights"]["verified_full_solution"] == 0.0
     assert manifest["data"]["math_v7_weights"]["final_answer_aux"] == 0.0
     assert manifest["data"]["math_v7_weights"]["format_repair"] == 0.0
+    assert manifest["data"]["math_sidecar_m0_input_dir"] == "/data/full_m0"
+    assert manifest["data"]["math_sidecar_max_records_per_env"] == 50000
     assert manifest["packing"]["pack_size"] == 8192
     assert manifest["training"]["seq_length"] == 8192
     assert "--math-supervision-strategy hard_math_long_reasoning_v7" in local_script
@@ -351,6 +357,8 @@ def test_scaleup_planner_can_emit_hard_math_long_reasoning_v7_data_prep(tmp_path
     assert "--math-v7-verified-full-solution-weight 0.0" in local_script
     assert "--math-v7-final-answer-aux-weight 0.0" in local_script
     assert "--math-v7-format-repair-weight 0.0" in local_script
+    assert "--math-sidecar-m0-input-dir /data/full_m0" in local_script
+    assert "--math-sidecar-max-records-per-env 50000" in local_script
     assert "pack_size=8192" in local_script
 
 

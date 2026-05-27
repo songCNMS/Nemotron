@@ -221,6 +221,13 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
                 "final_answer_aux": args.math_v7_final_answer_aux_weight,
                 "format_repair": args.math_v7_format_repair_weight,
             },
+            "math_sidecar_m0_input_dir": (
+                str(args.math_sidecar_m0_input_dir)
+                if args.math_sidecar_m0_input_dir is not None
+                else None
+            ),
+            "math_sidecar_max_records_per_env": args.math_sidecar_max_records_per_env,
+            "math_sidecar_max_val_shadow_per_env": args.math_sidecar_max_val_shadow_per_env,
         },
         "packing": {
             "tokenizer_model": qwen_hf_model,
@@ -355,6 +362,21 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f" \\\n  --math-v7-format-repair-weight "
             f"{float(math_v7_weights['format_repair'])}"
         )
+    if data.get("math_sidecar_m0_input_dir"):
+        math_supervision_flag_lines += (
+            f" \\\n  --math-sidecar-m0-input-dir "
+            f"{_q(data['math_sidecar_m0_input_dir'])}"
+        )
+        if data.get("math_sidecar_max_records_per_env") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --math-sidecar-max-records-per-env "
+                f"{int(data['math_sidecar_max_records_per_env'])}"
+            )
+        if data.get("math_sidecar_max_val_shadow_per_env") is not None:
+            math_supervision_flag_lines += (
+                f" \\\n  --math-sidecar-max-val-shadow-per-env "
+                f"{int(data['math_sidecar_max_val_shadow_per_env'])}"
+            )
     optional_training_flags = _optional_training_flags(training)
     optional_training_flag_lines = (
         "".join(f" \\\n  {_q(flag)}" for flag in optional_training_flags)
@@ -592,6 +614,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Math v5 weights: `{data['math_v5_weights']}`",
             f"- Math v6 weights: `{data['math_v6_weights']}`",
             f"- Math v7 weights: `{data['math_v7_weights']}`",
+            f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
                 f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
@@ -777,6 +800,27 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V7_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for v7 math format-repair rows.",
+    )
+    parser.add_argument(
+        "--math-sidecar-m0-input-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional M0 cache used only for math supervision sidecar buckets. "
+            "Base rows still use the planner-generated M0 cache."
+        ),
+    )
+    parser.add_argument(
+        "--math-sidecar-max-records-per-env",
+        type=int,
+        default=None,
+        help="Optional train cap for math sidecar source environments.",
+    )
+    parser.add_argument(
+        "--math-sidecar-max-val-shadow-per-env",
+        type=int,
+        default=None,
+        help="Optional val cap for math sidecar source environments.",
     )
     parser.add_argument("--num-shards", type=int, default=32)
     parser.add_argument("--pack-size", type=int, default=4096)

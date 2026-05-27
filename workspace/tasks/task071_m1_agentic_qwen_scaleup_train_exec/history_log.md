@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Session 1
 
@@ -963,3 +963,17 @@
 - Gate decision：AIME parsed recovery 有改善，但 AIME correct recovery 仍为 `0`，因此不允许启动 30B V7 scale-up；需先增加和清洗 verified AIME/HMMT-style long-solution rows，并保留 pilot AIME `correct_rows > 0` 作为 30B 前置门槛。
 - 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_2k_iter428_session88/corrected_eval_gate`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k/metrics/metric_curves_session88_final_iter428.png`。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_2k_pilot_session88.md`，记录 data prep、training、export、corrected eval 和 no-scale-up decision。
+
+## Session 89
+
+- 按“执行下一步”实现 V7 数据扩量修正：`prepare_m1_agentic_sft.py` 新增 `--math-sidecar-m0-input-dir`，允许 pilot 保持 capped base agentic rows，同时从 uncapped M0 cache 扫描 math sidecar buckets；`plan_qwen_scaleup_run.py` 同步新增 planner flags。
+- V7 hard filter 新增 last boxed scalar numeric answer 约束，排除集合、函数、区间、文本结论等不匹配 AIME/HMMT numeric scoring 的 boxed supervision。
+- 本地验证全量 math cache 规模：uncapped sidecar source math competition `859494` rows、math reasoning `7473` rows；Qwen4B full-sidecar pilot 的 V7 hard verified source/written rows 从 Session 88 的 `29/29` 提升到 `5702/5702`。
+- 完成 Qwen4B full-sidecar pilot local prep/packing：base M1 train `14045` rows、val-shadow `513` rows，packed `19574` sequences、`20958271` tokens、train/valid rows `1402/211`，planner 给出 `train_iters=561`。
+- 同步到 NemTron 并完成 2-GPU Qwen4B train：final checkpoint `iter_0000561`，validation loss/PPL `200:0.6158555/1.851240`、`400:0.4428872/1.557197`、`561:0.3993315/1.490828`，skipped/nan `0/0`。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_full_sidecar_pilot/hf_export_iter_0000561`，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-pilot-iter0000561-hf`，3 个 safetensors shards，tokenizer chat template present。
+- Corrected eval 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`；8k serving context + `6144` max tokens 下 AIME25 parsed/correct `3/10`、`0/10`，HMMT parsed/correct `5/10`、`3/10`。
+- 关键诊断：切到 16k serving context + AIME `8192` max tokens 后，AIME25 parsed/correct 恢复为 `7/10`、`3/10`，说明 30B promotion gate 必须使用 16k/8192 corrected math protocol，不能沿用 8k/6144 gate。
+- 生成但未启动 30B scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar`，配置为 original Qwen3-30B-A3B、uncapped data、V7 full sidecar、pack/seq `8192/8192`、GBS `8`、0.2 epoch、8 H200。
+- 清理：停止 SGLang endpoint，NemTron 8 张 H200 回到 idle；eval summaries 和 export manifest 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_full_sidecar_iter561_session89`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_full_sidecar_pilot/metrics/metric_curves_session89_final_iter561.png`。
+- 验证：py_compile passed；focused M1 SFT tests `3 passed, 73 deselected`；focused Qwen planner test `1 passed, 11 deselected`；ruff passed。

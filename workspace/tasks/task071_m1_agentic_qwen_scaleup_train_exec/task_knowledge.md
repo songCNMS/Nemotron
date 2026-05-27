@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Notes
 
@@ -231,3 +231,9 @@
 - Qwen4B V7 2k training fact: Session 88 completed Qwen4B training to `iter_0000428`; validation loss/PPL improved from `0.6374835/1.891714` at iter `200` to `0.4411893/1.554555` at iter `428`, with skipped/nan `0/0`.
 - Qwen4B V7 2k eval gate fact: corrected eval on the exported `iter_0000428` HF model scored MMLU-Pro per-category-5 `35/70` accuracy `0.5`; AIME25 10 rows at `6144` max tokens parsed `6/10` but correct `0/10`; HMMT 10 rows parsed `6/10` and correct `1/10`.
 - Qwen V7 scale-up gate fact: increasing hard rows and train iters recovered partial AIME parsing but not AIME correctness. Do not start a 30B V7 scale-up until a 4B pilot shows AIME `parsed_rows > 0` and `correct_rows > 0` under the corrected eval gate.
+- M1 math sidecar source fact: Session 89 added `--math-sidecar-m0-input-dir` so capped pilot base data can source math sidecar buckets from an uncapped M0 cache; planner support emits the matching flags in `run_local_data_prep.sh`.
+- Qwen V7 scalar numeric filter fact: Session 89 changed V7 hard-row selection to require the final boxed answer payload to be scalar numeric, excluding symbolic/textual boxed conclusions that do not match AIME/HMMT numeric scoring.
+- Qwen4B V7 full-sidecar pilot data fact: Session 89 used uncapped V6 M0 as math sidecar source and produced V7 hard verified source/written `5702/5702`, packed `19574` sequences, `20958271` tokens, packed train/valid rows `1402/211`, and `train_iters=561`.
+- Qwen4B V7 full-sidecar pilot training fact: Session 89 completed Qwen4B train to `iter_0000561`; validation loss/PPL improved from `0.6158555/1.851240` at iter `200` to `0.3993315/1.490828` at iter `561`, with skipped/nan `0/0`.
+- Qwen4B V7 full-sidecar corrected eval fact: under 8k serving context and `6144` max tokens, AIME25 stayed `0/10` correct while HMMT reached `3/10`; under 16k serving context and AIME `8192` max tokens, AIME25 recovered to parsed/correct `7/10` and `3/10`.
+- Qwen V7 promotion protocol fact: the 30B V7 gate must use corrected math serving with `context_length=16384` and AIME `max_tokens=8192`; the shorter 8k/6144 protocol truncates enough AIME rows to under-report the recipe.
