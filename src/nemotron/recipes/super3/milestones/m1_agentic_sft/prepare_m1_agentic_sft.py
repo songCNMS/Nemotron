@@ -156,6 +156,26 @@ MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V8_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
+
+# AIME-25 / HMMT decontamination contract for math_competition_numeric
+# (NuminaMath) rows. NuminaMath is built from MATH / AIME / AMC / HMMT
+# olympiad sources — task056 README and the m0_math_numinamath data-registry
+# row both declare contamination_against AIME-24/25 and HMMT and call out
+# decontamination as non-negotiable for M1+ runs. The values below are the
+# defaults; the operator points `--decontaminate-math-against-corpus` at the
+# eval prompt corpus (JSONL of {"id", "prompt"} or {"prompt"} records).
+MATH_DECONTAMINATION_DEFAULT_NGRAM_SIZE = 8
+MATH_DECONTAMINATION_DEFAULT_BLOCKER_THRESHOLD = 0.5
+MATH_DECONTAMINATION_ENVIRONMENTS = ("math_competition_numeric",)
+# Hard-math recipes are the highest-stakes regression risk: V7/V8 distill
+# long competition-math reasoning, the exact shape NuminaMath shares with
+# AIME-25 / HMMT. Refuse to run those strategies without a corpus path —
+# silent training on test problems would inflate scores and hide the
+# data-quality issue the team has been working through.
+STRATEGIES_REQUIRING_MATH_DECONTAMINATION = (
+    MATH_SUPERVISION_STRATEGY_V7,
+    MATH_SUPERVISION_STRATEGY_V8,
+)
 MATH_V4_ANSWER_SEEKING_PATTERNS = (
     "compute",
     "determine",
@@ -597,6 +617,113 @@ def _message_content(row: Mapping[str, Any], role: str) -> str:
         if isinstance(message, Mapping) and message.get("role") == role:
             return str(message.get("content", ""))
     return ""
+
+
+def load_math_decontamination_corpus(path: Path) -> list[dict]:
+    """Load an AIME-25 / HMMT prompt corpus for math decontamination.
+
+    Accepts the same JSONL / JSON / YAML / plain-text shapes as
+    ``contamination_scanner._load_records`` so an operator can drop the
+    held-out eval prompts in any of the formats the scanner already
+    supports. Returns the raw record list; the scanner extracts prompt
+    text per its standard field-name heuristics.
+    """
+    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
+        _load_records,
+    )
+
+    return _load_records(path)
+
+
+def decontaminate_math_rows(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    corpus: Sequence[Mapping[str, Any] | str],
+    ngram_size: int = MATH_DECONTAMINATION_DEFAULT_NGRAM_SIZE,
+    blocker_threshold: float = MATH_DECONTAMINATION_DEFAULT_BLOCKER_THRESHOLD,
+    eval_set_name: str = "aime25_hmmt",
+    environments: Sequence[str] = MATH_DECONTAMINATION_ENVIRONMENTS,
+) -> tuple[list[Mapping[str, Any]], JsonDict]:
+    """Drop SFT rows whose user prompt overlaps an eval-corpus prompt.
+
+    Uses task035's :func:`scan_prompt_corpus` to compute deterministic
+    token-n-gram overlap. Rows in ``environments`` whose overlap reaches
+    ``blocker_threshold`` are removed. Non-math rows are passed through
+    untouched. The summary dict records counts the operator can audit
+    after the run.
+    """
+    summary: JsonDict = {
+        "applied": False,
+        "ngram_size": int(ngram_size),
+        "blocker_threshold": float(blocker_threshold),
+        "eval_set_name": eval_set_name,
+        "environments": list(environments),
+        "corpus_size": 0,
+        "scanned_rows": 0,
+        "dropped_rows": 0,
+        "blocker_findings": 0,
+    }
+    if not corpus:
+        return list(rows), summary
+
+    summary["corpus_size"] = len(corpus)
+    target_envs = frozenset(environments)
+    scannable: list[dict] = []
+    scannable_indices: list[int] = []
+    for index, row in enumerate(rows):
+        metadata = row.get("metadata")
+        if not isinstance(metadata, Mapping):
+            continue
+        if metadata.get("m0_environment") not in target_envs:
+            continue
+        prompt = _message_content(row, "user")
+        if not prompt:
+            continue
+        scannable.append({"id": f"row_{index}", "prompt": prompt})
+        scannable_indices.append(index)
+
+    summary["scanned_rows"] = len(scannable)
+    if not scannable:
+        return list(rows), summary
+
+    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
+        scan_prompt_corpus,
+    )
+
+    report = scan_prompt_corpus(
+        scannable,
+        {eval_set_name: list(corpus)},
+        ngram_size=int(ngram_size),
+        # Drop rows the moment they cross the blocker threshold; we don't
+        # care about a separate informational tier here.
+        informational_threshold=float(blocker_threshold),
+        blocker_threshold=float(blocker_threshold),
+    )
+    dropped_row_indices: set[int] = set()
+    for finding in report.get("blockers", []):
+        prompt_id = finding.get("prompt_id")
+        if not isinstance(prompt_id, str) or not prompt_id.startswith("row_"):
+            continue
+        try:
+            dropped_row_indices.add(int(prompt_id[len("row_"):]))
+        except ValueError:
+            continue
+    summary["applied"] = True
+    summary["blocker_findings"] = len(report.get("blockers", []))
+    summary["dropped_rows"] = len(dropped_row_indices)
+    summary["sample_dropped_findings"] = [
+        {
+            "prompt_id": item.get("prompt_id"),
+            "eval_id": item.get("eval_id"),
+            "score": item.get("score"),
+            "matched_ngrams": item.get("matched_ngrams"),
+        }
+        for item in report.get("blockers", [])[:10]
+    ]
+    return (
+        [row for index, row in enumerate(rows) if index not in dropped_row_indices],
+        summary,
+    )
 
 
 def is_hard_math_recovery_row(row: Mapping[str, Any]) -> bool:
@@ -1916,6 +2043,84 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             ]
             math_sidecar_train_rows = filter_v3_training_rows(math_sidecar_train_rows)
 
+    # Math decontamination against AIME-25 / HMMT. NuminaMath's
+    # math_competition_numeric pool overlaps competition-math eval
+    # benchmarks (declared in data_registry.yaml line 499); silently
+    # training on a held-out problem would inflate scores. V7+V8
+    # explicitly target the same long-CoT distribution that's most at
+    # risk, so they require the corpus flag; older strategies allow
+    # optional decontamination for ad-hoc safety.
+    decontamination_corpus_path = getattr(
+        args, "decontaminate_math_against_corpus", None
+    )
+    strategy_requires_decontamination = (
+        math_supervision_strategy in STRATEGIES_REQUIRING_MATH_DECONTAMINATION
+    )
+    skip_decontamination_check = bool(
+        getattr(args, "skip_math_decontamination_check", False)
+    )
+    if strategy_requires_decontamination and decontamination_corpus_path is None:
+        if not skip_decontamination_check:
+            raise ValueError(
+                f"--math-supervision-strategy={math_supervision_strategy} "
+                "requires --decontaminate-math-against-corpus pointing at "
+                "the AIME-25 / HMMT eval prompt corpus, OR an explicit "
+                "--skip-math-decontamination-check (NOT recommended for "
+                "production training). NuminaMath's "
+                "math_competition_numeric pool contains AIME/HMMT olympiad "
+                "problems (see data_registry.yaml m0_math_numinamath "
+                "contamination_against). The hard-math V7/V8 recipes "
+                "distill exactly that distribution, so silent overlap with "
+                "held-out evals would inflate AIME-25 / HMMT scores. See "
+                "workspace/tasks/task071*/qwen_original_vs_sft_math_pipeline_review_session82.md."
+            )
+    decontamination_ngram_size = int(
+        getattr(
+            args,
+            "decontaminate_math_ngram_size",
+            MATH_DECONTAMINATION_DEFAULT_NGRAM_SIZE,
+        )
+    )
+    decontamination_blocker_threshold = float(
+        getattr(
+            args,
+            "decontaminate_math_blocker_threshold",
+            MATH_DECONTAMINATION_DEFAULT_BLOCKER_THRESHOLD,
+        )
+    )
+    decontamination_audit: JsonDict = {
+        "applied": False,
+        "strategy": math_supervision_strategy,
+        "strategy_requires_corpus": strategy_requires_decontamination,
+        "skip_check": skip_decontamination_check,
+        "corpus_path": (
+            str(decontamination_corpus_path)
+            if decontamination_corpus_path is not None
+            else None
+        ),
+    }
+    if decontamination_corpus_path is not None:
+        corpus = load_math_decontamination_corpus(decontamination_corpus_path)
+        train_rows, train_decontam = decontaminate_math_rows(
+            train_rows,
+            corpus=corpus,
+            ngram_size=decontamination_ngram_size,
+            blocker_threshold=decontamination_blocker_threshold,
+        )
+        decontamination_audit["base_train"] = train_decontam
+        if math_sidecar_train_rows is not None:
+            (
+                math_sidecar_train_rows,
+                sidecar_decontam,
+            ) = decontaminate_math_rows(
+                math_sidecar_train_rows,
+                corpus=corpus,
+                ngram_size=decontamination_ngram_size,
+                blocker_threshold=decontamination_blocker_threshold,
+            )
+            decontamination_audit["math_sidecar_train"] = sidecar_decontam
+        decontamination_audit["applied"] = True
+
     # task040 Session 2: W1 curriculum sampler wiring. Applies to TRAIN
     # only — val rows stay in stable order so shadow eval is reproducible.
     train_rows, curriculum_audit = _apply_curriculum_to_train(
@@ -2077,6 +2282,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "val_shadow": count_difficulty_buckets(val_rows),
         },
         "curriculum": curriculum_audit,
+        "math_decontamination": decontamination_audit,
         "math_final_answer_supervision": {
             "environments": sorted(MATH_FINAL_ANSWER_ENVIRONMENTS),
             "format": MATH_FINAL_ANSWER_FORMAT,
@@ -2388,6 +2594,52 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help="Optional per-math-environment val cap for --math-sidecar-m0-input-dir.",
+    )
+    parser.add_argument(
+        "--decontaminate-math-against-corpus",
+        type=Path,
+        default=None,
+        help=(
+            "Drop `math_competition_numeric` (NuminaMath) rows whose user "
+            "prompt overlaps prompts in this corpus at the blocker threshold. "
+            "Reuses task035 contamination_scanner.scan_prompt_corpus for "
+            "deterministic token-n-gram overlap. Required for "
+            "--math-supervision-strategy hard_math_long_reasoning_v7 / "
+            "hard_math_clean_final_v8 (or pass "
+            "--skip-math-decontamination-check explicitly). Corpus accepts "
+            "JSONL / JSON / YAML / plain-text shapes; minimal record is "
+            "{\"id\": str, \"prompt\": str}."
+        ),
+    )
+    parser.add_argument(
+        "--decontaminate-math-ngram-size",
+        type=int,
+        default=MATH_DECONTAMINATION_DEFAULT_NGRAM_SIZE,
+        help=(
+            "Token n-gram size for math decontamination overlap scoring. "
+            "Smaller values are more strict (catch shorter copies)."
+        ),
+    )
+    parser.add_argument(
+        "--decontaminate-math-blocker-threshold",
+        type=float,
+        default=MATH_DECONTAMINATION_DEFAULT_BLOCKER_THRESHOLD,
+        help=(
+            "Overlap ratio threshold for blocking a math row. "
+            "max(prompt_overlap_ratio, eval_overlap_ratio) >= this value "
+            "drops the row."
+        ),
+    )
+    parser.add_argument(
+        "--skip-math-decontamination-check",
+        action="store_true",
+        help=(
+            "Acknowledge AIME-25 / HMMT contamination risk and run "
+            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 "
+            "without a decontamination corpus. NOT recommended for "
+            "production training; intended only for smoke/dry-run paths "
+            "where the operator has already validated their slice."
+        ),
     )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument(
