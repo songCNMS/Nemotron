@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
 
 ## Session 1
 
@@ -882,3 +882,13 @@
 - 启动健康检查通过：checkpoint 从 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507` 加载，显存上升到约 `81-88G`，训练进入 iteration；最新同步日志到 iter `130/1529`，latest train lm loss `0.8720737`，load-balancing loss `1.476049`，skipped/nan `0/0`。
 - 刷新正式 V6 startup metrics：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_balanced_v6/metrics/metric_curves_session80_iter130.png`，同时生成 `train_loss_points.csv` 和 `health_summary.json`；首个 validation 将在 iter `400`。
 - 新增报告 `qwen_v6_pilot_and_full_launch_session80.md`，记录 pilot train/export/eval、全量数据规模、训练启动状态和后续监控入口。
+
+## Session 81
+
+- 用户质疑：Qwen4B pilot 在 AIME/HMMT 小篮子上 accuracy `0.0`，为什么仍启动 30B 全量 V6 训练。
+- 复核结论：启动 30B V6 是决策错误；我把 pilot 当成 pipeline smoke 通过标准，但当前任务目标是恢复 hard-math benchmark，AIME/HMMT pilot `0.0` 应该触发 scale-up stop gate。
+- 解释：4B、10-row pilot 的分数不能可靠预测 30B full-run 最终 benchmark，但它已经证明当前 V6 recipe 没有产生正向 hard-math signal；在此目标下，不应继续占用 8-GPU 训练资源。
+- 已停止 NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6`；停止前日志已到 iter `260/1529`，latest train lm loss `0.5426581`，load-balancing loss `1.453394`，skipped/nan `0/0`。
+- 停止后确认：NemTron tmux server 无该 session，8 张 H200 均回到 `1 MiB` 显存占用、util `0%`，且 run 未到 iter `400` save/eval 点，没有 `latest_checkpointed_iteration.txt`。
+- 修正后的 gate：任何 hard-math recovery recipe 在放大到 30B 全量训练前，应在 small pilot 上至少满足 hard-math smoke 的非零 correctness 或给出明确诊断解释；仅 MMLU-Pro parsed/accuracy 和 pipeline 成功不够。
+- 推荐下一步：先在小型数据和小模型/短 30B slice 上验证 math prompt cap、final-answer format、verified full-solution rows 的 answer extraction coverage；只有 AIME/HMMT smoke 出现非零 correctness 或明确修复 parser/protocol bug 后，再启动 8-GPU full run。

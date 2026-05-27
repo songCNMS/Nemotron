@@ -88,3 +88,13 @@ User requested a small-data validation before scaling to full data, with the val
 - Targeted tests: V6 M1 prep and Qwen scale-up planner tests passed.
 - Pilot pipeline: local data prep, sync, remote train, metrics, checkpoint export, endpoint smoke, corrected MMLU-Pro eval, corrected AIME/HMMT eval.
 - Full pipeline stage reached: uncapped data prep, Qwen tokenizer packing, train plan, remote sync, remote 8-GPU train launch, early iteration monitoring.
+
+## Session 81 Stop Decision
+
+The V6 full run was stopped after review because the Qwen4B pilot AIME/HMMT correctness was `0.0`. I had treated the pilot as a pipeline smoke, but for a hard-math recovery recipe that was not a sufficient scale-up gate.
+
+- Stopped tmux session: `task067_task071_qwen30b_a3b_hard_math_balanced_v6`.
+- Last observed train point before stop: iter `260/1529`, train loss `0.5426581`, load-balancing loss `1.453394`, skipped/nan `0/0`.
+- Checkpoint state: no iter `400` save/eval point was reached; no checkpoint marker exists for this run.
+- Resource state after stop: all 8 H200 GPUs returned to idle.
+- Corrected gate: hard-math recipes need nonzero AIME/HMMT smoke correctness or a concrete eval-protocol/parser diagnosis before an 8-GPU full run.

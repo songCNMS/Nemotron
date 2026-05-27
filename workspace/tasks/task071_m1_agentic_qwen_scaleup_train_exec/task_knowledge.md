@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
 
 ## Notes
 
@@ -211,3 +211,5 @@
 - Qwen 4B math eval sizing fact: corrected math runner defaults to `max_tokens=8192`, which exceeds the pilot SGLang endpoint `max_model_len=4096` and causes HTTP 400; for 4B pilot endpoints use `--aime-max-tokens 2048 --hmmt-max-tokens 2048` or serve with a larger context.
 - Qwen V6 full-data artifact fact: Session 80 uncapped V6 data prep produced base M1 train rows `983397`, val-shadow rows `11354`, hard verified source/written `114305/68583`, broad verified `430662/107666`, final-answer aux `29/1`, format repair `321971/9659`, heldout eval `1419`, packed sequences `1169133`, packed tokens `769769392`, packed train rows `61129`, valid rows `398`, and `train_iters=1529` at GBS `8`.
 - Qwen V6 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_balanced_v6`, uses all 8 H200 GPUs, `train_iters=1529`, GBS `8`, eval/save interval `400`, lr `2e-7`, min lr `8e-8`, and warmup `100`; Session 80 confirmed early training through parsed iter `130/1529` with latest train loss `0.8720737`, load-balancing loss `1.476049`, and skipped/nan `0/0`.
+- Qwen V6 gate correction fact: Session 81 stopped the `task067_task071_qwen30b_a3b_hard_math_balanced_v6` full run after user review because the Qwen4B pilot AIME/HMMT correctness was `0.0`; the run stopped before iter `400`, so no checkpoint marker was written, and 8 H200 GPUs were released.
+- Qwen hard-math scale-up rule: for hard-math recovery recipes, a pilot that only proves pipeline execution is insufficient; AIME/HMMT smoke should show nonzero correctness or a concrete parser/protocol fix before starting an 8-GPU full 30B run.
