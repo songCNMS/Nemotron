@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
 
 ## Notes
 
@@ -250,3 +250,4 @@
 - Qwen V8 script fact: if the local pretrained Megatron checkpoint path is absent but the checkpoint exists on NemTron, regenerate the scale-up bundle with `--allow-missing-checkpoint`; remote training can still use `SUPER3_M1_PRETRAINED_CHECKPOINT=/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`.
 - Qwen V8 train fact: Session 94 completed `task071_qwen30b_a3b_hard_math_clean_final_v8` on NemTron 8 H200 GPUs to `iter_0000779`; validation loss/PPL improved from `0.4647015/1.591539` at iter `400` to `0.4463005/1.562521` at iter `779`, with max skipped/nan `0/0`.
 - Qwen V8 checkpoint fact: remote checkpoints exist at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints/iter_0000400` and `iter_0000779`; the final metrics curve is `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/metrics/metric_curves_session94_final_iter779.png`.
+- PR state fact: Session 95 confirmed PR #164 is merged, but branch `intern_nemontron_code_reading/task071_math_sidecar_data_session40` still has source-code changes ahead of `origin/main`; a fresh PR is needed to promote those changes.

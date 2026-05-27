@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
 
 ## Session 1
 
@@ -1038,3 +1038,10 @@
 - Max skipped/nan iterations remained `0/0`; final parsed train point was iter `770` with train loss `0.4295896`, lr `8.005201e-08`, grad norm `0.597`.
 - Generated metrics artifacts under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/metrics`, including `metric_curves_session94_final_iter779.png`, `train_loss_points.csv`, `validation_points.csv`, and `health_summary.json`.
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_train_session94.md`，记录 V8 data scale、remote training、validation metrics、checkpoint paths 和 eval handoff.
+
+## Session 95
+
+- 回答用户 “any code changes to open an PR”：先检查本地 branch 状态、fetch `origin/main`，并查询 GitHub PR #164 状态。
+- `gh pr view 164` 显示 PR #164 已经 `MERGED`，head branch 是 `intern_nemontron_code_reading/task071_math_sidecar_data_session40`，base 是 `main`。
+- `git diff --name-only origin/main...HEAD` 仍显示 source files ahead of `origin/main`，包括 M1 SFT data prep/planner、Qwen stage1 SFT train/contract/data-prep files 和对应 tests。
+- 结论：若要提交当前 branch 的新增工作，需要开 fresh PR；本轮未新增实现代码，只更新 task bookkeeping 和答复 PR 状态判断。

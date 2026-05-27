@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 94 |
+| Session | 95 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Completed V8 uncapped data prep, synced to NemTron, and finished the bounded 30B-A3B V8 train-to-validation run at iter_0000779 with improved validation loss/PPL. |
+| Latest | Checked PR state and branch diff: PR #164 is merged, and the current branch still contains source changes ahead of origin/main that warrant a fresh PR if promoted. |
