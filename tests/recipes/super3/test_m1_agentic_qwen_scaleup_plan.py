@@ -430,6 +430,99 @@ def test_scaleup_planner_can_emit_hard_math_clean_final_v8_data_prep(tmp_path) -
     assert "pack_size=8192" in local_script
 
 
+def test_scaleup_planner_plumbs_math_decontamination_flags_through_local_script(tmp_path) -> None:
+    """Regression: prepare_m1_agentic_sft.py requires
+    --decontaminate-math-against-corpus for V7/V8 strategies (or
+    --skip-math-decontamination-check). The planner must plumb both
+    flags through to the local data-prep script, otherwise V7/V8
+    scaleup bundles fail with the prepare-side guard.
+    """
+    corpus_path = tmp_path / "aime25_hmmt_corpus.jsonl"
+    corpus_path.write_text("", encoding="utf-8")
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_long_reasoning_v7",
+            "--math-decontaminate-against-corpus",
+            str(corpus_path),
+            "--math-decontaminate-ngram-size",
+            "6",
+            "--math-decontaminate-blocker-threshold",
+            "0.4",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_decontaminate_against_corpus"] == str(corpus_path)
+    assert manifest["data"]["math_decontaminate_ngram_size"] == 6
+    assert manifest["data"]["math_decontaminate_blocker_threshold"] == 0.4
+    assert manifest["data"]["math_skip_decontamination_check"] is False
+    assert f"--decontaminate-math-against-corpus {corpus_path}" in local_script
+    assert "--decontaminate-math-ngram-size 6" in local_script
+    assert "--decontaminate-math-blocker-threshold 0.4" in local_script
+    assert "--skip-math-decontamination-check" not in local_script
+
+
+def test_scaleup_planner_can_emit_skip_decontamination_check(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_clean_final_v8",
+            "--math-skip-decontamination-check",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_skip_decontamination_check"] is True
+    assert manifest["data"]["math_decontaminate_against_corpus"] is None
+    assert "--skip-math-decontamination-check" in local_script
+    assert "--decontaminate-math-against-corpus" not in local_script
+
+
+def test_scaleup_planner_omits_decontamination_flags_when_not_set(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "reasoning_replay_v3",  # V3 doesn't require decontam
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    # V3 doesn't pass decontamination flags by default; older bundle
+    # behavior is preserved.
+    assert manifest["data"]["math_decontaminate_against_corpus"] is None
+    assert manifest["data"]["math_skip_decontamination_check"] is False
+    assert "--decontaminate-math-against-corpus" not in local_script
+    assert "--skip-math-decontamination-check" not in local_script
+
+
 def test_write_plan_outputs_executable_scripts(tmp_path) -> None:
     manifest = build_manifest(_args(tmp_path))
     write_plan(manifest, overwrite=True)
