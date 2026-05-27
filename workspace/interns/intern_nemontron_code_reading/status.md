@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 89 |
+| Session | 90 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Added uncapped math-sidecar sourcing and scalar numeric V7 filtering; Qwen4B full-sidecar pilot reached AIME 3/10 correct under 16k/8192 eval and generated 30B scale-up scripts. |
+| Latest | Completed 30B V7 full-sidecar data prep, fixed planner auto-entrypoint for Qwen3-30B-A3B, trained to iter 782, exported HF artifact, and generated final metric curve. |

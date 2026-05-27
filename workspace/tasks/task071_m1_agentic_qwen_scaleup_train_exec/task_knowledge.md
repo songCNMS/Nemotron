@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
 
 ## Notes
 
@@ -237,3 +237,6 @@
 - Qwen4B V7 full-sidecar pilot training fact: Session 89 completed Qwen4B train to `iter_0000561`; validation loss/PPL improved from `0.6158555/1.851240` at iter `200` to `0.3993315/1.490828` at iter `561`, with skipped/nan `0/0`.
 - Qwen4B V7 full-sidecar corrected eval fact: under 8k serving context and `6144` max tokens, AIME25 stayed `0/10` correct while HMMT reached `3/10`; under 16k serving context and AIME `8192` max tokens, AIME25 recovered to parsed/correct `7/10` and `3/10`.
 - Qwen V7 promotion protocol fact: the 30B V7 gate must use corrected math serving with `context_length=16384` and AIME `max_tokens=8192`; the shorter 8k/6144 protocol truncates enough AIME rows to under-report the recipe.
+- Qwen3-30B-A3B planner entrypoint fact: scale-up runs for model paths containing `30B-A3B` must use `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`; the generic `qwen_local_train.py` sets Qwen4B-style TP and `sequence_parallel=False`, which fails 30B-A3B MoE training at first forward with the Megatron sequence-parallel requirement.
+- Qwen 30B V7 full-sidecar train fact: Session 90 completed the uncapped V7 full-sidecar 30B run to `iter_0000782` with final validation loss/PPL `0.4461341/1.562261`, best validation at final iter, max skipped/nan `0/0`, metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/metrics/metric_curves_session90_final_iter782.png`, and checkpoint marker `782`.
+- Qwen 30B V7 full-sidecar export fact: Session 90 exported `iter_0000782` to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`; the HF artifact is about `57G`, has `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-iter0000782-hf`.

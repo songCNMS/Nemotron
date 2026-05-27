@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
 
 ## Session 1
 
@@ -977,3 +977,16 @@
 - 生成但未启动 30B scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar`，配置为 original Qwen3-30B-A3B、uncapped data、V7 full sidecar、pack/seq `8192/8192`、GBS `8`、0.2 epoch、8 H200。
 - 清理：停止 SGLang endpoint，NemTron 8 张 H200 回到 idle；eval summaries 和 export manifest 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_full_sidecar_iter561_session89`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_full_sidecar_pilot/metrics/metric_curves_session89_final_iter561.png`。
 - 验证：py_compile passed；focused M1 SFT tests `3 passed, 73 deselected`；focused Qwen planner test `1 passed, 11 deselected`；ruff passed。
+
+## Session 90
+
+- 按“continue to the next step”启动 30B V7 full-sidecar scale-up：本地 uncapped M0/M1 data prep 完成，M1 train rows `983397`、val-shadow `11354`，Qwen packed artifact `988926` sequences、`674237679` tokens、32 shards。
+- 训练计划基于 packed rows 计算 `train_iters=782`，packed train/valid rows `31258/2546`，GBS `8`，pack/seq `8192/8192`，eval/save interval `400`。
+- 首次远端训练使用了默认 `qwen_local_train.py`，在第一步 forward 报错：Qwen3-30B-A3B MoE + tensor parallel training 必须启用 sequence parallel。根因是 scale-up planner 未自动选择 30B-A3B 专用入口。
+- 修复 `plan_qwen_scaleup_run.py`：当 `--qwen-hf-model` 包含 `30B-A3B` 且未显式传 `--train-entrypoint` 时，自动使用 `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`；补充 planner 单测覆盖 auto-selection。
+- 重新同步 NemTron 并用 30B-A3B 专用入口完成训练：final checkpoint `iter_0000782`，checkpoint marker `782`，skipped/nan `0/0`，8 张 H200 训练结束后释放。
+- 训练指标：iter `400` validation loss/PPL `0.4646536/1.591463`，final iter `782` validation loss/PPL `0.4461341/1.562261`，best validation 为 final iter `782`。
+- 本地 metric artifacts 刷新到 `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/metrics`，最终曲线为 `metric_curves_session90_final_iter782.png`。
+- 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 NemTron GPU5 上导出 final checkpoint 到 HF：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`，日志包含 `EXPORT_DONE`。
+- HF export 校验通过：`model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`、tokenizer `Qwen2TokenizerFast`、chat template present、16 个 safetensors shards，总大小 `61084232276` bytes；manifest 写到 `task071_export_manifest.json`。
+- 验证：focused planner tests `2 passed, 11 deselected`；ruff passed；`py_compile` passed。

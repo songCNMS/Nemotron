@@ -34,6 +34,7 @@ DEFAULT_NEMTRON_VENV = Path("/root/nemotron_session5_venv")
 DEFAULT_REMOTE_ROOT = Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup")
 DEFAULT_RUN_NAME = "qwen_m1_agentic_sft_scaleup"
 DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py"
+QWEN30B_A3B_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
 
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 QWEN_CHECKPOINT_ENV_VAR = "SUPER3_M1_PRETRAINED_CHECKPOINT"
@@ -105,6 +106,17 @@ def _env_or_arg(value: str | None, env_var: str, flag: str) -> str:
     return resolved
 
 
+def resolve_train_entrypoint(explicit: str | None, qwen_hf_model: str) -> str:
+    """Pick the Qwen train entrypoint that matches the model family."""
+
+    if explicit:
+        return explicit
+    normalized_model = qwen_hf_model.lower()
+    if "30b-a3b" in normalized_model:
+        return QWEN30B_A3B_TRAIN_ENTRYPOINT
+    return DEFAULT_TRAIN_ENTRYPOINT
+
+
 def _write_executable(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
     path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
@@ -162,6 +174,7 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
     qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
+    train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
     pretrained_checkpoint = _env_or_arg(
         args.pretrained_checkpoint,
         QWEN_CHECKPOINT_ENV_VAR,
@@ -241,7 +254,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         },
         "training": {
             "pretrained_checkpoint": pretrained_checkpoint,
-            "train_entrypoint": args.train_entrypoint,
+            "train_entrypoint": train_entrypoint,
             "epochs": args.epochs,
             "global_batch_size": args.global_batch_size,
             "micro_batch_size": args.micro_batch_size,
@@ -673,7 +686,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--run-name", default=DEFAULT_RUN_NAME)
     parser.add_argument("--qwen-hf-model", default=None)
     parser.add_argument("--pretrained-checkpoint", default=None)
-    parser.add_argument("--train-entrypoint", default=DEFAULT_TRAIN_ENTRYPOINT)
+    parser.add_argument(
+        "--train-entrypoint",
+        default=None,
+        help=(
+            "Training entrypoint script. Defaults to the 30B-A3B MoE entrypoint "
+            "when --qwen-hf-model contains 30B-A3B, otherwise the 4B Qwen entrypoint."
+        ),
+    )
     parser.add_argument("--max-train-per-dataset", type=int, default=100)
     parser.add_argument("--max-val-per-dataset", type=int, default=25)
     parser.add_argument(

@@ -4,6 +4,7 @@ import pytest
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run import (
     AGENTIC_M0_DATASET_IDS,
+    QWEN30B_A3B_TRAIN_ENTRYPOINT,
     build_manifest,
     build_parser,
     render_eval_script,
@@ -144,6 +145,27 @@ def test_scaleup_planner_wires_30b_entrypoint_and_strategy_overrides(tmp_path) -
     assert "++optimizer.min_lr=1e-07" in remote_script
     assert "scheduler.lr_warmup_iters=100" in remote_script
     assert "++scheduler.lr_decay_iters=$TRAIN_ITERS" in remote_script
+
+
+def test_scaleup_planner_auto_selects_30b_a3b_entrypoint(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+        ]
+    )
+    manifest = build_manifest(args)
+    remote_script = render_remote_train_script(manifest)
+
+    assert manifest["training"]["train_entrypoint"] == QWEN30B_A3B_TRAIN_ENTRYPOINT
+    assert "qwen3_30b_a3b_local_train.py" in remote_script
+    assert "qwen_local_train.py" not in remote_script
 
 
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
