@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=83 -->
 
 ## Notes
 
@@ -218,3 +218,7 @@
 - Same-row hard-math fact: on `aime_01_r01`, original used `4821` completion tokens and ended at correct `\boxed{293}`, while conservative, iter3000, V3, V4, and V5 used roughly `551-795` tokens and returned wrong boxed answers `145` or `73`.
 - M1 math data-shape fact: V3/V4/V5/V6 Qwen packed artifacts use `chat_template=tokenizer` with thinking disabled, but their hard-math sidecar assistant responses are much shorter than original successful eval traces. Representative assistant content p50 is about `898` chars for V3 verified, `1198` for V4 hard, `1468` for V5 hard, and `1465` for V6 hard, while original eval successes often require thousands of completion tokens.
 - Hard-math gate fact: parsed rate alone is not a promotion signal. For hard-math recovery, track parsed-correct ratio, average completion tokens, same-row original-vs-candidate deltas, and nonzero AIME/HMMT pilot correctness before starting full 30B scale-up.
+- Qwen thinking-template audit fact: Session 83 verified the current Qwen3-30B-A3B tokenizer template has no `enable_thinking`, `reasoning_content`, or `<think>` branch; rendering the same prompt with `enable_thinking=false` and `enable_thinking=true` is identical. Current V3/V4/V5/V6 failures are not caused by disabling a tokenizer-level thinking path.
+- Current M1 reasoning-field fact: Session 83 scanned current V3/V4/V5/V6 M1 JSONLs and found non-empty `reasoning_content=0` and `<think>` tags `0`; GSM8K/NuminaMath source solutions are preserved through `extra_env_info.reference_solution` into assistant `content`.
+- Current recipe fact: V4/V5/V6 hard-math runs are not dominated by final-answer-only auxiliary rows (`0`, `0`, and `1` aux row respectively). The current failure is better explained by short visible solution traces, 4096 train sequence length, and sidecar quality than by hidden CoT omission.
+- Historical template misuse fact: `task071_qwen30b_a3b_math_final_answer_v1` was a real bad artifact because its packed run config used `chat_template=super3`; subsequent Qwen-chat runs use `chat_template=tokenizer` and are protected by `validate_qwen_packed_sft_chat_contract`.

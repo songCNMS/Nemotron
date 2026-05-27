@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 82 |
+| Session | 83 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Reviewed the original-vs-SFT AIME/HMMT eval pipeline end to end; concluded the gap is a real SFT reasoning/output-policy regression, not a parser or current Qwen chat-template bug. |
+| Latest | Audited Qwen thinking/template/data recipe paths; ruled out current hidden thinking-token omission or tokenizer-template misuse as the live AIME/HMMT failure cause, while confirming historical Super3-template misuse was already retired. |

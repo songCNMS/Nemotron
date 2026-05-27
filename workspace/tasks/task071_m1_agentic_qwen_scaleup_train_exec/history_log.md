@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=83 -->
 
 ## Session 1
 
@@ -903,3 +903,15 @@
 - 数据侧诊断：M1 hard-math sidecar assistant responses 主要为短 full-solution 或 boxed-answer supervision，p50 大约 `0.9k-1.5k` chars，远短于 original eval 中成功 hard-math traces 的 `5k-7k` completion tokens；部分 sidecar 仍有 malformed boxed/final-answer 风险。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_original_vs_sft_math_pipeline_review_session82.md`，记录 verdict、raw metrics、sample evidence、root causes 和 revised hard-math gates。
 - 结论：AIME/HMMT 差异不是 eval metric 或 current chat-template bug；SFT 学到了更短、更易 parse 的 boxed answer 输出策略，但压缩了 hard-math long reasoning/self-correction 行为。下一步应先做小型端到端 pilot，加入 long-solution retention / stronger verification，并以 AIME/HMMT 非零 correctness 作为 scale-up gate。
+
+## Session 83
+
+- 按用户要求重点复核是否存在 data/template misuse，例如遗漏 thinking tokens、错误 chat template 或 `enable_thinking=false` 使 fine-tuned model 在 AIME/HMMT 上停止思考并直接给错答案。
+- 代码路径复核：`chat_sft_shard_core._tokenize_chunks_with_mask` 只对 assistant chunks 置 loss mask `1`，system/user/tool 为 `0`；Qwen 4B/30B train entrypoints 在构建 recipe 前调用 `validate_qwen_packed_sft_chat_contract`，要求 packed metadata 为 `chat_template=tokenizer`、thinking kwargs 显式 false，且 tokenizer URI 匹配。
+- 实际 artifact 复核：Qwen chat v2、V3、V4、V5、V6 的 packed metadata 均为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`、`pack_size=4096`；旧 `task071_qwen30b_a3b_math_final_answer_v1` 确认为历史坏例，packed run config 记录 `chat_template=super3`，已在 Session 50 后改用 Qwen tokenizer packing。
+- Tokenizer probe：当前 `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507/tokenizer_config.json` 的 chat template 不包含 `enable_thinking`、`reasoning_content` 或 `<think>`/`</think>` 分支；同一 prompt 在 `{}`、`enable_thinking=false`、`enable_thinking=true` 下 render 完全一致。
+- 远端 export probe：V4/V5 HF export 的 `chat_template.jinja` 也不含 thinking branches；NemTron packed metadata 对 V4/V5/V6 与本地一致。V3 远端 export path 缺 tokenizer files，但本地 packed artifact 仍证实训练数据使用 tokenizer 模板。
+- M0/M1 数据字段复核：GSM8K/NuminaMath converters 将 source full solution 保存到 `extra_env_info.reference_solution`；M1 `assistant_for_reasoning` 将该 solution 放进 assistant `content`。当前 V3/V4/V5/V6 M1 JSONL 扫描均为 non-empty `reasoning_content=0`、`<think>` tag `0`，所以没有 hidden thinking 字段被当前 pipeline 丢弃。
+- 当前 recipe 诊断：V4/V5/V6 不是 final-answer-only aux 主导，V4 final-answer aux `0` rows、V5 `0` rows、V6 `1` row；主要问题是 visible full-solution traces 太短，V3/V4/V5/V6 hard/broad sidecar p50 约 `0.8k-1.5k` chars，而 original AIME/HMMT 成功 eval 常用 `5k-7k` completion tokens。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_thinking_template_data_recipe_audit_session83.md`，记录 ruled-out hypotheses、confirmed historical issue、current likely recipe issue 和 recommendation。
+- 结论：不要把当前 AIME/HMMT 失败当作 live chat-template bug 修；应作为 long hard-math reasoning retention / sequence-length / sidecar quality 问题处理，并增加 future tokenizer-thinking branch guard。
