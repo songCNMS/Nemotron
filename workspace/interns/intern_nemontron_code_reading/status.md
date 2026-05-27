@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 93 |
+| Session | 94 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Added hard_math_clean_final_v8 data recipe and planner wiring, smoke-validated V8 prep, and generated 30B V8 scale-up scripts for the next train-to-eval run. |
+| Latest | Completed V8 uncapped data prep, synced to NemTron, and finished the bounded 30B-A3B V8 train-to-validation run at iter_0000779 with improved validation loss/PPL. |

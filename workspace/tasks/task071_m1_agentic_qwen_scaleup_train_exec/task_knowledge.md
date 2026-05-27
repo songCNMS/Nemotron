@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Notes
 
@@ -246,3 +246,7 @@
 - Qwen 30B V7 HMMT eval-policy fact: Session 92 HMMT-only probes scored `4/30` at both `8192` repeat and `12288` max tokens under `parallelism=8`; `12288` improved parsed rows from `18/30` to `20/30` but did not improve exact score, so the default corrected HMMT gate should stay at `8192` max tokens while reporting the observed `13.3%-16.7%` small-sample band for V7.
 - Qwen V8 recipe fact: Session 93 added `hard_math_clean_final_v8`, a V7-derived strategy that only duplicates long hard-math rows whose single boxed scalar final answer matches the source M0 expected answer and is not followed by explanatory text; it preserves existing V7 behavior as a separate strategy.
 - Qwen V8 planning fact: Session 93 generated `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8` with uncapped base data, V7 full M0 cache as math sidecar source, pack/seq `8192/8192`, 0.2 epoch, GBS `8`, lr `2e-7`, min lr `8e-8`, and 8-H200 30B-A3B train entrypoint.
+- Qwen V8 data fact: Session 94 full local prep produced base M1 train rows `983397`, val-shadow rows `11354`, V8 hard clean final source/written rows `4546/4546`, packed sequences `987770`, packed tokens `672788411`, `32` train shards, `1` valid shard, packed train rows `31144`, packed valid rows `2546`, and `train_iters=779` at GBS `8`.
+- Qwen V8 script fact: if the local pretrained Megatron checkpoint path is absent but the checkpoint exists on NemTron, regenerate the scale-up bundle with `--allow-missing-checkpoint`; remote training can still use `SUPER3_M1_PRETRAINED_CHECKPOINT=/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507`.
+- Qwen V8 train fact: Session 94 completed `task071_qwen30b_a3b_hard_math_clean_final_v8` on NemTron 8 H200 GPUs to `iter_0000779`; validation loss/PPL improved from `0.4647015/1.591539` at iter `400` to `0.4463005/1.562521` at iter `779`, with max skipped/nan `0/0`.
+- Qwen V8 checkpoint fact: remote checkpoints exist at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints/iter_0000400` and `iter_0000779`; the final metrics curve is `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/metrics/metric_curves_session94_final_iter779.png`.

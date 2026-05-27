@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Session 1
 
@@ -1024,3 +1024,17 @@
 - 生成 30B V8 scale-up script bundle：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8`，配置为 uncapped base data、V7 full M0 cache as math sidecar source、pack/seq `8192/8192`、GBS `8`、0.2 epoch、lr `2e-7`、min lr `8e-8`、8 H200。
 - 验证：focused V7/V8 tests `3 passed, 74 deselected`；focused planner tests `3 passed, 11 deselected`；full related test files `90 passed, 1 skipped`；ruff passed；`git diff --check` passed。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_recipe_session93.md`，记录 V8 design、smoke evidence、script bundle 和 validation.
+
+## Session 94
+
+- 按用户要求执行 V8 full path：本地运行 `run_local_data_prep.sh`，完成 uncapped M0/M1 data prep、Qwen tokenizer packing 和 training plan 生成。
+- V8 M1 数据规模：base M1 train rows `983397`、val-shadow rows `11354`；V8 hard clean final source/written rows `4546/4546`，errors `0`。
+- V8 base train env counts：`math_competition_numeric=859494`、`search_grounded_qa=90447`、`search_multihop_qa=19938`、`math_reasoning_numeric=7473`、`structured_outputs_json=1241`、`general_tool_calling=1100`、`multi_turn_tool_use=1100`、`tool_call_repair_negative=1090`、`terminal_basic_shell=840`、`code_execution_python=374`、`swe_pivot_patch_supervision=300`。
+- Packed artifact：`987770` total sequences、`672788411` total tokens、pack/seq `8192/8192`、`32` train parquet shards、`1` valid shard；planner gave `train_iters=779` at GBS `8` for `0.2` epoch.
+- Local planner initially failed because the local Megatron pretrained checkpoint path was absent; regenerated the V8 script bundle with `--allow-missing-checkpoint`, matching prior remote-checkpoint workflow while preserving the 30B-A3B train entrypoint.
+- Synced the V8 output bundle to NemTron under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8`; remote size after sync was about `14G`, and remote manifest matched `train_iters=779`, `train_rows=31144`, `valid_rows=2546`.
+- Launched and completed the bounded 8-H200 training run via tmux session `task067_task071_qwen30b_a3b_hard_math_clean_final_v8`; the session exited cleanly with no remaining train workers.
+- Training health: first gate iter `400` train loss `0.4720876`, validation loss/PPL `0.4647015/1.591539`, checkpoint `iter_0000400` saved; final checkpoint `iter_0000779` saved, final validation loss/PPL `0.4463005/1.562521`.
+- Max skipped/nan iterations remained `0/0`; final parsed train point was iter `770` with train loss `0.4295896`, lr `8.005201e-08`, grad norm `0.597`.
+- Generated metrics artifacts under `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/metrics`, including `metric_curves_session94_final_iter779.png`, `train_loss_points.csv`, `validation_points.csv`, and `health_summary.json`.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v8_train_session94.md`，记录 V8 data scale、remote training、validation metrics、checkpoint paths 和 eval handoff.
