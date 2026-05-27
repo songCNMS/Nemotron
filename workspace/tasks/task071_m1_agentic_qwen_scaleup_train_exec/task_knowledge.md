@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=82 -->
 
 ## Notes
 
@@ -213,3 +213,8 @@
 - Qwen V6 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_balanced_v6`, uses all 8 H200 GPUs, `train_iters=1529`, GBS `8`, eval/save interval `400`, lr `2e-7`, min lr `8e-8`, and warmup `100`; Session 80 confirmed early training through parsed iter `130/1529` with latest train loss `0.8720737`, load-balancing loss `1.476049`, and skipped/nan `0/0`.
 - Qwen V6 gate correction fact: Session 81 stopped the `task067_task071_qwen30b_a3b_hard_math_balanced_v6` full run after user review because the Qwen4B pilot AIME/HMMT correctness was `0.0`; the run stopped before iter `400`, so no checkpoint marker was written, and 8 H200 GPUs were released.
 - Qwen hard-math scale-up rule: for hard-math recovery recipes, a pilot that only proves pipeline execution is insufficient; AIME/HMMT smoke should show nonzero correctness or a concrete parser/protocol fix before starting an 8-GPU full 30B run.
+- Original-vs-SFT hard-math pipeline fact: Session 82 reviewed raw corrected AIME/HMMT artifacts and found the gap is a real SFT behavior regression, not a parser or current Qwen chat-template bug. Original AIME Session 38 parsed `184/300` and correct `155/300` with avg completion tokens `5736.9`; original HMMT 8192 parsed `17/30` and correct `8/30` with avg completion tokens `6860.8`.
+- SFT hard-math output-policy fact: SFT variants parse much more often but are mostly wrong. V3 AIME parsed `282/300` with correct `26/300`, V4 AIME parsed `284/300` with correct `25/300`, V5 AIME parsed `282/300` with correct `20/300`; HMMT for V3/V4/V5 parsed `30/29/27` but correct `0/1/0`.
+- Same-row hard-math fact: on `aime_01_r01`, original used `4821` completion tokens and ended at correct `\boxed{293}`, while conservative, iter3000, V3, V4, and V5 used roughly `551-795` tokens and returned wrong boxed answers `145` or `73`.
+- M1 math data-shape fact: V3/V4/V5/V6 Qwen packed artifacts use `chat_template=tokenizer` with thinking disabled, but their hard-math sidecar assistant responses are much shorter than original successful eval traces. Representative assistant content p50 is about `898` chars for V3 verified, `1198` for V4 hard, `1468` for V5 hard, and `1465` for V6 hard, while original eval successes often require thousands of completion tokens.
+- Hard-math gate fact: parsed rate alone is not a promotion signal. For hard-math recovery, track parsed-correct ratio, average completion tokens, same-row original-vs-candidate deltas, and nonzero AIME/HMMT pilot correctness before starting full 30B scale-up.

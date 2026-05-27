@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 81 |
+| Session | 82 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Stopped the V6 30B scale-up run after reviewing that the Qwen4B pilot hard-math eval scored 0.0 on AIME/HMMT; recorded that this should have been a scale-up stop gate, not only a pipeline smoke. |
+| Latest | Reviewed the original-vs-SFT AIME/HMMT eval pipeline end to end; concluded the gap is a real SFT reasoning/output-policy regression, not a parser or current Qwen chat-template bug. |

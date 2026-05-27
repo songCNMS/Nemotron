@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=82 -->
 
 ## Session 1
 
@@ -892,3 +892,14 @@
 - 停止后确认：NemTron tmux server 无该 session，8 张 H200 均回到 `1 MiB` 显存占用、util `0%`，且 run 未到 iter `400` save/eval 点，没有 `latest_checkpointed_iteration.txt`。
 - 修正后的 gate：任何 hard-math recovery recipe 在放大到 30B 全量训练前，应在 small pilot 上至少满足 hard-math smoke 的非零 correctness 或给出明确诊断解释；仅 MMLU-Pro parsed/accuracy 和 pipeline 成功不够。
 - 推荐下一步：先在小型数据和小模型/短 30B slice 上验证 math prompt cap、final-answer format、verified full-solution rows 的 answer extraction coverage；只有 AIME/HMMT smoke 出现非零 correctness 或明确修复 parser/protocol bug 后，再启动 8-GPU full run。
+
+## Session 82
+
+- 按用户要求 review 原始 Qwen 与 fine-tuned checkpoint 在 AIME/HMMT 上分数差异的完整 pipeline，覆盖 corrected math eval runner、raw result artifacts、same-row samples、Qwen chat-template contract、packed metadata 和 M1 hard-math sidecar 数据形态。
+- 从 NemTron 同步并复核 Session 38 原始模型 corrected math raw artifacts：original AIME25 `300` rows 中 parsed `184`、correct `155`、avg completion tokens `5736.9`；original HMMT 8192 run `30` rows 中 parsed `17`、correct `8`、avg completion tokens `6860.8`。
+- 对比 SFT raw artifacts：`iter0009119` AIME/HMMT 几乎立即停止且 correct `0`；conservative、iter3000、V3、V4、V5 的 parsed rate 明显更高，但 AIME correct 只有 `10/20/26/25/20`，HMMT correct 只有 `2/0/0/1/0`。
+- Same-row check `aime_01_r01`：original 用 `4821` completion tokens 得到正确 `\boxed{293}`；SFT variants 用 `551-795` tokens 输出稳定错误 `145` 或 `73`，说明主要问题是 reasoning/output-policy regression，而不是 parser 漏判。
+- 复核当前 Qwen data pipeline：V3/V4/V5/V6 packed metadata 均为 `chat_template=tokenizer`、`enable_thinking=false`、`truncate_history_thinking=false`；Session 75 已确认 source/export tokenizer rendering 一致，所以当前问题不是旧 Super3-template mismatch。
+- 数据侧诊断：M1 hard-math sidecar assistant responses 主要为短 full-solution 或 boxed-answer supervision，p50 大约 `0.9k-1.5k` chars，远短于 original eval 中成功 hard-math traces 的 `5k-7k` completion tokens；部分 sidecar 仍有 malformed boxed/final-answer 风险。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_original_vs_sft_math_pipeline_review_session82.md`，记录 verdict、raw metrics、sample evidence、root causes 和 revised hard-math gates。
+- 结论：AIME/HMMT 差异不是 eval metric 或 current chat-template bug；SFT 学到了更短、更易 parse 的 boxed answer 输出策略，但压缩了 hard-math long reasoning/self-correction 行为。下一步应先做小型端到端 pilot，加入 long-solution retention / stronger verification，并以 AIME/HMMT 非零 correctness 作为 scale-up gate。
