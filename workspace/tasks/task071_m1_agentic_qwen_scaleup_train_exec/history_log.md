@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=91 -->
 
 ## Session 1
 
@@ -990,3 +990,14 @@
 - 使用 Megatron-Bridge `AutoBridge.export_ckpt` 在 NemTron GPU5 上导出 final checkpoint 到 HF：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`，日志包含 `EXPORT_DONE`。
 - HF export 校验通过：`model_type=qwen3_moe`、`num_hidden_layers=48`、`num_experts=128`、`num_experts_per_tok=8`、tokenizer `Qwen2TokenizerFast`、chat template present、16 个 safetensors shards，总大小 `61084232276` bytes；manifest 写到 `task071_export_manifest.json`。
 - 验证：focused planner tests `2 passed, 11 deselected`；ruff passed；`py_compile` passed。
+
+## Session 91
+
+- 按“执行下一步”在 NemTron 上启动 30B V7 full-sidecar `iter_0000782` HF export 的 SGLang endpoint：model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-iter0000782-hf`，`tp=4`、`dp=2`、`context_length=16384`、`mem_fraction_static=0.84`、`max_running_requests=16`。
+- Endpoint smoke 通过：`/v1/models` 返回 `max_model_len=16384`，chat smoke 对 `Reply exactly: ready` 返回 exact `ready`。
+- 复用 Session 79 corrected eval input artifacts，在 NemTron 本机执行 runner，避免本地 SSH tunnel 抖动；MMLU-Pro input 共 `12032` rows，AIME/HMMT corrected math input 共 `300/30` rows。
+- Full corrected MMLU-Pro 完成：`12032/12032` status ok，parsed rate `1.0`，accuracy `0.5601728723404256`，correct `6740/12032`，runtime `79.386s`。
+- Full corrected math 完成：AIME25 `63/300` exact-normalized correct，accuracy `0.21`，parsed rate `0.91`，finish `stop=273/length=27`；HMMT `5/30` exact-normalized correct，exact percent `16.666666666666668`，parsed rate `0.5666666666666667`，finish `stop=15/length=15`。
+- Gate result：MMLU-Pro `>=0.55` pass，AIME25 `>=0.20` pass，HMMT exact percent `>=10.0` pass；AIME margin is narrow, but V7 is the first 30B SFT candidate in this sequence to pass all three corrected gates.
+- Copied remote corrected eval outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session91/remote_corrected_eval_outputs` and stopped the SGLang/tmux eval sessions after completion.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_corrected_eval_session91.md`，记录 endpoint、full metrics、same-protocol comparison、gate result 和 recommended follow-up.

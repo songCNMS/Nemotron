@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=91 -->
 
 ## Notes
 
@@ -240,3 +240,5 @@
 - Qwen3-30B-A3B planner entrypoint fact: scale-up runs for model paths containing `30B-A3B` must use `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`; the generic `qwen_local_train.py` sets Qwen4B-style TP and `sequence_parallel=False`, which fails 30B-A3B MoE training at first forward with the Megatron sequence-parallel requirement.
 - Qwen 30B V7 full-sidecar train fact: Session 90 completed the uncapped V7 full-sidecar 30B run to `iter_0000782` with final validation loss/PPL `0.4461341/1.562261`, best validation at final iter, max skipped/nan `0/0`, metric figure `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/metrics/metric_curves_session90_final_iter782.png`, and checkpoint marker `782`.
 - Qwen 30B V7 full-sidecar export fact: Session 90 exported `iter_0000782` to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`; the HF artifact is about `57G`, has `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-iter0000782-hf`.
+- Qwen 30B V7 corrected eval fact: Session 91 served `hf_export_iter_0000782` with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; full corrected metrics are MMLU-Pro `0.5601728723404256` with parsed rate `1.0`, AIME25 `0.21` with parsed rate `0.91`, and HMMT exact-normalized correct percent `16.666666666666668` with parsed rate `0.5666666666666667`.
+- Qwen 30B V7 gate fact: Session 91 V7 passes the corrected gates MMLU-Pro `>=0.55`, AIME25 `>=0.20`, and HMMT exact percent `>=10.0`; compared with original Qwen corrected metrics it remains lower on AIME/HMMT, but compared with V5 it improves AIME by `+0.14333333333333334` and HMMT exact percent by `+16.666666666666668`.
