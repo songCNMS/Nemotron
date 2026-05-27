@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 91 |
+| Session | 92 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Evaluated 30B V7 full-sidecar iter 782 HF export with corrected MMLU-Pro/AIME25/HMMT full protocol; gates pass with MMLU-Pro 0.56017, AIME25 0.21, and HMMT 16.67%. |
+| Latest | Analyzed V7 iter 782 AIME/HMMT failure clusters and ran HMMT 8192/12288 probes; AIME failures are mostly stable wrong answers, and HMMT remains 13.3-16.7% with token-budget and run variance. |

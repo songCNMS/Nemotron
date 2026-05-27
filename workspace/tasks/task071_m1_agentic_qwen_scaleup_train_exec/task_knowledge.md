@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Notes
 
@@ -242,3 +242,5 @@
 - Qwen 30B V7 full-sidecar export fact: Session 90 exported `iter_0000782` to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_long_reasoning_v7_full_sidecar/hf_export_iter_0000782`; the HF artifact is about `57G`, has `16` safetensors shards, validates as `qwen3_moe` with `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and model id `task071-qwen3-30b-a3b-agentic-sft-hard-math-long-reasoning-v7-full-sidecar-iter0000782-hf`.
 - Qwen 30B V7 corrected eval fact: Session 91 served `hf_export_iter_0000782` with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; full corrected metrics are MMLU-Pro `0.5601728723404256` with parsed rate `1.0`, AIME25 `0.21` with parsed rate `0.91`, and HMMT exact-normalized correct percent `16.666666666666668` with parsed rate `0.5666666666666667`.
 - Qwen 30B V7 gate fact: Session 91 V7 passes the corrected gates MMLU-Pro `>=0.55`, AIME25 `>=0.20`, and HMMT exact percent `>=10.0`; compared with original Qwen corrected metrics it remains lower on AIME/HMMT, but compared with V5 it improves AIME by `+0.14333333333333334` and HMMT exact percent by `+16.666666666666668`.
+- Qwen 30B V7 AIME error fact: Session 92 found V7 AIME recovery is concentrated in six fully solved unique problems `06/10/15/26/27/29` plus partial problems `13` and `23`; 17 unique problems are fully parsed but wrong, so the remaining AIME gap is mostly stable incorrect reasoning rather than parser failure.
+- Qwen 30B V7 HMMT eval-policy fact: Session 92 HMMT-only probes scored `4/30` at both `8192` repeat and `12288` max tokens under `parallelism=8`; `12288` improved parsed rows from `18/30` to `20/30` but did not improve exact score, so the default corrected HMMT gate should stay at `8192` max tokens while reporting the observed `13.3%-16.7%` small-sample band for V7.

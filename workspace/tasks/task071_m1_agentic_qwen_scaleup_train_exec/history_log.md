@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Session 1
 
@@ -1001,3 +1001,14 @@
 - Gate result：MMLU-Pro `>=0.55` pass，AIME25 `>=0.20` pass，HMMT exact percent `>=10.0` pass；AIME margin is narrow, but V7 is the first 30B SFT candidate in this sequence to pass all three corrected gates.
 - Copied remote corrected eval outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session91/remote_corrected_eval_outputs` and stopped the SGLang/tmux eval sessions after completion.
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_corrected_eval_session91.md`，记录 endpoint、full metrics、same-protocol comparison、gate result 和 recommended follow-up.
+
+## Session 92
+
+- 按“继续下一步”分析 Session 91 V7 `iter_0000782` corrected math full results，按 AIME unique problem、HMMT row、finish reason、parsed/correct、completion tokens 和 prediction 聚合 failure clusters。
+- AIME25 cluster：30 个 unique problems 中，`06/10/15/26/27/29` 为 `10/10` 全中，`13` 为 `2/10`、`23` 为 `1/10` 部分命中；17 个题为 `10/10` parsed but wrong，`09` 为 `10/10` length wrong，另有 `17/22/25/28` 为部分解析但无正确。
+- AIME25 结论：V7 相比 V5 的 `20/300` 提升到 `63/300` 是真实恢复，但主要剩余缺口来自稳定错误推理，而不是 parser failure；全 length 的问题集中在 `09`，length-heavy 的问题集中在 `25`。
+- 为拆解 HMMT length cap，重启 V7 SGLang endpoint 并运行 HMMT-only `max_tokens=12288` probe：parsed `20/30`、correct `4/30`、finish `stop=19/length=11`，相比 Session 91 的 8192 full run parsed 增加但 correct 未提升。
+- 为对齐并发条件，又运行 HMMT-only `max_tokens=8192`、`parallelism=8` repeat：parsed `18/30`、correct `4/30`、finish `stop=17/length=13`，说明 HMMT 这个 30-row benchmark 有约 1 题级别的运行波动；V7 HMMT 恢复可按 `13.3%-16.7%` 区间解读。
+- HMMT 结论：不要把 default eval max tokens 从 `8192` 直接改到 `12288`；更大的 token budget 只提高 parsed rate，没有提高 exact score，还会让 `hmmt_16` 这类原本正确行变错。
+- Copied Session 92 remote probe outputs to `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v7_iter0782_session92_error_analysis/remote_error_analysis` and stopped SGLang/tmux sessions after probes.
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_v7_iter0782_math_error_analysis_session92.md`，记录 AIME/HMMT clusters、HMMT generation-policy probes 和 recommended recipe/eval actions.
