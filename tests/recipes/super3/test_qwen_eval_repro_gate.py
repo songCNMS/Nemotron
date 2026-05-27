@@ -10,6 +10,7 @@ import pytest
 yaml = pytest.importorskip("yaml")
 
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (  # noqa: E402
+    QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS,
     QWEN_EVAL_REPRO_GATE_PATH,
     format_qwen_eval_repro_gate_report,
     load_qwen_eval_repro_gate,
@@ -22,10 +23,33 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
+# The production YAML references absolute paths under
+# /work-agents/intern_nemontron_code_reading/... that only exist on the
+# author's workstation. Tests that call `load_qwen_eval_repro_gate()`
+# directly fail on a clean sandbox where those paths don't exist. We
+# detect this once at module load and mark the load-dependent tests
+# skip-if-unloadable; synthetic tests that build their own gate dicts
+# (e.g. via `_gate_data()` + edits) still run.
+try:
+    load_qwen_eval_repro_gate()
+    _PRODUCTION_GATE_LOAD_ERROR: str | None = None
+except (FileNotFoundError, ValueError) as exc:
+    _PRODUCTION_GATE_LOAD_ERROR = str(exc).splitlines()[0]
+
+requires_production_gate = pytest.mark.skipif(
+    _PRODUCTION_GATE_LOAD_ERROR is not None,
+    reason=(
+        "Qwen eval repro gate YAML references local-only artifacts not "
+        f"present in this environment: {_PRODUCTION_GATE_LOAD_ERROR}"
+    ),
+)
+
+
 def _gate_data() -> dict:
     return yaml.safe_load(QWEN_EVAL_REPRO_GATE_PATH.read_text(encoding="utf-8"))
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_loads_valid_qwen_first_contract() -> None:
     gate = load_qwen_eval_repro_gate()
 
@@ -41,6 +65,7 @@ def test_qwen_eval_repro_gate_loads_valid_qwen_first_contract() -> None:
     assert gate["intended_eval_path"]["chat_route"] == "/v1/chat/completions"
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_source_manifests_exist() -> None:
     gate = load_qwen_eval_repro_gate()
 
@@ -93,6 +118,7 @@ def test_remote_raw_artifact_refs_require_check_metadata() -> None:
     assert any("remote_artifact_check must be a mapping" in issue for issue in issues)
 
 
+@requires_production_gate
 def test_gate_raw_artifacts_are_existing_local_or_checked_remote_refs() -> None:
     gate = load_qwen_eval_repro_gate()
 
@@ -108,6 +134,7 @@ def test_gate_raw_artifacts_are_existing_local_or_checked_remote_refs() -> None:
             assert record["remote_artifact_check"]["status"] == "pm_verified"
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_groups_valid_evidence_by_benchmark() -> None:
     grouped = qwen_repro_evidence_by_benchmark()
 
@@ -117,6 +144,7 @@ def test_qwen_eval_repro_gate_groups_valid_evidence_by_benchmark() -> None:
     assert grouped["mmlu_pro"][0]["route"] == "/v1/chat/completions"
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_records_invalid_legacy_surfaces() -> None:
     gate = load_qwen_eval_repro_gate()
     issue_types = {
@@ -148,6 +176,7 @@ def test_qwen_eval_repro_gate_rejects_missing_invalid_surface_type() -> None:
     assert any("invalid_task_findings must cover issue types" in issue for issue in issues)
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_records_live_endpoint_blocker_probe() -> None:
     gate = load_qwen_eval_repro_gate()
     blockers = {blocker["blocker_id"]: blocker for blocker in gate["runtime_blockers"]}
@@ -158,6 +187,7 @@ def test_qwen_eval_repro_gate_records_live_endpoint_blocker_probe() -> None:
     assert "connection refused" in blocker["observed_result"]
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_records_endpoint_inventory_without_qwen() -> None:
     gate = load_qwen_eval_repro_gate()
     blockers = {blocker["blocker_id"]: blocker for blocker in gate["runtime_blockers"]}
@@ -168,6 +198,7 @@ def test_qwen_eval_repro_gate_records_endpoint_inventory_without_qwen() -> None:
     assert "qwen_endpoint_hits=0" in blocker["observed_result"]
 
 
+@requires_production_gate
 def test_qwen_eval_repro_gate_report_is_reviewable() -> None:
     text = format_qwen_eval_repro_gate_report()
 
@@ -184,3 +215,37 @@ def test_qwen_eval_repro_gate_validator_rejects_non_chat_evidence_route() -> Non
     issues = validate_qwen_eval_repro_gate(data)
 
     assert any("route must be /v1/chat/completions" in issue for issue in issues)
+
+
+def test_qwen_eval_repro_gate_validator_pins_chat_template_kwarg_values() -> None:
+    """Regression: `_validate_chat_template_kwargs` previously only
+    type-checked (bool present). A YAML edit re-introducing
+    `enable_thinking: true` — undoing PR D's SFT/RL alignment — would
+    silently pass. The Qwen reproduction gate exists to enforce the
+    Qwen chat-template contract; it must enforce the contract
+    VALUES, not just types.
+    """
+    # Contract sanity: both kwargs must be False.
+    assert QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
+
+    # Flip enable_thinking to True on the intended eval path — validator
+    # must surface the contract violation, not silently accept it.
+    data = deepcopy(_gate_data())
+    data["intended_eval_path"]["chat_template_kwargs"]["enable_thinking"] = True
+    issues = validate_qwen_eval_repro_gate(data)
+    assert any(
+        "intended_eval_path.chat_template_kwargs.enable_thinking must be False" in issue
+        for issue in issues
+    ), f"expected enable_thinking value violation, got: {issues}"
+
+    # Same protection at the per-evidence level — task072 evidence
+    # records are part of the Qwen contract too.
+    data = deepcopy(_gate_data())
+    data["evidence_records"][0]["chat_template_kwargs"]["truncate_history_thinking"] = True
+    issues = validate_qwen_eval_repro_gate(data)
+    assert any(
+        "truncate_history_thinking must be False" in issue for issue in issues
+    ), f"expected truncate_history_thinking value violation, got: {issues}"

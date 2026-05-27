@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Session 1
 
@@ -1052,3 +1052,10 @@
 - 创建 PR #178：`https://github.com/songCNMS/Nemotron/pull/178`，base `main`，head `intern_nemontron_code_reading/task071_math_sidecar_data_session40`。
 - PR 标题：`Add Qwen hard-math SFT recipes and V8 training records`；body 概述 hard-math SFT recipes through V8、Qwen3-30B-A3B planner/train entrypoint support、chat-template/loss-mask regression coverage 和 V8 train validation evidence。
 - 本轮没有新增 source implementation；只创建 PR 并更新 task/status bookkeeping。
+
+## Session 97
+
+- 按用户 “merge the PR” 执行合并流程；检查 PR #178 时 GitHub 报 `CONFLICTING/DIRTY`，因此先在本分支执行 `git merge origin/main`。
+- 解决 merge conflicts：对 M1 Agentic SFT planner/prep、Qwen SFT bridge tests、scale-up planner tests、M1 SFT tests 和 metrics parser 保留本分支 V4-V8/Qwen30B-A3B 语义；保留 `origin/main` clean auto-merged 的 Qwen eval repro gate 文件更新。
+- 按 playbook 执行 pre-merge bookkeeping：`status.md` 切到 Idle、task README 已为 Completed、task metadata bumped to Session 97，并将 Qwen hard-math SFT workflow 经验写入个人 knowledge base。
+- 准备提交 conflict-resolution/completion commit 后推送，再通过 GitHub PR merge 合并 PR #178。
