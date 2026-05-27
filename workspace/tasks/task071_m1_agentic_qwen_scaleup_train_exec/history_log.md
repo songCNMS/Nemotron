@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Session 1
 
@@ -951,3 +951,15 @@
 - Corrected math smoke 完成：AIME25 5 rows 全部 `length`，parsed/correct `0/5`，avg completion tokens `4096`；HMMT 5 rows parsed/correct `2/5`，exact-normalized accuracy `0.4`，avg completion tokens `3460.4`。
 - 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 已复制到 `debug/task071_eval_logic_debug/qwen4b_v7_iter12_session87/corrected_eval_smoke`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot/metrics/metric_curves_session87_final_iter12.png`。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_pilot_session87.md`，记录 data prep、training、export、smoke eval 和 gate decision。
+
+## Session 88
+
+- 按用户要求运行更大的 V7 Qwen4B pilot：run name `task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k`，每 M0 dataset cap `2000/100` train/val rows，`pack_size=8192`，`seq_length=8192`，GBS `2`，2 GPUs。
+- 本地 data prep 完成：M1 train `14045` rows、val-shadow `513` rows；V7 hard verified source/written `29/29`，broad verified `1262/0`，final-answer aux `1/0`，format repair `2708/0`，heldout eval `200`。
+- Qwen tokenizer packed artifact 完成：`chat_template=tokenizer`、thinking kwargs false、`13901` sequences、`13960245` tokens、8 shards、packed train/valid rows `1070/211`，planner 给出 `train_iters=428`。
+- 同步到 NemTron 并完成训练：final checkpoint `iter_0000428`，validation loss/PPL 从 iter `200` 的 `0.6374835/1.891714` 改善到 iter `428` 的 `0.4411893/1.554555`，skipped/nan `0/0`。
+- 导出 HF checkpoint 成功：`/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k/hf_export_iter_0000428`，model id `task071-qwen3-4b-agentic-sft-hard-math-long-reasoning-v7-pilot-2k-iter0000428-hf`，3 个 safetensors shards，tokenizer chat template present。
+- Corrected eval gate 完成：MMLU-Pro per-category-5 `35/70` accuracy `0.5`、parsed rate `1.0`；AIME25 10 rows at `6144` max tokens parsed `6/10`、correct `0/10`；HMMT 10 rows parsed `6/10`、correct `1/10`、exact-normalized accuracy `0.1`。
+- Gate decision：AIME parsed recovery 有改善，但 AIME correct recovery 仍为 `0`，因此不允许启动 30B V7 scale-up；需先增加和清洗 verified AIME/HMMT-style long-solution rows，并保留 pilot AIME `correct_rows > 0` 作为 30B 前置门槛。
+- 清理：停止 SGLang tmux session，NemTron 8 张 H200 回到 idle；eval summaries 复制到 `debug/task071_eval_logic_debug/qwen4b_v7_2k_iter428_session88/corrected_eval_gate`，metric figure 写到 `outputs/task071_qwen4b_hard_math_long_reasoning_v7_pilot_2k/metrics/metric_curves_session88_final_iter428.png`。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen4b_v7_2k_pilot_session88.md`，记录 data prep、training、export、corrected eval 和 no-scale-up decision。

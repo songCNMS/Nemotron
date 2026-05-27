@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Notes
 
@@ -227,3 +227,7 @@
 - Regression guard fact: Session 85 added `test_packed_math_reasoning_tokens_before_box_are_supervised`, which decodes supervised labels from a synthetic packed Qwen-style math row and asserts the reasoning tokens before `\boxed{42}` are covered by shifted-label SFT loss while system/user prompt tokens remain masked.
 - Qwen V7 hard-math pilot recipe fact: Session 86 added `hard_math_long_reasoning_v7`, which filters for long, line-structured AIME/HMMT-style verified full-solution rows and defaults to a hard verified sidecar fraction of `1.0` with broad verified, final-answer aux, and format-repair sidecars disabled.
 - Qwen4B V7 pilot fact: Session 87 completed a 12-iter Qwen4B pilot with `8192` pack/seq length. Smoke eval scored MMLU-Pro per-category-5 accuracy `0.5`, AIME25 `0/5` with all rows hitting the `4096` generation cap, and HMMT `2/5` exact-normalized correct.
+- Qwen4B V7 2k pilot data fact: Session 88 increased the pilot to `2000/100` M0 train/val caps, yielding M1 train `14045` rows, V7 hard verified full-solution `29/29` source/written rows, packed `13901` sequences, `13960245` tokens, packed train/valid rows `1070/211`, and `train_iters=428`.
+- Qwen4B V7 2k training fact: Session 88 completed Qwen4B training to `iter_0000428`; validation loss/PPL improved from `0.6374835/1.891714` at iter `200` to `0.4411893/1.554555` at iter `428`, with skipped/nan `0/0`.
+- Qwen4B V7 2k eval gate fact: corrected eval on the exported `iter_0000428` HF model scored MMLU-Pro per-category-5 `35/70` accuracy `0.5`; AIME25 10 rows at `6144` max tokens parsed `6/10` but correct `0/10`; HMMT 10 rows parsed `6/10` and correct `1/10`.
+- Qwen V7 scale-up gate fact: increasing hard rows and train iters recovered partial AIME parsing but not AIME correctness. Do not start a 30B V7 scale-up until a 4B pilot shows AIME `parsed_rows > 0` and `correct_rows > 0` under the corrected eval gate.
