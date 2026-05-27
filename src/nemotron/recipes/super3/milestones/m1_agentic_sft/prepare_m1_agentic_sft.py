@@ -480,8 +480,23 @@ def _remove_boxed_spans(text: str) -> str:
 
 
 def _has_boxed_answer_near_end(text: str, *, tail_chars: int) -> bool:
-    tail = text[-tail_chars:] if tail_chars > 0 else text
-    return re.search(r"\\+boxed\s*\{[^{}]+\}", tail) is not None
+    """Return True iff the LAST `\\boxed{...}` span ends within ``tail_chars``
+    of the text end.
+
+    Earlier this used a regex (``\\boxed{[^{}]+}``) whose negated brace class
+    cannot match nested braces, so legitimate scalar-fraction finals like
+    ``\\boxed{\\frac{1}{2}}`` were silently rejected — even though the sibling
+    ``_is_scalar_numeric_answer_text`` accepts ``\\frac{...}{...}``. Use the
+    proper nested-brace span parser so the proximity check agrees with the
+    scalar-numeric check for V4/V5/V7 hard-math filters.
+    """
+    span = _last_boxed_answer_span(text)
+    if span is None:
+        return False
+    if tail_chars <= 0:
+        return True
+    _payload, _start, end = span
+    return end >= len(text) - tail_chars
 
 
 def _last_boxed_answer_text(text: str) -> str | None:

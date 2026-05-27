@@ -27,6 +27,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
+    _has_boxed_answer_near_end,
     decontaminate_math_rows,
     load_math_decontamination_corpus,
     prepare,
@@ -275,3 +276,36 @@ def test_prepare_v7_with_corpus_drops_contaminated_row(tmp_path: Path) -> None:
     assert base["scanned_rows"] >= 1
     assert base["blocker_threshold"] == 0.5
     assert base["ngram_size"] == 5
+
+
+# ---- _has_boxed_answer_near_end nested-brace handling ----
+
+
+def test_has_boxed_answer_near_end_accepts_nested_brace_fraction() -> None:
+    """Regression: the helper previously used a regex (``\\boxed{[^{}]+}``)
+    that excluded nested braces, so legitimate scalar-fraction finals like
+    ``\\boxed{\\frac{1}{2}}`` were silently rejected — even though
+    ``_is_scalar_numeric_answer_text`` accepts ``\\frac{...}{...}``.
+    The two checks must agree so the V4/V5/V7 hard-math filters don't
+    drop valid scalar-fraction answers from their sidecar pools.
+    """
+    solution = (
+        "We follow standard manipulation. Step 1: ... step 2: ... "
+        "step 3: ... so the final answer is \\boxed{\\frac{1}{2}}."
+    )
+    assert _has_boxed_answer_near_end(solution, tail_chars=3000) is True
+
+
+def test_has_boxed_answer_near_end_still_accepts_plain_integer() -> None:
+    solution = "Steps ... so the final answer is \\boxed{42}."
+    assert _has_boxed_answer_near_end(solution, tail_chars=3000) is True
+
+
+def test_has_boxed_answer_near_end_rejects_no_boxed_and_far_away_boxed() -> None:
+    # No boxed at all
+    assert _has_boxed_answer_near_end("no boxed answer here at all", tail_chars=3000) is False
+    # Boxed exists but is far from end of text — proximity check should fail
+    far_away = "\\boxed{42}" + " " * 5000
+    assert _has_boxed_answer_near_end(far_away, tail_chars=100) is False
+    # Same far-away text but with a more generous tail — should pass
+    assert _has_boxed_answer_near_end(far_away, tail_chars=10_000) is True
