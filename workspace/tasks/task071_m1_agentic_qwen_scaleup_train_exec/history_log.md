@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=79 -->
+<!-- METADATA:SESSION=80 -->
 
 ## Session 1
 
@@ -863,3 +863,22 @@
 - Gate 结论：MMLU-Pro `>=0.55` pass；AIME25 `>=0.20` fail；HMMT exact percent `>=10.0` fail。V5 保住 MMLU-Pro，但 stricter hard-math precision sidecar 未恢复 AIME/HMMT。
 - 资源清理：评测完成后停止 SGLang tmux session `task071_qwen_v5_iter1744_sglang_full_eval`，复制 remote outputs 到 `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v5_iter1744_session79/remote_corrected_eval_outputs`。
 - 新增报告 `qwen_v5_iter1744_corrected_eval_session79.md`，记录 serving、smoke/mid/full corrected eval、same-protocol comparison、gate 结论和 cleanup。
+
+## Session 80
+
+- 按用户要求先用小数据验证完整 pipeline，再进入全量数据；新增 M1 math strategy `hard_math_balanced_v6`，保留 V5 high-precision hard filter，同时恢复 broad verified full-solution diversity，并加入小比例 final-answer aux 与 format-repair sidecars。
+- V6 默认采样比例：hard verified full-solution `0.6`、broad verified full-solution `0.25`、final-answer aux `0.05`、format repair `0.03`；planner 新增 `--math-v6-*` flags，manifest/report 新增 `math_hard_balanced_v6`。
+- 修复 `plot_qwen_sft_metrics.py`：`load_balancing_loss` 变为 optional，使 parser 同时兼容 Qwen4B dense 日志和 30B MoE 日志；dense 日志 summary 中该字段写为 `null`，MoE 日志继续绘制 load-balancing curve。
+- Qwen4B pilot 数据准备使用 `max_train_per_dataset=100`、`max_val_per_dataset=25`、`train_ratio=0.95`、`valid_ratio=0.05`；M1 train rows `1100`、val-shadow rows `273`、V6 hard/broad/format sidecar written rows分别为 `11/12/4`，packed train rows `106`、valid rows `9`，计划 `train_iters=53`。
+- Qwen4B pilot 训练完成：remote run root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen4b_hard_math_balanced_v6_pilot`，final checkpoint `iter_0000053`；validation loss/PPL 从 iter `40` 的 `0.4337248/1.542994` 改善到 final `0.4315846/1.539695`，skipped/nan `0/0`。
+- Qwen4B pilot HF export 成功：`hf_export_iter_0000053` 约 `7.6G`，3 个 safetensors shards，model id `task071-qwen3-4b-agentic-sft-hard-math-balanced-v6-pilot-iter0000053-hf`，tokenizer chat template present。
+- Qwen4B pilot corrected eval 跑通：MMLU-Pro per-category 5 共 `70` rows accuracy `0.5142857142857142`、parsed rate `1.0`；AIME25/HMMT 各 `5` rows 在 `max_tokens=2048` 下 `10/10` requests status ok，AIME parsed rate `0.8`、HMMT parsed rate `0.2`，exact-normalized correct 均 `0.0`。
+- 发现 eval protocol sizing issue：Qwen4B endpoint `max_model_len=4096` 时，math runner 默认 `max_tokens=8192` 会触发 HTTP 400；将 AIME/HMMT cap 降到 `2048` 后同一 runner 可真实请求模型并产出 summary。
+- 全量 V6 本地数据准备完成：M0 uncapped 包含 HotpotQA `90447`、MuSiQue `19938`、MBPP `374`、terminal `840`、SWE Lite `300`、Hermes tool/repair/JSON rows `1100/1100/1090/1241`、GSM8K `7473`、NuminaMath `859494` train rows。
+- 全量 V6 M1 artifact：base train rows `983397`、val-shadow rows `11354`、errors `0`；hard verified source/written `114305/68583`，broad verified `430662/107666`，final-answer aux `29/1`，format repair `321971/9659`，heldout eval `1419`。
+- 全量 V6 Qwen tokenizer packing 完成：`chat_template=tokenizer`，thinking disabled，packed `total_sequences=1169133`、`total_tokens=769769392`、train rows `61129`、valid rows `398`、train shards `32`，GBS `8` 和 `0.2` epoch 对应 `train_iters=1529`。
+- 同步全量 V6 bundle 到 NemTron `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_balanced_v6`，远端 manifest 校验通过，启动前 8 张 H200 idle。
+- 启动正式训练 tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6`，参数为 all 8 H200、`train_iters=1529`、GBS `8`、lr `2e-7`、min lr `8e-8`、warmup `100`、eval/save interval `400`。
+- 启动健康检查通过：checkpoint 从 `/work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/pretrained_megatron_qwen3_30b_a3b_instruct_2507` 加载，显存上升到约 `81-88G`，训练进入 iteration；最新同步日志到 iter `130/1529`，latest train lm loss `0.8720737`，load-balancing loss `1.476049`，skipped/nan `0/0`。
+- 刷新正式 V6 startup metrics：`/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_balanced_v6/metrics/metric_curves_session80_iter130.png`，同时生成 `train_loss_points.csv` 和 `health_summary.json`；首个 validation 将在 iter `400`。
+- 新增报告 `qwen_v6_pilot_and_full_launch_session80.md`，记录 pilot train/export/eval、全量数据规模、训练启动状态和后续监控入口。

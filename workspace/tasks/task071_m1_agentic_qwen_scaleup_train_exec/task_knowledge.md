@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=79 -->
+<!-- METADATA:SESSION=80 -->
 
 ## Notes
 
@@ -205,3 +205,9 @@
 - Qwen V5 iter1744 corrected full eval fact: Session 79 full corrected metrics are MMLU-Pro `0.5581781914893617` with parsed rate `1.0`, AIME25 `0.06666666666666667` with parsed rate `0.94`, and HMMT exact-normalized correct percent `0.0` with parsed rate `0.9`; copied artifacts are under `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/qwen_v5_iter1744_session79/remote_corrected_eval_outputs`.
 - Qwen V5 gate fact: Session 79 V5 passes the MMLU-Pro `>=0.55` gate but fails AIME25 `>=0.20` and HMMT exact percent `>=10.0`; compared with V4 iter0800, V5 is `-0.0005817819148936128` on MMLU-Pro, `-0.016666666666666663` on AIME25, and `-3.3333333333333335` HMMT exact percent.
 - Qwen hard-math strategy fact: V5 strict high-confidence hard sidecar preserved broad MMLU-Pro quality but did not recover AIME/HMMT; the next recipe should keep tokenizer-native Qwen chat-template packing while reintroducing broader verified full-solution diversity and improving final-answer extraction supervision without using heldout AIME25/HMMT labels.
+- Qwen V6 hard-math balanced recipe fact: Session 80 added `hard_math_balanced_v6`, which uses the V5 high-precision AIME/HMMT-style hard filter for the hard sidecar while restoring broad verified full-solution replay and small final-answer/format-repair sidecars; default sampling fractions are hard `0.6`, broad verified `0.25`, final-answer aux `0.05`, and format repair `0.03`.
+- Qwen dense/MoE metric parser fact: `plot_qwen_sft_metrics.py` must treat `load_balancing_loss` as optional because Qwen4B dense train logs omit it, while Qwen30B-A3B MoE logs include it; Session 80 changed the parser and plotter to support both formats.
+- Qwen V6 pilot fact: `task071_qwen4b_hard_math_balanced_v6_pilot` completed the small train-to-eval pipeline on NemTron with Qwen3-4B, final checkpoint `iter_0000053`, validation loss/PPL `0.4315846/1.539695`, HF export `hf_export_iter_0000053` with 3 safetensors shards, MMLU-Pro per-category-5 accuracy `0.5142857142857142`, and AIME/HMMT 5-each requests status ok when max tokens were capped at `2048`.
+- Qwen 4B math eval sizing fact: corrected math runner defaults to `max_tokens=8192`, which exceeds the pilot SGLang endpoint `max_model_len=4096` and causes HTTP 400; for 4B pilot endpoints use `--aime-max-tokens 2048 --hmmt-max-tokens 2048` or serve with a larger context.
+- Qwen V6 full-data artifact fact: Session 80 uncapped V6 data prep produced base M1 train rows `983397`, val-shadow rows `11354`, hard verified source/written `114305/68583`, broad verified `430662/107666`, final-answer aux `29/1`, format repair `321971/9659`, heldout eval `1419`, packed sequences `1169133`, packed tokens `769769392`, packed train rows `61129`, valid rows `398`, and `train_iters=1529` at GBS `8`.
+- Qwen V6 remote train fact: NemTron tmux session `task067_task071_qwen30b_a3b_hard_math_balanced_v6` runs under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_balanced_v6`, uses all 8 H200 GPUs, `train_iters=1529`, GBS `8`, eval/save interval `400`, lr `2e-7`, min lr `8e-8`, and warmup `100`; Session 80 confirmed early training through parsed iter `130/1529` with latest train loss `0.8720737`, load-balancing loss `1.476049`, and skipped/nan `0/0`.

@@ -28,7 +28,7 @@ TRAIN_RE = re.compile(
     rf"\s+\|\s+learning rate:\s+(?P<learning_rate>{FLOAT})"
     rf"\s+\|\s+global batch size:\s+(?P<global_batch_size>\d+)"
     rf"\s+\|\s+lm loss:\s+(?P<lm_loss>{FLOAT})"
-    rf"\s+\|\s+load_balancing_loss:\s+(?P<load_balancing_loss>{FLOAT})"
+    rf"(?:\s+\|\s+load_balancing_loss:\s+(?P<load_balancing_loss>{FLOAT}))?"
     rf"\s+\|\s+loss scale:\s+(?P<loss_scale>{FLOAT})"
     rf"\s+\|\s+grad norm:\s+(?P<grad_norm>{FLOAT})"
     rf"\s+\|\s+number of skipped iterations:\s+(?P<skipped_iterations>\d+)"
@@ -52,7 +52,7 @@ class TrainPoint:
     learning_rate: float
     global_batch_size: int
     lm_loss: float
-    load_balancing_loss: float
+    load_balancing_loss: float | None
     loss_scale: float
     grad_norm: float
     skipped_iterations: int
@@ -87,7 +87,9 @@ def parse_log(path: Path) -> tuple[list[TrainPoint], list[ValidationPoint]]:
                         learning_rate=_float(gd["learning_rate"]),
                         global_batch_size=int(gd["global_batch_size"]),
                         lm_loss=_float(gd["lm_loss"]),
-                        load_balancing_loss=_float(gd["load_balancing_loss"]),
+                        load_balancing_loss=(
+                            _float(gd["load_balancing_loss"]) if gd.get("load_balancing_loss") else None
+                        ),
                         loss_scale=_float(gd["loss_scale"]),
                         grad_norm=_float(gd["grad_norm"]),
                         skipped_iterations=int(gd["skipped_iterations"]),
@@ -274,7 +276,13 @@ def plot_metrics(path: Path, run_name: str, train: list[TrainPoint], validation:
     axes[1, 0].grid(True, alpha=0.3)
 
     axes[1, 1].plot(iterations, [p.grad_norm for p in train], label="grad norm", linewidth=1.0)
-    axes[1, 1].plot(iterations, [p.load_balancing_loss for p in train], label="load balancing loss", linewidth=1.0)
+    if any(p.load_balancing_loss is not None for p in train):
+        axes[1, 1].plot(
+            [p.iteration for p in train if p.load_balancing_loss is not None],
+            [p.load_balancing_loss for p in train if p.load_balancing_loss is not None],
+            label="load balancing loss",
+            linewidth=1.0,
+        )
     max_bad = max([p.skipped_iterations + p.nan_iterations for p in train], default=0)
     if max_bad > 0:
         axes[1, 1].plot(iterations, [p.skipped_iterations for p in train], label="skipped", linewidth=1.0)

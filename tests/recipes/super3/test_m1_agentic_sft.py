@@ -23,6 +23,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V4,
     MATH_SUPERVISION_STRATEGY_V5,
+    MATH_SUPERVISION_STRATEGY_V6,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -34,6 +35,10 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V5_FORMAT_REPAIR_WEIGHT,
     MATH_V5_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
     MATH_V5_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V6_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V6_FORMAT_REPAIR_WEIGHT,
+    MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
@@ -800,6 +805,108 @@ def test_prepare_hard_math_precision_v5_keeps_only_high_confidence_hard_rows(tmp
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math hard precision v5 buckets" in report_md
     assert "| hard_verified_full_solution | 1 | 1 | 0.6 | 1.0 |" in report_md
+
+
+def test_prepare_hard_math_balanced_v6_restores_diversity_and_final_answer_rows(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    precise = _base_record("math_competition_numeric")
+    precise["expected_answer"] = "293"
+    precise["responses_create_params"]["input"][-1]["content"] = (
+        "Determine the number of ordered integer triples satisfying a modular "
+        "system where triangle side lengths, divisor cases, and remainder "
+        "conditions force a unique AIME-style numeric answer."
+    )
+    precise["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "We split the triples by the possible remainders and keep only compatible cases.",
+            "For each case, factor the congruence and count the integer choices.",
+            "The triangle side-length constraints remove the impossible boundary cases.",
+            "Adding the remaining cases gives the required total.",
+            ("The compatibility count repeats over the reduced residue classes. " * 18).strip(),
+            r"Therefore the final count is \boxed{293}.",
+        ]
+    )
+
+    broad = _base_record("math_competition_numeric")
+    broad["expected_answer"] = "101"
+    broad["responses_create_params"]["input"][-1]["content"] = precise["responses_create_params"][
+        "input"
+    ][-1]["content"]
+    broad["extra_env_info"]["reference_solution"] = (
+        r"The case split gives \boxed{101}. "
+        + ("After that, the explanation continues without a final boxed answer near the end. " * 18)
+    )
+
+    answer_only = _base_record("math_reasoning_numeric")
+    answer_only["expected_answer"] = "5"
+    answer_only["extra_env_info"].pop("reference_solution", None)
+
+    repaired = _base_record("math_reasoning_numeric")
+    repaired["expected_answer"] = "7"
+    repaired["extra_env_info"]["reference_solution"] = "Add 3 and 4 to obtain 7."
+
+    heldout = _base_record("math_competition_numeric")
+    heldout["expected_answer"] = "11"
+    heldout["extra_env_info"].pop("reference_solution", None)
+
+    search = _base_record("search_grounded_qa")
+    search["expected_answer"] = "Paris"
+
+    write_split("math_competition_numeric", "train", [precise, broad, heldout])
+    write_split("math_competition_numeric", "val", [])
+    write_split("math_reasoning_numeric", "train", [answer_only, repaired])
+    write_split("math_reasoning_numeric", "val", [])
+    write_split("search_grounded_qa", "train", [search])
+    write_split("search_grounded_qa", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V6
+        math_v6_hard_verified_full_solution_weight = MATH_V6_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v6_verified_full_solution_weight = MATH_V6_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v6_final_answer_aux_weight = MATH_V6_FINAL_ANSWER_AUX_WEIGHT
+        math_v6_format_repair_weight = MATH_V6_FORMAT_REPAIR_WEIGHT
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V6
+    bucket_info = manifest["math_hard_balanced_v6"]["buckets"]
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["sample_fraction"] == 0.6
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["sample_fraction"] == 0.25
+    assert bucket_info[MATH_BUCKET_FINAL_ANSWER_AUX]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_FORMAT_REPAIR]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_HELDOUT_EVAL]["rows"] == 1
+
+    blend = json.loads((Args.output_dir / "data_blend_agentic_sft_v0.json").read_text(encoding="utf-8"))
+    blend_names = [dataset["name"] for dataset in blend["datasets"]]
+    assert blend_names == [
+        "m1-agentic-sft-v0-from-m0",
+        "m1-agentic-sft-v0-math-hard-verified-full-solution",
+        "m1-agentic-sft-v0-math-verified-full-solution",
+        "m1-agentic-sft-v0-math-final-answer-aux",
+        "m1-agentic-sft-v0-math-format-repair",
+    ]
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math hard balanced v6 buckets" in report_md
+    assert "| final_answer_aux | 1 | 1 | 0.05 | 1.0 |" in report_md
+    assert "| format_repair | 1 | 1 | 0.03 | 1.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:
