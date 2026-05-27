@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Session 1
 
@@ -1045,3 +1045,10 @@
 - `gh pr view 164` 显示 PR #164 已经 `MERGED`，head branch 是 `intern_nemontron_code_reading/task071_math_sidecar_data_session40`，base 是 `main`。
 - `git diff --name-only origin/main...HEAD` 仍显示 source files ahead of `origin/main`，包括 M1 SFT data prep/planner、Qwen stage1 SFT train/contract/data-prep files 和对应 tests。
 - 结论：若要提交当前 branch 的新增工作，需要开 fresh PR；本轮未新增实现代码，只更新 task bookkeeping 和答复 PR 状态判断。
+
+## Session 96
+
+- 按用户 “continue the next” 执行 fresh PR 创建流程：检查 head branch 当前无 open PR，确认工作树 clean。
+- 创建 PR #178：`https://github.com/songCNMS/Nemotron/pull/178`，base `main`，head `intern_nemontron_code_reading/task071_math_sidecar_data_session40`。
+- PR 标题：`Add Qwen hard-math SFT recipes and V8 training records`；body 概述 hard-math SFT recipes through V8、Qwen3-30B-A3B planner/train entrypoint support、chat-template/loss-mask regression coverage 和 V8 train validation evidence。
+- 本轮没有新增 source implementation；只创建 PR 并更新 task/status bookkeeping。
