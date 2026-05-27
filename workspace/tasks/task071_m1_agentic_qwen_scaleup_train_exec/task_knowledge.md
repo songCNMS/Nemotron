@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=84 -->
+<!-- METADATA:SESSION=85 -->
 
 ## Notes
 
@@ -224,3 +224,4 @@
 - Historical template misuse fact: `task071_qwen30b_a3b_math_final_answer_v1` was a real bad artifact because its packed run config used `chat_template=super3`; subsequent Qwen-chat runs use `chat_template=tokenizer` and are protected by `validate_qwen_packed_sft_chat_contract`.
 - Training-loss reasoning fact: Session 84 verified visible math reasoning, not only final answers, is in loss. Raw helper checks on V3/V4/V5/V6 full-solution rows show every assistant token has raw loss mask `1`; packed parquet checks using shifted label semantics show supervised text includes hundreds to thousands of chars before the first `\boxed`.
 - Loss-mask implication fact: current AIME/HMMT regression should be treated as short/noisy visible-reasoning supervision under loss, not missing reasoning from loss. Bad or shortcut reasoning in assistant `content` is also supervised unless filtered before packing.
+- Regression guard fact: Session 85 added `test_packed_math_reasoning_tokens_before_box_are_supervised`, which decodes supervised labels from a synthetic packed Qwen-style math row and asserts the reasoning tokens before `\boxed{42}` are covered by shifted-label SFT loss while system/user prompt tokens remain masked.

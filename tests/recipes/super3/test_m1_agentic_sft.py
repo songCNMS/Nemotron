@@ -1584,6 +1584,67 @@ def test_tokenize_chunks_with_mask_pins_tool_role_to_zero() -> None:
     assert cursor == len(loss_mask)
 
 
+def test_packed_math_reasoning_tokens_before_box_are_supervised() -> None:
+    """Guard that packed math SFT loss covers reasoning, not only the final box."""
+    import pytest
+
+    pytest.importorskip("cosmos_xenna")
+    from nemotron.data_prep.core.chat_sft_shard_core import _tokenize_chunks_with_mask
+    from nemotron.data_prep.packing.builder import PackedSequenceBuilder
+
+    class _StubTokenizer:
+        def __init__(self):
+            self.vocab: dict[str, int] = {}
+            self.reverse: dict[int, str] = {}
+
+        def encode(self, text, add_special_tokens=False):  # noqa: ARG002
+            output = []
+            for word in text.split():
+                token_id = self.vocab.get(word)
+                if token_id is None:
+                    token_id = len(self.vocab) + 1
+                    self.vocab[word] = token_id
+                    self.reverse[token_id] = word
+                output.append(token_id)
+            return output
+
+        def decode(self, token_ids):
+            return " ".join(self.reverse[token_id] for token_id in token_ids)
+
+    tokenizer = _StubTokenizer()
+    chunks = [
+        {"role": "system", "content": "system primer"},
+        {"role": "user", "content": "solve olympiad prompt"},
+        {
+            "role": "assistant",
+            "content": "Since alpha equals beta derive gamma Therefore final answer is \\boxed{42}",
+        },
+    ]
+    input_ids, raw_loss_mask = _tokenize_chunks_with_mask(tokenizer, chunks)
+
+    builder = PackedSequenceBuilder(pack_size=128, seed=0)
+    builder.add_sequence(input_ids, loss_mask=raw_loss_mask)
+    packed_rows, metadata = builder.finalize()
+
+    assert metadata["num_sequences"] == 1
+    assert len(packed_rows) == 1
+    packed = packed_rows[0]
+    assert packed["seq_start_id"] == [0]
+
+    supervised_label_ids = [
+        packed["input_ids"][idx + 1]
+        for idx, enabled in enumerate(packed["loss_mask"][:-1])
+        if enabled
+    ]
+    supervised_text = tokenizer.decode(supervised_label_ids)
+
+    assert "system" not in supervised_text
+    assert "solve" not in supervised_text
+    assert "\\boxed{42}" in supervised_text
+    pre_box_text = supervised_text.split("\\boxed{42}", 1)[0]
+    assert "Since alpha equals beta derive gamma Therefore final answer is" in pre_box_text
+
+
 def test_m1_agentic_train_yaml_tokenizer_matches_data_prep_tokenizer() -> None:
     """Regression for review finding B2: training defaults used the Nano tokenizer."""
     from pathlib import Path

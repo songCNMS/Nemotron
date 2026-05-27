@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=84 -->
+<!-- METADATA:SESSION=85 -->
 
 ## Session 1
 
@@ -924,3 +924,10 @@
 - 复核实际 packed train parquet：根据 Megatron-Bridge shifted label semantics 用 `loss_mask[j]` 对应 label `input_ids[j+1]` 还原 supervised text；V3/V4/V5/V6 首个 boxed math segment 的 boxed 前 supervised chars 分别为 `3483`、`2585`、`328`、`759`，均包含 derivation/reasoning。
 - 结论：当前 Qwen SFT 并不是 only-final-answer loss；visible reasoning trace 和 final boxed answer 都在训练 loss 中。更准确的问题是这些 visible traces 偏短、质量/格式有噪声、受 `4096` seq length 限制，可能训练出短而错误的 reasoning。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_training_loss_reasoning_content_check_session84.md`，记录 raw tokenization evidence、packed parquet evidence 和 practical conclusion。
+
+## Session 85
+
+- 按“执行下一步”把 Session 84 的 loss-mask 结论固化为回归测试，覆盖 Qwen-style math chunks 经过 `_tokenize_chunks_with_mask` 与 `PackedSequenceBuilder` 后的监督语义。
+- 新增 `test_packed_math_reasoning_tokens_before_box_are_supervised`：构造 system/user/assistant math sample，确认 system/user token 不进入 supervised labels，且 `\boxed{42}` 前的 assistant 推导文字在 Megatron-Bridge shifted label loss 中被监督。
+- 验证：`PYTHONPATH=src pytest -q tests/recipes/super3/test_m1_agentic_sft.py -k "packed_math_reasoning_tokens_before_box_are_supervised or tokenize_chunks_with_mask_pins_tool_role_to_zero"` 通过，结果 `2 passed, 72 deselected`。
+- 验证：`ruff check tests/recipes/super3/test_m1_agentic_sft.py` 和 `git diff --check` 通过。

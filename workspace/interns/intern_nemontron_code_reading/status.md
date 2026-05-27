@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 84 |
+| Session | 85 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Double-checked raw tokenization and packed parquet loss masks; visible math reasoning tokens before boxed answers are supervised, so current Qwen SFT is not training only final answers. |
+| Latest | Added a regression test proving Qwen-style packed math rows supervise boxed-answer reasoning tokens under Megatron-Bridge shifted label semantics. |
