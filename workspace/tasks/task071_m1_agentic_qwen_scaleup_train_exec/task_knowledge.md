@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - task_knowledge
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
 
 ## Notes
 
@@ -222,3 +222,5 @@
 - Current M1 reasoning-field fact: Session 83 scanned current V3/V4/V5/V6 M1 JSONLs and found non-empty `reasoning_content=0` and `<think>` tags `0`; GSM8K/NuminaMath source solutions are preserved through `extra_env_info.reference_solution` into assistant `content`.
 - Current recipe fact: V4/V5/V6 hard-math runs are not dominated by final-answer-only auxiliary rows (`0`, `0`, and `1` aux row respectively). The current failure is better explained by short visible solution traces, 4096 train sequence length, and sidecar quality than by hidden CoT omission.
 - Historical template misuse fact: `task071_qwen30b_a3b_math_final_answer_v1` was a real bad artifact because its packed run config used `chat_template=super3`; subsequent Qwen-chat runs use `chat_template=tokenizer` and are protected by `validate_qwen_packed_sft_chat_contract`.
+- Training-loss reasoning fact: Session 84 verified visible math reasoning, not only final answers, is in loss. Raw helper checks on V3/V4/V5/V6 full-solution rows show every assistant token has raw loss mask `1`; packed parquet checks using shifted label semantics show supervised text includes hundreds to thousands of chars before the first `\boxed`.
+- Loss-mask implication fact: current AIME/HMMT regression should be treated as short/noisy visible-reasoning supervision under loss, not missing reasoning from loss. Bad or shortcut reasoning in assistant `content` is also supervised unless filtered before packing.

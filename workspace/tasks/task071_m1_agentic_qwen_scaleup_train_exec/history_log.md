@@ -1,6 +1,6 @@
 # task071_m1_agentic_qwen_scaleup_train_exec - history
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
 
 ## Session 1
 
@@ -915,3 +915,12 @@
 - 当前 recipe 诊断：V4/V5/V6 不是 final-answer-only aux 主导，V4 final-answer aux `0` rows、V5 `0` rows、V6 `1` row；主要问题是 visible full-solution traces 太短，V3/V4/V5/V6 hard/broad sidecar p50 约 `0.8k-1.5k` chars，而 original AIME/HMMT 成功 eval 常用 `5k-7k` completion tokens。
 - 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_thinking_template_data_recipe_audit_session83.md`，记录 ruled-out hypotheses、confirmed historical issue、current likely recipe issue 和 recommendation。
 - 结论：不要把当前 AIME/HMMT 失败当作 live chat-template bug 修；应作为 long hard-math reasoning retention / sequence-length / sidecar quality 问题处理，并增加 future tokenizer-thinking branch guard。
+
+## Session 84
+
+- 按用户要求 double check training loss 是否包含 thinking / step-by-step content，而不是只包含 final answer。
+- 复核 pipeline 代码路径：M0 GSM8K/NuminaMath converters 将 full solution 存入 `extra_env_info.reference_solution`；M1 `assistant_for_reasoning` 将 full solution 放进 assistant `content`；`_tokenize_chunks_with_mask` 对整个 assistant chunk 置 raw loss mask `1`。
+- 用真实 Qwen tokenizer 和当前 helper 对 V3 verified、V4 hard、V5 hard、V6 hard、V6 broad 各抽一条 full-solution math row 重跑 raw tokenization：assistant tokens 与 assistant raw loss tokens 完全相等，分别为 `664/664`、`664/664`、`664/664`、`429/429`、`562/562`，且 boxed answer 前有明显推导文字。
+- 复核实际 packed train parquet：根据 Megatron-Bridge shifted label semantics 用 `loss_mask[j]` 对应 label `input_ids[j+1]` 还原 supervised text；V3/V4/V5/V6 首个 boxed math segment 的 boxed 前 supervised chars 分别为 `3483`、`2585`、`328`、`759`，均包含 derivation/reasoning。
+- 结论：当前 Qwen SFT 并不是 only-final-answer loss；visible reasoning trace 和 final boxed answer 都在训练 loss 中。更准确的问题是这些 visible traces 偏短、质量/格式有噪声、受 `4096` seq length 限制，可能训练出短而错误的 reasoning。
+- 新增报告 `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/qwen_training_loss_reasoning_content_check_session84.md`，记录 raw tokenization evidence、packed parquet evidence 和 practical conclusion。

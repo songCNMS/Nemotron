@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task071_m1_agentic_qwen_scaleup_train_exec |
 | PR | https://github.com/songCNMS/Nemotron/pull/164 |
-| Session | 83 |
+| Session | 84 |
 | Branch | intern_nemontron_code_reading/task071_math_sidecar_data_session40 |
-| Latest | Audited Qwen thinking/template/data recipe paths; ruled out current hidden thinking-token omission or tokenizer-template misuse as the live AIME/HMMT failure cause, while confirming historical Super3-template misuse was already retired. |
+| Latest | Double-checked raw tokenization and packed parquet loss masks; visible math reasoning tokens before boxed answers are supervised, so current Qwen SFT is not training only final answers. |
