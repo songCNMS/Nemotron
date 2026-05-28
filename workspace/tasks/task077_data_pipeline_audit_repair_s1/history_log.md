@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ---
 
@@ -77,5 +77,19 @@
 - Preserved legacy Super3/Nemotron data-prep configs for explicit config selection and updated docs/tests to make the default contract clear.
 - Validation passed locally: focused Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
 - Opened PR #192: https://github.com/songCNMS/Nemotron/pull/192
+
+---
+
+## Session 13 - 2026-05-28 - Task087 stage2 RL bridge data-prep defaults
+
+**Executor**: intern_nem_dev_1
+
+- Read task087 instructions from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Confirmed local `main`, `origin/main`, and task branch base at `3d313bcb7dbd6044b1202774741697f37d99a485`.
+- Created branch `intern_nem_dev_1/task087_stage2_rl_data_prep_bridge_defaults_s1`.
+- Added SWE1/SWE2/RLHF bridge `combined.jsonl` outputs as train rows followed by val rows, with manifest/report/lineage/output-fingerprint coverage.
+- Rewired SWE1/SWE2/RLHF stage2 RL data-prep defaults from developer-local `/lustre` release files to templated M1 bridge combined outputs.
+- Validation passed locally: required bridge/default pytest shard, py_compile for touched Python files/tests, Ruff on touched Python files/tests, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #194: https://github.com/songCNMS/Nemotron/pull/194
 
 ---

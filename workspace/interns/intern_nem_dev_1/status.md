@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task086_qwen_sft_data_prep_default_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/192 |
-| Session | 12 |
-| Recent Progress | Opened PR #192 for task086 after changing SFT data-prep runnable defaults to Qwen-safe profile; required Qwen/SFT tests, py_compile, Ruff, and diff checks passed |
+| Current Task | task087_stage2_rl_data_prep_bridge_defaults_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/194 |
+| Session | 13 |
+| Recent Progress | Opened PR #194 for task087 after adding SWE1/SWE2/RLHF bridge combined outputs and rewiring stage2 RL data-prep defaults; required bridge/default tests, py_compile, Ruff, and diff checks passed |
