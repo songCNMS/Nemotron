@@ -7,9 +7,8 @@
 #   nemotron super3 data prep rl swe2
 #   nemotron super3 data prep rl swe2 sample=100
 
-# Path to source JSONL file
-# TODO: Update to hf:// path once nvidia/Nemotron-RL-Super-Training-Blends is published
-input_path: /lustre/fs1/portfolios/coreai/projects/coreai_dlalgo_nemorl/users/yifuw/code/nano-v3-data/super_data/release/swe2.jsonl
+# M0-derived combined JSONL from the SWE2 bridge.
+input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe2/combined.jsonl
 
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/swe2

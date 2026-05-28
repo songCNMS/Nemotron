@@ -273,7 +273,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
     lines.extend(
         render_bridge_quality_report_sections(
             manifest,
-            fingerprint_keys=("train_path", "val_path"),
+            fingerprint_keys=("train_path", "val_path", "combined_path"),
         )
     )
     if manifest["errors"]:
@@ -336,12 +336,15 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     train_path = args.output_dir / "train.jsonl"
     val_path = args.output_dir / "val.jsonl"
+    combined_path = args.output_dir / "combined.jsonl"
     write_jsonl(train_path, train_rows)
     write_jsonl(val_path, val_rows)
+    write_jsonl(combined_path, [*train_rows, *val_rows])
     output_fingerprints = output_fingerprints_for_paths(
         {
             "train_path": train_path,
             "val_path": val_path,
+            "combined_path": combined_path,
         }
     )
 
@@ -356,6 +359,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         "output_dir": str(args.output_dir),
         "train_path": str(train_path),
         "val_path": str(val_path),
+        "combined_path": str(combined_path),
         "env_map": dict(env_map),
         "counts": {
             "train": train_counts,
@@ -389,6 +393,15 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             ref=str(val_path.relative_to(args.output_dir)),
             rows=sum(val_counts.values()),
             notes="NemoGymDataset val input for RLHF",
+        ),
+        LineageOutput(
+            kind="m1_rlhf_combined_jsonl",
+            ref=str(combined_path.relative_to(args.output_dir)),
+            rows=sum(train_counts.values()) + sum(val_counts.values()),
+            notes=(
+                "Combined train+val jsonl for RLHF input to "
+                "stage2_rl/_data_prep_base.split_local_jsonl"
+            ),
         ),
     ]
     lineage_record = make_lineage_record(
