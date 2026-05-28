@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -49,5 +49,10 @@
 37. technical fact: Corrected V9 SGLang serving used model id `task076-qwen3-30b-a3b-agentic-sft-hard-math-recurrence-v9-ckptroot-fix-s10-iter0000192-hf`, `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; minimal chat smoke returned exact `ready`.
 38. technical fact: Corrected V9 targeted `aime_06` smoke with original prompts and expected answer `907` returned status `ok` and `finish_reason=stop` for all `10` repeats, parsed `10/10`, but correct remained `0/10`; predictions were five `640` and five `830`.
 39. research conclusion: The checkpoint-root fix repaired the random-init generation pathology, but V9 still fails the recurrence recovery objective; a full corrected gate is not justified until the `aime_06` reasoning traces or V9 sidecar weighting are revised.
+40. technical fact: Session 12 reconfirmed the active Qwen HF metadata/tokenizer path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`; the SFT continuation checkpoint is separately the V8 Megatron checkpoint root and should not be replaced by the Qwen HF directory.
+41. technical fact: Corrected V9 `aime_06` trace audit found two wrong modes: five repeats predicted `640` after losing the no-three-consecutive DP, and five repeats predicted `830` after using the wrong `(1+x+x^2)^16` coefficient model.
+42. technical fact: The correct `aime_06` run enumeration is `sum_{b=0..4} C(8-b,b) C(9,8-b) = 2907`, so the answer remains `907`.
+43. technical fact: Real V9 recurrence sidecar coverage is too sparse for the target: among `221` rows, exact signal counts were `chairs=1`, `binary string=1`, `consecutive ones=1`, explicit DP/dynamic-programming `4`, and no rows combining a no-111-like binary/chair constraint with DP/recurrence signals.
+44. research conclusion: Skip the full corrected V9 gate and move to a focused V10-style run-length DP sidecar or weighting patch using the cephfs Qwen HF path.
 
 ---

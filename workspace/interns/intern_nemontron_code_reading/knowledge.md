@@ -22,6 +22,10 @@ NemTron host `lg-cmc-b7r202-e09u26-h200-000459` has 8x H200 and `/root/nemotron_
 
 For Qwen3-30B-A3B hard-math SFT, use tokenizer-native Qwen chat packing with visible reasoning in assistant `content`, not hidden `reasoning_content`. The stable scale-up path is local M0/M1 prep and packing in `/work-agents/.venv`, sync packed artifacts to NemTron, train with `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, then export the Megatron checkpoint to HF and run corrected eval with SGLang `context_length=16384`. Promotion gates should use full MMLU-Pro, AIME25 with `max_tokens=8192`, and HMMT with `max_tokens=8192`; parsed rate alone is not enough for hard-math promotion.
 
+### Task076 Qwen path override
+
+For task076 and follow-up Qwen3-30B-A3B hard-math runs, use Qwen HF metadata/tokenizer under `/mnt/cephfs/data/stable/models/Qwen`, specifically `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`. Do not fall back to old `/mnt/3fs` Qwen paths. Keep the SFT continuation checkpoint separate: it should point to the Megatron checkpoint root for the chosen starting model, such as V8 `.../checkpoints`, not to the HF metadata/tokenizer directory.
+
 ### Live HF checks in PR tests
 
 Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such as `NEMOTRON_RUN_LIVE_HF_TESTS=1`; default PR tests should assert static slugs/subsets and avoid network-dependent skip/fail behavior.

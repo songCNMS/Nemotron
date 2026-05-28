@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ---
 
@@ -129,5 +129,20 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Recorded smoke artifacts under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/targeted_smoke/aime06/`.
 - Stopped the SGLang endpoint after smoke; port `30000` was clear and all 8 H200 GPUs returned to idle.
 - Wrote `v9_corrected_export_smoke_session11.md`.
+
+---
+
+## Session 12 - 2026-05-28 - AIME06 trace audit and Qwen path confirmation
+
+**Executor**: intern_nemontron_code_reading
+
+- Reconfirmed the active Qwen HF metadata/tokenizer checkpoint path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, under the user-requested root `/mnt/cephfs/data/stable/models/Qwen`.
+- Clarified that the SFT continuation checkpoint remains the V8 Megatron checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints`; replacing that with the Qwen HF directory would lose the V8 starting weights.
+- Audited corrected V9 `aime_06` results from `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/targeted_smoke/aime06/results.jsonl`.
+- Found two stable wrong-answer modes: five repeats predicted `640` after recognizing the no-three-consecutive constraint but failing to execute the DP, and five repeats predicted `830` after using the wrong `(1+x+x^2)^16` coefficient model.
+- Re-derived the correct run enumeration: summing `C(r,b)C(9,r)` over `b=0..4`, `r=8-b`, gives `2907`, so the required answer is `907`.
+- Audited the V9 recurrence sidecar and found it too sparse for the target structure: out of `221` rows, exact signal counts were `chairs=1`, `binary string=1`, `consecutive ones=1`, explicit DP/dynamic-programming rows `4`, and no rows combining a no-111-like binary/chair constraint with DP/recurrence signals.
+- Decision: skip the full corrected MMLU-Pro/AIME25/HMMT gate for V9 and prepare a focused V10-style run-length DP sidecar or weighting patch.
+- Wrote `v9_aime06_trace_audit_session12.md`.
 
 ---

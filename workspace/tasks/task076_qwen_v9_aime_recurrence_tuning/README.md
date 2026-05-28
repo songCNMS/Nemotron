@@ -99,3 +99,12 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Targeted corrected `aime_06` smoke completed all `10` repeats with status `ok`, `finish_reason=stop`, parsed `10/10`, correct `0/10`, and average completion tokens `3540`.
 - Per-row predictions split between `640` and `830`, so the checkpoint-root fix repaired generation quality but did not recover the expected `aime_06` answer `907`.
 - The SGLang endpoint was stopped after smoke; port `30000` was clear and all 8 H200 GPUs returned to idle.
+
+## Session 12 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_aime06_trace_audit_session12.md`.
+- Reconfirmed the active Qwen HF metadata/tokenizer checkpoint path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, under the user-requested root `/mnt/cephfs/data/stable/models/Qwen`.
+- Clarified that the SFT continuation checkpoint must remain the V8 Megatron checkpoint root, not the Qwen HF directory.
+- Audited corrected V9 `aime_06` traces: `5/10` predicted `640` after losing the DP recurrence, and `5/10` predicted `830` after using the wrong `(1+x+x^2)^16` coefficient model.
+- Audited the real V9 sidecar: `221` rows total, but only `1` row mentions `chairs`, `1` row mentions `binary string`, and `0` rows combine a no-111-like binary/chair constraint with DP/recurrence signals.
+- Decision: do not spend the full corrected gate on V9; the next implementation step should be a focused V10-style run-length DP sidecar or weighting patch.
