@@ -26,6 +26,7 @@ JsonDict = dict[str, Any]
 QWEN_EVAL_REPRO_GATE_PATH = Path(__file__).with_name(
     "qwen_eval_repro_gate.yaml"
 )
+REPO_ROOT = Path(__file__).resolve().parents[6]
 
 REQUIRED_REFERENCE_MODEL_FIELDS = (
     "source_model",
@@ -207,6 +208,22 @@ def validate_raw_artifact_paths(paths: Any, *, context: str) -> list[str]:
     return issues
 
 
+def _validate_repo_relative_existing_paths(
+    paths: list[str],
+    *,
+    context: str,
+) -> list[str]:
+    issues: list[str] = []
+    for path in paths:
+        candidate = Path(path)
+        if candidate.is_absolute():
+            issues.append(f"{context} must be repo-relative: {path}")
+            continue
+        if not (REPO_ROOT / candidate).is_file():
+            issues.append(f"{context} repo-relative path does not exist: {path}")
+    return issues
+
+
 def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
     """Return validation issues for the Qwen eval reproduction gate."""
     issues: list[str] = []
@@ -273,6 +290,13 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
         or not all(_is_non_empty_string(path) for path in source_manifests)
     ):
         issues.append("source_manifests must be non-empty strings")
+    else:
+        issues.extend(
+            _validate_repo_relative_existing_paths(
+                list(source_manifests),
+                context="source_manifests",
+            )
+        )
 
     evidence_records = data.get("evidence_records")
     valid_evidence_count = 0
@@ -288,6 +312,16 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
             for field in REQUIRED_EVIDENCE_FIELDS:
                 if field not in record:
                     issues.append(f"{prefix} missing required field {field!r}")
+            source_manifest = record.get("source_manifest")
+            if not _is_non_empty_string(source_manifest):
+                issues.append(f"{prefix}.source_manifest must be a non-empty string")
+            else:
+                issues.extend(
+                    _validate_repo_relative_existing_paths(
+                        [str(source_manifest)],
+                        context=f"{prefix}.source_manifest",
+                    )
+                )
             evidence_id = record.get("evidence_id")
             if _is_non_empty_string(evidence_id):
                 if evidence_id in seen:
