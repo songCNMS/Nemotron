@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task075_qwen_v8_export_eval |
 | PR | https://github.com/songCNMS/Nemotron/pull/182 |
-| Session | 2 |
+| Session | 3 |
 | Branch | intern_nemontron_code_reading/task075_qwen_v8_export_eval |
-| Latest | Restarted Claude intern `intern_nemontron_review_cc` and verified its local Feishu online status; task075 eval remains in progress. |
+| Latest | Completed V8 iter_0000779 HF export validation and corrected full eval; V8 passes MMLU-Pro/HMMT gates but fails AIME25 at 0.1967 versus 0.20. |

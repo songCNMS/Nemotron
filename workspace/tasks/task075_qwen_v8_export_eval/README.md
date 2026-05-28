@@ -15,9 +15,17 @@ Task071 produced the Qwen3-30B-A3B V8 hard-math clean-final SFT checkpoint at `i
 
 ## Acceptance Criteria
 
-- [ ] HF export exists and passes basic config/tokenizer/shard validation.
-- [ ] SGLang endpoint smoke passes with the exported V8 model.
-- [ ] Corrected full MMLU-Pro metrics are recorded.
-- [ ] Corrected full AIME25 metrics are recorded with `max_tokens=8192`.
-- [ ] Corrected full HMMT metrics are recorded with `max_tokens=8192`.
-- [ ] Gate verdict is recorded against V7 thresholds: MMLU-Pro `>=0.55`, AIME25 `>=0.20`, HMMT exact percent `>=10.0`.
+- [x] HF export exists and passes basic config/tokenizer/shard validation.
+- [x] SGLang endpoint smoke passes with the exported V8 model.
+- [x] Corrected full MMLU-Pro metrics are recorded.
+- [x] Corrected full AIME25 metrics are recorded with `max_tokens=8192`.
+- [x] Corrected full HMMT metrics are recorded with `max_tokens=8192`.
+- [x] Gate verdict is recorded against V7 thresholds: MMLU-Pro `>=0.55`, AIME25 `>=0.20`, HMMT exact percent `>=10.0`.
+
+## Session 3 Result
+
+- Report: `workspace/tasks/task075_qwen_v8_export_eval/qwen_v8_iter0779_corrected_eval_session3.md`.
+- MMLU-Pro: `0.5606715425531915` on 12032 rows, pass against `>=0.55`.
+- AIME25: `0.19666666666666666` (`59/300`) with original prompts and `max_tokens=8192`, fail against `>=0.20`.
+- HMMT: `13.333333333333334%` (`4/30`) with original prompts and `max_tokens=8192`, pass against `>=10.0`.
+- Overall V7-gate verdict: fail due AIME25 missing the threshold by 1 correct repeat.
