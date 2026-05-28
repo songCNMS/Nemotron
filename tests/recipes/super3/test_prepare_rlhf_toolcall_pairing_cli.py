@@ -7,8 +7,8 @@ Covers:
 - Output rows use M0 env name `rlhf_toolcall_paired` (not the NeMo-Gym
   env name) — so the M1 RLHF bridge picks them up via its env_map
 - Manifest counts: helpsteer2_rows / hermes_rows / paired_rows
-- `--eval-prompts-jsonl` optional; absent → empty set, no contamination
-  filter
+- `--eval-prompts-jsonl` required unless `--skip-contamination-check` is
+  explicit; explicit skip records manifest metadata
 - CLI subprocess: exit 0 on success / exit 1 on missing input / exit 2
   on malformed JSONL
 - rlhf_env_registry.yaml's tool-call row is now `active` with
@@ -102,6 +102,7 @@ def test_prepare_writes_paired_jsonl_and_manifest(tmp_path: Path) -> None:
         helpsteer2_jsonl=helpsteer_path,
         hermes_jsonl=hermes_path,
         eval_prompts_jsonl=None,
+        skip_contamination_check=True,
         output_dir=output_dir,
     )
     manifest = prepare(args)
@@ -133,6 +134,7 @@ def test_prepare_paired_rows_use_m0_env_name(tmp_path: Path) -> None:
         helpsteer2_jsonl=helpsteer_path,
         hermes_jsonl=hermes_path,
         eval_prompts_jsonl=None,
+        skip_contamination_check=True,
         output_dir=output_dir,
     )
     prepare(args)
@@ -165,6 +167,7 @@ def test_prepare_manifest_carries_lineage_block(tmp_path: Path) -> None:
         helpsteer2_jsonl=helpsteer_path,
         hermes_jsonl=hermes_path,
         eval_prompts_jsonl=None,
+        skip_contamination_check=True,
         output_dir=tmp_path / "out",
     )
     manifest = prepare(args)
@@ -202,6 +205,7 @@ def test_prepare_optional_eval_prompts_jsonl(tmp_path: Path) -> None:
         helpsteer2_jsonl=helpsteer_path,
         hermes_jsonl=hermes_path,
         eval_prompts_jsonl=eval_prompts_path,
+        skip_contamination_check=False,
         output_dir=tmp_path / "out",
     )
     manifest = prepare(args)
@@ -209,9 +213,8 @@ def test_prepare_optional_eval_prompts_jsonl(tmp_path: Path) -> None:
     assert manifest["counts"]["eval_prompt_5grams"] > 0
 
 
-def test_prepare_with_no_eval_prompts_skips_contamination_filter(tmp_path: Path) -> None:
-    """No --eval-prompts-jsonl → empty set → contamination filter does
-    nothing → prompt passes through."""
+def test_prepare_with_explicit_skip_skips_contamination_filter(tmp_path: Path) -> None:
+    """Explicit skip allows sandbox runs and records the bypass in manifest."""
     helpsteer_path = _write_jsonl(
         tmp_path / "helpsteer.jsonl",
         [_helpsteer_row("Translate the following passenger announcement.")],
@@ -227,17 +230,79 @@ def test_prepare_with_no_eval_prompts_skips_contamination_filter(tmp_path: Path)
         helpsteer2_jsonl=helpsteer_path,
         hermes_jsonl=hermes_path,
         eval_prompts_jsonl=None,
+        skip_contamination_check=True,
         output_dir=tmp_path / "out",
     )
     manifest = prepare(args)
     assert manifest["counts"]["paired_rows"] == 1
     assert manifest["counts"]["eval_prompt_5grams"] == 0
+    assert manifest["contamination_check_skipped"] is True
+    assert "--skip-contamination-check" in manifest["contamination_check_skip_warning"]
+
+
+def test_prepare_requires_eval_prompts_or_explicit_skip(tmp_path: Path) -> None:
+    helpsteer_path = _write_jsonl(
+        tmp_path / "helpsteer.jsonl",
+        [_helpsteer_row("Look up the weather.")],
+    )
+    hermes_path = _write_jsonl(
+        tmp_path / "hermes.jsonl",
+        [_hermes_row("get_weather", {"location": "X"}, source_id="h_1")],
+    )
+
+    from scripts.prepare_rlhf_toolcall_pairing import prepare
+
+    args = SimpleNamespace(
+        helpsteer2_jsonl=helpsteer_path,
+        hermes_jsonl=hermes_path,
+        eval_prompts_jsonl=None,
+        skip_contamination_check=False,
+        output_dir=tmp_path / "out",
+    )
+
+    with pytest.raises(ValueError, match="--skip-contamination-check"):
+        prepare(args)
+    assert not (tmp_path / "out").exists()
 
 
 # ---------- CLI subprocess ----------
 
 
 def test_cli_subprocess_smoke_roundtrip(tmp_path: Path) -> None:
+    helpsteer_path = _write_jsonl(
+        tmp_path / "helpsteer.jsonl",
+        [_helpsteer_row("Look up the weather.")],
+    )
+    hermes_path = _write_jsonl(
+        tmp_path / "hermes.jsonl",
+        [_hermes_row("get_weather", {"location": "X"}, source_id="h_1")],
+    )
+    output_dir = tmp_path / "out"
+
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(CLI_PATH),
+            "--helpsteer2-jsonl",
+            str(helpsteer_path),
+            "--hermes-jsonl",
+            str(hermes_path),
+            "--skip-contamination-check",
+            "--output-dir",
+            str(output_dir),
+        ],
+        capture_output=True,
+        text=True,
+        env={"PYTHONPATH": str(REPO_ROOT / "src"), "PATH": "/usr/bin:/bin"},
+    )
+    assert proc.returncode == 0, f"stderr: {proc.stderr}\nstdout: {proc.stdout}"
+    assert (output_dir / "paired.jsonl").is_file()
+    assert (output_dir / "manifest.json").is_file()
+    manifest = json.loads((output_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["contamination_check_skipped"] is True
+
+
+def test_cli_requires_eval_prompts_or_explicit_skip(tmp_path: Path) -> None:
     helpsteer_path = _write_jsonl(
         tmp_path / "helpsteer.jsonl",
         [_helpsteer_row("Look up the weather.")],
@@ -263,9 +328,9 @@ def test_cli_subprocess_smoke_roundtrip(tmp_path: Path) -> None:
         text=True,
         env={"PYTHONPATH": str(REPO_ROOT / "src"), "PATH": "/usr/bin:/bin"},
     )
-    assert proc.returncode == 0, f"stderr: {proc.stderr}\nstdout: {proc.stdout}"
-    assert (output_dir / "paired.jsonl").is_file()
-    assert (output_dir / "manifest.json").is_file()
+    assert proc.returncode == 2
+    assert "--skip-contamination-check" in proc.stderr
+    assert not output_dir.exists()
 
 
 def test_cli_exits_1_on_missing_helpsteer_input(tmp_path: Path) -> None:
@@ -282,6 +347,7 @@ def test_cli_exits_1_on_missing_helpsteer_input(tmp_path: Path) -> None:
             str(tmp_path / "does_not_exist.jsonl"),
             "--hermes-jsonl",
             str(hermes_path),
+            "--skip-contamination-check",
             "--output-dir",
             str(tmp_path / "out"),
         ],
@@ -307,6 +373,7 @@ def test_cli_exits_2_on_malformed_jsonl(tmp_path: Path) -> None:
             str(helpsteer_path),
             "--hermes-jsonl",
             str(hermes_path),
+            "--skip-contamination-check",
             "--output-dir",
             str(tmp_path / "out"),
         ],
