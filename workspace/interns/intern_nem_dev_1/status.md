@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task090_nano3_stage0_pretrain_data_prep_output_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/197 |
-| Session | 14 |
-| Recent Progress | Opened PR #197 for task090 after moving Nano3 stage0 pretrain data-prep default output_dir off named-user /lustre and adding static config portability tests; required checks passed |
+| Current Task | task092_nano3_stage2_rl_qwen_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/199 |
+| Session | 16 |
+| Recent Progress | Pushed task092 follow-up to PR #199 fixing Nano3 tiny validation split to use `${art:data,val}` and adding a focused train/validation split-key regression test; focused checks passed |

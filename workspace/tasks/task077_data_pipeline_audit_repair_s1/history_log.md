@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=16 -->
 
 ---
 
@@ -104,5 +104,32 @@
 - Preserved existing `tiny.yaml` behavior and added focused static tests for Nano3 stage0 pretrain data-prep required fields and portable output dirs.
 - Validation passed locally: focused Nano3 config pytest shard, py_compile for touched test, Ruff for touched test, static output_dir scan, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #197: https://github.com/songCNMS/Nemotron/pull/197
+
+---
+
+## Session 15 - 2026-05-28 - Task092 Nano3 stage2 RL Qwen contract
+
+**Executor**: intern_nem_dev_1
+
+- Read task092 instructions from `/work-agents/intern_nem_dev_1/instruction.md` and ignored unrelated generic prompt text.
+- Fast-forwarded local `main` to `914dc3db746702744651a97ea8680087e582a6fb` and created branch `intern_nem_dev_1/task092_nano3_stage2_rl_qwen_contract_s1`.
+- Updated Nano3 stage2 RL `default.yaml` and `tiny.yaml` to pin tokenizer and vLLM serving `chat_template_kwargs` with `enable_thinking=false` and `truncate_history_thinking=false`.
+- Added `<|im_end|>` generation stop string and switched HTTP serving parser contract from `deepseek_r1` to `nano_v3` with `nemo_rl/utils/nano_v3_reasoning_parser.py`.
+- Added focused static tests proving default/tiny satisfy the Nano3 Qwen RL contract and do not drift from each other.
+- Validation passed locally: focused Nano3 Qwen RL pytest shard, py_compile for touched test, Ruff for touched test, structured YAML probe, `git diff --check`, and `git diff --cached --check`.
+- Suggested existing integration shard was attempted and is blocked by unrelated pre-existing drift in `tests/recipes/nano3/stage2_rl/test_data_prep_train_integration.py`.
+- Opened PR #199: https://github.com/songCNMS/Nemotron/pull/199
+
+---
+
+## Session 16 - 2026-05-28 - Task092 Nano3 tiny validation split follow-up
+
+**Executor**: intern_nem_dev_1
+
+- Read updated task092 instruction from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Fixed Nano3 stage2 RL `tiny.yaml` so `data.validation_jsonl_fpath` uses `${art:data,val}` instead of reusing `${art:data,train}`.
+- Extended the focused task092 static test to prove tiny train and validation artifact split keys are `train` and `val` and differ.
+- Validation passed locally: focused Nano3 Qwen RL contract pytest shard, py_compile for touched test, Ruff for touched test, structured YAML probe including tiny split keys, `git diff --check`, and `git diff --cached --check`.
+- Pushed the follow-up to existing PR #199: https://github.com/songCNMS/Nemotron/pull/199
 
 ---

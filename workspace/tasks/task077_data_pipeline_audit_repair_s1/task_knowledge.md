@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=16 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -41,5 +41,15 @@
 29. file change: Nano3 stage0 pretrain `default.yaml` now uses `${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain` for `output_dir`; `tiny.yaml` remains unchanged.
 30. test evidence: Task090 focused Nano3 config pytest shard passed, py_compile passed for the touched test, Ruff passed for the touched test, static output_dir scan found no `/lustre` or `users/mromeijn` output_dir defaults, and diff checks passed.
 31. file change: PR #197 opened against `main` for task090 Nano3 stage0 pretrain output portability.
+32. supervisor request: PM assigned task092 to sync latest main, fix Nano3 stage2 RL Qwen chat kwargs, stop-string, and parser/plugin contract in `default.yaml` and `tiny.yaml`, add focused tests, open a PR to `main`, and ignore unrelated generic prompt text.
+33. file change: Nano3 stage2 RL `default.yaml` and `tiny.yaml` now pin tokenizer and vLLM serving `chat_template_kwargs` to `enable_thinking=false` and `truncate_history_thinking=false`.
+34. file change: Nano3 stage2 RL `default.yaml` and `tiny.yaml` now use `stop_strings: ["<|im_end|>"]`, `tool_parser: qwen3_coder`, `reasoning_parser: nano_v3`, and `reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py`.
+35. test evidence: Task092 focused Qwen RL contract pytest passed with 7 tests, py_compile passed for the touched test, Ruff passed for the touched test, structured YAML probe passed, and diff checks passed.
+36. blocker: Suggested existing Nano3 stage2 RL integration shard is blocked by unrelated pre-existing drift in `test_data_prep_train_integration.py` imports/APIs and missing legacy helper modules.
+37. file change: PR #199 opened against `main` for task092 Nano3 stage2 RL Qwen contract.
+38. supervisor request: PM follow-up for active task092 required fixing Nano3 tiny validation split because `validation_jsonl_fpath` reused `${art:data,train}`.
+39. file change: Nano3 stage2 RL `tiny.yaml` now uses `train_jsonl_fpath: ${art:data,train}` and `validation_jsonl_fpath: ${art:data,val}`.
+40. test evidence: Task092 focused Qwen RL contract pytest now passes with 8 tests and includes a regression proving tiny train/validation artifact split keys differ.
+41. file change: PR #199 updated with the Nano3 tiny split follow-up.
 
 ---
