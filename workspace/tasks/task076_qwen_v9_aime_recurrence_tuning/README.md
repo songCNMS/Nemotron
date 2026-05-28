@@ -27,7 +27,7 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 ## Acceptance Criteria
 
 - [x] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
-- [ ] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
+- [x] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
 - [ ] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
 - [ ] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
 - [ ] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
@@ -39,3 +39,12 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - PR: `https://github.com/songCNMS/Nemotron/pull/183`.
 - Hypothesis report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_tuning_hypothesis_session1.md`.
 - Initial direction: add a high-precision `hard_math_recurrence_v9` sidecar on top of V8 clean-final rows, selected for recurrence/counting structure and still gated by AIME25/HMMT/MATH decontamination.
+
+## Session 2 Result
+
+- Added `hard_math_recurrence_v9` prep/planner support and tests.
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_data_plan_session2.md`.
+- Generated local V9 plan: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/scaleup_manifest.json`.
+- Generated decontamination corpus: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/aime25_hmmt_math_heldout_decontam_corpus.jsonl` with `30` AIME25, `30` HMMT, and `1419` MATH-style heldout prompts.
+- Source-count probe found `220/4546` existing V8 hard sidecar rows match the V9 recurrence/counting filter.
+- Training was not launched in Session 2.
