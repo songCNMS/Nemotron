@@ -1,6 +1,6 @@
 # task083_qwen_rl_reasoning_parser_contract_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 - 2026-05-28
 
@@ -11,3 +11,9 @@
 - Aligned the generic config to `nano_v3` and expanded focused config tests to require matching `tool_parser`, `reasoning_parser`, and `reasoning_parser_plugin` across all five runnable RL configs.
 - Verified required checks locally: focused RL config tests passed with 28 tests, py_compile passed for touched tests, `git diff --check` passed, `/work-agents/.venv/bin/ruff check` passed for touched tests, and a structured stage2 RL parser audit passed.
 - Opened PR #190 to `main`: https://github.com/songCNMS/Nemotron/pull/190.
+
+## Session 4 - 2026-05-28
+
+- Stop-hook audit required an explicit Session 4 record in this history log for `task083_qwen_rl_reasoning_parser_contract_s1`.
+- Confirmed PR #190 remains the active task083 PR and the implementation scope is unchanged: generic RL reasoning parser contract alignment plus focused static config tests.
+- Recorded this bookkeeping-only Session 4 entry and kept the validation evidence from Session 1 intact.
