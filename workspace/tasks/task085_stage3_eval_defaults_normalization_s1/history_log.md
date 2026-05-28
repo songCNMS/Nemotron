@@ -1,6 +1,6 @@
 # task085_stage3_eval_defaults_normalization_s1 history
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 1 - 2026-05-28
 
@@ -17,3 +17,9 @@
 - Fixed stop-hook bookkeeping by adding the explicit Session 6 task085 history record.
 - Left implementation scope unchanged: PR #193 remains the active review for stage3 eval defaults normalization.
 - Rechecked staged doc-only changes with `git diff --cached --check` before pushing the PR branch update.
+
+## Session 7 - 2026-05-28
+
+- PM assigned `task089_stage0_pretrain_data_prep_output_portability_s1` after task085 had landed in synced `main`.
+- Synced local `main` to `a221b222e2226be8ed8d4258734638199eedf073` and branched task089 from that base.
+- No additional task085 implementation changes were made in this transition record.

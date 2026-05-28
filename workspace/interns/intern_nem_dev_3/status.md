@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task085_stage3_eval_defaults_normalization_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task089_stage0_pretrain_data_prep_output_portability_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task085_stage3_eval_defaults_normalization_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/193 |
-| Session | 6 |
-| Recent Progress | Opened PR #193 for stage3 eval launcher normalization and pushed a doc-only Session 6 bookkeeping fix for task085 history/knowledge after the stop-hook audit |
+| Current Task | task089_stage0_pretrain_data_prep_output_portability_s1 |
+| PR | pending from branch `intern_nem_dev_3/task089_stage0_pretrain_data_prep_output_portability_s1` |
+| Session | 7 |
+| Recent Progress | Synced main to `a221b222e2226be8ed8d4258734638199eedf073`, branched task089, removed hard-coded stage0 pretrain data-prep `/lustre` output dirs, and added focused static config tests |
