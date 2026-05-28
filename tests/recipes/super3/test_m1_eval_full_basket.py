@@ -30,12 +30,12 @@ from nemotron.cli.commands.super3.eval import (  # noqa: E402
     load_stage3_eval_config,
     normalize_evaluator_launcher_config,
 )
-from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
-    diff_eval_runs,
-)
 from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
     benchmark_alignment_target_suites,
     load_benchmark_alignment_ledger,
+)
+from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
+    diff_eval_runs,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -1245,6 +1245,42 @@ def test_corrected_math_metadata_is_stripped_before_launcher_submission() -> Non
         "simple_evals.AIME_2025",
         "nemo_skills.ns_hmmt_feb2025",
     ]
+
+
+@pytest.mark.parametrize(
+    ("config_name", "expected_task_count"),
+    [
+        ("default", 5),
+        ("m1_basket", 8),
+        ("m1_full_basket", 19),
+        ("m1_full_basket_launcher_available", 14),
+        ("m1_corrected_math_comparison", 2),
+    ],
+)
+def test_normalized_stage3_eval_configs_strip_repo_metadata(
+    config_name: str,
+    expected_task_count: int,
+) -> None:
+    """Normalized launcher configs must not leak Hydra/repo-only metadata.
+
+    Compact basket overlays still need to inherit default.yaml, expand
+    top-level task selectors into ``evaluation.tasks``, and keep the Qwen eval
+    chat-template kwargs inherited from the source default.
+    """
+    ctx = SimpleNamespace(config=config_name, dotlist=[])
+    config = load_stage3_eval_config(ctx, REPO_ROOT / CONFIG_DIR, "default")
+
+    normalize_evaluator_launcher_config(config)
+
+    assert "defaults" not in config
+    assert "qwen_chat_contract" not in config
+    assert "corrected_math" not in config
+    assert "tasks" not in config
+    assert len(config.evaluation.tasks) == expected_task_count
+    assert config.evaluation.nemo_evaluator_config.config.params.extra.chat_template_kwargs == {
+        "enable_thinking": False,
+        "truncate_history_thinking": False,
+    }
 
 
 # ---------- regression_report works on combined gate map ----------
