@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Qwen V9 AIME recurrence tuning
 
-<!-- METADATA:STATUS=Open,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 
@@ -26,9 +26,15 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 
 ## Acceptance Criteria
 
-- [ ] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
+- [x] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
 - [ ] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
 - [ ] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
 - [ ] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
 - [ ] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
 - [ ] If a V9 checkpoint is produced, corrected full MMLU-Pro, AIME25 `max_tokens=8192`, and HMMT `max_tokens=8192` metrics are recorded and compared with V7/V8.
+
+## Session 1 Result
+
+- Branch: `intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning`.
+- Hypothesis report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_tuning_hypothesis_session1.md`.
+- Initial direction: add a high-precision `hard_math_recurrence_v9` sidecar on top of V8 clean-final rows, selected for recurrence/counting structure and still gated by AIME25/HMMT/MATH decontamination.
