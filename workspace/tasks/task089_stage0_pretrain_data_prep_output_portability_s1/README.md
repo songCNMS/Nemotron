@@ -1,6 +1,6 @@
 # task089_stage0_pretrain_data_prep_output_portability_s1 - Stage0 pretrain data-prep output portability
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Background
 
@@ -31,3 +31,7 @@ portable repo-relative output directory.
 - `python -m py_compile` passes for touched Python tests.
 - Ruff passes for touched Python tests when available.
 - `git diff --check` and `git diff --cached --check` pass.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/195

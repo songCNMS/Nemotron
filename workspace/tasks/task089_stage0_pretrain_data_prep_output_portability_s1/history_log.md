@@ -10,3 +10,5 @@
 - Replaced hard-coded stage0 pretrain data-prep `/lustre` output directories with portable repo-relative defaults.
 - Added focused static tests for data-prep output portability and required config fields.
 - Verified focused pytest, py_compile, Ruff, and no-hard-coded-output-dir probe before broader diff checks.
+- Opened PR #195 to `main`: https://github.com/songCNMS/Nemotron/pull/195.
+- Confirmed no direct `main` push, self-merge, live dataset download, tokenization, W&B run, cluster job, deployment, endpoint call, or promotion was performed.
