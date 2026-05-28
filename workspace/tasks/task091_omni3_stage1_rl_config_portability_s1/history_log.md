@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 1 - 2026-05-28
 
@@ -12,3 +12,9 @@
 - Added `test_stage1_rl_config_portability.py` covering named-user removal, required env keys, env override names, resolved portable defaults, override precedence, and MPO tiny job/node defaults.
 - Verified locally: focused Omni3 portability tests passed under system Python, full Omni3 CLI plus portability shard passed under the project venv, py_compile passed, ruff passed, static grep/probe passed, and whitespace checks passed.
 - Opened PR #198 to `main`: https://github.com/songCNMS/Nemotron/pull/198.
+
+## Session 8 - 2026-05-28
+
+- Stop-hook audit required an explicit Session 8 record in this task091 history log.
+- Confirmed PR #198 remains open for `task091_omni3_stage1_rl_config_portability_s1`, with Omni3 stage1 RL named-user fallbacks replaced by portable run-dir or home-cache defaults.
+- Recorded this Session 8 bookkeeping entry and kept the validation evidence from Session 1 intact.

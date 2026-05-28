@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Omni3 stage1 RL config portability
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=8 -->
 
 ## Background
 
