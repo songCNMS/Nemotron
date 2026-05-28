@@ -28,6 +28,11 @@ dataset:
 tokenizer:
   tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16}
 
+training_contract:
+  model_profile: ${oc.env:SUPER3_M1_TRAINING_PROFILE,nemotron-super}
+  model_ref: null
+  train_entrypoint: null
+
 train:
   train_iters: 1
   global_batch_size: 1

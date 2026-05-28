@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task073_qwen_rl_chat_contract_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task078_qwen_training_pipeline_contract_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task073_qwen_rl_chat_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/172 |
+| Current Task | task078_qwen_training_pipeline_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/185 |
 | Session | 1 |
 
-最近进展：已从 clean `main` `9456469509539648a5a2ab4e4b36a16fa46a95dd` 创建 `intern_nem_dev_2/task073_qwen_rl_chat_contract_s1`，完成 Qwen RL tokenizer/serving kwargs 对齐和 focused consistency tests，已打开 PR #172。
+最近进展：PM requested PR #185 rebase after PR #186; fetched `origin/main` at `2489a87d07137fb743d70547e19ca0cf4e309645`, rebased `intern_nem_dev_2/task078_qwen_training_pipeline_contract_s1`, and resolved conflicts by composing PR #186 Qwen data-prep/profile guards with PR #185 training-contract/profile plumbing. Required Qwen/RL/M1 checks, py_compile, and `git diff --check` passed; `test_stage1_sft_train_bridge.py` is skipped because `megatron` is not installed.

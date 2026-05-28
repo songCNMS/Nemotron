@@ -22,6 +22,7 @@ QWEN_SFT_CHAT_TEMPLATE_KWARGS: dict[str, bool] = {
     "enable_thinking": False,
     "truncate_history_thinking": False,
 }
+QWEN_TRAINING_PROFILE = "qwen"
 
 
 def _metadata_candidates(packed_sft_dir: str | Path) -> list[Path]:
@@ -89,6 +90,13 @@ def _config_value(config: Mapping[str, Any], key: str) -> Any:
         tokenizer = config.get("tokenizer")
         if isinstance(tokenizer, Mapping):
             return tokenizer.get("model") or tokenizer.get("tokenizer_model")
+    return None
+
+
+def _metadata_container(metadata: Mapping[str, Any], key: str) -> Mapping[str, Any] | None:
+    value = metadata.get(key)
+    if isinstance(value, Mapping):
+        return value
     return None
 
 
@@ -161,6 +169,51 @@ def validate_qwen_data_prep_config(
             )
 
 
+def _is_qwen_ref(value: str | None) -> bool:
+    if not value:
+        return False
+    normalized = _normalize_tokenizer_ref(str(value)).lower()
+    return "qwen" in normalized
+
+
+def _is_nemotron_super_ref(value: str | None) -> bool:
+    if not value:
+        return False
+    normalized = _normalize_tokenizer_ref(str(value)).lower()
+    return (
+        normalized == _normalize_tokenizer_ref(NEMOTRON_SUPER_TOKENIZER_DEFAULT).lower()
+        or "nvidia-nemotron-3-super" in normalized
+        or "nemotron-3-super" in normalized
+    )
+
+
+def _is_qwen_profile(value: str | None) -> bool:
+    return bool(value) and str(value).strip().lower().startswith(QWEN_TRAINING_PROFILE)
+
+
+def _metadata_declares_qwen(metadata: Mapping[str, Any]) -> bool:
+    tokenizer_uri = _metadata_value(metadata, "tokenizer_uri")
+    if isinstance(tokenizer_uri, str) and _is_qwen_ref(tokenizer_uri):
+        return True
+
+    profile = _metadata_value(metadata, "model_profile") or _metadata_value(metadata, "training_profile")
+    if isinstance(profile, str) and _is_qwen_profile(profile):
+        return True
+
+    if _metadata_container(metadata, "qwen_chat_contract") is not None:
+        return True
+
+    chat_template = _metadata_value(metadata, "chat_template")
+    chat_template_kwargs = _metadata_value(metadata, "chat_template_kwargs")
+    if chat_template == QWEN_SFT_CHAT_TEMPLATE and isinstance(chat_template_kwargs, Mapping):
+        return all(
+            chat_template_kwargs.get(key) is expected
+            for key, expected in QWEN_SFT_CHAT_TEMPLATE_KWARGS.items()
+        )
+
+    return False
+
+
 def validate_qwen_packed_sft_chat_contract(
     packed_sft_dir: str | Path,
     *,
@@ -210,14 +263,99 @@ def validate_qwen_packed_sft_chat_contract(
     return metadata_path
 
 
+def validate_qwen_training_pipeline_contract(
+    packed_sft_dir: str | Path,
+    *,
+    tokenizer_model: str | None,
+    training_profile: str | None = None,
+    model_ref: str | None = None,
+    train_entrypoint: str | Path | None = None,
+    recipe_target: str | None = None,
+) -> Path | None:
+    """Validate a resolved training launch cannot mix Qwen and Nemotron defaults.
+
+    This is an offline preflight: it inspects packed-data metadata plus the
+    resolved launch/profile fields and raises before Megatron starts if Qwen
+    packed data would be trained with the generic Nemotron profile, tokenizer,
+    or recipe defaults. Non-Qwen metadata returns ``None`` without gating the
+    legacy Nemotron path.
+    """
+
+    entrypoint_text = str(train_entrypoint or "")
+    recipe_text = str(recipe_target or "")
+    profile_is_qwen = _is_qwen_profile(training_profile)
+    entrypoint_is_qwen = _is_qwen_ref(entrypoint_text)
+    recipe_is_qwen = _is_qwen_ref(recipe_text)
+    tokenizer_is_qwen = _is_qwen_ref(tokenizer_model)
+    model_is_qwen = _is_qwen_ref(model_ref)
+    explicit_qwen_target = any(
+        (
+            profile_is_qwen,
+            entrypoint_is_qwen,
+            recipe_is_qwen,
+            tokenizer_is_qwen,
+            model_is_qwen,
+        )
+    )
+    metadata_path = find_packed_sft_metadata_path(packed_sft_dir)
+    if metadata_path is None:
+        if explicit_qwen_target:
+            load_packed_sft_metadata(packed_sft_dir)
+        return None
+    metadata_path, metadata = load_packed_sft_metadata(packed_sft_dir)
+
+    packed_is_qwen = _metadata_declares_qwen(metadata)
+    qwen_target = packed_is_qwen or explicit_qwen_target
+    if not qwen_target:
+        return None
+
+    if not profile_is_qwen:
+        raise ValueError(
+            "Qwen target training requires training_contract.model_profile=qwen "
+            "(or SUPER3_M1_TRAINING_PROFILE=qwen). "
+            f"{metadata_path} looks Qwen-like but launch profile is {training_profile!r}."
+        )
+
+    if not (entrypoint_is_qwen or recipe_is_qwen):
+        raise ValueError(
+            "Qwen training profile requires a Qwen train entrypoint or Qwen recipe target. "
+            f"Got train_entrypoint={entrypoint_text!r}, recipe._target_={recipe_text!r}. "
+            "Use qwen_local_train.py / qwen3_30b_a3b_local_train.py or set an explicit Qwen recipe."
+        )
+
+    if not tokenizer_model:
+        raise ValueError(
+            "Qwen training profile requires tokenizer.tokenizer_model to resolve to the Qwen HF model. "
+            "Set SUPER3_M1_TOKENIZER_MODEL to the same Qwen path used for data packing."
+        )
+    if _is_nemotron_super_ref(tokenizer_model) or not tokenizer_is_qwen:
+        raise ValueError(
+            "Qwen training profile cannot use the Nemotron tokenizer default. "
+            f"Resolved tokenizer.tokenizer_model={tokenizer_model!r}; set it to the Qwen HF model."
+        )
+
+    if model_ref and not model_is_qwen:
+        raise ValueError(
+            "Qwen training profile model_ref must point at a Qwen HF model. "
+            f"Got model_ref={model_ref!r}."
+        )
+
+    return validate_qwen_packed_sft_chat_contract(
+        packed_sft_dir,
+        tokenizer_model=tokenizer_model,
+    )
+
+
 __all__ = [
     "NEMOTRON_SUPER_TOKENIZER_DEFAULT",
     "QWEN_DATA_PREP_CONFIG_NAME",
     "QWEN_DATA_PREP_TARGET_FAMILY",
     "QWEN_SFT_CHAT_TEMPLATE",
     "QWEN_SFT_CHAT_TEMPLATE_KWARGS",
+    "QWEN_TRAINING_PROFILE",
     "find_packed_sft_metadata_path",
     "load_packed_sft_metadata",
     "validate_qwen_data_prep_config",
     "validate_qwen_packed_sft_chat_contract",
+    "validate_qwen_training_pipeline_contract",
 ]

@@ -2,6 +2,8 @@ import json
 from argparse import Namespace
 from pathlib import Path
 
+import pytest
+
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import (
     build_plan,
     compute_train_iters,
@@ -66,6 +68,11 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
 from nemotron.recipes.super3.milestones.m1_agentic_sft.run_m1_sft_roundtrip_smoke import (
     run as run_m1_sft_roundtrip_smoke,
 )
+from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+    NEMOTRON_SUPER_TOKENIZER_DEFAULT,
+    QWEN_SFT_CHAT_TEMPLATE_KWARGS,
+    validate_qwen_training_pipeline_contract,
+)
 
 
 def _base_record(environment: str) -> dict:
@@ -94,6 +101,68 @@ def _base_record(environment: str) -> dict:
             "contamination": "notes",
         },
     }
+
+
+def _write_qwen_packed_metadata(splits_dir: Path, tokenizer_uri: str = "/models/qwen3-4b") -> Path:
+    splits_dir.mkdir(parents=True, exist_ok=True)
+    metadata_path = splits_dir / "metadata.json"
+    metadata_path.write_text(
+        json.dumps(
+            {
+                "type": "SFTDataArtifact",
+                "tokenizer_uri": tokenizer_uri,
+                "chat_template": "tokenizer",
+                "chat_template_kwargs": dict(QWEN_SFT_CHAT_TEMPLATE_KWARGS),
+            }
+        ),
+        encoding="utf-8",
+    )
+    return metadata_path
+
+
+def test_qwen_training_contract_rejects_qwen_data_without_qwen_profile(tmp_path) -> None:
+    splits_dir = tmp_path / "packed" / "splits"
+    _write_qwen_packed_metadata(splits_dir)
+
+    with pytest.raises(ValueError, match="model_profile=qwen"):
+        validate_qwen_training_pipeline_contract(
+            splits_dir,
+            tokenizer_model=NEMOTRON_SUPER_TOKENIZER_DEFAULT,
+            training_profile="nemotron-super",
+            train_entrypoint="src/nemotron/recipes/super3/stage1_sft/train.py",
+            recipe_target="megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config",
+        )
+
+
+def test_qwen_training_contract_rejects_generic_entrypoint_even_with_profile(tmp_path) -> None:
+    splits_dir = tmp_path / "packed" / "splits"
+    _write_qwen_packed_metadata(splits_dir)
+
+    with pytest.raises(ValueError, match="Qwen train entrypoint"):
+        validate_qwen_training_pipeline_contract(
+            splits_dir,
+            tokenizer_model="/models/qwen3-4b",
+            training_profile="qwen",
+            model_ref="/models/qwen3-4b",
+            train_entrypoint="src/nemotron/recipes/super3/stage1_sft/train.py",
+            recipe_target="megatron.bridge.recipes.nemotronh.nemotron_3_super.nemotron_3_super_sft_config",
+        )
+
+
+def test_qwen_training_contract_accepts_profile_tokenizer_and_entrypoint(tmp_path) -> None:
+    splits_dir = tmp_path / "packed" / "splits"
+    metadata_path = _write_qwen_packed_metadata(splits_dir)
+
+    assert (
+        validate_qwen_training_pipeline_contract(
+            splits_dir,
+            tokenizer_model="/models/qwen3-4b",
+            training_profile="qwen",
+            model_ref="/models/qwen3-4b",
+            train_entrypoint="src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py",
+        )
+        == metadata_path
+    )
 
 
 def test_convert_reasoning_record_preserves_reference_solution_without_gsm8k_marker() -> None:
@@ -1469,6 +1538,47 @@ def test_build_plan_uses_batch_geometry_guard(tmp_path) -> None:
         build_plan(Args())
 
 
+def test_plan_m1_rejects_qwen_packed_data_without_qwen_training_profile(tmp_path) -> None:
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"not-a-real-parquet")
+    tokenizer_dir = tmp_path / "qwen3-4b"
+    tokenizer_dir.mkdir()
+    checkpoint_dir = tmp_path / "checkpoint"
+    checkpoint_dir.mkdir()
+    _write_qwen_packed_metadata(splits_dir, tokenizer_uri=f"file://{tokenizer_dir}")
+
+    class Args:
+        packed_sft_dir = packed_root
+        pretrained_checkpoint = checkpoint_dir
+        tokenizer_model = None
+        save_dir = tmp_path / "save"
+        output_dir = tmp_path / "plans"
+        run_name = "unit"
+        repo_dir = tmp_path / "repo"
+        script_path = "src/nemotron/recipes/super3/stage1_sft/train.py"
+        config_path = "src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"
+        training_profile = "nemotron-super"
+        venv = None
+        nodes = 1
+        gpus_per_node = 1
+        epochs = 1.0
+        train_iters = 1
+        fallback_train_iters = 1700
+        global_batch_size = 1
+        micro_batch_size = 1
+        seq_length = 4096
+        eval_interval = 1
+        save_interval = 1
+        allow_missing_checkpoint = False
+
+    with pytest.raises(ValueError, match="model_profile=qwen"):
+        build_plan(Args())
+
+
 def test_m1_agentic_smoke_yaml_pretrained_checkpoint_resolves_without_env(monkeypatch) -> None:
     """Regression for review finding N2: smoke yaml used to raise MissingMandatoryValue."""
     from pathlib import Path
@@ -2065,6 +2175,8 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
 
     assert manifest["paths"]["packed_sft_dir"] == str(splits_dir)
     assert manifest["paths"]["tokenizer_model"] == str(tokenizer_dir)
+    assert manifest["training_contract"]["model_profile"] == "nemotron-super"
+    assert manifest["training_contract"]["tokenizer_model"] == str(tokenizer_dir)
     assert manifest["training"]["train_iters"] == 9
     assert manifest["splits"]["train"]["shards"] == 1
     assert "--nproc_per_node=2" in script

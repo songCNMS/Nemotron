@@ -36,6 +36,7 @@ from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (  # noqa: E40
     QWEN_DATA_PREP_TARGET_FAMILY,
     QWEN_SFT_CHAT_TEMPLATE,
     QWEN_SFT_CHAT_TEMPLATE_KWARGS,
+    QWEN_TRAINING_PROFILE,
     validate_qwen_data_prep_config,
 )
 
@@ -310,6 +311,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         "training": {
             "pretrained_checkpoint": pretrained_checkpoint,
             "train_entrypoint": train_entrypoint,
+            "training_profile": QWEN_TRAINING_PROFILE,
             "epochs": args.epochs,
             "global_batch_size": args.global_batch_size,
             "micro_batch_size": args.micro_batch_size,
@@ -337,6 +339,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "sft_tokenizer_model": qwen_hf_model,
             "sft_chat_template": QWEN_CHAT_TEMPLATE,
             "sft_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
+            "training_profile": QWEN_TRAINING_PROFILE,
             "train_tokenizer_env": "SUPER3_M1_TOKENIZER_MODEL",
             "train_model_env": QWEN_MODEL_ENV_VAR,
             "eval_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
@@ -561,6 +564,7 @@ python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft
   --run-name {_q(manifest["run_name"])} \\
   --repo-dir {_q(repo_dir)} \\
   --script-path {_q(training["train_entrypoint"])} \\
+  --training-profile {_q(training["training_profile"])} \\
   --venv {_q(training["nemtron_venv"])} \\
   --gpus-per-node {int(training["nproc_per_node"])} \\
   --global-batch-size {int(training["global_batch_size"])} \\
@@ -620,6 +624,9 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"dataset.seq_length={int(training['seq_length'])}",
         f"dataset.packed_sequence_specs.packed_sequence_size={int(training['seq_length'])}",
         f"model.seq_length={int(training['seq_length'])}",
+        f"training_contract.model_profile={training['training_profile']}",
+        f"training_contract.model_ref={packing['tokenizer_model']}",
+        f"training_contract.train_entrypoint={training['train_entrypoint']}",
         "train.train_iters=$TRAIN_ITERS",
         f"train.eval_interval={int(training['eval_interval'])}",
         f"train.global_batch_size={int(training['global_batch_size'])}",
@@ -644,6 +651,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"export SUPER3_M1_QWEN_HF_MODEL={_q(packing['tokenizer_model'])}",
         f"export SUPER3_M1_AGENTIC_PACKED_DIR={_q(remote_run_root / 'packed_qwen' / 'splits')}",
         f"export SUPER3_M1_TOKENIZER_MODEL={_q(packing['tokenizer_model'])}",
+        f"export SUPER3_M1_TRAINING_PROFILE={_q(training['training_profile'])}",
         f"export SUPER3_M1_PRETRAINED_CHECKPOINT={_q(training['pretrained_checkpoint'])}",
         f"export SUPER3_M1_SFT_SAVE={_q(remote_ckpt)}",
         f"export CUDA_VISIBLE_DEVICES={_q(training['cuda_visible_devices'])}",
