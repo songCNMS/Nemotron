@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task102_qwen_scaleup_remote_root_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/208 |
+| Current Task | task105_qwen_scaleup_local_plan_model_ref_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/210 |
 | Session | 17 |
-| Recent Progress | Opened PR #208 fixing Qwen scale-up planner remote-root default off another intern workspace and preserving explicit `--remote-root`; focused planner checks passed |
+| Recent Progress | Opened PR #210 passing Qwen HF model ref through the scale-up local training-plan command while keeping tokenizer path separate; focused planner checks passed |

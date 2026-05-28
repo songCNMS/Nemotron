@@ -162,4 +162,12 @@
 - Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, static rendered portability probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #208: https://github.com/songCNMS/Nemotron/pull/208
 
+- Task105 follow-up in same Session 17:
+- Read PM assignment for `task105_qwen_scaleup_local_plan_model_ref_s1`.
+- Fast-forwarded local `main` to `efcf0e6f5b5c043cc4c9b701d4faabe63ce69156` and created branch `intern_nem_dev_1/task105_qwen_scaleup_local_plan_model_ref_s1`.
+- Updated Qwen scale-up local data-prep script rendering so the nested `plan_m1_agentic_sft_training.py` command receives `--qwen-hf-model` from `manifest["training"]["qwen_hf_model"]`.
+- Extended focused planner tests for separate Qwen HF model and tokenizer paths so the local script renders both `--qwen-hf-model` and `--tokenizer-model` and never uses the tokenizer path as `training_contract.model_ref`.
+- Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, structured separate model/tokenizer render probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #210: https://github.com/songCNMS/Nemotron/pull/210
+
 ---
