@@ -28,10 +28,10 @@ from pathlib import Path
 
 from omegaconf import DictConfig, OmegaConf
 
-from nemo_runspec.env import get_artifacts_config, get_wandb_config
 from nemo_runspec.cli_context import GlobalContext
-from nemo_runspec.utils import rewrite_paths_for_remote, resolve_run_interpolations
 from nemo_runspec.config.resolvers import _is_artifact_reference
+from nemo_runspec.env import get_artifacts_config, get_wandb_config
+from nemo_runspec.utils import resolve_run_interpolations, rewrite_paths_for_remote
 
 
 def parse_config(ctx: GlobalContext, config_dir: Path, default_config: str) -> DictConfig:
@@ -98,6 +98,7 @@ def load_config(config_path: Path) -> DictConfig:
 
     Registers custom OmegaConf resolvers before loading to support:
     - ${auto_mount:git+url@ref} for git repo mounts
+    - repo-local ``defaults: "base.yaml"`` overlays
 
     Args:
         config_path: Path to the YAML config file
@@ -110,7 +111,24 @@ def load_config(config_path: Path) -> DictConfig:
     # Register resolvers before loading config (safe to call multiple times)
     register_auto_mount_resolver()
 
-    return OmegaConf.load(config_path)
+    return _load_config_with_local_defaults(Path(config_path), seen=())
+
+
+def _load_config_with_local_defaults(config_path: Path, *, seen: tuple[Path, ...]) -> DictConfig:
+    resolved_path = config_path.resolve()
+    if resolved_path in seen:
+        cycle = " -> ".join(str(path) for path in (*seen, resolved_path))
+        raise ValueError(f"Config defaults cycle detected: {cycle}")
+
+    config = OmegaConf.load(resolved_path)
+    defaults = config.get("defaults")
+    if not isinstance(defaults, str):
+        return config
+
+    base_path = (resolved_path.parent / defaults).resolve()
+    base_config = _load_config_with_local_defaults(base_path, seen=(*seen, resolved_path))
+    del config["defaults"]
+    return OmegaConf.merge(base_config, config)
 
 
 def apply_dotlist_overrides(config: DictConfig, dotlist: list[str]) -> DictConfig:
@@ -194,8 +212,8 @@ def build_job_config(
         # Re-apply YAML resource keys so recipe requirements win over profile defaults.
         # The recipe knows how many nodes/GPUs it needs; env.toml provides cluster
         # logistics (account, partition, tunnel, mounts) the recipe doesn't know about.
-        _RESOURCE_KEYS = ("nodes", "gpus_per_node", "ntasks_per_node", "nproc_per_node")
-        for key in _RESOURCE_KEYS:
+        resource_keys = ("nodes", "gpus_per_node", "ntasks_per_node", "nproc_per_node")
+        for key in resource_keys:
             if key in existing_env:
                 merged_env[key] = existing_env[key]
         run_updates["env"] = merged_env
@@ -348,5 +366,3 @@ def save_configs(
     OmegaConf.save(train_config, train_path)
 
     return job_path, train_path
-
-

@@ -1,6 +1,6 @@
 # task083_qwen_rl_reasoning_parser_contract_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-28
 
@@ -17,3 +17,9 @@
 - Stop-hook audit required an explicit Session 4 record in this history log for `task083_qwen_rl_reasoning_parser_contract_s1`.
 - Confirmed PR #190 remains the active task083 PR and the implementation scope is unchanged: generic RL reasoning parser contract alignment plus focused static config tests.
 - Recorded this bookkeeping-only Session 4 entry and kept the validation evidence from Session 1 intact.
+
+## Session 5 - 2026-05-28
+
+- PM reported PR #190 merged at `d2f37f7e647bce186922f41da9476fa6e734576c`.
+- Fast-forwarded local `main` to that merge commit and preserved the pushed task083 branch.
+- Recorded task083 Working -> Idle closeout context before starting `task084_stage2_rl_runspec_default_contract_s1` from latest `origin/main`.

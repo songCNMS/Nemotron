@@ -12,6 +12,8 @@ run:
       RAY_DEDUP_LOGS: "1"
       OMP_NUM_THREADS: "16"
 
+defaults: "default.yaml"
+
 grpo:
   num_prompts_per_step: 8
   num_generations_per_prompt: 4

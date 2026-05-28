@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task083_qwen_rl_reasoning_parser_contract_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task084_stage2_rl_runspec_default_contract_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task083_qwen_rl_reasoning_parser_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/190 |
-| Session | 4 |
+| Current Task | task084_stage2_rl_runspec_default_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/191 |
+| Session | 6 |
 
-最近进展：PR #188 for `task081_qwen_rl_config_contract_s2` merged at `945b3170c954c22ac4c128dacee60a07927140ba`; task081 Session 4 closeout context was recorded. PM assigned `task083_qwen_rl_reasoning_parser_contract_s1`, local `main` was fast-forwarded to latest `origin/main`, and branch `intern_nem_dev_2/task083_qwen_rl_reasoning_parser_contract_s1` was created. Generic RL reasoning parser drift was aligned to the stage-specific Qwen `nano_v3` parser contract; focused RL config tests, py_compile, ruff, parser audit, and `git diff --check` passed. Opened PR #190 to `main`; Session 4 bookkeeping record added after stop-hook audit.
+最近进展：PR #191 gate blocker on old head `6b19b050df110d54c46764db9d8668e0ddfc0912` was reproduced as a real loader coverage gap: `parse_config()` used `OmegaConf.load()` directly and did not merge `defaults: "default.yaml"`. Session 6 updates `nemo_runspec.config.load_config()` to resolve the repo-local string defaults convention, strips the resolved `defaults` key, and switches the task084 tests to the production `parse_config()` path for generic `tiny` plus known RL overlays. Focused pytest, py_compile, ruff, whitespace checks, and a real `parse_config` structured audit now pass locally.
