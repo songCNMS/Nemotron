@@ -181,7 +181,10 @@ def test_scaleup_planner_can_use_separate_qwen_tokenizer_model(tmp_path) -> None
         == "/local/models/Qwen3-30B-A3B-Instruct-2507"
     )
     assert "tokenizer.model=/local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "--qwen-hf-model /remote/models/Qwen3-30B-A3B-Instruct-2507" in local_script
     assert "--tokenizer-model /local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "--qwen-hf-model /local/models/Qwen3-30B-A3B-Instruct-2507" not in local_script
+    assert "training_contract.model_ref=/local/models/Qwen3-30B-A3B-Instruct-2507" not in local_script
     assert "export SUPER3_M1_QWEN_HF_MODEL=/remote/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
     assert "export SUPER3_M1_TOKENIZER_MODEL=/local/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
     assert "training_contract.model_ref=/remote/models/Qwen3-30B-A3B-Instruct-2507" in remote_script

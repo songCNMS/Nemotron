@@ -66,5 +66,10 @@
 54. file change: Qwen scale-up planner `DEFAULT_REMOTE_ROOT` now resolves under the current checkout owner's `../outputs/task067_qwen_scaleup_remote` path.
 55. test evidence: Task102 focused planner pytest shard passed with 22 tests; py_compile, Ruff, static rendered portability probe, and diff checks passed.
 56. file change: PR #208 opened against `main` for task102 Qwen scale-up remote-root portability.
+57. supervisor request: PM assigned task105 to sync latest main, ensure Qwen scale-up local training-plan rendering passes `--qwen-hf-model`, preserve separate tokenizer handling, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+58. technical fact: `render_local_data_prep_script()` already rendered `--tokenizer-model` for `plan_m1_agentic_sft_training.py`, but omitted `--qwen-hf-model`; with separate remote model and local tokenizer paths, the nested plan could record tokenizer path as `training_contract.model_ref`.
+59. file change: Qwen scale-up local script rendering now passes `--qwen-hf-model` from `manifest["training"]["qwen_hf_model"]` next to `--tokenizer-model`.
+60. test evidence: Task105 focused planner pytest shard passed with 22 tests; py_compile, Ruff, structured separate model/tokenizer render probe, and diff checks passed.
+61. file change: PR #210 opened against `main` for task105 Qwen scale-up local plan model-ref contract.
 
 ---
