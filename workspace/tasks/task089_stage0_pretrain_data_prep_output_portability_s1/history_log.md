@@ -1,6 +1,6 @@
 # task089_stage0_pretrain_data_prep_output_portability_s1 history
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 7 - 2026-05-28
 
@@ -12,3 +12,9 @@
 - Verified focused pytest, py_compile, Ruff, and no-hard-coded-output-dir probe before broader diff checks.
 - Opened PR #195 to `main`: https://github.com/songCNMS/Nemotron/pull/195.
 - Confirmed no direct `main` push, self-merge, live dataset download, tokenization, W&B run, cluster job, deployment, endpoint call, or promotion was performed.
+
+## Session 8 - 2026-05-28
+
+- PM assigned `task093_nano3_stage3_eval_chat_contract_s1` after task089 had landed in synced `main`.
+- Synced local `main` to `914dc3db746702744651a97ea8680087e582a6fb` and branched task093 from that base.
+- No additional task089 implementation changes were made in this transition record.
