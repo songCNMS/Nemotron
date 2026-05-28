@@ -29,3 +29,11 @@ Task071 produced the Qwen3-30B-A3B V8 hard-math clean-final SFT checkpoint at `i
 - AIME25: `0.19666666666666666` (`59/300`) with original prompts and `max_tokens=8192`, fail against `>=0.20`.
 - HMMT: `13.333333333333334%` (`4/30`) with original prompts and `max_tokens=8192`, pass against `>=10.0`.
 - Overall V7-gate verdict: fail due AIME25 missing the threshold by 1 correct repeat.
+
+## Session 4 AIME25 Audit
+
+- Report: `workspace/tasks/task075_qwen_v8_export_eval/qwen_v8_aime25_v7_comparison_session4.md`.
+- V8 has fewer AIME25 length-capped rows than V7 (`14` versus `27`) and more parsed rows (`286` versus `273`), so the AIME gate miss is not primarily a truncation artifact.
+- Exact-correct overlap: `51` both correct, `229` both wrong, `12` V7-only correct, `8` V8-only correct.
+- Main regression: `aime_06` drops from V7 `10/10` correct to V8 `0/10` correct; this accounts for the gate miss despite V8 gains on `aime_13` and `aime_14`.
+- Audit conclusion: treat the AIME25 failure as a real V8 gate failure, not scorer noise.

@@ -1,6 +1,6 @@
 # task075_qwen_v8_export_eval - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1
 
@@ -25,3 +25,12 @@
 - Ran corrected full HMMT with original prompts and `max_tokens=8192`: `4/30`, exact percent `13.333333333333334`, parsed rate `0.6666666666666666`.
 - Recorded report `qwen_v8_iter0779_corrected_eval_session3.md`; overall V7-gate verdict is fail because AIME25 is below `0.20` by one correct repeat.
 - Stopped the V8 SGLang endpoint after eval and verified GPUs returned to idle.
+
+## Session 4
+
+- Compared V8 AIME25 row-level results against V7 session91 using the same corrected original-prompt protocol.
+- Recorded audit report `qwen_v8_aime25_v7_comparison_session4.md`.
+- Found V8 improved length/parse behavior versus V7 (`14` length-capped rows versus `27`; `286` parsed rows versus `273`), so the AIME25 miss is not primarily a truncation artifact.
+- Found exact-correct overlap: `51` both correct, `229` both wrong, `12` V7-only correct, `8` V8-only correct, net `-4` for V8.
+- Identified the main real regression: `aime_06` dropped from V7 `10/10` correct to V8 `0/10` correct, with wrong final boxed predictions and no expected answer contained.
+- Conclusion: keep V8 marked as a real AIME25 gate failure; do not treat the `59/300` result as scorer noise.

@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task075_qwen_v8_export_eval |
 | PR | https://github.com/songCNMS/Nemotron/pull/182 |
-| Session | 3 |
+| Session | 4 |
 | Branch | intern_nemontron_code_reading/task075_qwen_v8_export_eval |
-| Latest | Completed V8 iter_0000779 HF export validation and corrected full eval; V8 passes MMLU-Pro/HMMT gates but fails AIME25 at 0.1967 versus 0.20. |
+| Latest | Completed V7-vs-V8 AIME25 row audit; V8 miss is a real content regression concentrated on aime_06, not truncation/scorer noise. |
