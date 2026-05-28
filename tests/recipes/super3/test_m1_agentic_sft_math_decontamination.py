@@ -19,11 +19,11 @@ from pathlib import Path
 
 import pytest
 
-
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (  # noqa: E402
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -227,6 +227,12 @@ def test_prepare_v7_requires_decontamination_corpus(tmp_path: Path) -> None:
 
 def test_prepare_v8_requires_decontamination_corpus(tmp_path: Path) -> None:
     args = _prepare_args(tmp_path, strategy=MATH_SUPERVISION_STRATEGY_V8)
+    with pytest.raises(ValueError, match="decontaminate-math-against-corpus"):
+        prepare(args)
+
+
+def test_prepare_v9_requires_decontamination_corpus(tmp_path: Path) -> None:
+    args = _prepare_args(tmp_path, strategy=MATH_SUPERVISION_STRATEGY_V9)
     with pytest.raises(ValueError, match="decontaminate-math-against-corpus"):
         prepare(args)
 

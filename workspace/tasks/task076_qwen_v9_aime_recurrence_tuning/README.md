@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Qwen V9 AIME recurrence tuning
 
-<!-- METADATA:STATUS=Open,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 
@@ -26,9 +26,85 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 
 ## Acceptance Criteria
 
-- [ ] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
-- [ ] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
-- [ ] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
-- [ ] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
-- [ ] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
+- [x] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
+- [x] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
+- [x] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
+- [x] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
+- [x] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
 - [ ] If a V9 checkpoint is produced, corrected full MMLU-Pro, AIME25 `max_tokens=8192`, and HMMT `max_tokens=8192` metrics are recorded and compared with V7/V8.
+
+## Session 1 Result
+
+- Branch: `intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning`.
+- PR: `https://github.com/songCNMS/Nemotron/pull/183`.
+- Hypothesis report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_tuning_hypothesis_session1.md`.
+- Initial direction: add a high-precision `hard_math_recurrence_v9` sidecar on top of V8 clean-final rows, selected for recurrence/counting structure and still gated by AIME25/HMMT/MATH decontamination.
+
+## Session 2 Result
+
+- Added `hard_math_recurrence_v9` prep/planner support and tests.
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_data_plan_session2.md`.
+- Generated local V9 plan: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/scaleup_manifest.json`.
+- Generated decontamination corpus: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/aime25_hmmt_math_heldout_decontam_corpus.jsonl` with `30` AIME25, `30` HMMT, and `1419` MATH-style heldout prompts.
+- Source-count probe found `220/4546` existing V8 hard sidecar rows match the V9 recurrence/counting filter.
+- Training was not launched in Session 2.
+
+## Session 7 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_data_prep_session7.md`.
+- Optimized V9 math decontamination and completed M1 prep: `983087` train rows, `11354` val-shadow rows, `310` dropped math blockers in base train and `310` in sidecar train.
+- V9 recurrence sidecar: `221` hard verified full-solution training rows; `1419` heldout eval rows remain excluded.
+- Switched Qwen model/tokenizer path from inaccessible `/mnt/3fs` to `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- Packed data: `32` shards, `983135` total sequences, `667289202` total tokens, `pack_size=8192`; Qwen chat contract validation passed.
+- Generated training plan: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/training_plan/task076_qwen30b_a3b_hard_math_recurrence_v9/training_manifest.json` with `train_iters=192`.
+- Ran generated `m1_basket` eval dry-run successfully; training launch remains the next step.
+
+## Session 8 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_train_session8.md`.
+- Synced repo and packed V9 artifacts to NemTron.
+- Created a lightweight metadata/tokenizer mirror at `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` on NemTron because the cephfs mount was not present there.
+- Launched and completed V9 training: `192/192` iterations on 8 H200 GPUs from V8 checkpoint `iter_0000779`.
+- Final checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
+- Final validation loss at iter 192: `8.960094`; no traceback/OOM/runtime error was found in the observed train log.
+
+## Session 9 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_export_smoke_session9.md`.
+- Exported final V9 checkpoint `iter_0000192` to HF at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/hf_export_iter_0000192`.
+- Used the user-requested Qwen metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- HF validation passed: `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, chat template present.
+- Served the HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`.
+- Targeted corrected `aime_06` smoke completed all `10` repeats with expected answer `907`, but all `10` hit `finish_reason=length`, parsed `0/10`, correct `0/10`, and averaged `8192` completion tokens.
+- Minimal chat smoke also degenerated (` the   the the the the the`), so full corrected MMLU-Pro/AIME25/HMMT was not launched; next step is diagnosing V9 training/export lineage before spending the full gate.
+
+## Session 10 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_checkpoint_root_fix_session10.md`.
+- Diagnosed Session 8/9 V9 as invalid: the launch exported `SUPER3_M1_PRETRAINED_CHECKPOINT` as the child path `.../checkpoints/iter_0000779`, but Megatron-Bridge expects the checkpoint root containing `latest_checkpointed_iteration.txt`.
+- Confirmed evidence: invalid V9 log has no `successfully loaded checkpoint` line and trained at random-init scale (`iter 10` loss `12.25112`, final validation loss/PPL `8.960094/7786.093`).
+- Fixed both training planners to normalize `iter_XXXXXXX` checkpoint paths to their parent checkpoint root and added regression tests.
+- Launched corrected V9 rerun using the same packed V9 data and the corrected V8 checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints`.
+- Corrected run loaded the V8 checkpoint successfully and completed `192/192` iterations with final validation loss/PPL `0.4252748/1.530011`.
+- Corrected checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`.
+- The Session 9 HF export/smoke belongs to the invalid lineage; the corrected checkpoint still needs HF export and targeted `aime_06` smoke.
+
+## Session 11 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_corrected_export_smoke_session11.md`.
+- Exported corrected V9 checkpoint-root-fix `iter_0000192` to HF at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/hf_export_iter_0000192`.
+- Used the user-requested Qwen metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- HF validation passed: `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, chat template present.
+- Served the corrected HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`; minimal chat smoke returned exact `ready`.
+- Targeted corrected `aime_06` smoke completed all `10` repeats with status `ok`, `finish_reason=stop`, parsed `10/10`, correct `0/10`, and average completion tokens `3540`.
+- Per-row predictions split between `640` and `830`, so the checkpoint-root fix repaired generation quality but did not recover the expected `aime_06` answer `907`.
+- The SGLang endpoint was stopped after smoke; port `30000` was clear and all 8 H200 GPUs returned to idle.
+
+## Session 12 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_aime06_trace_audit_session12.md`.
+- Reconfirmed the active Qwen HF metadata/tokenizer checkpoint path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, under the user-requested root `/mnt/cephfs/data/stable/models/Qwen`.
+- Clarified that the SFT continuation checkpoint must remain the V8 Megatron checkpoint root, not the Qwen HF directory.
+- Audited corrected V9 `aime_06` traces: `5/10` predicted `640` after losing the DP recurrence, and `5/10` predicted `830` after using the wrong `(1+x+x^2)^16` coefficient model.
+- Audited the real V9 sidecar: `221` rows total, but only `1` row mentions `chairs`, `1` row mentions `binary string`, and `0` rows combine a no-111-like binary/chair constraint with DP/recurrence signals.
+- Decision: do not spend the full corrected gate on V9; the next implementation step should be a focused V10-style run-length DP sidecar or weighting patch.

@@ -60,6 +60,7 @@ MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
 MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
 MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
 MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
+MATH_SUPERVISION_STRATEGY_V9 = "hard_math_recurrence_v9"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
@@ -68,6 +69,7 @@ MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
 )
 MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
@@ -92,6 +94,10 @@ MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V8_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V9_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V9_FORMAT_REPAIR_WEIGHT = 0.0
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -120,6 +126,26 @@ def _env_or_arg(value: str | None, env_var: str, flag: str) -> str:
     if not resolved:
         raise ValueError(f"{flag} is required, or set {env_var}")
     return resolved
+
+
+def normalize_megatron_pretrained_checkpoint(path: str) -> str:
+    """Return the Megatron checkpoint root expected by Megatron-Bridge.
+
+    Megatron-Bridge resolves the active iteration from
+    ``latest_checkpointed_iteration.txt`` under the checkpoint root. Passing an
+    ``iter_XXXXXXX`` child directory can silently skip loading when
+    ``exit_on_missing_checkpoint`` is false, so generated launch scripts should
+    export the parent root instead.
+    """
+
+    checkpoint = Path(path)
+    if (
+        checkpoint.name.startswith("iter_")
+        and checkpoint.name.removeprefix("iter_").isdigit()
+        and checkpoint.parent != Path(".")
+    ):
+        return str(checkpoint.parent)
+    return path
 
 
 def resolve_train_entrypoint(explicit: str | None, qwen_hf_model: str) -> str:
@@ -202,16 +228,19 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
     qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
-    qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_hf_model)
+    qwen_tokenizer_model = args.qwen_tokenizer_model or qwen_hf_model
+    qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_tokenizer_model)
     validate_qwen_data_prep_config(
         qwen_data_prep_contract,
         config_path=QWEN_DATA_PREP_CONFIG,
     )
     train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
-    pretrained_checkpoint = _env_or_arg(
-        args.pretrained_checkpoint,
-        QWEN_CHECKPOINT_ENV_VAR,
-        "--pretrained-checkpoint",
+    pretrained_checkpoint = normalize_megatron_pretrained_checkpoint(
+        _env_or_arg(
+            args.pretrained_checkpoint,
+            QWEN_CHECKPOINT_ENV_VAR,
+            "--pretrained-checkpoint",
+        )
     )
     paths = build_paths(args.output_dir, args.remote_root)
     return {
@@ -273,6 +302,12 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
                 "final_answer_aux": args.math_v8_final_answer_aux_weight,
                 "format_repair": args.math_v8_format_repair_weight,
             },
+            "math_v9_weights": {
+                "hard_verified_full_solution": args.math_v9_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v9_verified_full_solution_weight,
+                "final_answer_aux": args.math_v9_final_answer_aux_weight,
+                "format_repair": args.math_v9_format_repair_weight,
+            },
             "math_sidecar_m0_input_dir": (
                 str(args.math_sidecar_m0_input_dir)
                 if args.math_sidecar_m0_input_dir is not None
@@ -296,7 +331,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             ),
         },
         "packing": {
-            "tokenizer_model": qwen_hf_model,
+            "tokenizer_model": qwen_tokenizer_model,
             "chat_template": QWEN_CHAT_TEMPLATE,
             "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "target_model_family": QWEN_DATA_PREP_TARGET_FAMILY,
@@ -309,6 +344,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "test_ratio": args.test_ratio,
         },
         "training": {
+            "qwen_hf_model": qwen_hf_model,
             "pretrained_checkpoint": pretrained_checkpoint,
             "train_entrypoint": train_entrypoint,
             "training_profile": QWEN_TRAINING_PROFILE,
@@ -336,7 +372,8 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "dry_run_only": True,
         },
         "qwen_chat_contract": {
-            "sft_tokenizer_model": qwen_hf_model,
+            "sft_model": qwen_hf_model,
+            "sft_tokenizer_model": qwen_tokenizer_model,
             "sft_chat_template": QWEN_CHAT_TEMPLATE,
             "sft_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "training_profile": QWEN_TRAINING_PROFILE,
@@ -446,6 +483,18 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f" \\\n  --math-v8-format-repair-weight "
             f"{float(math_v8_weights['format_repair'])}"
         )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V9:
+        math_v9_weights = data["math_v9_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v9-hard-verified-full-solution-weight "
+            f"{float(math_v9_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v9-verified-full-solution-weight "
+            f"{float(math_v9_weights['verified_full_solution'])}"
+            f" \\\n  --math-v9-final-answer-aux-weight "
+            f"{float(math_v9_weights['final_answer_aux'])}"
+            f" \\\n  --math-v9-format-repair-weight "
+            f"{float(math_v9_weights['format_repair'])}"
+        )
     if data.get("math_sidecar_m0_input_dir"):
         math_supervision_flag_lines += (
             f" \\\n  --math-sidecar-m0-input-dir "
@@ -462,10 +511,11 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
                 f"{int(data['math_sidecar_max_val_shadow_per_env'])}"
             )
     # AIME-25 / HMMT decontamination flags. prepare_m1_agentic_sft.py refuses
-    # to run hard_math_long_reasoning_v7 / hard_math_clean_final_v8 without
+    # to run hard_math_long_reasoning_v7 / hard_math_clean_final_v8 /
+    # hard_math_recurrence_v9 without
     # either --decontaminate-math-against-corpus or
     # --skip-math-decontamination-check; both are plumbed through the planner
-    # so V7/V8 scaleup bundles fail fast or get the operator-confirmed flag.
+    # so V7+ scaleup bundles fail fast or get the operator-confirmed flag.
     if data.get("math_decontaminate_against_corpus"):
         math_supervision_flag_lines += (
             f" \\\n  --decontaminate-math-against-corpus "
@@ -648,7 +698,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"cd {_q(remote_repo)}",
         f"source {_q(Path(training['nemtron_venv']) / 'bin' / 'activate')}",
         "export PYTHONPATH=$PWD/src",
-        f"export SUPER3_M1_QWEN_HF_MODEL={_q(packing['tokenizer_model'])}",
+        f"export SUPER3_M1_QWEN_HF_MODEL={_q(training.get('qwen_hf_model', packing['tokenizer_model']))}",
         f"export SUPER3_M1_AGENTIC_PACKED_DIR={_q(remote_run_root / 'packed_qwen' / 'splits')}",
         f"export SUPER3_M1_TOKENIZER_MODEL={_q(packing['tokenizer_model'])}",
         f"export SUPER3_M1_TRAINING_PROFILE={_q(training['training_profile'])}",
@@ -714,6 +764,7 @@ def render_report(manifest: JsonDict) -> str:
         if data.get("uncapped")
         else f"train={data['max_train_per_dataset']}, val={data['max_val_per_dataset']}"
     )
+    qwen_model = training.get("qwen_hf_model", manifest["packing"]["tokenizer_model"])
     return "\n".join(
         [
             "# Qwen M1 Agentic SFT Scale-up Plan",
@@ -728,11 +779,13 @@ def render_report(manifest: JsonDict) -> str:
             f"- Math v6 weights: `{data['math_v6_weights']}`",
             f"- Math v7 weights: `{data['math_v7_weights']}`",
             f"- Math v8 weights: `{data['math_v8_weights']}`",
+            f"- Math v9 weights: `{data['math_v9_weights']}`",
             f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
             f"- Data-prep config: `{manifest['packing']['data_prep_config']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
-                f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
+                f"- Qwen chat contract: model `{qwen_model}`, "
+                f"tokenizer `{manifest['packing']['tokenizer_model']}`, "
                 f"template `{manifest['packing']['chat_template']}`, "
                 f"kwargs `{manifest['packing']['chat_template_kwargs']}`"
             ),
@@ -787,6 +840,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-dir", type=Path, default=REPO_ROOT)
     parser.add_argument("--run-name", default=DEFAULT_RUN_NAME)
     parser.add_argument("--qwen-hf-model", default=None)
+    parser.add_argument(
+        "--qwen-tokenizer-model",
+        default=None,
+        help=(
+            "Tokenizer model/path for local packing and training contract validation. "
+            "Defaults to --qwen-hf-model; set this separately when the training HF "
+            "model path is only visible on the remote training host."
+        ),
+    )
     parser.add_argument("--pretrained-checkpoint", default=None)
     parser.add_argument(
         "--train-entrypoint",
@@ -948,6 +1010,30 @@ def build_parser() -> argparse.ArgumentParser:
         help="Sample fraction for v8 math format-repair rows.",
     )
     parser.add_argument(
+        "--math-v9-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v9 recurrence/counting verified full-solution math rows.",
+    )
+    parser.add_argument(
+        "--math-v9-verified-full-solution-weight",
+        type=float,
+        default=MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v9 broad verified full-solution math replay rows.",
+    )
+    parser.add_argument(
+        "--math-v9-final-answer-aux-weight",
+        type=float,
+        default=MATH_V9_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v9 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v9-format-repair-weight",
+        type=float,
+        default=MATH_V9_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v9 math format-repair rows.",
+    )
+    parser.add_argument(
         "--math-sidecar-m0-input-dir",
         type=Path,
         default=None,
@@ -975,8 +1061,9 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Path to the AIME-25 / HMMT eval prompt corpus used to drop "
             "contaminated NuminaMath rows at SFT prep time. Required for "
-            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 unless "
-            "--math-skip-decontamination-check is also set (NOT "
+            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 / "
+            "hard_math_recurrence_v9 unless --math-skip-decontamination-check "
+            "is also set (NOT "
             "recommended for production). See prepare_m1_agentic_sft.py "
             "--decontaminate-math-against-corpus."
         ),
@@ -997,7 +1084,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--math-skip-decontamination-check",
         action="store_true",
         help=(
-            "Acknowledge AIME-25 / HMMT contamination risk and bundle V7/V8 "
+            "Acknowledge AIME-25 / HMMT contamination risk and bundle V7+ "
             "without a decontamination corpus. NOT recommended for production "
             "training; intended only for smoke/dry-run paths."
         ),

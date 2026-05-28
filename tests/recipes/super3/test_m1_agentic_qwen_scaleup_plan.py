@@ -12,6 +12,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run imp
     render_eval_script,
     render_local_data_prep_script,
     render_remote_train_script,
+    render_report,
     write_plan,
 )
 from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
@@ -127,6 +128,43 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "deployment.checkpoint_path=" in eval_script
 
 
+def test_scaleup_planner_can_use_separate_qwen_tokenizer_model(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--run-name",
+            "unit_qwen_scaleup",
+            "--qwen-hf-model",
+            "/remote/models/Qwen3-30B-A3B-Instruct-2507",
+            "--qwen-tokenizer-model",
+            "/local/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+        ]
+    )
+    manifest = build_manifest(args)
+
+    local_script = render_local_data_prep_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+    report = render_report(manifest)
+
+    assert manifest["training"]["qwen_hf_model"] == "/remote/models/Qwen3-30B-A3B-Instruct-2507"
+    assert manifest["packing"]["tokenizer_model"] == "/local/models/Qwen3-30B-A3B-Instruct-2507"
+    assert manifest["qwen_chat_contract"]["sft_model"] == "/remote/models/Qwen3-30B-A3B-Instruct-2507"
+    assert (
+        manifest["qwen_chat_contract"]["sft_tokenizer_model"]
+        == "/local/models/Qwen3-30B-A3B-Instruct-2507"
+    )
+    assert "tokenizer.model=/local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "--tokenizer-model /local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "export SUPER3_M1_QWEN_HF_MODEL=/remote/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
+    assert "export SUPER3_M1_TOKENIZER_MODEL=/local/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
+    assert "/remote/models/Qwen3-30B-A3B-Instruct-2507" in report
+
+
 def test_scaleup_planner_wires_30b_entrypoint_and_strategy_overrides(tmp_path) -> None:
     train_entrypoint = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
     args = build_parser().parse_args(
@@ -194,6 +232,29 @@ def test_scaleup_planner_qwen_data_prep_contract_rejects_super3_drift() -> None:
 
     with pytest.raises(ValueError, match="chat_template='tokenizer'"):
         validate_qwen_data_prep_config(contract)
+
+
+def test_scaleup_planner_normalizes_iter_checkpoint_to_root(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/runs/v8/checkpoints/iter_0000779",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+
+    assert manifest["training"]["pretrained_checkpoint"] == "/runs/v8/checkpoints"
+    assert "--pretrained-checkpoint /runs/v8/checkpoints" in local_script
+    assert "export SUPER3_M1_PRETRAINED_CHECKPOINT=/runs/v8/checkpoints" in remote_script
+    assert "iter_0000779" not in remote_script
 
 
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
@@ -458,11 +519,63 @@ def test_scaleup_planner_can_emit_hard_math_clean_final_v8_data_prep(tmp_path) -
     assert "pack_size=8192" in local_script
 
 
+def test_scaleup_planner_can_emit_hard_math_recurrence_v9_data_prep(tmp_path) -> None:
+    corpus_path = tmp_path / "aime25_hmmt_math_corpus.jsonl"
+    corpus_path.write_text("", encoding="utf-8")
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/qwen3-30b-a3b",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_recurrence_v9",
+            "--math-v9-hard-verified-full-solution-weight",
+            "0.5",
+            "--math-v9-verified-full-solution-weight",
+            "0.0",
+            "--math-v9-final-answer-aux-weight",
+            "0.0",
+            "--math-v9-format-repair-weight",
+            "0.0",
+            "--math-sidecar-m0-input-dir",
+            "/data/full_m0",
+            "--math-decontaminate-against-corpus",
+            str(corpus_path),
+            "--pack-size",
+            "8192",
+            "--seq-length",
+            "8192",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+
+    assert manifest["data"]["math_supervision_strategy"] == "hard_math_recurrence_v9"
+    assert manifest["data"]["math_v9_weights"]["hard_verified_full_solution"] == 0.5
+    assert manifest["data"]["math_v9_weights"]["verified_full_solution"] == 0.0
+    assert manifest["data"]["math_v9_weights"]["final_answer_aux"] == 0.0
+    assert manifest["data"]["math_v9_weights"]["format_repair"] == 0.0
+    assert manifest["data"]["math_decontaminate_against_corpus"] == str(corpus_path)
+    assert "--math-supervision-strategy hard_math_recurrence_v9" in local_script
+    assert "--math-v9-hard-verified-full-solution-weight 0.5" in local_script
+    assert "--math-v9-verified-full-solution-weight 0.0" in local_script
+    assert "--math-v9-final-answer-aux-weight 0.0" in local_script
+    assert "--math-v9-format-repair-weight 0.0" in local_script
+    assert f"--decontaminate-math-against-corpus {corpus_path}" in local_script
+    assert "--math-sidecar-m0-input-dir /data/full_m0" in local_script
+    assert "pack_size=8192" in local_script
+
+
 def test_scaleup_planner_plumbs_math_decontamination_flags_through_local_script(tmp_path) -> None:
     """Regression: prepare_m1_agentic_sft.py requires
-    --decontaminate-math-against-corpus for V7/V8 strategies (or
+    --decontaminate-math-against-corpus for V7+ strategies (or
     --skip-math-decontamination-check). The planner must plumb both
-    flags through to the local data-prep script, otherwise V7/V8
+    flags through to the local data-prep script, otherwise V7+
     scaleup bundles fail with the prepare-side guard.
     """
     corpus_path = tmp_path / "aime25_hmmt_corpus.jsonl"

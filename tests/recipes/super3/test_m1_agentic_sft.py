@@ -29,6 +29,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -52,6 +53,10 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V8_FORMAT_REPAIR_WEIGHT,
     MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
     MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V9_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V9_FORMAT_REPAIR_WEIGHT,
+    MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
@@ -61,6 +66,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     is_hard_math_long_reasoning_row,
     is_hard_math_precision_row,
     is_hard_math_recovery_row,
+    is_hard_math_recurrence_row,
     load_difficulty_signal,
     prepare,
     sample_rows_by_fraction,
@@ -1092,6 +1098,8 @@ def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_p
         math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
         math_v7_format_repair_weight = MATH_V7_FORMAT_REPAIR_WEIGHT
+        decontaminate_math_against_corpus = None
+        skip_math_decontamination_check = True
 
     manifest = prepare(Args())
 
@@ -1185,6 +1193,8 @@ def test_prepare_math_sidecar_can_use_uncapped_m0_source(tmp_path) -> None:
         math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
         math_v7_format_repair_weight = MATH_V7_FORMAT_REPAIR_WEIGHT
+        decontaminate_math_against_corpus = None
+        skip_math_decontamination_check = True
 
     manifest = prepare(Args())
 
@@ -1289,6 +1299,8 @@ def test_prepare_hard_math_clean_final_v8_requires_single_expected_final_box(tmp
         math_v8_verified_full_solution_weight = MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v8_final_answer_aux_weight = MATH_V8_FINAL_ANSWER_AUX_WEIGHT
         math_v8_format_repair_weight = MATH_V8_FORMAT_REPAIR_WEIGHT
+        decontaminate_math_against_corpus = None
+        skip_math_decontamination_check = True
 
     manifest = prepare(Args())
 
@@ -1313,6 +1325,111 @@ def test_prepare_hard_math_clean_final_v8_requires_single_expected_final_box(tmp
 
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math hard clean final v8 buckets" in report_md
+    assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
+
+
+def test_prepare_hard_math_recurrence_v9_keeps_clean_dp_counting_rows(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    recurrence = _base_record("math_competition_numeric")
+    recurrence["expected_answer"] = "907"
+    recurrence["responses_create_params"]["input"][-1]["content"] = (
+        "How many ways are there to choose 8 occupied chairs from 16 chairs "
+        "arranged in a row if no occupied chair has two occupied neighbors? "
+        "Equivalently, count binary strings with exactly 8 ones and no three "
+        "consecutive ones, then give the remainder modulo 1000."
+    )
+    recurrence["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Encode occupied chairs by ones and empty chairs by zeroes.",
+            "Let dp[i][j][r] be the number of prefixes of length i with j ones.",
+            "The state variable r is the trailing run length of consecutive ones.",
+            "Placing zero resets the trailing run length to zero.",
+            "Placing one is allowed only when r is less than two.",
+            "This transition gives a dynamic programming recurrence over small states.",
+            ("The dynamic programming state table records the count for every prefix "
+             "length, selected-chair count, and trailing run length. " * 34).strip(),
+            "Summing the three final states gives 2907, so the remainder is 907.",
+            r"Therefore the final answer is \boxed{907}.",
+        ]
+    )
+
+    broad_clean = _base_record("math_competition_numeric")
+    broad_clean["expected_answer"] = "293"
+    broad_clean["responses_create_params"]["input"][-1]["content"] = (
+        "Determine the value of a polynomial expression with integer "
+        "coefficients after substituting several divisor and remainder "
+        "conditions, and report the final scalar value."
+    )
+    broad_clean["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Expand the polynomial expression.",
+            "Collect like terms.",
+            "Use the divisor condition to simplify the integer coefficients.",
+            "Apply the remainder condition to reduce the expression.",
+            "Evaluate the resulting scalar.",
+            ("The algebraic simplification preserves the polynomial identity "
+             "across every term and coefficient. " * 42).strip(),
+            r"Therefore the final answer is \boxed{293}.",
+        ]
+    )
+
+    converted_recurrence = convert_m0_record(recurrence, split="train")
+    converted_broad = convert_m0_record(broad_clean, split="train")
+    assert is_hard_math_clean_final_row(converted_recurrence) is True
+    assert is_hard_math_recurrence_row(converted_recurrence) is True
+    assert is_hard_math_clean_final_row(converted_broad) is True
+    assert is_hard_math_recurrence_row(converted_broad) is False
+
+    write_split("math_competition_numeric", "train", [recurrence, broad_clean])
+    write_split("math_competition_numeric", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V9
+        math_v9_hard_verified_full_solution_weight = MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v9_verified_full_solution_weight = MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v9_final_answer_aux_weight = MATH_V9_FINAL_ANSWER_AUX_WEIGHT
+        math_v9_format_repair_weight = MATH_V9_FORMAT_REPAIR_WEIGHT
+        decontaminate_math_against_corpus = None
+        skip_math_decontamination_check = True
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V9
+    assert manifest["math_decontamination"]["strategy_requires_corpus"] is True
+    assert manifest["math_decontamination"]["skip_check"] is True
+    bucket_info = manifest["math_hard_recurrence_v9"]["buckets"]
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 1
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 0
+
+    hard_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert len(hard_rows) == 1
+    assert hard_rows[0]["metadata"]["m0_expected_answer"] == "907"
+    assert hard_rows[0]["metadata"]["final_answer_supervision"]["strategy"] == MATH_SUPERVISION_STRATEGY_V9
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math hard recurrence v9 buckets" in report_md
     assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
 
 
@@ -2183,6 +2300,53 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
     assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
     assert (Args.output_dir / "unit" / "training_manifest.json").exists()
     assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
+
+
+def test_build_plan_normalizes_iter_checkpoint_to_root(tmp_path) -> None:
+    from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import build_plan
+
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid", "test"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"placeholder")
+    tokenizer_dir = tmp_path / "tokenizer"
+    tokenizer_dir.mkdir()
+    checkpoint_root = tmp_path / "checkpoints"
+    iter_checkpoint = checkpoint_root / "iter_0000779"
+    iter_checkpoint.mkdir(parents=True)
+    (checkpoint_root / "latest_checkpointed_iteration.txt").write_text("779", encoding="utf-8")
+    metadata = {"type": "SFTDataArtifact", "tokenizer_uri": f"file://{tokenizer_dir}"}
+    with (splits_dir / "metadata.json").open("w", encoding="utf-8") as f:
+        json.dump(metadata, f)
+
+    class Args:
+        packed_sft_dir = packed_root
+        pretrained_checkpoint = iter_checkpoint
+        tokenizer_model = None
+        save_dir = tmp_path / "save"
+        output_dir = tmp_path / "plans"
+        run_name = "normalized"
+        repo_dir = tmp_path / "repo"
+        script_path = "src/nemotron/recipes/super3/stage1_sft/train.py"
+        config_path = "src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"
+        venv = None
+        nodes = 1
+        gpus_per_node = 2
+        epochs = 1.0
+        train_iters = 1
+        fallback_train_iters = 1700
+        global_batch_size = 4
+        micro_batch_size = 1
+        seq_length = 4096
+        eval_interval = 1
+        save_interval = 1
+        allow_missing_checkpoint = False
+
+    manifest = build_plan(Args())
+
+    assert manifest["paths"]["pretrained_checkpoint"] == str(checkpoint_root)
 
 
 def test_build_plan_derives_train_iters_from_packed_rows(tmp_path, monkeypatch) -> None:

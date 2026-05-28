@@ -64,6 +64,7 @@ MATH_SUPERVISION_STRATEGY_V5 = "hard_math_precision_v5"
 MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
 MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
 MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
+MATH_SUPERVISION_STRATEGY_V9 = "hard_math_recurrence_v9"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
@@ -72,6 +73,7 @@ MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
     MATH_SUPERVISION_STRATEGY_V3,
@@ -80,6 +82,7 @@ MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
     MATH_SUPERVISION_STRATEGY_V4,
@@ -87,6 +90,7 @@ MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
     MATH_SUPERVISION_STRATEGY_V6,
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
 )
 MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION = "hard_verified_full_solution"
 MATH_BUCKET_VERIFIED_FULL_SOLUTION = "verified_full_solution"
@@ -156,6 +160,10 @@ MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V8_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V9_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V9_FORMAT_REPAIR_WEIGHT = 0.0
 
 # AIME-25 / HMMT decontamination contract for math_competition_numeric
 # (NuminaMath) rows. NuminaMath is built from MATH / AIME / AMC / HMMT
@@ -167,7 +175,7 @@ MATH_V8_FORMAT_REPAIR_WEIGHT = 0.0
 MATH_DECONTAMINATION_DEFAULT_NGRAM_SIZE = 8
 MATH_DECONTAMINATION_DEFAULT_BLOCKER_THRESHOLD = 0.5
 MATH_DECONTAMINATION_ENVIRONMENTS = ("math_competition_numeric",)
-# Hard-math recipes are the highest-stakes regression risk: V7/V8 distill
+# Hard-math recipes are the highest-stakes regression risk: V7+ distill
 # long competition-math reasoning, the exact shape NuminaMath shares with
 # AIME-25 / HMMT. Refuse to run those strategies without a corpus path —
 # silent training on test problems would inflate scores and hide the
@@ -175,6 +183,7 @@ MATH_DECONTAMINATION_ENVIRONMENTS = ("math_competition_numeric",)
 STRATEGIES_REQUIRING_MATH_DECONTAMINATION = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
+    MATH_SUPERVISION_STRATEGY_V9,
 )
 MATH_V4_ANSWER_SEEKING_PATTERNS = (
     "compute",
@@ -228,6 +237,38 @@ MATH_V7_MAX_SOLUTION_CHARS = 16000
 MATH_V7_MIN_SOLUTION_LINES = 6
 MATH_V7_BOXED_TAIL_CHARS = 3000
 MATH_V8_MAX_TRAILING_CHARS_AFTER_BOXED = 240
+MATH_V9_PROMPT_RECURRENCE_KEYWORDS = (
+    "arranged in a row",
+    "binary string",
+    "chairs",
+    "consecutive",
+    "how many",
+    "in a row",
+    "no adjacent",
+    "no consecutive",
+    "number of ways",
+    "sequence",
+    "strings",
+    "subsets",
+    "ways",
+)
+MATH_V9_SOLUTION_RECURRENCE_KEYWORDS = (
+    "binary string",
+    "case",
+    "count",
+    "dp[",
+    "dynamic programming",
+    "recurrence",
+    "state",
+    "states",
+    "transition",
+)
+MATH_V9_RUN_LENGTH_KEYWORDS = (
+    "adjacent",
+    "consecutive",
+    "run length",
+    "trailing",
+)
 MATH_SIDECAR_SOURCE_ENVIRONMENTS = frozenset(MATH_FINAL_ANSWER_ENVIRONMENTS)
 SOURCE_METADATA_REQUIRED_FIELDS = (
     "m0_source_dataset",
@@ -690,8 +731,26 @@ def decontaminate_math_rows(
 
     summary["corpus_size"] = len(corpus)
     target_envs = frozenset(environments)
-    scannable: list[dict] = []
-    scannable_indices: list[int] = []
+    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
+        DEFAULT_TEXT_FIELDS,
+        _build_index,
+        text_ngrams,
+    )
+
+    eval_records = _build_index(
+        corpus,
+        ngram_size=int(ngram_size),
+        text_fields=DEFAULT_TEXT_FIELDS,
+        id_prefix=f"{eval_set_name}_eval",
+    )
+    eval_ngram_index: dict[str, list[int]] = defaultdict(list)
+    for eval_index, eval_record in enumerate(eval_records):
+        for ngram in eval_record["ngrams"]:
+            eval_ngram_index[ngram].append(eval_index)
+
+    dropped_row_indices: set[int] = set()
+    sample_dropped_findings: list[JsonDict] = []
+    blocker_findings = 0
     for index, row in enumerate(rows):
         metadata = row.get("metadata")
         if not isinstance(metadata, Mapping):
@@ -701,47 +760,47 @@ def decontaminate_math_rows(
         prompt = _message_content(row, "user")
         if not prompt:
             continue
-        scannable.append({"id": f"row_{index}", "prompt": prompt})
-        scannable_indices.append(index)
-
-    summary["scanned_rows"] = len(scannable)
-    if not scannable:
+        summary["scanned_rows"] += 1
+        prompt_ngrams = text_ngrams(prompt, int(ngram_size))
+        if not prompt_ngrams:
+            continue
+        overlap_counts: dict[int, int] = defaultdict(int)
+        for ngram in prompt_ngrams:
+            for eval_index in eval_ngram_index.get(ngram, ()):
+                overlap_counts[eval_index] += 1
+        if not overlap_counts:
+            continue
+        prompt_ngram_count = len(prompt_ngrams)
+        row_is_blocked = False
+        for eval_index, overlap_count in overlap_counts.items():
+            eval_record = eval_records[eval_index]
+            eval_ngrams = eval_record["ngrams"]
+            if not eval_ngrams:
+                continue
+            prompt_ratio = overlap_count / prompt_ngram_count
+            eval_ratio = overlap_count / len(eval_ngrams)
+            score = max(prompt_ratio, eval_ratio)
+            if score < blocker_threshold:
+                continue
+            blocker_findings += 1
+            row_is_blocked = True
+            if len(sample_dropped_findings) < 10:
+                sample_dropped_findings.append(
+                    {
+                        "prompt_id": f"row_{index}",
+                        "eval_id": eval_record["id"],
+                        "score": round(score, 6),
+                        "matched_ngrams": sorted(prompt_ngrams & eval_ngrams)[:8],
+                    }
+                )
+        if row_is_blocked:
+            dropped_row_indices.add(index)
+    if summary["scanned_rows"] == 0:
         return list(rows), summary
-
-    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
-        scan_prompt_corpus,
-    )
-
-    report = scan_prompt_corpus(
-        scannable,
-        {eval_set_name: list(corpus)},
-        ngram_size=int(ngram_size),
-        # Drop rows the moment they cross the blocker threshold; we don't
-        # care about a separate informational tier here.
-        informational_threshold=float(blocker_threshold),
-        blocker_threshold=float(blocker_threshold),
-    )
-    dropped_row_indices: set[int] = set()
-    for finding in report.get("blockers", []):
-        prompt_id = finding.get("prompt_id")
-        if not isinstance(prompt_id, str) or not prompt_id.startswith("row_"):
-            continue
-        try:
-            dropped_row_indices.add(int(prompt_id[len("row_"):]))
-        except ValueError:
-            continue
     summary["applied"] = True
-    summary["blocker_findings"] = len(report.get("blockers", []))
+    summary["blocker_findings"] = blocker_findings
     summary["dropped_rows"] = len(dropped_row_indices)
-    summary["sample_dropped_findings"] = [
-        {
-            "prompt_id": item.get("prompt_id"),
-            "eval_id": item.get("eval_id"),
-            "score": item.get("score"),
-            "matched_ngrams": item.get("matched_ngrams"),
-        }
-        for item in report.get("blockers", [])[:10]
-    ]
+    summary["sample_dropped_findings"] = sample_dropped_findings
     return (
         [row for index, row in enumerate(rows) if index not in dropped_row_indices],
         summary,
@@ -828,7 +887,31 @@ def is_hard_math_clean_final_row(row: Mapping[str, Any]) -> bool:
     return _has_clean_final_boxed_answer(solution, expected_answer=expected_answer)
 
 
+def is_hard_math_recurrence_row(row: Mapping[str, Any]) -> bool:
+    """V9 subset: clean-final hard math with recurrence/counting structure."""
+    if not is_hard_math_clean_final_row(row):
+        return False
+    prompt = _message_content(row, "user")
+    solution = _message_content(row, "assistant")
+    lower_prompt = prompt.lower()
+    lower_solution = solution.lower()
+    lower_text = f"{lower_prompt}\n{lower_solution}"
+    has_counting_prompt = any(
+        keyword in lower_prompt for keyword in MATH_V9_PROMPT_RECURRENCE_KEYWORDS
+    )
+    has_recurrence_solution = any(
+        keyword in lower_solution
+        for keyword in MATH_V9_SOLUTION_RECURRENCE_KEYWORDS
+    )
+    has_run_length_signal = any(
+        keyword in lower_text for keyword in MATH_V9_RUN_LENGTH_KEYWORDS
+    )
+    return has_counting_prompt and has_recurrence_solution and has_run_length_signal
+
+
 def is_hard_math_row_for_strategy(row: Mapping[str, Any], strategy: str) -> bool:
+    if strategy == MATH_SUPERVISION_STRATEGY_V9:
+        return is_hard_math_recurrence_row(row)
     if strategy == MATH_SUPERVISION_STRATEGY_V8:
         return is_hard_math_clean_final_row(row)
     if strategy == MATH_SUPERVISION_STRATEGY_V7:
@@ -1625,7 +1708,34 @@ def _math_v8_weights(args: argparse.Namespace) -> dict[str, float]:
     }
 
 
+def _math_v9_weights(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v9_hard_verified_full_solution_weight",
+                MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v9_verified_full_solution_weight",
+                MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_FINAL_ANSWER_AUX: float(
+            getattr(args, "math_v9_final_answer_aux_weight", MATH_V9_FINAL_ANSWER_AUX_WEIGHT)
+        ),
+        MATH_BUCKET_FORMAT_REPAIR: float(
+            getattr(args, "math_v9_format_repair_weight", MATH_V9_FORMAT_REPAIR_WEIGHT)
+        ),
+    }
+
+
 def _math_weights_for_strategy(args: argparse.Namespace, strategy: str) -> dict[str, float]:
+    if strategy == MATH_SUPERVISION_STRATEGY_V9:
+        return _math_v9_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V8:
         return _math_v8_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V7:
@@ -1666,7 +1776,14 @@ def build_math_strategy_blend(
                 "weight": 1.0,
             }
         )
-    if strategy == MATH_SUPERVISION_STRATEGY_V8:
+    if strategy == MATH_SUPERVISION_STRATEGY_V9:
+        comment = (
+            "M1 Agentic SFT v0 hard_math_recurrence_v9 blend. The base train "
+            "JSONL keeps agentic coverage; only V8 clean-final hard-math traces "
+            "with explicit recurrence, DP state, or run-length counting signals "
+            "are duplicated as the hard sidecar."
+        )
+    elif strategy == MATH_SUPERVISION_STRATEGY_V8:
         comment = (
             "M1 Agentic SFT v0 hard_math_clean_final_v8 blend. The base train "
             "JSONL keeps agentic coverage; only V7 long hard-math traces with "
@@ -2038,6 +2155,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         ("math_hard_balanced_v6", "Math hard balanced v6 buckets"),
         ("math_hard_long_reasoning_v7", "Math hard long reasoning v7 buckets"),
         ("math_hard_clean_final_v8", "Math hard clean final v8 buckets"),
+        ("math_hard_recurrence_v9", "Math hard recurrence v9 buckets"),
     ):
         math_hard = manifest.get(hard_manifest_key)
         if not isinstance(math_hard, Mapping):
@@ -2138,7 +2256,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                 [
                     "",
                     f"- Train/val source-key overlaps: `{split_routing.get('train_val_source_key_overlap_count', 0)}`",
-                    f"- Train/val normalized-prompt overlaps: `{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
+                    "- Train/val normalized-prompt overlaps: "
+                    f"`{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
                 ]
             )
     output_fingerprints = manifest.get("output_fingerprints") or {}
@@ -2249,7 +2368,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     # Math decontamination against AIME-25 / HMMT. NuminaMath's
     # math_competition_numeric pool overlaps competition-math eval
     # benchmarks (declared in data_registry.yaml line 499); silently
-    # training on a held-out problem would inflate scores. V7+V8
+    # training on a held-out problem would inflate scores. V7+ recipes
     # explicitly target the same long-CoT distribution that's most at
     # risk, so they require the corpus flag; older strategies allow
     # optional decontamination for ad-hoc safety.
@@ -2272,7 +2391,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "production training). NuminaMath's "
                 "math_competition_numeric pool contains AIME/HMMT olympiad "
                 "problems (see data_registry.yaml m0_math_numinamath "
-                "contamination_against). The hard-math V7/V8 recipes "
+                "contamination_against). The hard-math V7+ recipes "
                 "distill exactly that distribution, so silent overlap with "
                 "held-out evals would inflate AIME-25 / HMMT scores. See "
                 "workspace/tasks/task071*/qwen_original_vs_sft_math_pipeline_review_session82.md."
@@ -2532,7 +2651,15 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "errors": [*math_sidecar_train_errors, *math_sidecar_val_errors],
         }
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
-        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7:
+        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V9:
+            math_strategy_manifest_key = "math_hard_recurrence_v9"
+            math_strategy_description = (
+                "Separates V8 clean-final hard-math rows with recurrence, "
+                "DP-state, counting, and run-length signals; broad replay, "
+                "final-answer auxiliary rows, format-repair rows, and held-out "
+                "eval rows stay separate."
+            )
+        elif math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7:
             math_strategy_manifest_key = "math_hard_long_reasoning_v7"
             math_strategy_description = (
                 "Separates long, line-structured AIME/HMMT-style verified full-solution rows, "
@@ -2620,7 +2747,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "min_prompt_chars": (
                     MATH_V7_MIN_PROMPT_CHARS
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_MIN_PROMPT_CHARS
                     if math_supervision_strategy
@@ -2630,7 +2761,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "max_prompt_chars": (
                     MATH_V7_MAX_PROMPT_CHARS
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_MAX_PROMPT_CHARS
                     if math_supervision_strategy
@@ -2640,7 +2775,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "min_solution_chars": (
                     MATH_V7_MIN_SOLUTION_CHARS
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_MIN_SOLUTION_CHARS
                     if math_supervision_strategy
@@ -2650,7 +2789,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "max_solution_chars": (
                     MATH_V7_MAX_SOLUTION_CHARS
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_MAX_SOLUTION_CHARS
                     if math_supervision_strategy
@@ -2660,7 +2803,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "min_solution_lines": (
                     MATH_V7_MIN_SOLUTION_LINES
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_MIN_SOLUTION_LINES
                     if math_supervision_strategy
@@ -2670,7 +2817,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "boxed_tail_chars": (
                     MATH_V7_BOXED_TAIL_CHARS
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V7, MATH_SUPERVISION_STRATEGY_V8)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V7,
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                    )
                     else
                     MATH_V5_BOXED_TAIL_CHARS
                     if math_supervision_strategy
@@ -2679,7 +2830,8 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 ),
                 "final_answer_filter": (
                     "single_clean_last_boxed_scalar_numeric_matches_expected"
-                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V8
+                    if math_supervision_strategy
+                    in (MATH_SUPERVISION_STRATEGY_V8, MATH_SUPERVISION_STRATEGY_V9)
                     else
                     "last_boxed_scalar_numeric"
                     if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
@@ -2687,11 +2839,18 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 ),
                 "max_trailing_chars_after_boxed": (
                     MATH_V8_MAX_TRAILING_CHARS_AFTER_BOXED
-                    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V8
+                    if math_supervision_strategy
+                    in (MATH_SUPERVISION_STRATEGY_V8, MATH_SUPERVISION_STRATEGY_V9)
                     else None
                 ),
                 "topic_keywords": list(MATH_V4_TOPIC_KEYWORDS),
             }
+            if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V9:
+                manifest[math_strategy_manifest_key]["hard_filter"]["recurrence_filter"] = {
+                    "prompt_keywords": list(MATH_V9_PROMPT_RECURRENCE_KEYWORDS),
+                    "solution_keywords": list(MATH_V9_SOLUTION_RECURRENCE_KEYWORDS),
+                    "run_length_keywords": list(MATH_V9_RUN_LENGTH_KEYWORDS),
+                }
 
     # task021 Session 2: cross-stage lineage block. M1 declares the M0
     # manifest as its single upstream manifest input plus the optional
@@ -2820,7 +2979,7 @@ def build_parser() -> argparse.ArgumentParser:
             "Reuses task035 contamination_scanner.scan_prompt_corpus for "
             "deterministic token-n-gram overlap. Required for "
             "--math-supervision-strategy hard_math_long_reasoning_v7 / "
-            "hard_math_clean_final_v8 (or pass "
+            "hard_math_clean_final_v8 / hard_math_recurrence_v9 (or pass "
             "--skip-math-decontamination-check explicitly). Corpus accepts "
             "JSONL / JSON / YAML / plain-text shapes; minimal record is "
             "{\"id\": str, \"prompt\": str}."
@@ -2850,7 +3009,8 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "Acknowledge AIME-25 / HMMT contamination risk and run "
-            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 "
+            "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 / "
+            "hard_math_recurrence_v9 "
             "without a decontamination corpus. NOT recommended for "
             "production training; intended only for smoke/dry-run paths "
             "where the operator has already validated their slice."
@@ -2874,7 +3034,9 @@ def build_parser() -> argparse.ArgumentParser:
             "verified replay, and adds small final-answer/format-repair sidecars. "
             "`hard_math_long_reasoning_v7` keeps only longer verified hard-math "
             "full solutions for pilot runs. `hard_math_clean_final_v8` further "
-            "requires a single clean final boxed answer matching the source label."
+            "requires a single clean final boxed answer matching the source label. "
+            "`hard_math_recurrence_v9` keeps the V8 clean-final contract and "
+            "narrows the hard sidecar to recurrence/counting/run-length rows."
         ),
     )
     parser.add_argument(
@@ -3014,6 +3176,30 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V8_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for hard_math_clean_final_v8 format-repair math rows.",
+    )
+    parser.add_argument(
+        "--math-v9-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_recurrence_v9 recurrence/counting full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v9-verified-full-solution-weight",
+        type=float,
+        default=MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for hard_math_recurrence_v9 broad verified full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v9-final-answer-aux-weight",
+        type=float,
+        default=MATH_V9_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for hard_math_recurrence_v9 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v9-format-repair-weight",
+        type=float,
+        default=MATH_V9_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for hard_math_recurrence_v9 format-repair math rows.",
     )
     # task040 Session 2: W1 curriculum sampler wiring. Off by default
     # (as_is = passthrough). Operators opt in via --curriculum-policy.
