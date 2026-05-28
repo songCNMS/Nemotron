@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (
+    VALID_ARTIFACT_CHECK_STATUSES,
     is_remote_artifact_reference,
     validate_raw_artifact_paths,
 )
@@ -28,6 +29,7 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
 JsonDict = dict[str, Any]
 
 M1_EVAL_BASKET_DIR = Path(__file__).resolve().parent
+REPO_ROOT = M1_EVAL_BASKET_DIR.parents[5]
 MILESTONES_DIR = M1_EVAL_BASKET_DIR.parent
 SUPER3_DIR = MILESTONES_DIR.parent
 STAGE3_EVAL_CONFIG_DIR = SUPER3_DIR / "stage3_eval" / "config"
@@ -186,9 +188,33 @@ def _validate_artifact_check(value: Any, *, context: str) -> list[str]:
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping for checked raw artifacts"]
     issues: list[str] = []
-    for field in ("status", "checked_at_utc", "checked_by"):
+    status = value.get("status")
+    if not _is_non_empty_string(status):
+        issues.append(f"{context}.status must be a non-empty string")
+    elif status not in VALID_ARTIFACT_CHECK_STATUSES:
+        issues.append(
+            f"{context}.status must be one of "
+            f"{sorted(VALID_ARTIFACT_CHECK_STATUSES)}; got {status!r}"
+        )
+    for field in ("checked_at_utc", "checked_by"):
         if not _is_non_empty_string(value.get(field)):
             issues.append(f"{context}.{field} must be a non-empty string")
+    return issues
+
+
+def _validate_repo_relative_existing_paths(
+    paths: list[str],
+    *,
+    context: str,
+) -> list[str]:
+    issues: list[str] = []
+    for path in paths:
+        candidate = Path(path)
+        if candidate.is_absolute():
+            issues.append(f"{context} must be repo-relative: {path}")
+            continue
+        if not (REPO_ROOT / candidate).is_file():
+            issues.append(f"{context} repo-relative path does not exist: {path}")
     return issues
 
 
@@ -460,6 +486,13 @@ def _validate_evidence_records(
             or not all(_is_non_empty_string(path) for path in source_manifests)
         ):
             issues.append(f"{prefix}.source_manifests must be non-empty strings")
+        else:
+            issues.extend(
+                _validate_repo_relative_existing_paths(
+                    list(source_manifests),
+                    context=f"{prefix}.source_manifests",
+                )
+            )
 
         issues.extend(_validate_record(record.get("baseline"), context=f"{prefix}.baseline"))
         issues.extend(_validate_record(record.get("current"), context=f"{prefix}.current"))
@@ -647,6 +680,7 @@ def valid_benchmark_improvement_evidence(
 __all__ = [
     "BENCHMARK_ALIGNMENT_LEDGER_PATH",
     "QWEN_CORRECTED_BENCHMARK_IDS",
+    "VALID_ARTIFACT_CHECK_STATUSES",
     "VALID_INVALID_EVAL_TYPES",
     "benchmark_alignment_target_suites",
     "load_benchmark_alignment_ledger",

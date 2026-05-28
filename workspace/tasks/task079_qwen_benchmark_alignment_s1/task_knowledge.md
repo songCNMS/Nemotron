@@ -1,6 +1,6 @@
 # task079_qwen_benchmark_alignment_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
   runtime, and frozen Qwen3.5-122B-A10B baselines are absent.
 - PR #182 and PR #183 are context only for this task; do not rewrite those
   branches or count their sidecar/targeted-smoke records as merged gate evidence.
+- Session 4 follow-up moved artifact-check status hardening to task082 after
+  task079 was merged through PR #184.

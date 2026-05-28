@@ -76,6 +76,12 @@ VALID_INVALID_FINDING_TYPES = frozenset(
 VALID_EVIDENCE_STATUSES = frozenset(
     {"valid_qwen_reproduction_smoke", "valid_qwen_reproduction_full"}
 )
+VALID_ARTIFACT_CHECK_STATUSES = frozenset(
+    {
+        "pm_verified",
+        "local_workspace_verified",
+    }
+)
 REMOTE_ARTIFACT_PREFIXES = ("vm4vpn:", "vpn:")
 
 
@@ -151,8 +157,14 @@ def _validate_remote_artifact_check(value: Any, *, context: str) -> list[str]:
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping for remote raw artifact paths"]
     issues: list[str] = []
-    if not _is_non_empty_string(value.get("status")):
+    status = value.get("status")
+    if not _is_non_empty_string(status):
         issues.append(f"{context}.status must be a non-empty string")
+    elif status not in VALID_ARTIFACT_CHECK_STATUSES:
+        issues.append(
+            f"{context}.status must be one of "
+            f"{sorted(VALID_ARTIFACT_CHECK_STATUSES)}; got {status!r}"
+        )
     if not _is_non_empty_string(value.get("checked_at_utc")):
         issues.append(f"{context}.checked_at_utc must be a non-empty string")
     if not _is_non_empty_string(value.get("checked_by")):
@@ -440,6 +452,7 @@ def format_qwen_eval_repro_gate_report(
 __all__ = [
     "QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS",
     "QWEN_EVAL_REPRO_GATE_PATH",
+    "VALID_ARTIFACT_CHECK_STATUSES",
     "VALID_EVIDENCE_STATUSES",
     "VALID_INVALID_FINDING_TYPES",
     "format_qwen_eval_repro_gate_report",

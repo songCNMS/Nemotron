@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task079_qwen_benchmark_alignment_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task082_qwen_benchmark_artifact_verification_s2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task079_qwen_benchmark_alignment_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/184 |
+| Current Task | task082_qwen_benchmark_artifact_verification_s2 |
+| PR | https://github.com/songCNMS/Nemotron/pull/187 |
 | Session | 1 |
-| Recent Progress | Opened PR #184 for Qwen benchmark alignment ledger from base `ffcf0ae247400f1da8f4b0a20e32e4d2c6393795`; implementation commit `1b8a87f2e780caf86108102397dc3bb512f3e432`; focused eval alignment tests, py_compile, and diff checks passed |
+| Recent Progress | Synced local `main` to `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`, confirmed task079 PR #184 merged, and opened task082 PR #187 for Qwen artifact-check status hardening; focused tests, py_compile, and diff checks passed |
