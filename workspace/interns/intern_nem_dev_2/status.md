@@ -7,7 +7,7 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task091_omni3_stage1_rl_config_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/207 |
-| Session | 11 |
+| PR | task103 PR not opened yet |
+| Session | 12 |
 
-最近进展：Session 11 completed PM assignment `task099_super3_generic_rl_tokenizer_name_contract_s1` from `origin/main` `9ab5e264b110095c0a1c9ea33c9b49ccd8d44909`, branched `intern_nem_dev_2/task099_super3_generic_rl_tokenizer_name_contract_s1`, updated generic Super3 stage2 RL default/tiny tokenizer names to follow `${policy.model_name}`, added focused config-contract tests, and opened PR #207. Required local validation is passing. No main/master push or self-merge; no live RL runs.
+最近进展：Session 12 started PM assignment `task103_sft_data_quality_strict_gate_s1` from `origin/main` `efcf0e6f5b5c043cc4c9b701d4faabe63ce69156`, branched `intern_nem_dev_2/task103_sft_data_quality_strict_gate_s1`, added opt-in strict M1 Agentic SFT data-quality enforcement, and added focused tests. Required local validation is passing. No main/master push or self-merge; no live train/eval runs.

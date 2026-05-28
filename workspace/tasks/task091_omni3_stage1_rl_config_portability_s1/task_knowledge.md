@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -16,3 +16,6 @@
 7. session 11 note: generic Super3 RL defaults should avoid fixed tokenizer
    artifacts when `policy.model_name` is the selected checkpoint; use
    `${policy.model_name}` to keep model and tokenizer aligned by default.
+8. session 12 note: data-quality audits that compute leakage/duplicate counters
+   need an explicit fail path for production use; report-only remains useful
+   for smoke fixtures, but strict callers should get a nonzero error.

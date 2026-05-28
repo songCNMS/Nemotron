@@ -277,6 +277,13 @@ SOURCE_METADATA_REQUIRED_FIELDS = (
     "license",
 )
 DATA_QUALITY_SAMPLE_LIMIT = 20
+STRICT_DATA_QUALITY_CHECKS = (
+    "missing_required_source_metadata_count",
+    "duplicate_source_key_count",
+    "duplicate_normalized_prompt_hash_count",
+    "train_val_source_key_overlap_count",
+    "train_val_normalized_prompt_overlap_count",
+)
 
 JsonDict = dict[str, Any]
 
@@ -2004,6 +2011,94 @@ def audit_data_quality(
     }
 
 
+def _count_value(value: Any) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        return 0
+    return max(value, 0)
+
+
+def strict_data_quality_issue_counts(data_quality: Mapping[str, Any]) -> dict[str, int]:
+    """Return the data-quality issue counters enforced by strict mode."""
+    source_metadata = data_quality.get("source_metadata")
+    if not isinstance(source_metadata, Mapping):
+        source_metadata = {}
+    split_routing = data_quality.get("split_routing")
+    if not isinstance(split_routing, Mapping):
+        split_routing = {}
+
+    missing_metadata_count = 0
+    duplicate_source_key_count = 0
+    duplicate_prompt_hash_count = 0
+    for split in ("train", "val_shadow"):
+        split_info = source_metadata.get(split)
+        if not isinstance(split_info, Mapping):
+            continue
+        missing_fields = split_info.get("missing_required_fields")
+        if isinstance(missing_fields, Mapping):
+            missing_metadata_count += sum(
+                _count_value(count) for count in missing_fields.values()
+            )
+        duplicate_source_key_count += _count_value(
+            split_info.get("duplicate_source_key_count")
+        )
+        duplicate_prompt_hash_count += _count_value(
+            split_info.get("duplicate_normalized_prompt_hash_count")
+        )
+
+    return {
+        "missing_required_source_metadata_count": missing_metadata_count,
+        "duplicate_source_key_count": duplicate_source_key_count,
+        "duplicate_normalized_prompt_hash_count": duplicate_prompt_hash_count,
+        "train_val_source_key_overlap_count": _count_value(
+            split_routing.get("train_val_source_key_overlap_count")
+        ),
+        "train_val_normalized_prompt_overlap_count": _count_value(
+            split_routing.get("train_val_normalized_prompt_overlap_count")
+        ),
+    }
+
+
+def data_quality_strict_enforcement(
+    data_quality: Mapping[str, Any],
+    *,
+    enabled: bool,
+) -> JsonDict:
+    checked_issue_counts = strict_data_quality_issue_counts(data_quality)
+    failing_checks = [
+        check
+        for check in STRICT_DATA_QUALITY_CHECKS
+        if checked_issue_counts.get(check, 0) > 0
+    ]
+    return {
+        "enabled": enabled,
+        "checked_issue_counts": checked_issue_counts,
+        "failing_checks": failing_checks,
+        "passed": not failing_checks,
+    }
+
+
+def raise_for_strict_data_quality_issues(enforcement: Mapping[str, Any]) -> None:
+    if not enforcement.get("enabled"):
+        return
+    failing_checks = enforcement.get("failing_checks")
+    counts = enforcement.get("checked_issue_counts")
+    if not isinstance(failing_checks, Sequence) or isinstance(
+        failing_checks, (str, bytes)
+    ):
+        return
+    if not isinstance(counts, Mapping):
+        counts = {}
+    failing_details = [
+        f"{check}={counts.get(check, 0)}"
+        for check in failing_checks
+        if isinstance(check, str)
+    ]
+    if failing_details:
+        raise ValueError(
+            "strict data-quality gate failed: " + ", ".join(failing_details)
+        )
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as f:
@@ -2258,6 +2353,19 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     f"- Train/val source-key overlaps: `{split_routing.get('train_val_source_key_overlap_count', 0)}`",
                     "- Train/val normalized-prompt overlaps: "
                     f"`{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
+                ]
+            )
+        strict_enforcement = data_quality.get("strict_enforcement") or {}
+        if isinstance(strict_enforcement, Mapping):
+            lines.extend(
+                [
+                    "",
+                    "- Strict data-quality enforcement enabled: "
+                    f"`{bool(strict_enforcement.get('enabled'))}`",
+                    "- Strict data-quality checked issue counts: "
+                    f"`{strict_enforcement.get('checked_issue_counts', {})}`",
+                    "- Strict data-quality failing checks: "
+                    f"`{strict_enforcement.get('failing_checks', [])}`",
                 ]
             )
     output_fingerprints = manifest.get("output_fingerprints") or {}
@@ -2588,6 +2696,12 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         MATH_FINAL_ANSWER_SIDECAR_WEIGHT if legacy_sidecar_in_blend else 0.0
     )
 
+    data_quality = audit_data_quality(train_rows=train_rows, val_rows=val_rows)
+    data_quality["strict_enforcement"] = data_quality_strict_enforcement(
+        data_quality,
+        enabled=bool(getattr(args, "fail_on_data_quality_issues", False)),
+    )
+
     manifest = {
         "schema_version": 1,
         "milestone": MILESTONE,
@@ -2613,7 +2727,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "train": count_difficulty_buckets(train_rows),
             "val_shadow": count_difficulty_buckets(val_rows),
         },
-        "data_quality": audit_data_quality(train_rows=train_rows, val_rows=val_rows),
+        "data_quality": data_quality,
         "output_fingerprints": output_fingerprints,
         "curriculum": curriculum_audit,
         "math_decontamination": decontamination_audit,
@@ -2926,6 +3040,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
 
     write_json(args.output_dir / "manifest.json", manifest)
     write_report(args.output_dir / "report.md", manifest)
+    raise_for_strict_data_quality_issues(data_quality["strict_enforcement"])
     return manifest
 
 
@@ -2946,6 +3061,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-shadow-per-env", type=int, default=None)
+    parser.add_argument(
+        "--fail-on-data-quality-issues",
+        action="store_true",
+        help=(
+            "Fail after writing manifest/report when the M1 data-quality audit "
+            "finds missing required source metadata, duplicate source keys, "
+            "duplicate normalized prompts, train/val source-key overlap, or "
+            "train/val normalized-prompt overlap. Default is report-only for "
+            "back-compat and smoke fixtures."
+        ),
+    )
     parser.add_argument(
         "--math-sidecar-m0-input-dir",
         type=Path,

@@ -513,6 +513,57 @@ def test_build_blend_can_add_math_final_answer_sidecar() -> None:
     assert blend["datasets"][1]["weight"] == MATH_FINAL_ANSWER_SIDECAR_WEIGHT
 
 
+def _quality_gate_record(
+    *,
+    source_id: str,
+    question: str,
+    source_row_index: int,
+    include_license: bool = True,
+) -> dict:
+    record = _base_record("math_reasoning_numeric")
+    record["question"] = question
+    record["expected_answer"] = "42"
+    record["responses_create_params"]["input"][1]["content"] = question
+    record["extra_env_info"]["reference_solution"] = "#### 42"
+    metadata = record["metadata"]
+    metadata["source_id"] = source_id
+    metadata["source_row_index"] = source_row_index
+    if not include_license:
+        metadata.pop("license")
+    return record
+
+
+def _write_quality_gate_splits(
+    m0_root: Path,
+    *,
+    train_records: list[dict],
+    val_records: list[dict],
+) -> None:
+    env_dir = m0_root / "math_reasoning_numeric"
+    env_dir.mkdir(parents=True)
+    for split, records in (("train", train_records), ("val", val_records)):
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+
+def _prepare_quality_gate_args(
+    tmp_path: Path,
+    *,
+    fail_on_data_quality_issues: bool,
+) -> Namespace:
+    return Namespace(
+        m0_input_dir=tmp_path / "m0",
+        output_dir=tmp_path / "out",
+        m0_health_baseline=None,
+        max_records_per_env=None,
+        max_val_shadow_per_env=None,
+        overwrite=False,
+        fail_on_data_quality_issues=fail_on_data_quality_issues,
+    )
+
+
 def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     m0_root = tmp_path / "m0"
     env_dir = m0_root / "math_reasoning_numeric"
@@ -562,11 +613,100 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     assert manifest["data_quality"]["source_metadata"]["train"]["missing_required_fields"] == {}
     assert manifest["data_quality"]["source_metadata"]["val_shadow"]["missing_required_fields"] == {}
     assert manifest["data_quality"]["split_routing"]["train_val_source_key_overlap_count"] == 1
+    strict = manifest["data_quality"]["strict_enforcement"]
+    assert strict["enabled"] is False
+    assert strict["checked_issue_counts"]["train_val_source_key_overlap_count"] == 1
+    assert strict["checked_issue_counts"]["train_val_normalized_prompt_overlap_count"] == 1
     assert "train_path" in manifest["output_fingerprints"]
     assert len(manifest["output_fingerprints"]["blend_path"]) == 64
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Data quality audit" in report_md
+    assert "Strict data-quality enforcement enabled: `False`" in report_md
     assert "## Output fingerprints" in report_md
+
+
+def test_prepare_strict_data_quality_gate_fails_on_quality_issues(tmp_path) -> None:
+    args = _prepare_quality_gate_args(tmp_path, fail_on_data_quality_issues=True)
+    duplicate_train = _quality_gate_record(
+        source_id="dup-source",
+        question="Repeated prompt?",
+        source_row_index=7,
+        include_license=False,
+    )
+    _write_quality_gate_splits(
+        args.m0_input_dir,
+        train_records=[
+            duplicate_train,
+            _quality_gate_record(
+                source_id="dup-source",
+                question="Repeated prompt?",
+                source_row_index=7,
+            ),
+        ],
+        val_records=[
+            _quality_gate_record(
+                source_id="dup-source",
+                question="Repeated prompt?",
+                source_row_index=7,
+            )
+        ],
+    )
+
+    with pytest.raises(ValueError, match="strict data-quality gate failed"):
+        prepare(args)
+
+    manifest = json.loads((args.output_dir / "manifest.json").read_text(encoding="utf-8"))
+    strict = manifest["data_quality"]["strict_enforcement"]
+    assert strict["enabled"] is True
+    assert strict["passed"] is False
+    checked = strict["checked_issue_counts"]
+    assert checked["missing_required_source_metadata_count"] == 1
+    assert checked["duplicate_source_key_count"] == 1
+    assert checked["duplicate_normalized_prompt_hash_count"] == 1
+    assert checked["train_val_source_key_overlap_count"] == 1
+    assert checked["train_val_normalized_prompt_overlap_count"] == 1
+    assert set(strict["failing_checks"]) == set(checked)
+
+    report_md = (args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "Strict data-quality enforcement enabled: `True`" in report_md
+    assert "duplicate_source_key_count" in report_md
+
+
+def test_prepare_strict_data_quality_gate_passes_clean_fixture(tmp_path) -> None:
+    args = _prepare_quality_gate_args(tmp_path, fail_on_data_quality_issues=True)
+    _write_quality_gate_splits(
+        args.m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="train-source",
+                question="Train prompt?",
+                source_row_index=1,
+            )
+        ],
+        val_records=[
+            _quality_gate_record(
+                source_id="val-source",
+                question="Validation prompt?",
+                source_row_index=2,
+            )
+        ],
+    )
+
+    manifest = prepare(args)
+
+    strict = manifest["data_quality"]["strict_enforcement"]
+    assert strict == {
+        "enabled": True,
+        "checked_issue_counts": {
+            "missing_required_source_metadata_count": 0,
+            "duplicate_source_key_count": 0,
+            "duplicate_normalized_prompt_hash_count": 0,
+            "train_val_source_key_overlap_count": 0,
+            "train_val_normalized_prompt_overlap_count": 0,
+        },
+        "failing_checks": [],
+        "passed": True,
+    }
 
 
 def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> None:
