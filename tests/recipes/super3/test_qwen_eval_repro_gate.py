@@ -18,6 +18,12 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
     validate_raw_artifact_paths,
     validate_qwen_eval_repro_gate,
 )
+from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
+    BENCHMARK_ALIGNMENT_LEDGER_PATH,
+    load_benchmark_alignment_ledger,
+    valid_benchmark_improvement_evidence,
+    validate_benchmark_alignment_ledger,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -47,6 +53,10 @@ requires_production_gate = pytest.mark.skipif(
 
 def _gate_data() -> dict:
     return yaml.safe_load(QWEN_EVAL_REPRO_GATE_PATH.read_text(encoding="utf-8"))
+
+
+def _alignment_ledger_data() -> dict:
+    return yaml.safe_load(BENCHMARK_ALIGNMENT_LEDGER_PATH.read_text(encoding="utf-8"))
 
 
 @requires_production_gate
@@ -249,3 +259,67 @@ def test_qwen_eval_repro_gate_validator_pins_chat_template_kwarg_values() -> Non
     assert any(
         "truncate_history_thinking must be False" in issue for issue in issues
     ), f"expected truncate_history_thinking value violation, got: {issues}"
+
+
+def test_qwen_benchmark_alignment_ledger_loads_and_records_no_task071_improvement() -> None:
+    ledger = load_benchmark_alignment_ledger()
+
+    corrected = next(
+        suite
+        for suite in ledger["target_suites"]
+        if suite["suite_id"] == "m1_qwen_corrected_improvement_subset"
+    )
+    assert corrected["benchmark_ids"] == ["mmlu_pro", "aime25", "hmmt"]
+    assert valid_benchmark_improvement_evidence(ledger) == []
+    assert {
+        record["benchmark_id"] for record in ledger["evidence_records"]
+    } == {"mmlu_pro", "aime25", "hmmt"}
+
+
+def test_qwen_benchmark_alignment_rejects_completions_only_evidence() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    data["evidence_records"][0]["endpoint_type"] = "openai_completions"
+    data["evidence_records"][0]["route"] = "/v1/completions"
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("completions-only evidence cannot count" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_short_cap_math_evidence() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    aime = next(
+        record
+        for record in data["evidence_records"]
+        if record["benchmark_id"] == "aime25"
+    )
+    aime["max_generation_tokens"] = 2048
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("short generation cap cannot count" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_parser_misaligned_evidence() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    hmmt = next(
+        record
+        for record in data["evidence_records"]
+        if record["benchmark_id"] == "hmmt"
+    )
+    hmmt["parser"] = "free_text_contains_answer"
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("parser-misaligned evidence cannot count" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_missing_raw_artifacts() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    data["evidence_records"][0]["raw_artifact_paths"] = [
+        "/tmp/task079_missing_raw_artifact.jsonl"
+    ]
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("missing raw artifact evidence cannot count" in issue for issue in issues)

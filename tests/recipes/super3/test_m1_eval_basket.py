@@ -31,6 +31,10 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import 
     format_regression_report,
     load_eval_results,
 )
+from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
+    benchmark_alignment_target_suites,
+    load_benchmark_alignment_ledger,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -355,3 +359,14 @@ def test_m1_basket_config_selects_eight_benchmark_tasks() -> None:
     registry = yaml.safe_load(REGISTRY_PATH.read_text(encoding="utf-8"))
     registry_ids = {row["benchmark_id"] for row in registry["benchmarks"]}
     assert stripped == registry_ids
+
+
+def test_alignment_ledger_matches_m1_v0_basket_gate_targets() -> None:
+    """The task079 alignment ledger must follow the v0 registry exactly;
+    otherwise MMLU-Pro/AIME25 evidence policy can drift from the basket
+    still used by M1 gates."""
+    suites = benchmark_alignment_target_suites(load_benchmark_alignment_ledger())
+    registry = yaml.safe_load(REGISTRY_PATH.read_text(encoding="utf-8"))
+    registry_ids = {row["benchmark_id"] for row in registry["benchmarks"]}
+
+    assert set(suites["m1_v0_basket_gate_targets"]) == registry_ids

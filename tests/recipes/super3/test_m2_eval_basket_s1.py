@@ -21,6 +21,10 @@ from nemotron.recipes.super3.milestones.m2_eval_basket.registry import (  # noqa
     validate_m2_adapter_config,
     validate_m2_eval_basket,
 )
+from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
+    benchmark_alignment_target_suites,
+    load_benchmark_alignment_ledger,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -114,6 +118,20 @@ def test_registry_and_adapter_config_validate_clean() -> None:
 
     assert validate_m2_eval_basket(registry_data) == []
     assert validate_m2_adapter_config(adapter_data) == []
+
+
+def test_alignment_ledger_matches_m2_config_only_gate_scope() -> None:
+    ledger = load_benchmark_alignment_ledger()
+    suites = benchmark_alignment_target_suites(ledger)
+
+    assert set(suites["m2_eval_basket_config_only"]) == EXPECTED_M2_BENCHMARK_IDS
+    m2_suite = next(
+        suite
+        for suite in ledger["target_suites"]
+        if suite["suite_id"] == "m2_eval_basket_config_only"
+    )
+    assert m2_suite["gate_usage"] == "config_only_gate"
+    assert m2_suite["evidence_policy"]["accepts_improvement_evidence"] is False
 
 
 def test_validator_rejects_missing_runtime_blockers() -> None:

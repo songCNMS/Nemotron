@@ -1,0 +1,414 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0.
+
+schema_version: 1
+ledger_id: task079_qwen_benchmark_alignment_s1
+recorded_at_utc: "2026-05-28T00:00:00Z"
+base_sha: ffcf0ae247400f1da8f4b0a20e32e4d2c6393795
+description: |
+  Repo-local benchmark alignment ledger for Qwen gate evidence. The basket
+  configs and registries define target coverage; this ledger defines which
+  AIME25/HMMT/MMLU-Pro artifacts can count as benchmark improvement evidence.
+  Evidence must use the Qwen chat-completions route, parser-compatible final
+  answer format, adequate generation budget, checked raw artifacts, and an
+  explicit baseline/current delta.
+
+target_suites:
+  - suite_id: m1_v0_basket_gate_targets
+    milestone: M1
+    gate_usage: target_acceptance_basket
+    source_config: src/nemotron/recipes/super3/stage3_eval/config/m1_basket.yaml
+    registry_paths:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_basket_registry.yaml
+    benchmark_ids:
+      - mmlu_pro
+      - aime25
+      - gpqa
+      - livecodebench
+      - ifbench
+      - multichallenge
+      - ruler_256k
+      - taubench_airline
+    evidence_policy:
+      accepts_improvement_evidence: false
+      reason: |
+        Basket membership alone is not enough. MMLU-Pro and AIME25 require the
+        corrected Qwen evidence protocol below before a run can count as
+        benchmark improvement evidence.
+
+  - suite_id: m1_full_basket_target
+    milestone: M1
+    gate_usage: target_acceptance_basket
+    source_config: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket.yaml
+    registry_paths:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_basket_registry.yaml
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_full_basket_registry.yaml
+    benchmark_ids:
+      - mmlu_pro
+      - aime25
+      - hmmt
+      - gpqa
+      - hle
+      - livecodebench
+      - scicode
+      - ifbench
+      - multichallenge
+      - ruler_256k
+      - aa_lcr
+      - taubench_airline
+      - terminalbench
+      - bfcl
+      - mcp_mark
+      - tool_decathlon
+      - swe_bench_verified
+      - mmlu_prox
+      - wmt24pp
+    evidence_policy:
+      accepts_improvement_evidence: false
+      reason: |
+        This is the exact M1 target set. Countable Qwen improvement evidence for
+        MMLU-Pro/AIME25/HMMT must be recorded under
+        m1_qwen_corrected_improvement_subset.
+
+  - suite_id: m1_full_basket_launcher_available
+    milestone: M1
+    gate_usage: runnable_regression_subset
+    source_config: src/nemotron/recipes/super3/stage3_eval/config/m1_full_basket_launcher_available.yaml
+    registry_paths:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_eval_launcher_mapping.yaml
+    benchmark_ids:
+      - mmlu_pro
+      - aime25
+      - hmmt
+      - gpqa
+      - hle
+      - livecodebench
+      - scicode
+      - ifbench
+      - ruler_256k
+      - aa_lcr
+      - taubench_airline
+      - bfcl
+      - mmlu_prox
+      - wmt24pp
+    missing_benchmark_ids:
+      - multichallenge
+      - terminalbench
+      - swe_bench_verified
+      - mcp_mark
+      - tool_decathlon
+    evidence_policy:
+      accepts_improvement_evidence: false
+      reason: |
+        Launcher availability is useful for regression sweeps, but the legacy
+        MMLU-Pro/AIME25/HMMT launcher metrics remain parser/budget sensitive.
+        They cannot be promoted as Qwen benchmark improvement evidence without
+        the corrected records below.
+
+  - suite_id: m1_qwen_corrected_improvement_subset
+    milestone: M1
+    gate_usage: qwen_benchmark_improvement_gate
+    source_config: src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml
+    registry_paths:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_eval_repro_gate.yaml
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_benchmark_alignment_ledger.yaml
+    benchmark_ids:
+      - mmlu_pro
+      - aime25
+      - hmmt
+    evidence_policy:
+      accepts_improvement_evidence: true
+      requires_chat_completions: true
+      requires_raw_artifacts: true
+      requires_baseline_delta: true
+      rejects_issue_types:
+        - completions_only
+        - short_generation_capped
+        - parser_misaligned
+        - missing_raw_artifact
+
+  - suite_id: m2_eval_basket_config_only
+    milestone: M2
+    gate_usage: config_only_gate
+    source_config: src/nemotron/recipes/super3/milestones/m2_eval_basket/m2_eval_basket_registry.yaml
+    registry_paths:
+      - src/nemotron/recipes/super3/milestones/m2_eval_basket/m2_eval_basket_registry.yaml
+      - src/nemotron/recipes/super3/milestones/m2_eval_basket/m2_eval_adapter_config.yaml
+      - src/nemotron/recipes/super3/milestones/m2_eval_basket/m2_eval_gap_thresholds.yaml
+    benchmark_ids:
+      - hle
+      - browsecomp
+      - bird_real_execution
+      - bfcl_full
+      - mcp_mark
+      - tool_decathlon
+      - multilingual_ifeval
+      - multilingual_humaneval
+    evidence_policy:
+      accepts_improvement_evidence: false
+      reason: |
+        M2 rows are still config-only: live assets, cluster runtimes, and frozen
+        Qwen3.5-122B-A10B baselines are not present in the repo. They define gate
+        scope but cannot count as benchmark improvements.
+
+benchmark_protocols:
+  - benchmark_id: mmlu_pro
+    suite_id: m1_qwen_corrected_improvement_subset
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: chat JSON answer-only prompt, temperature=0.0, top_p=1e-5
+    parser: chat_json_answer_key_exact_match
+    final_answer_format: JSON object with answer key only
+    min_max_generation_tokens: 64
+    accepted_max_generation_tokens: 64
+    raw_artifact_requirements:
+      - summary.json
+      - results.jsonl
+    invalid_legacy_issue_types:
+      - completions_only
+      - short_generation_capped
+      - parser_misaligned
+      - missing_raw_artifact
+
+  - benchmark_id: aime25
+    suite_id: m1_qwen_corrected_improvement_subset
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: original AIME25 math prompt, temperature=0.0, top_p=1e-5
+    parser: exact_normalized_boxed_or_symbolic_parser
+    final_answer_format: boxed final answer or scorer-normalized numeric answer
+    min_max_generation_tokens: 8192
+    accepted_max_generation_tokens: 8192
+    raw_artifact_requirements:
+      - summary.json
+      - results.jsonl
+    invalid_legacy_issue_types:
+      - short_generation_capped
+      - parser_misaligned
+      - missing_raw_artifact
+
+  - benchmark_id: hmmt
+    suite_id: m1_qwen_corrected_improvement_subset
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: original HMMT February 2025 prompt, temperature=0.0, top_p=1e-5
+    parser: exact_normalized_boxed_or_symbolic_parser
+    final_answer_format: boxed final answer or scorer-normalized symbolic answer
+    min_max_generation_tokens: 8192
+    accepted_max_generation_tokens: 8192
+    raw_artifact_requirements:
+      - summary.json
+      - results.jsonl
+    invalid_legacy_issue_types:
+      - short_generation_capped
+      - parser_misaligned
+      - missing_raw_artifact
+
+evidence_records:
+  - evidence_id: task071_qwen30b_iter0009119_mmlu_pro_corrected_full_delta
+    benchmark_id: mmlu_pro
+    suite_id: m1_qwen_corrected_improvement_subset
+    source_manifests:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml
+    baseline:
+      model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+      model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original
+      metric_name: corrected_accuracy
+      metric_value: 0.561751994680851
+    current:
+      model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf
+      model_path: /work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119
+      endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf-corrected-mmlu-pro-full
+      metric_name: corrected_accuracy
+      metric_value: 0.5339926861702128
+    delta:
+      metric_name: corrected_accuracy
+      baseline_value: 0.561751994680851
+      current_value: 0.5339926861702128
+      current_minus_baseline: -0.027759308510638236
+      higher_is_better: true
+      counts_as_improvement: false
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: chat JSON answer-only prompt, temperature=0.0, top_p=1e-5
+    parser: chat_json_answer_key_exact_match
+    final_answer_format: JSON object with answer key only
+    max_generation_tokens: 64
+    raw_artifact_paths:
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_original.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_original.jsonl
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_iter0009119.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_iter0009119.jsonl
+    artifact_check:
+      status: local_workspace_verified
+      checked_at_utc: "2026-05-28T00:00:00Z"
+      checked_by: intern_nem_dev_3
+      notes: Task071 corrected MMLU-Pro summary/results files are present under the recorded workspace path on this checkout.
+    gate_status: valid_delta_evidence
+    evidence_limitations: Corrected delta is negative, so this record is not an improvement.
+
+  - evidence_id: task071_qwen30b_iter0009119_aime25_corrected_full_delta
+    benchmark_id: aime25
+    suite_id: m1_qwen_corrected_improvement_subset
+    source_manifests:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml
+    baseline:
+      model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+      model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-corrected-math-full
+      metric_name: exact_normalized_accuracy
+      metric_value: 0.5166666666666667
+    current:
+      model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf
+      model_path: /work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119
+      endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf-corrected-math-full
+      metric_name: exact_normalized_accuracy
+      metric_value: 0.0
+    delta:
+      metric_name: exact_normalized_accuracy
+      baseline_value: 0.5166666666666667
+      current_value: 0.0
+      current_minus_baseline: -0.5166666666666667
+      higher_is_better: true
+      counts_as_improvement: false
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: original AIME25 math prompt, temperature=0.0, top_p=1e-5
+    parser: exact_normalized_boxed_or_symbolic_parser
+    final_answer_format: boxed final answer or scorer-normalized numeric answer
+    max_generation_tokens: 8192
+    raw_artifact_paths:
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/summary.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_session38/results.jsonl
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
+    artifact_check:
+      status: local_workspace_verified
+      checked_at_utc: "2026-05-28T00:00:00Z"
+      checked_by: intern_nem_dev_3
+      notes: Task071 corrected AIME25 summary/results files are present under the recorded workspace path on this checkout.
+    gate_status: valid_delta_evidence
+    evidence_limitations: Corrected delta is negative, so this record is not an improvement.
+
+  - evidence_id: task071_qwen30b_iter0009119_hmmt_corrected_full_delta
+    benchmark_id: hmmt
+    suite_id: m1_qwen_corrected_improvement_subset
+    source_manifests:
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+      - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml
+    baseline:
+      model_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+      model_path: /mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507
+      endpoint_model_id: qwen3-30b-a3b-instruct-2507-original-corrected-math-full
+      metric_name: exact_normalized_correct_percent
+      metric_value: 26.666666666666668
+    current:
+      model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf
+      model_path: /work-agents/intern_nemontron_code_reading/task071_qwen30b_a3b_sft_train_exec/hf_export_iter_0009119
+      endpoint_model_id: task071-qwen3-30b-a3b-agentic-sft-iter0009119-hf-corrected-math-full
+      metric_name: exact_normalized_correct_percent
+      metric_value: 0.0
+    delta:
+      metric_name: exact_normalized_correct_percent
+      baseline_value: 26.666666666666668
+      current_value: 0.0
+      current_minus_baseline: -26.666666666666668
+      higher_is_better: true
+      counts_as_improvement: false
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    endpoint_url_shape: http://127.0.0.1:13000/v1/chat/completions
+    prompt_contract: original HMMT February 2025 prompt, temperature=0.0, top_p=1e-5
+    parser: exact_normalized_boxed_or_symbolic_parser
+    final_answer_format: boxed final answer or scorer-normalized symbolic answer
+    max_generation_tokens: 8192
+    raw_artifact_paths:
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/summary.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_original_hmmt8192_session38/results.jsonl
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
+      - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
+    artifact_check:
+      status: local_workspace_verified
+      checked_at_utc: "2026-05-28T00:00:00Z"
+      checked_by: intern_nem_dev_3
+      notes: Task071 corrected HMMT summary/results files are present under the recorded workspace path on this checkout.
+    gate_status: valid_delta_evidence
+    evidence_limitations: Corrected delta is negative, so this record is not an improvement.
+
+invalid_legacy_eval_surfaces:
+  - finding_id: legacy_mmlu_pro_completions_short_parser_mismatch
+    benchmark_id: mmlu_pro
+    issue_types:
+      - completions_only
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      The legacy MMLU-Pro launcher path used /v1/completions with max_gen_toks=32
+      while prompting for step-by-step reasoning; most outputs were invalid under
+      the old parser.
+    required_remediation: Use /v1/chat/completions, JSON answer-only prompting, max_tokens=64, checked summary/results artifacts, and explicit corrected deltas.
+
+  - finding_id: legacy_aime25_short_cap_parser_mismatch
+    benchmark_id: aime25
+    issue_types:
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      The legacy AIME25 math path used 2048 generation tokens and mixed model
+      quality with length caps and missing boxed/final-answer parses.
+    required_remediation: Use the corrected math protocol with /v1/chat/completions, max_tokens=8192, exact-normalized parser, checked artifacts, and baseline/current deltas.
+
+  - finding_id: legacy_hmmt_short_cap_parser_mismatch
+    benchmark_id: hmmt
+    issue_types:
+      - short_generation_capped
+      - parser_misaligned
+    invalid_reason: |
+      The legacy HMMT path used 2048 generation tokens and only a small number
+      of symbolic predicted-answer rows reached the scorer.
+    required_remediation: Use the corrected math protocol with /v1/chat/completions, max_tokens=8192, symbolic final-answer parser, checked artifacts, and baseline/current deltas.
+
+  - finding_id: open_pr_sidecar_or_targeted_smoke_context_not_countable
+    benchmark_id: qwen_sidecar_context
+    issue_types:
+      - missing_raw_artifact
+      - open_pr_context_only
+      - targeted_smoke_only
+      - missing_baseline_delta
+    invalid_reason: |
+      task075/task076 evidence is still in open PR context and includes targeted
+      smoke or sidecar audit records that are not repo-local merged benchmark
+      artifacts with full baseline/current deltas.
+    required_remediation: Merge the evidence, record checked raw artifact paths, and add full corrected MMLU-Pro/AIME25/HMMT baseline/current deltas before counting as improvement evidence.
+
+  - finding_id: m2_config_only_without_frozen_baselines
+    benchmark_id: m2_eval_basket
+    issue_types:
+      - config_only_no_frozen_baseline
+      - missing_baseline_delta
+    invalid_reason: |
+      M2 basket rows are still config-only and do not have frozen Qwen3.5-122B
+      baseline values or live benchmark artifacts in this repo.
+    required_remediation: Add frozen baselines, checked raw artifacts, and full live eval deltas before using M2 rows as benchmark improvement evidence.
+
+context_only_records:
+  - source: PR #182 task075_qwen_v8_export_eval
+    count_as_improvement_evidence: false
+    reason: |
+      V8 corrected metrics and AIME row audit are useful context, but the task075
+      refs are not all on main. They must not be counted by this ledger until
+      merged and artifact-checked.
+  - source: PR #183 task076_qwen_v9_aime_recurrence_tuning
+    count_as_improvement_evidence: false
+    reason: |
+      V9 targeted AIME06 smoke is useful diagnostic context, not a full corrected
+      MMLU-Pro/AIME25/HMMT gate with baseline/current deltas.
