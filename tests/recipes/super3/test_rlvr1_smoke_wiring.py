@@ -6,8 +6,8 @@ Covers:
   val) — val rows last so the consumer's ``val_holdout`` re-split lands
   on the same boundary
 - ``combined.jsonl`` appears in the bridge manifest + lineage outputs
-- ``data_prep/rlvr1.yaml`` loads, no longer references the
-  NVIDIA-internal /lustre path, and points at a templated bridge output
+- RLVR1/RLVR2/RLVR3 data-prep defaults load, no longer reference
+  NVIDIA-internal /lustre paths, and point at templated bridge outputs
 - ``stage1_rlvr/config/smoke.yaml`` loads + structurally smaller
   resource footprint than ``small.yaml`` (the next-up production tier)
 - ``smoke.yaml`` inherits ``default.yaml`` like its production siblings
@@ -29,12 +29,15 @@ from nemotron.recipes.super3.milestones.m1_rlvr.prepare_m1_rlvr_jsonl import (  
     prepare,
 )
 
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
-DATA_PREP_RLVR1_PATH = (
+DATA_PREP_CONFIG_DIR = (
     REPO_ROOT
-    / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/config/data_prep/rlvr1.yaml"
+    / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/config/data_prep"
 )
+DATA_PREP_CONFIG_PATHS = {
+    mix: DATA_PREP_CONFIG_DIR / f"{mix}.yaml"
+    for mix in ("rlvr1", "rlvr2", "rlvr3")
+}
 SMOKE_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/config/smoke.yaml"
@@ -100,6 +103,13 @@ def _args(m0_root: Path, out_dir: Path) -> argparse.Namespace:
         max_records_per_env=None,
         max_val_records_per_env=None,
     )
+
+
+def _load_data_prep_config(mix: str) -> dict:
+    path = DATA_PREP_CONFIG_PATHS[mix]
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    assert isinstance(data, dict), f"{path}: top-level YAML must be a mapping"
+    return data
 
 
 # ---------- Bridge writes combined.jsonl ----------
@@ -171,33 +181,40 @@ def test_bridge_lineage_includes_combined_output(tmp_path: Path) -> None:
     assert combined_out["rows"] == train_total + val_total
 
 
-# ---------- data_prep/rlvr1.yaml ----------
+# ---------- data_prep/rlvr{1,2,3}.yaml ----------
 
 
-def test_data_prep_rlvr1_no_longer_references_internal_lustre_path() -> None:
-    """The whole point of Session 2 — the NVIDIA-internal cluster path
-    must be gone so the config works for downstream consumers."""
-    text = DATA_PREP_RLVR1_PATH.read_text(encoding="utf-8")
+@pytest.mark.parametrize("mix", ("rlvr1", "rlvr2", "rlvr3"))
+def test_data_prep_rlvr_defaults_reject_internal_lustre_paths(mix: str) -> None:
+    """NVIDIA-internal cluster paths must not be runnable defaults."""
+    text = DATA_PREP_CONFIG_PATHS[mix].read_text(encoding="utf-8")
     assert "/lustre/" not in text
     assert "yifuw" not in text
 
 
-def test_data_prep_rlvr1_input_path_points_at_bridge_combined_output() -> None:
+@pytest.mark.parametrize("mix", ("rlvr1", "rlvr2", "rlvr3"))
+def test_data_prep_rlvr_defaults_point_at_bridge_combined_output(mix: str) -> None:
     """`input_path` must reference the bridge's combined.jsonl shape so
     the M0 → bridge → data_prep pipeline is wired end-to-end."""
-    data = yaml.safe_load(DATA_PREP_RLVR1_PATH.read_text(encoding="utf-8"))
-    assert "combined.jsonl" in data["input_path"]
-    assert "m1_rlvr/rlvr1" in data["input_path"]
+    data = _load_data_prep_config(mix)
+    assert data["input_path"] == (
+        f"${{oc.env:NEMO_RUN_DIR,.}}/output/super3/m1_rlvr/{mix}/combined.jsonl"
+    )
     # NEMO_RUN_DIR templating so the path works wherever the operator runs
     assert "${oc.env:NEMO_RUN_DIR" in data["input_path"]
 
 
-def test_data_prep_rlvr1_preserves_expected_config_fields() -> None:
+@pytest.mark.parametrize("mix", ("rlvr1", "rlvr2", "rlvr3"))
+def test_data_prep_rlvr_defaults_preserve_data_prep_base_fields(mix: str) -> None:
     """The data_prep config must keep the contract fields the existing
     `_data_prep_base.SubStageDataPrepConfig` consumes."""
-    data = yaml.safe_load(DATA_PREP_RLVR1_PATH.read_text(encoding="utf-8"))
+    data = _load_data_prep_config(mix)
     for field in ("input_path", "output_dir", "val_holdout", "sample", "force"):
-        assert field in data, f"data_prep rlvr1.yaml missing field {field}"
+        assert field in data, f"data_prep {mix}.yaml missing field {field}"
+    assert data["output_dir"] == f"${{oc.env:PWD}}/../output/super3/stage2_rl/{mix}"
+    assert data["val_holdout"] == 100
+    assert data["sample"] is None
+    assert data["force"] is False
 
 
 # ---------- smoke.yaml ----------

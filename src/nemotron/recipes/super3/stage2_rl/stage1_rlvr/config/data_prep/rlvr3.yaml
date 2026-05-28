@@ -4,15 +4,18 @@ run:
 
 # RLVR Stage 1.3 data preparation
 #
-# Resolves HF placeholders (Skywork-OR1-RL-Data) and splits into
-# train/val (last 100 rows → val).
+# `input_path` points at the M0-derived combined.jsonl produced by
+# the M1 RLVR bridge (`prepare_m1_rlvr_jsonl.py --mix rlvr3`). This is
+# the intended data-prep contract even while current registry coverage
+# may have no active rlvr3 rows; unblock the bridge coverage rather
+# than running a developer-local release file as a default.
 #
 # Usage:
 #   nemotron super3 data prep rl rlvr -c rlvr3
 
-# Path to source JSONL file
-# TODO: Update to hf:// path once nvidia/Nemotron-RL-Super-Training-Blends is published
-input_path: /lustre/fs1/portfolios/coreai/projects/coreai_dlalgo_nemorl/users/yifuw/code/nano-v3-data/super_data/release/rlvr3.jsonl
+# M0-derived combined JSONL from the bridge. Override this path only if
+# the bridge wrote rlvr3 output to a different directory.
+input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr3/combined.jsonl
 
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/rlvr3
