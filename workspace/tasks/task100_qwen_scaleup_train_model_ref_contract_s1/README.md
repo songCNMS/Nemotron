@@ -1,6 +1,6 @@
 # task100_qwen_scaleup_train_model_ref_contract_s1 - Qwen scale-up train model ref contract
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=11 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3,SESSION=11 -->
 
 ## Background
 
@@ -34,8 +34,8 @@ expects the train model reference.
   `training_contract.model_ref`.
 - [x] Focused planner pytest passes.
 - [x] py_compile, Ruff, static contract probe, and whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/206
