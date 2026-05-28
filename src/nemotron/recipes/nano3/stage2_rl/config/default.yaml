@@ -78,6 +78,9 @@ policy:
   model_name: "/path/to/hf_checkpoint"
   tokenizer:
     name: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-Base-BF16
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
   train_global_batch_size: 2048
   train_micro_batch_size: 1
   generation_batch_size: 64 # Only used when generating using HF backend
@@ -208,7 +211,8 @@ policy:
     top_p: 1.0
     top_k: null
     stop_token_ids: null
-    stop_strings: null
+    stop_strings:
+      - "<|im_end|>"
     vllm_cfg:
       # NB: can re-enable prefix cache on vllm >= 0.11.2.
       # enable_prefix_caching: false
@@ -231,7 +235,11 @@ policy:
       http_server_serving_chat_kwargs:
         enable_auto_tools: true
         tool_parser: qwen3_coder
-        reasoning_parser: deepseek_r1
+        reasoning_parser: nano_v3
+        reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
+        chat_template_kwargs:
+          enable_thinking: false
+          truncate_history_thinking: false
 
     vllm_kwargs:
       mamba_ssm_cache_dtype: "float32"
