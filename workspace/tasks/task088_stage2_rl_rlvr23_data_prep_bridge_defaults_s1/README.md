@@ -1,6 +1,6 @@
 # task088_stage2_rl_rlvr23_data_prep_bridge_defaults_s1 - RLVR2/RLVR3 data-prep bridge defaults
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=7 -->
 
 ## Background
 
