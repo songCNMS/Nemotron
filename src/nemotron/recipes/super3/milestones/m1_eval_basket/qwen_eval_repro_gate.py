@@ -21,7 +21,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-
 JsonDict = dict[str, Any]
 
 QWEN_EVAL_REPRO_GATE_PATH = Path(__file__).with_name(
@@ -153,7 +152,12 @@ def is_remote_artifact_reference(path: str) -> bool:
     return path.startswith(REMOTE_ARTIFACT_PREFIXES)
 
 
-def _validate_remote_artifact_check(value: Any, *, context: str) -> list[str]:
+def _validate_remote_artifact_check(
+    value: Any,
+    *,
+    context: str,
+    requires_pm_verified: bool = False,
+) -> list[str]:
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping for remote raw artifact paths"]
     issues: list[str] = []
@@ -164,6 +168,11 @@ def _validate_remote_artifact_check(value: Any, *, context: str) -> list[str]:
         issues.append(
             f"{context}.status must be one of "
             f"{sorted(VALID_ARTIFACT_CHECK_STATUSES)}; got {status!r}"
+        )
+    elif requires_pm_verified and status != "pm_verified":
+        issues.append(
+            f"{context}.status must be 'pm_verified' for remote raw artifact "
+            f"references; got {status!r}"
         )
     if not _is_non_empty_string(value.get("checked_at_utc")):
         issues.append(f"{context}.checked_at_utc must be a non-empty string")
@@ -317,6 +326,7 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
                     _validate_remote_artifact_check(
                         record.get("remote_artifact_check"),
                         context=f"{prefix}.remote_artifact_check",
+                        requires_pm_verified=True,
                     )
                 )
             if not _is_mapping(record.get("baseline_numbers")):

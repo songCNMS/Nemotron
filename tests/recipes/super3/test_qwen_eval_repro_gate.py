@@ -147,6 +147,63 @@ def test_remote_raw_artifact_refs_reject_unverified_statuses() -> None:
         ), f"expected status rejection for {status!r}, got: {issues}"
 
 
+def test_vm4vpn_remote_raw_artifact_refs_require_pm_verified_status() -> None:
+    data = deepcopy(_gate_data())
+    record = data["evidence_records"][1]
+    assert any(
+        path.startswith("vm4vpn:") for path in record["raw_artifact_paths"]
+    )
+    record["remote_artifact_check"]["status"] = "local_workspace_verified"
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "remote_artifact_check.status must be 'pm_verified' for remote raw "
+        "artifact references" in issue
+        for issue in issues
+    ), f"expected vm4vpn remote artifact pm_verified issue, got: {issues}"
+
+
+def test_vpn_remote_raw_artifact_refs_require_pm_verified_status() -> None:
+    data = deepcopy(_gate_data())
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [
+        "vpn:/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/results.yml"
+    ]
+    record["remote_artifact_check"] = {
+        "status": "local_workspace_verified",
+        "checked_at_utc": "2026-05-28T20:46:00Z",
+        "checked_by": "intern_nem_dev_2",
+    }
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "remote_artifact_check.status must be 'pm_verified' for remote raw "
+        "artifact references" in issue
+        for issue in issues
+    ), f"expected vpn remote artifact pm_verified issue, got: {issues}"
+
+
+def test_local_raw_artifacts_allow_local_workspace_verified_status(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_gate_data())
+    local_artifact = tmp_path / "local_artifact.json"
+    local_artifact.write_text("{}\n", encoding="utf-8")
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(local_artifact)]
+    record["remote_artifact_check"] = {
+        "status": "local_workspace_verified",
+        "checked_at_utc": "2026-05-28T20:46:00Z",
+        "checked_by": "intern_nem_dev_2",
+    }
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert issues == []
+
+
 @requires_production_gate
 def test_gate_raw_artifacts_are_existing_local_or_checked_remote_refs() -> None:
     gate = load_qwen_eval_repro_gate()
