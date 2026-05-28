@@ -29,4 +29,8 @@ release JSONL files, bypassing the bridge and lineage path.
 - [x] RLVR2 and RLVR3 defaults use templated bridge `combined.jsonl` paths.
 - [x] Focused tests cover all three RLVR data-prep defaults.
 - [x] Required validation passes locally.
-- [ ] PR opened to `main`; no direct push to `main` or `master`.
+- [x] PR opened to `main`; no direct push to `main` or `master`.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/196

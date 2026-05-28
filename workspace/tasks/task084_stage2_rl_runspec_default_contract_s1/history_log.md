@@ -1,6 +1,6 @@
 # task084_stage2_rl_runspec_default_contract_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 1 - 2026-05-28
 
@@ -26,3 +26,9 @@
 - Fixed the production loader path in `nemo_runspec.config.load_config()` so repo-local `defaults: "base.yaml"` overlays are resolved recursively, the final merged config omits the resolved `defaults` key, and cycle errors are explicit.
 - Replaced the task084 test-local defaults resolver with a real `parse_config()` helper and added coverage for generic `stage2_rl/config/tiny` plus stage1 RLVR small/smoke/rlvr2/rlvr3, stage2 SWE1 small, and stage3 RLHF small overlays.
 - Verified locally: focused RL config shard passed with 36 tests, py_compile passed for touched Python/tests, ruff passed for touched loader/tests, `git diff --check` and `git diff --cached --check` passed, and a structured real `parse_config` audit passed.
+
+## Session 7 - 2026-05-28
+
+- Synced local `main` to `a221b222e2226be8ed8d4258734638199eedf073`, which includes merged task084 PR #191 via commit `a757e44`.
+- Started PM-assigned `task088_stage2_rl_rlvr23_data_prep_bridge_defaults_s1` on branch `intern_nem_dev_2/task088_stage2_rl_rlvr23_data_prep_bridge_defaults_s1`.
+- Fixed RLVR2/RLVR3 data-prep bridge defaults, opened PR #196, and recorded this Session 7 bookkeeping entry in the task084 history as required by the active intern session contract.
