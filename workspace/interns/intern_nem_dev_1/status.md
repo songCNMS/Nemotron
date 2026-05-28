@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task077_data_pipeline_audit_repair_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/189 |
-| Session | 11 |
-| Recent Progress | Applied narrow import/lint fix for PR #189 ruff gate; exact Ruff command, focused 65-test bridge shard, py_compile, and git diff --check passed |
+| Current Task | task086_qwen_sft_data_prep_default_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/192 |
+| Session | 12 |
+| Recent Progress | Opened PR #192 for task086 after changing SFT data-prep runnable defaults to Qwen-safe profile; required Qwen/SFT tests, py_compile, Ruff, and diff checks passed |

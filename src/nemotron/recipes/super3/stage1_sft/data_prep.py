@@ -16,7 +16,7 @@
 #
 # [tool.runspec.config]
 # dir = "./config/data_prep"
-# default = "default"
+# default = "qwen_agentic_v0"
 # format = "omegaconf"
 #
 # [tool.runspec.resources]
@@ -74,13 +74,14 @@ Pipeline:
 4. Distribute shards to train/valid/test splits
 
 CLI:
-    nemotron super3 data prep sft                       # local execution
+    nemotron super3 data prep sft                       # Qwen-safe local execution
     nemotron super3 data prep sft --run ray --sample 10000  # submit to cluster
+    nemotron super3 data prep sft -c agentic_v0         # explicit Super3/Nemotron packing
 
 Execution logic: src/nemotron/cli/commands/super3/data/prep/sft.py
 
 Direct usage:
-    python data_prep.py
+    python data_prep.py                                # Qwen-safe default config
     python data_prep.py --config /path/to/config.yaml
     python data_prep.py sample=100 force=true
 """
@@ -133,7 +134,7 @@ logger = logging.getLogger(__name__)
 STAGE_PATH = Path(__file__).parent
 
 # Default config path relative to this file
-DEFAULT_CONFIG_PATH = STAGE_PATH / "config" / "data_prep" / "default.yaml"
+DEFAULT_CONFIG_PATH = STAGE_PATH / "config" / "data_prep" / "qwen_agentic_v0.yaml"
 
 # Use NEMO_RUN_DIR for output when running via nemo-run (avoids writing to code dir)
 _OUTPUT_BASE = Path(os.environ.get("NEMO_RUN_DIR", "."))

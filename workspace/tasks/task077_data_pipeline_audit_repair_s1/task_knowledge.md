@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -26,5 +26,9 @@
 14. supervisor request: PM ruff gate for PR #189 failed on import sorting and unused imports; required a narrow fix on `intern_nem_dev_1/task080_m1_bridge_data_quality_s1` with no main/master push or merge.
 15. file change: Session 11 ruff fix is import/lint-only: Ruff-sorted bridge/test imports, removed unused `read_jsonl` bridge imports, and kept `KNOWN_STATUSES` as an explicit bridge-module re-export.
 16. test evidence: Exact PM Ruff command passed, focused bridge pytest shard passed with 65 tests, `python -m py_compile` for touched bridge modules/tests passed, and `git diff --check` passed.
+17. supervisor request: PM corrected the misdelivered task085/stage3 eval message; intern_nem_dev_1 must work only on task086 Qwen SFT data-prep default contract.
+18. file change: Task086 changes Super3 SFT data-prep runnable defaults (`runspec` default and direct `DEFAULT_CONFIG_PATH`) to `qwen_agentic_v0`, leaving legacy Super3/Nemotron configs available through explicit selection.
+19. test evidence: Task086 validation passed with the Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
+20. file change: PR #192 opened against `main` for task086 Qwen SFT data-prep default contract.
 
 ---

@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ---
 
@@ -63,5 +63,19 @@
 - Ran `/work-agents/.venv/bin/ruff check --fix ...`, inspected the diff, and preserved `KNOWN_STATUSES` as an explicit re-export while removing unused `read_jsonl` imports.
 - Validation passed: exact PM Ruff command, `PYTHONPATH=src python -m pytest -q` focused bridge shard with 65 tests, `python -m py_compile` for touched bridge modules/tests, and `git diff --check`.
 - No direct push to `main` or `master`; no self-merge.
+
+---
+
+## Session 12 - 2026-05-28 - Task086 Qwen SFT data-prep default contract
+
+**Executor**: intern_nem_dev_1
+
+- Received PM correction to ignore misdelivered task085/stage3 eval work; task085 belongs to intern_nem_dev_3.
+- Read task086 instructions from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Synced local `main` to `d2f37f7e647bce186922f41da9476fa6e734576c` and created branch `intern_nem_dev_1/task086_qwen_sft_data_prep_default_contract_s1`.
+- Changed the Super3 SFT data-prep runspec/direct-script runnable default to `qwen_agentic_v0` so the default path cannot silently pack Super3/Nemotron rows for the current Qwen target.
+- Preserved legacy Super3/Nemotron data-prep configs for explicit config selection and updated docs/tests to make the default contract clear.
+- Validation passed locally: focused Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
+- Opened PR #192: https://github.com/songCNMS/Nemotron/pull/192
 
 ---
