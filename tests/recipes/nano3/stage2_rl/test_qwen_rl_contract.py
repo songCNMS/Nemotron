@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
@@ -23,11 +24,17 @@ EXPECTED_HTTP_SERVING_FIELDS = {
     "reasoning_parser": "nano_v3",
     "reasoning_parser_plugin": "nemo_rl/utils/nano_v3_reasoning_parser.py",
 }
+ARTIFACT_SPLIT_PATTERN = re.compile(r"^\$\{art:data,([^}]+)\}$")
+
+
+def _config_data(config_path: Path) -> dict:
+    data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    assert isinstance(data, dict), f"{config_path}: top-level config must be a mapping"
+    return data
 
 
 def _policy(config_path: Path) -> dict:
-    data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
-    assert isinstance(data, dict), f"{config_path}: top-level config must be a mapping"
+    data = _config_data(config_path)
     policy = data.get("policy")
     assert isinstance(policy, dict), f"{config_path}: missing policy block"
     return policy
@@ -103,3 +110,21 @@ def test_nano3_tiny_and_default_share_the_qwen_rl_contract() -> None:
         assert default_http_chat.get(key) == tiny_http_chat.get(key), (
             f"tiny.yaml drifted from default.yaml for {key}"
         )
+
+
+def test_nano3_tiny_train_and_validation_use_distinct_artifact_splits() -> None:
+    data = _config_data(CONFIGS["tiny"]).get("data")
+    assert isinstance(data, dict), "tiny.yaml: missing data block"
+
+    train_path = data.get("train_jsonl_fpath")
+    validation_path = data.get("validation_jsonl_fpath")
+    train_match = ARTIFACT_SPLIT_PATTERN.match(train_path or "")
+    validation_match = ARTIFACT_SPLIT_PATTERN.match(validation_path or "")
+
+    assert train_match, f"tiny.yaml: unexpected train artifact path {train_path!r}"
+    assert validation_match, (
+        f"tiny.yaml: unexpected validation artifact path {validation_path!r}"
+    )
+    assert train_match.group(1) == "train"
+    assert validation_match.group(1) == "val"
+    assert train_match.group(1) != validation_match.group(1)

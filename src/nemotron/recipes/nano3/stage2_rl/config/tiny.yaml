@@ -269,7 +269,7 @@ policy:
 
 data:
   train_jsonl_fpath: ${art:data,train}
-  validation_jsonl_fpath: ${art:data,train}
+  validation_jsonl_fpath: ${art:data,val}
   shuffle: False
   num_workers: 1
 
