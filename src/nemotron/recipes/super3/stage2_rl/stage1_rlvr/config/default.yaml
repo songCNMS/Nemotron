@@ -503,7 +503,8 @@ env:
           router_dp_size: 2
           server_args:
             tensor_parallel_size: 8
-            reasoning_parser: deepseek_r1
+            reasoning_parser: nano_v3
+            reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
             gpu_memory_utilization: 0.85
             max_model_len: 60000
             model_loader_extra_config:
