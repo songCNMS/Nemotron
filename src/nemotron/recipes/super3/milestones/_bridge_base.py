@@ -31,12 +31,13 @@ suites are the validation surface for this refactor.
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
-
 
 JsonDict = dict[str, Any]
 
@@ -49,6 +50,13 @@ STATUS_BLOCKED_EXTERNAL = "blocked_external"
 KNOWN_STATUSES = frozenset(
     {STATUS_ACTIVE, STATUS_M0_MISSING, STATUS_VERIFIER_MISMATCH, STATUS_BLOCKED_EXTERNAL}
 )
+SOURCE_METADATA_REQUIRED_FIELDS = (
+    "source_dataset",
+    "source_revision",
+    "source_id",
+    "license",
+)
+DATA_QUALITY_SAMPLE_LIMIT = 20
 
 
 # --- JSONL / JSON I/O -----------------------------------------------------
@@ -87,6 +95,230 @@ def write_json(path: Path, value: Mapping[str, Any]) -> None:
     with path.open("w", encoding="utf-8") as f:
         json.dump(value, f, ensure_ascii=False, indent=2, sort_keys=True)
         f.write("\n")
+
+
+def file_sha256(path: Path) -> str:
+    """Return a SHA-256 hex digest for an output artifact."""
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def output_fingerprints_for_paths(paths: Mapping[str, Path]) -> JsonDict:
+    """Build a stable ``{manifest_path_key: sha256}`` block."""
+    return {key: file_sha256(path) for key, path in paths.items()}
+
+
+# --- Data-quality audit ---------------------------------------------------
+
+
+def _metadata_for_audit(row: Mapping[str, Any]) -> Mapping[str, Any]:
+    metadata = row.get("metadata")
+    return metadata if isinstance(metadata, Mapping) else {}
+
+
+def _metadata_value(metadata: Mapping[str, Any], field: str) -> Any:
+    value = metadata.get(field)
+    if value not in (None, ""):
+        return value
+    if field.startswith("source_"):
+        return metadata.get(f"m0_{field}")
+    return None
+
+
+def _source_key_for_audit(row: Mapping[str, Any]) -> str | None:
+    metadata = _metadata_for_audit(row)
+    parts = [
+        _metadata_value(metadata, "source_dataset"),
+        _metadata_value(metadata, "source_config"),
+        _metadata_value(metadata, "source_revision"),
+        _metadata_value(metadata, "source_id"),
+        _metadata_value(metadata, "source_row_index"),
+    ]
+    if not any(part is not None and str(part).strip() for part in parts):
+        return None
+    return "|".join("" if part is None else str(part) for part in parts)
+
+
+def _message_text(messages: Any) -> str:
+    if not isinstance(messages, Sequence) or isinstance(messages, (str, bytes)):
+        return ""
+    chunks: list[str] = []
+    for message in messages:
+        if not isinstance(message, Mapping):
+            continue
+        if message.get("role") not in {"system", "user"}:
+            continue
+        content = message.get("content")
+        if isinstance(content, str):
+            chunks.append(content)
+    return "\n".join(chunks)
+
+
+def _prompt_text_for_audit(row: Mapping[str, Any]) -> str:
+    message_text = _message_text(row.get("messages"))
+    if message_text:
+        return message_text
+    params = row.get("responses_create_params")
+    if isinstance(params, Mapping):
+        input_value = params.get("input")
+        if isinstance(input_value, str):
+            return input_value
+        message_text = _message_text(input_value)
+        if message_text:
+            return message_text
+    question = row.get("question")
+    return question if isinstance(question, str) else ""
+
+
+def _normalized_prompt_hash(row: Mapping[str, Any]) -> str:
+    normalized = re.sub(r"\W+", " ", _prompt_text_for_audit(row).lower()).strip()
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def _duplicate_counts(values: Sequence[str]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for value in values:
+        counts[value] += 1
+    return {key: count for key, count in sorted(counts.items()) if count > 1}
+
+
+def _sample_keys(keys: Sequence[str]) -> list[str]:
+    return list(keys[:DATA_QUALITY_SAMPLE_LIMIT])
+
+
+def audit_bridge_data_quality(
+    *,
+    train_rows: Sequence[Mapping[str, Any]],
+    val_rows: Sequence[Mapping[str, Any]],
+) -> JsonDict:
+    """Return SFT-style source, split, and duplicate audit metadata."""
+    by_split = {
+        "train": list(train_rows),
+        "val": list(val_rows),
+    }
+    split_audits: dict[str, JsonDict] = {}
+    source_keys_by_split: dict[str, set[str]] = {}
+    prompt_hashes_by_split: dict[str, set[str]] = {}
+
+    for split, rows in by_split.items():
+        missing_required_fields: dict[str, int] = defaultdict(int)
+        missing_examples: list[JsonDict] = []
+        source_keys: list[str] = []
+        prompt_hashes: list[str] = []
+        for index, row in enumerate(rows):
+            metadata = _metadata_for_audit(row)
+            missing = [
+                field
+                for field in SOURCE_METADATA_REQUIRED_FIELDS
+                if _metadata_value(metadata, field) in (None, "")
+            ]
+            if missing:
+                for field in missing:
+                    missing_required_fields[field] += 1
+                if len(missing_examples) < DATA_QUALITY_SAMPLE_LIMIT:
+                    missing_examples.append(
+                        {
+                            "row_index": index,
+                            "environment": row.get("environment")
+                            or metadata.get("m0_environment"),
+                            "missing_fields": missing,
+                        }
+                    )
+            source_key = _source_key_for_audit(row)
+            if source_key is not None:
+                source_keys.append(source_key)
+            prompt_hashes.append(_normalized_prompt_hash(row))
+
+        duplicate_source_keys = _duplicate_counts(source_keys)
+        duplicate_prompt_hashes = _duplicate_counts(prompt_hashes)
+        source_keys_by_split[split] = set(source_keys)
+        prompt_hashes_by_split[split] = set(prompt_hashes)
+        split_audits[split] = {
+            "rows": len(rows),
+            "required_source_metadata_fields": list(SOURCE_METADATA_REQUIRED_FIELDS),
+            "missing_required_fields": dict(sorted(missing_required_fields.items())),
+            "missing_required_field_examples": missing_examples,
+            "duplicate_source_key_count": len(duplicate_source_keys),
+            "duplicate_source_key_examples": _sample_keys(list(duplicate_source_keys)),
+            "duplicate_normalized_prompt_hash_count": len(duplicate_prompt_hashes),
+            "duplicate_normalized_prompt_hash_examples": _sample_keys(
+                list(duplicate_prompt_hashes)
+            ),
+        }
+
+    overlapping_source_keys = sorted(source_keys_by_split["train"] & source_keys_by_split["val"])
+    overlapping_prompt_hashes = sorted(prompt_hashes_by_split["train"] & prompt_hashes_by_split["val"])
+    return {
+        "source_metadata": split_audits,
+        "split_routing": {
+            "train_val_source_key_overlap_count": len(overlapping_source_keys),
+            "train_val_source_key_overlap_examples": _sample_keys(overlapping_source_keys),
+            "train_val_normalized_prompt_overlap_count": len(overlapping_prompt_hashes),
+            "train_val_normalized_prompt_overlap_examples": _sample_keys(
+                overlapping_prompt_hashes
+            ),
+        },
+        "near_duplicate_guard": {
+            "method": "normalized_system_user_prompt_sha256",
+            "normalization": "lowercase plus non-word collapse",
+            "sample_limit": DATA_QUALITY_SAMPLE_LIMIT,
+        },
+    }
+
+
+def render_bridge_quality_report_sections(
+    manifest: Mapping[str, Any],
+    *,
+    fingerprint_keys: Sequence[str],
+) -> list[str]:
+    """Render SFT-style data-quality and fingerprint sections for reports."""
+    lines: list[str] = []
+    data_quality = manifest.get("data_quality") or {}
+    if isinstance(data_quality, Mapping):
+        lines.extend(
+            [
+                "",
+                "## Data quality audit",
+                "",
+                "| Split | Rows | Missing source metadata | Duplicate source keys | Duplicate normalized prompts |",
+                "|---|---:|---:|---:|---:|",
+            ]
+        )
+        source_metadata = data_quality.get("source_metadata") or {}
+        if isinstance(source_metadata, Mapping):
+            for split in ("train", "val"):
+                info = source_metadata.get(split) or {}
+                if not isinstance(info, Mapping):
+                    continue
+                missing = sum((info.get("missing_required_fields") or {}).values())
+                lines.append(
+                    f"| {split} | {info.get('rows', 0)} | {missing} | "
+                    f"{info.get('duplicate_source_key_count', 0)} | "
+                    f"{info.get('duplicate_normalized_prompt_hash_count', 0)} |"
+                )
+        split_routing = data_quality.get("split_routing") or {}
+        if isinstance(split_routing, Mapping):
+            lines.extend(
+                [
+                    "",
+                    f"- Train/val source-key overlaps: `{split_routing.get('train_val_source_key_overlap_count', 0)}`",
+                    (
+                        "- Train/val normalized-prompt overlaps: "
+                        f"`{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`"
+                    ),
+                ]
+            )
+
+    output_fingerprints = manifest.get("output_fingerprints") or {}
+    if isinstance(output_fingerprints, Mapping):
+        lines.extend(["", "## Output fingerprints", ""])
+        for key in fingerprint_keys:
+            if key in output_fingerprints:
+                lines.append(f"- {key}: `{output_fingerprints[key]}`")
+    return lines
 
 
 # --- M0 split discovery ---------------------------------------------------
@@ -388,6 +620,10 @@ __all__ = [
     "read_jsonl",
     "write_jsonl",
     "write_json",
+    "file_sha256",
+    "output_fingerprints_for_paths",
+    "audit_bridge_data_quality",
+    "render_bridge_quality_report_sections",
     # discovery
     "discover_m0_split_files",
     # registry + derivation

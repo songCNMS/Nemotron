@@ -19,8 +19,8 @@ from typing import Any
 import pytest
 
 from nemotron.recipes.super3.milestones.lineage import (
-    LineageRecord,
     SWE2_ARTIFACT,
+    LineageRecord,
 )
 from nemotron.recipes.super3.milestones.m1_swe2.prepare_m1_swe2_jsonl import (
     ENV_REGISTRY_PATH,
@@ -400,3 +400,10 @@ def test_prepare_happy_path_with_synthetic_active_registry(
     coverage = manifest["coverage"]
     assert coverage["counts"]["active"] == 1
     assert coverage["active"] == ["swe_agents"]
+    assert manifest["data_quality"]["source_metadata"]["train"]["rows"] == 2
+    assert manifest["data_quality"]["source_metadata"]["val"]["rows"] == 1
+    assert set(manifest["output_fingerprints"]) == {"train_path", "val_path"}
+    assert len(manifest["output_fingerprints"]["train_path"]) == 64
+    report_md = (out_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Data quality audit" in report_md
+    assert "## Output fingerprints" in report_md

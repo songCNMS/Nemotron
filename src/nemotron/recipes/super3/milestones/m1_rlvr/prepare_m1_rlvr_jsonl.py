@@ -35,14 +35,18 @@ from typing import Any
 
 try:
     from nemotron.recipes.super3.milestones._bridge_base import (
-        KNOWN_STATUSES,
+        KNOWN_STATUSES as KNOWN_STATUSES,
+    )
+    from nemotron.recipes.super3.milestones._bridge_base import (
+        audit_bridge_data_quality,
         base_coverage_report,
         base_tag_record,
         collect_mix_rows,
         derive_env_map,
         discover_m0_split_files,
         load_env_registry,
-        read_jsonl,
+        output_fingerprints_for_paths,
+        render_bridge_quality_report_sections,
         write_json,
         write_jsonl,
     )
@@ -52,20 +56,26 @@ try:
         RLVR3_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from nemotron.recipes.super3.milestones.lineage import (
         make_record as make_lineage_record,
     )
 except ModuleNotFoundError:
     # Fallback for direct-script execution (PEP 723 banner enables that).
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from _bridge_base import (  # type: ignore[no-redef]
-        KNOWN_STATUSES,
+        KNOWN_STATUSES as KNOWN_STATUSES,
+    )
+    from _bridge_base import (
+        audit_bridge_data_quality,
         base_coverage_report,
         base_tag_record,
         collect_mix_rows,
         derive_env_map,
         discover_m0_split_files,
         load_env_registry,
-        read_jsonl,
+        output_fingerprints_for_paths,
+        render_bridge_quality_report_sections,
         write_json,
         write_jsonl,
     )
@@ -75,6 +85,8 @@ except ModuleNotFoundError:
         RLVR3_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from lineage import (
         make_record as make_lineage_record,
     )
 
@@ -180,10 +192,25 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
             f"## Coverage ({coverage['total_target_envs']} target envs)",
             "",
             f"- active: {len(coverage['active'])} — {', '.join(f'`{e}`' for e in coverage['active']) or '(none)'}",
-            f"- m0_missing: {len(coverage['m0_missing'])} — {', '.join(f'`{e}`' for e in coverage['m0_missing']) or '(none)'}",
-            f"- verifier_mismatch: {len(coverage['verifier_mismatch'])} — {', '.join(f'`{e}`' for e in coverage['verifier_mismatch']) or '(none)'}",
-            f"- blocked_external: {len(coverage['blocked_external'])} — {', '.join(f'`{e}`' for e in coverage['blocked_external']) or '(none)'}",
+            (
+                f"- m0_missing: {len(coverage['m0_missing'])} — "
+                f"{', '.join(f'`{e}`' for e in coverage['m0_missing']) or '(none)'}"
+            ),
+            (
+                f"- verifier_mismatch: {len(coverage['verifier_mismatch'])} — "
+                f"{', '.join(f'`{e}`' for e in coverage['verifier_mismatch']) or '(none)'}"
+            ),
+            (
+                f"- blocked_external: {len(coverage['blocked_external'])} — "
+                f"{', '.join(f'`{e}`' for e in coverage['blocked_external']) or '(none)'}"
+            ),
         ]
+    lines.extend(
+        render_bridge_quality_report_sections(
+            manifest,
+            fingerprint_keys=("train_path", "val_path", "combined_path"),
+        )
+    )
     if manifest["errors"]:
         lines += ["", "## Errors", ""]
         for error in manifest["errors"]:
@@ -251,6 +278,13 @@ def prepare(args: argparse.Namespace) -> JsonDict:
     # downstream consumers that prefer them directly. (task014 Session 2)
     combined_path = args.output_dir / "combined.jsonl"
     write_jsonl(combined_path, [*train_rows, *val_rows])
+    output_fingerprints = output_fingerprints_for_paths(
+        {
+            "train_path": train_path,
+            "val_path": val_path,
+            "combined_path": combined_path,
+        }
+    )
 
     manifest: JsonDict = {
         "schema_version": 1,
@@ -270,6 +304,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "val": val_counts,
         },
         "coverage": coverage_report(_REGISTRY, args.mix),
+        "data_quality": audit_bridge_data_quality(
+            train_rows=train_rows,
+            val_rows=val_rows,
+        ),
+        "output_fingerprints": output_fingerprints,
         "errors": [*train_errors, *val_errors],
     }
 

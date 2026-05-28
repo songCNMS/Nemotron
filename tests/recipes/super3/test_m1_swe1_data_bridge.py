@@ -25,8 +25,8 @@ from typing import Any
 import pytest
 
 from nemotron.recipes.super3.milestones.lineage import (
-    LineageRecord,
     SWE1_ARTIFACT,
+    LineageRecord,
 )
 from nemotron.recipes.super3.milestones.m1_swe1.prepare_m1_swe1_jsonl import (
     KNOWN_STATUSES,
@@ -332,6 +332,13 @@ def test_prepare_happy_path_with_synthetic_active_registry(
     assert coverage["active"] == [
         "swe_pivot_single_step_tool_use_with_argument_comparison",
     ]
+    assert manifest["data_quality"]["source_metadata"]["train"]["rows"] == 3
+    assert manifest["data_quality"]["source_metadata"]["val"]["rows"] == 1
+    assert set(manifest["output_fingerprints"]) == {"train_path", "val_path"}
+    assert len(manifest["output_fingerprints"]["train_path"]) == 64
+    report_md = (out_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Data quality audit" in report_md
+    assert "## Output fingerprints" in report_md
 
 
 def test_prepare_filters_out_envs_outside_swe1_mix(
