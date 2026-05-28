@@ -14,7 +14,7 @@ run:
 blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase2.json
 
 # Output directory for tokenized data
-output_dir: /lustre/fsw/portfolios/coreai/users/mromeijn/output/super3/stage0_pretrain/phase2
+output_dir: ${oc.env:PWD}/../output/super3/stage0_pretrain/phase2
 
 # Number of output shards for parallel loading
 num_shards: 128
