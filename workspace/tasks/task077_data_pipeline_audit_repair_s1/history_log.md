@@ -154,4 +154,12 @@
 - Validation passed locally: requested M1 Agentic SFT/Qwen scale-up pytest shard, py_compile, Ruff, static OmegaConf packed-dir probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #205: https://github.com/songCNMS/Nemotron/pull/205
 
+- Task102 follow-up in same Session 17:
+- Read PM assignment for `task102_qwen_scaleup_remote_root_portability_s1`.
+- Fast-forwarded local `main` to `944483ba510fd4a8b98bf00613127567a499f8dc` and created branch `intern_nem_dev_1/task102_qwen_scaleup_remote_root_portability_s1`.
+- Replaced Qwen scale-up planner `DEFAULT_REMOTE_ROOT` from `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup` with the checkout-owner output path `../outputs/task067_qwen_scaleup_remote`.
+- Updated focused planner tests so rendered sync/train scripts reject `intern_nemontron_code_reading`, include the deterministic default remote root, and preserve explicit `--remote-root`.
+- Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, static rendered portability probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #208: https://github.com/songCNMS/Nemotron/pull/208
+
 ---

@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task098_qwen_sft_local_train_packed_dir_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/205 |
+| Current Task | task102_qwen_scaleup_remote_root_portability_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/208 |
 | Session | 17 |
-| Recent Progress | Opened PR #205 fixing Qwen 4B/30B local train packed-dir defaults to use `stage1_sft_agentic_v0_qwen/splits` while preserving explicit packed-dir overrides; focused checks passed |
+| Recent Progress | Opened PR #208 fixing Qwen scale-up planner remote-root default off another intern workspace and preserving explicit `--remote-root`; focused planner checks passed |

@@ -4,6 +4,7 @@ import pytest
 
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run import (
     AGENTIC_M0_DATASET_IDS,
+    DEFAULT_REMOTE_ROOT,
     QWEN30B_A3B_TRAIN_ENTRYPOINT,
     QWEN_DATA_PREP_CONFIG,
     build_manifest,
@@ -13,6 +14,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run imp
     render_local_data_prep_script,
     render_remote_train_script,
     render_report,
+    render_sync_script,
     write_plan,
 )
 from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
@@ -22,7 +24,7 @@ from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
 )
 
 
-def _args(tmp_path: Path):
+def _args(tmp_path: Path, *extra_args: str):
     return build_parser().parse_args(
         [
             "--output-dir",
@@ -50,6 +52,7 @@ def _args(tmp_path: Path):
             "--eval-config",
             "m1_full_basket",
             "--overwrite",
+            *extra_args,
         ]
     )
 
@@ -112,7 +115,10 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "TRAIN_ITERS=" in remote_script
     assert "export TRAIN_ITERS" in remote_script
     assert 'tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS" 2>/dev/null || true' in remote_script
-    assert 'Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup' in remote_script
+    assert "intern_nemontron_code_reading" not in remote_script
+    assert manifest["paths"]["remote_root"] == str(DEFAULT_REMOTE_ROOT)
+    assert manifest["paths"]["remote_run_root"] == str(DEFAULT_REMOTE_ROOT / "scaleup")
+    assert str(DEFAULT_REMOTE_ROOT / "scaleup") in remote_script
     assert "dataset.packed_sequence_specs.packed_sequence_size=512" in remote_script
     assert "--training-profile qwen" in local_script
     assert "training_contract.model_profile=qwen" in remote_script
@@ -126,6 +132,22 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "super3 eval -c m1_full_basket --dry-run" in eval_script
     assert "run.model=sft:unit_qwen_scaleup" in eval_script
     assert "deployment.checkpoint_path=" in eval_script
+
+
+def test_scaleup_planner_preserves_explicit_remote_root(tmp_path) -> None:
+    explicit_remote_root = tmp_path / "operator_remote_root"
+    manifest = build_manifest(_args(tmp_path, "--remote-root", str(explicit_remote_root)))
+    remote_script = render_remote_train_script(manifest)
+    sync_script = render_sync_script(manifest)
+
+    assert manifest["paths"]["remote_root"] == str(explicit_remote_root)
+    assert manifest["paths"]["remote_run_root"] == str(explicit_remote_root / "scaleup")
+    assert str(explicit_remote_root / "scaleup") in remote_script
+    assert str(explicit_remote_root) in sync_script
+    assert str(DEFAULT_REMOTE_ROOT) not in remote_script
+    assert str(DEFAULT_REMOTE_ROOT) not in sync_script
+    assert "intern_nemontron_code_reading" not in remote_script
+    assert "intern_nemontron_code_reading" not in sync_script
 
 
 def test_scaleup_planner_can_use_separate_qwen_tokenizer_model(tmp_path) -> None:
