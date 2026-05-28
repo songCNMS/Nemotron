@@ -514,6 +514,50 @@ def _default_recipe_builder(config: DictConfig) -> ConfigContainer:
     return recipe_func(**recipe_kwargs)
 
 
+def _to_resolved_dict(value: Any) -> dict[str, Any]:
+    if value is None:
+        return {}
+    resolved = OmegaConf.to_container(value, resolve=True)
+    return resolved if isinstance(resolved, dict) else {}
+
+
+def _validate_sft_training_contract(
+    *,
+    config: DictConfig,
+    cfg: ConfigContainer,
+    tags: list[str] | None,
+) -> None:
+    dataset_config = _to_resolved_dict(config.get("dataset"))
+    packed_sft_dir = dataset_config.get("super3_packed_sft_dir")
+    if not packed_sft_dir:
+        return
+
+    training_contract = _to_resolved_dict(config.get("training_contract"))
+    training_profile = training_contract.get("model_profile")
+    if not training_profile and tags and any("qwen" in tag.lower() for tag in tags):
+        training_profile = "qwen"
+
+    tokenizer_model = getattr(getattr(cfg, "tokenizer", None), "tokenizer_model", None)
+    train_entrypoint = training_contract.get("train_entrypoint") or sys.argv[0]
+    model_ref = training_contract.get("model_ref") or os.environ.get("SUPER3_M1_QWEN_HF_MODEL")
+    recipe_target = OmegaConf.select(config, "recipe._target_", default=None)
+
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        validate_qwen_training_pipeline_contract,
+    )
+
+    metadata_path = validate_qwen_training_pipeline_contract(
+        str(packed_sft_dir),
+        tokenizer_model=str(tokenizer_model) if tokenizer_model else None,
+        training_profile=str(training_profile) if training_profile else None,
+        model_ref=str(model_ref) if model_ref else None,
+        train_entrypoint=str(train_entrypoint) if train_entrypoint else None,
+        recipe_target=str(recipe_target) if recipe_target else None,
+    )
+    if metadata_path is not None:
+        logger.info("Validated Qwen SFT training pipeline contract in %s", metadata_path)
+
+
 def run_finetune(
     config_path: Path,
     recipe_builder: RecipeBuilder,
@@ -537,7 +581,7 @@ def run_finetune(
     script_config_overrides = []
     for override in cli_overrides or []:
         override_key = override.split("=", 1)[0].lstrip("+~")
-        if override_key.startswith(("dataset.", "tokenizer.")):
+        if override_key.startswith(("dataset.", "tokenizer.", "training_contract.")):
             script_config_overrides.append(override)
     if script_config_overrides:
         # Apply launch-time overrides to the script config before recipe and
@@ -580,6 +624,7 @@ def run_finetune(
     config_overrides.pop("recipe", None)
     config_overrides.pop("run", None)
     config_overrides.pop("dataset", None)
+    config_overrides.pop("training_contract", None)
     config_overrides.pop("convert_to_hf", None)
 
     if config_overrides:
@@ -596,7 +641,10 @@ def run_finetune(
     final_overrides_as_dict = OmegaConf.to_container(merged_omega_conf, resolve=True)
 
     final_overrides_as_dict.pop("dataset", None)
+    final_overrides_as_dict.pop("training_contract", None)
     apply_overrides(cfg, final_overrides_as_dict, excluded_fields)
+
+    _validate_sft_training_contract(config=config, cfg=cfg, tags=tags)
 
     if "dataset" in config:
         dataset_config = OmegaConf.to_container(config.dataset, resolve=True)

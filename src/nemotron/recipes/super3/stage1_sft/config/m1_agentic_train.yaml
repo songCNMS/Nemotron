@@ -30,6 +30,14 @@ dataset:
 tokenizer:
   tokenizer_model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16}
 
+training_contract:
+  # Qwen launches must set SUPER3_M1_TRAINING_PROFILE=qwen (or override this
+  # field) so the offline preflight can reject Nemotron tokenizer/recipe
+  # defaults before Megatron starts.
+  model_profile: ${oc.env:SUPER3_M1_TRAINING_PROFILE,nemotron-super}
+  model_ref: null
+  train_entrypoint: null
+
 train:
   # The 1700 default is a placeholder, not a tuned value: on M0 smoke data
   # (~400 raw rows → ~5-20 packed sequences at pack_size=4096) it represents

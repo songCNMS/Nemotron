@@ -15,6 +15,11 @@ from typing import TYPE_CHECKING
 # without pulling the whole training stack into the test environment.
 from omegaconf import DictConfig, OmegaConf
 
+from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+    NEMOTRON_SUPER_TOKENIZER_DEFAULT,
+    QWEN_TRAINING_PROFILE,
+)
+
 if TYPE_CHECKING:
     from megatron.bridge.training.config import ConfigContainer
 
@@ -22,7 +27,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "config" / "m1_agentic_train.yaml"
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
-NEMOTRON_SUPER_TOKENIZER_DEFAULT = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"
 
 
 def resolve_qwen_hf_model() -> str:
@@ -57,6 +61,10 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
 
     hf_model = resolve_qwen_hf_model()
     tokenizer_model = resolve_qwen_tokenizer_model(config, hf_model)
+    OmegaConf.update(config, "tokenizer.tokenizer_model", tokenizer_model, merge=True)
+    OmegaConf.update(config, "training_contract.model_profile", QWEN_TRAINING_PROFILE, merge=True)
+    OmegaConf.update(config, "training_contract.model_ref", hf_model, merge=True)
+    OmegaConf.update(config, "training_contract.train_entrypoint", __file__, merge=True)
     packed_sft_dir = OmegaConf.select(config, "dataset.super3_packed_sft_dir", default=None)
     if packed_sft_dir:
         metadata_path = validate_qwen_packed_sft_chat_contract(

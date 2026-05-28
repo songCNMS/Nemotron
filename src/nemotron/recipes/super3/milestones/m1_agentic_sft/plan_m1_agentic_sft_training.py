@@ -23,6 +23,7 @@ DEFAULT_SAVE_DIR = Path("../output/super3/m1_agentic_sft_v0/checkpoints")
 DEFAULT_CONFIG_PATH = Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml")
 DEFAULT_SCRIPT_PATH = Path("src/nemotron/recipes/super3/stage1_sft/train.py")
 DEFAULT_REPO_DIR: Path | None = None
+DEFAULT_TRAINING_PROFILE = "nemotron-super"
 MILESTONE = "M1"
 STAGE = "Agentic SFT v0 training"
 
@@ -128,6 +129,7 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
     resources = manifest["resources"]
     training = manifest["training"]
     paths = manifest["paths"]
+    training_contract = manifest.get("training_contract") or {}
     nodes = int(resources.get("nodes", 1))
     if nodes != 1:
         # Multi-node launches need rendezvous endpoint, node_rank, and a launcher
@@ -155,6 +157,12 @@ def build_torchrun_command(manifest: Mapping[str, Any]) -> list[str]:
         f"dataset.packed_sequence_specs.packed_sequence_size={training['seq_length']}",
         f"checkpoint.save_interval={training['save_interval']}",
     ]
+    if training_contract.get("model_profile"):
+        command.append(f"training_contract.model_profile={training_contract['model_profile']}")
+    if training_contract.get("model_ref"):
+        command.append(f"training_contract.model_ref={training_contract['model_ref']}")
+    if training_contract.get("train_entrypoint"):
+        command.append(f"training_contract.train_entrypoint={training_contract['train_entrypoint']}")
     if training.get("optimizer_lr") is not None:
         command.append(f"++optimizer.lr={training['optimizer_lr']}")
     if training.get("scheduler_min_lr") is not None:
@@ -189,6 +197,7 @@ def render_run_script(manifest: Mapping[str, Any]) -> str:
             f"export SUPER3_M1_TOKENIZER_MODEL={shell_quote(paths['tokenizer_model'])}",
             f"export SUPER3_M1_PRETRAINED_CHECKPOINT={shell_quote(paths['pretrained_checkpoint'])}",
             f"export SUPER3_M1_SFT_SAVE={shell_quote(paths['save_dir'])}",
+            f"export SUPER3_M1_TRAINING_PROFILE={shell_quote(manifest['training_contract']['model_profile'])}",
             "export PYTHONPATH=\"${PWD}/src${PYTHONPATH:+:${PYTHONPATH}}\"",
             "export WANDB_MODE=\"${WANDB_MODE:-offline}\"",
             "export WANDB_DISABLED=\"${WANDB_DISABLED:-true}\"",
@@ -324,6 +333,7 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
     tokenizer_model = infer_tokenizer_model(metadata, args.tokenizer_model)
     if not tokenizer_model:
         raise ValueError("tokenizer model is required when packed metadata has no tokenizer_uri")
+    training_profile = getattr(args, "training_profile", None) or DEFAULT_TRAINING_PROFILE
     pretrained_checkpoint_value = args.pretrained_checkpoint or os.environ.get("SUPER3_M1_PRETRAINED_CHECKPOINT")
     if not pretrained_checkpoint_value:
         raise ValueError("--pretrained-checkpoint or SUPER3_M1_PRETRAINED_CHECKPOINT is required")
@@ -334,6 +344,18 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         pretrained_checkpoint=pretrained_checkpoint,
         tokenizer_model=tokenizer_model,
         allow_missing_checkpoint=args.allow_missing_checkpoint,
+    )
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        validate_qwen_training_pipeline_contract,
+    )
+
+    qwen_contract_metadata_path = validate_qwen_training_pipeline_contract(
+        packed_sft_dir,
+        tokenizer_model=tokenizer_model,
+        training_profile=training_profile,
+        model_ref=tokenizer_model,
+        train_entrypoint=args.script_path,
+        recipe_target=None,
     )
 
     splits = {
@@ -375,6 +397,14 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         },
         "validation": {
             "allow_missing_checkpoint": args.allow_missing_checkpoint,
+            "qwen_contract_metadata_path": str(qwen_contract_metadata_path) if qwen_contract_metadata_path else None,
+        },
+        "training_contract": {
+            "model_profile": training_profile,
+            "model_ref": tokenizer_model if training_profile.lower().startswith("qwen") else None,
+            "tokenizer_model": tokenizer_model,
+            "train_entrypoint": str(args.script_path),
+            "packed_metadata_path": str(metadata_path) if metadata_path else None,
         },
         "resources": {
             "nodes": args.nodes,
@@ -434,6 +464,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-dir", type=Path, default=DEFAULT_REPO_DIR)
     parser.add_argument("--script-path", type=Path, default=DEFAULT_SCRIPT_PATH)
     parser.add_argument("--config-path", type=Path, default=DEFAULT_CONFIG_PATH)
+    parser.add_argument("--training-profile", default=DEFAULT_TRAINING_PROFILE)
     parser.add_argument("--venv", type=Path, default=None)
     parser.add_argument("--nodes", type=int, default=1)
     parser.add_argument("--gpus-per-node", type=int, default=8)

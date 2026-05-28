@@ -100,6 +100,7 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert manifest["packing"]["data_prep_config_name"] == QWEN_DATA_PREP_CONFIG_NAME
     assert manifest["qwen_chat_contract"]["sft_chat_template"] == "tokenizer"
     validate_qwen_data_prep_config(manifest["qwen_chat_contract"]["data_prep"])
+    assert manifest["qwen_chat_contract"]["training_profile"] == "qwen"
     assert (
         manifest["qwen_chat_contract"]["eval_chat_template_kwargs"]
         == manifest["packing"]["chat_template_kwargs"]
@@ -112,6 +113,10 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert 'tmux set-environment -g TRAIN_ITERS "$TRAIN_ITERS" 2>/dev/null || true' in remote_script
     assert 'Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup' in remote_script
     assert "dataset.packed_sequence_specs.packed_sequence_size=512" in remote_script
+    assert "--training-profile qwen" in local_script
+    assert "training_contract.model_profile=qwen" in remote_script
+    assert "training_contract.model_ref=/models/qwen3-4b" in remote_script
+    assert "export SUPER3_M1_TRAINING_PROFILE=qwen" in remote_script
     assert "CUDA_VISIBLE_DEVICES=0,1" in remote_script
     assert "train.global_batch_size=2" in remote_script
     assert "train.eval_interval=7" in remote_script
