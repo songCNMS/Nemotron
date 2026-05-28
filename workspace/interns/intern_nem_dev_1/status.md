@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task105_qwen_scaleup_local_plan_model_ref_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/210 |
+| Current Task | task106_qwen_sft_data_prep_tokenizer_env_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/213 |
 | Session | 17 |
-| Recent Progress | Opened PR #210 passing Qwen HF model ref through the scale-up local training-plan command while keeping tokenizer path separate; focused planner checks passed |
+| Recent Progress | Opened PR #213 making Qwen SFT data prep prefer `SUPER3_M1_TOKENIZER_MODEL` with fallback to `SUPER3_M1_QWEN_HF_MODEL`; focused Qwen/M1 SFT checks passed |

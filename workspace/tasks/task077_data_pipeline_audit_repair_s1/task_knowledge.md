@@ -71,5 +71,10 @@
 59. file change: Qwen scale-up local script rendering now passes `--qwen-hf-model` from `manifest["training"]["qwen_hf_model"]` next to `--tokenizer-model`.
 60. test evidence: Task105 focused planner pytest shard passed with 22 tests; py_compile, Ruff, structured separate model/tokenizer render probe, and diff checks passed.
 61. file change: PR #210 opened against `main` for task105 Qwen scale-up local plan model-ref contract.
+62. supervisor request: PM assigned task106 to sync latest main, make Qwen SFT data prep tokenizer env prefer `SUPER3_M1_TOKENIZER_MODEL`, preserve fallback to `SUPER3_M1_QWEN_HF_MODEL`, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+63. technical fact: `qwen_agentic_v0.yaml` previously set `tokenizer.model` directly from `SUPER3_M1_QWEN_HF_MODEL`, so direct data prep could not use a separate tokenizer path.
+64. file change: Qwen SFT data prep `qwen_agentic_v0.yaml` now sets `tokenizer.model` from `${oc.env:SUPER3_M1_TOKENIZER_MODEL,${oc.env:SUPER3_M1_QWEN_HF_MODEL}}`.
+65. test evidence: Task106 focused Qwen/M1 SFT pytest shard passed with 95 tests and 1 skipped; py_compile, Ruff, structured OmegaConf both-env/fallback probe, and diff checks passed.
+66. file change: PR #213 opened against `main` for task106 Qwen SFT data-prep tokenizer env contract.
 
 ---
