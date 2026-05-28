@@ -1,6 +1,6 @@
 # task085_stage3_eval_defaults_normalization_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1 - 2026-05-28
 
@@ -11,3 +11,9 @@
 - Verified before restart: eval shard 103 passed with 9 warnings, touched Python py_compile passed, Ruff passed, and `git diff --check` passed.
 - After restart, made only status/task documentation updates before staging for PR.
 - Opened PR #193 to `main`: https://github.com/songCNMS/Nemotron/pull/193.
+
+## Session 6 - 2026-05-28
+
+- Fixed stop-hook bookkeeping by adding the explicit Session 6 task085 history record.
+- Left implementation scope unchanged: PR #193 remains the active review for stage3 eval defaults normalization.
+- Rechecked staged doc-only changes with `git diff --cached --check` before pushing the PR branch update.

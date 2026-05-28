@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task085_stage3_eval_defaults_normalization_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/193 |
-| Session | 1 |
-| Recent Progress | Opened PR #193 for stage3 eval launcher normalization that strips inherited top-level `defaults`, adds focused normalized-config coverage, and records pre-restart passing evidence plus post-restart cached diff check |
+| Session | 6 |
+| Recent Progress | Opened PR #193 for stage3 eval launcher normalization and pushed a doc-only Session 6 bookkeeping fix for task085 history/knowledge after the stop-hook audit |
