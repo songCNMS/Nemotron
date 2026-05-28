@@ -1,6 +1,6 @@
 # task101_qwen_m1_training_plan_model_ref_contract_s1 knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
   `SUPER3_M1_QWEN_HF_MODEL`, then tokenizer fallback for older manifests.
 - `render_run_script()` exports `SUPER3_M1_QWEN_HF_MODEL` only when the
   training profile is Qwen and a model ref is available.
+- Session 13 adds no new task101-specific implementation knowledge; task104
+  carries the Qwen eval source-manifest lineage gate.

@@ -83,6 +83,44 @@ def test_qwen_eval_repro_gate_source_manifests_exist() -> None:
         assert (REPO_ROOT / manifest).is_file(), manifest
 
 
+def test_qwen_eval_repro_gate_current_source_manifests_are_repo_relative_existing() -> None:
+    gate = _gate_data()
+
+    for manifest in gate["source_manifests"]:
+        path = Path(manifest)
+        assert not path.is_absolute(), manifest
+        assert (REPO_ROOT / path).is_file(), manifest
+
+
+def test_qwen_eval_repro_gate_rejects_absolute_source_manifest_paths() -> None:
+    data = deepcopy(_gate_data())
+    data["source_manifests"] = ["/tmp/not_repo_relative.yaml"]
+    data["evidence_records"][0]["source_manifest"] = "/tmp/not_repo_relative.yaml"
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any("source_manifests must be repo-relative" in issue for issue in issues)
+    assert any("source_manifest must be repo-relative" in issue for issue in issues)
+
+
+def test_qwen_eval_repro_gate_rejects_missing_repo_relative_source_manifest_paths() -> None:
+    data = deepcopy(_gate_data())
+    missing = "src/nemotron/recipes/super3/milestones/m1_eval_basket/missing_source_manifest.yaml"
+    data["source_manifests"] = [missing]
+    data["evidence_records"][0]["source_manifest"] = missing
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "source_manifests repo-relative path does not exist" in issue
+        for issue in issues
+    )
+    assert any(
+        "source_manifest repo-relative path does not exist" in issue
+        for issue in issues
+    )
+
+
 def test_qwen_eval_repro_gate_requires_qwen_not_super3_only() -> None:
     data = _gate_data()
     data["super3_template_consistency_is_sufficient"] = True
