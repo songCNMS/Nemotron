@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ---
 
@@ -62,5 +62,21 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Passed Qwen packed chat contract validation and generated the V9 training manifest with `train_iters=192`, `train_rows=30699`, `valid_rows=2571`, LR `8e-8`, min LR `3e-8`, warmup `20`, and V8 checkpoint `iter_0000779` as the starting point.
 - Ran the generated `m1_basket` eval dry-run; the config compiled with `adlr_aime25` present and `enable_thinking=false`.
 - Wrote `v9_data_prep_session7.md`.
+
+---
+
+## Session 8 - 2026-05-28 - V9 NemTron training launch and completion
+
+**Executor**: intern_nemontron_code_reading
+
+- Synced the current PR branch and V9 packed output to NemTron with `sync_to_nemtron.sh`.
+- Confirmed the user-requested Qwen path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` was not mounted on NemTron, then created a lightweight metadata/tokenizer mirror at the same path excluding the 16 HF safetensor weight shards.
+- Verified the Qwen 30B-A3B recipe builder works with that lightweight HF metadata/tokenizer path because `load_weights=False` is used for the HF bridge and the actual weights load from the V8 NeMo checkpoint.
+- Launched `run_nemtron_train.sh` in tmux session `task067_task076_qwen30b_a3b_hard_math_recurrence_v9` on 8 H200 GPUs.
+- Training completed all `192/192` planned iterations from V8 checkpoint `iter_0000779`.
+- Health signals: iter 10 train lm loss `12.25112`, iter 100 train lm loss `9.722968`, iter 190 train lm loss `8.950349`, validation loss at iter 100 `9.630936`, final validation loss at iter 192 `8.960094`.
+- Checkpoints saved: `iter_0000100` and final `iter_0000192`.
+- Final checkpoint path: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
+- Wrote `v9_train_session8.md`.
 
 ---

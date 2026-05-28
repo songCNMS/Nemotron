@@ -28,7 +28,7 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 
 - [x] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
 - [x] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
-- [ ] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
+- [x] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
 - [ ] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
 - [ ] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
 - [ ] If a V9 checkpoint is produced, corrected full MMLU-Pro, AIME25 `max_tokens=8192`, and HMMT `max_tokens=8192` metrics are recorded and compared with V7/V8.
@@ -58,3 +58,12 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Packed data: `32` shards, `983135` total sequences, `667289202` total tokens, `pack_size=8192`; Qwen chat contract validation passed.
 - Generated training plan: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/training_plan/task076_qwen30b_a3b_hard_math_recurrence_v9/training_manifest.json` with `train_iters=192`.
 - Ran generated `m1_basket` eval dry-run successfully; training launch remains the next step.
+
+## Session 8 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_train_session8.md`.
+- Synced repo and packed V9 artifacts to NemTron.
+- Created a lightweight metadata/tokenizer mirror at `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` on NemTron because the cephfs mount was not present there.
+- Launched and completed V9 training: `192/192` iterations on 8 H200 GPUs from V8 checkpoint `iter_0000779`.
+- Final checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
+- Final validation loss at iter 192: `8.960094`; no traceback/OOM/runtime error was found in the observed train log.

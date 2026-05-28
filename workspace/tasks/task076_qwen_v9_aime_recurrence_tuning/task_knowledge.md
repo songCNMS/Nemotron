@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -32,5 +32,9 @@
 20. technical fact: V9 packing completed with `32` shards, `983135` total sequences, `667289202` total tokens, `pack_size=8192`, and tokenizer URI `file:///mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
 21. technical fact: The V9 training manifest uses V8 checkpoint `iter_0000779`, `train_iters=192`, `global_batch_size=8`, `seq_length=8192`, LR `8e-8`, min LR `3e-8`, warmup `20`, and `qwen3_30b_a3b_local_train.py`.
 22. technical fact: The generated `m1_basket` eval dry-run compiled successfully with `adlr_aime25` and `enable_thinking=false`.
+23. technical fact: NemTron did not have `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` mounted, so Session 8 mirrored only Qwen HF metadata/tokenizer files there and excluded the 16 `model-*.safetensors` weight shards.
+24. technical fact: Qwen3 30B-A3B recipe builder preflight passed with the lightweight HF metadata/tokenizer mirror because the HF bridge uses `load_weights=False` and the actual weights load from V8 NeMo checkpoint `iter_0000779`.
+25. technical fact: V9 training completed all `192` iterations on NemTron 8xH200 and saved final checkpoint `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
+26. technical fact: V9 train loss decreased from iter 10 lm loss `12.25112` to iter 190 lm loss `8.950349`; final validation loss at iter 192 was `8.960094`.
 
 ---
