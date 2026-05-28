@@ -261,7 +261,8 @@ policy:
       http_server_serving_chat_kwargs:
         enable_auto_tools: true
         tool_parser: qwen3_coder
-        reasoning_parser: deepseek_r1
+        reasoning_parser: nano_v3
+        reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py
         # Pin Qwen chat-template kwargs explicitly so generic Super3
         # RL launches use the same tokenizer and rollout-serving
         # contract as the stage-specific RL configs.
