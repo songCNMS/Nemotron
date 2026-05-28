@@ -345,7 +345,21 @@ def test_prepare_happy_path_with_synthetic_active_registry(
         for line in (out_dir / "train.jsonl").read_text().splitlines()
         if line
     ]
+    val_rows = [
+        json.loads(line)
+        for line in (out_dir / "val.jsonl").read_text().splitlines()
+        if line
+    ]
+    combined_rows = [
+        json.loads(line)
+        for line in (out_dir / "combined.jsonl").read_text().splitlines()
+        if line
+    ]
     assert len(train_rows) == 2
+    assert len(val_rows) == 1
+    assert manifest["combined_path"] == str(out_dir / "combined.jsonl")
+    assert combined_rows == [*train_rows, *val_rows]
+    assert combined_rows[-len(val_rows) :] == val_rows
     for row in train_rows:
         assert row["nemo_gym_env"] == "genrm_compare"
         assert row["nemo_gym_mix"] == "rlhf"
@@ -358,15 +372,29 @@ def test_prepare_happy_path_with_synthetic_active_registry(
     assert len(manifest_inputs) == 1
     assert Path(manifest_inputs[0].ref).resolve() == (m0_root / "manifest.json").resolve()
     output_kinds = {out.kind for out in lineage.outputs}
-    assert {"m1_rlhf_train_jsonl", "m1_rlhf_val_jsonl"}.issubset(output_kinds)
+    assert {
+        "m1_rlhf_train_jsonl",
+        "m1_rlhf_val_jsonl",
+        "m1_rlhf_combined_jsonl",
+    }.issubset(output_kinds)
+    combined_output = next(
+        out for out in lineage.outputs if out.kind == "m1_rlhf_combined_jsonl"
+    )
+    assert combined_output.rows == len(train_rows) + len(val_rows)
 
     coverage = manifest["coverage"]
     assert coverage["counts"]["active"] == 1
     assert coverage["active"] == ["genrm_compare"]
     assert manifest["data_quality"]["source_metadata"]["train"]["rows"] == 2
     assert manifest["data_quality"]["source_metadata"]["val"]["rows"] == 1
-    assert set(manifest["output_fingerprints"]) == {"train_path", "val_path"}
+    assert set(manifest["output_fingerprints"]) == {
+        "train_path",
+        "val_path",
+        "combined_path",
+    }
     assert len(manifest["output_fingerprints"]["train_path"]) == 64
+    assert len(manifest["output_fingerprints"]["combined_path"]) == 64
     report_md = (out_dir / "report.md").read_text(encoding="utf-8")
     assert "## Data quality audit" in report_md
     assert "## Output fingerprints" in report_md
+    assert "combined_path" in report_md

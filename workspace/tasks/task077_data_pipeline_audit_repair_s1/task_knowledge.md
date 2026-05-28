@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -30,5 +30,11 @@
 18. file change: Task086 changes Super3 SFT data-prep runnable defaults (`runspec` default and direct `DEFAULT_CONFIG_PATH`) to `qwen_agentic_v0`, leaving legacy Super3/Nemotron configs available through explicit selection.
 19. test evidence: Task086 validation passed with the Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
 20. file change: PR #192 opened against `main` for task086 Qwen SFT data-prep default contract.
+21. supervisor request: PM assigned task087 to sync latest main, add SWE1/SWE2/RLHF bridge combined outputs, rewire stage2 RL data-prep defaults to bridge combined JSONL paths, run focused bridge/default checks, open a PR to `main`, and avoid live data/cluster/W&B/deploy/main push/merge.
+22. technical fact: SWE1/SWE2/RLHF data-prep defaults consume one `input_path`; bridge `combined.jsonl` must preserve the RLVR train+val val-last contract so `_data_prep_base` can re-split without dropping the existing val rows.
+23. file change: SWE1/SWE2/RLHF bridge writers now emit `combined.jsonl`, record `combined_path` in manifest/report fingerprints, and add `m1_<mix>_combined_jsonl` lineage outputs.
+24. file change: SWE1/SWE2/RLHF stage2 RL data-prep defaults now point at `${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_<mix>/combined.jsonl` instead of developer-local `/lustre` release JSONL files.
+25. test evidence: Task087 validation passed with the required bridge/RLVR/default pytest shard, py_compile for touched Python files/tests, Ruff on touched Python files/tests, `git diff --check`, and `git diff --cached --check`.
+26. file change: PR #194 opened against `main` for task087 stage2 RL bridge data-prep defaults.
 
 ---
