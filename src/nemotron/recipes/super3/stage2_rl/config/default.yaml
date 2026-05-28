@@ -96,8 +96,9 @@ checkpointing:
 policy:
   model_name: "/path/to/hf_checkpoint"
   tokenizer:
-    # TODO(super3): Replace with actual Super3 HF model/tokenizer name once available on HF
-    name: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-Base-BF16
+    # Follow the selected policy model unless an operator explicitly overrides
+    # tokenizer.name for a separate tokenizer artifact.
+    name: ${policy.model_name}
     # Qwen-chat contract shared with vLLM serving below. Keep this in
     # lockstep with
     # policy.generation.vllm_cfg.http_server_serving_chat_kwargs.chat_template_kwargs.

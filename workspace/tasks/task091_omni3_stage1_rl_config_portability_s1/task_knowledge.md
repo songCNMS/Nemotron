@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -13,3 +13,6 @@
    guard.
 6. session 10 note: PR #204 gate can fail on workspace task docs too; always
    run `git diff --check` after bookkeeping file edits before pushing.
+7. session 11 note: generic Super3 RL defaults should avoid fixed tokenizer
+   artifacts when `policy.model_name` is the selected checkpoint; use
+   `${policy.model_name}` to keep model and tokenizer aligned by default.

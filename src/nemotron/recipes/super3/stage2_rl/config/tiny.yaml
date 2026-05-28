@@ -24,8 +24,7 @@ policy:
   # TODO(super3): Replace with actual Super3 HF model name
   model_name: "/path/to/hf_checkpoint"
   tokenizer:
-    # TODO(super3): Replace with actual Super3 tokenizer once available on HF
-    name: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-Base-BF16
+    name: ${policy.model_name}
 
 cluster:
   gpus_per_node: 8

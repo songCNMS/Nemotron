@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 1 - 2026-05-28
 
@@ -36,3 +36,14 @@
   had a new blank line at EOF.
 - Removed the trailing EOF blank line on the same task096 branch, reran the
   requested diff whitespace checks, and pushed the updated PR head.
+
+## Session 11 - 2026-05-28
+
+- PM assigned `task099_super3_generic_rl_tokenizer_name_contract_s1` while the
+  active intern bookkeeping still requires task091 Session 11 records.
+- Synced local `main` to `origin/main`
+  `9ab5e264b110095c0a1c9ea33c9b49ccd8d44909` and worked on branch
+  `intern_nem_dev_2/task099_super3_generic_rl_tokenizer_name_contract_s1`.
+- Updated generic Super3 stage2 RL default/tiny tokenizer names to follow
+  `${policy.model_name}`, added focused tests, opened PR #207, and recorded
+  this Session 11 bookkeeping entry.
