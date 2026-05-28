@@ -1,6 +1,6 @@
 # task099_super3_generic_rl_tokenizer_name_contract_s1 - Generic Super3 RL tokenizer name contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=11 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2,SESSION=11 -->
 
 ## Background
 
@@ -29,4 +29,8 @@ reasoning parser, but still hard-coded
 - [x] Focused test coverage added to the Super3 RL contract shard.
 - [x] Required pytest, py_compile, ruff, static tokenizer probe, and whitespace
   checks pass locally.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/207

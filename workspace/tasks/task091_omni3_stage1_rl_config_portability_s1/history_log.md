@@ -45,5 +45,5 @@
   `9ab5e264b110095c0a1c9ea33c9b49ccd8d44909` and worked on branch
   `intern_nem_dev_2/task099_super3_generic_rl_tokenizer_name_contract_s1`.
 - Updated generic Super3 stage2 RL default/tiny tokenizer names to follow
-  `${policy.model_name}`, added focused tests, and recorded this Session 11
-  bookkeeping entry.
+  `${policy.model_name}`, added focused tests, opened PR #207, and recorded
+  this Session 11 bookkeeping entry.

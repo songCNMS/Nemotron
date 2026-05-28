@@ -16,3 +16,5 @@
   `test_rl_chat_template_kwargs_consistency.py` for generic default and tiny.
 - Verified locally with the required Super3 RL chat-template/stop-string shard,
   py_compile, ruff, static tokenizer grep/YAML probe, and whitespace checks.
+- Opened PR #207 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/207.
