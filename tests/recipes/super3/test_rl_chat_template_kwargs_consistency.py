@@ -55,6 +55,12 @@ EXPECTED_KWARGS = {
     "truncate_history_thinking": False,
 }
 
+EXPECTED_HTTP_CHAT_SERVING_FIELDS = {
+    "tool_parser": "qwen3_coder",
+    "reasoning_parser": "nano_v3",
+    "reasoning_parser_plugin": "nemo_rl/utils/nano_v3_reasoning_parser.py",
+}
+
 
 def _policy_block(config_path: Path) -> dict:
     data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
@@ -78,13 +84,8 @@ def _vllm_cfg(config_path: Path) -> dict:
 
 
 def _http_chat_template_kwargs(config_path: Path) -> dict:
-    """Return vLLM serving chat_template_kwargs from a stage RL config."""
-    vllm_cfg = _vllm_cfg(config_path)
-    http_chat = vllm_cfg.get("http_server_serving_chat_kwargs")
-    assert isinstance(http_chat, dict), (
-        f"{config_path}: missing policy.generation.vllm_cfg."
-        "http_server_serving_chat_kwargs block"
-    )
+    """Return vLLM serving chat_template_kwargs from an RL config."""
+    http_chat = _http_chat_serving_kwargs(config_path)
     kwargs = http_chat.get("chat_template_kwargs")
     assert isinstance(kwargs, dict), (
         f"{config_path}: chat_template_kwargs must be a mapping inside "
@@ -92,6 +93,17 @@ def _http_chat_template_kwargs(config_path: Path) -> dict:
         "inherit Qwen-chat defaults)"
     )
     return kwargs
+
+
+def _http_chat_serving_kwargs(config_path: Path) -> dict:
+    """Return vLLM HTTP chat serving kwargs from an RL config."""
+    vllm_cfg = _vllm_cfg(config_path)
+    http_chat = vllm_cfg.get("http_server_serving_chat_kwargs")
+    assert isinstance(http_chat, dict), (
+        f"{config_path}: missing policy.generation.vllm_cfg."
+        "http_server_serving_chat_kwargs block"
+    )
+    return http_chat
 
 
 def _tokenizer_chat_template_kwargs(config_path: Path) -> dict:
@@ -149,6 +161,19 @@ def test_vllm_cfg_has_no_conflicting_enable_thinking_sibling(config_path: Path) 
         )
 
 
+@pytest.mark.parametrize(
+    "config_path", RL_CONFIGS, ids=lambda p: p.parent.parent.name
+)
+def test_http_serving_uses_unified_qwen_parser_contract(config_path: Path) -> None:
+    http_chat = _http_chat_serving_kwargs(config_path)
+    for key, expected in EXPECTED_HTTP_CHAT_SERVING_FIELDS.items():
+        assert http_chat.get(key) == expected, (
+            f"{config_path}: http_server_serving_chat_kwargs.{key}="
+            f"{http_chat.get(key)!r} diverges from the unified Qwen RL "
+            f"serving contract ({key}={expected!r})"
+        )
+
+
 def test_all_rl_configs_agree_on_chat_template_kwargs() -> None:
     """Cross-config consistency: every runnable RL config uses the same kwargs.
     Drift here is the bug, not the values."""
@@ -163,5 +188,24 @@ def test_all_rl_configs_agree_on_chat_template_kwargs() -> None:
         "RL stages disagree on chat_template_kwargs: "
         + "; ".join(
             f"{name}={dict(items)}" for name, items in per_stage_kwargs.items()
+        )
+    )
+
+
+def test_all_rl_configs_agree_on_http_serving_parser_contract() -> None:
+    """Cross-config consistency: generic and stage-specific RL serving
+    must use the same tool parser and Qwen reasoning parser plugin."""
+    per_config_contract = {
+        config_path.parent.parent.name: {
+            key: _http_chat_serving_kwargs(config_path).get(key)
+            for key in EXPECTED_HTTP_CHAT_SERVING_FIELDS
+        }
+        for config_path in RL_CONFIGS
+    }
+    distinct = {tuple(sorted(contract.items())) for contract in per_config_contract.values()}
+    assert len(distinct) == 1, (
+        "RL configs disagree on HTTP serving parser contract: "
+        + "; ".join(
+            f"{name}={contract}" for name, contract in per_config_contract.items()
         )
     )
