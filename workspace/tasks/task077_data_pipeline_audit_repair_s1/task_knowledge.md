@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -21,5 +21,7 @@
 9. file change: M1 RLVR, SWE1, SWE2, and RLHF bridge manifests/reports now include `data_quality` and `output_fingerprints`; RLVR fingerprints include `combined_path` in addition to train/val.
 10. test evidence: Task080 focused bridge shard passed with 65 tests via `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_rlvr_data_bridge.py tests/recipes/super3/test_m1_swe1_data_bridge.py tests/recipes/super3/test_m1_swe2_data_bridge.py tests/recipes/super3/test_m1_rlhf_data_bridge.py`; `git diff --check` passed; Ruff was unavailable.
 11. file change: PR #189 opened against `main` for task080 bridge data-quality fingerprints.
+12. supervisor request: PM follow-up for PR #189 required docs/lineage-only task080 records, with scope, PR URL, base/head, changed files, validation, residual risk, and no main/master push or merge.
+13. file change: Added `workspace/tasks/task080_m1_bridge_data_quality_s1/README.md`, `history_log.md`, and `task_knowledge.md`; product code unchanged in Session 10.
 
 ---

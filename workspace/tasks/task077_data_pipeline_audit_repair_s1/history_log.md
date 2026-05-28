@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ---
 
@@ -40,5 +40,16 @@
 - Wired `data_quality` and `output_fingerprints` manifest/report blocks into RLVR, SWE1, SWE2, and RLHF bridge writers.
 - Added focused bridge assertions for all four bridge families and opened PR #189: https://github.com/songCNMS/Nemotron/pull/189
 - Validation: `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_rlvr_data_bridge.py tests/recipes/super3/test_m1_swe1_data_bridge.py tests/recipes/super3/test_m1_swe2_data_bridge.py tests/recipes/super3/test_m1_rlhf_data_bridge.py` passed with 65 tests; `git diff --check` passed. `python -m ruff check ...` was attempted but Ruff is not installed.
+
+---
+
+## Session 10 - 2026-05-28 - Task080 lineage docs follow-up
+
+**Executor**: intern_nem_dev_1
+
+- Read `/work-agents/intern_nem_dev_1/instruction.md` section `2026-05-28 16:26 UTC - PM follow-up for PR #189 task080 lineage docs`.
+- Added docs/lineage-only task080 files: `README.md`, `history_log.md`, and `task_knowledge.md`.
+- Recorded PR #189 scope, URL, base/head, changed files, validation evidence, residual risk, and no main/master push or merge.
+- Product code unchanged in this follow-up.
 
 ---
