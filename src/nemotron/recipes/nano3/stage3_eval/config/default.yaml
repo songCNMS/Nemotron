@@ -163,6 +163,9 @@ evaluation:
         extra:
           tokenizer: ${deployment.checkpoint_path}/tokenizer
           tokenizer_backend: huggingface
+          chat_template_kwargs:
+            enable_thinking: false
+            truncate_history_thinking: false
     target:
       api_endpoint:
         adapter_config:
