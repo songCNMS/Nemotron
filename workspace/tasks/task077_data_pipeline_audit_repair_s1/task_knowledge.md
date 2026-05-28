@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=9 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -16,5 +16,6 @@
 4. file change: `prepare_m1_agentic_sft.py` records `data_quality` and `output_fingerprints` in the M1 manifest/report for source metadata, split overlap, normalized prompt duplicates, and deterministic output hashes.
 5. test evidence: Focused Qwen planner/contract, M1 prepare, math decontamination, contamination audit/pipeline, registry contamination validation, py_compile, and `git diff --check` passed locally during Session 1.
 6. file change: PR #186 opened against `main` for task077.
+7. technical fact: PR #186 merged before Session 9; local `main` fast-forwarded cleanly to `95ddee2f55df4c6d76134f7ea22d5ed5092b6732` after fetching origin, with no blocker and no push to `main`.
 
 ---

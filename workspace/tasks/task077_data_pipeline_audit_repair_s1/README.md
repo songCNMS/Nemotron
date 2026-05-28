@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Data pipeline audit repair
 
-<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Done,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Background
 
