@@ -16,6 +16,7 @@ from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
     NEMOTRON_SUPER_TOKENIZER_DEFAULT,
     QWEN_TRAINING_PROFILE,
 )
+from nemotron.recipes.super3.stage1_sft.qwen_local_train import resolve_qwen_packed_sft_dir
 
 if TYPE_CHECKING:
     from megatron.bridge.training.config import ConfigContainer
@@ -56,7 +57,7 @@ def _qwen30b_a3b_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     OmegaConf.update(config, "training_contract.model_profile", QWEN_TRAINING_PROFILE, merge=True)
     OmegaConf.update(config, "training_contract.model_ref", hf_model, merge=True)
     OmegaConf.update(config, "training_contract.train_entrypoint", __file__, merge=True)
-    packed_sft_dir = OmegaConf.select(config, "dataset.super3_packed_sft_dir", default=None)
+    packed_sft_dir = resolve_qwen_packed_sft_dir(config)
     if packed_sft_dir:
         metadata_path = validate_qwen_packed_sft_chat_contract(
             str(packed_sft_dir),

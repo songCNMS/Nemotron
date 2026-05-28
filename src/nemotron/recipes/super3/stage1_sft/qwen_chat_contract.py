@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 NEMOTRON_SUPER_TOKENIZER_DEFAULT = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"
+LEGACY_AGENTIC_PACKED_SFT_DIR = "../output/super3/stage1_sft_agentic_v0/splits"
+QWEN_AGENTIC_PACKED_SFT_DIR = "../output/super3/stage1_sft_agentic_v0_qwen/splits"
 QWEN_DATA_PREP_TARGET_FAMILY = "qwen"
 QWEN_DATA_PREP_CONFIG_NAME = "qwen_agentic_v0"
 QWEN_SFT_CHAT_TEMPLATE = "tokenizer"
@@ -23,6 +25,31 @@ QWEN_SFT_CHAT_TEMPLATE_KWARGS: dict[str, bool] = {
     "truncate_history_thinking": False,
 }
 QWEN_TRAINING_PROFILE = "qwen"
+SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR = "SUPER3_M1_AGENTIC_PACKED_DIR"
+
+
+def qwen_local_packed_sft_dir_default(
+    packed_sft_dir: object,
+    *,
+    packed_dir_env_is_set: bool,
+) -> str | None:
+    """Return the Qwen local-train packed-data default for inherited config.
+
+    The Qwen local train entrypoints intentionally reuse ``m1_agentic_train`` for
+    most training knobs, but that YAML's fallback packed dir is the Super3
+    ``agentic_v0`` output. Rewrite only that inherited fallback; explicit env or
+    CLI/config overrides remain operator-owned.
+    """
+
+    if packed_sft_dir is None:
+        return None
+
+    resolved = str(packed_sft_dir)
+    if packed_dir_env_is_set:
+        return resolved
+    if resolved == LEGACY_AGENTIC_PACKED_SFT_DIR:
+        return QWEN_AGENTIC_PACKED_SFT_DIR
+    return resolved
 
 
 def _metadata_candidates(packed_sft_dir: str | Path) -> list[Path]:
@@ -347,14 +374,18 @@ def validate_qwen_training_pipeline_contract(
 
 
 __all__ = [
+    "LEGACY_AGENTIC_PACKED_SFT_DIR",
     "NEMOTRON_SUPER_TOKENIZER_DEFAULT",
+    "QWEN_AGENTIC_PACKED_SFT_DIR",
     "QWEN_DATA_PREP_CONFIG_NAME",
     "QWEN_DATA_PREP_TARGET_FAMILY",
     "QWEN_SFT_CHAT_TEMPLATE",
     "QWEN_SFT_CHAT_TEMPLATE_KWARGS",
     "QWEN_TRAINING_PROFILE",
+    "SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR",
     "find_packed_sft_metadata_path",
     "load_packed_sft_metadata",
+    "qwen_local_packed_sft_dir_default",
     "validate_qwen_data_prep_config",
     "validate_qwen_packed_sft_chat_contract",
     "validate_qwen_training_pipeline_contract",
