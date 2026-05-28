@@ -11,3 +11,4 @@
 - Aligned `CONTAINER` fallback with the existing `/home/${oc.env:USER}/.cache/nemotron/containers/omni3-rl.sqsh` convention.
 - Added `test_stage1_rl_config_portability.py` covering named-user removal, required env keys, env override names, resolved portable defaults, override precedence, and MPO tiny job/node defaults.
 - Verified locally: focused Omni3 portability tests passed under system Python, full Omni3 CLI plus portability shard passed under the project venv, py_compile passed, ruff passed, static grep/probe passed, and whitespace checks passed.
+- Opened PR #198 to `main`: https://github.com/songCNMS/Nemotron/pull/198.

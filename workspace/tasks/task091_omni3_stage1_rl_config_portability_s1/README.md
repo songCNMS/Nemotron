@@ -28,4 +28,8 @@ container image roots.
 - [x] Required env var keys and env override names are preserved.
 - [x] No-env defaults resolve to run-dir-relative or home-cache paths.
 - [x] MPO tiny keeps one-node and tiny job-name defaults.
-- [ ] PR opened to `main`; no direct push to `main` or `master`.
+- [x] PR opened to `main`; no direct push to `main` or `master`.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/198
