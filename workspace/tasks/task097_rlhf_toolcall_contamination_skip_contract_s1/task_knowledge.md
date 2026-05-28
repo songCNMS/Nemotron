@@ -1,6 +1,6 @@
 # task097_rlhf_toolcall_contamination_skip_contract_s1 knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Working Notes
 
@@ -11,3 +11,5 @@
   `contamination_check_skipped` and `contamination_check_skip_warning`.
 - A skipped contamination check is for sandbox/smoke use only and must not be
   interpreted by lineage consumers as clean decontaminated output.
+- Session 11 only records the handoff to task100; no new task097 technical
+  findings were added.
