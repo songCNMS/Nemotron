@@ -15,8 +15,9 @@ run:
 blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw.json
 
 # Output directory for tokenized data
-# Using fixed path to enable caching across job submissions
-output_dir: /lustre/fsw/portfolios/coreai/users/mromeijn/output/nano3/stage0_pretrain
+# Uses the same NEMO_RUN_DIR-relative default as data_prep.py, with a local
+# fallback for dry-run/static flows.
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain
 
 # Number of output shards for parallel loading
 num_shards: 128

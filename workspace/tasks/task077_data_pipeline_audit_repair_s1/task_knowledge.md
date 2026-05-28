@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -36,5 +36,10 @@
 24. file change: SWE1/SWE2/RLHF stage2 RL data-prep defaults now point at `${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_<mix>/combined.jsonl` instead of developer-local `/lustre` release JSONL files.
 25. test evidence: Task087 validation passed with the required bridge/RLVR/default pytest shard, py_compile for touched Python files/tests, Ruff on touched Python files/tests, `git diff --check`, and `git diff --cached --check`.
 26. file change: PR #194 opened against `main` for task087 stage2 RL bridge data-prep defaults.
+27. supervisor request: PM assigned task090 to sync latest main, move Nano3 stage0 pretrain data-prep default output_dir off named-user `/lustre`, add focused static tests, open a PR to `main`, and avoid live data/training/endpoint/W&B/cluster/deploy/main push.
+28. technical fact: `PreTrainDataPrepConfig.output_dir` already defaults to `Path(os.environ.get("NEMO_RUN_DIR", ".")) / "output/nano3/stage0_pretrain"`; YAML default should follow that portable contract.
+29. file change: Nano3 stage0 pretrain `default.yaml` now uses `${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain` for `output_dir`; `tiny.yaml` remains unchanged.
+30. test evidence: Task090 focused Nano3 config pytest shard passed, py_compile passed for the touched test, Ruff passed for the touched test, static output_dir scan found no `/lustre` or `users/mromeijn` output_dir defaults, and diff checks passed.
+31. file change: PR #197 opened against `main` for task090 Nano3 stage0 pretrain output portability.
 
 ---
