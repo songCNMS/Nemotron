@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -54,5 +54,8 @@
 42. technical fact: The correct `aime_06` run enumeration is `sum_{b=0..4} C(8-b,b) C(9,8-b) = 2907`, so the answer remains `907`.
 43. technical fact: Real V9 recurrence sidecar coverage is too sparse for the target: among `221` rows, exact signal counts were `chairs=1`, `binary string=1`, `consecutive ones=1`, explicit DP/dynamic-programming `4`, and no rows combining a no-111-like binary/chair constraint with DP/recurrence signals.
 44. research conclusion: Skip the full corrected V9 gate and move to a focused V10-style run-length DP sidecar or weighting patch using the cephfs Qwen HF path.
+45. supervisor request: Rebase/update PR #183 after task077/task078/task079 merges, rerun task076 checks, push the updated PR branch, report the head SHA, and do not push main.
+46. technical fact: Session 13 rebased PR #183 onto `origin/main` `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`; conflicts were in intern status history plus Qwen planner/test integration between task076 V9 support and newer Qwen contract/data-prep guards.
+47. technical fact: Session 13 task076 verification passed with `python -m py_compile` on touched planner/prep modules, focused pytest `116 passed, 1 skipped`, and `/work-agents/.venv/bin/ruff check` on touched task076 files.
 
 ---

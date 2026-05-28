@@ -19,7 +19,6 @@ from pathlib import Path
 
 import pytest
 
-
 from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft import (  # noqa: E402
     MATH_SUPERVISION_STRATEGY_V3,
     MATH_SUPERVISION_STRATEGY_V7,

@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ---
 
@@ -144,5 +144,18 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Audited the V9 recurrence sidecar and found it too sparse for the target structure: out of `221` rows, exact signal counts were `chairs=1`, `binary string=1`, `consecutive ones=1`, explicit DP/dynamic-programming rows `4`, and no rows combining a no-111-like binary/chair constraint with DP/recurrence signals.
 - Decision: skip the full corrected MMLU-Pro/AIME25/HMMT gate for V9 and prepare a focused V10-style run-length DP sidecar or weighting patch.
 - Wrote `v9_aime06_trace_audit_session12.md`.
+
+---
+
+## Session 13 - 2026-05-28 - PR rebase on latest main
+
+**Executor**: intern_nemontron_code_reading
+
+- Fetched `origin/main` at `95ddee2f55df4c6d76134f7ea22d5ed5092b6732` after task077/task078/task079 merged.
+- Rebasing PR #183 required resolving status-file history and Qwen planner/test conflicts between task076 V9 support and the newer Qwen data/training contract guards from main.
+- Preserved both sides of the integration: task076 `hard_math_recurrence_v9` support and checkpoint-root normalization remain, while the task077/task078/task079 Qwen contract/data-prep assertions remain active.
+- Fixed two post-rebase ruff findings in `prepare_m1_agentic_sft.py` and `test_m1_agentic_sft_math_decontamination.py`.
+- Verification passed: `python -m py_compile` on the touched task076 planner/prep modules, `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_sft_math_decontamination.py` with `116 passed, 1 skipped`, and `/work-agents/.venv/bin/ruff check` on the touched task076 files.
+- A pre-existing local V10 work-in-progress diff was preserved in `stash@{0}` and not included in this PR update because this session scope was the PR #183 rebase/check/push.
 
 ---

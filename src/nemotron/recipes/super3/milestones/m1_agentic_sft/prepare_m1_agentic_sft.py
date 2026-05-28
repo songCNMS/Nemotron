@@ -2256,7 +2256,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                 [
                     "",
                     f"- Train/val source-key overlaps: `{split_routing.get('train_val_source_key_overlap_count', 0)}`",
-                    f"- Train/val normalized-prompt overlaps: `{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
+                    "- Train/val normalized-prompt overlaps: "
+                    f"`{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
                 ]
             )
     output_fingerprints = manifest.get("output_fingerprints") or {}

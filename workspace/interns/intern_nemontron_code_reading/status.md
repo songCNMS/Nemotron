@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task076_qwen_v9_aime_recurrence_tuning |
 | PR | https://github.com/songCNMS/Nemotron/pull/183 |
-| Session | 12 |
+| Session | 13 |
 | Branch | intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning |
-| Latest | Confirmed active Qwen HF checkpoint/tokenizer path is under `/mnt/cephfs/data/stable/models/Qwen`; audited corrected V9 `aime_06` traces and sidecar coverage, finding V9 now parses/stops but still misses `907` because the mined sidecar lacks no-111 binary/run-length DP examples. |
+| Latest | Rebased PR #183 onto `origin/main` `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`, resolved task077/task078/task079 integration conflicts, and reran task076 compile/pytest/ruff checks successfully. |
