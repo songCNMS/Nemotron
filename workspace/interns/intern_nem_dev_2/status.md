@@ -10,4 +10,4 @@
 | PR | https://github.com/songCNMS/Nemotron/pull/185 |
 | Session | 1 |
 
-最近进展：PM assigned `task078_qwen_training_pipeline_contract_s1`; synced local `main` and branch base to `ffcf0ae247400f1da8f4b0a20e32e4d2c6393795`, created `intern_nem_dev_2/task078_qwen_training_pipeline_contract_s1`, implemented offline Qwen SFT training profile/tokenizer/entrypoint contract validation plus planner/run-manifest plumbing, and opened PR #185. Focused Qwen contract, scale-up planner, RL chat kwargs, RL stop strings, py_compile, and `git diff --check` pass; `test_stage1_sft_train_bridge.py` is skipped in this sandbox because `megatron` is not installed.
+最近进展：PM requested PR #185 rebase after PR #186; fetched `origin/main` at `2489a87d07137fb743d70547e19ca0cf4e309645`, rebased `intern_nem_dev_2/task078_qwen_training_pipeline_contract_s1`, and resolved conflicts by composing PR #186 Qwen data-prep/profile guards with PR #185 training-contract/profile plumbing. Required Qwen/RL/M1 checks, py_compile, and `git diff --check` passed; `test_stage1_sft_train_bridge.py` is skipped because `megatron` is not installed.
