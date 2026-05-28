@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task090_nano3_stage0_pretrain_data_prep_output_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/197 |
-| Session | 14 |
-| Recent Progress | Opened PR #197 for task090 after moving Nano3 stage0 pretrain data-prep default output_dir off named-user /lustre and adding static config portability tests; required checks passed |
+| Current Task | task092_nano3_stage2_rl_qwen_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/199 |
+| Session | 15 |
+| Recent Progress | Opened PR #199 for task092 after pinning Nano3 stage2 RL Qwen chat kwargs, stop string, and nano_v3 parser/plugin contract; focused checks passed |
