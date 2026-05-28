@@ -179,6 +179,10 @@ def normalize_evaluator_launcher_config(config: DictConfig) -> None:
         with open_dict(config):
             del config["qwen_chat_contract"]
 
+    if "defaults" in config:
+        with open_dict(config):
+            del config["defaults"]
+
 
 def _execute_eval(cfg: RecipeConfig):
     """Execute evaluation with nemo-evaluator-launcher.
