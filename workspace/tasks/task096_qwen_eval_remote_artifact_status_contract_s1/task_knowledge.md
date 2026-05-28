@@ -15,4 +15,3 @@
    are remote.
 4. test contract: focused tests must reject `local_workspace_verified` for both
    remote prefixes while accepting it for a real existing local artifact path.
-

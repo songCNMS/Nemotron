@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,5 @@
 5. session 9 note: task096 work reused the same intern session bookkeeping path
    while implementing a Qwen eval repro gate remote-artifact PM verification
    guard.
+6. session 10 note: PR #204 gate can fail on workspace task docs too; always
+   run `git diff --check` after bookkeeping file edits before pushing.

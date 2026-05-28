@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 1 - 2026-05-28
 
@@ -28,3 +28,11 @@
   `intern_nem_dev_2/task096_qwen_eval_remote_artifact_status_contract_s1`.
 - Implemented the Qwen eval remote raw artifact status guard, added focused
   tests, opened PR #204, and recorded this Session 9 bookkeeping entry.
+
+## Session 10 - 2026-05-28
+
+- PM reported PR #204 was blocked only by `git diff --check` whitespace:
+  `workspace/tasks/task096_qwen_eval_remote_artifact_status_contract_s1/task_knowledge.md`
+  had a new blank line at EOF.
+- Removed the trailing EOF blank line on the same task096 branch, reran the
+  requested diff whitespace checks, and pushed the updated PR head.
