@@ -5,12 +5,19 @@ import pytest
 from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run import (
     AGENTIC_M0_DATASET_IDS,
     QWEN30B_A3B_TRAIN_ENTRYPOINT,
+    QWEN_DATA_PREP_CONFIG,
     build_manifest,
     build_parser,
+    qwen_data_prep_config_contract,
     render_eval_script,
     render_local_data_prep_script,
     render_remote_train_script,
     write_plan,
+)
+from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+    QWEN_DATA_PREP_CONFIG_NAME,
+    QWEN_DATA_PREP_TARGET_FAMILY,
+    validate_qwen_data_prep_config,
 )
 
 
@@ -69,11 +76,15 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert 'if [[ "$m0_status" -ne 0 && "$m0_status" -ne 2 ]]' in local_script
     assert "prepare_m1_agentic_sft.py" in local_script
     assert "stage1_sft/data_prep.py" in local_script
+    assert f"--config {QWEN_DATA_PREP_CONFIG}" in local_script
+    assert "config/data_prep/agentic_v0.yaml" not in local_script
     assert "plan_m1_agentic_sft_training.py" in local_script
     assert "--dataset-id m0_search_hotpotqa" in local_script
     assert "--dataset-id m0_math_numinamath" in local_script
     assert "tokenizer.model=/models/qwen3-4b" in local_script
     assert "chat_template=tokenizer" in local_script
+    assert "target_model_family=qwen" in local_script
+    assert "config_name=qwen_agentic_v0" in local_script
     assert "chat_template_kwargs.enable_thinking=false" in local_script
     assert "chat_template_kwargs.truncate_history_thinking=false" in local_script
     assert "validate_qwen_packed_sft_chat_contract" in local_script
@@ -84,7 +95,11 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
         "enable_thinking": False,
         "truncate_history_thinking": False,
     }
+    assert manifest["packing"]["target_model_family"] == QWEN_DATA_PREP_TARGET_FAMILY
+    assert manifest["packing"]["data_prep_config"] == QWEN_DATA_PREP_CONFIG
+    assert manifest["packing"]["data_prep_config_name"] == QWEN_DATA_PREP_CONFIG_NAME
     assert manifest["qwen_chat_contract"]["sft_chat_template"] == "tokenizer"
+    validate_qwen_data_prep_config(manifest["qwen_chat_contract"]["data_prep"])
     assert (
         manifest["qwen_chat_contract"]["eval_chat_template_kwargs"]
         == manifest["packing"]["chat_template_kwargs"]
@@ -166,6 +181,14 @@ def test_scaleup_planner_auto_selects_30b_a3b_entrypoint(tmp_path) -> None:
     assert manifest["training"]["train_entrypoint"] == QWEN30B_A3B_TRAIN_ENTRYPOINT
     assert "qwen3_30b_a3b_local_train.py" in remote_script
     assert "qwen_local_train.py" not in remote_script
+
+
+def test_scaleup_planner_qwen_data_prep_contract_rejects_super3_drift() -> None:
+    contract = qwen_data_prep_config_contract("/models/qwen3-4b")
+    contract["chat_template"] = "super3"
+
+    with pytest.raises(ValueError, match="chat_template='tokenizer'"):
+        validate_qwen_data_prep_config(contract)
 
 
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:

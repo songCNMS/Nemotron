@@ -1,0 +1,68 @@
+run:
+  env:
+    container: anyscale/ray:2.49.2-py312
+
+# Qwen-safe M1 Agentic SFT v0 data-prep config.
+#
+# This profile is intentionally separate from agentic_v0.yaml. The Super3
+# profile defaults to the Nemotron tokenizer and the repo-pinned super3.jinja
+# template; Qwen target runs must pack with the Qwen tokenizer chat template.
+#
+# The scale-up planner still passes explicit CLI overrides for the concrete
+# model path and output directories, but target_model_family/config_name make
+# data_prep.py fail fast if this profile drifts back to Super3 defaults.
+
+blend_path: ${oc.env:PWD}/../output/super3/m1_agentic_sft_v0/data_blend_agentic_sft_v0.json
+output_dir: ${oc.env:PWD}/../output/super3/stage1_sft_agentic_v0_qwen
+
+num_shards: 16
+
+tokenizer:
+  model: ${oc.env:SUPER3_M1_QWEN_HF_MODEL}
+  add_bos: false
+  add_eos: true
+
+pack_size: 4096
+algorithm: first_fit_shuffle
+seed: null
+parquet_row_group_size: 1000
+parquet_compression: zstd
+
+train_ratio: 0.98
+valid_ratio: 0.01
+test_ratio: 0.01
+
+chat_template: tokenizer
+chat_template_kwargs:
+  enable_thinking: false
+  truncate_history_thinking: false
+messages_field: messages
+tools_field: tools
+used_in_filter: super3_agentic_sft_v0
+used_in_field: used_in
+max_doc_tokens: null
+
+sample: null
+sample_seed: 42
+force: false
+execution_mode: auto
+config_name: qwen_agentic_v0
+target_model_family: qwen
+
+plan:
+  planner_cpus: 0.5
+
+download:
+  batch_size: 1
+  stage_cpus: 0.5
+  hf_xet_high_performance: true
+  hf_xet_concurrent_range_gets: 32
+  max_retries: 3
+  timeout_sec: 300
+
+tokenization:
+  cpus_per_worker: 1
+
+observability:
+  pipeline_logging_interval_s: 30
+  wandb_log_pipeline_stats: true
