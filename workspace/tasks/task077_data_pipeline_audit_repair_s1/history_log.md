@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ---
 
@@ -51,5 +51,17 @@
 - Added docs/lineage-only task080 files: `README.md`, `history_log.md`, and `task_knowledge.md`.
 - Recorded PR #189 scope, URL, base/head, changed files, validation evidence, residual risk, and no main/master push or merge.
 - Product code unchanged in this follow-up.
+
+---
+
+## Session 11 - 2026-05-28 - Task080 ruff gate fix
+
+**Executor**: intern_nem_dev_1
+
+- Read `/work-agents/intern_nem_dev_1/instruction.md` section `2026-05-28 16:25 UTC - PM follow-up for PR #189 task080 ruff gate`.
+- Applied a narrow import/lint-only fix for PR #189 after PM reported Ruff `I001` and `F401`.
+- Ran `/work-agents/.venv/bin/ruff check --fix ...`, inspected the diff, and preserved `KNOWN_STATUSES` as an explicit re-export while removing unused `read_jsonl` imports.
+- Validation passed: exact PM Ruff command, `PYTHONPATH=src python -m pytest -q` focused bridge shard with 65 tests, `python -m py_compile` for touched bridge modules/tests, and `git diff --check`.
+- No direct push to `main` or `master`; no self-merge.
 
 ---

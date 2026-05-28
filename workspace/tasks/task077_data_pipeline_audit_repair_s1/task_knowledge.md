@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -23,5 +23,8 @@
 11. file change: PR #189 opened against `main` for task080 bridge data-quality fingerprints.
 12. supervisor request: PM follow-up for PR #189 required docs/lineage-only task080 records, with scope, PR URL, base/head, changed files, validation, residual risk, and no main/master push or merge.
 13. file change: Added `workspace/tasks/task080_m1_bridge_data_quality_s1/README.md`, `history_log.md`, and `task_knowledge.md`; product code unchanged in Session 10.
+14. supervisor request: PM ruff gate for PR #189 failed on import sorting and unused imports; required a narrow fix on `intern_nem_dev_1/task080_m1_bridge_data_quality_s1` with no main/master push or merge.
+15. file change: Session 11 ruff fix is import/lint-only: Ruff-sorted bridge/test imports, removed unused `read_jsonl` bridge imports, and kept `KNOWN_STATUSES` as an explicit bridge-module re-export.
+16. test evidence: Exact PM Ruff command passed, focused bridge pytest shard passed with 65 tests, `python -m py_compile` for touched bridge modules/tests passed, and `git diff --check` passed.
 
 ---

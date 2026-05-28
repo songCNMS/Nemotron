@@ -25,8 +25,8 @@ from typing import Any
 import pytest
 
 from nemotron.recipes.super3.milestones.lineage import (
-    LineageRecord,
     SWE1_ARTIFACT,
+    LineageRecord,
 )
 from nemotron.recipes.super3.milestones.m1_swe1.prepare_m1_swe1_jsonl import (
     KNOWN_STATUSES,

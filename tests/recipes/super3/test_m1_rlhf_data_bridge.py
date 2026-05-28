@@ -20,8 +20,8 @@ from typing import Any
 import pytest
 
 from nemotron.recipes.super3.milestones.lineage import (
-    LineageRecord,
     RLHF_ARTIFACT,
+    LineageRecord,
 )
 from nemotron.recipes.super3.milestones.m1_rlhf.prepare_m1_rlhf_jsonl import (
     ENV_REGISTRY_PATH,

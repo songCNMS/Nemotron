@@ -41,7 +41,9 @@ from typing import Any
 
 try:
     from nemotron.recipes.super3.milestones._bridge_base import (
-        KNOWN_STATUSES,
+        KNOWN_STATUSES as KNOWN_STATUSES,
+    )
+    from nemotron.recipes.super3.milestones._bridge_base import (
         audit_bridge_data_quality,
         base_coverage_report,
         base_tag_record,
@@ -50,7 +52,6 @@ try:
         discover_m0_split_files,
         load_env_registry,
         output_fingerprints_for_paths,
-        read_jsonl,
         render_bridge_quality_report_sections,
         write_json,
         write_jsonl,
@@ -59,12 +60,16 @@ try:
         SWE2_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from nemotron.recipes.super3.milestones.lineage import (
         make_record as make_lineage_record,
     )
 except ModuleNotFoundError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from _bridge_base import (  # type: ignore[no-redef]
-        KNOWN_STATUSES,
+        KNOWN_STATUSES as KNOWN_STATUSES,
+    )
+    from _bridge_base import (
         audit_bridge_data_quality,
         base_coverage_report,
         base_tag_record,
@@ -73,7 +78,6 @@ except ModuleNotFoundError:
         discover_m0_split_files,
         load_env_registry,
         output_fingerprints_for_paths,
-        read_jsonl,
         render_bridge_quality_report_sections,
         write_json,
         write_jsonl,
@@ -82,6 +86,8 @@ except ModuleNotFoundError:
         SWE2_ARTIFACT,
         LineageInput,
         LineageOutput,
+    )
+    from lineage import (
         make_record as make_lineage_record,
     )
 
