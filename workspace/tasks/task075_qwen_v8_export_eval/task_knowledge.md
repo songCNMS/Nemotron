@@ -1,6 +1,6 @@
 # task075_qwen_v8_export_eval - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -10,3 +10,4 @@
 - V8 `iter_0000779` corrected full eval: MMLU-Pro `0.5606715425531915` pass, AIME25 `0.19666666666666666` fail, HMMT exact percent `13.333333333333334` pass; overall V7 gate set fails only on AIME25 by one correct repeat (`59/300`, threshold requires `60/300`).
 - V8 HF export artifact path: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/hf_export_iter_0000779`; corrected eval artifact root: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/session75_v8_corrected_eval`.
 - Session 4 AIME25 audit: V8 has fewer length-capped AIME rows than V7 (`14` vs `27`) but loses exact correctness due a concentrated real regression on `aime_06` (`10/10` V7 correct to `0/10` V8 correct); treat V8 AIME25 gate failure as real, not scorer/truncation noise.
+- Follow-up task created: `task076_qwen_v9_aime_recurrence_tuning` owns V9 tuning focused on recovering `aime_06`-style counting/recurrence behavior; shared-repo creation commit `969d902`.

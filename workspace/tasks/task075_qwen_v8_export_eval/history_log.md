@@ -1,6 +1,6 @@
 # task075_qwen_v8_export_eval - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1
 
@@ -34,3 +34,10 @@
 - Found exact-correct overlap: `51` both correct, `229` both wrong, `12` V7-only correct, `8` V8-only correct, net `-4` for V8.
 - Identified the main real regression: `aime_06` dropped from V7 `10/10` correct to V8 `0/10` correct, with wrong final boxed predictions and no expected answer contained.
 - Conclusion: keep V8 marked as a real AIME25 gate failure; do not treat the `59/300` result as scorer noise.
+
+## Session 5
+
+- Created follow-up task `task076_qwen_v9_aime_recurrence_tuning` in shared repo `/work-agents/Nemotron`.
+- Pushed shared-repo commit `969d902` on `main` with the V9 task scaffold.
+- Scoped task076 to recover `aime_06`-style recurrence/counting behavior, produce a V9 data/training plan, run targeted recurrence smoke, then run corrected full gates if a V9 checkpoint is produced.
+- Task075 remains the completed V8 export/eval/audit record; the next implementation work should happen under task076.
