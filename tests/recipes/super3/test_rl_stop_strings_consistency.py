@@ -1,4 +1,4 @@
-"""Regression: all 4 super3 RL stage configs must terminate Qwen chat
+"""Regression: Super3 RL configs must terminate Qwen chat
 generation at the assistant-turn delimiter.
 
 Before PR A (chat-template consistency review follow-up), each of
@@ -25,7 +25,12 @@ yaml = pytest.importorskip("yaml")
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
-RL_STAGE_CONFIGS = (
+GENERIC_RL_CONFIG = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/default.yaml"
+)
+
+RL_CONFIGS = (
+    GENERIC_RL_CONFIG,
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/config/default.yaml",
     REPO_ROOT
@@ -52,7 +57,7 @@ def _generation_block(config_path: Path) -> dict:
     return generation
 
 
-@pytest.mark.parametrize("config_path", RL_STAGE_CONFIGS, ids=lambda p: p.parent.parent.name)
+@pytest.mark.parametrize("config_path", RL_CONFIGS, ids=lambda p: p.parent.parent.name)
 def test_rl_stage_config_terminates_at_chat_template_assistant_end(
     config_path: Path,
 ) -> None:
@@ -69,15 +74,16 @@ def test_rl_stage_config_terminates_at_chat_template_assistant_end(
     )
 
 
-def test_all_four_rl_stage_configs_agree_on_assistant_turn_stop() -> None:
-    """Cross-stage consistency: every RL stage stops on the same delimiter
+def test_all_rl_configs_agree_on_assistant_turn_stop() -> None:
+    """Cross-config consistency: every runnable RL config stops on the same delimiter
     so the model's effective generation contract is identical across RLVR,
-    SWE1, SWE2, and RLHF. Drift here is the bug, not the value."""
+    SWE1, SWE2, RLHF, and the generic stage2 RL surface. Drift here is
+    the bug, not the value."""
     per_stage_stops = {
         config_path.parent.parent.name: tuple(
             _generation_block(config_path).get("stop_strings") or ()
         )
-        for config_path in RL_STAGE_CONFIGS
+        for config_path in RL_CONFIGS
     }
     assert len(set(per_stage_stops.values())) == 1, (
         "RL stages disagree on stop_strings: "

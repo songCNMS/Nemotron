@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task078_qwen_training_pipeline_contract_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task081_qwen_rl_config_contract_s2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task078_qwen_training_pipeline_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/185 |
-| Session | 1 |
+| Current Task | task081_qwen_rl_config_contract_s2 |
+| PR | https://github.com/songCNMS/Nemotron/pull/188 |
+| Session | 3 |
 
-最近进展：PM requested PR #185 rebase after PR #186; fetched `origin/main` at `2489a87d07137fb743d70547e19ca0cf4e309645`, rebased `intern_nem_dev_2/task078_qwen_training_pipeline_contract_s1`, and resolved conflicts by composing PR #186 Qwen data-prep/profile guards with PR #185 training-contract/profile plumbing. Required Qwen/RL/M1 checks, py_compile, and `git diff --check` passed; `test_stage1_sft_train_bridge.py` is skipped because `megatron` is not installed.
+最近进展：PM assigned critical second-wave `task081_qwen_rl_config_contract_s2`. Preserved pushed task078 closeout bookkeeping, synced local `main` to `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`, and created branch `intern_nem_dev_2/task081_qwen_rl_config_contract_s2`. Implemented the explicit Qwen-compatible fix for generic `stage2_rl/config/default.yaml`; focused RL kwargs/stop-string tests, structured stage2 RL config audit, py_compile, and `git diff --check` passed. Opened PR #188 to `main`; Session 3 bookkeeping record added after stop-hook audit.
