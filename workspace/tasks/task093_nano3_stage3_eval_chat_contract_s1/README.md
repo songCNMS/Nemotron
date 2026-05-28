@@ -1,6 +1,6 @@
 # task093_nano3_stage3_eval_chat_contract_s1 - Nano3 stage3 eval chat contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Background
 
@@ -36,3 +36,7 @@ tokenizer defaults that may drift from training and rollout rendering.
 - Ruff passes for the new focused test files when available.
 - Static probe confirms Nano3 eval extra chat-template kwargs are explicit.
 - `git diff --check` and `git diff --cached --check` pass.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/200
