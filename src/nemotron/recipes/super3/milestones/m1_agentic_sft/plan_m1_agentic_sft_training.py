@@ -24,6 +24,7 @@ DEFAULT_CONFIG_PATH = Path("src/nemotron/recipes/super3/stage1_sft/config/m1_age
 DEFAULT_SCRIPT_PATH = Path("src/nemotron/recipes/super3/stage1_sft/train.py")
 DEFAULT_REPO_DIR: Path | None = None
 DEFAULT_TRAINING_PROFILE = "nemotron-super"
+QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 MILESTONE = "M1"
 STAGE = "Agentic SFT v0 training"
 
@@ -104,6 +105,17 @@ def infer_tokenizer_model(metadata: Mapping[str, Any], explicit: str | None) -> 
     if isinstance(value, str) and value:
         return value
     return None
+
+
+def qwen_model_ref_for_training(
+    *,
+    training_profile: str,
+    qwen_hf_model: str | None,
+    tokenizer_model: str,
+) -> str | None:
+    if not training_profile.lower().startswith("qwen"):
+        return None
+    return qwen_hf_model or os.environ.get(QWEN_MODEL_ENV_VAR) or tokenizer_model
 
 
 def normalize_megatron_pretrained_checkpoint(path: Path) -> Path:
@@ -206,6 +218,17 @@ def render_run_script(manifest: Mapping[str, Any]) -> str:
     lines.extend(
         [
             f"export SUPER3_M1_AGENTIC_PACKED_DIR={shell_quote(paths['packed_sft_dir'])}",
+        ]
+    )
+    if (
+        str(manifest["training_contract"].get("model_profile", "")).lower().startswith("qwen")
+        and manifest["training_contract"].get("model_ref")
+    ):
+        lines.append(
+            f"export {QWEN_MODEL_ENV_VAR}={shell_quote(manifest['training_contract']['model_ref'])}"
+        )
+    lines.extend(
+        [
             f"export SUPER3_M1_TOKENIZER_MODEL={shell_quote(paths['tokenizer_model'])}",
             f"export SUPER3_M1_PRETRAINED_CHECKPOINT={shell_quote(paths['pretrained_checkpoint'])}",
             f"export SUPER3_M1_SFT_SAVE={shell_quote(paths['save_dir'])}",
@@ -346,6 +369,11 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
     if not tokenizer_model:
         raise ValueError("tokenizer model is required when packed metadata has no tokenizer_uri")
     training_profile = getattr(args, "training_profile", None) or DEFAULT_TRAINING_PROFILE
+    qwen_model_ref = qwen_model_ref_for_training(
+        training_profile=training_profile,
+        qwen_hf_model=getattr(args, "qwen_hf_model", None),
+        tokenizer_model=tokenizer_model,
+    )
     pretrained_checkpoint_value = args.pretrained_checkpoint or os.environ.get("SUPER3_M1_PRETRAINED_CHECKPOINT")
     if not pretrained_checkpoint_value:
         raise ValueError("--pretrained-checkpoint or SUPER3_M1_PRETRAINED_CHECKPOINT is required")
@@ -367,7 +395,7 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         packed_sft_dir,
         tokenizer_model=tokenizer_model,
         training_profile=training_profile,
-        model_ref=tokenizer_model,
+        model_ref=qwen_model_ref,
         train_entrypoint=args.script_path,
         recipe_target=None,
     )
@@ -415,7 +443,8 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
         },
         "training_contract": {
             "model_profile": training_profile,
-            "model_ref": tokenizer_model if training_profile.lower().startswith("qwen") else None,
+            "model_ref": qwen_model_ref,
+            "qwen_hf_model": qwen_model_ref,
             "tokenizer_model": tokenizer_model,
             "train_entrypoint": str(args.script_path),
             "packed_metadata_path": str(metadata_path) if metadata_path else None,
@@ -472,6 +501,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--packed-sft-dir", type=Path, default=DEFAULT_PACKED_SFT_DIR)
     parser.add_argument("--pretrained-checkpoint", type=Path, default=None)
     parser.add_argument("--tokenizer-model", default=None)
+    parser.add_argument("--qwen-hf-model", default=None)
     parser.add_argument("--save-dir", type=Path, default=DEFAULT_SAVE_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--run-name", default=None)

@@ -1,6 +1,6 @@
 # task100_qwen_scaleup_train_model_ref_contract_s1 history
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 11 - 2026-05-28
 
@@ -21,3 +21,10 @@
 - Confirmed no live SFT packing, training launch, checkpoint conversion,
   endpoint calls, W&B, cluster jobs, deployment, promotion, direct `main` or
   `master` push, or self-merge was performed.
+
+## Session 12 - 2026-05-28
+
+- Transitioned from task100 PR #206 to PM-assigned
+  `task101_qwen_m1_training_plan_model_ref_contract_s1`, the direct M1 planner
+  analogue of the task100 scale-up model-ref contract fix.
+- No additional task100 code or tests were changed in this session.

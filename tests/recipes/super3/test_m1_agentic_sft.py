@@ -2379,13 +2379,69 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
     assert manifest["paths"]["packed_sft_dir"] == str(splits_dir)
     assert manifest["paths"]["tokenizer_model"] == str(tokenizer_dir)
     assert manifest["training_contract"]["model_profile"] == "nemotron-super"
+    assert manifest["training_contract"]["model_ref"] is None
     assert manifest["training_contract"]["tokenizer_model"] == str(tokenizer_dir)
     assert manifest["training"]["train_iters"] == 9
     assert manifest["splits"]["train"]["shards"] == 1
     assert "--nproc_per_node=2" in script
     assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
+    assert "SUPER3_M1_QWEN_HF_MODEL" not in script
     assert (Args.output_dir / "unit" / "training_manifest.json").exists()
     assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
+
+
+def test_plan_m1_qwen_uses_distinct_hf_model_for_training_contract(tmp_path) -> None:
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid", "test"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"not-a-real-parquet")
+    tokenizer_dir = tmp_path / "local-qwen-tokenizer"
+    tokenizer_dir.mkdir()
+    checkpoint_dir = tmp_path / "checkpoint"
+    checkpoint_dir.mkdir()
+    _write_qwen_packed_metadata(splits_dir, tokenizer_uri=f"file://{tokenizer_dir}")
+    qwen_hf_model = "/remote/models/Qwen3-30B-A3B-Instruct-2507"
+
+    args = Namespace(
+        packed_sft_dir=packed_root,
+        pretrained_checkpoint=checkpoint_dir,
+        tokenizer_model=str(tokenizer_dir),
+        qwen_hf_model=qwen_hf_model,
+        save_dir=tmp_path / "save",
+        output_dir=tmp_path / "plans",
+        run_name="qwen",
+        repo_dir=tmp_path / "repo",
+        script_path="src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py",
+        config_path="src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml",
+        training_profile="qwen",
+        venv=None,
+        nodes=1,
+        gpus_per_node=2,
+        epochs=1.0,
+        train_iters=9,
+        fallback_train_iters=1700,
+        global_batch_size=2,
+        micro_batch_size=1,
+        seq_length=4096,
+        eval_interval=3,
+        save_interval=3,
+        allow_missing_checkpoint=False,
+    )
+
+    manifest = build_plan(args)
+    script = render_run_script(manifest)
+
+    assert manifest["paths"]["tokenizer_model"] == str(tokenizer_dir)
+    assert manifest["training_contract"]["model_profile"] == "qwen"
+    assert manifest["training_contract"]["model_ref"] == qwen_hf_model
+    assert manifest["training_contract"]["qwen_hf_model"] == qwen_hf_model
+    assert manifest["training_contract"]["tokenizer_model"] == str(tokenizer_dir)
+    assert f"export SUPER3_M1_QWEN_HF_MODEL={qwen_hf_model}" in script
+    assert f"export SUPER3_M1_TOKENIZER_MODEL={tokenizer_dir}" in script
+    assert f"training_contract.model_ref={qwen_hf_model}" in script
+    assert f"training_contract.model_ref={tokenizer_dir}" not in script
 
 
 def test_build_plan_normalizes_iter_checkpoint_to_root(tmp_path) -> None:
