@@ -10,3 +10,4 @@
 - Added focused coverage for normalized default and M1 compact eval configs.
 - Verified before restart: eval shard 103 passed with 9 warnings, touched Python py_compile passed, Ruff passed, and `git diff --check` passed.
 - After restart, made only status/task documentation updates before staging for PR.
+- Opened PR #193 to `main`: https://github.com/songCNMS/Nemotron/pull/193.
