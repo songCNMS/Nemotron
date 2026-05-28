@@ -1,6 +1,6 @@
 # task088_stage2_rl_rlvr23_data_prep_bridge_defaults_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 1 - 2026-05-28
 
@@ -17,3 +17,8 @@
 - Stop-hook audit required an explicit Session 7 record in this task088 history log.
 - Confirmed PR #196 remains open for `task088_stage2_rl_rlvr23_data_prep_bridge_defaults_s1`, with RLVR2/RLVR3 defaults bridged to `m1_rlvr/{rlvr2,rlvr3}/combined.jsonl`.
 - Recorded this Session 7 bookkeeping entry and kept the validation evidence from Session 1 intact.
+
+## Session 8 - 2026-05-28
+
+- PM assigned `task091_omni3_stage1_rl_config_portability_s1`; synced local `main` to `914dc3db746702744651a97ea8680087e582a6fb` and created branch `intern_nem_dev_2/task091_omni3_stage1_rl_config_portability_s1`.
+- Implemented the Omni3 stage1 RL config portability fix and recorded this Session 8 entry in the task088 history as required by the active intern session contract.
