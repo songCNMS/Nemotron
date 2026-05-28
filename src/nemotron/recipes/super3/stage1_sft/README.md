@@ -17,7 +17,7 @@ This stage takes instruction-following datasets in OpenAI chat format, applies c
 ### Using nemotron CLI (Recommended)
 
 ```bash
-# 1. Prepare data (apply chat templates, tokenize to packed Parquet)
+# 1. Prepare Qwen-safe data (Qwen tokenizer template, thinking disabled)
 uv run nemotron super3 data prep sft --run YOUR-CLUSTER
 
 # 2. Run SFT
@@ -33,7 +33,7 @@ Inside a container on a compute node:
 
 ```bash
 # Data preparation
-python data_prep.py --config config/data_prep/default.yaml
+python data_prep.py
 
 # Training (single node)
 python train.py --config config/tiny.yaml
@@ -60,6 +60,11 @@ The `data_prep.py` script processes OpenAI-format chat data into packed Parquet 
 uv run nemotron super3 data prep sft [options]
 ```
 
+The runnable default is Qwen-safe and selects
+`config/data_prep/qwen_agentic_v0.yaml`. Legacy Super3/Nemotron packing
+profiles remain available only by explicit config selection, for example
+`-c agentic_v0` or `--config config/data_prep/default.yaml`.
+
 | Option | Description |
 |--------|-------------|
 | `--run <profile>` | Execute on Slurm via NeMo-Run |
@@ -81,7 +86,7 @@ python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_
 Then run the existing packed SFT pipeline with the generated blend:
 
 ```bash
-uv run nemotron super3 data prep sft -c agentic_v0 \
+uv run nemotron super3 data prep sft \
   blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 

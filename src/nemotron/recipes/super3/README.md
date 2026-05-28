@@ -97,7 +97,7 @@ See [docs/nemo_runspec/nemo-run.md](../../../docs/nemo_runspec/nemo-run.md) for 
 uv run nemotron super3 data prep pretrain --run YOUR-CLUSTER
 uv run nemotron super3 pretrain --run YOUR-CLUSTER
 
-# Stage 1: Data prep + SFT
+# Stage 1: Qwen-safe data prep + SFT
 uv run nemotron super3 data prep sft --run YOUR-CLUSTER
 uv run nemotron super3 sft --run YOUR-CLUSTER
 
@@ -129,7 +129,7 @@ uv run nemotron super3 pretrain -c tiny --run YOUR-CLUSTER
 # Pretrain data: tokenize to Megatron bin/idx format
 uv run nemotron super3 data prep pretrain [--run <profile>] [--sample N] [--force]
 
-# SFT data: apply chat templates, tokenize to packed Parquet
+# SFT data: apply the Qwen-safe default chat template contract, tokenize to packed Parquet
 uv run nemotron super3 data prep sft [--run <profile>] [--sample N] [--force]
 
 # RL data: resolve HF placeholders, convert to JSONL
@@ -177,6 +177,12 @@ Each stage has a `config/` directory with:
 | `tiny.yaml` | Testing variant (small model, few iterations) |
 | `data_prep/default.yaml` | Data preparation configuration |
 | `data_prep/data_blend_raw.json` | Dataset blend specification |
+
+For Stage 1 SFT data prep, the runnable default selects
+`data_prep/qwen_agentic_v0.yaml` so current Qwen target runs cannot silently
+pack with the legacy Super3/Nemotron tokenizer/template. Legacy Super3 profiles
+remain available by explicit config selection such as `-c agentic_v0` or
+`--config data_prep/default.yaml`.
 
 Override config values on the command line:
 
