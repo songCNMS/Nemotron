@@ -56,4 +56,4 @@
   `efcf0e6f5b5c043cc4c9b701d4faabe63ce69156` and worked on branch
   `intern_nem_dev_2/task103_sft_data_quality_strict_gate_s1`.
 - Added opt-in strict M1 Agentic SFT data-quality enforcement, focused tests,
-  and recorded this Session 12 bookkeeping entry.
+  opened PR #212, and recorded this Session 12 bookkeeping entry.

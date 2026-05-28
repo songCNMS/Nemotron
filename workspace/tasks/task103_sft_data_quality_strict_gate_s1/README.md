@@ -1,6 +1,6 @@
 # task103_sft_data_quality_strict_gate_s1 - M1 Agentic SFT strict data-quality gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=12 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2,SESSION=12 -->
 
 ## Background
 
@@ -32,4 +32,8 @@ and train/val leakage counters, but only recorded them in manifest/report.
 - [x] Focused M1 SFT tests cover default, failing strict, and clean strict paths.
 - [x] Required pytest, py_compile, ruff, structured prepare probe, and whitespace
   checks pass locally.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/212
