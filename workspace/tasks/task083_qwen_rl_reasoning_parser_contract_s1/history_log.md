@@ -10,3 +10,4 @@
 - Audited generic and stage-specific RL defaults; only generic `stage2_rl/config/default.yaml` used `reasoning_parser: deepseek_r1`, while all four stage configs use `nano_v3` plus `nemo_rl/utils/nano_v3_reasoning_parser.py`.
 - Aligned the generic config to `nano_v3` and expanded focused config tests to require matching `tool_parser`, `reasoning_parser`, and `reasoning_parser_plugin` across all five runnable RL configs.
 - Verified required checks locally: focused RL config tests passed with 28 tests, py_compile passed for touched tests, `git diff --check` passed, `/work-agents/.venv/bin/ruff check` passed for touched tests, and a structured stage2 RL parser audit passed.
+- Opened PR #190 to `main`: https://github.com/songCNMS/Nemotron/pull/190.

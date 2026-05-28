@@ -27,8 +27,8 @@ with `reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py`.
 - [x] Focused tests cover generic plus stage-specific tool/parser/plugin
   agreement.
 - [x] Required validation passes locally.
-- [ ] PR opened to `main`; no direct push to `main` or `master`.
+- [x] PR opened to `main`; no direct push to `main` or `master`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/190
