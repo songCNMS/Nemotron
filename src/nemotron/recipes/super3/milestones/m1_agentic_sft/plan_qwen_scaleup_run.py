@@ -663,6 +663,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
     log_dir = remote_run_root / "logs"
     session = f"task067_{manifest['run_name']}"
     lr_decay_override = training.get("lr_decay_iters")
+    model_ref = training.get("qwen_hf_model") or packing["tokenizer_model"]
     torchrun_args = [
         "python",
         "-m",
@@ -675,7 +676,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"dataset.packed_sequence_specs.packed_sequence_size={int(training['seq_length'])}",
         f"model.seq_length={int(training['seq_length'])}",
         f"training_contract.model_profile={training['training_profile']}",
-        f"training_contract.model_ref={packing['tokenizer_model']}",
+        f"training_contract.model_ref={model_ref}",
         f"training_contract.train_entrypoint={training['train_entrypoint']}",
         "train.train_iters=$TRAIN_ITERS",
         f"train.eval_interval={int(training['eval_interval'])}",
