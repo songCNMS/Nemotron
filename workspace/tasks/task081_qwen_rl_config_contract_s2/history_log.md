@@ -10,3 +10,4 @@
 - Chose the explicit Qwen-compatible config fix for `src/nemotron/recipes/super3/stage2_rl/config/default.yaml` rather than a non-Qwen guard, because the generic RL surface is still runnable for the active Qwen target.
 - Added the generic RL config to the existing chat-template kwargs and stop-string regression shards.
 - Verified focused tests and audits locally: RL kwargs/stop strings passed with 22 tests, structured stage2 RL config audit passed, py_compile for touched tests passed, and `git diff --check` passed.
+- Opened PR #188 to `main`: https://github.com/songCNMS/Nemotron/pull/188.

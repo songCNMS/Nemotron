@@ -1,6 +1,6 @@
 # task081_qwen_rl_config_contract_s2 - Qwen RL config contract S2
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=PR_OPEN,ASSIGNEE=intern_nem_dev_2 -->
 
 ## Background
 
@@ -26,8 +26,8 @@ The four stage-specific RL configs pin the Qwen chat-template kwargs and
 - [x] Stage2 RL config audit for null/missing/conflicting Qwen chat-template
   fields is reported.
 - [x] Required local checks pass.
-- [ ] PR opened to `main`; no direct push to `main` or `master`.
+- [x] PR opened to `main`; no direct push to `main` or `master`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/188
