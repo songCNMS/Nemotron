@@ -19,4 +19,5 @@
   artifact using `local_workspace_verified`.
 - Verified locally with the focused qwen eval repro gate shard, py_compile,
   ruff, a structured production YAML probe, and whitespace checks.
-
+- Opened PR #204 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/204.

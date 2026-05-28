@@ -1,6 +1,6 @@
 # task096_qwen_eval_remote_artifact_status_contract_s1 - Qwen eval remote artifact status contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=9 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2,SESSION=9 -->
 
 ## Background
 
@@ -28,5 +28,8 @@ for explicit `vm4vpn:` or `vpn:` raw artifact references.
 - [x] Remote raw artifact references require `pm_verified`.
 - [x] Local artifact validation still permits `local_workspace_verified`.
 - [x] Focused pytest, compile, ruff, structured probe, and whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/204
