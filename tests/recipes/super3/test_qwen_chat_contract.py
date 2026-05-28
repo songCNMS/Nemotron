@@ -70,8 +70,24 @@ def test_sft_data_prep_runnable_defaults_select_qwen_profile() -> None:
     assert 'DEFAULT_CONFIG_PATH = STAGE_PATH / "config" / "data_prep" / "qwen_agentic_v0.yaml"' in source
 
 
-def test_qwen_agentic_config_resolves_target_model_env(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_qwen_agentic_config_prefers_tokenizer_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    monkeypatch.setenv("SUPER3_M1_QWEN_HF_MODEL", "/models/Qwen/Qwen3-4B-Train")
+    monkeypatch.setenv("SUPER3_M1_TOKENIZER_MODEL", "/models/Qwen/Qwen3-4B-Tokenizer")
+
+    config = omega_conf.to_container(omega_conf.load(QWEN_CONFIG), resolve=True)
+
+    assert config["tokenizer"]["model"] == "/models/Qwen/Qwen3-4B-Tokenizer"
+    validate_qwen_data_prep_config(config, config_path=QWEN_CONFIG)
+
+
+def test_qwen_agentic_config_falls_back_to_qwen_hf_model_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    monkeypatch.delenv("SUPER3_M1_TOKENIZER_MODEL", raising=False)
     monkeypatch.setenv("SUPER3_M1_QWEN_HF_MODEL", "/models/Qwen/Qwen3-4B-Instruct-2507")
 
     config = omega_conf.to_container(omega_conf.load(QWEN_CONFIG), resolve=True)

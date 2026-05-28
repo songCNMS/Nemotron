@@ -18,7 +18,7 @@ output_dir: ${oc.env:PWD}/../output/super3/stage1_sft_agentic_v0_qwen
 num_shards: 16
 
 tokenizer:
-  model: ${oc.env:SUPER3_M1_QWEN_HF_MODEL}
+  model: ${oc.env:SUPER3_M1_TOKENIZER_MODEL,${oc.env:SUPER3_M1_QWEN_HF_MODEL}}
   add_bos: false
   add_eos: true
 
