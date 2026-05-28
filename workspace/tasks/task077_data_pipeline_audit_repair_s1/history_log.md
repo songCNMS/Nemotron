@@ -146,3 +146,17 @@
 - Opened PR #202: https://github.com/songCNMS/Nemotron/pull/202
 
 ---
+
+## Session 17 - 2026-05-28 - Task098 Qwen SFT local train packed-dir contract
+
+**Executor**: intern_nem_dev_1
+
+- Read task098 instructions from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Fast-forwarded local `main` to `780626169586fe5be34993deaa49598b7af11a44` and created branch `intern_nem_dev_1/task098_qwen_sft_local_train_packed_dir_contract_s1`.
+- Added a shared Qwen local packed-dir default helper that rewrites only the inherited legacy `../output/super3/stage1_sft_agentic_v0/splits` fallback to `../output/super3/stage1_sft_agentic_v0_qwen/splits`.
+- Wired both Qwen 4B and Qwen3 30B-A3B local train entrypoints through the helper before packed-data metadata validation.
+- Added focused tests proving the 4B and 30B entrypoints rewrite the inherited fallback and preserve explicit config/env packed-dir overrides.
+- Validation passed locally: requested M1 Agentic SFT/Qwen scale-up pytest shard, py_compile, Ruff, static OmegaConf packed-dir probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #205: https://github.com/songCNMS/Nemotron/pull/205
+
+---

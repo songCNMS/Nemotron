@@ -56,5 +56,10 @@
 44. file change: Super3 stage1_rlvr and stage3_rlhf GenRM `server_args` now use `nano_v3` plus `nemo_rl/utils/nano_v3_reasoning_parser.py`; non-reasoning judge servers were left unchanged.
 45. test evidence: Task095 required Super3 parser/stop-string pytest shard passed with 38 tests using `PYTHONPATH=src`, py_compile passed for the touched test, Ruff passed for the touched test, and diff checks passed.
 46. file change: PR #202 opened against `main` for task095 Super3 GenRM reasoning parser contract.
+47. supervisor request: PM assigned task098 to sync from main at or after `780626169586fe5be34993deaa49598b7af11a44`, fix Qwen SFT local train packed-dir defaults, add focused tests, open a PR, and avoid main push/self-merge.
+48. technical fact: Qwen local train entrypoints reuse `m1_agentic_train.yaml`, whose inherited packed-dir fallback is `../output/super3/stage1_sft_agentic_v0/splits`, while Qwen data prep writes `../output/super3/stage1_sft_agentic_v0_qwen/splits`.
+49. file change: `qwen_local_train.py` and `qwen3_30b_a3b_local_train.py` now resolve the inherited legacy packed-dir fallback to the Qwen packed-data default before metadata validation, while preserving explicit `SUPER3_M1_AGENTIC_PACKED_DIR` and config/CLI overrides.
+50. test evidence: Task098 requested M1 Agentic SFT/Qwen scale-up pytest shard passed with 107 tests and 1 skipped; py_compile, Ruff, static OmegaConf packed-dir probe, and diff checks passed.
+51. file change: PR #205 opened against `main` for task098 Qwen SFT local train packed-dir contract.
 
 ---

@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task095_super3_genrm_reasoning_parser_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/202 |
+| Current Task | task098_qwen_sft_local_train_packed_dir_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/205 |
 | Session | 17 |
-| Recent Progress | Opened PR #202 aligning Super3 stage1_rlvr/stage3_rlhf GenRM reasoning-parser server args to the Nano3 `nano_v3` parser/plugin contract; focused Super3 parser/stop-string checks passed |
+| Recent Progress | Opened PR #205 fixing Qwen 4B/30B local train packed-dir defaults to use `stage1_sft_agentic_v0_qwen/splits` while preserving explicit packed-dir overrides; focused checks passed |
