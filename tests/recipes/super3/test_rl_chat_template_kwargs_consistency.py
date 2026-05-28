@@ -34,6 +34,9 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 GENERIC_RL_CONFIG = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/default.yaml"
 )
+GENERIC_RL_TINY_CONFIG = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/tiny.yaml"
+)
 GENERIC_RL_CONFIG_DIR = GENERIC_RL_CONFIG.parent
 GENERIC_RL_RUNSPEC_SCRIPT = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/train.py"
@@ -68,6 +71,7 @@ RL_DEFAULT_OVERLAY_CONFIGS = (
     (STAGE2_SWE1_CONFIG_DIR, "small"),
     (STAGE3_RLHF_CONFIG_DIR, "small"),
 )
+GENERIC_RL_RAW_CONFIGS = (GENERIC_RL_CONFIG, GENERIC_RL_TINY_CONFIG)
 
 EXPECTED_KWARGS = {
     # PR D: enable_thinking=false matches what SFT actually trains
@@ -86,6 +90,9 @@ EXPECTED_HTTP_CHAT_SERVING_FIELDS = {
     "reasoning_parser": "nano_v3",
     "reasoning_parser_plugin": "nemo_rl/utils/nano_v3_reasoning_parser.py",
 }
+FIXED_NEMOTRON_NANO_TOKENIZER = (
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-Base-BF16"
+)
 
 
 def _policy_block(config_path: Path) -> dict:
@@ -156,6 +163,31 @@ def _tokenizer_chat_template_kwargs(config_path: Path) -> dict:
         "it must not be null when rollout serving pins Qwen chat kwargs"
     )
     return kwargs
+
+
+@pytest.mark.parametrize(
+    "config_path",
+    GENERIC_RL_RAW_CONFIGS,
+    ids=lambda p: f"generic_{p.stem}",
+)
+def test_generic_rl_tokenizer_name_follows_policy_model_name(
+    config_path: Path,
+) -> None:
+    raw_text = config_path.read_text(encoding="utf-8")
+    assert FIXED_NEMOTRON_NANO_TOKENIZER not in raw_text, (
+        f"{config_path}: generic Super3 RL tokenizer.name must not hard-code "
+        "the Nemotron Nano tokenizer; it must follow policy.model_name unless "
+        "an operator explicitly overrides it"
+    )
+
+    policy = _policy_block(config_path)
+    tokenizer = policy.get("tokenizer")
+    assert isinstance(tokenizer, dict), f"{config_path}: missing policy.tokenizer"
+    assert tokenizer.get("name") == "${policy.model_name}", (
+        f"{config_path}: policy.tokenizer.name must follow policy.model_name "
+        "so generic Qwen/Super3 RL configs do not tokenize with a fixed Nano "
+        "tokenizer when policy.model_name is changed"
+    )
 
 
 @pytest.mark.parametrize(
