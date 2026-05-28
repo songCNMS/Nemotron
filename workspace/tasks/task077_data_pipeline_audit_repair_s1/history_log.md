@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ---
 
@@ -91,5 +91,18 @@
 - Rewired SWE1/SWE2/RLHF stage2 RL data-prep defaults from developer-local `/lustre` release files to templated M1 bridge combined outputs.
 - Validation passed locally: required bridge/default pytest shard, py_compile for touched Python files/tests, Ruff on touched Python files/tests, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #194: https://github.com/songCNMS/Nemotron/pull/194
+
+---
+
+## Session 14 - 2026-05-28 - Task090 Nano3 stage0 pretrain output portability
+
+**Executor**: intern_nem_dev_1
+
+- Read task090 instructions from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Fast-forwarded local `main` to `c26dedfcbff336e3f827f59f39230d713d260e29` and created branch `intern_nem_dev_1/task090_nano3_stage0_pretrain_data_prep_output_portability_s1`.
+- Replaced Nano3 stage0 pretrain `default.yaml` `output_dir` named-user `/lustre` default with `${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain`, matching the recipe-local dataclass default contract.
+- Preserved existing `tiny.yaml` behavior and added focused static tests for Nano3 stage0 pretrain data-prep required fields and portable output dirs.
+- Validation passed locally: focused Nano3 config pytest shard, py_compile for touched test, Ruff for touched test, static output_dir scan, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #197: https://github.com/songCNMS/Nemotron/pull/197
 
 ---

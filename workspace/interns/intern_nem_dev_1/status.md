@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task087_stage2_rl_data_prep_bridge_defaults_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/194 |
-| Session | 13 |
-| Recent Progress | Opened PR #194 for task087 after adding SWE1/SWE2/RLHF bridge combined outputs and rewiring stage2 RL data-prep defaults; required bridge/default tests, py_compile, Ruff, and diff checks passed |
+| Current Task | task090_nano3_stage0_pretrain_data_prep_output_portability_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/197 |
+| Session | 14 |
+| Recent Progress | Opened PR #197 for task090 after moving Nano3 stage0 pretrain data-prep default output_dir off named-user /lustre and adding static config portability tests; required checks passed |
