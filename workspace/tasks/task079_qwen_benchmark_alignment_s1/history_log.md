@@ -8,3 +8,4 @@
 - Created branch `intern_nem_dev_3/task079_qwen_benchmark_alignment_s1`.
 - Added benchmark alignment ledger and validator for Qwen MMLU-Pro/AIME25/HMMT evidence.
 - Cross-wired tests with M1/M2 basket registries and launcher mapping.
+- Opened PR #184: https://github.com/songCNMS/Nemotron/pull/184.
