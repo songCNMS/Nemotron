@@ -106,6 +106,18 @@ def infer_tokenizer_model(metadata: Mapping[str, Any], explicit: str | None) -> 
     return None
 
 
+def normalize_megatron_pretrained_checkpoint(path: Path) -> Path:
+    """Return the Megatron checkpoint root expected by Megatron-Bridge."""
+
+    if (
+        path.name.startswith("iter_")
+        and path.name.removeprefix("iter_").isdigit()
+        and path.parent != Path(".")
+    ):
+        return path.parent
+    return path
+
+
 def compute_train_iters(
     *,
     explicit_train_iters: int | None,
@@ -337,7 +349,9 @@ def build_plan(args: argparse.Namespace) -> JsonDict:
     pretrained_checkpoint_value = args.pretrained_checkpoint or os.environ.get("SUPER3_M1_PRETRAINED_CHECKPOINT")
     if not pretrained_checkpoint_value:
         raise ValueError("--pretrained-checkpoint or SUPER3_M1_PRETRAINED_CHECKPOINT is required")
-    pretrained_checkpoint = Path(pretrained_checkpoint_value)
+    pretrained_checkpoint = normalize_megatron_pretrained_checkpoint(
+        Path(pretrained_checkpoint_value)
+    )
 
     ensure_inputs(
         packed_sft_dir=packed_sft_dir,

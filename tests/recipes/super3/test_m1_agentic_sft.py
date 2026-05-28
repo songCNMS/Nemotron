@@ -65,8 +65,8 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     is_hard_math_clean_final_row,
     is_hard_math_long_reasoning_row,
     is_hard_math_precision_row,
-    is_hard_math_recurrence_row,
     is_hard_math_recovery_row,
+    is_hard_math_recurrence_row,
     load_difficulty_signal,
     prepare,
     sample_rows_by_fraction,
@@ -2300,6 +2300,53 @@ def test_plan_m1_training_writes_manifest_and_run_script(tmp_path) -> None:
     assert "SUPER3_M1_AGENTIC_PACKED_DIR" in script
     assert (Args.output_dir / "unit" / "training_manifest.json").exists()
     assert (Args.output_dir / "unit" / "run_m1_agentic_sft.sh").exists()
+
+
+def test_build_plan_normalizes_iter_checkpoint_to_root(tmp_path) -> None:
+    from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_m1_agentic_sft_training import build_plan
+
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    for split in ("train", "valid", "test"):
+        split_dir = splits_dir / split
+        split_dir.mkdir(parents=True)
+        (split_dir / "shard_000000.parquet").write_bytes(b"placeholder")
+    tokenizer_dir = tmp_path / "tokenizer"
+    tokenizer_dir.mkdir()
+    checkpoint_root = tmp_path / "checkpoints"
+    iter_checkpoint = checkpoint_root / "iter_0000779"
+    iter_checkpoint.mkdir(parents=True)
+    (checkpoint_root / "latest_checkpointed_iteration.txt").write_text("779", encoding="utf-8")
+    metadata = {"type": "SFTDataArtifact", "tokenizer_uri": f"file://{tokenizer_dir}"}
+    with (splits_dir / "metadata.json").open("w", encoding="utf-8") as f:
+        json.dump(metadata, f)
+
+    class Args:
+        packed_sft_dir = packed_root
+        pretrained_checkpoint = iter_checkpoint
+        tokenizer_model = None
+        save_dir = tmp_path / "save"
+        output_dir = tmp_path / "plans"
+        run_name = "normalized"
+        repo_dir = tmp_path / "repo"
+        script_path = "src/nemotron/recipes/super3/stage1_sft/train.py"
+        config_path = "src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml"
+        venv = None
+        nodes = 1
+        gpus_per_node = 2
+        epochs = 1.0
+        train_iters = 1
+        fallback_train_iters = 1700
+        global_batch_size = 4
+        micro_batch_size = 1
+        seq_length = 4096
+        eval_interval = 1
+        save_interval = 1
+        allow_missing_checkpoint = False
+
+    manifest = build_plan(Args())
+
+    assert manifest["paths"]["pretrained_checkpoint"] == str(checkpoint_root)
 
 
 def test_build_plan_derives_train_iters_from_packed_rows(tmp_path, monkeypatch) -> None:

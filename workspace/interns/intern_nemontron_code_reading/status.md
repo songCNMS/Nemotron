@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task076_qwen_v9_aime_recurrence_tuning |
 | PR | https://github.com/songCNMS/Nemotron/pull/183 |
-| Session | 9 |
+| Session | 10 |
 | Branch | intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning |
-| Latest | Exported V9 iter_0000192 to HF, validated shards/config/tokenizer, and ran targeted corrected aime_06 smoke; smoke failed with 0/10 parsed/correct and length-capped generations, so next step is V9 lineage/data diagnosis before full gate. |
+| Latest | Diagnosed invalid V9 as a checkpoint-root bug, patched planners to normalize iter_* checkpoint inputs, and completed corrected V9 rerun from V8 root with final validation loss/PPL 0.4252748/1.530011; next step is HF export and aime_06 smoke for the corrected checkpoint. |

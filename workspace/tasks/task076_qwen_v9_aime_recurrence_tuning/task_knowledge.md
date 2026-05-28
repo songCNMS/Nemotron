@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -40,5 +40,9 @@
 28. technical fact: V9 HF export validation passed with `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and chat template present.
 29. technical fact: V9 targeted corrected `aime_06` smoke on `10` repeats used original prompts, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and expected answer `907`; all `10` responses ended by length, parsed `0/10`, and correct was `0/10`.
 30. research conclusion: V9 `iter_0000192` is not a useful full-gate candidate until lineage is diagnosed, because even a trivial chat smoke degenerated to repeated `the` tokens and `aime_06` produced no boxed answers.
+31. technical fact: Session 10 diagnosed the invalid V9 as a checkpoint-root bug: the launch used child path `.../checkpoints/iter_0000779`, but Megatron-Bridge expects the checkpoint root containing `latest_checkpointed_iteration.txt`.
+32. file change: Patched both Qwen scale-up and generic M1 SFT training planners to normalize `iter_XXXXXXX` checkpoint inputs to the parent checkpoint root before writing manifests or launch scripts.
+33. technical fact: The corrected Session 10 V9 rerun loaded V8 checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints` and completed `192/192` iters with final validation loss/PPL `0.4252748/1.530011`.
+34. technical fact: The corrected V9 checkpoint is `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`; Session 9 HF export/smoke belongs to the invalid random-init lineage.
 
 ---

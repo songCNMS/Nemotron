@@ -77,3 +77,14 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Served the HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`.
 - Targeted corrected `aime_06` smoke completed all `10` repeats with expected answer `907`, but all `10` hit `finish_reason=length`, parsed `0/10`, correct `0/10`, and averaged `8192` completion tokens.
 - Minimal chat smoke also degenerated (` the   the the the the the`), so full corrected MMLU-Pro/AIME25/HMMT was not launched; next step is diagnosing V9 training/export lineage before spending the full gate.
+
+## Session 10 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_checkpoint_root_fix_session10.md`.
+- Diagnosed Session 8/9 V9 as invalid: the launch exported `SUPER3_M1_PRETRAINED_CHECKPOINT` as the child path `.../checkpoints/iter_0000779`, but Megatron-Bridge expects the checkpoint root containing `latest_checkpointed_iteration.txt`.
+- Confirmed evidence: invalid V9 log has no `successfully loaded checkpoint` line and trained at random-init scale (`iter 10` loss `12.25112`, final validation loss/PPL `8.960094/7786.093`).
+- Fixed both training planners to normalize `iter_XXXXXXX` checkpoint paths to their parent checkpoint root and added regression tests.
+- Launched corrected V9 rerun using the same packed V9 data and the corrected V8 checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints`.
+- Corrected run loaded the V8 checkpoint successfully and completed `192/192` iterations with final validation loss/PPL `0.4252748/1.530011`.
+- Corrected checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`.
+- The Session 9 HF export/smoke belongs to the invalid lineage; the corrected checkpoint still needs HF export and targeted `aime_06` smoke.

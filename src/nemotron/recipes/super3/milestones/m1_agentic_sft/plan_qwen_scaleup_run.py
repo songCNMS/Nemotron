@@ -128,6 +128,26 @@ def _env_or_arg(value: str | None, env_var: str, flag: str) -> str:
     return resolved
 
 
+def normalize_megatron_pretrained_checkpoint(path: str) -> str:
+    """Return the Megatron checkpoint root expected by Megatron-Bridge.
+
+    Megatron-Bridge resolves the active iteration from
+    ``latest_checkpointed_iteration.txt`` under the checkpoint root. Passing an
+    ``iter_XXXXXXX`` child directory can silently skip loading when
+    ``exit_on_missing_checkpoint`` is false, so generated launch scripts should
+    export the parent root instead.
+    """
+
+    checkpoint = Path(path)
+    if (
+        checkpoint.name.startswith("iter_")
+        and checkpoint.name.removeprefix("iter_").isdigit()
+        and checkpoint.parent != Path(".")
+    ):
+        return str(checkpoint.parent)
+    return path
+
+
 def resolve_train_entrypoint(explicit: str | None, qwen_hf_model: str) -> str:
     """Pick the Qwen train entrypoint that matches the model family."""
 
@@ -215,10 +235,12 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
         config_path=QWEN_DATA_PREP_CONFIG,
     )
     train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
-    pretrained_checkpoint = _env_or_arg(
-        args.pretrained_checkpoint,
-        QWEN_CHECKPOINT_ENV_VAR,
-        "--pretrained-checkpoint",
+    pretrained_checkpoint = normalize_megatron_pretrained_checkpoint(
+        _env_or_arg(
+            args.pretrained_checkpoint,
+            QWEN_CHECKPOINT_ENV_VAR,
+            "--pretrained-checkpoint",
+        )
     )
     paths = build_paths(args.output_dir, args.remote_root)
     return {
@@ -742,6 +764,7 @@ def render_report(manifest: JsonDict) -> str:
         if data.get("uncapped")
         else f"train={data['max_train_per_dataset']}, val={data['max_val_per_dataset']}"
     )
+    qwen_model = training.get("qwen_hf_model", manifest["packing"]["tokenizer_model"])
     return "\n".join(
         [
             "# Qwen M1 Agentic SFT Scale-up Plan",
@@ -761,7 +784,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Data-prep config: `{manifest['packing']['data_prep_config']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
-                f"- Qwen chat contract: model `{training.get('qwen_hf_model', manifest['packing']['tokenizer_model'])}`, "
+                f"- Qwen chat contract: model `{qwen_model}`, "
                 f"tokenizer `{manifest['packing']['tokenizer_model']}`, "
                 f"template `{manifest['packing']['chat_template']}`, "
                 f"kwargs `{manifest['packing']['chat_template_kwargs']}`"

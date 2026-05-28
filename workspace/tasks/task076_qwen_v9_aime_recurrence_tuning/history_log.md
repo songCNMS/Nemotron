@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ---
 
@@ -94,5 +94,22 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Recorded smoke artifacts under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/targeted_smoke/aime06/`.
 - Stopped the SGLang endpoint after smoke; port `30000` was clear and GPUs returned to idle.
 - Wrote `v9_export_smoke_session9.md`.
+
+---
+
+## Session 10 - 2026-05-28 - Checkpoint-root diagnosis and corrected V9 rerun
+
+**Executor**: intern_nemontron_code_reading
+
+- Diagnosed the Session 8/9 V9 failure as a checkpoint path bug: `SUPER3_M1_PRETRAINED_CHECKPOINT` was set to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints/iter_0000779`, but Megatron-Bridge expects the checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints`.
+- Confirmed the invalid V9 log has no `successfully loaded checkpoint` line, while V8/V7 continuation logs do; invalid V9 trained at random-init scale with iter 10 lm loss `12.25112` and final validation loss/PPL `8.960094/7786.093`.
+- Patched `plan_qwen_scaleup_run.py` and `plan_m1_agentic_sft_training.py` so `iter_XXXXXXX` checkpoint inputs are normalized to the parent checkpoint root before manifests and launch scripts are written.
+- Added regression tests covering checkpoint-root normalization in both planner layers.
+- Verification passed: `py_compile` for both planners, targeted pytest for the new normalization tests and related Qwen scale-up tests, and `ruff check` on touched planner/test files.
+- Launched corrected V9 rerun at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10` using the same V9 packed data, the cephfs Qwen metadata/tokenizer path, and the corrected V8 checkpoint root.
+- Corrected rerun log confirms `successfully loaded checkpoint from /work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints [ t 1/4, p 1/2 ] at iteration 0`.
+- Corrected rerun completed `192/192` iterations; health signals were iter 10 lm loss `0.4368270`, iter 100 lm loss `0.4449203`, iter 190 lm loss `0.4447130`, validation@100 loss/PPL `0.4531137/1.573203`, and final validation loss/PPL `0.4252748/1.530011`.
+- Final corrected checkpoint path: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`; checkpoint marker is `192` and size is about `399G`.
+- Wrote `v9_checkpoint_root_fix_session10.md`.
 
 ---

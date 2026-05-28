@@ -11,8 +11,8 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run imp
     qwen_data_prep_config_contract,
     render_eval_script,
     render_local_data_prep_script,
-    render_report,
     render_remote_train_script,
+    render_report,
     write_plan,
 )
 from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
@@ -232,6 +232,29 @@ def test_scaleup_planner_qwen_data_prep_contract_rejects_super3_drift() -> None:
 
     with pytest.raises(ValueError, match="chat_template='tokenizer'"):
         validate_qwen_data_prep_config(contract)
+
+
+def test_scaleup_planner_normalizes_iter_checkpoint_to_root(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/runs/v8/checkpoints/iter_0000779",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+
+    assert manifest["training"]["pretrained_checkpoint"] == "/runs/v8/checkpoints"
+    assert "--pretrained-checkpoint /runs/v8/checkpoints" in local_script
+    assert "export SUPER3_M1_PRETRAINED_CHECKPOINT=/runs/v8/checkpoints" in remote_script
+    assert "iter_0000779" not in remote_script
 
 
 def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
