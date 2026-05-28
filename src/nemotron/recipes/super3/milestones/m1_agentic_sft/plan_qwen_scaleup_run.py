@@ -608,6 +608,7 @@ PY
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py \\
   --packed-sft-dir {_q(Path(paths["packed_dir"]) / "splits")} \\
   --pretrained-checkpoint {_q(training["pretrained_checkpoint"])} \\
+  --qwen-hf-model {_q(training["qwen_hf_model"])} \\
   --tokenizer-model {_q(packing["tokenizer_model"])} \\
   --save-dir {_q(paths["checkpoint_dir"])} \\
   --output-dir {_q(paths["plan_dir"])} \\
