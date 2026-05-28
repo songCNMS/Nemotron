@@ -33,6 +33,10 @@ from nemotron.cli.commands.super3.eval import (  # noqa: E402
 from nemotron.recipes.super3.milestones.m1_eval_basket.regression_report import (  # noqa: E402
     diff_eval_runs,
 )
+from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
+    benchmark_alignment_target_suites,
+    load_benchmark_alignment_ledger,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 V0_REGISTRY_PATH = (
@@ -353,6 +357,29 @@ def test_launcher_available_config_uses_only_verified_available_tasks() -> None:
     tasks = set(data["tasks"])
     assert tasks == expected
     assert len(tasks) == 14
+
+
+def test_alignment_ledger_matches_m1_full_and_launcher_available_suites() -> None:
+    """task079 ledger cross-walks the target M1 basket and the runnable
+    launcher subset so legacy parser/budget-sensitive rows cannot be
+    promoted merely because a launcher task exists."""
+    ledger = load_benchmark_alignment_ledger()
+    suites = benchmark_alignment_target_suites(ledger)
+
+    full_expected = EXPECTED_V0_IDS | EXPECTED_FULL_IDS
+    assert set(suites["m1_full_basket_target"]) == full_expected
+    assert set(suites["m1_full_basket_launcher_available"]) == {
+        row["benchmark_id"]
+        for row in _load_launcher_rows()
+        if row["status"] == "available"
+    }
+
+    launcher_suite = next(
+        suite
+        for suite in ledger["target_suites"]
+        if suite["suite_id"] == "m1_full_basket_launcher_available"
+    )
+    assert launcher_suite["evidence_policy"]["accepts_improvement_evidence"] is False
 
 
 def test_corrected_math_comparison_config_records_long_budget_protocol() -> None:

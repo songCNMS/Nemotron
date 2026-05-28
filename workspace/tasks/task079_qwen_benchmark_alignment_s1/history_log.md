@@ -1,0 +1,10 @@
+# task079_qwen_benchmark_alignment_s1 history
+
+<!-- METADATA:SESSION=1 -->
+
+## Session 1 - 2026-05-28
+
+- Synced local `main` by fast-forward to `ffcf0ae247400f1da8f4b0a20e32e4d2c6393795`.
+- Created branch `intern_nem_dev_3/task079_qwen_benchmark_alignment_s1`.
+- Added benchmark alignment ledger and validator for Qwen MMLU-Pro/AIME25/HMMT evidence.
+- Cross-wired tests with M1/M2 basket registries and launcher mapping.
