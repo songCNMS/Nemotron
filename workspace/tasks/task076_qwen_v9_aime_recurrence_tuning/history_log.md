@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ---
 
@@ -78,5 +78,21 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Checkpoints saved: `iter_0000100` and final `iter_0000192`.
 - Final checkpoint path: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
 - Wrote `v9_train_session8.md`.
+
+---
+
+## Session 9 - 2026-05-28 - V9 HF export and targeted AIME06 smoke
+
+**Executor**: intern_nemontron_code_reading
+
+- Exported final V9 checkpoint `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192` to HF path `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/hf_export_iter_0000192`.
+- Used source HF metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` and export log `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/logs/export_iter_0000192.log`.
+- Validated the HF artifact: `16` safetensors shards, `61066575144` safetensors bytes, `model_type=qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and chat template present.
+- Wrote export manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/hf_export_iter_0000192/task076_export_manifest.json`.
+- Served the HF export in SGLang tmux session `task076_qwen_v9_iter0192_sglang_smoke` with `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`.
+- Ran targeted corrected `aime_06` smoke using the task071 corrected math runner row assignment and original AIME prompts. The expected answer was `907`; all `10` repeats returned status `ok` but hit `finish_reason=length`, parsed `0/10`, correct `0/10`, and averaged `8192` completion tokens.
+- Recorded smoke artifacts under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/targeted_smoke/aime06/`.
+- Stopped the SGLang endpoint after smoke; port `30000` was clear and GPUs returned to idle.
+- Wrote `v9_export_smoke_session9.md`.
 
 ---

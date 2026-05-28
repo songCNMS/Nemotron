@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task076_qwen_v9_aime_recurrence_tuning |
 | PR | https://github.com/songCNMS/Nemotron/pull/183 |
-| Session | 8 |
+| Session | 9 |
 | Branch | intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning |
-| Latest | Completed V9 30B-A3B training on NemTron: synced packed data, mirrored cephfs Qwen metadata/tokenizer on remote, ran 192 iters, and saved final checkpoint iter_0000192. |
+| Latest | Exported V9 iter_0000192 to HF, validated shards/config/tokenizer, and ran targeted corrected aime_06 smoke; smoke failed with 0/10 parsed/correct and length-capped generations, so next step is V9 lineage/data diagnosis before full gate. |

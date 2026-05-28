@@ -29,8 +29,8 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - [x] V7/V8 AIME row audit is converted into a concrete V9 tuning hypothesis, including why `aime_06` failed and what data or weighting should address it.
 - [x] V9 data or training plan is generated with explicit decontamination against AIME25/HMMT/MATH-style heldouts.
 - [x] V9 candidate checkpoint or a clearly blocked launch record exists with exact commands, logs, and artifact paths.
-- [ ] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
-- [ ] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
+- [x] Targeted recurrence/counting AIME smoke records per-row predictions for `aime_06`-style prompts.
+- [x] If a V9 checkpoint is produced, HF export passes config/tokenizer/shard validation.
 - [ ] If a V9 checkpoint is produced, corrected full MMLU-Pro, AIME25 `max_tokens=8192`, and HMMT `max_tokens=8192` metrics are recorded and compared with V7/V8.
 
 ## Session 1 Result
@@ -67,3 +67,13 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Launched and completed V9 training: `192/192` iterations on 8 H200 GPUs from V8 checkpoint `iter_0000779`.
 - Final checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
 - Final validation loss at iter 192: `8.960094`; no traceback/OOM/runtime error was found in the observed train log.
+
+## Session 9 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_export_smoke_session9.md`.
+- Exported final V9 checkpoint `iter_0000192` to HF at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/hf_export_iter_0000192`.
+- Used the user-requested Qwen metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- HF validation passed: `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, chat template present.
+- Served the HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`.
+- Targeted corrected `aime_06` smoke completed all `10` repeats with expected answer `907`, but all `10` hit `finish_reason=length`, parsed `0/10`, correct `0/10`, and averaged `8192` completion tokens.
+- Minimal chat smoke also degenerated (` the   the the the the the`), so full corrected MMLU-Pro/AIME25/HMMT was not launched; next step is diagnosing V9 training/export lineage before spending the full gate.

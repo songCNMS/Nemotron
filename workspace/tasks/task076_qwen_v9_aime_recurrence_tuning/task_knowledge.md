@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -36,5 +36,9 @@
 24. technical fact: Qwen3 30B-A3B recipe builder preflight passed with the lightweight HF metadata/tokenizer mirror because the HF bridge uses `load_weights=False` and the actual weights load from V8 NeMo checkpoint `iter_0000779`.
 25. technical fact: V9 training completed all `192` iterations on NemTron 8xH200 and saved final checkpoint `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/checkpoints/iter_0000192`.
 26. technical fact: V9 train loss decreased from iter 10 lm loss `12.25112` to iter 190 lm loss `8.950349`; final validation loss at iter 192 was `8.960094`.
+27. technical fact: V9 `iter_0000192` was exported to HF at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9/hf_export_iter_0000192` using source metadata/tokenizer `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+28. technical fact: V9 HF export validation passed with `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and chat template present.
+29. technical fact: V9 targeted corrected `aime_06` smoke on `10` repeats used original prompts, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and expected answer `907`; all `10` responses ended by length, parsed `0/10`, and correct was `0/10`.
+30. research conclusion: V9 `iter_0000192` is not a useful full-gate candidate until lineage is diagnosed, because even a trivial chat smoke degenerated to repeated `the` tokens and `aime_06` produced no boxed answers.
 
 ---
