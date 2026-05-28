@@ -17,3 +17,6 @@
 - Added focused assertions for separate Qwen HF model and tokenizer paths.
 - Verified focused planner pytest, py_compile, Ruff, structured rendered
   manifest/script probe, and `git diff --check`.
+- Opened PR #209 to `main`: https://github.com/songCNMS/Nemotron/pull/209.
+- Confirmed no live train/eval runs, endpoints, W&B, cluster jobs, deployment,
+  promotion, direct `main` or `master` push, or self-merge was performed.

@@ -1,6 +1,6 @@
 # task101_qwen_m1_training_plan_model_ref_contract_s1 - Qwen M1 training plan model ref contract
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=12 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3,SESSION=12 -->
 
 ## Background
 
@@ -33,8 +33,8 @@ separate Qwen HF model and tokenizer paths.
 - [x] Generated Qwen run script exports `SUPER3_M1_QWEN_HF_MODEL`.
 - [x] Focused M1 SFT planner pytest, py_compile, and Ruff pass.
 - [x] Static rendered manifest/script probe and whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/209
