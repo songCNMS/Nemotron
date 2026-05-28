@@ -1,6 +1,6 @@
 # task100_qwen_scaleup_train_model_ref_contract_s1 knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
 - The focused regression is the distinct path case:
   `/remote/models/Qwen3-30B-A3B-Instruct-2507` must be the model ref, while
   `/local/models/Qwen3-30B-A3B-Instruct-2507` remains only the tokenizer ref.
+- Session 12 adds no new task100-specific implementation knowledge; task101
+  carries the direct M1 planner analogue.
