@@ -1,6 +1,6 @@
 # task104_qwen_eval_source_manifest_lineage_gate_s1 - Qwen eval source manifest lineage gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=13 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3,SESSION=13 -->
 
 ## Background
 
@@ -31,8 +31,8 @@ YAML to pass validator checks.
 - [x] Production validator rejects missing repo-relative source manifest paths.
 - [x] Current production source manifests are repo-relative existing files.
 - [x] Focused pytest, py_compile, Ruff, structured probe, and `git diff --check` pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/211
