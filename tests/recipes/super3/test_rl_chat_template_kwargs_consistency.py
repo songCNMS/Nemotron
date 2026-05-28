@@ -30,6 +30,10 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 GENERIC_RL_CONFIG = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/default.yaml"
 )
+GENERIC_RL_CONFIG_DIR = GENERIC_RL_CONFIG.parent
+GENERIC_RL_RUNSPEC_SCRIPT = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/train.py"
+)
 
 RL_CONFIGS = (
     GENERIC_RL_CONFIG,
@@ -68,6 +72,37 @@ def _policy_block(config_path: Path) -> dict:
     policy = data.get("policy")
     assert isinstance(policy, dict), f"{config_path}: missing policy block"
     return policy
+
+
+def _deep_merge_dicts(base: dict, override: dict) -> dict:
+    merged = dict(base)
+    for key, value in override.items():
+        if key == "defaults":
+            continue
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _deep_merge_dicts(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _load_config_with_defaults(config_path: Path) -> dict:
+    data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    assert isinstance(data, dict), f"{config_path}: top-level must be a mapping"
+    defaults = data.get("defaults")
+    if defaults is None:
+        return data
+    assert isinstance(defaults, str), f"{config_path}: defaults must name one YAML file"
+    base_config = _load_config_with_defaults(config_path.parent / defaults)
+    return _deep_merge_dicts(base_config, data)
+
+
+def _runspec_default_config_name(script_path: Path) -> str:
+    for line in script_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("# default = "):
+            return stripped.split('"')[1]
+    raise AssertionError(f"{script_path}: missing tool.runspec.config default")
 
 
 def _vllm_cfg(config_path: Path) -> dict:
@@ -209,3 +244,40 @@ def test_all_rl_configs_agree_on_http_serving_parser_contract() -> None:
             f"{name}={contract}" for name, contract in per_config_contract.items()
         )
     )
+
+
+def test_generic_runspec_default_tiny_inherits_qwen_rl_contract() -> None:
+    """The generic `nemotron super3 rl` runspec default must not bypass
+    the Qwen chat-template, parser, or stop-string contract."""
+    default_name = _runspec_default_config_name(GENERIC_RL_RUNSPEC_SCRIPT)
+    assert default_name == "tiny"
+
+    tiny_config_path = GENERIC_RL_CONFIG_DIR / f"{default_name}.yaml"
+    tiny_raw = yaml.safe_load(tiny_config_path.read_text(encoding="utf-8"))
+    assert isinstance(tiny_raw, dict), f"{tiny_config_path}: top-level must be a mapping"
+    assert tiny_raw.get("defaults") == "default.yaml"
+
+    resolved = _load_config_with_defaults(tiny_config_path)
+    policy = resolved.get("policy")
+    assert isinstance(policy, dict), f"{tiny_config_path}: missing policy block"
+
+    tokenizer = policy.get("tokenizer")
+    assert isinstance(tokenizer, dict), f"{tiny_config_path}: missing policy.tokenizer"
+    assert tokenizer.get("chat_template_kwargs") == EXPECTED_KWARGS
+
+    generation = policy.get("generation")
+    assert isinstance(generation, dict), f"{tiny_config_path}: missing policy.generation"
+    assert generation.get("stop_strings") == ["<|im_end|>"]
+
+    vllm_cfg = generation.get("vllm_cfg")
+    assert isinstance(vllm_cfg, dict), f"{tiny_config_path}: missing vllm_cfg"
+    http_chat = vllm_cfg.get("http_server_serving_chat_kwargs")
+    assert isinstance(http_chat, dict), (
+        f"{tiny_config_path}: missing http_server_serving_chat_kwargs"
+    )
+    for key, expected in EXPECTED_HTTP_CHAT_SERVING_FIELDS.items():
+        assert http_chat.get(key) == expected
+    assert http_chat.get("chat_template_kwargs") == EXPECTED_KWARGS
+
+    assert resolved["grpo"]["max_num_steps"] == 10
+    assert resolved["run"]["model"] == "super3-sft-model-tiny:latest"
