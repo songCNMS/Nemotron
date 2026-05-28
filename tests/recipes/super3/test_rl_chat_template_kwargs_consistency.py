@@ -1,4 +1,4 @@
-"""Regression: all 4 super3 RL stage configs must declare one Qwen
+"""Regression: Super3 RL configs must declare one Qwen
 chat-template rendering contract.
 
 Before PR C (chat-template consistency review follow-up), only SWE1
@@ -27,7 +27,12 @@ yaml = pytest.importorskip("yaml")
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
-RL_STAGE_CONFIGS = (
+GENERIC_RL_CONFIG = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/default.yaml"
+)
+
+RL_CONFIGS = (
+    GENERIC_RL_CONFIG,
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/config/default.yaml",
     REPO_ROOT
@@ -103,7 +108,7 @@ def _tokenizer_chat_template_kwargs(config_path: Path) -> dict:
 
 
 @pytest.mark.parametrize(
-    "config_path", RL_STAGE_CONFIGS, ids=lambda p: p.parent.parent.name
+    "config_path", RL_CONFIGS, ids=lambda p: p.parent.parent.name
 )
 def test_rl_stage_pins_unified_chat_template_kwargs(config_path: Path) -> None:
     kwargs = _http_chat_template_kwargs(config_path)
@@ -116,7 +121,7 @@ def test_rl_stage_pins_unified_chat_template_kwargs(config_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "config_path", RL_STAGE_CONFIGS, ids=lambda p: p.parent.parent.name
+    "config_path", RL_CONFIGS, ids=lambda p: p.parent.parent.name
 )
 def test_tokenizer_kwargs_match_rollout_serving_kwargs(config_path: Path) -> None:
     tokenizer_kwargs = _tokenizer_chat_template_kwargs(config_path)
@@ -129,7 +134,7 @@ def test_tokenizer_kwargs_match_rollout_serving_kwargs(config_path: Path) -> Non
 
 
 @pytest.mark.parametrize(
-    "config_path", RL_STAGE_CONFIGS, ids=lambda p: p.parent.parent.name
+    "config_path", RL_CONFIGS, ids=lambda p: p.parent.parent.name
 )
 def test_vllm_cfg_has_no_conflicting_enable_thinking_sibling(config_path: Path) -> None:
     vllm_cfg = _vllm_cfg(config_path)
@@ -144,14 +149,14 @@ def test_vllm_cfg_has_no_conflicting_enable_thinking_sibling(config_path: Path) 
         )
 
 
-def test_all_four_rl_stages_agree_on_chat_template_kwargs() -> None:
-    """Cross-stage consistency: every RL stage uses the same kwargs.
+def test_all_rl_configs_agree_on_chat_template_kwargs() -> None:
+    """Cross-config consistency: every runnable RL config uses the same kwargs.
     Drift here is the bug, not the values."""
     per_stage_kwargs = {
         config_path.parent.parent.name: tuple(
             sorted(_http_chat_template_kwargs(config_path).items())
         )
-        for config_path in RL_STAGE_CONFIGS
+        for config_path in RL_CONFIGS
     }
     distinct = set(per_stage_kwargs.values())
     assert len(distinct) == 1, (
