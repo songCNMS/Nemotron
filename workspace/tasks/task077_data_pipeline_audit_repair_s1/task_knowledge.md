@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -47,5 +47,9 @@
 35. test evidence: Task092 focused Qwen RL contract pytest passed with 7 tests, py_compile passed for the touched test, Ruff passed for the touched test, structured YAML probe passed, and diff checks passed.
 36. blocker: Suggested existing Nano3 stage2 RL integration shard is blocked by unrelated pre-existing drift in `test_data_prep_train_integration.py` imports/APIs and missing legacy helper modules.
 37. file change: PR #199 opened against `main` for task092 Nano3 stage2 RL Qwen contract.
+38. supervisor request: PM follow-up for active task092 required fixing Nano3 tiny validation split because `validation_jsonl_fpath` reused `${art:data,train}`.
+39. file change: Nano3 stage2 RL `tiny.yaml` now uses `train_jsonl_fpath: ${art:data,train}` and `validation_jsonl_fpath: ${art:data,val}`.
+40. test evidence: Task092 focused Qwen RL contract pytest now passes with 8 tests and includes a regression proving tiny train/validation artifact split keys differ.
+41. file change: PR #199 updated with the Nano3 tiny split follow-up.
 
 ---

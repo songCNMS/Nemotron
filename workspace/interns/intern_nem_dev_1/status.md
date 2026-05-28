@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task092_nano3_stage2_rl_qwen_contract_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/199 |
-| Session | 15 |
-| Recent Progress | Opened PR #199 for task092 after pinning Nano3 stage2 RL Qwen chat kwargs, stop string, and nano_v3 parser/plugin contract; focused checks passed |
+| Session | 16 |
+| Recent Progress | Pushed task092 follow-up to PR #199 fixing Nano3 tiny validation split to use `${art:data,val}` and adding a focused train/validation split-key regression test; focused checks passed |

@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ---
 
@@ -119,5 +119,17 @@
 - Validation passed locally: focused Nano3 Qwen RL pytest shard, py_compile for touched test, Ruff for touched test, structured YAML probe, `git diff --check`, and `git diff --cached --check`.
 - Suggested existing integration shard was attempted and is blocked by unrelated pre-existing drift in `tests/recipes/nano3/stage2_rl/test_data_prep_train_integration.py`.
 - Opened PR #199: https://github.com/songCNMS/Nemotron/pull/199
+
+---
+
+## Session 16 - 2026-05-28 - Task092 Nano3 tiny validation split follow-up
+
+**Executor**: intern_nem_dev_1
+
+- Read updated task092 instruction from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Fixed Nano3 stage2 RL `tiny.yaml` so `data.validation_jsonl_fpath` uses `${art:data,val}` instead of reusing `${art:data,train}`.
+- Extended the focused task092 static test to prove tiny train and validation artifact split keys are `train` and `val` and differ.
+- Validation passed locally: focused Nano3 Qwen RL contract pytest shard, py_compile for touched test, Ruff for touched test, structured YAML probe including tiny split keys, `git diff --check`, and `git diff --cached --check`.
+- Pushed the follow-up to existing PR #199: https://github.com/songCNMS/Nemotron/pull/199
 
 ---
