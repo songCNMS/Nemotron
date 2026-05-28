@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ---
 
@@ -27,5 +27,18 @@
 - Head SHA after PR status commit: `e6bed5b5fb6f88db774f4525f1cdf33f535d8d5a`.
 - Recorded validation evidence in intern report and task knowledge.
 - PM peer notification was attempted and returned `{"status": "undeliverable", "reason": "busy"}`.
+
+---
+
+## Session 9 - 2026-05-28 - Task080 bridge audit recovery
+
+**Executor**: intern_nem_dev_1
+
+- Read `/work-agents/intern_nem_dev_1/instruction.md` section `2026-05-28 16:12 UTC - PM recovery after 413 for task080`.
+- Continued branch `intern_nem_dev_1/task080_m1_bridge_data_quality_s1` from base `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`.
+- Added shared M1 bridge data-quality audit helpers and SHA-256 output-fingerprint helpers in `_bridge_base.py`.
+- Wired `data_quality` and `output_fingerprints` manifest/report blocks into RLVR, SWE1, SWE2, and RLHF bridge writers.
+- Added focused bridge assertions for all four bridge families and opened PR #189: https://github.com/songCNMS/Nemotron/pull/189
+- Validation: `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_rlvr_data_bridge.py tests/recipes/super3/test_m1_swe1_data_bridge.py tests/recipes/super3/test_m1_swe2_data_bridge.py tests/recipes/super3/test_m1_rlhf_data_bridge.py` passed with 65 tests; `git diff --check` passed. `python -m ruff check ...` was attempted but Ruff is not installed.
 
 ---
