@@ -1,6 +1,6 @@
 # task078_qwen_training_pipeline_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
