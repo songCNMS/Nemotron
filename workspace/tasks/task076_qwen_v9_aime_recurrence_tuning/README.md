@@ -48,3 +48,13 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Generated decontamination corpus: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/aime25_hmmt_math_heldout_decontam_corpus.jsonl` with `30` AIME25, `30` HMMT, and `1419` MATH-style heldout prompts.
 - Source-count probe found `220/4546` existing V8 hard sidecar rows match the V9 recurrence/counting filter.
 - Training was not launched in Session 2.
+
+## Session 7 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_data_prep_session7.md`.
+- Optimized V9 math decontamination and completed M1 prep: `983087` train rows, `11354` val-shadow rows, `310` dropped math blockers in base train and `310` in sidecar train.
+- V9 recurrence sidecar: `221` hard verified full-solution training rows; `1419` heldout eval rows remain excluded.
+- Switched Qwen model/tokenizer path from inaccessible `/mnt/3fs` to `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- Packed data: `32` shards, `983135` total sequences, `667289202` total tokens, `pack_size=8192`; Qwen chat contract validation passed.
+- Generated training plan: `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/training_plan/task076_qwen30b_a3b_hard_math_recurrence_v9/training_manifest.json` with `train_iters=192`.
+- Ran generated `m1_basket` eval dry-run successfully; training launch remains the next step.

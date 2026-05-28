@@ -208,7 +208,8 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
     qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
-    qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_hf_model)
+    qwen_tokenizer_model = args.qwen_tokenizer_model or qwen_hf_model
+    qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_tokenizer_model)
     validate_qwen_data_prep_config(
         qwen_data_prep_contract,
         config_path=QWEN_DATA_PREP_CONFIG,
@@ -308,7 +309,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             ),
         },
         "packing": {
-            "tokenizer_model": qwen_hf_model,
+            "tokenizer_model": qwen_tokenizer_model,
             "chat_template": QWEN_CHAT_TEMPLATE,
             "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "target_model_family": QWEN_DATA_PREP_TARGET_FAMILY,
@@ -321,6 +322,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "test_ratio": args.test_ratio,
         },
         "training": {
+            "qwen_hf_model": qwen_hf_model,
             "pretrained_checkpoint": pretrained_checkpoint,
             "train_entrypoint": train_entrypoint,
             "training_profile": QWEN_TRAINING_PROFILE,
@@ -348,7 +350,8 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "dry_run_only": True,
         },
         "qwen_chat_contract": {
-            "sft_tokenizer_model": qwen_hf_model,
+            "sft_model": qwen_hf_model,
+            "sft_tokenizer_model": qwen_tokenizer_model,
             "sft_chat_template": QWEN_CHAT_TEMPLATE,
             "sft_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "training_profile": QWEN_TRAINING_PROFILE,
@@ -673,7 +676,7 @@ def render_remote_train_script(manifest: JsonDict) -> str:
         f"cd {_q(remote_repo)}",
         f"source {_q(Path(training['nemtron_venv']) / 'bin' / 'activate')}",
         "export PYTHONPATH=$PWD/src",
-        f"export SUPER3_M1_QWEN_HF_MODEL={_q(packing['tokenizer_model'])}",
+        f"export SUPER3_M1_QWEN_HF_MODEL={_q(training.get('qwen_hf_model', packing['tokenizer_model']))}",
         f"export SUPER3_M1_AGENTIC_PACKED_DIR={_q(remote_run_root / 'packed_qwen' / 'splits')}",
         f"export SUPER3_M1_TOKENIZER_MODEL={_q(packing['tokenizer_model'])}",
         f"export SUPER3_M1_TRAINING_PROFILE={_q(training['training_profile'])}",
@@ -758,7 +761,8 @@ def render_report(manifest: JsonDict) -> str:
             f"- Data-prep config: `{manifest['packing']['data_prep_config']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
-                f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "
+                f"- Qwen chat contract: model `{training.get('qwen_hf_model', manifest['packing']['tokenizer_model'])}`, "
+                f"tokenizer `{manifest['packing']['tokenizer_model']}`, "
                 f"template `{manifest['packing']['chat_template']}`, "
                 f"kwargs `{manifest['packing']['chat_template_kwargs']}`"
             ),
@@ -813,6 +817,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-dir", type=Path, default=REPO_ROOT)
     parser.add_argument("--run-name", default=DEFAULT_RUN_NAME)
     parser.add_argument("--qwen-hf-model", default=None)
+    parser.add_argument(
+        "--qwen-tokenizer-model",
+        default=None,
+        help=(
+            "Tokenizer model/path for local packing and training contract validation. "
+            "Defaults to --qwen-hf-model; set this separately when the training HF "
+            "model path is only visible on the remote training host."
+        ),
+    )
     parser.add_argument("--pretrained-checkpoint", default=None)
     parser.add_argument(
         "--train-entrypoint",

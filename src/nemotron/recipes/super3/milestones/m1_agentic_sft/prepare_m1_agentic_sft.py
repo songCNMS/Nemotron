@@ -731,8 +731,26 @@ def decontaminate_math_rows(
 
     summary["corpus_size"] = len(corpus)
     target_envs = frozenset(environments)
-    scannable: list[dict] = []
-    scannable_indices: list[int] = []
+    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
+        DEFAULT_TEXT_FIELDS,
+        _build_index,
+        text_ngrams,
+    )
+
+    eval_records = _build_index(
+        corpus,
+        ngram_size=int(ngram_size),
+        text_fields=DEFAULT_TEXT_FIELDS,
+        id_prefix=f"{eval_set_name}_eval",
+    )
+    eval_ngram_index: dict[str, list[int]] = defaultdict(list)
+    for eval_index, eval_record in enumerate(eval_records):
+        for ngram in eval_record["ngrams"]:
+            eval_ngram_index[ngram].append(eval_index)
+
+    dropped_row_indices: set[int] = set()
+    sample_dropped_findings: list[JsonDict] = []
+    blocker_findings = 0
     for index, row in enumerate(rows):
         metadata = row.get("metadata")
         if not isinstance(metadata, Mapping):
@@ -742,47 +760,47 @@ def decontaminate_math_rows(
         prompt = _message_content(row, "user")
         if not prompt:
             continue
-        scannable.append({"id": f"row_{index}", "prompt": prompt})
-        scannable_indices.append(index)
-
-    summary["scanned_rows"] = len(scannable)
-    if not scannable:
+        summary["scanned_rows"] += 1
+        prompt_ngrams = text_ngrams(prompt, int(ngram_size))
+        if not prompt_ngrams:
+            continue
+        overlap_counts: dict[int, int] = defaultdict(int)
+        for ngram in prompt_ngrams:
+            for eval_index in eval_ngram_index.get(ngram, ()):
+                overlap_counts[eval_index] += 1
+        if not overlap_counts:
+            continue
+        prompt_ngram_count = len(prompt_ngrams)
+        row_is_blocked = False
+        for eval_index, overlap_count in overlap_counts.items():
+            eval_record = eval_records[eval_index]
+            eval_ngrams = eval_record["ngrams"]
+            if not eval_ngrams:
+                continue
+            prompt_ratio = overlap_count / prompt_ngram_count
+            eval_ratio = overlap_count / len(eval_ngrams)
+            score = max(prompt_ratio, eval_ratio)
+            if score < blocker_threshold:
+                continue
+            blocker_findings += 1
+            row_is_blocked = True
+            if len(sample_dropped_findings) < 10:
+                sample_dropped_findings.append(
+                    {
+                        "prompt_id": f"row_{index}",
+                        "eval_id": eval_record["id"],
+                        "score": round(score, 6),
+                        "matched_ngrams": sorted(prompt_ngrams & eval_ngrams)[:8],
+                    }
+                )
+        if row_is_blocked:
+            dropped_row_indices.add(index)
+    if summary["scanned_rows"] == 0:
         return list(rows), summary
-
-    from nemotron.recipes.super3.milestones.data_registries.contamination_scanner import (
-        scan_prompt_corpus,
-    )
-
-    report = scan_prompt_corpus(
-        scannable,
-        {eval_set_name: list(corpus)},
-        ngram_size=int(ngram_size),
-        # Drop rows the moment they cross the blocker threshold; we don't
-        # care about a separate informational tier here.
-        informational_threshold=float(blocker_threshold),
-        blocker_threshold=float(blocker_threshold),
-    )
-    dropped_row_indices: set[int] = set()
-    for finding in report.get("blockers", []):
-        prompt_id = finding.get("prompt_id")
-        if not isinstance(prompt_id, str) or not prompt_id.startswith("row_"):
-            continue
-        try:
-            dropped_row_indices.add(int(prompt_id[len("row_"):]))
-        except ValueError:
-            continue
     summary["applied"] = True
-    summary["blocker_findings"] = len(report.get("blockers", []))
+    summary["blocker_findings"] = blocker_findings
     summary["dropped_rows"] = len(dropped_row_indices)
-    summary["sample_dropped_findings"] = [
-        {
-            "prompt_id": item.get("prompt_id"),
-            "eval_id": item.get("eval_id"),
-            "score": item.get("score"),
-            "matched_ngrams": item.get("matched_ngrams"),
-        }
-        for item in report.get("blockers", [])[:10]
-    ]
+    summary["sample_dropped_findings"] = sample_dropped_findings
     return (
         [row for index, row in enumerate(rows) if index not in dropped_row_indices],
         summary,

@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -23,5 +23,14 @@
 11. technical fact: The V9 decontamination corpus has `1479` prompts: `30` AIME25, `30` HMMT, and `1419` MATH-style heldout-eval prompts.
 12. research conclusion: The V9 continuation plan should start from V8 `iter_0000779` with a short `0.05` epoch, low-LR recurrence sidecar run before any corrected full eval.
 13. file change: Synced Session 6 bookkeeping after pushing the V9 recurrence strategy and decontaminated plan support.
+14. technical fact: Session 7 uncapped M0 prep produced valid rows for all 11 agentic datasets and recorded `2389` known Hermes conversion errors.
+15. file change: Optimized `decontaminate_math_rows` with an eval n-gram inverted index so V9 decontamination no longer performs a full rows-by-corpus nested scan.
+16. technical fact: Session 7 M1 V9 prep produced `983087` train rows and `11354` val-shadow rows after dropping `310` decontamination blockers from base math train and `310` from sidecar math train.
+17. technical fact: The final V9 recurrence sidecar contains `221` hard verified full-solution training rows; heldout eval rows remain excluded from training at `1419`.
+18. supervisor request: Use `/mnt/cephfs/data/stable/models/Qwen` instead of the inaccessible `/mnt/3fs` Qwen path for the model checkpoint/tokenizer path.
+19. technical fact: The usable cephfs Qwen 30B-A3B Instruct tokenizer/model directory is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+20. technical fact: V9 packing completed with `32` shards, `983135` total sequences, `667289202` total tokens, `pack_size=8192`, and tokenizer URI `file:///mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+21. technical fact: The V9 training manifest uses V8 checkpoint `iter_0000779`, `train_iters=192`, `global_batch_size=8`, `seq_length=8192`, LR `8e-8`, min LR `3e-8`, warmup `20`, and `qwen3_30b_a3b_local_train.py`.
+22. technical fact: The generated `m1_basket` eval dry-run compiled successfully with `adlr_aime25` and `enable_thinking=false`.
 
 ---

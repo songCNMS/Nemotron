@@ -11,6 +11,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.plan_qwen_scaleup_run imp
     qwen_data_prep_config_contract,
     render_eval_script,
     render_local_data_prep_script,
+    render_report,
     render_remote_train_script,
     write_plan,
 )
@@ -125,6 +126,43 @@ def test_scaleup_scripts_wire_data_training_and_eval(tmp_path) -> None:
     assert "super3 eval -c m1_full_basket --dry-run" in eval_script
     assert "run.model=sft:unit_qwen_scaleup" in eval_script
     assert "deployment.checkpoint_path=" in eval_script
+
+
+def test_scaleup_planner_can_use_separate_qwen_tokenizer_model(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--run-name",
+            "unit_qwen_scaleup",
+            "--qwen-hf-model",
+            "/remote/models/Qwen3-30B-A3B-Instruct-2507",
+            "--qwen-tokenizer-model",
+            "/local/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+        ]
+    )
+    manifest = build_manifest(args)
+
+    local_script = render_local_data_prep_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+    report = render_report(manifest)
+
+    assert manifest["training"]["qwen_hf_model"] == "/remote/models/Qwen3-30B-A3B-Instruct-2507"
+    assert manifest["packing"]["tokenizer_model"] == "/local/models/Qwen3-30B-A3B-Instruct-2507"
+    assert manifest["qwen_chat_contract"]["sft_model"] == "/remote/models/Qwen3-30B-A3B-Instruct-2507"
+    assert (
+        manifest["qwen_chat_contract"]["sft_tokenizer_model"]
+        == "/local/models/Qwen3-30B-A3B-Instruct-2507"
+    )
+    assert "tokenizer.model=/local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "--tokenizer-model /local/models/Qwen3-30B-A3B-Instruct-2507" in local_script
+    assert "export SUPER3_M1_QWEN_HF_MODEL=/remote/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
+    assert "export SUPER3_M1_TOKENIZER_MODEL=/local/models/Qwen3-30B-A3B-Instruct-2507" in remote_script
+    assert "/remote/models/Qwen3-30B-A3B-Instruct-2507" in report
 
 
 def test_scaleup_planner_wires_30b_entrypoint_and_strategy_overrides(tmp_path) -> None:
