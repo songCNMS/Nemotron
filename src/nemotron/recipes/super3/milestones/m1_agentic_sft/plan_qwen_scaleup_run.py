@@ -43,7 +43,7 @@ from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (  # noqa: E40
 DEFAULT_OUTPUT_DIR = REPO_ROOT.parent / "outputs" / "task067_qwen_scaleup"
 DEFAULT_LOCAL_VENV = Path("/work-agents/.venv")
 DEFAULT_NEMTRON_VENV = Path("/root/nemotron_session5_venv")
-DEFAULT_REMOTE_ROOT = Path("/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup")
+DEFAULT_REMOTE_ROOT = REPO_ROOT.parent / "outputs" / "task067_qwen_scaleup_remote"
 DEFAULT_RUN_NAME = "qwen_m1_agentic_sft_scaleup"
 DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py"
 QWEN30B_A3B_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
