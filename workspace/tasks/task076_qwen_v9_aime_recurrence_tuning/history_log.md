@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=6 -->
 
 ---
 
@@ -36,5 +36,15 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Generated local decontamination corpus `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/aime25_hmmt_math_heldout_decontam_corpus.jsonl` with `1479` prompts.
 - Generated local V9 scale-up plan `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/scaleup_manifest.json`.
 - Wrote `v9_data_plan_session2.md` and marked the V9 data/training-plan acceptance criterion complete.
+
+---
+
+## Session 6 - 2026-05-28 - Checklist sync
+
+**Executor**: intern_nemontron_code_reading
+
+- Confirmed task076 PR branch was pushed through commit `89a9c1e`.
+- Added the missing stop-hook Session 6 bookkeeping entry.
+- Kept task status as Working because V9 data prep/training launch remains the next actionable step.
 
 ---

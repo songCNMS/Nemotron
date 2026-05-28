@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=6 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -22,5 +22,6 @@
 10. file change: Generated local V9 scale-up plan at `/work-agents/intern_nemontron_code_reading/outputs/task076_qwen30b_a3b_hard_math_recurrence_v9/scaleup_manifest.json`.
 11. technical fact: The V9 decontamination corpus has `1479` prompts: `30` AIME25, `30` HMMT, and `1419` MATH-style heldout-eval prompts.
 12. research conclusion: The V9 continuation plan should start from V8 `iter_0000779` with a short `0.05` epoch, low-LR recurrence sidecar run before any corrected full eval.
+13. file change: Synced Session 6 bookkeeping after pushing the V9 recurrence strategy and decontaminated plan support.
 
 ---

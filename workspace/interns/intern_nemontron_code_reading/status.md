@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task076_qwen_v9_aime_recurrence_tuning |
 | PR | https://github.com/songCNMS/Nemotron/pull/183 |
-| Session | 2 |
+| Session | 6 |
 | Branch | intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning |
-| Latest | Added `hard_math_recurrence_v9` prep/planner support, generated the decontaminated V9 plan artifact, and recorded Session 2 results. |
+| Latest | Synced Session 6 stop-hook bookkeeping after pushing V9 recurrence strategy and decontaminated plan support. |
