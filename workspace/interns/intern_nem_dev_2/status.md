@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task084_stage2_rl_runspec_default_contract_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/191 |
-| Session | 1 |
+| Session | 6 |
 
-最近进展：PR #190 for `task083_qwen_rl_reasoning_parser_contract_s1` merged at `d2f37f7e647bce186922f41da9476fa6e734576c`; task083 Session 5 closeout context was recorded. PM assigned `task084_stage2_rl_runspec_default_contract_s1`, local `main` was fast-forwarded to latest `origin/main`, and branch `intern_nem_dev_2/task084_stage2_rl_runspec_default_contract_s1` was created. Generic `stage2_rl/config/tiny.yaml` now inherits `default.yaml`, focused static tests prove the runspec default path resolves the Qwen RL chat/parser/stop contract, required validation passed, and PR #191 is open.
+最近进展：PR #191 gate blocker on old head `6b19b050df110d54c46764db9d8668e0ddfc0912` was reproduced as a real loader coverage gap: `parse_config()` used `OmegaConf.load()` directly and did not merge `defaults: "default.yaml"`. Session 6 updates `nemo_runspec.config.load_config()` to resolve the repo-local string defaults convention, strips the resolved `defaults` key, and switches the task084 tests to the production `parse_config()` path for generic `tiny` plus known RL overlays. Focused pytest, py_compile, ruff, whitespace checks, and a real `parse_config` structured audit now pass locally.

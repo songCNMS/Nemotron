@@ -1,6 +1,6 @@
 # task084_stage2_rl_runspec_default_contract_s1 - Stage2 RL runspec default contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=6 -->
 
 ## Background
 
@@ -10,6 +10,11 @@ script execution defaults to `config/default.yaml`. The generic `tiny.yaml`
 did not inherit `default.yaml`, so the runspec default path could bypass the
 Qwen RL chat-template, parser, and stop-string contract.
 
+PM gate then found that the first PR head only proved inheritance with a
+test-local resolver. The production runspec path calls
+`nemo_runspec.config.parse_config()` and previously loaded YAML with
+`OmegaConf.load()` directly, so `defaults: "default.yaml"` was not resolved.
+
 ## Goals
 
 - Start from latest `origin/main` and preserve local work.
@@ -18,7 +23,7 @@ Qwen RL chat-template, parser, and stop-string contract.
 - Add focused static regression coverage proving the runspec default path
   resolves the Qwen tokenizer, rollout-serving, parser, plugin, and stop-string
   contract.
-- Keep scope static config/test/docs only.
+- Keep scope static loader/config/test/docs only.
 
 ## Acceptance Criteria
 
@@ -30,6 +35,8 @@ Qwen RL chat-template, parser, and stop-string contract.
   `reasoning_parser_plugin=nemo_rl/utils/nano_v3_reasoning_parser.py`.
 - [x] Required validation passes locally.
 - [x] PR opened to `main`; no direct push to `main` or `master`.
+- [x] Production `parse_config()` resolves generic `tiny` and known RL overlay
+  configs through the Qwen chat/parser/stop contract.
 
 ## PR
 
