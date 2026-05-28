@@ -1,6 +1,6 @@
 # task093_nano3_stage3_eval_chat_contract_s1 knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Notes
 
@@ -11,3 +11,5 @@
   `evaluation.nemo_evaluator_config.config.params.extra.chat_template_kwargs`.
 - This task is static config/test only; live evals and task092 merge-gate
   validation remain outside the PR implementation.
+- Session 9 added no new task093-specific implementation knowledge; task094
+  owns the benchmark remote artifact verification follow-up.

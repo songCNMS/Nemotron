@@ -25,7 +25,6 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
     validate_raw_artifact_paths,
 )
 
-
 JsonDict = dict[str, Any]
 
 M1_EVAL_BASKET_DIR = Path(__file__).resolve().parent
@@ -184,7 +183,12 @@ def _load_launcher_available_ids() -> set[str]:
     }
 
 
-def _validate_artifact_check(value: Any, *, context: str) -> list[str]:
+def _validate_artifact_check(
+    value: Any,
+    *,
+    context: str,
+    requires_pm_verified: bool = False,
+) -> list[str]:
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping for checked raw artifacts"]
     issues: list[str] = []
@@ -195,6 +199,11 @@ def _validate_artifact_check(value: Any, *, context: str) -> list[str]:
         issues.append(
             f"{context}.status must be one of "
             f"{sorted(VALID_ARTIFACT_CHECK_STATUSES)}; got {status!r}"
+        )
+    elif requires_pm_verified and status != "pm_verified":
+        issues.append(
+            f"{context}.status must be 'pm_verified' for remote raw artifact "
+            f"references; got {status!r}"
         )
     for field in ("checked_at_utc", "checked_by"):
         if not _is_non_empty_string(value.get(field)):
@@ -522,14 +531,16 @@ def _validate_evidence_records(
                 f"{prefix}: missing raw artifact evidence cannot count as "
                 f"benchmark improvement evidence ({issue})"
             )
-        if isinstance(raw_paths, list) and any(
+        has_remote_raw_artifacts = isinstance(raw_paths, list) and any(
             isinstance(path, str) and is_remote_artifact_reference(path)
             for path in raw_paths
-        ):
+        )
+        if has_remote_raw_artifacts:
             issues.extend(
                 _validate_artifact_check(
                     record.get("artifact_check"),
                     context=f"{prefix}.artifact_check",
+                    requires_pm_verified=True,
                 )
             )
         if record.get("gate_status") not in VALID_EVIDENCE_STATUSES:

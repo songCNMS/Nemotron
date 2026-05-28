@@ -9,6 +9,12 @@ import pytest
 
 yaml = pytest.importorskip("yaml")
 
+from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
+    BENCHMARK_ALIGNMENT_LEDGER_PATH,
+    load_benchmark_alignment_ledger,
+    valid_benchmark_improvement_evidence,
+    validate_benchmark_alignment_ledger,
+)
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (  # noqa: E402
     QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS,
     QWEN_EVAL_REPRO_GATE_PATH,
@@ -16,16 +22,9 @@ from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate impo
     format_qwen_eval_repro_gate_report,
     load_qwen_eval_repro_gate,
     qwen_repro_evidence_by_benchmark,
-    validate_raw_artifact_paths,
     validate_qwen_eval_repro_gate,
+    validate_raw_artifact_paths,
 )
-from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
-    BENCHMARK_ALIGNMENT_LEDGER_PATH,
-    load_benchmark_alignment_ledger,
-    valid_benchmark_improvement_evidence,
-    validate_benchmark_alignment_ledger,
-)
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
@@ -356,6 +355,32 @@ def test_qwen_benchmark_alignment_rejects_unverified_artifact_check_statuses() -
             "artifact_check.status must be one of" in issue and status in issue
             for issue in issues
         ), f"expected status rejection for {status!r}, got: {issues}"
+
+
+def test_qwen_benchmark_alignment_remote_raw_refs_require_pm_verified() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    data["evidence_records"][0]["artifact_check"]["status"] = (
+        "local_workspace_verified"
+    )
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any(
+        "artifact_check.status must be 'pm_verified' for remote raw artifact references"
+        in issue
+        for issue in issues
+    ), f"expected remote artifact pm_verified issue, got: {issues}"
+
+
+def test_qwen_benchmark_alignment_current_remote_artifacts_are_pm_verified() -> None:
+    ledger = load_benchmark_alignment_ledger()
+
+    for record in ledger["evidence_records"]:
+        if any(
+            isinstance(path, str) and path.startswith(("vm4vpn:", "vpn:"))
+            for path in record["raw_artifact_paths"]
+        ):
+            assert record["artifact_check"]["status"] == "pm_verified"
 
 
 def test_qwen_benchmark_alignment_requires_existing_repo_relative_source_manifests() -> None:
