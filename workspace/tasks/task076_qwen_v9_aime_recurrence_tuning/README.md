@@ -36,5 +36,6 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 ## Session 1 Result
 
 - Branch: `intern_nemontron_code_reading/task076_qwen_v9_aime_recurrence_tuning`.
+- PR: `https://github.com/songCNMS/Nemotron/pull/183`.
 - Hypothesis report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_tuning_hypothesis_session1.md`.
 - Initial direction: add a high-precision `hard_math_recurrence_v9` sidecar on top of V8 clean-final rows, selected for recurrence/counting structure and still gated by AIME25/HMMT/MATH decontamination.
