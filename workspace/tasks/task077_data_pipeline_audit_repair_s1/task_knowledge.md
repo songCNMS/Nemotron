@@ -61,5 +61,10 @@
 49. file change: `qwen_local_train.py` and `qwen3_30b_a3b_local_train.py` now resolve the inherited legacy packed-dir fallback to the Qwen packed-data default before metadata validation, while preserving explicit `SUPER3_M1_AGENTIC_PACKED_DIR` and config/CLI overrides.
 50. test evidence: Task098 requested M1 Agentic SFT/Qwen scale-up pytest shard passed with 107 tests and 1 skipped; py_compile, Ruff, static OmegaConf packed-dir probe, and diff checks passed.
 51. file change: PR #205 opened against `main` for task098 Qwen SFT local train packed-dir contract.
+52. supervisor request: PM assigned task102 to sync latest main, fix Qwen scale-up planner remote-root portability, preserve explicit `--remote-root`, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+53. technical fact: `plan_qwen_scaleup_run.py` previously defaulted `DEFAULT_REMOTE_ROOT` to `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup`, so rendered sync/train scripts could write into another intern workspace.
+54. file change: Qwen scale-up planner `DEFAULT_REMOTE_ROOT` now resolves under the current checkout owner's `../outputs/task067_qwen_scaleup_remote` path.
+55. test evidence: Task102 focused planner pytest shard passed with 22 tests; py_compile, Ruff, static rendered portability probe, and diff checks passed.
+56. file change: PR #208 opened against `main` for task102 Qwen scale-up remote-root portability.
 
 ---
