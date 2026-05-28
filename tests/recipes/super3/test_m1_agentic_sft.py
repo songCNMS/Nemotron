@@ -484,6 +484,14 @@ def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     # No M0 baseline supplied → every row falls into the unknown bucket.
     assert manifest["difficulty_buckets"]["train"] == {"unknown": 1}
     assert manifest["difficulty_buckets"]["val_shadow"] == {"unknown": 1}
+    assert manifest["data_quality"]["source_metadata"]["train"]["missing_required_fields"] == {}
+    assert manifest["data_quality"]["source_metadata"]["val_shadow"]["missing_required_fields"] == {}
+    assert manifest["data_quality"]["split_routing"]["train_val_source_key_overlap_count"] == 1
+    assert "train_path" in manifest["output_fingerprints"]
+    assert len(manifest["output_fingerprints"]["blend_path"]) == 64
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Data quality audit" in report_md
+    assert "## Output fingerprints" in report_md
 
 
 def test_prepare_reasoning_replay_v3_writes_math_buckets_and_blend(tmp_path) -> None:
@@ -1010,6 +1018,7 @@ def test_prepare_hard_math_long_reasoning_v7_keeps_long_verified_hard_rows(tmp_p
         max_val_shadow_per_env = None
         overwrite = False
         math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V7
+        skip_math_decontamination_check = True
         math_v7_hard_verified_full_solution_weight = MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
@@ -1102,6 +1111,7 @@ def test_prepare_math_sidecar_can_use_uncapped_m0_source(tmp_path) -> None:
         max_val_shadow_per_env = None
         overwrite = False
         math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V7
+        skip_math_decontamination_check = True
         math_v7_hard_verified_full_solution_weight = MATH_V7_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_verified_full_solution_weight = MATH_V7_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v7_final_answer_aux_weight = MATH_V7_FINAL_ANSWER_AUX_WEIGHT
@@ -1205,6 +1215,7 @@ def test_prepare_hard_math_clean_final_v8_requires_single_expected_final_box(tmp
         max_val_shadow_per_env = None
         overwrite = False
         math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V8
+        skip_math_decontamination_check = True
         math_v8_hard_verified_full_solution_weight = MATH_V8_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v8_verified_full_solution_weight = MATH_V8_VERIFIED_FULL_SOLUTION_WEIGHT
         math_v8_final_answer_aux_weight = MATH_V8_FINAL_ANSWER_AUX_WEIGHT

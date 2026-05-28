@@ -14,6 +14,9 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+NEMOTRON_SUPER_TOKENIZER_DEFAULT = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"
+QWEN_DATA_PREP_TARGET_FAMILY = "qwen"
+QWEN_DATA_PREP_CONFIG_NAME = "qwen_agentic_v0"
 QWEN_SFT_CHAT_TEMPLATE = "tokenizer"
 QWEN_SFT_CHAT_TEMPLATE_KWARGS: dict[str, bool] = {
     "enable_thinking": False,
@@ -78,6 +81,17 @@ def _metadata_value(metadata: Mapping[str, Any], key: str) -> Any:
     return None
 
 
+def _config_value(config: Mapping[str, Any], key: str) -> Any:
+    value = config.get(key)
+    if value is not None:
+        return value
+    if key == "tokenizer_model":
+        tokenizer = config.get("tokenizer")
+        if isinstance(tokenizer, Mapping):
+            return tokenizer.get("model") or tokenizer.get("tokenizer_model")
+    return None
+
+
 def _normalize_tokenizer_ref(value: str) -> str:
     normalized = value.removeprefix("file://")
     for prefix in ("https://huggingface.co/", "http://huggingface.co/"):
@@ -89,6 +103,62 @@ def _normalize_tokenizer_ref(value: str) -> str:
     if normalized.startswith(("/", "~", ".")) or Path(normalized).expanduser().exists():
         return str(Path(normalized).expanduser().resolve(strict=False))
     return normalized
+
+
+def validate_qwen_data_prep_config(
+    config: Mapping[str, Any],
+    *,
+    config_path: str | Path | None = None,
+) -> None:
+    """Validate a data-prep config before packing Qwen-target SFT rows.
+
+    Qwen data must never rely on the Super3 profile defaults because those
+    defaults use the Nemotron tokenizer and the repo-pinned Super3 template.
+    This check stays lightweight so planners and tests can run it as a static
+    invariant without importing the full data-prep pipeline.
+    """
+
+    label = str(config_path) if config_path is not None else "Qwen data-prep config"
+
+    target_family = _config_value(config, "target_model_family")
+    if target_family != QWEN_DATA_PREP_TARGET_FAMILY:
+        raise ValueError(
+            f"{label} must set target_model_family={QWEN_DATA_PREP_TARGET_FAMILY!r}; "
+            f"got {target_family!r}."
+        )
+
+    config_name = _config_value(config, "config_name")
+    if config_name != QWEN_DATA_PREP_CONFIG_NAME:
+        raise ValueError(
+            f"{label} must set config_name={QWEN_DATA_PREP_CONFIG_NAME!r}; "
+            f"got {config_name!r}."
+        )
+
+    tokenizer_model = _config_value(config, "tokenizer_model")
+    if not isinstance(tokenizer_model, str) or not tokenizer_model.strip():
+        raise ValueError(f"{label} must set tokenizer.model to the explicit Qwen tokenizer/model.")
+    if tokenizer_model == NEMOTRON_SUPER_TOKENIZER_DEFAULT:
+        raise ValueError(
+            f"{label} still points tokenizer.model at the Nemotron/Super3 default. "
+            "Set tokenizer.model to the target Qwen HF model or local tokenizer path."
+        )
+
+    chat_template = _config_value(config, "chat_template")
+    if chat_template != QWEN_SFT_CHAT_TEMPLATE:
+        raise ValueError(
+            f"{label} must set chat_template={QWEN_SFT_CHAT_TEMPLATE!r}; "
+            f"got {chat_template!r}."
+        )
+
+    chat_template_kwargs = _config_value(config, "chat_template_kwargs")
+    if not isinstance(chat_template_kwargs, Mapping):
+        raise ValueError(f"{label} must define chat_template_kwargs for Qwen packing.")
+    for key, expected in QWEN_SFT_CHAT_TEMPLATE_KWARGS.items():
+        if chat_template_kwargs.get(key) is not expected:
+            raise ValueError(
+                f"{label} must set chat_template_kwargs.{key}={expected!r}; "
+                f"got {chat_template_kwargs.get(key)!r}."
+            )
 
 
 def validate_qwen_packed_sft_chat_contract(
@@ -138,3 +208,16 @@ def validate_qwen_packed_sft_chat_contract(
             )
 
     return metadata_path
+
+
+__all__ = [
+    "NEMOTRON_SUPER_TOKENIZER_DEFAULT",
+    "QWEN_DATA_PREP_CONFIG_NAME",
+    "QWEN_DATA_PREP_TARGET_FAMILY",
+    "QWEN_SFT_CHAT_TEMPLATE",
+    "QWEN_SFT_CHAT_TEMPLATE_KWARGS",
+    "find_packed_sft_metadata_path",
+    "load_packed_sft_metadata",
+    "validate_qwen_data_prep_config",
+    "validate_qwen_packed_sft_chat_contract",
+]

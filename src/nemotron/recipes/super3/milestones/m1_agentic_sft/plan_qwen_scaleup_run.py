@@ -27,6 +27,17 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[5]
+SRC_ROOT = REPO_ROOT / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
+
+from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (  # noqa: E402
+    QWEN_DATA_PREP_CONFIG_NAME,
+    QWEN_DATA_PREP_TARGET_FAMILY,
+    QWEN_SFT_CHAT_TEMPLATE,
+    QWEN_SFT_CHAT_TEMPLATE_KWARGS,
+    validate_qwen_data_prep_config,
+)
 
 DEFAULT_OUTPUT_DIR = REPO_ROOT.parent / "outputs" / "task067_qwen_scaleup"
 DEFAULT_LOCAL_VENV = Path("/work-agents/.venv")
@@ -35,14 +46,12 @@ DEFAULT_REMOTE_ROOT = Path("/work-agents/intern_nemontron_code_reading/task067_q
 DEFAULT_RUN_NAME = "qwen_m1_agentic_sft_scaleup"
 DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py"
 QWEN30B_A3B_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
+QWEN_DATA_PREP_CONFIG = "src/nemotron/recipes/super3/stage1_sft/config/data_prep/qwen_agentic_v0.yaml"
 
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 QWEN_CHECKPOINT_ENV_VAR = "SUPER3_M1_PRETRAINED_CHECKPOINT"
-QWEN_CHAT_TEMPLATE = "tokenizer"
-QWEN_CHAT_TEMPLATE_KWARGS: dict[str, Any] = {
-    "enable_thinking": False,
-    "truncate_history_thinking": False,
-}
+QWEN_CHAT_TEMPLATE = QWEN_SFT_CHAT_TEMPLATE
+QWEN_CHAT_TEMPLATE_KWARGS: dict[str, Any] = dict(QWEN_SFT_CHAT_TEMPLATE_KWARGS)
 MATH_SUPERVISION_STRATEGY_V1 = "final_answer_sidecar_v1"
 MATH_SUPERVISION_STRATEGY_V3 = "reasoning_replay_v3"
 MATH_SUPERVISION_STRATEGY_V4 = "hard_math_recovery_v4"
@@ -123,6 +132,18 @@ def resolve_train_entrypoint(explicit: str | None, qwen_hf_model: str) -> str:
     return DEFAULT_TRAIN_ENTRYPOINT
 
 
+def qwen_data_prep_config_contract(tokenizer_model: str) -> JsonDict:
+    """Return the static Qwen packing contract used by generated scripts."""
+
+    return {
+        "target_model_family": QWEN_DATA_PREP_TARGET_FAMILY,
+        "config_name": QWEN_DATA_PREP_CONFIG_NAME,
+        "tokenizer": {"model": tokenizer_model},
+        "chat_template": QWEN_CHAT_TEMPLATE,
+        "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
+    }
+
+
 def _write_executable(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
     path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
@@ -180,6 +201,11 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
     qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
+    qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_hf_model)
+    validate_qwen_data_prep_config(
+        qwen_data_prep_contract,
+        config_path=QWEN_DATA_PREP_CONFIG,
+    )
     train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
     pretrained_checkpoint = _env_or_arg(
         args.pretrained_checkpoint,
@@ -272,6 +298,9 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "tokenizer_model": qwen_hf_model,
             "chat_template": QWEN_CHAT_TEMPLATE,
             "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
+            "target_model_family": QWEN_DATA_PREP_TARGET_FAMILY,
+            "data_prep_config": QWEN_DATA_PREP_CONFIG,
+            "data_prep_config_name": QWEN_DATA_PREP_CONFIG_NAME,
             "num_shards": args.num_shards,
             "pack_size": args.pack_size,
             "train_ratio": args.train_ratio,
@@ -311,6 +340,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "train_tokenizer_env": "SUPER3_M1_TOKENIZER_MODEL",
             "train_model_env": QWEN_MODEL_ENV_VAR,
             "eval_chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
+            "data_prep": qwen_data_prep_contract,
         },
         "outputs": {
             "manifest": str(paths.manifest_path),
@@ -493,9 +523,11 @@ python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_
   --overwrite{math_supervision_flag_lines}
 
 python src/nemotron/recipes/super3/stage1_sft/data_prep.py \\
-  --config src/nemotron/recipes/super3/stage1_sft/config/data_prep/agentic_v0.yaml \\
+  --config {_q(packing["data_prep_config"])} \\
   blend_path={_q(Path(paths["m1_dir"]) / "data_blend_agentic_sft_v0.json")} \\
   output_dir={_q(paths["packed_dir"])} \\
+  target_model_family={_q(packing["target_model_family"])} \\
+  config_name={_q(packing["data_prep_config_name"])} \\
   tokenizer.model={_q(packing["tokenizer_model"])} \\
   chat_template={_q(packing["chat_template"])} \\
   chat_template_kwargs.enable_thinking=false \\
@@ -689,6 +721,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Math v7 weights: `{data['math_v7_weights']}`",
             f"- Math v8 weights: `{data['math_v8_weights']}`",
             f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
+            f"- Data-prep config: `{manifest['packing']['data_prep_config']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
                 f"- Qwen chat contract: tokenizer `{manifest['packing']['tokenizer_model']}`, "

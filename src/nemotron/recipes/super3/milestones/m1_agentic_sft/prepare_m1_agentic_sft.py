@@ -229,6 +229,13 @@ MATH_V7_MIN_SOLUTION_LINES = 6
 MATH_V7_BOXED_TAIL_CHARS = 3000
 MATH_V8_MAX_TRAILING_CHARS_AFTER_BOXED = 240
 MATH_SIDECAR_SOURCE_ENVIRONMENTS = frozenset(MATH_FINAL_ANSWER_ENVIRONMENTS)
+SOURCE_METADATA_REQUIRED_FIELDS = (
+    "m0_source_dataset",
+    "m0_source_revision",
+    "m0_source_id",
+    "license",
+)
+DATA_QUALITY_SAMPLE_LIMIT = 20
 
 JsonDict = dict[str, Any]
 
@@ -1745,6 +1752,149 @@ def count_difficulty_buckets(rows: Sequence[Mapping[str, Any]]) -> dict[str, int
     return dict(sorted(counts.items()))
 
 
+def _metadata_for_audit(row: Mapping[str, Any]) -> Mapping[str, Any]:
+    metadata = row.get("metadata")
+    return metadata if isinstance(metadata, Mapping) else {}
+
+
+def _source_key_for_audit(row: Mapping[str, Any]) -> str | None:
+    metadata = _metadata_for_audit(row)
+    parts = [
+        metadata.get("m0_source_dataset"),
+        metadata.get("m0_source_config"),
+        metadata.get("m0_source_revision"),
+        metadata.get("m0_source_id"),
+        metadata.get("m0_source_row_index"),
+    ]
+    if not any(part is not None and str(part).strip() for part in parts):
+        return None
+    return "|".join("" if part is None else str(part) for part in parts)
+
+
+def _prompt_text_for_audit(row: Mapping[str, Any]) -> str:
+    messages = row.get("messages")
+    if not isinstance(messages, Sequence) or isinstance(messages, (str, bytes)):
+        return ""
+    chunks: list[str] = []
+    for message in messages:
+        if not isinstance(message, Mapping):
+            continue
+        if message.get("role") not in {"system", "user"}:
+            continue
+        content = message.get("content")
+        if isinstance(content, str):
+            chunks.append(content)
+    return "\n".join(chunks)
+
+
+def _normalized_prompt_hash(row: Mapping[str, Any]) -> str:
+    normalized = re.sub(r"\W+", " ", _prompt_text_for_audit(row).lower()).strip()
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def _duplicate_counts(values: Sequence[str]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for value in values:
+        counts[value] += 1
+    return {key: count for key, count in sorted(counts.items()) if count > 1}
+
+
+def _sample_keys(keys: Sequence[str]) -> list[str]:
+    return list(keys[:DATA_QUALITY_SAMPLE_LIMIT])
+
+
+def audit_data_quality(
+    *,
+    train_rows: Sequence[Mapping[str, Any]],
+    val_rows: Sequence[Mapping[str, Any]],
+) -> JsonDict:
+    """Return static source, split, and duplicate audit metadata for M1 rows."""
+
+    by_split = {
+        "train": list(train_rows),
+        "val_shadow": list(val_rows),
+    }
+    split_audits: dict[str, JsonDict] = {}
+    source_keys_by_split: dict[str, set[str]] = {}
+    prompt_hashes_by_split: dict[str, set[str]] = {}
+
+    for split, rows in by_split.items():
+        missing_required_fields: dict[str, int] = defaultdict(int)
+        missing_examples: list[JsonDict] = []
+        source_keys: list[str] = []
+        prompt_hashes: list[str] = []
+        for index, row in enumerate(rows):
+            metadata = _metadata_for_audit(row)
+            missing = [
+                field
+                for field in SOURCE_METADATA_REQUIRED_FIELDS
+                if metadata.get(field) in (None, "")
+            ]
+            if missing:
+                for field in missing:
+                    missing_required_fields[field] += 1
+                if len(missing_examples) < DATA_QUALITY_SAMPLE_LIMIT:
+                    missing_examples.append(
+                        {
+                            "row_index": index,
+                            "environment": metadata.get("m0_environment"),
+                            "missing_fields": missing,
+                        }
+                    )
+            source_key = _source_key_for_audit(row)
+            if source_key is not None:
+                source_keys.append(source_key)
+            prompt_hashes.append(_normalized_prompt_hash(row))
+
+        duplicate_source_keys = _duplicate_counts(source_keys)
+        duplicate_prompt_hashes = _duplicate_counts(prompt_hashes)
+        source_keys_by_split[split] = set(source_keys)
+        prompt_hashes_by_split[split] = set(prompt_hashes)
+        split_audits[split] = {
+            "rows": len(rows),
+            "required_source_metadata_fields": list(SOURCE_METADATA_REQUIRED_FIELDS),
+            "missing_required_fields": dict(sorted(missing_required_fields.items())),
+            "missing_required_field_examples": missing_examples,
+            "duplicate_source_key_count": len(duplicate_source_keys),
+            "duplicate_source_key_examples": _sample_keys(list(duplicate_source_keys)),
+            "duplicate_normalized_prompt_hash_count": len(duplicate_prompt_hashes),
+            "duplicate_normalized_prompt_hash_examples": _sample_keys(
+                list(duplicate_prompt_hashes)
+            ),
+        }
+
+    overlapping_source_keys = sorted(
+        source_keys_by_split["train"] & source_keys_by_split["val_shadow"]
+    )
+    overlapping_prompt_hashes = sorted(
+        prompt_hashes_by_split["train"] & prompt_hashes_by_split["val_shadow"]
+    )
+    return {
+        "source_metadata": split_audits,
+        "split_routing": {
+            "train_val_source_key_overlap_count": len(overlapping_source_keys),
+            "train_val_source_key_overlap_examples": _sample_keys(overlapping_source_keys),
+            "train_val_normalized_prompt_overlap_count": len(overlapping_prompt_hashes),
+            "train_val_normalized_prompt_overlap_examples": _sample_keys(
+                overlapping_prompt_hashes
+            ),
+        },
+        "near_duplicate_guard": {
+            "method": "normalized_system_user_prompt_sha256",
+            "normalization": "lowercase plus non-word collapse",
+            "sample_limit": DATA_QUALITY_SAMPLE_LIMIT,
+        },
+    }
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _apply_curriculum_to_train(
     train_rows: Sequence[Mapping[str, Any]],
     *,
@@ -1959,6 +2109,44 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
             for bucket in (DIFFICULTY_TRIVIAL, DIFFICULTY_HARD, DIFFICULTY_UNKNOWN):
                 if bucket in buckets:
                     lines.append(f"| {split} | {bucket} | {buckets[bucket]} |")
+    data_quality = manifest.get("data_quality") or {}
+    if isinstance(data_quality, Mapping):
+        lines.extend(
+            [
+                "",
+                "## Data quality audit",
+                "",
+                "| Split | Rows | Missing source metadata | Duplicate source keys | Duplicate normalized prompts |",
+                "|---|---:|---:|---:|---:|",
+            ]
+        )
+        source_metadata = data_quality.get("source_metadata") or {}
+        if isinstance(source_metadata, Mapping):
+            for split in ("train", "val_shadow"):
+                info = source_metadata.get(split) or {}
+                if not isinstance(info, Mapping):
+                    continue
+                missing = sum((info.get("missing_required_fields") or {}).values())
+                lines.append(
+                    f"| {split} | {info.get('rows', 0)} | {missing} | "
+                    f"{info.get('duplicate_source_key_count', 0)} | "
+                    f"{info.get('duplicate_normalized_prompt_hash_count', 0)} |"
+                )
+        split_routing = data_quality.get("split_routing") or {}
+        if isinstance(split_routing, Mapping):
+            lines.extend(
+                [
+                    "",
+                    f"- Train/val source-key overlaps: `{split_routing.get('train_val_source_key_overlap_count', 0)}`",
+                    f"- Train/val normalized-prompt overlaps: `{split_routing.get('train_val_normalized_prompt_overlap_count', 0)}`",
+                ]
+            )
+    output_fingerprints = manifest.get("output_fingerprints") or {}
+    if isinstance(output_fingerprints, Mapping):
+        lines.extend(["", "## Output fingerprints", ""])
+        for key in ("train_path", "math_final_answer_train_path", "val_shadow_path", "blend_path"):
+            if key in output_fingerprints:
+                lines.append(f"- {key}: `{output_fingerprints[key]}`")
     if manifest["errors"]:
         lines.extend(["", "## Errors", ""])
         for error in manifest["errors"]:
@@ -2262,6 +2450,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             )
         ),
     )
+    output_fingerprints = {
+        "train_path": file_sha256(train_path),
+        "math_final_answer_train_path": file_sha256(math_final_answer_train_path),
+        "val_shadow_path": file_sha256(val_shadow_path),
+        "blend_path": file_sha256(blend_path),
+    }
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
+        output_fingerprints["math_bucket_paths"] = {
+            bucket: file_sha256(path) for bucket, path in math_bucket_paths.items()
+        }
 
     legacy_sidecar_in_blend = (
         math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V1
@@ -2296,6 +2494,8 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "train": count_difficulty_buckets(train_rows),
             "val_shadow": count_difficulty_buckets(val_rows),
         },
+        "data_quality": audit_data_quality(train_rows=train_rows, val_rows=val_rows),
+        "output_fingerprints": output_fingerprints,
         "curriculum": curriculum_audit,
         "math_decontamination": decontamination_audit,
         "math_final_answer_supervision": {

@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Idle,TASK=task072_qwen_eval_repro_gate -->
+<!-- METADATA:STATUS=Working,TASK=task077_data_pipeline_audit_repair_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Idle |
-| Current Task | task072_qwen_eval_repro_gate |
-| PR | https://github.com/songCNMS/Nemotron/pull/175 |
-| Session | 7 |
-| Recent Progress | PR #173 merged; synced local main to ab1fbbf64f892abda34582a7cfc18229fb6f1824 and opened closeout PR #175 |
+| Status | Working |
+| Current Task | task077_data_pipeline_audit_repair_s1 |
+| PR | pending |
+| Session | 1 |
+| Recent Progress | Synced local main to ffcf0ae247400f1da8f4b0a20e32e4d2c6393795; implementing Qwen-safe data-prep profile/validator and M1 data-quality audit fixes |
