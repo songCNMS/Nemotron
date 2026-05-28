@@ -18,6 +18,8 @@ from omegaconf import DictConfig, OmegaConf
 from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
     NEMOTRON_SUPER_TOKENIZER_DEFAULT,
     QWEN_TRAINING_PROFILE,
+    SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR,
+    qwen_local_packed_sft_dir_default,
 )
 
 if TYPE_CHECKING:
@@ -55,6 +57,19 @@ def resolve_qwen_tokenizer_model(config: DictConfig, hf_model: str) -> str:
     return str(tokenizer_model)
 
 
+def resolve_qwen_packed_sft_dir(config: DictConfig) -> str | None:
+    """Resolve the packed SFT directory for Qwen local training defaults."""
+
+    packed_sft_dir = OmegaConf.select(config, "dataset.super3_packed_sft_dir", default=None)
+    resolved = qwen_local_packed_sft_dir_default(
+        packed_sft_dir,
+        packed_dir_env_is_set=SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR in os.environ,
+    )
+    if resolved is not None and resolved != packed_sft_dir:
+        OmegaConf.update(config, "dataset.super3_packed_sft_dir", resolved, merge=True)
+    return resolved
+
+
 def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     """Build a Qwen3 4B SFT config from a local HF model directory."""
     from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import validate_qwen_packed_sft_chat_contract
@@ -65,7 +80,7 @@ def _qwen_local_recipe_builder(config: DictConfig) -> ConfigContainer:
     OmegaConf.update(config, "training_contract.model_profile", QWEN_TRAINING_PROFILE, merge=True)
     OmegaConf.update(config, "training_contract.model_ref", hf_model, merge=True)
     OmegaConf.update(config, "training_contract.train_entrypoint", __file__, merge=True)
-    packed_sft_dir = OmegaConf.select(config, "dataset.super3_packed_sft_dir", default=None)
+    packed_sft_dir = resolve_qwen_packed_sft_dir(config)
     if packed_sft_dir:
         metadata_path = validate_qwen_packed_sft_chat_contract(
             str(packed_sft_dir),

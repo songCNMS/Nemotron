@@ -1772,6 +1772,72 @@ def test_qwen_local_train_uses_qwen_tokenizer_when_config_has_nemotron_fallback(
     assert resolve_qwen_tokenizer_model(cfg, qwen_model) == explicit_tokenizer
 
 
+def test_qwen_local_train_rewrites_legacy_packed_dir_default(monkeypatch) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        LEGACY_AGENTIC_PACKED_SFT_DIR,
+        QWEN_AGENTIC_PACKED_SFT_DIR,
+        SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR,
+    )
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import resolve_qwen_packed_sft_dir
+
+    monkeypatch.delenv(SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR, raising=False)
+    cfg = omega_conf.create({"dataset": {"super3_packed_sft_dir": LEGACY_AGENTIC_PACKED_SFT_DIR}})
+
+    assert resolve_qwen_packed_sft_dir(cfg) == QWEN_AGENTIC_PACKED_SFT_DIR
+    assert omega_conf.select(cfg, "dataset.super3_packed_sft_dir") == QWEN_AGENTIC_PACKED_SFT_DIR
+    assert "stage1_sft_agentic_v0_qwen/splits" in QWEN_AGENTIC_PACKED_SFT_DIR
+    assert "stage1_sft_agentic_v0/splits" not in QWEN_AGENTIC_PACKED_SFT_DIR
+
+
+def test_qwen_local_train_preserves_explicit_packed_dir_override(monkeypatch, tmp_path) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        QWEN_AGENTIC_PACKED_SFT_DIR,
+        SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR,
+    )
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import resolve_qwen_packed_sft_dir
+
+    explicit = str(tmp_path / "operator-packed-splits")
+    monkeypatch.delenv(SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR, raising=False)
+    cfg = omega_conf.create({"dataset": {"super3_packed_sft_dir": explicit}})
+
+    assert resolve_qwen_packed_sft_dir(cfg) == explicit
+    assert omega_conf.select(cfg, "dataset.super3_packed_sft_dir") == explicit
+    assert explicit != QWEN_AGENTIC_PACKED_SFT_DIR
+
+
+def test_qwen_local_train_preserves_env_packed_dir_override(monkeypatch, tmp_path) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        LEGACY_AGENTIC_PACKED_SFT_DIR,
+        SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR,
+    )
+    from nemotron.recipes.super3.stage1_sft.qwen_local_train import resolve_qwen_packed_sft_dir
+
+    explicit = str(tmp_path / "env-packed-splits")
+    monkeypatch.setenv(SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR, explicit)
+    cfg = omega_conf.create(
+        {
+            "dataset": {
+                "super3_packed_sft_dir": (
+                    "${oc.env:SUPER3_M1_AGENTIC_PACKED_DIR,"
+                    f"{LEGACY_AGENTIC_PACKED_SFT_DIR}}}"
+                )
+            }
+        }
+    )
+
+    assert resolve_qwen_packed_sft_dir(cfg) == explicit
+    assert omega_conf.select(cfg, "dataset.super3_packed_sft_dir") == explicit
+
+
 def test_qwen30b_a3b_local_train_requires_env_var(monkeypatch) -> None:
     import pytest
 
@@ -1814,6 +1880,26 @@ def test_qwen30b_a3b_local_train_uses_qwen_tokenizer_when_config_has_nemotron_fa
     cfg = omega_conf.create({"tokenizer": {"tokenizer_model": NEMOTRON_SUPER_TOKENIZER_DEFAULT}})
 
     assert resolve_qwen_tokenizer_model(cfg, qwen_model) == qwen_model
+
+
+def test_qwen30b_a3b_local_train_rewrites_legacy_packed_dir_default(monkeypatch) -> None:
+    import pytest
+
+    omega_conf = pytest.importorskip("omegaconf").OmegaConf
+    from nemotron.recipes.super3.stage1_sft.qwen3_30b_a3b_local_train import (
+        resolve_qwen_packed_sft_dir,
+    )
+    from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+        LEGACY_AGENTIC_PACKED_SFT_DIR,
+        QWEN_AGENTIC_PACKED_SFT_DIR,
+        SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR,
+    )
+
+    monkeypatch.delenv(SUPER3_M1_AGENTIC_PACKED_DIR_ENV_VAR, raising=False)
+    cfg = omega_conf.create({"dataset": {"super3_packed_sft_dir": LEGACY_AGENTIC_PACKED_SFT_DIR}})
+
+    assert resolve_qwen_packed_sft_dir(cfg) == QWEN_AGENTIC_PACKED_SFT_DIR
+    assert omega_conf.select(cfg, "dataset.super3_packed_sft_dir") == QWEN_AGENTIC_PACKED_SFT_DIR
 
 
 def test_convert_m0_record_raises_on_empty_supervision_across_all_envs() -> None:
