@@ -133,3 +133,16 @@
 - Pushed the follow-up to existing PR #199: https://github.com/songCNMS/Nemotron/pull/199
 
 ---
+
+## Session 17 - 2026-05-28 - Task095 Super3 GenRM reasoning parser contract
+
+**Executor**: intern_nem_dev_1
+
+- Read task095 instructions from `/work-agents/intern_nem_dev_1/instruction.md`.
+- Confirmed branch `intern_nem_dev_1/task095_super3_genrm_reasoning_parser_contract_s1` was based on `90e64c745e6ed905559aacf11125b4d5d3d1f255`.
+- Updated Super3 stage1_rlvr and stage3_rlhf GenRM vLLM `server_args` from stale `deepseek_r1` to the Nano3 `nano_v3` reasoning parser plus `nemo_rl/utils/nano_v3_reasoning_parser.py`.
+- Added a focused static test walking stage1_rlvr/stage3_rlhf Nemo Gym vLLM model definitions and asserting every `uses_reasoning_parser: true` server matches the rollout parser/plugin contract.
+- Validation passed locally: required Super3 parser/stop-string pytest shard, py_compile for touched test, Ruff for touched test, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #202: https://github.com/songCNMS/Nemotron/pull/202
+
+---

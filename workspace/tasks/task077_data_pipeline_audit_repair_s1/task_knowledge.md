@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -51,5 +51,10 @@
 39. file change: Nano3 stage2 RL `tiny.yaml` now uses `train_jsonl_fpath: ${art:data,train}` and `validation_jsonl_fpath: ${art:data,val}`.
 40. test evidence: Task092 focused Qwen RL contract pytest now passes with 8 tests and includes a regression proving tiny train/validation artifact split keys differ.
 41. file change: PR #199 updated with the Nano3 tiny split follow-up.
+42. supervisor request: PM assigned task095 to sync from main at or after `90e64c745e6ed905559aacf11125b4d5d3d1f255`, audit/fix Super3 stage1_rlvr and stage3_rlhf GenRM reasoning parser drift, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+43. technical fact: Super3 stage1_rlvr and stage3_rlhf rollout policy HTTP serving was already pinned to `reasoning_parser: nano_v3` with `reasoning_parser_plugin: nemo_rl/utils/nano_v3_reasoning_parser.py`, while GenRM vLLM `server_args` still used stale `deepseek_r1`.
+44. file change: Super3 stage1_rlvr and stage3_rlhf GenRM `server_args` now use `nano_v3` plus `nemo_rl/utils/nano_v3_reasoning_parser.py`; non-reasoning judge servers were left unchanged.
+45. test evidence: Task095 required Super3 parser/stop-string pytest shard passed with 38 tests using `PYTHONPATH=src`, py_compile passed for the touched test, Ruff passed for the touched test, and diff checks passed.
+46. file change: PR #202 opened against `main` for task095 Super3 GenRM reasoning parser contract.
 
 ---

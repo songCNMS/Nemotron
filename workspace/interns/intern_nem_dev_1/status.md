@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task092_nano3_stage2_rl_qwen_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/199 |
-| Session | 16 |
-| Recent Progress | Pushed task092 follow-up to PR #199 fixing Nano3 tiny validation split to use `${art:data,val}` and adding a focused train/validation split-key regression test; focused checks passed |
+| Current Task | task095_super3_genrm_reasoning_parser_contract_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/202 |
+| Session | 17 |
+| Recent Progress | Opened PR #202 aligning Super3 stage1_rlvr/stage3_rlhf GenRM reasoning-parser server args to the Nano3 `nano_v3` parser/plugin contract; focused Super3 parser/stop-string checks passed |
