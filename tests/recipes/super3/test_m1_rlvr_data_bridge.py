@@ -18,6 +18,7 @@ Covers:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from collections.abc import Mapping
 from pathlib import Path
@@ -287,6 +288,19 @@ def test_prepare_writes_jsonl_and_manifest(tmp_path: Path) -> None:
     assert manifest["counts"]["train"] == {env: 2 for env in RLVR1_ENV_MAP}
     assert manifest["counts"]["val"] == {env: 1 for env in RLVR1_ENV_MAP}
     assert manifest["errors"] == []
+    assert manifest["data_quality"]["source_metadata"]["train"]["rows"] == len(train_rows)
+    assert manifest["data_quality"]["source_metadata"]["val"]["rows"] == len(val_rows)
+    assert set(manifest["output_fingerprints"]) == {
+        "train_path",
+        "val_path",
+        "combined_path",
+    }
+    assert manifest["output_fingerprints"]["train_path"] == hashlib.sha256(
+        train_path.read_bytes()
+    ).hexdigest()
+    report_md = (out_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Data quality audit" in report_md
+    assert "## Output fingerprints" in report_md
     # Every emitted row is tagged with the NeMo-Gym env mapping.
     for row in [*train_rows, *val_rows]:
         m0_env = row["environment"]

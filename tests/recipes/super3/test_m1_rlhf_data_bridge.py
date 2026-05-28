@@ -209,7 +209,12 @@ def test_coverage_report_includes_pref_dataset_breakdown_and_candidates() -> Non
     data registry). Together they answer 'which pref source is wired to
     which env, and which pref sources have no wiring yet?'."""
     fake_envs = [
-        {"nemo_gym_env": "genrm_compare", "mix": "rlhf", "pref_dataset_candidate": "helpsteer2", "status": "blocked_external"},
+        {
+            "nemo_gym_env": "genrm_compare",
+            "mix": "rlhf",
+            "pref_dataset_candidate": "helpsteer2",
+            "status": "blocked_external",
+        },
         {"nemo_gym_env": "single_step_tool_use_with_argument_comparison", "mix": "rlhf", "status": "m0_missing"},
     ]
     fake_pref = [
@@ -358,3 +363,10 @@ def test_prepare_happy_path_with_synthetic_active_registry(
     coverage = manifest["coverage"]
     assert coverage["counts"]["active"] == 1
     assert coverage["active"] == ["genrm_compare"]
+    assert manifest["data_quality"]["source_metadata"]["train"]["rows"] == 2
+    assert manifest["data_quality"]["source_metadata"]["val"]["rows"] == 1
+    assert set(manifest["output_fingerprints"]) == {"train_path", "val_path"}
+    assert len(manifest["output_fingerprints"]["train_path"]) == 64
+    report_md = (out_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Data quality audit" in report_md
+    assert "## Output fingerprints" in report_md
