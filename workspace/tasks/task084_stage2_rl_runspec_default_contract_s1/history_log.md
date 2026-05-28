@@ -12,3 +12,4 @@
 - Expanded focused RL config tests with a static defaults resolver proving the generic runspec default path resolves the Qwen RL contract.
 - Left `config/test.yaml` unchanged because it points at `test_train.py` and is documented as a parsing/preflight config, not the generic RL training script path.
 - Verified required checks locally: focused RL config tests passed with 29 tests, py_compile passed for touched tests, `/work-agents/.venv/bin/ruff check` passed for touched tests, `git diff --check` passed, and a structured generic runspec default audit passed.
+- Opened PR #191 to `main`: https://github.com/songCNMS/Nemotron/pull/191.

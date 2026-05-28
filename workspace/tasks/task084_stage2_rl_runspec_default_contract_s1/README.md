@@ -29,8 +29,8 @@ Qwen RL chat-template, parser, and stop-string contract.
   `tool_parser=qwen3_coder`, `reasoning_parser=nano_v3`, and
   `reasoning_parser_plugin=nemo_rl/utils/nano_v3_reasoning_parser.py`.
 - [x] Required validation passes locally.
-- [ ] PR opened to `main`; no direct push to `main` or `master`.
+- [x] PR opened to `main`; no direct push to `main` or `master`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/191
