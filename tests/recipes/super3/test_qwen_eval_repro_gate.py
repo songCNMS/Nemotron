@@ -12,6 +12,7 @@ yaml = pytest.importorskip("yaml")
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (  # noqa: E402
     QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS,
     QWEN_EVAL_REPRO_GATE_PATH,
+    VALID_ARTIFACT_CHECK_STATUSES,
     format_qwen_eval_repro_gate_report,
     load_qwen_eval_repro_gate,
     qwen_repro_evidence_by_benchmark,
@@ -126,6 +127,25 @@ def test_remote_raw_artifact_refs_require_check_metadata() -> None:
     issues = validate_qwen_eval_repro_gate(data)
 
     assert any("remote_artifact_check must be a mapping" in issue for issue in issues)
+
+
+def test_remote_raw_artifact_refs_reject_unverified_statuses() -> None:
+    assert VALID_ARTIFACT_CHECK_STATUSES == {
+        "pm_verified",
+        "local_workspace_verified",
+    }
+    for status in ("unchecked", "unverified", "missing", "reviewed_elsewhere"):
+        data = _gate_data()
+        record = data["evidence_records"][1]
+        record["remote_artifact_check"]["status"] = status
+
+        issues = validate_qwen_eval_repro_gate(data)
+
+        assert any(
+            "remote_artifact_check.status must be one of" in issue
+            and status in issue
+            for issue in issues
+        ), f"expected status rejection for {status!r}, got: {issues}"
 
 
 @requires_production_gate
@@ -323,3 +343,34 @@ def test_qwen_benchmark_alignment_rejects_missing_raw_artifacts() -> None:
     issues = validate_benchmark_alignment_ledger(data)
 
     assert any("missing raw artifact evidence cannot count" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_unverified_artifact_check_statuses() -> None:
+    for status in ("unchecked", "unverified", "missing", "reviewed_elsewhere"):
+        data = deepcopy(_alignment_ledger_data())
+        data["evidence_records"][0]["artifact_check"]["status"] = status
+
+        issues = validate_benchmark_alignment_ledger(data)
+
+        assert any(
+            "artifact_check.status must be one of" in issue and status in issue
+            for issue in issues
+        ), f"expected status rejection for {status!r}, got: {issues}"
+
+
+def test_qwen_benchmark_alignment_requires_existing_repo_relative_source_manifests() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    data["evidence_records"][0]["source_manifests"] = [
+        "/tmp/not_repo_relative.yaml"
+    ]
+
+    issues = validate_benchmark_alignment_ledger(data)
+    assert any("source_manifests must be repo-relative" in issue for issue in issues)
+
+    data = deepcopy(_alignment_ledger_data())
+    data["evidence_records"][0]["source_manifests"] = [
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/missing.yaml"
+    ]
+
+    issues = validate_benchmark_alignment_ledger(data)
+    assert any("source_manifests repo-relative path does not exist" in issue for issue in issues)
