@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ---
 
@@ -111,5 +111,23 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Corrected rerun completed `192/192` iterations; health signals were iter 10 lm loss `0.4368270`, iter 100 lm loss `0.4449203`, iter 190 lm loss `0.4447130`, validation@100 loss/PPL `0.4531137/1.573203`, and final validation loss/PPL `0.4252748/1.530011`.
 - Final corrected checkpoint path: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`; checkpoint marker is `192` and size is about `399G`.
 - Wrote `v9_checkpoint_root_fix_session10.md`.
+
+---
+
+## Session 11 - 2026-05-28 - Corrected V9 HF export and targeted AIME06 smoke
+
+**Executor**: intern_nemontron_code_reading
+
+- Exported corrected V9 checkpoint-root-fix checkpoint `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192` to HF path `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/hf_export_iter_0000192`.
+- Used source HF metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` and export log `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/logs/export_iter_0000192.log`.
+- Validated the corrected HF artifact: `16` safetensors shards, `61066575144` safetensors bytes, `model_type=qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and chat template present.
+- Wrote export manifest `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/hf_export_iter_0000192/task076_export_manifest.json`.
+- Served the corrected HF export in SGLang tmux session `task076_v9_ckptroot_fix_iter0192_sglang_smoke` with `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`.
+- Confirmed `/v1/models` returned the corrected model id with `max_model_len=16384`; minimal chat smoke to `Reply with exactly: ready` returned exact `ready`.
+- Ran targeted corrected `aime_06` smoke using original prompts, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and parallelism `4`. The expected answer remained `907`.
+- Corrected smoke returned status `ok` for all `10` repeats and all ended with `finish_reason=stop`; parsed `10/10`, correct `0/10`, average completion tokens `3540`, and predictions split between `640` and `830`.
+- Recorded smoke artifacts under `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/targeted_smoke/aime06/`.
+- Stopped the SGLang endpoint after smoke; port `30000` was clear and all 8 H200 GPUs returned to idle.
+- Wrote `v9_corrected_export_smoke_session11.md`.
 
 ---

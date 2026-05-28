@@ -88,3 +88,14 @@ The row-level audit showed this is not a scorer or length-cap artifact. V8 impro
 - Corrected run loaded the V8 checkpoint successfully and completed `192/192` iterations with final validation loss/PPL `0.4252748/1.530011`.
 - Corrected checkpoint: `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`.
 - The Session 9 HF export/smoke belongs to the invalid lineage; the corrected checkpoint still needs HF export and targeted `aime_06` smoke.
+
+## Session 11 Result
+
+- Generated report: `workspace/tasks/task076_qwen_v9_aime_recurrence_tuning/v9_corrected_export_smoke_session11.md`.
+- Exported corrected V9 checkpoint-root-fix `iter_0000192` to HF at `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/hf_export_iter_0000192`.
+- Used the user-requested Qwen metadata/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- HF validation passed: `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, chat template present.
+- Served the corrected HF export with SGLang `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, `max_running_requests=16`; minimal chat smoke returned exact `ready`.
+- Targeted corrected `aime_06` smoke completed all `10` repeats with status `ok`, `finish_reason=stop`, parsed `10/10`, correct `0/10`, and average completion tokens `3540`.
+- Per-row predictions split between `640` and `830`, so the checkpoint-root fix repaired generation quality but did not recover the expected `aime_06` answer `907`.
+- The SGLang endpoint was stopped after smoke; port `30000` was clear and all 8 H200 GPUs returned to idle.

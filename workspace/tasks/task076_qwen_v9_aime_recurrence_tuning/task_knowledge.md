@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -44,5 +44,10 @@
 32. file change: Patched both Qwen scale-up and generic M1 SFT training planners to normalize `iter_XXXXXXX` checkpoint inputs to the parent checkpoint root before writing manifests or launch scripts.
 33. technical fact: The corrected Session 10 V9 rerun loaded V8 checkpoint root `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task071_qwen30b_a3b_hard_math_clean_final_v8/checkpoints` and completed `192/192` iters with final validation loss/PPL `0.4252748/1.530011`.
 34. technical fact: The corrected V9 checkpoint is `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/checkpoints/iter_0000192`; Session 9 HF export/smoke belongs to the invalid random-init lineage.
+35. technical fact: Session 11 exported corrected V9 checkpoint-root-fix `iter_0000192` to HF path `/work-agents/intern_nemontron_code_reading/task067_qwen_scaleup/task076_qwen30b_a3b_hard_math_recurrence_v9_ckptroot_fix_s10/hf_export_iter_0000192` using `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` as source HF metadata/tokenizer.
+36. technical fact: The corrected V9 HF export validates with `16` safetensors shards, `61066575144` safetensors bytes, `qwen3_moe`, `48` layers, `128` experts, `8` experts per token, tokenizer `Qwen2TokenizerFast`, and chat template present.
+37. technical fact: Corrected V9 SGLang serving used model id `task076-qwen3-30b-a3b-agentic-sft-hard-math-recurrence-v9-ckptroot-fix-s10-iter0000192-hf`, `tp=4`, `dp=2`, `context_length=16384`, `mem_fraction_static=0.84`, and `max_running_requests=16`; minimal chat smoke returned exact `ready`.
+38. technical fact: Corrected V9 targeted `aime_06` smoke with original prompts and expected answer `907` returned status `ok` and `finish_reason=stop` for all `10` repeats, parsed `10/10`, but correct remained `0/10`; predictions were five `640` and five `830`.
+39. research conclusion: The checkpoint-root fix repaired the random-init generation pathology, but V9 still fails the recurrence recovery objective; a full corrected gate is not justified until the `aime_06` reasoning traces or V9 sidecar weighting are revised.
 
 ---
