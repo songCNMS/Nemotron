@@ -76,5 +76,6 @@
 - Changed the Super3 SFT data-prep runspec/direct-script runnable default to `qwen_agentic_v0` so the default path cannot silently pack Super3/Nemotron rows for the current Qwen target.
 - Preserved legacy Super3/Nemotron data-prep configs for explicit config selection and updated docs/tests to make the default contract clear.
 - Validation passed locally: focused Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
+- Opened PR #192: https://github.com/songCNMS/Nemotron/pull/192
 
 ---

@@ -29,5 +29,6 @@
 17. supervisor request: PM corrected the misdelivered task085/stage3 eval message; intern_nem_dev_1 must work only on task086 Qwen SFT data-prep default contract.
 18. file change: Task086 changes Super3 SFT data-prep runnable defaults (`runspec` default and direct `DEFAULT_CONFIG_PATH`) to `qwen_agentic_v0`, leaving legacy Super3/Nemotron configs available through explicit selection.
 19. test evidence: Task086 validation passed with the Qwen contract test, required Qwen/SFT pytest shard, py_compile, Ruff on touched Python files/tests, and `git diff --check`.
+20. file change: PR #192 opened against `main` for task086 Qwen SFT data-prep default contract.
 
 ---
