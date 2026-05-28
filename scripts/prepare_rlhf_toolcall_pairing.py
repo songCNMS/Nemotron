@@ -15,7 +15,8 @@ into a runnable script.
 
 The pairing is a STREAM operation that consumes TWO M0 sources
 (HelpSteer-2 prompts + Hermes function-calling rows) plus an
-optional eval-prompt JSONL for decontamination. This script doesn't
+eval-prompt JSONL for decontamination. Sandbox/smoke runs may explicitly pass
+``--skip-contamination-check`` to omit eval prompts. This script doesn't
 fit the per-row converter pattern in `prepare_m0_assets.py`, so it
 lives as its own CLI.
 
@@ -46,6 +47,8 @@ from pathlib import Path
 from nemotron.recipes.super3.milestones.lineage import (
     LineageInput,
     LineageOutput,
+)
+from nemotron.recipes.super3.milestones.lineage import (
     make_record as make_lineage_record,
 )
 from nemotron.recipes.super3.milestones.m0_data_env.rlhf_toolcall_pairing import (
@@ -76,8 +79,8 @@ def _load_jsonl(path: Path) -> list[dict]:
 def _eval_prompts(path: Path | None) -> frozenset[str]:
     """Build the eval-prompt 5-gram set from a JSONL of {prompt: str}.
 
-    Empty set when *path* is None — converter falls through to no
-    contamination filtering (useful for sandbox / smoke runs).
+    Empty set when *path* is None. Callers must explicitly acknowledge that
+    skip before reaching this helper.
     """
     if path is None:
         return frozenset()
@@ -119,7 +122,13 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help="Optional path to eval-prompt JSONL used for decontamination. "
-        "Empty set if omitted (no contamination filter).",
+        "If omitted, --skip-contamination-check is required.",
+    )
+    parser.add_argument(
+        "--skip-contamination-check",
+        action="store_true",
+        help="Explicitly skip eval-prompt decontamination for sandbox/smoke runs. "
+        "The skip is recorded in manifest.json.",
     )
     parser.add_argument(
         "--output-dir",
@@ -137,9 +146,21 @@ def prepare(args: argparse.Namespace) -> dict:
     (already written to disk too). Tests call this directly with a
     constructed `argparse.Namespace`.
     """
+    skip_contamination_check = bool(
+        getattr(args, "skip_contamination_check", False)
+    )
+    if args.eval_prompts_jsonl is None and not skip_contamination_check:
+        raise ValueError(
+            "--eval-prompts-jsonl is required unless "
+            "--skip-contamination-check is set; omitting eval prompts disables "
+            "BFCL / TauBench airline / MCP-Mark / HelpSteer1 contamination "
+            "filtering."
+        )
+
     helpsteer_rows = _load_jsonl(args.helpsteer2_jsonl)
     hermes_rows = _load_jsonl(args.hermes_jsonl)
     eval_set = _eval_prompts(args.eval_prompts_jsonl)
+    contamination_check_skipped = args.eval_prompts_jsonl is None
 
     paired = list(
         transform_rlhf_toolcall_pairing(
@@ -173,6 +194,13 @@ def prepare(args: argparse.Namespace) -> dict:
                 notes="Decontamination 5-gram set (BFCL / TauBench airline / MCP-Mark / HelpSteer1)",
             )
         )
+    contamination_skip_warning = (
+        "Eval-prompt contamination filtering was intentionally skipped via "
+        "--skip-contamination-check; manifest consumers must not treat this as "
+        "clean decontaminated output."
+        if contamination_check_skipped
+        else None
+    )
     lineage_outputs = [
         LineageOutput(
             kind="rlhf_toolcall_paired_jsonl",
@@ -203,6 +231,8 @@ def prepare(args: argparse.Namespace) -> dict:
             if args.eval_prompts_jsonl is not None
             else None
         ),
+        "contamination_check_skipped": contamination_check_skipped,
+        "contamination_check_skip_warning": contamination_skip_warning,
         "output_dir": str(args.output_dir),
         "counts": {
             "helpsteer2_rows": len(helpsteer_rows),

@@ -20,9 +20,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
-
 from nemotron.recipes.super3.milestones.m0_data_env.rlhf_toolcall_pairing import (  # noqa: E402
     PAIRED_CONTAMINATION_AGAINST,
     RELEVANCE_KEYWORDS,
