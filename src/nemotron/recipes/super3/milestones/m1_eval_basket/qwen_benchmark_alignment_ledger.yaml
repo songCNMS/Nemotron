@@ -247,10 +247,10 @@ evidence_records:
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_summary_iter0009119.json
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_full_results_iter0009119.jsonl
     artifact_check:
-      status: local_workspace_verified
+      status: pm_verified
       checked_at_utc: "2026-05-28T00:00:00Z"
-      checked_by: intern_nem_dev_3
-      notes: Task071 corrected MMLU-Pro summary/results files are present under the recorded workspace path on this checkout.
+      checked_by: intern_nem_pm
+      notes: PM-verified remote vm4vpn raw artifact references for Task071 corrected MMLU-Pro summary/results evidence; task094 normalized the ledger metadata without re-running live artifact probes.
     gate_status: valid_delta_evidence
     evidence_limitations: Corrected delta is negative, so this record is not an improvement.
 
@@ -292,10 +292,10 @@ evidence_records:
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
     artifact_check:
-      status: local_workspace_verified
+      status: pm_verified
       checked_at_utc: "2026-05-28T00:00:00Z"
-      checked_by: intern_nem_dev_3
-      notes: Task071 corrected AIME25 summary/results files are present under the recorded workspace path on this checkout.
+      checked_by: intern_nem_pm
+      notes: PM-verified remote vm4vpn raw artifact references for Task071 corrected AIME25 summary/results evidence; task094 normalized the ledger metadata without re-running live artifact probes.
     gate_status: valid_delta_evidence
     evidence_limitations: Corrected delta is negative, so this record is not an improvement.
 
@@ -337,10 +337,10 @@ evidence_records:
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/summary.json
       - vm4vpn:/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/corrected_math_full_iter0009119_session38/results.jsonl
     artifact_check:
-      status: local_workspace_verified
+      status: pm_verified
       checked_at_utc: "2026-05-28T00:00:00Z"
-      checked_by: intern_nem_dev_3
-      notes: Task071 corrected HMMT summary/results files are present under the recorded workspace path on this checkout.
+      checked_by: intern_nem_pm
+      notes: PM-verified remote vm4vpn raw artifact references for Task071 corrected HMMT summary/results evidence; task094 normalized the ledger metadata without re-running live artifact probes.
     gate_status: valid_delta_evidence
     evidence_limitations: Corrected delta is negative, so this record is not an improvement.
 
