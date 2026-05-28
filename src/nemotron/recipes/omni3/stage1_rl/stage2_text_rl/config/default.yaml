@@ -5,15 +5,15 @@ run:
     container: /home/${oc.env:USER}/.cache/nemotron/containers/omni3-rl.sqsh
     workdir: /opt/nemo-rl-omni
     env_vars:
-      OMNI_SHARED_ROOT: ${oc.env:OMNI_SHARED_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias}
-      DATA_ROOT: ${oc.env:OMNI3_DATA_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias/data}
-      MODEL_ROOT: ${oc.env:OMNI3_MODEL_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias/checkpoints}
-      CHECKPOINT_ROOT: ${oc.env:OMNI3_CHECKPOINT_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias/checkpoints}
-      CONTAINER_ROOT: ${oc.env:OMNI3_CONTAINER_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias/containers}
-      USER_ROOT: ${oc.env:OMNI3_USER_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias}
-      CACHE_ROOT: ${oc.env:OMNI3_CACHE_ROOT,/lustre/fs1/portfolios/coreai/users/aroshanghias/.cache}
+      OMNI_SHARED_ROOT: ${oc.env:OMNI_SHARED_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3}
+      DATA_ROOT: ${oc.env:OMNI3_DATA_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3/stage1_rl/data}
+      MODEL_ROOT: ${oc.env:OMNI3_MODEL_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3/stage1_rl/checkpoints}
+      CHECKPOINT_ROOT: ${oc.env:OMNI3_CHECKPOINT_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3/stage1_rl/checkpoints}
+      CONTAINER_ROOT: ${oc.env:OMNI3_CONTAINER_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3/stage1_rl/containers}
+      USER_ROOT: ${oc.env:OMNI3_USER_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3}
+      CACHE_ROOT: ${oc.env:OMNI3_CACHE_ROOT,${oc.env:NEMO_RUN_DIR,.}/output/omni3/.cache}
       NEMORL: ${oc.env:OMNI3_RL_ROOT,/opt/nemo-rl-omni}
-      CONTAINER: ${oc.env:OMNI3_RL_SQSH,/lustre/fs1/portfolios/coreai/users/aroshanghias/containers/omni3-rl.sqsh}
+      CONTAINER: ${oc.env:OMNI3_RL_SQSH,/home/${oc.env:USER}/.cache/nemotron/containers/omni3-rl.sqsh}
       JOB_NAME: ${oc.env:OMNI3_TEXT_JOB_NAME,text-only-rl-stage-1}
       NUM_NODES: ${oc.env:OMNI3_TEXT_NUM_NODES,16}
       CONTEXT_PARALLEL_SIZE: ${oc.env:CONTEXT_PARALLEL_SIZE,4}

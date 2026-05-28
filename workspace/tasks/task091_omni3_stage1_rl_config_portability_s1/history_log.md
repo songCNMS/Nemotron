@@ -1,0 +1,13 @@
+# task091_omni3_stage1_rl_config_portability_s1 - History Log
+
+<!-- METADATA:SESSION=1 -->
+
+## Session 1 - 2026-05-28
+
+- Received PM assignment to fix named-user Omni3 stage1 RL config fallbacks.
+- Fast-forwarded local `main` to `914dc3db746702744651a97ea8680087e582a6fb` and created branch `intern_nem_dev_2/task091_omni3_stage1_rl_config_portability_s1`.
+- Audited `stage1_mpo/config/default.yaml`, `stage1_mpo/config/tiny.yaml`, and `stage2_text_rl/config/default.yaml`; all three had `/lustre/fs1/portfolios/coreai/users/aroshanghias` fallbacks.
+- Replaced generated-root fallbacks with `${oc.env:NEMO_RUN_DIR,.}/output/omni3/...` defaults while preserving the existing env override names.
+- Aligned `CONTAINER` fallback with the existing `/home/${oc.env:USER}/.cache/nemotron/containers/omni3-rl.sqsh` convention.
+- Added `test_stage1_rl_config_portability.py` covering named-user removal, required env keys, env override names, resolved portable defaults, override precedence, and MPO tiny job/node defaults.
+- Verified locally: focused Omni3 portability tests passed under system Python, full Omni3 CLI plus portability shard passed under the project venv, py_compile passed, ruff passed, static grep/probe passed, and whitespace checks passed.
