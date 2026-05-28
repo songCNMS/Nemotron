@@ -14,5 +14,6 @@
 - Updated the Qwen scale-up planner to use the Qwen config and reject Super3/Nemotron drift statically.
 - Added M1 manifest/report audit fields for source metadata, split routing, normalized prompt duplication, and output SHA256 fingerprints.
 - Updated synthetic V7/V8 tests to explicitly acknowledge the decontamination skip used only by local fixtures.
+- Opened PR #186 against `main`: https://github.com/songCNMS/Nemotron/pull/186
 
 ---

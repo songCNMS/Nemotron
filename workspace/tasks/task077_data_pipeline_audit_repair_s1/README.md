@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Data pipeline audit repair
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Background
 
@@ -15,8 +15,12 @@ PM assigned a PR-sized lane to audit and repair the Super3 M1 Agentic SFT data p
 
 ## Acceptance Criteria
 
-- [ ] Qwen scale-up planner emits a Qwen-safe SFT data-prep config path.
-- [ ] Qwen data-prep config validation rejects Super3 template or Nemotron tokenizer drift.
-- [ ] M1 Agentic SFT manifests/report include source metadata, split routing, duplicate/near-duplicate, and output fingerprint audit blocks.
-- [ ] Relevant Super3 data-prep, Qwen planner, contamination, registry validation, compile, and whitespace checks pass.
-- [ ] PR opened against `main`; PM receives base SHA, head SHA, changed files, and tests.
+- [x] Qwen scale-up planner emits a Qwen-safe SFT data-prep config path.
+- [x] Qwen data-prep config validation rejects Super3 template or Nemotron tokenizer drift.
+- [x] M1 Agentic SFT manifests/report include source metadata, split routing, duplicate/near-duplicate, and output fingerprint audit blocks.
+- [x] Relevant Super3 data-prep, Qwen planner, contamination, registry validation, compile, and whitespace checks pass.
+- [x] PR opened against `main`; PM receives base SHA, head SHA, changed files, and tests.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/186
