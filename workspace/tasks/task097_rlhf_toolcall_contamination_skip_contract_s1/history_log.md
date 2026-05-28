@@ -12,3 +12,5 @@
 - Recorded explicit contamination-check skip metadata in `manifest.json`.
 - Updated focused CLI tests for fail, explicit skip, and eval-prompt filtering paths.
 - Verified assigned focused pytest, py_compile, Ruff, and no-live-surface static probe before final diff checks.
+- Opened PR #203 to `main`: https://github.com/songCNMS/Nemotron/pull/203.
+- Confirmed no live HelpSteer/Hermes data prep, production eval-prompt corpus construction, endpoint calls, W&B, cluster jobs, deployment, promotion, direct `main`/`master` push, or self-merge was performed.

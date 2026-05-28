@@ -1,6 +1,6 @@
 # task097_rlhf_toolcall_contamination_skip_contract_s1 - RLHF tool-call contamination skip contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Background
 
@@ -34,3 +34,7 @@ must not look like a normal clean run.
 - Static probe confirms no live data-prep/download/endpoint/W&B/cluster/deploy
   surface was added.
 - `git diff --check` and `git diff --cached --check` pass.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/203

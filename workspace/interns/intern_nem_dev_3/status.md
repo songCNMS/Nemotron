@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task097_rlhf_toolcall_contamination_skip_contract_s1 |
-| PR | pending from branch `intern_nem_dev_3/task097_rlhf_toolcall_contamination_skip_contract_s1` |
+| PR | https://github.com/songCNMS/Nemotron/pull/203 |
 | Session | 10 |
-| Recent Progress | Synced main to `90e64c745e6ed905559aacf11125b4d5d3d1f255`, branched task097, required explicit contamination-check skip for omitted eval prompts, recorded skip metadata, and passed assigned focused checks |
+| Recent Progress | Opened PR #203 for task097 RLHF tool-call contamination skip contract after assigned pytest, py_compile, Ruff, no-live-surface probe, and diff checks passed |
