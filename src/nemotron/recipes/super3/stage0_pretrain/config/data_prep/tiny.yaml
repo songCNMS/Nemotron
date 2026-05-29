@@ -8,8 +8,7 @@ run:
 #   nemotron super3 data prep pretrain --config tiny
 
 # Path to data blend JSON file
-# TODO(super3): Replace with super3-specific data blend once available
-blend_path: src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json
+blend_path: src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_small.json
 
 # Output directory for tokenized data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain_tiny

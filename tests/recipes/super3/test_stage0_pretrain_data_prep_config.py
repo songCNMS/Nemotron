@@ -44,7 +44,7 @@ EXPECTED_BLEND_PATHS = {
         "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/"
         "data_blend_raw_long_context.json"
     ),
-    "tiny": "src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json",
+    "tiny": "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_small.json",
 }
 
 REQUIRED_TOP_LEVEL_FIELDS = {
@@ -81,6 +81,7 @@ def test_stage0_pretrain_data_prep_blend_paths_are_repo_local(
 
     assert data["blend_path"] == EXPECTED_BLEND_PATHS[config_name]
     assert "${oc.env:PWD}/src/" not in text
+    assert "/nano3/" not in data["blend_path"]
 
 
 @pytest.mark.parametrize("config_name", sorted(EXPECTED_BLEND_PATHS))
@@ -111,6 +112,37 @@ def test_stage0_pretrain_config_dataclass_preserves_relative_override() -> None:
     cfg = PreTrainDataPrepConfig(blend_path="custom/blend.json")
 
     assert cfg.blend_path == Path("custom/blend.json")
+
+
+def test_stage0_pretrain_config_dataclass_preserves_absolute_override(
+    tmp_path: Path,
+) -> None:
+    blend_path = tmp_path / "blend.json"
+
+    cfg = PreTrainDataPrepConfig(blend_path=blend_path)
+
+    assert cfg.blend_path == blend_path
+
+
+def test_stage0_pretrain_tiny_blend_is_super3_owned_and_non_empty() -> None:
+    _, tiny_data = _read_config("tiny")
+    blend_path = REPO_ROOT / tiny_data["blend_path"]
+    blend = yaml.safe_load(blend_path.read_text(encoding="utf-8"))
+    datasets = blend["datasets"]
+
+    assert tiny_data["blend_path"] == EXPECTED_BLEND_PATHS["tiny"]
+    assert "src/nemotron/recipes/super3/stage0_pretrain" in tiny_data["blend_path"]
+    assert "src/nemotron/recipes/nano3/" not in tiny_data["blend_path"]
+    assert datasets
+    assert len(datasets) <= 5
+    assert {row["path"] for row in datasets} <= {
+        "hf://nvidia/Nemotron-CC-v2",
+        "hf://nvidia/Nemotron-CC-v2.1",
+        "hf://nvidia/Nemotron-CC-Math-v1",
+    }
+    for row in datasets:
+        assert {"name", "path", "subset", "text_field", "weight"} <= set(row)
+        assert row["text_field"] == "text"
 
 
 @pytest.mark.parametrize("config_name", sorted(EXPECTED_OUTPUT_DIRS))
