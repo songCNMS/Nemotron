@@ -91,5 +91,11 @@
 79. file change: `prepare_m1_agentic_sft.py` now records per-sidecar `base_train_source_key_overlap_*` and `base_train_normalized_prompt_overlap_*` fields and includes those counts in strict overlap totals.
 80. test evidence: Task113 focused SFT pytest shard passed with 92 tests and 1 skipped; py_compile, Ruff, structured sidecar/base-train overlap probe, and diff checks passed.
 81. file change: PR #220 opened against `main` for task113 SFT sidecar train-overlap strict gate.
+82. supervisor request: PM assigned task116 to sync latest main, replace successful packed SFT parquet `xxh64:unknown` metadata/receipts with deterministic real checksums, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+83. technical fact: Before task116, packed SFT parquet core and stage fallback receipt handling reported `checksum: "xxh64:unknown"`, weakening lineage/cache validation for successful parquet artifacts.
+84. file change: `ParquetShardWriter.finalize()` now reads the finalized parquet through local or PyArrow filesystem APIs and returns `bytes` plus `xxh64:<16 hex>` checksum metadata.
+85. file change: Packed SFT parquet core/stage metadata now consumes writer checksum/bytes and uses explicit `xxh64:empty` or `xxh64:missing` fallback metadata instead of `xxh64:unknown`.
+86. test evidence: Task116 focused data-prep checksum shard passed with 3 tests; py_compile, Ruff, product grep for no `xxh64:unknown`, and diff checks passed.
+87. file change: PR #224 opened against `main` for task116 packed SFT parquet checksum lineage.
 
 ---

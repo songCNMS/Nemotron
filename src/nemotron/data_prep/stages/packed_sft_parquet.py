@@ -35,10 +35,15 @@ from nemotron.data_prep.core.chat_sft_shard_core import (
     process_chat_sft_parquet_from_spool_core,
     process_chat_sft_spool_core,
 )
-from nemotron.data_prep.utils.filesystem import get_filesystem
 from nemotron.data_prep.core.receipt import ReceiptManager
-from nemotron.data_prep.stages.context import PipelineContext
 from nemotron.data_prep.core.work_items import SftShardWorkItem
+from nemotron.data_prep.stages.context import PipelineContext
+from nemotron.data_prep.utils.filesystem import get_filesystem
+
+
+def _fallback_parquet_file_metadata(path: str, bytes_count: int) -> dict[str, Any]:
+    checksum = "xxh64:empty" if bytes_count == 0 else "xxh64:missing"
+    return {"path": path, "bytes": bytes_count, "checksum": checksum}
 
 
 @dataclass(frozen=True)
@@ -168,11 +173,6 @@ class PackedSftParquetStage(pipelines_v1.Stage[SftShardWorkItem, SftShardWorkIte
         parquet_rel = f"{shard_id}.parquet"
         parquet_path = f"{task.output_dir.rstrip('/')}/{parquet_rel}"
 
-        try:
-            parquet_bytes = int(self._fs.size(parquet_path))
-        except Exception:
-            parquet_bytes = 0
-
         stats, files = process_chat_sft_parquet_from_spool_core(
             shard_index=task.shard_index,
             output_dir=task.output_dir,
@@ -186,18 +186,28 @@ class PackedSftParquetStage(pipelines_v1.Stage[SftShardWorkItem, SftShardWorkIte
             parquet_compression=str(task.parquet_compression),
         )
 
+        try:
+            parquet_bytes = int(self._fs.size(parquet_path))
+        except Exception:
+            parquet_bytes = 0
+
         # Ensure receipt has a stable files entry for progress/aggregation.
         if not isinstance(files, dict):
             files = {}
         if "parquet" not in files:
-            files["parquet"] = {"path": parquet_rel, "bytes": parquet_bytes, "checksum": "xxh64:unknown"}
+            files["parquet"] = _fallback_parquet_file_metadata(parquet_rel, parquet_bytes)
         else:
             try:
                 files["parquet"].setdefault("bytes", parquet_bytes)
-                files["parquet"].setdefault("checksum", "xxh64:unknown")
+                checksum = (
+                    "xxh64:empty"
+                    if int(files["parquet"].get("bytes", 0) or 0) == 0
+                    else "xxh64:missing"
+                )
+                files["parquet"].setdefault("checksum", checksum)
                 files["parquet"].setdefault("path", parquet_rel)
             except Exception:
-                files["parquet"] = {"path": parquet_rel, "bytes": parquet_bytes, "checksum": "xxh64:unknown"}
+                files["parquet"] = _fallback_parquet_file_metadata(parquet_rel, parquet_bytes)
 
         return stats, files
 
