@@ -1,4 +1,4 @@
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 # History Log
 
@@ -12,3 +12,9 @@
 - Refreshed the PM-required Nano3 integration shard for current `nemo_runspec` resolver and data-prep utility APIs; the legacy removed `data_prep_merge.py` split-ratio check is now skipped.
 - Checks passed: focused Nano3 config/integration/Qwen pytest shard (`126 passed, 2 skipped`), py_compile, Ruff, structured non-repo-CWD resolver probe, static no-PWD/no-up-level-output grep, `git diff --check`, `git diff --cached --check`, and added-line live-surface scan.
 - Opened PR #256: https://github.com/songCNMS/Nemotron/pull/256.
+
+## Session 2 - 2026-05-29
+
+- Stop-hook audit requested Session 2 bookkeeping for task149 after PR #256 was opened.
+- Bumped task149 history/task knowledge/status session metadata to Session 2 and preserved the ready-for-gate report.
+- No product, config, or test files changed in this bookkeeping correction.
