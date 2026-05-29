@@ -1,6 +1,6 @@
 # task150_super3_stage1_sft_tiny_blend_contract_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Notes
 
