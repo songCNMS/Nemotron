@@ -86,5 +86,10 @@
 74. file change: `prepare_m1_agentic_sft.py` now records `data_quality.training_sidecars` for non-heldout math bucket sidecars, reports that table, and folds sidecar missing metadata, duplicate keys/prompts, and validation overlaps into strict issue counts.
 75. test evidence: Task110 focused SFT pytest shard passed with 91 tests and 1 skipped; py_compile, Ruff, structured sidecar strict-failure/clean-pass probe, and diff checks passed.
 76. file change: PR #219 opened against `main` for task110 SFT math sidecar data-quality gate.
+77. supervisor request: PM assigned task113 to sync latest main, extend SFT math sidecar strict data-quality checks to sidecar-vs-base-train source-key and normalized-prompt overlaps, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+78. technical fact: Task110 sidecar checks covered sidecar-internal duplicates plus validation/heldout overlaps, but a math sidecar row that duplicated a base train row could still enter the same blend and silently overweight the example.
+79. file change: `prepare_m1_agentic_sft.py` now records per-sidecar `base_train_source_key_overlap_*` and `base_train_normalized_prompt_overlap_*` fields and includes those counts in strict overlap totals.
+80. test evidence: Task113 focused SFT pytest shard passed with 92 tests and 1 skipped; py_compile, Ruff, structured sidecar/base-train overlap probe, and diff checks passed.
+81. file change: PR #220 opened against `main` for task113 SFT sidecar train-overlap strict gate.
 
 ---

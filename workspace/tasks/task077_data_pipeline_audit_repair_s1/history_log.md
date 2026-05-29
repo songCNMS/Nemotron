@@ -196,4 +196,13 @@
 - Validation passed locally: focused SFT pytest shard, py_compile, Ruff, structured sidecar strict-failure/clean-pass probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #219: https://github.com/songCNMS/Nemotron/pull/219
 
+- Task113 follow-up in same Session 17:
+- Read PM assignment for `task113_sft_sidecar_train_overlap_strict_gate_s1`.
+- Fast-forwarded local `main` to `d64cbd067a15cca222b9eba200af1eb1ec5b7788` and created branch `intern_nem_dev_1/task113_sft_sidecar_train_overlap_strict_gate_s1`.
+- Extended M1 Agentic SFT sidecar data-quality auditing to compare training sidecar rows against base train rows by source key and normalized prompt.
+- Added per-sidecar manifest/report fields for base-train source-key and normalized-prompt overlap counts/examples, and folded those counts into strict checked overlap totals.
+- Added focused coverage proving strict mode fails after manifest/report writing when a sidecar duplicates base train by source key/prompt, and clean sidecars still pass with zero checked counts.
+- Validation passed locally: focused SFT pytest shard, py_compile, Ruff, structured sidecar/base-train overlap probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #220: https://github.com/songCNMS/Nemotron/pull/220
+
 ---
