@@ -53,10 +53,9 @@ qwen_chat_contract:
       enable_thinking: false
       truncate_history_thinking: false
   task_audit:
+    bucket_semantics: exactly_one_bucket_per_runnable_task
     valid_qwen_chat_tasks:
       - ifbench.ifbench
-      - ruler.ruler-256k-chat
-      - lm-evaluation-harness.mmlu_prox_chat
     completion_or_non_chat_prompt_tasks:
       - livecodebench.codegeneration_release_latest
       - scicode.scicode
@@ -65,6 +64,16 @@ qwen_chat_contract:
       - nemo_skills.ns_hmmt_feb2025
       - simple_evals.gpqa_diamond
       - lm-evaluation-harness.mmlu_pro
+      - hle.hle
+    long_context_tasks:
+      - ruler.ruler-256k-chat
+      - AA-LCR.aa_lcr
+    tool_or_agentic_tasks:
+      - tau2_bench.tau2_bench_airline
+      - bfcl.bfclv3
+    multilingual_tasks:
+      - lm-evaluation-harness.mmlu_prox_chat
+      - nemo_skills.ns_wmt24pp
 
 # =============================================================================
 # Nemotron run section (artifact resolution + env.toml injection)

@@ -26,6 +26,11 @@ EVAL_DEFAULT_PATH = (
     REPO_ROOT
     / "src/nemotron/recipes/super3/stage3_eval/config/default.yaml"
 )
+M1_FULL_BASKET_LAUNCHER_AVAILABLE_PATH = (
+    REPO_ROOT
+    / "src/nemotron/recipes/super3/stage3_eval/config/"
+    "m1_full_basket_launcher_available.yaml"
+)
 
 
 def _eval_chat_template_kwargs() -> dict:
@@ -62,6 +67,27 @@ def _qwen_chat_contract() -> dict:
     contract = _eval_default_data().get("qwen_chat_contract")
     assert isinstance(contract, dict), "missing qwen_chat_contract audit block"
     return contract
+
+
+def _m1_full_basket_launcher_available_tasks() -> list[str]:
+    data = yaml.safe_load(
+        M1_FULL_BASKET_LAUNCHER_AVAILABLE_PATH.read_text(encoding="utf-8")
+    )
+    assert isinstance(data, dict), "launcher-available config must load as a mapping"
+    tasks = data.get("tasks")
+    assert isinstance(tasks, list), "launcher-available config must list tasks"
+    assert all(isinstance(task, str) and task for task in tasks)
+    return tasks
+
+
+def _qwen_task_audit_buckets() -> dict[str, list[str]]:
+    task_audit = _qwen_chat_contract()["task_audit"]
+    assert isinstance(task_audit, dict), "task_audit must be a mapping"
+    return {
+        bucket: tasks
+        for bucket, tasks in task_audit.items()
+        if bucket.endswith("_tasks") and isinstance(tasks, list)
+    }
 
 
 def _eval_default_endpoints() -> dict:
@@ -138,6 +164,7 @@ def test_eval_default_uses_slashless_openai_routes() -> None:
 def test_eval_qwen_contract_calls_out_non_chat_and_parser_sensitive_tasks() -> None:
     task_audit = _qwen_chat_contract()["task_audit"]
 
+    assert task_audit["bucket_semantics"] == "exactly_one_bucket_per_runnable_task"
     assert "ifbench.ifbench" in task_audit["valid_qwen_chat_tasks"]
     assert (
         "livecodebench.codegeneration_release_latest"
@@ -147,3 +174,29 @@ def test_eval_qwen_contract_calls_out_non_chat_and_parser_sensitive_tasks() -> N
         "simple_evals.AIME_2025"
         in task_audit["short_generation_cap_or_parser_sensitive_tasks"]
     )
+
+
+def test_eval_qwen_contract_classifies_all_launcher_available_tasks_once() -> None:
+    launcher_tasks = set(_m1_full_basket_launcher_available_tasks())
+    audit_buckets = _qwen_task_audit_buckets()
+    classified: dict[str, str] = {}
+    duplicates: dict[str, list[str]] = {}
+
+    for bucket, tasks in audit_buckets.items():
+        for task in tasks:
+            if task in classified:
+                duplicates.setdefault(task, [classified[task]]).append(bucket)
+            classified[task] = bucket
+
+    assert duplicates == {}
+    assert set(classified) == launcher_tasks
+
+
+def test_eval_qwen_contract_explicitly_classifies_recently_missing_tasks() -> None:
+    audit_buckets = _qwen_task_audit_buckets()
+
+    assert "AA-LCR.aa_lcr" in audit_buckets["long_context_tasks"]
+    assert "bfcl.bfclv3" in audit_buckets["tool_or_agentic_tasks"]
+    assert "hle.hle" in audit_buckets["short_generation_cap_or_parser_sensitive_tasks"]
+    assert "nemo_skills.ns_wmt24pp" in audit_buckets["multilingual_tasks"]
+    assert "tau2_bench.tau2_bench_airline" in audit_buckets["tool_or_agentic_tasks"]
