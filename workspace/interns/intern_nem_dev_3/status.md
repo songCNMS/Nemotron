@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task184_qwen_eval_repro_gate_artifact_portability_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/291 |
 | Session | 1 |
-| Recent Progress | Branch based on origin/main df45842e; made Qwen eval repro gate raw artifact refs portable, removed production-load skip workaround, and passed focused checks through git diff --check; PR pending |
+| Recent Progress | PR #291 opened for Qwen eval repro gate artifact portability after focused pytest, py_compile, Ruff, structured probe, local-only artifact grep, added-line live-surface scan, and diff checks passed |

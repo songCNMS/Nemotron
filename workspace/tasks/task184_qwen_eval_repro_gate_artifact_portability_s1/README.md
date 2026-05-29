@@ -1,6 +1,6 @@
 # task184_qwen_eval_repro_gate_artifact_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
 
 ## Scope
 
@@ -22,7 +22,8 @@
 
 - Base: `df45842edade40c19fd0496f3844ef20653a94cc`
 - Branch: `intern_nem_dev_3/task184_qwen_eval_repro_gate_artifact_portability_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/291
+- Head: `1de97978412d564f93e3e39a45199fb77ea48c98`
 - Checks: focused Qwen eval repro gate pytest, py_compile, Ruff, structured
   portability probe, product local-only artifact grep, added-line live-surface
   scan, and `git diff --check` passed.
