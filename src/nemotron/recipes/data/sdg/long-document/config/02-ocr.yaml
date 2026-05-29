@@ -3,7 +3,7 @@
 # `vllm_endpoint` and `seed_path` are required; supply them on the CLI:
 #   nemotron data sdg long-document ocr --run dlw -c 02-ocr \
 #       vllm_endpoint=http://node:8000/v1 \
-#       seed_path=/lustre/.../seed_per_page.parquet \
+#       seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
 #       num_records=100
 
 vllm_endpoint: null
