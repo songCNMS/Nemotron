@@ -20,4 +20,4 @@
 
 - Branch: `intern_nem_dev_3/task137_qwen_eval_task_audit_completeness_s1`
 - Base: `c917636a006c0d3e5f7bcff6db97189bad6f8c13`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/244
