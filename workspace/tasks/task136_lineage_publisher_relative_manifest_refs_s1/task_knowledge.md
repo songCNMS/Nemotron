@@ -1,6 +1,6 @@
 # task136_lineage_publisher_relative_manifest_refs_s1 knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Notes
 
