@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task091_omni3_stage1_rl_config_portability_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task126_benchmark_alignment_source_manifest_path_guard_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task091_omni3_stage1_rl_config_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/231 |
-| Session | 19 |
+| Current Task | task126_benchmark_alignment_source_manifest_path_guard_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/233 |
+| Session | 1 |
 
-最近进展：Session 19 completed PM addendum for `task123_omni3_rl_source_revision_pins_s1` on branch `intern_nem_dev_2/task123_omni3_rl_source_revision_pins_s1`: `_prepare_text()` now fails when a configured `source_revision` has no matching blend row for `source_uri`, with focused test/probe coverage. Opened PR #231. No main/master push or self-merge; no dataset download, live data prep, train/eval, endpoint, W&B, cluster, or deploy runs.
+最近进展：Accepted PM assignment `task126_benchmark_alignment_source_manifest_path_guard_s1` from synced `main` `7d49d91a5cc2c49e17d617690d63d8a92ecb696b`. Implemented benchmark alignment `source_manifests` path hardening with focused tests/probes and opened PR #233. No main/master push; no live benchmark/eval, endpoint, W&B, cluster, data prep, training, artifact download, or deploy runs.
