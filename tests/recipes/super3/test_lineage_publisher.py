@@ -24,8 +24,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 from nemotron.recipes.super3.milestones.lineage import (
     LineageInput,
     LineageOutput,
@@ -40,7 +38,6 @@ from nemotron.recipes.super3.milestones.lineage_publisher import (
     WandbArtifactPublisher,
     default_upstream_resolver,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PUBLISH_SCRIPT = REPO_ROOT / "scripts" / "publish_lineage.py"

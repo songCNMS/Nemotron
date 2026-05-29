@@ -21,19 +21,16 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
-import pytest
-
-
 from nemotron.recipes.super3.milestones.lineage import (
     LineageInput,
     LineageOutput,
     make_record,
-    now_utc_iso,
 )
 from nemotron.recipes.super3.milestones.lineage_publisher import (
+    _AUTO,
+    FakeArtifact,
     FakeWandbRun,
     PublishResult,
-    _AUTO,
     _resolve_wandb_run,
     maybe_publish_lineage_from_manifest,
 )
@@ -57,6 +54,29 @@ def _write_manifest_with_lineage(
         json.dumps({"lineage": record.to_jsonable()}), encoding="utf-8"
     )
     return manifest_path
+
+
+def _write_manifest(
+    manifest_path: Path,
+    *,
+    artifact_name: str,
+    artifact_type: str = "SFTDataArtifact",
+    inputs: list[LineageInput] | None = None,
+) -> None:
+    record = make_record(
+        stage="lineage publisher test",
+        produced_by="test_lineage_publisher_wiring.py",
+        artifact_type=artifact_type,
+        artifact_name=artifact_name,
+        inputs=inputs or [],
+        outputs=[LineageOutput(kind="jsonl", ref="split.jsonl")],
+    )
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    (manifest_path.parent / "split.jsonl").write_text("row\n", encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps({"lineage": record.to_jsonable()}),
+        encoding="utf-8",
+    )
 
 
 # ---------- maybe_publish_lineage_from_manifest ----------
@@ -83,6 +103,108 @@ def test_helper_dry_runs_when_run_is_none(tmp_path: Path) -> None:
     result = maybe_publish_lineage_from_manifest(manifest, wandb_run=None)
     assert isinstance(result, PublishResult)
     assert result.dry_run is True
+
+
+def test_helper_dry_run_resolves_relative_manifest_from_declaring_dir(
+    tmp_path: Path,
+) -> None:
+    upstream_manifest = tmp_path / "m0" / "manifest.json"
+    _write_manifest(
+        upstream_manifest,
+        artifact_name="probe-m0-publish",
+        artifact_type="RawDataArtifact",
+    )
+    child_manifest = tmp_path / "nested" / "m1" / "manifest.json"
+    _write_manifest(
+        child_manifest,
+        artifact_name="probe-m1-publish",
+        inputs=[LineageInput(kind="manifest", ref="../../m0/manifest.json")],
+    )
+
+    result = maybe_publish_lineage_from_manifest(child_manifest, wandb_run=None)
+
+    assert isinstance(result, PublishResult)
+    assert result.dry_run is True
+    assert result.upstream_resolved == ["probe-m0-publish:latest"]
+    assert result.upstream_unresolved == []
+
+
+def test_helper_live_publish_uses_relative_manifest_upstream(
+    tmp_path: Path,
+) -> None:
+    upstream_manifest = tmp_path / "m0" / "manifest.json"
+    _write_manifest(
+        upstream_manifest,
+        artifact_name="probe-m0-live",
+        artifact_type="RawDataArtifact",
+    )
+    child_manifest = tmp_path / "nested" / "m1" / "manifest.json"
+    _write_manifest(
+        child_manifest,
+        artifact_name="probe-m1-live",
+        inputs=[LineageInput(kind="manifest", ref="../../m0/manifest.json")],
+    )
+    run = FakeWandbRun()
+
+    result = maybe_publish_lineage_from_manifest(
+        child_manifest,
+        wandb_run=run,
+        artifact_factory=lambda name, type: FakeArtifact(name=name, type=type),
+    )
+
+    assert isinstance(result, PublishResult)
+    assert result.dry_run is False
+    assert result.upstream_resolved == ["probe-m0-live:latest"]
+    assert run.use_artifact_calls == ["probe-m0-live:latest"]
+
+
+def test_helper_custom_resolver_receives_original_manifest_input(
+    tmp_path: Path,
+) -> None:
+    upstream_manifest = tmp_path / "m0" / "manifest.json"
+    _write_manifest(
+        upstream_manifest,
+        artifact_name="probe-m0-custom",
+        artifact_type="RawDataArtifact",
+    )
+    child_manifest = tmp_path / "nested" / "m1" / "manifest.json"
+    _write_manifest(
+        child_manifest,
+        artifact_name="probe-m1-custom",
+        inputs=[LineageInput(kind="manifest", ref="../../m0/manifest.json")],
+    )
+    seen_refs: list[str] = []
+
+    def custom_resolver(inp: LineageInput) -> str | None:
+        seen_refs.append(inp.ref)
+        return "custom-upstream:v1"
+
+    result = maybe_publish_lineage_from_manifest(
+        child_manifest,
+        wandb_run=None,
+        upstream_artifact_resolver=custom_resolver,
+    )
+
+    assert isinstance(result, PublishResult)
+    assert seen_refs == ["../../m0/manifest.json"]
+    assert result.upstream_resolved == ["custom-upstream:v1"]
+
+
+def test_helper_broken_relative_manifest_ref_stays_unresolved(
+    tmp_path: Path,
+) -> None:
+    child_manifest = tmp_path / "nested" / "m1" / "manifest.json"
+    _write_manifest(
+        child_manifest,
+        artifact_name="probe-m1-broken",
+        inputs=[LineageInput(kind="manifest", ref="../../m0/missing.json")],
+    )
+
+    result = maybe_publish_lineage_from_manifest(child_manifest, wandb_run=None)
+
+    assert isinstance(result, PublishResult)
+    assert result.upstream_resolved == []
+    assert result.upstream_unresolved == ["manifest:../../m0/missing.json"]
 
 
 def test_helper_returns_none_when_manifest_missing(tmp_path: Path) -> None:

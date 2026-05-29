@@ -39,16 +39,14 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
 from nemotron.recipes.super3.milestones.lineage import (
     LineageInput,
-    LineageOutput,
     LineageRecord,
 )
-
 
 # An upstream-artifact resolver takes a LineageInput and returns the
 # W&B qualified name (``name:version`` or ``name:alias``) that the
@@ -92,6 +90,22 @@ def default_upstream_resolver(inp: LineageInput) -> str | None:
     if inp.kind == "checkpoint":
         return f"{Path(inp.ref).name}:latest"
     return None
+
+
+def _manifest_relative_upstream_resolver(manifest_dir: Path) -> UpstreamResolver:
+    """Resolve relative manifest inputs against the declaring manifest dir."""
+
+    def _resolve(inp: LineageInput) -> str | None:
+        if inp.kind != "manifest":
+            return default_upstream_resolver(inp)
+        ref_path = Path(inp.ref)
+        if ref_path.is_absolute():
+            return default_upstream_resolver(inp)
+        return default_upstream_resolver(
+            replace(inp, ref=str(manifest_dir / ref_path))
+        )
+
+    return _resolve
 
 
 @dataclass
@@ -347,10 +361,14 @@ def maybe_publish_lineage_from_manifest(
             wandb_run=run, artifact_factory=artifact_factory
         )
         resolved_root = Path(file_root) if file_root is not None else target.parent
+        resolver = (
+            upstream_artifact_resolver
+            or _manifest_relative_upstream_resolver(target.parent)
+        )
         return publisher.publish(
             record,
             file_root=resolved_root,
-            upstream_artifact_resolver=upstream_artifact_resolver,
+            upstream_artifact_resolver=resolver,
         )
     except Exception:  # noqa: BLE001 — publishing must never crash prep
         return None
