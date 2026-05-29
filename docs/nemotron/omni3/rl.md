@@ -103,9 +103,9 @@ The configs under `stage1_rl/config/data_prep/` map to:
 
 | Config | Source | Output |
 |--------|--------|--------|
-| `mpo.yaml` | `hf://OpenGVLab/MMPR` (auto-downloads via `source_uri`) | `MMPR-v1.2/` cache + rewritten `meta_public.json` |
-| `text.yaml` | `hf://nvidia/Nemotron-3-Nano-RL-Training-Blend` (resolved through Nano3's HF placeholder pipeline) | per-blend train/val JSONL with `responses_create_params` schema |
-| `vision.yaml` | `hf://OpenGVLab/MMPR-Tiny` (auto-downloads via `source_uri`) | `MMPR-Tiny/` cache + parquet + preview |
+| `mpo.yaml` | `hf://OpenGVLab/MMPR` @ `fe3f35704dcfc2709a072b07df0ecab6046b2c0c` (auto-downloads via `source_uri`) | `MMPR-v1.2/` cache + rewritten `meta_public.json` |
+| `text.yaml` | `hf://nvidia/Nemotron-3-Nano-RL-Training-Blend` @ `ffd169f2b74bb492ec607d64bd56f7435054972b` (resolved through Nano3's HF placeholder pipeline) | per-blend train/val JSONL with `responses_create_params` schema |
+| `vision.yaml` | `hf://OpenGVLab/MMPR-Tiny` @ `eb493212c9614b69ca49cd6e66719413c514459b` (auto-downloads via `source_uri`) | `MMPR-Tiny/` cache + parquet + preview |
 
 When `input_dir` is empty/incomplete and `source_uri` is set, the
 dispatcher snapshot-downloads the HF repo before the prep stage runs.
