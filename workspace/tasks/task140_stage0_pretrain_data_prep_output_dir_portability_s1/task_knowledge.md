@@ -1,6 +1,6 @@
 # task140_stage0_pretrain_data_prep_output_dir_portability_s1 knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Working Notes
 
@@ -12,3 +12,5 @@
   `stage0_pretrain/long_context`, and `stage0_pretrain_tiny`.
 - Session 5 added no new implementation knowledge; it only aligned durable
   bookkeeping with the open PR state.
+- Session 6 added no new implementation knowledge; it only recorded PR #247
+  merge completion and PM merged-main verification.

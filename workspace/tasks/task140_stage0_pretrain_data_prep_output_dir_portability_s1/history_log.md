@@ -1,6 +1,6 @@
 # task140_stage0_pretrain_data_prep_output_dir_portability_s1 history
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1 - 2026-05-29
 
@@ -19,3 +19,9 @@
 
 - Added stop-hook bookkeeping for the already-open PR #247; no product or test
   code changes were made in this session.
+
+## Session 6 - 2026-05-29
+
+- Recorded PM notice that PR #247 merged after PM and independent test gates;
+  squash merge/new main is `494eb6d147dd4e3d5a7f959df3a5cb57fcfe77db`
+  and PM merged-main verification passed.
