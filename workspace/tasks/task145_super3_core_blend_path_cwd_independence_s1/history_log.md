@@ -20,3 +20,4 @@
   preservation.
 - Verified focused pytest, py_compile, Ruff, structured non-repo CWD
   resolution probe, static no-PWD-source-blend grep, and diff checks.
+- Opened PR #252 to `main`: https://github.com/songCNMS/Nemotron/pull/252.

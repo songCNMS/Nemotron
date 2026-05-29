@@ -25,4 +25,4 @@
 - Branch:
   `intern_nem_dev_2/task145_super3_core_blend_path_cwd_independence_s1`
 - Base: `802f7bee98579e5a9647813f5182bb048e1aa44b`
-- PR: Pending
+- PR: https://github.com/songCNMS/Nemotron/pull/252
