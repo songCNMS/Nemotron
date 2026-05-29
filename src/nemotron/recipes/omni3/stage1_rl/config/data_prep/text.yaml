@@ -6,7 +6,7 @@ source_revision: ffd169f2b74bb492ec607d64bd56f7435054972b
 # is identical in shape to nano3/stage2_rl/config/data_prep/data_blend_raw.json
 # because the omni3 text RL stage consumes the same dataset with the same
 # placeholder semantics (DAPO + Skywork resolution).
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/omni3/stage1_rl/config/data_prep/data_blend_raw.json
+blend_path: src/nemotron/recipes/omni3/stage1_rl/config/data_prep/data_blend_raw.json
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/stage1_rl/data_prep/text
 sample: null
 force: false
