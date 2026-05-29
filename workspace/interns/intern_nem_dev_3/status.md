@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task117_qwen_eval_gate_slashless_route_contract_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/223 |
 | Session | 17 |
-| Recent Progress | Extended Qwen eval repro gate to require slashless intended completions route; focused pytest, py_compile, Ruff, route probes, and diff check passed before staging |
+| Recent Progress | Opened PR #223 for Qwen eval repro gate slashless completions-route enforcement after rebasing onto current main and rerunning focused checks |

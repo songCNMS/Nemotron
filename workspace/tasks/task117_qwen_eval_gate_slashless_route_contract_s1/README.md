@@ -19,5 +19,5 @@
 ## Status
 
 - Branch: `intern_nem_dev_3/task117_qwen_eval_gate_slashless_route_contract_s1`
-- Base: `bd5e907040647b760d82cd32315f2e85147bc4fd`
-- PR: pending
+- Base: `40eab704f6d02dd65e94189f098e712be6a1f6f2`
+- PR: https://github.com/songCNMS/Nemotron/pull/223
