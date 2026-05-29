@@ -1,8 +1,8 @@
 # task165_data_blend_revision_propagation_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: Ready for PM gate
+Status: Working - PR ready for PM gate
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task165_data_blend_revision_propagation_s1`
 Base: `83119f9ca83a4978773f4702ef0a4b48c0c4fe94`
