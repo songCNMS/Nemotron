@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 1 - 2026-05-28
 
@@ -47,3 +47,13 @@
 - Updated generic Super3 stage2 RL default/tiny tokenizer names to follow
   `${policy.model_name}`, added focused tests, opened PR #207, and recorded
   this Session 11 bookkeeping entry.
+
+## Session 12 - 2026-05-28
+
+- PM assigned `task103_sft_data_quality_strict_gate_s1` while active intern
+  bookkeeping still requires task091 Session 12 records.
+- Synced local `main` to `origin/main`
+  `efcf0e6f5b5c043cc4c9b701d4faabe63ce69156` and worked on branch
+  `intern_nem_dev_2/task103_sft_data_quality_strict_gate_s1`.
+- Added opt-in strict M1 Agentic SFT data-quality enforcement, focused tests,
+  opened PR #212, and recorded this Session 12 bookkeeping entry.
