@@ -10,6 +10,7 @@ import pytest
 
 yaml = pytest.importorskip("yaml")
 
+from nemotron.recipes.super3.milestones.m1_eval_basket import qwen_eval_repro_gate as qwen_gate  # noqa: E402
 from nemotron.recipes.super3.milestones.m1_eval_basket.benchmark_alignment import (  # noqa: E402
     BENCHMARK_ALIGNMENT_LEDGER_PATH,
     load_benchmark_alignment_ledger,
@@ -96,6 +97,107 @@ def test_qwen_eval_repro_gate_current_source_manifests_are_repo_relative_existin
         path = Path(manifest)
         assert not path.is_absolute(), manifest
         assert (REPO_ROOT / path).is_file(), manifest
+
+
+def test_qwen_eval_repro_gate_rejects_source_manifest_traversal_paths() -> None:
+    data = deepcopy(_gate_data())
+    data["source_manifests"] = ["../instruction.md"]
+    data["evidence_records"][0]["source_manifest"] = "../instruction.md"
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "source_manifests must be a normal repo-relative path" in issue
+        for issue in issues
+    )
+    assert any(
+        "source_manifest must be a normal repo-relative path" in issue
+        for issue in issues
+    )
+
+
+@pytest.mark.parametrize(
+    "source_manifest",
+    [
+        "src//manifest.yaml",
+        "src/./manifest.yaml",
+        "src/manifest.yaml/",
+    ],
+)
+def test_qwen_eval_repro_gate_rejects_source_manifest_empty_or_dot_components(
+    source_manifest: str,
+) -> None:
+    data = deepcopy(_gate_data())
+    data["source_manifests"] = [source_manifest]
+    data["evidence_records"][0]["source_manifest"] = source_manifest
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "source_manifests must be a normal repo-relative path" in issue
+        for issue in issues
+    )
+    assert any(
+        "source_manifest must be a normal repo-relative path" in issue
+        for issue in issues
+    )
+
+
+def test_repo_relative_source_manifest_helper_rejects_symlink_escape(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    outside = tmp_path / "outside.yaml"
+    outside.write_text("outside: true\n", encoding="utf-8")
+    (repo_root / "manifest.yaml").symlink_to(outside)
+    monkeypatch.setattr(qwen_gate, "REPO_ROOT", repo_root)
+
+    issues = qwen_gate._validate_repo_relative_existing_paths(
+        ["manifest.yaml"],
+        context="probe",
+    )
+
+    assert issues == [
+        "probe repo-relative path resolves outside the repo: manifest.yaml"
+    ]
+
+
+def test_repo_relative_source_manifest_helper_rejects_directories(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / "manifests").mkdir()
+    monkeypatch.setattr(qwen_gate, "REPO_ROOT", repo_root)
+
+    issues = qwen_gate._validate_repo_relative_existing_paths(
+        ["manifests"],
+        context="probe",
+    )
+
+    assert issues == ["probe repo-relative path must be a file: manifests"]
+
+
+def test_repo_relative_source_manifest_helper_accepts_normal_repo_file(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = tmp_path / "repo"
+    source_dir = repo_root / "src"
+    source_dir.mkdir(parents=True)
+    (source_dir / "manifest.yaml").write_text("inside: true\n", encoding="utf-8")
+    monkeypatch.setattr(qwen_gate, "REPO_ROOT", repo_root)
+
+    assert (
+        qwen_gate._validate_repo_relative_existing_paths(
+            ["src/manifest.yaml"],
+            context="probe",
+        )
+        == []
+    )
 
 
 def test_qwen_eval_repro_gate_rejects_absolute_source_manifest_paths() -> None:

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Mapping
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 JsonDict = dict[str, Any]
@@ -271,13 +271,43 @@ def _validate_repo_relative_existing_paths(
     context: str,
 ) -> list[str]:
     issues: list[str] = []
+    repo_root = REPO_ROOT.resolve(strict=True)
     for path in paths:
-        candidate = Path(path)
+        if not _is_non_empty_string(path):
+            issues.append(f"{context} must be a non-empty repo-relative path: {path!r}")
+            continue
+        if path != path.strip():
+            issues.append(
+                f"{context} must not contain leading or trailing whitespace: {path!r}"
+            )
+            continue
+
+        candidate = PurePosixPath(path)
         if candidate.is_absolute():
             issues.append(f"{context} must be repo-relative: {path}")
             continue
-        if not (REPO_ROOT / candidate).is_file():
+        parts = path.split("/")
+        if any(part in ("", ".", "..") for part in parts):
+            issues.append(
+                f"{context} must be a normal repo-relative path without empty, '.', "
+                f"or '..' components: {path}"
+            )
+            continue
+
+        repo_path = REPO_ROOT.joinpath(*parts)
+        try:
+            resolved = repo_path.resolve(strict=True)
+        except FileNotFoundError:
             issues.append(f"{context} repo-relative path does not exist: {path}")
+            continue
+
+        if resolved != repo_root and repo_root not in resolved.parents:
+            issues.append(
+                f"{context} repo-relative path resolves outside the repo: {path}"
+            )
+            continue
+        if not resolved.is_file():
+            issues.append(f"{context} repo-relative path must be a file: {path}")
     return issues
 
 
