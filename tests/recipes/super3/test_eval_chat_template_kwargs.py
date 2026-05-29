@@ -19,6 +19,7 @@ from pathlib import Path
 import pytest
 
 yaml = pytest.importorskip("yaml")
+OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -96,6 +97,27 @@ def _eval_default_endpoints() -> dict:
     endpoints = deployment.get("endpoints")
     assert isinstance(endpoints, dict), "missing deployment.endpoints block"
     return endpoints
+
+
+def test_eval_default_remote_job_dir_uses_nemo_run_dir() -> None:
+    data = _eval_default_data()
+
+    assert data["run"]["env"]["remote_job_dir"] == "${oc.env:NEMO_RUN_DIR,.}/.nemotron"
+    assert "${oc.env:PWD}" not in data["run"]["env"]["remote_job_dir"]
+    assert data["execution"]["output_dir"] == "${run.env.remote_job_dir}/evaluations"
+
+
+def test_eval_default_remote_job_dir_resolves_under_run_dir(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    run_dir = tmp_path / "nemo_run"
+    monkeypatch.setenv("NEMO_RUN_DIR", str(run_dir))
+
+    cfg = OmegaConf.load(EVAL_DEFAULT_PATH)
+
+    assert Path(cfg.run.env.remote_job_dir) == run_dir / ".nemotron"
+    assert Path(cfg.execution.output_dir) == run_dir / ".nemotron" / "evaluations"
 
 
 def test_eval_default_pins_enable_thinking() -> None:
