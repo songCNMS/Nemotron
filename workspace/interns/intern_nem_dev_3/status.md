@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task117_qwen_eval_gate_slashless_route_contract_s1,SESSION=17 -->
+<!-- METADATA:STATUS=Working,TASK=task119_qwen_sft_tokenizer_ref_contract_s1,SESSION=19 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task117_qwen_eval_gate_slashless_route_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/223 |
-| Session | 17 |
-| Recent Progress | Opened PR #223 for Qwen eval repro gate slashless completions-route enforcement after rebasing onto current main and rerunning focused checks |
+| Current Task | task119_qwen_sft_tokenizer_ref_contract_s1 |
+| PR | pending |
+| Session | 19 |
+| Recent Progress | Added Qwen data-prep tokenizer ref validation plus packed metadata tokenizer_uri lineage checks; focused pytest, py_compile, Ruff, structured probe, and diff check passed before staging |

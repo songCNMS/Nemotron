@@ -177,6 +177,11 @@ def validate_qwen_data_prep_config(
             f"{label} still points tokenizer.model at the Nemotron/Super3 default. "
             "Set tokenizer.model to the target Qwen HF model or local tokenizer path."
         )
+    if not _is_qwen_ref(tokenizer_model):
+        raise ValueError(
+            f"{label} must set tokenizer.model to a recognizably Qwen tokenizer/model; "
+            f"got {tokenizer_model!r}."
+        )
 
     chat_template = _config_value(config, "chat_template")
     if chat_template != QWEN_SFT_CHAT_TEMPLATE:
@@ -279,8 +284,27 @@ def validate_qwen_packed_sft_chat_contract(
             )
 
     tokenizer_uri = _metadata_value(metadata, "tokenizer_uri")
-    if tokenizer_model and isinstance(tokenizer_uri, str) and tokenizer_uri:
-        if _normalize_tokenizer_ref(tokenizer_uri) != _normalize_tokenizer_ref(tokenizer_model):
+    if tokenizer_model and (
+        not isinstance(tokenizer_uri, str) or not tokenizer_uri.strip()
+    ):
+        raise ValueError(
+            "Qwen SFT packed data must record tokenizer_uri when a training "
+            f"tokenizer_model is supplied; {metadata_path} is missing tokenizer_uri."
+        )
+    if tokenizer_uri is not None:
+        if not isinstance(tokenizer_uri, str) or not tokenizer_uri.strip():
+            raise ValueError(
+                "Qwen SFT packed data tokenizer_uri must be a non-empty Qwen "
+                f"tokenizer/model; {metadata_path} has tokenizer_uri={tokenizer_uri!r}."
+            )
+        if not _is_qwen_ref(tokenizer_uri):
+            raise ValueError(
+                "Qwen SFT packed data tokenizer_uri must point at a Qwen "
+                f"tokenizer/model; {metadata_path} has tokenizer_uri={tokenizer_uri!r}."
+            )
+        if tokenizer_model and _normalize_tokenizer_ref(
+            tokenizer_uri
+        ) != _normalize_tokenizer_ref(tokenizer_model):
             raise ValueError(
                 "Qwen SFT tokenizer mismatch between packed data and training config: "
                 f"{metadata_path} tokenizer_uri={tokenizer_uri!r}, "

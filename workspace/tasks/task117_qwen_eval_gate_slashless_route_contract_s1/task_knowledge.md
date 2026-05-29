@@ -1,6 +1,6 @@
 # task117_qwen_eval_gate_slashless_route_contract_s1 knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Working Notes
 
@@ -9,3 +9,5 @@
   production validator require and pin it.
 - Evidence records remain chat-completions-only where appropriate. The new
   check only covers the intended eval path route contract.
+- Session 18 added no new task117 implementation knowledge. The follow-up
+  task119 uses the same fail-fast contract style for Qwen SFT data prep.

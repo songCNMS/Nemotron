@@ -1,6 +1,6 @@
 # task117_qwen_eval_gate_slashless_route_contract_s1 history
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 17 - 2026-05-29
 
@@ -16,3 +16,11 @@
 - Verified focused pytest, py_compile, Ruff, static YAML route probes,
   `git diff --check`, and `git diff --cached --check`.
 - Opened PR #223 to `main`: https://github.com/songCNMS/Nemotron/pull/223.
+
+## Session 18 - 2026-05-29
+
+- Transitioned from completed task117 PR #223 to PM-assigned
+  `task119_qwen_sft_tokenizer_ref_contract_s1` on branch
+  `intern_nem_dev_3/task119_qwen_sft_tokenizer_ref_contract_s1`.
+- Left task117 implementation unchanged; task119 hardens the Qwen SFT
+  data-prep tokenizer reference contract.
