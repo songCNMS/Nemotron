@@ -21,4 +21,4 @@
 
 - Branch: `intern_nem_dev_1/task148_nano3_stage3_eval_remote_job_dir_portability_s1`
 - Base: `311a407294be2de5413de3d300770b3c51afa986`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/255
