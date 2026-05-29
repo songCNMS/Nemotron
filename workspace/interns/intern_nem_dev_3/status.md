@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task153_super3_m0_data_env_docs_path_portability_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=none,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
-| Current Task | task153_super3_m0_data_env_docs_path_portability_s1 |
+| Status | Idle |
+| Current Task | none |
 | PR | https://github.com/songCNMS/Nemotron/pull/260 |
-| Session | 1 |
-| Recent Progress | Opened PR #260 for M0 data-env README portability docs/static guard after focused pytest, py_compile, Ruff, static grep, live-surface scan, and diff checks passed |
+| Session | 2 |
+| Recent Progress | PR #260 squash-merged to main at 795eb92359257ed82816a8685db0f9cae1c751ae; local main synced; waiting for next assignment |
