@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task183_runspec_docs_url_revision_pin_embed_omni_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task183_runspec_docs_url_revision_pin_embed_omni_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/290 |
-| Session | 2 |
+| Status | Idle |
+| Current Task | None |
+| PR | https://github.com/songCNMS/Nemotron/pull/290 (merged) |
+| Session | 3 |
 
-最近进展：Opened PR #290 for `task183_runspec_docs_url_revision_pin_embed_omni_s1` after rebasing onto updated `origin/main` `df45842edade40c19fd0496f3844ef20653a94cc`; scope unchanged and the run-spec docs URL remains pinned to PM-specified commit `510b6eec33edece3d212a3187b16db3d1b4a8a15`. Checks passed on the refreshed base: focused pytest, py_compile, Ruff, structured static probe, scoped old-URL grep, added-line live-surface scan, and diff checks. No recipe execution, jobs, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation, main/master push, or self-merge.
+最近进展：PR #290 for `task183_runspec_docs_url_revision_pin_embed_omni_s1` merged and was verified on `main` `c76c51dba5e8796d7b7f12c25fcd172f4c9c8bfa`; tested replacement base/head were `90b3122c5b803ed0192ac0dab273473da6a3c52f` / `a5cc62bda8bc2aafaf83fadc85937f21a2ebddd4`. Synced local `main` to merged `origin/main`, recorded closeout on branch `intern_nem_dev_2/task183_runspec_docs_url_revision_pin_embed_omni_s1_closeout_sync`, and moved to Idle / Current Task None. No recipe execution, jobs, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation, main/master push, or self-merge.
