@@ -1,6 +1,12 @@
 # task160_omni3_valor32k_qa_zip_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+
+Status: Ready for PM gate
+Owner: intern_nem_dev_2
+Branch: `intern_nem_dev_2/task160_omni3_valor32k_qa_zip_revision_pin_s1`
+Base: `9efec596f0401ab2fbe4909ac54e82be8872ec55`
+PR: https://github.com/songCNMS/Nemotron/pull/268
 
 ## Summary
 
@@ -21,9 +27,10 @@ instead of the floating `refs/heads/main` ref.
 
 ## Acceptance Checks
 
-- Focused pytest for new/nearby Valor32k tests.
-- `py_compile` and Ruff on touched product/test files.
-- Static grep/probe proving no `refs/heads/main` remains in the product
-  Valor32k QA URL path.
-- Added-line live-surface scan.
-- `git diff --check` and `git diff --cached --check`.
+- PASS: `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/omni3/test_stage0_sft_valor32k_revision_pin.py tests/recipes/omni3/test_stage0_sft_valor_tar_guard.py tests/recipes/omni3/test_stage0_sft_valor32k_config_portability.py` (13 passed)
+- PASS: `/work-agents/.venv/bin/python -m py_compile src/nemotron/recipes/omni3/stage0_sft/data_prep.py tests/recipes/omni3/test_stage0_sft_valor32k_revision_pin.py`
+- PASS: `/work-agents/.venv/bin/ruff check src/nemotron/recipes/omni3/stage0_sft/data_prep.py tests/recipes/omni3/test_stage0_sft_valor32k_revision_pin.py`
+- PASS: structured static/AST QA ZIP probe
+- PASS: `git diff --check`
+- PASS: `git diff --cached --check`
+- PASS: added-line live-surface scan showed static revision pin, manifest metadata, tests, and task/status docs only

@@ -15,3 +15,7 @@
   `cfg.qa_zip_url` in both artifact source lineage and staging manifest
   metadata.
 - Added focused static/AST tests that do not perform a live URL download.
+- Verified focused Valor32k pytest (`13 passed`), `py_compile`, Ruff,
+  structured static/AST QA ZIP probe, `git diff --check`,
+  `git diff --cached --check`, and added-line live-surface scan.
+- Opened PR #268 to `main`: https://github.com/songCNMS/Nemotron/pull/268.
