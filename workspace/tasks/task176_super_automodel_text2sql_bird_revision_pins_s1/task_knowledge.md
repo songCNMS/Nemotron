@@ -1,0 +1,13 @@
+# Task Knowledge
+
+<!-- METADATA:SESSION=1 -->
+
+- Super AutoModel Text2SQL BIRD notebook:
+  `usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-automodel/automodel_lora_cookbook.ipynb`.
+- PM-provided dataset pins:
+  - `xu3kev/BIRD-SQL-data-train`:
+    `9122256f9d14752ed80fb9b7d158e21d9f9261aa`
+  - `meowterspace45/bird-sql-train-with-reasoning`:
+    `9e351e0057819f1b0917debb83c8e12f321157a4`
+- The task is docs/static-test only; do not execute the notebook or call
+  `load_dataset`.
