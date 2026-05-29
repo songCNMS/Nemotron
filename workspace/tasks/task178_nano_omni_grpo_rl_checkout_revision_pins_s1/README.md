@@ -6,7 +6,7 @@ Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task178_nano_omni_grpo_rl_checkout_revision_pins_s1`
 Base: `67bb428e4a992c608b8795795ced4f3fa9b9271c`
-PR: pending
+PR: https://github.com/songCNMS/Nemotron/pull/286
 
 ## Summary
 

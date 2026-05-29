@@ -14,3 +14,5 @@
   executing notebook commands.
 - Verified focused pytest, `py_compile`, Ruff, structured static notebook
   probe, added-line live-surface scan, and diff checks before commit.
+- Opened PR #286 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/286.
