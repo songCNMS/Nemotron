@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ---
 
@@ -221,5 +221,14 @@
 - Added focused M1 Agentic SFT tests proving non-empty missing-boxed references get exactly one `Final answer: \\boxed{expected}` suffix, empty references emit one final-answer line, and already-boxed references are not appended.
 - Validation passed locally: focused M1 SFT pytest shard, py_compile, Ruff, structured helper/rendered-target probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #227: https://github.com/songCNMS/Nemotron/pull/227
+
+- Task124 follow-up in same Session 17:
+- Read PM assignment for `task124_bridge_active_row_metadata_contract_s1`.
+- Synced `origin/main` at `dc6e00e741c4189051bc4db4052283dbc78d0c13` and created branch `intern_nem_dev_1/task124_bridge_active_row_metadata_contract_s1`.
+- Added a shared bridge env-registry guard requiring `status: active` rows to carry non-empty `m0_env_id`, `m0_verifier`, `nemo_gym_verifier`, and a reviewed non-placeholder `license`.
+- Preserved inactive blocker rows (`m0_missing`, `verifier_mismatch`, `blocked_external`) with unknown/pending metadata while keeping existing mix/status and module-specific validators.
+- Added focused cross-registry coverage proving bundled active RLVR/SWE1/SWE2/RLHF rows satisfy the metadata contract, plus negative loader tests for missing active metadata and placeholder licenses.
+- Validation passed locally: required bridge pytest shard, py_compile, Ruff, structured registry active-row metadata probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #230: https://github.com/songCNMS/Nemotron/pull/230
 
 ---
