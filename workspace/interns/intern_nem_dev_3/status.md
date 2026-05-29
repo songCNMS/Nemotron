@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task172_docs_upstream_branch_checkout_revision_pins_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/279 |
 | Session | 1 |
-| Recent Progress | Created task172 branch from origin/main 9cf231a; pinning scoped upstream checkout examples and adding static docs guards |
+| Recent Progress | PR #279 opened for scoped upstream checkout SHA pins after focused pytest, py_compile, Ruff, static probe/grep, live-surface scan, and diff checks passed |

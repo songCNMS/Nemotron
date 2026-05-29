@@ -12,3 +12,7 @@
   Nano-Omni AutoModel upstream branch checkout examples.
 - Added focused static docs tests for repo/branch/SHA coverage and absence of
   unpinned Megatron-Bridge branch checkout lines.
+- Verified focused pytest, `py_compile`, Ruff, structured upstream checkout
+  revision probe, static unpinned-checkout grep, added-line live-surface scan,
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #279 to `main`: https://github.com/songCNMS/Nemotron/pull/279.

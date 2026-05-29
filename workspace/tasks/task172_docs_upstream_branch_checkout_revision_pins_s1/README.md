@@ -1,6 +1,6 @@
 # task172_docs_upstream_branch_checkout_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -37,3 +37,7 @@ clone or checkout upstream release branches to PM-verified exact commit SHAs.
 - No live git clone/fetch/checkout, build, data prep, train/eval, endpoint
   calls, W&B, cluster jobs, deploy, artifact ops, direct `main`/`master` push,
   or self-merge.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/279
