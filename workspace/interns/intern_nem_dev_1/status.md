@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task167_usage_cookbook_mmpr_tiny_revision_zip_guard_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task167_usage_cookbook_mmpr_tiny_revision_zip_guard_s1 |
+| Status | Idle |
+| Current Task | none |
 | PR | https://github.com/songCNMS/Nemotron/pull/274 |
-| Session | 1 |
-| Recent Progress | Opened PR #274 for task167; MMPR-Tiny cookbook downloads are revision-pinned and zip extraction is guarded with mocked/static checks passing |
+| Session | 2 |
+| Recent Progress | PR #274 task167 was exact-head gated, squash-merged, and verified on main at 6328c018a86da7448e11a03bc1c71afc38e067f2; local main synced and closeout recorded |
