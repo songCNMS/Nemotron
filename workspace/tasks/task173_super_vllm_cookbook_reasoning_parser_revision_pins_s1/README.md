@@ -1,12 +1,13 @@
 # task173_super_vllm_cookbook_reasoning_parser_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Complete
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task173_super_vllm_cookbook_reasoning_parser_revision_pins_s1`
 Base: `e8c748fa834bb62acff2b81d1e26279994b84440`
-PR: https://github.com/songCNMS/Nemotron/pull/280
+PR: https://github.com/songCNMS/Nemotron/pull/280 (merged)
+Merged main: `5527046f0aeec3e37bf47b7b67f3b1b089164b4f`
 
 ## Summary
 
@@ -40,3 +41,9 @@ BF16, FP8, and NVFP4 users do not fetch a drifting Hugging Face `main` file.
 - PASS: structured notebook probe for exact BF16/FP8/NVFP4 parser URLs and no floating main parser URL
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
+
+## Closeout
+
+- PM reported PR #280 squash-merged and verified on `main` at
+  `5527046f0aeec3e37bf47b7b67f3b1b089164b4f`.
+- Local `main` was fast-forwarded to the merged `origin/main`.
