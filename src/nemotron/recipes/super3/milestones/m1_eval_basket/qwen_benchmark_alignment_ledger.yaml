@@ -14,6 +14,10 @@ description: |
   answer format, adequate generation budget, checked raw artifacts, and an
   explicit baseline/current delta.
 
+source_manifests:
+  - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_qwen3_30b_a3b_instruct_2507_original.yaml
+  - src/nemotron/recipes/super3/milestones/m1_eval_basket/m1_full_basket_full_non_dry_results_task071_qwen3_30b_a3b_iter0009119.yaml
+
 target_suites:
   - suite_id: m1_v0_basket_gate_targets
     milestone: M1

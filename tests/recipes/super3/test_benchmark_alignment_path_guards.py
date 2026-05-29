@@ -26,6 +26,16 @@ def test_production_ledger_source_manifests_validate() -> None:
     assert validate_benchmark_alignment_ledger(_alignment_ledger_data()) == []
 
 
+def test_production_ledger_evidence_source_manifests_are_declared() -> None:
+    data = _alignment_ledger_data()
+    declared = set(data["source_manifests"])
+
+    assert validate_benchmark_alignment_ledger(data) == []
+    for record in data["evidence_records"]:
+        for source_manifest in record["source_manifests"]:
+            assert source_manifest in declared, record["evidence_id"]
+
+
 def test_repo_relative_source_manifest_file_is_accepted() -> None:
     issues = benchmark_alignment._validate_repo_relative_existing_paths(
         [
@@ -112,6 +122,41 @@ def test_benchmark_alignment_ledger_surfaces_bad_evidence_source_manifests() -> 
         and "must not contain traversal components" in issue
         for issue in issues
     ), issues
+
+
+@pytest.mark.parametrize(
+    "undeclared_manifest",
+    [
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "qwen_eval_repro_gate.yaml",
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "qwen_benchmark_alignment_ledger.yaml",
+    ],
+)
+def test_benchmark_alignment_rejects_undeclared_evidence_source_manifests(
+    undeclared_manifest: str,
+) -> None:
+    data = deepcopy(_alignment_ledger_data())
+    assert (benchmark_alignment.REPO_ROOT / undeclared_manifest).is_file()
+    assert undeclared_manifest not in data["source_manifests"]
+    data["evidence_records"][0]["source_manifests"] = [undeclared_manifest]
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any(
+        "evidence_records[0].source_manifests entry is not declared in "
+        "top-level source_manifests" in issue
+        for issue in issues
+    ), issues
+
+
+def test_benchmark_alignment_requires_top_level_source_manifests() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    data.pop("source_manifests")
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("source_manifests must be non-empty strings" in issue for issue in issues)
 
 
 def test_benchmark_alignment_rejects_directory_local_raw_artifacts(

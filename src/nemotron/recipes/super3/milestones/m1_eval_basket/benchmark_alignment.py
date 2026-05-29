@@ -248,6 +248,23 @@ def _validate_repo_relative_existing_paths(
     return issues
 
 
+def _validate_declared_source_manifests(
+    value: Any,
+) -> tuple[set[str] | None, list[str]]:
+    if (
+        not isinstance(value, list)
+        or not value
+        or not all(_is_non_empty_string(path) for path in value)
+    ):
+        return None, ["source_manifests must be non-empty strings"]
+
+    paths = [str(path) for path in value]
+    return set(paths), _validate_repo_relative_existing_paths(
+        paths,
+        context="source_manifests",
+    )
+
+
 def _validate_record(value: Any, *, context: str) -> list[str]:
     if not isinstance(value, Mapping):
         return [f"{context} must be a mapping"]
@@ -448,6 +465,7 @@ def _validate_evidence_records(
     records: Any,
     *,
     protocols: Mapping[str, Mapping[str, Any]],
+    declared_source_manifests: set[str] | None,
 ) -> list[str]:
     issues: list[str] = []
     if not isinstance(records, list) or not records:
@@ -523,6 +541,13 @@ def _validate_evidence_records(
                     context=f"{prefix}.source_manifests",
                 )
             )
+            if declared_source_manifests is not None:
+                for source_manifest in source_manifests:
+                    if str(source_manifest) not in declared_source_manifests:
+                        issues.append(
+                            f"{prefix}.source_manifests entry is not declared in "
+                            f"top-level source_manifests: {source_manifest}"
+                        )
 
         issues.extend(_validate_record(record.get("baseline"), context=f"{prefix}.baseline"))
         issues.extend(_validate_record(record.get("current"), context=f"{prefix}.current"))
@@ -658,10 +683,15 @@ def validate_benchmark_alignment_ledger(data: Mapping[str, Any]) -> list[str]:
     issues.extend(_validate_target_suite_crosswalk(suite_ids))
 
     protocols = _protocols_by_benchmark(data.get("benchmark_protocols"), issues)
+    declared_source_manifests, source_manifest_issues = (
+        _validate_declared_source_manifests(data.get("source_manifests"))
+    )
+    issues.extend(source_manifest_issues)
     issues.extend(
         _validate_evidence_records(
             data.get("evidence_records"),
             protocols=protocols,
+            declared_source_manifests=declared_source_manifests,
         )
     )
     issues.extend(_validate_invalid_surfaces(data.get("invalid_legacy_eval_surfaces")))
