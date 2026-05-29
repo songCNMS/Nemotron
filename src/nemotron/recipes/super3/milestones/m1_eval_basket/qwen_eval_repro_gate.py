@@ -382,6 +382,7 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
         )
 
     source_manifests = data.get("source_manifests")
+    declared_source_manifests: set[str] | None = None
     if (
         not isinstance(source_manifests, list)
         or not source_manifests
@@ -389,6 +390,7 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
     ):
         issues.append("source_manifests must be non-empty strings")
     else:
+        declared_source_manifests = {str(path) for path in source_manifests}
         issues.extend(
             _validate_repo_relative_existing_paths(
                 list(source_manifests),
@@ -420,6 +422,14 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
                         context=f"{prefix}.source_manifest",
                     )
                 )
+                if (
+                    declared_source_manifests is not None
+                    and str(source_manifest) not in declared_source_manifests
+                ):
+                    issues.append(
+                        f"{prefix}.source_manifest is not declared in top-level "
+                        f"source_manifests: {source_manifest}"
+                    )
             evidence_id = record.get("evidence_id")
             if _is_non_empty_string(evidence_id):
                 if evidence_id in seen:
