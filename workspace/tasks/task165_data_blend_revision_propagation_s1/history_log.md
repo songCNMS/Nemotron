@@ -21,3 +21,4 @@
   run-hash sensitivity, and artifact lineage.
 - Verified focused pytest, `py_compile`, Ruff, static revision propagation probe,
   offline AST probe, added-line live-surface scan, and diff checks.
+- Opened PR #273 to `main`: https://github.com/songCNMS/Nemotron/pull/273.
