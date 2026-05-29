@@ -27,3 +27,4 @@
 - Ran focused pytest, py_compile, Ruff, structured static probe, scoped
   stale-link grep, added-line live-surface scan, `git diff --check`, and
   `git diff --cached --check`.
+- Opened PR #292: https://github.com/songCNMS/Nemotron/pull/292

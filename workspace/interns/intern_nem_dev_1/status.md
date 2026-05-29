@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task185_super3_upstream_doc_links_revision_pins_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/292 |
 | Session | 2 |
-| Recent Progress | Rebased task185 onto `origin/main` `f74e7c05668f96766d10c730fcd14ddec7191350`; Super3 upstream docs link pins and focused static tests are under validation |
+| Recent Progress | Opened PR #292 for task185 at head `a832efc15a9e22e745febb96c5f4e8bf6cc9e9f5`; focused docs/static checks passed |

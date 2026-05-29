@@ -24,7 +24,8 @@
 
 - Base: `f74e7c05668f96766d10c730fcd14ddec7191350`
 - Branch: `intern_nem_dev_1/task185_super3_upstream_doc_links_revision_pins_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/292
+- Head: `a832efc15a9e22e745febb96c5f4e8bf6cc9e9f5`
 - Checks: focused docs revision-pin pytest, py_compile, Ruff, structured
   static probe, scoped stale-link grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check` passed.
