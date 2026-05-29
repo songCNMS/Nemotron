@@ -16,3 +16,4 @@
 - Added focused static/config tests for the blend path, filter value, non-empty
   blend datasets, and row-filter behavior for missing `used_in`.
 - Verified focused pytest, py_compile, Ruff, and structured YAML probe.
+- Opened PR #246 to `main`: https://github.com/songCNMS/Nemotron/pull/246.

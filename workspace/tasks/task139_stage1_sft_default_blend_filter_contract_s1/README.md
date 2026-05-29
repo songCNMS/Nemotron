@@ -27,8 +27,8 @@ missing `used_in` field whenever a filter is configured.
 - [x] Row-filter helper test documents why missing `used_in` plus stale filter
   is dangerous.
 - [x] Focused pytest, py_compile, Ruff, structured probe, and diff checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/246
