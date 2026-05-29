@@ -61,7 +61,8 @@ class SubStageDataPrepConfig:
     different defaults for input_path and output_dir.
 
     Attributes:
-        input_path: Path to the source JSONL file (e.g., /lustre/.../rlvr1.jsonl).
+        input_path: Path to the source JSONL file (e.g.,
+            ${NEMO_RUN_DIR:-.}/output/super3/stage2_rl/rlvr1.jsonl).
         output_dir: Output directory for processed data.
         val_holdout: Number of rows to hold out for validation (from end of file),
             or "auto" to infer a bridge combined.jsonl holdout from sibling
