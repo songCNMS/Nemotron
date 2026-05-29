@@ -156,6 +156,10 @@ def test_pref_data_registry_loads_with_expected_candidates() -> None:
     assert "ultrafeedback" in ids
     for row in pref:
         assert {"id", "hf_dataset", "license", "hf_revision"} <= row.keys()
+        if row.get("hf_revision_pin_required") or row.get("m0_landed"):
+            assert isinstance(row.get("contamination_against"), list)
+            assert row["contamination_against"]
+            assert all(isinstance(target, str) and target for target in row["contamination_against"])
 
 
 def test_pref_data_registry_pins_required_hf_revisions() -> None:
@@ -173,6 +177,19 @@ def test_pref_data_registry_pins_required_hf_revisions() -> None:
     assert rows["distilabel_orca_pairs"]["hf_revision"] == (
         "0b10ec0df32c919f95126b203c8f5962b6875896"
     )
+    assert rows["helpsteer2"]["contamination_against"] == [
+        "MT-Bench",
+        "HelpSteer1",
+        "internal RLHF holdouts",
+    ]
+    assert rows["ultrafeedback"]["contamination_against"] == [
+        "AlpacaEval",
+        "MT-Bench",
+        "internal RLHF holdouts",
+    ]
+    assert rows["distilabel_orca_pairs"]["contamination_against"] == [
+        "Orca-style reasoning evals"
+    ]
 
 
 def test_pref_data_registry_path_resolves_to_yaml_in_module() -> None:

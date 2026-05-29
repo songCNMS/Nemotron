@@ -28,7 +28,6 @@ from nemotron.recipes.super3.milestones.data_registries.contamination_audit impo
     is_placeholder_entry,
 )
 
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT_PATH = REPO_ROOT / "scripts" / "validate_data_registries.py"
 
@@ -202,10 +201,9 @@ def test_mixed_real_and_placeholder_entries_clean_through(tmp_path: Path) -> Non
     assert audit["informational"] == []
 
 
-def test_pref_data_registry_rows_are_skipped(tmp_path: Path) -> None:
-    """Only m0_data_registry rows carry contamination_against;
-    pref_data_registry rows don't. The audit must skip pref rows
-    instead of false-flagging them as missing the field."""
+def test_exploratory_pref_data_registry_rows_are_skipped(tmp_path: Path) -> None:
+    """Exploratory pref rows without pin-required or landed flags are
+    skipped so early candidate notes do not block the contamination audit."""
     pref_reg = tmp_path / "pref_data.yaml"
     pref_reg.write_text(
         "schema_version: 1\n"
@@ -229,6 +227,72 @@ def test_pref_data_registry_rows_are_skipped(tmp_path: Path) -> None:
     )
     audit = find_weak_contamination(index)
     assert audit == {"blockers": [], "informational": []}
+
+
+def test_pin_required_pref_data_registry_row_requires_contamination_against(
+    tmp_path: Path,
+) -> None:
+    pref_reg = tmp_path / "pref_data.yaml"
+    pref_reg.write_text(
+        "schema_version: 1\n"
+        "milestone: M1\n"
+        "datasets:\n"
+        "  - id: stub_pref\n"
+        "    hf_dataset: stub/pref\n"
+        "    hf_revision_pin_required: true\n"
+        "    license: apache-2.0\n",
+        encoding="utf-8",
+    )
+    index = tmp_path / "unified_index.yaml"
+    index.write_text(
+        "schema_version: 1\n"
+        "milestone: M1\n"
+        "registries:\n"
+        "  - id: stub_pref\n"
+        "    kind: pref_data_registry\n"
+        f"    path: {pref_reg.name}\n"
+        "    summary: stub\n",
+        encoding="utf-8",
+    )
+
+    audit = find_weak_contamination(index)
+
+    assert len(audit["blockers"]) == 1
+    assert audit["blockers"][0]["row_id"] == "stub_pref"
+    assert "contamination_against missing" in audit["blockers"][0]["reasons"]
+
+
+def test_m0_landed_pref_data_registry_row_requires_real_targets(
+    tmp_path: Path,
+) -> None:
+    pref_reg = tmp_path / "pref_data.yaml"
+    pref_reg.write_text(
+        "schema_version: 1\n"
+        "milestone: M1\n"
+        "datasets:\n"
+        "  - id: stub_pref\n"
+        "    hf_dataset: stub/pref\n"
+        "    m0_landed: true\n"
+        "    license: apache-2.0\n"
+        "    contamination_against: []\n",
+        encoding="utf-8",
+    )
+    index = tmp_path / "unified_index.yaml"
+    index.write_text(
+        "schema_version: 1\n"
+        "milestone: M1\n"
+        "registries:\n"
+        "  - id: stub_pref\n"
+        "    kind: pref_data_registry\n"
+        f"    path: {pref_reg.name}\n"
+        "    summary: stub\n",
+        encoding="utf-8",
+    )
+
+    audit = find_weak_contamination(index)
+
+    assert len(audit["blockers"]) == 1
+    assert "contamination_against is empty []" in audit["blockers"][0]["reasons"]
 
 
 # ---------- format_contamination_report ----------

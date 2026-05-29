@@ -316,6 +316,34 @@ def m0_contamination_against_validator(row: JsonDict, index: int) -> str | None:
     return None
 
 
+def pref_contamination_against_validator(row: JsonDict, index: int) -> str | None:
+    """Validate promoted/required pref rows carry contamination targets.
+
+    Exploratory pref candidates may exist before promotion, but rows that are
+    landed into M0 or declare ``hf_revision_pin_required`` are intended to be
+    production candidates. They must carry the same machine-checkable
+    contamination target shape as M0 data rows.
+    """
+    if not row.get("m0_landed") and not row.get("hf_revision_pin_required"):
+        return None
+    value = row.get("contamination_against")
+    if value is None:
+        return (
+            "contamination_against must be a non-empty list for "
+            "m0_landed or hf_revision_pin_required pref rows"
+        )
+    if not isinstance(value, list):
+        return "contamination_against must be a list"
+    if not value:
+        return (
+            "contamination_against must be non-empty for "
+            "m0_landed or hf_revision_pin_required pref rows"
+        )
+    if any(not isinstance(item, str) or not item.strip() for item in value):
+        return "contamination_against entries must be non-empty strings"
+    return None
+
+
 __all__ = [
     "KNOWN_KINDS",
     "KNOWN_BRIDGE_STATUSES",
@@ -324,4 +352,5 @@ __all__ = [
     "bridge_status_validator",
     "bridge_mix_validator_factory",
     "m0_contamination_against_validator",
+    "pref_contamination_against_validator",
 ]
