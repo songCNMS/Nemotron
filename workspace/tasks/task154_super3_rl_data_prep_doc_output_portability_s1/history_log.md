@@ -13,3 +13,6 @@
   for the M0 `--output-dir` example.
 - Extended focused M0 docs static coverage in
   `tests/recipes/super3/test_m0_data_env.py`.
+- Ran focused docs pytest, py_compile, Ruff, scoped product-doc grep,
+  added-line live-surface scan, and diff checks.
+- Opened PR #261 to `main`: https://github.com/songCNMS/Nemotron/pull/261.

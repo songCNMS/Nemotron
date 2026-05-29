@@ -21,4 +21,4 @@
 
 - Branch: `intern_nem_dev_1/task154_super3_rl_data_prep_doc_output_portability_s1`
 - Base: `795eb92359257ed82816a8685db0f9cae1c751ae`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/261
