@@ -1,6 +1,6 @@
 # task119_qwen_sft_tokenizer_ref_contract_s1 history
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 18 - 2026-05-29
 
@@ -33,3 +33,11 @@
 - Re-verified focused pytest, py_compile, Ruff, structured validator probe,
   `git diff --check`, and `git diff --cached --check`.
 - Opened PR #226 to `main`: https://github.com/songCNMS/Nemotron/pull/226.
+
+## Session 20 - 2026-05-29
+
+- Transitioned from completed task119 PR #226 to PM-assigned
+  `task122_omni3_valor_tar_extraction_guard_s1` on branch
+  `intern_nem_dev_3/task122_omni3_valor_tar_extraction_guard_s1`.
+- Left task119 implementation unchanged; task122 hardens Omni3 Valor32k tar
+  extraction against unsafe archive members.
