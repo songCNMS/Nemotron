@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -19,3 +19,6 @@
 8. session 12 note: data-quality audits that compute leakage/duplicate counters
    need an explicit fail path for production use; report-only remains useful
    for smoke fixtures, but strict callers should get a nonzero error.
+9. session 13 note: Stage2 RL bridge `combined.jsonl` consumers should use the
+   bridge manifest's `counts.val` boundary instead of a fixed holdout whenever
+   the bridge emits train rows followed by validation rows.

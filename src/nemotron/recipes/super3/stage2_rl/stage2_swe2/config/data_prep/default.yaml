@@ -1,11 +1,12 @@
 # SWE Stage 2 data preparation
 #
-# Splits swe2.jsonl into train/val (last 100 rows → val).
+# Splits the bridge combined.jsonl into train/val using the sibling
+# manifest.json counts.val boundary.
 # No placeholder resolution needed.
 #
 # Usage:
 #   nemotron super3 data prep rl swe2
-#   nemotron super3 data prep rl swe2 sample=100
+#   nemotron super3 data prep rl swe2 val_holdout=<N> input_path=/path/to/manual.jsonl
 
 # M0-derived combined JSONL from the SWE2 bridge.
 input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe2/combined.jsonl
@@ -13,8 +14,9 @@ input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe2/combined.jsonl
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/swe2
 
-# Number of rows to hold out for validation (from end of file)
-val_holdout: 100
+# Infer the bridge validation row count from sibling manifest.json counts.val.
+# Override with an integer for manual/non-bridge JSONL inputs.
+val_holdout: auto
 
 # Limit rows per dataset for quick tests (null = no limit)
 sample: null

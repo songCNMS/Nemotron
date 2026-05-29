@@ -34,12 +34,14 @@ import hashlib
 import json
 import logging
 import time
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
 
 from nemotron.data_prep.config import ObservabilityConfig
+from nemotron.data_prep.core.work_items import JsonlDatasetWorkItem
 from nemotron.data_prep.observability import pipeline_wandb_hook
 from nemotron.data_prep.recipes.execution_mode import resolve_execution_mode
 from nemotron.data_prep.recipes.rl import (
@@ -56,7 +58,6 @@ from nemotron.data_prep.stages.jsonl_plan import JsonlPlanStageConfig
 from nemotron.data_prep.stages.jsonl_write import JsonlShardStage, JsonlShardStageConfig
 from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.data_prep.core.work_items import JsonlDatasetWorkItem
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +79,97 @@ class LocalSplitResult:
     manifest_path: str
 
 
+@dataclass(frozen=True)
+class _ValHoldoutResolution:
+    value: int
+    source: str
+    manifest_path: Path | None = None
+    manifest_train_rows: int | None = None
+    manifest_val_rows: int | None = None
+
+
+_AUTO_VAL_HOLDOUT_VALUES = {"auto", "manifest", "bridge_manifest"}
+
+
+def _count_from_manifest_value(value: object, *, manifest_path: Path, field: str) -> int:
+    if isinstance(value, bool) or value is None:
+        raise ValueError(f"{manifest_path} counts.{field} must be an integer or mapping of integer counts")
+
+    if isinstance(value, int):
+        if value < 0:
+            raise ValueError(f"{manifest_path} counts.{field} must be non-negative, got {value}")
+        return value
+
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{manifest_path} counts.{field} must be an integer or mapping of integer counts")
+
+    total = 0
+    for key, count in value.items():
+        if isinstance(count, bool) or not isinstance(count, int):
+            raise ValueError(
+                f"{manifest_path} counts.{field}.{key} must be an integer count, got {count!r}"
+            )
+        if count < 0:
+            raise ValueError(f"{manifest_path} counts.{field}.{key} must be non-negative, got {count}")
+        total += count
+    return total
+
+
+def _resolve_bridge_manifest_val_holdout(input_path: Path) -> _ValHoldoutResolution:
+    manifest_path = input_path.parent / "manifest.json"
+    if not manifest_path.exists():
+        raise FileNotFoundError(
+            "val_holdout=auto requires a bridge manifest next to the combined JSONL: "
+            f"{manifest_path}. Override val_holdout=<N> for manual/non-bridge inputs."
+        )
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"val_holdout=auto could not parse bridge manifest: {manifest_path}") from exc
+
+    counts = manifest.get("counts")
+    if not isinstance(counts, Mapping):
+        raise ValueError(f"{manifest_path} must contain counts.val for val_holdout=auto")
+
+    val_rows = _count_from_manifest_value(counts.get("val"), manifest_path=manifest_path, field="val")
+    train_rows = None
+    if "train" in counts:
+        train_rows = _count_from_manifest_value(counts.get("train"), manifest_path=manifest_path, field="train")
+
+    logger.info(
+        "Inferred val_holdout=%s from bridge manifest %s",
+        val_rows,
+        manifest_path,
+    )
+    return _ValHoldoutResolution(
+        value=val_rows,
+        source="bridge_manifest",
+        manifest_path=manifest_path,
+        manifest_train_rows=train_rows,
+        manifest_val_rows=val_rows,
+    )
+
+
+def _resolve_val_holdout(input_path: Path, val_holdout: int | str) -> _ValHoldoutResolution:
+    if isinstance(val_holdout, str):
+        normalized = val_holdout.strip().lower()
+        if normalized in _AUTO_VAL_HOLDOUT_VALUES:
+            return _resolve_bridge_manifest_val_holdout(input_path)
+        try:
+            val_holdout = int(normalized)
+        except ValueError as exc:
+            allowed = ", ".join(sorted(_AUTO_VAL_HOLDOUT_VALUES))
+            raise ValueError(f"val_holdout must be an integer or one of: {allowed}") from exc
+
+    if isinstance(val_holdout, bool) or not isinstance(val_holdout, int):
+        raise TypeError(f"val_holdout must be an integer, got {val_holdout!r}")
+    if val_holdout < 0:
+        raise ValueError(f"val_holdout must be non-negative, got {val_holdout}")
+
+    return _ValHoldoutResolution(value=val_holdout, source="explicit")
+
+
 # =============================================================================
 # Direct Path: split_local_jsonl
 # =============================================================================
@@ -87,7 +179,7 @@ def split_local_jsonl(
     input_path: Path,
     output_dir: Path,
     *,
-    val_holdout: int = 100,
+    val_holdout: int | str = 100,
     sample: int | None = None,
     force: bool = False,
 ) -> LocalSplitResult:
@@ -100,6 +192,8 @@ def split_local_jsonl(
         input_path: Path to source JSONL file.
         output_dir: Root output directory.
         val_holdout: Number of rows to hold out for validation (from end of file).
+            Use "auto" for bridge combined.jsonl inputs to infer the holdout
+            from sibling manifest.json counts.val.
         sample: If set, limit total rows to this count.
         force: If True, ignore cached results and re-run.
 
@@ -112,15 +206,23 @@ def split_local_jsonl(
     if not input_path.exists():
         raise FileNotFoundError(f"Input JSONL file not found: {input_path}")
 
+    holdout = _resolve_val_holdout(input_path, val_holdout)
+
     # Compute deterministic run hash for caching
     stat = input_path.stat()
     run_config = {
         "input_path": str(input_path),
         "input_mtime": stat.st_mtime,
         "input_size": stat.st_size,
-        "val_holdout": val_holdout,
+        "val_holdout": holdout.value,
+        "val_holdout_source": holdout.source,
         "sample": sample,
     }
+    if holdout.manifest_path is not None:
+        manifest_stat = holdout.manifest_path.stat()
+        run_config["bridge_manifest"] = str(holdout.manifest_path)
+        run_config["bridge_manifest_mtime"] = manifest_stat.st_mtime
+        run_config["bridge_manifest_size"] = manifest_stat.st_size
     config_hash = hashlib.sha256(
         json.dumps(run_config, sort_keys=True).encode()
     ).hexdigest()[:16]
@@ -144,13 +246,13 @@ def split_local_jsonl(
                 ):
                     logger.info(f"Using cached result from {run_dir}")
                     return LocalSplitResult(
-                    train_path=existing.get("train", ""),
-                    val_path=existing.get("val"),
-                    train_rows=existing.get("train_rows", 0),
-                    val_rows=existing.get("val_rows", 0),
-                    run_dir=str(run_dir),
-                    manifest_path=str(manifest_path),
-                )
+                        train_path=existing.get("train", ""),
+                        val_path=existing.get("val"),
+                        train_rows=existing.get("train_rows", 0),
+                        val_rows=existing.get("val_rows", 0),
+                        run_dir=str(run_dir),
+                        manifest_path=str(manifest_path),
+                    )
         except (json.JSONDecodeError, KeyError):
             pass  # Re-run if cache is corrupt
 
@@ -160,24 +262,49 @@ def split_local_jsonl(
     # Count total lines (streaming, memory-efficient)
     logger.info(f"Counting rows in {input_path}...")
     total_rows = 0
-    with open(input_path, "r") as f:
+    with open(input_path) as f:
         for _ in f:
             total_rows += 1
     logger.info(f"Total rows: {total_rows}")
+
+    if holdout.manifest_train_rows is not None and holdout.manifest_val_rows is not None:
+        manifest_total = holdout.manifest_train_rows + holdout.manifest_val_rows
+        if manifest_total != total_rows:
+            raise ValueError(
+                "Bridge manifest row count does not match combined JSONL: "
+                f"{holdout.manifest_path} counts train+val={manifest_total}, "
+                f"{input_path} rows={total_rows}. Regenerate the bridge output or "
+                "override val_holdout=<N> for manual/non-bridge inputs."
+            )
+
+    if holdout.source == "bridge_manifest" and sample is not None and sample < total_rows:
+        raise ValueError(
+            "sample cannot truncate a bridge combined JSONL when val_holdout=auto "
+            f"(sample={sample}, rows={total_rows}). Set sample=null or override val_holdout=<N>."
+        )
 
     # Apply sample limit
     effective_total = min(total_rows, sample) if sample else total_rows
 
     # Compute split point
-    if effective_total <= val_holdout:
+    if holdout.source == "bridge_manifest" and effective_total < holdout.value:
+        raise ValueError(
+            "Bridge manifest counts.val exceeds available combined JSONL rows: "
+            f"counts.val={holdout.value}, rows={effective_total}"
+        )
+
+    if holdout.source == "bridge_manifest" and effective_total == holdout.value:
+        train_end = 0
+        val_start = 0
+    elif effective_total <= holdout.value:
         logger.warning(
-            f"Total rows ({effective_total}) <= val_holdout ({val_holdout}). "
+            f"Total rows ({effective_total}) <= val_holdout ({holdout.value}). "
             f"All rows go to train, no validation split."
         )
         train_end = effective_total
         val_start = effective_total  # No val rows
     else:
-        train_end = effective_total - val_holdout
+        train_end = effective_total - holdout.value
         val_start = train_end
 
     # Create output directories
@@ -195,7 +322,7 @@ def split_local_jsonl(
     val_count = 0
 
     with (
-        open(input_path, "r") as fin,
+        open(input_path) as fin,
         open(train_file, "w") as f_train,
         open(val_file, "w") as f_val,
     ):
@@ -228,9 +355,17 @@ def split_local_jsonl(
         "mode": "local_split",
         "source": str(input_path),
         "run_hash": run_hash,
+        "val_holdout": holdout.value,
+        "val_holdout_source": holdout.source,
         "train_rows": train_count,
         "val_rows": val_count,
     }
+    if holdout.manifest_path is not None:
+        manifest["bridge_manifest"] = {
+            "path": str(holdout.manifest_path),
+            "train_rows": holdout.manifest_train_rows,
+            "val_rows": holdout.manifest_val_rows,
+        }
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2))
 
@@ -255,7 +390,7 @@ def run_resolve_and_split(
     input_path: Path,
     output_dir: Path,
     *,
-    val_holdout: int = 100,
+    val_holdout: int | str = 100,
     sample: int | None = None,
     force: bool = False,
     execution_mode: str = "auto",
@@ -272,7 +407,8 @@ def run_resolve_and_split(
     Args:
         input_path: Path to source JSONL file with placeholders.
         output_dir: Root output directory.
-        val_holdout: Number of rows to hold out for validation.
+        val_holdout: Number of rows to hold out for validation, or "auto"
+            to infer from a sibling bridge manifest before splitting.
         sample: If set, limit total rows.
         force: If True, ignore cached results.
         execution_mode: Pipeline execution mode ('auto', 'streaming', 'batch').
