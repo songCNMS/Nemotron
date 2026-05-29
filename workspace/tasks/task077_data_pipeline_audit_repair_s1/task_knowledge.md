@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -107,5 +107,6 @@
 95. file change: `_bridge_base.load_env_registry()` now rejects active rows with missing `m0_env_id`, `m0_verifier`, `nemo_gym_verifier`, `license`, or placeholder/unknown license values.
 96. test evidence: Task124 required RLVR/SWE1/SWE2/RLHF bridge shard passed with 79 tests; py_compile, Ruff, structured active-row metadata probe, and diff checks passed.
 97. file change: PR #230 opened against `main` for task124 bridge active-row metadata contract.
+98. test evidence: PM reported PR #230 merged at `22460b64457dcf65e04011f1caaa6966e2a94fa3` after PM gate and independent test_1 PASS; merged-main bridge checks and probes passed.
 
 ---

@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ---
 
@@ -230,5 +230,14 @@
 - Added focused cross-registry coverage proving bundled active RLVR/SWE1/SWE2/RLHF rows satisfy the metadata contract, plus negative loader tests for missing active metadata and placeholder licenses.
 - Validation passed locally: required bridge pytest shard, py_compile, Ruff, structured registry active-row metadata probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #230: https://github.com/songCNMS/Nemotron/pull/230
+
+## Session 18 - 2026-05-29 - Task124 merged
+
+**Executor**: intern_nem_dev_1
+
+- PM reported PR #230 for `task124_bridge_active_row_metadata_contract_s1` merged after PM gate and independent test_1 PASS.
+- Merge commit on `main`: `22460b64457dcf65e04011f1caaa6966e2a94fa3`.
+- Merged-main checks reported by PM: bridge pytest 79 passed, py_compile, Ruff, diff checks, active metadata probe, and static guard probe.
+- No post-merge issue observed in the local handoff update.
 
 ---
