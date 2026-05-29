@@ -329,6 +329,9 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "math_skip_decontamination_check": bool(
                 getattr(args, "math_skip_decontamination_check", False)
             ),
+            "fail_on_data_quality_issues": bool(
+                getattr(args, "fail_on_data_quality_issues", False)
+            ),
         },
         "packing": {
             "tokenizer_model": qwen_tokenizer_model,
@@ -533,6 +536,11 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             )
     if data.get("math_skip_decontamination_check"):
         math_supervision_flag_lines += " \\\n  --skip-math-decontamination-check"
+    strict_data_quality_flag = (
+        " \\\n  --fail-on-data-quality-issues"
+        if data.get("fail_on_data_quality_issues")
+        else ""
+    )
     optional_training_flags = _optional_training_flags(training)
     optional_training_flag_lines = (
         "".join(f" \\\n  {_q(flag)}" for flag in optional_training_flags)
@@ -573,7 +581,7 @@ fi
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \\
   --m0-input-dir {_q(paths["m0_dir"])} \\
   --output-dir {_q(paths["m1_dir"])} \\
-  --overwrite{math_supervision_flag_lines}
+  --overwrite{strict_data_quality_flag}{math_supervision_flag_lines}
 
 python src/nemotron/recipes/super3/stage1_sft/data_prep.py \\
   --config {_q(packing["data_prep_config"])} \\
@@ -774,6 +782,7 @@ def render_report(manifest: JsonDict) -> str:
             f"- Run name: `{manifest['run_name']}`",
             f"- M0 datasets: {len(data['m0_dataset_ids'])} agentic SFT slices",
             f"- Rows per dataset: {row_scope}",
+            f"- Strict data-quality gate: `{data['fail_on_data_quality_issues']}`",
             f"- Math supervision strategy: `{data['math_supervision_strategy']}`",
             f"- Math v3 weights: `{data['math_v3_weights']}`",
             f"- Math v4 weights: `{data['math_v4_weights']}`",
@@ -866,6 +875,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--uncapped-data",
         action="store_true",
         help="Generate M0 data with prepare_m0_assets.py --uncapped instead of per-dataset row caps.",
+    )
+    parser.add_argument(
+        "--fail-on-data-quality-issues",
+        action="store_true",
+        help=(
+            "Pass prepare_m1_agentic_sft.py --fail-on-data-quality-issues so "
+            "source-metadata, duplicate, and split-routing audit failures stop "
+            "the scale-up before packing/training."
+        ),
     )
     parser.add_argument(
         "--math-supervision-strategy",
