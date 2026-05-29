@@ -8,3 +8,4 @@
 - Updated public long-document SDG docs path examples toward `${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/...` portability.
 - Extended focused static docs test coverage to include the public docs page.
 - Ran focused static docs pytest, py_compile, Ruff, scoped no-`/lustre/` grep, structured public-doc probe, added-line live-surface scan, and `git diff --check`.
+- Opened PR #269: https://github.com/songCNMS/Nemotron/pull/269
