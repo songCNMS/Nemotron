@@ -1,6 +1,6 @@
 # task143_m1_bridge_cli_output_dir_portability_s1 knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Working Notes
 
@@ -11,3 +11,5 @@
   without affecting explicit CLI overrides.
 - Session 6 added no new implementation knowledge; it only aligned durable
   bookkeeping with the open PR state.
+- Session 7 added no new implementation knowledge; it only recorded PR #250
+  merge completion and PM merged-main verification.
