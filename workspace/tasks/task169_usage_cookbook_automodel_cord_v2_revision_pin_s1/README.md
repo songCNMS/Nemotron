@@ -1,6 +1,6 @@
 # task169_usage_cookbook_automodel_cord_v2_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -27,3 +27,7 @@ to the PM-verified Hugging Face dataset revision.
 - No live `load_dataset`, HF/dataset download, AutoModel training/inference,
   endpoint calls, W&B, cluster jobs, deploy, artifact ops, direct
   `main`/`master` push, or self-merge.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/276

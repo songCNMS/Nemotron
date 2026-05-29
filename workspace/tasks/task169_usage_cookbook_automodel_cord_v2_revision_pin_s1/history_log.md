@@ -12,3 +12,7 @@
   cookbook to revision `7f0115a4b758a71d6473b8d085751692da2fef98`.
 - Added focused static cookbook tests for exact revision pinning, absence of
   the unpinned call, and expected CORD-v2 section anchors.
+- Verified focused pytest, `py_compile`, Ruff, structured CORD-v2 revision
+  probe, static unpinned-call grep, added-line live-surface scan,
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #276 to `main`: https://github.com/songCNMS/Nemotron/pull/276.

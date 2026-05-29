@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task169_usage_cookbook_automodel_cord_v2_revision_pin_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/276 |
 | Session | 1 |
-| Recent Progress | Created task169 branch from origin/main 6328c01; pinning Nano-Omni AutoModel CORD-v2 cookbook examples and adding static guards |
+| Recent Progress | PR #276 opened for Nano-Omni AutoModel CORD-v2 cookbook revision pins after focused pytest, py_compile, Ruff, static probe/grep, live-surface scan, and diff checks passed |
