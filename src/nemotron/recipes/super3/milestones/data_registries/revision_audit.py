@@ -92,7 +92,7 @@ def find_unpinned_revisions(
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
-        load_registry_file,
+        load_indexed_registry,
         load_unified_index,
     )
 
@@ -104,10 +104,7 @@ def find_unpinned_revisions(
         kind = entry["kind"]
         if kind not in ("m0_data_registry", "pref_data_registry"):
             continue
-        registry_path = (target.parent / entry["path"]).resolve()
-        if not registry_path.is_file():
-            continue
-        data = load_registry_file(registry_path)
+        data = load_indexed_registry(target, entry)
         rows = data.get("datasets") or []
         for row in rows:
             if not isinstance(row, Mapping):

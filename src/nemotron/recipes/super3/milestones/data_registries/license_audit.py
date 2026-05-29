@@ -44,7 +44,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-
 JsonDict = dict[str, Any]
 
 
@@ -97,7 +96,7 @@ def find_share_alike_sources(
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
-        load_registry_file,
+        load_indexed_registry,
         load_unified_index,
     )
 
@@ -106,10 +105,7 @@ def find_share_alike_sources(
     for entry in load_unified_index(target):
         if entry["kind"] not in ("m0_data_registry", "pref_data_registry"):
             continue
-        registry_path = (target.parent / entry["path"]).resolve()
-        if not registry_path.is_file():
-            continue
-        data = load_registry_file(registry_path)
+        data = load_indexed_registry(target, entry)
         rows_key = "datasets"  # both kinds use 'datasets'
         for row in data.get(rows_key) or []:
             if not isinstance(row, Mapping):
@@ -158,7 +154,7 @@ def license_cascade(
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
-        load_registry_file,
+        load_indexed_registry,
         load_unified_index,
     )
 
@@ -170,10 +166,7 @@ def license_cascade(
     for entry in load_unified_index(target):
         if entry["kind"] != "bridge_env_registry":
             continue
-        registry_path = (target.parent / entry["path"]).resolve()
-        if not registry_path.is_file():
-            continue
-        data = load_registry_file(registry_path)
+        data = load_indexed_registry(target, entry)
         for row in data.get("envs") or []:
             if not isinstance(row, Mapping):
                 continue

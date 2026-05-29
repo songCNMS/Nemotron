@@ -30,17 +30,9 @@ from nemotron.recipes.super3.milestones.data_registries.contamination_audit impo
     classify_contamination_row,
 )
 
-
 JsonDict = dict[str, Any]
 
 POSTURES = ("clean", "informational", "blocker")
-
-
-def _registry_path(index_path: Path, registry_path: str) -> Path:
-    candidate = Path(registry_path)
-    if candidate.is_absolute():
-        return candidate
-    return (index_path.parent / candidate).resolve()
 
 
 def _clean_targets(value: Any) -> list[str]:
@@ -71,7 +63,7 @@ def _env_posture(rows: list[JsonDict]) -> str:
 
 def _load_environment_metadata(index_path: Path) -> dict[str, JsonDict]:
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
-        load_registry_file,
+        load_indexed_registry,
         load_unified_index,
     )
 
@@ -79,10 +71,7 @@ def _load_environment_metadata(index_path: Path) -> dict[str, JsonDict]:
     for entry in load_unified_index(index_path):
         if entry["kind"] != "m0_environment_registry":
             continue
-        registry_path = _registry_path(index_path, entry["path"])
-        if not registry_path.is_file():
-            continue
-        data = load_registry_file(registry_path)
+        data = load_indexed_registry(index_path, entry)
         for row in data.get("environments") or []:
             if not isinstance(row, Mapping):
                 continue
@@ -127,7 +116,7 @@ def build_eval_overlap_matrix(index_path: Path | None = None) -> JsonDict:
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
-        load_registry_file,
+        load_indexed_registry,
         load_unified_index,
     )
 
@@ -139,10 +128,7 @@ def build_eval_overlap_matrix(index_path: Path | None = None) -> JsonDict:
     for entry in load_unified_index(target):
         if entry["kind"] != "m0_data_registry":
             continue
-        registry_path = _registry_path(target, entry["path"])
-        if not registry_path.is_file():
-            continue
-        data = load_registry_file(registry_path)
+        data = load_indexed_registry(target, entry)
         for row in data.get("datasets") or []:
             if not isinstance(row, Mapping):
                 continue
