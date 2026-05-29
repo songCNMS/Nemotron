@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task177_nano2_vl_vllm_install_revision_pin_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task177_nano2_vl_vllm_install_revision_pin_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/284 |
-| Session | 1 |
-| Recent Progress | Opened PR #284 for task177; Nano2-VL vLLM install command is pinned and static notebook checks passed |
+| Session | 2 |
+| Recent Progress | Closed out task177 after PR #284 merged and verified on main 67bb428e4a992c608b8795795ced4f3fa9b9271c; local main synced |
