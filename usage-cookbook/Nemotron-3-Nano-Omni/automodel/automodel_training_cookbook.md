@@ -59,8 +59,9 @@ The **base model** produces free-form descriptions. After fine-tuning, it output
 cd /opt/Automodel
 
 # Or from a source checkout:
-git clone -b nemotron-omni ssh://git@gitlab-master.nvidia.com:12051/huiyingl/automodel-omni.git
-cd automodel-omni
+git clone -b nemotron-omni https://github.com/NVIDIA-NeMo/Automodel.git
+cd Automodel
+git checkout 7dfec6130ddf675cc9721d1619945dcc743f0095  # nemotron-omni
 ```
 
 :::{note}

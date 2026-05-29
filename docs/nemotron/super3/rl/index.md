@@ -127,9 +127,11 @@ uv run nemotron super3 rl rlvr -c test --run YOUR-CLUSTER
 Alternatively, run directly inside the NeMo-RL repo:
 
 ```bash
-# Clone NeMo-RL
+# Clone NeMo-RL with super-v3 branch context, then pin the exact revision
 git clone --recursive -b super-v3 https://github.com/NVIDIA-NeMo/RL.git
 cd RL
+git checkout bb0a7d43931950a74522e159f7117543a87b580b  # super-v3
+git submodule update --init --recursive
 ```
 
 #### Prepare Data
