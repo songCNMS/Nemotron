@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task109_qwen_eval_local_raw_artifact_fingerprint_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/215 |
 | Session | 14 |
-| Recent Progress | Patched Qwen eval repro gate to require SHA256 fingerprints for local raw artifacts and added current MMLU calibration artifact fingerprints; focused pytest, py_compile, Ruff, and structured probe passed |
+| Recent Progress | Opened PR #215 for Qwen eval local raw artifact SHA256 validation after focused pytest, py_compile, Ruff, structured probe, and diff checks passed |
