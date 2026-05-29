@@ -85,6 +85,7 @@ logging.getLogger("datasets").setLevel(logging.WARNING)
 logging.getLogger("fsspec").setLevel(logging.WARNING)
 
 FINEPDFS_REPO = "HuggingFaceFW/finepdfs"
+FINEPDFS_REVISION = "220bac3acbf07789502c621d2d33952f51ac7f86"
 
 
 class SeedConfig(BaseModel):
@@ -104,6 +105,11 @@ class SeedConfig(BaseModel):
     subset: str = Field(
         default="eng_Latn",
         description="FinePDFs language subset (e.g. eng_Latn, fra_Latn).",
+    )
+    finepdfs_revision: str = Field(
+        default=FINEPDFS_REVISION,
+        pattern=r"[0-9a-f]{40}",
+        description="Pinned FinePDFs dataset revision SHA for reproducible seed inputs.",
     )
     timeout: int = Field(
         default=20,
@@ -195,15 +201,17 @@ def run_seed(cfg: SeedConfig) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(
-        "Streaming %d documents from %s (subset=%s)",
+        "Streaming %d documents from %s (subset=%s, revision=%s)",
         cfg.num_docs,
         FINEPDFS_REPO,
         cfg.subset,
+        cfg.finepdfs_revision,
     )
 
     ds = load_dataset(
         FINEPDFS_REPO,
         name=cfg.subset,
+        revision=cfg.finepdfs_revision,
         split="train",
         streaming=True,
     )

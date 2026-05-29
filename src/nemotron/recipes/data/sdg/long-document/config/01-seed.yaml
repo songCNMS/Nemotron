@@ -7,6 +7,7 @@
 output_dir: ./seed_data
 num_docs: 10
 subset: eng_Latn
+finepdfs_revision: 220bac3acbf07789502c621d2d33952f51ac7f86
 timeout: 20
 dpi: 144
 max_pages: 50
