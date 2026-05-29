@@ -215,6 +215,7 @@ def test_convert_reasoning_record_appends_missing_expected_answer() -> None:
 
     content = converted["messages"][-1]["content"]
     assert content == r"Reason through the problem." "\n\n" r"Final answer: \boxed{42}"
+    assert content.count(r"Final answer: \boxed{42}") == 1
 
 
 def test_convert_reasoning_record_boxes_answer_when_no_reference_solution() -> None:
@@ -224,6 +225,33 @@ def test_convert_reasoning_record_boxes_answer_when_no_reference_solution() -> N
     converted = convert_m0_record(record, split="train")
 
     assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
+    assert converted["messages"][-1]["content"].count(r"Final answer: \boxed{42}") == 1
+
+
+def test_convert_reasoning_record_boxes_answer_when_reference_solution_empty() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = ""
+
+    converted = convert_m0_record(record, split="train")
+
+    assert converted["messages"][-1]["content"] == r"Final answer: \boxed{42}"
+    assert converted["messages"][-1]["content"].count(r"Final answer: \boxed{42}") == 1
+
+
+def test_convert_reasoning_record_does_not_append_when_boxed_answer_present() -> None:
+    record = _base_record("math_reasoning_numeric")
+    record["expected_answer"] = "42"
+    record["extra_env_info"]["reference_solution"] = (
+        r"Reason through the problem, then conclude with \boxed{42}."
+    )
+
+    converted = convert_m0_record(record, split="train")
+
+    content = converted["messages"][-1]["content"]
+    assert content == r"Reason through the problem, then conclude with \boxed{42}."
+    assert "Final answer:" not in content
+    assert content.count(r"\boxed{42}") == 1
 
 
 def test_convert_reasoning_record_does_not_double_box_expected_answer() -> None:
