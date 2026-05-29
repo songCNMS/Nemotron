@@ -1,6 +1,6 @@
 # task140_stage0_pretrain_data_prep_output_dir_portability_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Notes
 
@@ -10,3 +10,5 @@
 - Existing Stage0 pretrain data-prep profile suffixes are preserved:
   `stage0_pretrain/phase1`, `stage0_pretrain/phase2`,
   `stage0_pretrain/long_context`, and `stage0_pretrain_tiny`.
+- Session 5 added no new implementation knowledge; it only aligned durable
+  bookkeeping with the open PR state.

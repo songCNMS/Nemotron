@@ -1,6 +1,6 @@
 # task140_stage0_pretrain_data_prep_output_dir_portability_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-29
 
@@ -14,3 +14,8 @@
 - Verified focused pytest, py_compile, Ruff, structured OmegaConf probe, and
   diff checks before staging.
 - Opened PR #247 to `main`: https://github.com/songCNMS/Nemotron/pull/247.
+
+## Session 5 - 2026-05-29
+
+- Added stop-hook bookkeeping for the already-open PR #247; no product or test
+  code changes were made in this session.
