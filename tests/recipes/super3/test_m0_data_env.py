@@ -40,8 +40,12 @@ SFT_RAW_BLEND_PATH = (
 )
 RL_RAW_BLEND_PATH = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
 M0_DATA_ENV_README_PATH = REPO_ROOT / "src/nemotron/recipes/super3/milestones/m0_data_env/README.md"
+SUPER3_RL_DATA_PREP_DOC_PATH = REPO_ROOT / "docs/nemotron/super3/rl/data-prep.md"
 OLD_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-3-Super-RL-Training-Blends"
 LIVE_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-RL-Super-Training-Blends"
+PORTABLE_M0_SMOKE_OUTPUT_DIR = (
+    '"${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516"'
+)
 
 
 def _require_live_hf_tests() -> None:
@@ -103,8 +107,15 @@ def test_m0_data_env_readme_uses_portable_output_examples() -> None:
     readme = M0_DATA_ENV_README_PATH.read_text()
 
     assert "/mnt/3fs/data/lei.song/nemotron" not in readme
-    assert '--output-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516"' in readme
-    assert '--input-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516"' in readme
+    assert f"--output-dir {PORTABLE_M0_SMOKE_OUTPUT_DIR}" in readme
+    assert f"--input-dir {PORTABLE_M0_SMOKE_OUTPUT_DIR}" in readme
+
+
+def test_super3_rl_data_prep_doc_uses_portable_m0_output_example() -> None:
+    doc = SUPER3_RL_DATA_PREP_DOC_PATH.read_text()
+
+    assert "/mnt/3fs/data/lei.song/nemotron" not in doc
+    assert f"--output-dir {PORTABLE_M0_SMOKE_OUTPUT_DIR}" in doc
 
 
 def test_super3_rl_blend_slug_resolves_on_hf_when_network_available() -> None:

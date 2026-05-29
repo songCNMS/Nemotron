@@ -100,7 +100,7 @@ with `responses_create_params.input`, `question`, `expected_answer`,
 ```bash
 source /work-agents/.venv/bin/activate
 python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516 \
+  --output-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516" \
   --max-train-per-dataset 100 \
   --max-val-per-dataset 25
 ```
