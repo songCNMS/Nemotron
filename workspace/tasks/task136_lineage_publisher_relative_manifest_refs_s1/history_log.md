@@ -17,3 +17,4 @@
   broken relative refs remaining unresolved.
 - Verified focused publisher tests, py_compile, Ruff, and a structured local
   probe matching the PM finding.
+- Opened PR #243 to `main`: https://github.com/songCNMS/Nemotron/pull/243.

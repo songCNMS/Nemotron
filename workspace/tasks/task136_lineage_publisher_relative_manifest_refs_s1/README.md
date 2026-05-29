@@ -31,8 +31,8 @@ unresolved depending on the process working directory.
 - [x] Custom resolver receives the original relative `LineageInput.ref`.
 - [x] Broken relative manifest refs remain unresolved and do not crash.
 - [x] Focused pytest, py_compile, Ruff, structured probe, and diff checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/243
