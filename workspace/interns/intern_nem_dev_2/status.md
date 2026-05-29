@@ -7,7 +7,7 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task149_nano3_core_data_prep_path_portability_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/256 |
 | Session | 1 |
 
-最近进展：Started task149 from latest `origin/main` `652534e4865e20b72f4c80bf62b6c0cea5973fd1` on branch `intern_nem_dev_2/task149_nano3_core_data_prep_path_portability_s1`. Nano3 Stage0/Stage1/Stage2 data-prep YAML defaults and dataclass source-path resolution are being updated for repo-relative blend paths and `NEMO_RUN_DIR` output dirs. PR is pending checks. No live HF download, Nano3 data prep, SFT packing, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
+最近进展：Opened PR #256 for task149 from base `652534e4865e20b72f4c80bf62b6c0cea5973fd1`. Nano3 Stage0/Stage1/Stage2 data-prep defaults now use repo-relative checked-in blend paths and `NEMO_RUN_DIR` output dirs, with Nano3-prefix dataclass resolution preserving absolute/arbitrary relative overrides. Checks passed: focused Nano3 config/integration/Qwen pytest shard (`126 passed, 2 skipped`), py_compile, Ruff, structured non-repo-CWD resolver probe, static no-PWD/no-up-level-output grep, diff checks, and added-line live-surface scan. No live HF download, Nano3 data prep, SFT packing, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.

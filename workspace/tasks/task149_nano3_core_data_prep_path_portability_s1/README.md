@@ -1,10 +1,10 @@
 # task149_nano3_core_data_prep_path_portability_s1
 
-Status: In progress
+Status: Ready for PM gate
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task149_nano3_core_data_prep_path_portability_s1`
 Base: `652534e4865e20b72f4c80bf62b6c0cea5973fd1`
-PR: Pending
+PR: https://github.com/songCNMS/Nemotron/pull/256
 
 ## Scope
 
@@ -19,3 +19,14 @@ Make Nano3 Stage0/Stage1/Stage2 core data-prep defaults portable:
 ## Boundaries
 
 No live HF download, Nano3 data prep, SFT packing, training/eval, endpoint calls, W&B runs, cluster jobs, artifact downloads, deploys, direct main/master push, or self-merge.
+
+## Checks
+
+- PASS: focused Nano3 config/integration/Qwen contract pytest shard (`126 passed, 2 skipped`)
+- PASS: py_compile touched product/test Python files
+- PASS: Ruff touched product/test Python files
+- PASS: structured non-repo-CWD resolver probe
+- PASS: static grep found no `${oc.env:PWD}` or `/../output/` in target Nano3 data-prep YAMLs
+- PASS: `git diff --check`
+- PASS: `git diff --cached --check`
+- PASS: added-line live-surface scan showed only static path/default/test/docs/status matches
