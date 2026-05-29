@@ -1,6 +1,6 @@
 # task182_runspec_docs_url_revision_pin_nano_super_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 

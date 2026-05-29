@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -17,3 +17,9 @@
   probe, product-scope stale URL grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check`.
 - Opened PR #289: https://github.com/songCNMS/Nemotron/pull/289
+
+## Session 2 - 2026-05-29
+
+- Updated task182 stop-hook bookkeeping to Session 2 after PR #289 was opened.
+- Confirmed no implementation changes were needed beyond status/history/task
+  metadata; branch remains ready for PM gate.
