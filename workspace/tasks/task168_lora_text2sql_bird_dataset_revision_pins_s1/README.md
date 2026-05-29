@@ -5,8 +5,8 @@
 Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task168_lora_text2sql_bird_dataset_revision_pins_s1`
-Base: `0e190d301348990990650449485aa057eb7405ce`
-PR: pending
+Base: `6328c018a86da7448e11a03bc1c71afc38e067f2`
+PR: https://github.com/songCNMS/Nemotron/pull/275
 
 ## Summary
 
