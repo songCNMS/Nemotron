@@ -147,6 +147,51 @@ def test_missing_index_exits_two(tmp_path: Path) -> None:
     assert "validator raised" in result.stderr or "cannot import" in result.stderr
 
 
+def test_audit_cli_rejects_escaped_registry_path(tmp_path: Path) -> None:
+    """Audit-only CLI modes must not bypass unified-index path containment."""
+    outside_registry = tmp_path / "escaped_registry.yaml"
+    outside_registry.write_text(
+        """schema_version: 1
+milestone: M0
+datasets:
+  - id: escaped_share_alike
+    environment: escaped_env
+    hf_dataset: escaped/dataset
+    hf_split: train
+    hf_revision: deadbeef
+    license: cc-by-sa-4.0
+    contamination_against:
+      - Escaped eval
+    converter: escaped
+    use_stage:
+      - M0 data_env_foundation
+""",
+        encoding="utf-8",
+    )
+    index_dir = tmp_path / "index"
+    index_dir.mkdir()
+    index = index_dir / "unified_index.yaml"
+    index.write_text(
+        """schema_version: 1
+milestone: M0
+registries:
+  - id: escaped_registry
+    kind: m0_data_registry
+    path: ../escaped_registry.yaml
+    summary: escaped registry fixture
+""",
+        encoding="utf-8",
+    )
+
+    result = _run_script("--license-cascade", "--index-path", str(index))
+
+    assert result.returncode == 2
+    assert result.stdout == ""
+    assert "license-cascade audit raised" in result.stderr
+    assert "must stay under registry root" in result.stderr
+    assert "escaped_share_alike" not in result.stderr
+
+
 # ---------- In-process main() for fast unit feedback ----------
 
 

@@ -38,6 +38,46 @@ from nemotron.recipes.super3.milestones.data_registries.unified_index_loader imp
 yaml = pytest.importorskip("yaml")
 
 
+def _write_minimal_index(
+    index_path: Path,
+    *,
+    registry_path: str,
+    kind: str = "bridge_env_registry",
+    registry_id: str = "fixture_registry",
+) -> Path:
+    index_path.parent.mkdir(parents=True, exist_ok=True)
+    index_path.write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "milestone": "M1",
+                "registries": [
+                    {
+                        "id": registry_id,
+                        "kind": kind,
+                        "path": registry_path,
+                        "summary": "path guard fixture",
+                    }
+                ],
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+    return index_path
+
+
+def _write_minimal_bridge_registry(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        """schema_version: 1
+milestone: M1
+envs: []
+""",
+        encoding="utf-8",
+    )
+
+
 # ---------- Schema validators ----------
 
 
@@ -385,6 +425,165 @@ registries:
 
     issues = validate_unified_index(index)
     assert any("contamination_against must be a non-empty list" in issue for issue in issues)
+
+
+def test_unified_index_accepts_clean_relative_registry_path(tmp_path: Path) -> None:
+    index_dir = tmp_path / "index"
+    registry = index_dir / "registry.yaml"
+    _write_minimal_bridge_registry(registry)
+    index = _write_minimal_index(index_dir / "unified_index.yaml", registry_path=registry.name)
+
+    assert validate_unified_index(index) == []
+
+
+@pytest.mark.parametrize(
+    ("registry_path", "expected_issue"),
+    [
+        ("", "must be a non-empty string"),
+        (".", "must use normal relative path components"),
+        ("./registry.yaml", "must use normal relative path components"),
+        ("nested//registry.yaml", "must use normal relative path components"),
+        ("registry.yaml/", "must use normal relative path components"),
+    ],
+)
+def test_unified_index_rejects_empty_or_dot_path_components(
+    tmp_path: Path,
+    registry_path: str,
+    expected_issue: str,
+) -> None:
+    index = _write_minimal_index(
+        tmp_path / "index" / "unified_index.yaml",
+        registry_path=registry_path,
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any(expected_issue in issue for issue in issues)
+
+
+def test_unified_index_rejects_traversal_outside_index_dir(tmp_path: Path) -> None:
+    index_dir = tmp_path / "index"
+    outside = tmp_path / "outside_registry.yaml"
+    _write_minimal_bridge_registry(outside)
+    index = _write_minimal_index(
+        index_dir / "unified_index.yaml",
+        registry_path="../outside_registry.yaml",
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any("must stay under registry root" in issue for issue in issues)
+
+
+def test_unified_index_rejects_absolute_registry_path(tmp_path: Path) -> None:
+    registry = tmp_path / "registry.yaml"
+    _write_minimal_bridge_registry(registry)
+    index = _write_minimal_index(
+        tmp_path / "index" / "unified_index.yaml",
+        registry_path=str(registry),
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any("must be relative to the unified index" in issue for issue in issues)
+
+
+def test_unified_index_rejects_symlink_escape(tmp_path: Path) -> None:
+    index_dir = tmp_path / "index"
+    outside = tmp_path / "outside_registry.yaml"
+    _write_minimal_bridge_registry(outside)
+    index_dir.mkdir()
+    (index_dir / "linked_registry.yaml").symlink_to(outside)
+    index = _write_minimal_index(
+        index_dir / "unified_index.yaml",
+        registry_path="linked_registry.yaml",
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any("must stay under registry root" in issue for issue in issues)
+
+
+def test_unified_index_rejects_missing_registry_path(tmp_path: Path) -> None:
+    index = _write_minimal_index(
+        tmp_path / "index" / "unified_index.yaml",
+        registry_path="missing_registry.yaml",
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any("does not exist" in issue for issue in issues)
+
+
+def test_unified_index_rejects_directory_registry_path(tmp_path: Path) -> None:
+    index_dir = tmp_path / "index"
+    (index_dir / "registry_dir").mkdir(parents=True)
+    index = _write_minimal_index(
+        index_dir / "unified_index.yaml",
+        registry_path="registry_dir",
+    )
+
+    issues = validate_unified_index(index)
+
+    assert any("must resolve to a file" in issue for issue in issues)
+
+
+def test_inventories_do_not_read_registry_path_escape(tmp_path: Path) -> None:
+    outside_data = tmp_path / "outside_data_registry.yaml"
+    outside_data.write_text(
+        """schema_version: 1
+milestone: M0
+datasets:
+  - id: escaped_data
+    environment: escaped_env
+    hf_dataset: escaped/dataset
+    hf_split: train
+    hf_revision: deadbeef
+    license: escaped-license
+    contamination_against: []
+    converter: escaped
+    use_stage:
+      - M0 data_env_foundation
+""",
+        encoding="utf-8",
+    )
+    outside_bridge = tmp_path / "outside_bridge_registry.yaml"
+    outside_bridge.write_text(
+        """schema_version: 1
+milestone: M1
+envs:
+  - nemo_gym_env: escaped_nemo_env
+    mix: rlhf
+    status: active
+    m0_env_id: escaped_env
+""",
+        encoding="utf-8",
+    )
+    index = tmp_path / "index" / "unified_index.yaml"
+    index.parent.mkdir()
+    index.write_text(
+        """schema_version: 1
+milestone: M1
+registries:
+  - id: escaped_data_registry
+    kind: m0_data_registry
+    path: ../outside_data_registry.yaml
+    summary: escaped data fixture
+  - id: escaped_bridge_registry
+    kind: bridge_env_registry
+    path: ../outside_bridge_registry.yaml
+    summary: escaped bridge fixture
+""",
+        encoding="utf-8",
+    )
+
+    issues = validate_unified_index(index)
+
+    assert len(issues) == 2
+    assert all("must stay under registry root" in issue for issue in issues)
+    assert "escaped-license" not in licenses_inventory(index)
+    assert "escaped/dataset" not in hf_dataset_inventory(index)
+    assert "escaped_env" not in m0_to_downstream_inventory(index)
 
 
 # ---------- Live validation: every registry on main passes ----------

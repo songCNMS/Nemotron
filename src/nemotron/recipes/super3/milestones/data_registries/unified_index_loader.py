@@ -84,12 +84,60 @@ def load_unified_index(path: Path | None = None) -> list[JsonDict]:
     return rows
 
 
-def _resolve_path(index_path: Path, registry_path: str) -> Path:
-    """Resolve a registry's path relative to the unified index file."""
+def _registry_containment_root(index_path: Path) -> Path:
+    """Return the directory registry paths are allowed to resolve under."""
+    index_dir = index_path.resolve(strict=True).parent
+    if index_dir.name == "data_registries":
+        return index_dir.parent.resolve(strict=True)
+    return index_dir
+
+
+def _resolve_registry_path(
+    index_path: Path,
+    registry_path: Any,
+) -> tuple[Path | None, str | None]:
+    """Resolve a registry path with containment checks.
+
+    Production ``unified_index.yaml`` lives in ``data_registries/`` but
+    intentionally points at sibling milestone directories, so that index is
+    contained by the parent milestones directory. Other indexes are contained by
+    their own directory.
+    """
+    if not isinstance(registry_path, str) or not registry_path:
+        return None, "must be a non-empty string"
     candidate = Path(registry_path)
     if candidate.is_absolute():
-        return candidate
-    return (index_path.parent / candidate).resolve()
+        return None, "must be relative to the unified index"
+    components = registry_path.split("/")
+    if any(component in {"", "."} for component in components):
+        return None, "must use normal relative path components"
+
+    index_dir = index_path.resolve(strict=True).parent
+    containment_root = _registry_containment_root(index_path)
+    try:
+        resolved = (index_dir / candidate).resolve(strict=True)
+    except FileNotFoundError:
+        return None, "does not exist"
+    except OSError as exc:
+        return None, f"could not be resolved: {exc}"
+
+    try:
+        resolved.relative_to(containment_root)
+    except ValueError:
+        return None, f"must stay under registry root ({containment_root})"
+    if not resolved.is_file():
+        return None, "must resolve to a file"
+    return resolved, None
+
+
+def resolve_registry_path(index_path: Path, registry_path: Any) -> Path:
+    """Resolve a registry path or raise a clear containment error."""
+    resolved, path_issue = _resolve_registry_path(index_path, registry_path)
+    if path_issue:
+        raise ValueError(f"declared path {registry_path!r} {path_issue}")
+    if resolved is None:
+        raise ValueError(f"declared path {registry_path!r} could not be resolved")
+    return resolved
 
 
 def load_registry_file(path: Path) -> JsonDict:
@@ -98,6 +146,12 @@ def load_registry_file(path: Path) -> JsonDict:
 
     with path.open(encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def load_indexed_registry(index_path: Path, entry: Mapping[str, Any]) -> JsonDict:
+    """Resolve and load a registry row from a unified index."""
+    registry_path = resolve_registry_path(index_path, entry.get("path"))
+    return load_registry_file(registry_path)
 
 
 def validate_unified_index(
@@ -113,10 +167,10 @@ def validate_unified_index(
     index_rows = load_unified_index(target)
     issues: list[str] = []
     for entry in index_rows:
-        resolved = _resolve_path(target, entry["path"])
-        if not resolved.is_file():
+        resolved, path_issue = _resolve_registry_path(target, entry["path"])
+        if path_issue:
             issues.append(
-                f"{entry['id']}: declared path {entry['path']!r} does not resolve to a file ({resolved})"
+                f"{entry['id']}: declared path {entry['path']!r} {path_issue}"
             )
             continue
         try:
@@ -165,8 +219,8 @@ def licenses_inventory(
     target = index_path or INDEX_PATH
     out: dict[str, list[JsonDict]] = defaultdict(list)
     for entry in load_unified_index(target):
-        resolved = _resolve_path(target, entry["path"])
-        if not resolved.is_file():
+        resolved, path_issue = _resolve_registry_path(target, entry["path"])
+        if path_issue:
             continue
         data = load_registry_file(resolved)
         rows = _rows_of(data, entry["kind"])
@@ -197,8 +251,8 @@ def hf_dataset_inventory(
     for entry in load_unified_index(target):
         if entry["kind"] not in ("m0_data_registry", "pref_data_registry"):
             continue
-        resolved = _resolve_path(target, entry["path"])
-        if not resolved.is_file():
+        resolved, path_issue = _resolve_registry_path(target, entry["path"])
+        if path_issue:
             continue
         data = load_registry_file(resolved)
         rows = _rows_of(data, entry["kind"])
@@ -233,8 +287,8 @@ def m0_to_downstream_inventory(
     for entry in load_unified_index(target):
         if entry["kind"] != "bridge_env_registry":
             continue
-        resolved = _resolve_path(target, entry["path"])
-        if not resolved.is_file():
+        resolved, path_issue = _resolve_registry_path(target, entry["path"])
+        if path_issue:
             continue
         data = load_registry_file(resolved)
         rows = _rows_of(data, entry["kind"])
@@ -295,6 +349,8 @@ __all__ = [
     "INDEX_PATH",
     "load_unified_index",
     "load_registry_file",
+    "load_indexed_registry",
+    "resolve_registry_path",
     "validate_unified_index",
     "licenses_inventory",
     "hf_dataset_inventory",
