@@ -7,9 +7,9 @@ each backed by its own dataset and prep flow. The CLI dispatches by
 
 | Sub-stage | Source | Cache shape | Backed by |
 |-----------|--------|-------------|-----------|
-| `mpo` | `hf://OpenGVLab/MMPR` (full preference dataset) | `MMPR/images/` + `MMPR/annotations/` + `meta_public.json` | Vendored `scripts/prepare_public_mmpr_for_mpo.py` (subprocess inside a Xenna stage) |
-| `text` | `hf://nvidia/Nemotron-3-Nano-RL-Training-Blend` | per-blend train/val JSONL with `responses_create_params` schema | Shared with Nano3's text-RL recipe (`run_rl_resolve_pipeline`) |
-| `vision` | `hf://OpenGVLab/MMPR-Tiny` | `MMPR-Tiny/images/` + `mmpr_tiny.parquet` + preview JSONL | In-tree `VlmPreferencePrepStage(flavor="tiny")` (no shell-out) |
+| `mpo` | `hf://OpenGVLab/MMPR` @ `fe3f35704dcfc2709a072b07df0ecab6046b2c0c` (full preference dataset) | `MMPR/images/` + `MMPR/annotations/` + `meta_public.json` | Vendored `scripts/prepare_public_mmpr_for_mpo.py` (subprocess inside a Xenna stage) |
+| `text` | `hf://nvidia/Nemotron-3-Nano-RL-Training-Blend` @ `ffd169f2b74bb492ec607d64bd56f7435054972b` | per-blend train/val JSONL with `responses_create_params` schema | Shared with Nano3's text-RL recipe (`run_rl_resolve_pipeline`) |
+| `vision` | `hf://OpenGVLab/MMPR-Tiny` @ `eb493212c9614b69ca49cd6e66719413c514459b` | `MMPR-Tiny/images/` + `mmpr_tiny.parquet` + preview JSONL | In-tree `VlmPreferencePrepStage(flavor="tiny")` (no shell-out) |
 
 All three flows go through the same shared dispatcher
 (`src/nemotron/cli/commands/omni3/data/prep/rl.py`) so they share
@@ -70,13 +70,15 @@ Each command:
 
 ## Auto-download via `source_uri`
 
-Both `vision.yaml` and `mpo.yaml` carry a `source_uri:` field:
+Both `vision.yaml` and `mpo.yaml` carry `source_uri:` and
+`source_revision:` fields:
 
 ```yaml
 # vision.yaml
 stage: vision
 dataset_name: mmpr_tiny
 source_uri: hf://OpenGVLab/MMPR-Tiny
+source_revision: eb493212c9614b69ca49cd6e66719413c514459b
 input_dir: ${oc.env:OMNI3_MMPR_TINY_RAW,data/mmpr_tiny/raw}
 ```
 
@@ -85,6 +87,7 @@ input_dir: ${oc.env:OMNI3_MMPR_TINY_RAW,data/mmpr_tiny/raw}
 stage: mpo
 dataset_name: mmpr_public
 source_uri: hf://OpenGVLab/MMPR
+source_revision: fe3f35704dcfc2709a072b07df0ecab6046b2c0c
 input_dir: ${oc.env:OMNI3_MMPR_PUBLIC_RAW,data/mmpr_public/raw}
 ```
 
@@ -137,7 +140,10 @@ paths, swap `_relpath_for_meta` in
 Per-blend train/val JSONL split, identical schema to Nano3's
 `stage2_rl` recipe. Shared with Nano3 because the source dataset
 (`nvidia/Nemotron-3-Nano-RL-Training-Blend`) and output schema
-(`responses_create_params`-shaped JSONL) are the same.
+(`responses_create_params`-shaped JSONL) are the same. The shared
+source is pinned at revision
+`ffd169f2b74bb492ec607d64bd56f7435054972b` in `text.yaml` and
+`data_blend_raw.json`.
 
 ### `vision`
 
