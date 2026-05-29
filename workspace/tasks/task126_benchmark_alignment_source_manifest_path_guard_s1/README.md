@@ -32,8 +32,8 @@ directories.
   `source_manifests`.
 - [x] Focused pytest, py_compile, Ruff, structured path probe, and diff
   whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/233
