@@ -25,4 +25,4 @@
 - Branch:
   `intern_nem_dev_3/task143_m1_bridge_cli_output_dir_portability_s1`
 - Base: `802f7bee98579e5a9647813f5182bb048e1aa44b`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/250

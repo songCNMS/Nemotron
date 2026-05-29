@@ -15,3 +15,4 @@
   CLI override preservation.
 - Verified focused bridge/planner pytest shard, py_compile, Ruff, structured
   default-path probe, static stale-literal grep, and diff check before staging.
+- Opened PR #250 to `main`: https://github.com/songCNMS/Nemotron/pull/250.
