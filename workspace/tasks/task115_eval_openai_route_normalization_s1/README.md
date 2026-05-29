@@ -21,4 +21,4 @@
 
 - Branch: `intern_nem_dev_3/task115_eval_openai_route_normalization_s1`
 - Base: `d64cbd067a15cca222b9eba200af1eb1ec5b7788`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/221

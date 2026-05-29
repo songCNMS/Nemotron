@@ -13,4 +13,4 @@
   Super3 basket configs inheriting slashless default routes.
 - Verified focused pytest, py_compile, Ruff, static route probes, and
   `git diff --check` before staging.
-- PR: pending.
+- Opened PR #221 to `main`: https://github.com/songCNMS/Nemotron/pull/221.

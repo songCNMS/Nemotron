@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task115_eval_openai_route_normalization_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/221 |
 | Session | 16 |
-| Recent Progress | Normalized Super3 and Nano3 Stage3 eval OpenAI routes to slashless defaults; focused pytest, py_compile, Ruff, route probes, and diff check passed before staging |
+| Recent Progress | Opened PR #221 for Super3/Nano3 Stage3 eval slashless OpenAI route normalization after focused pytest, py_compile, Ruff, route probes, and diff checks passed |
