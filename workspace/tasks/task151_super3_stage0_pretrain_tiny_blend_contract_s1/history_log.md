@@ -1,6 +1,6 @@
 # task151_super3_stage0_pretrain_tiny_blend_contract_s1 history
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 1 - 2026-05-29
 
@@ -25,3 +25,16 @@
   PR URL, exact base/head SHAs, checks, blockers, and residual risk.
 - Sent PM ready-for-gate peer update with the same PR/check evidence.
 - No product code or tests changed in this closeout session.
+
+## Session 11 - 2026-05-29
+
+- PM reported PR #257 was squash-merged into `main` at
+  `1e00d0f2559dd40c9ce396f5b7d0a539ce509f3a` using exact head
+  `4923383cce1af3ac516e94f598e338a674a6ef6c`.
+- Recorded independent exact-head gate and merged-main verification passed:
+  focused Stage0 config pytest 29 passed, py_compile, Ruff,
+  `git diff --check`, static no-Nano3-small-blend grep, and structured
+  Super3 tiny blend probe.
+- Synced local `origin/main` and `main` to merge commit
+  `1e00d0f2559dd40c9ce396f5b7d0a539ce509f3a`.
+- Transitioned status to idle because no new dev assignment is active.
