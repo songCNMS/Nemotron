@@ -12,3 +12,7 @@
 - Added focused static notebook JSON tests for the pinned PDF root, no floating
   `resolve/main/documents`, preserved PDF registry, cleared outputs, and
   Nemotron Parse + Nano Omni context.
+- Ran focused pytest, py_compile, Ruff, structured notebook probe,
+  added-line live-surface scan, `git diff --check`, and
+  `git diff --cached --check`.
+- Opened PR #287: https://github.com/songCNMS/Nemotron/pull/287

@@ -22,5 +22,6 @@
 
 - Base: `67bb428e4a992c608b8795795ced4f3fa9b9271c`
 - Branch: `intern_nem_dev_1/task180_doc_intelligence_mmlongbench_pdf_revision_pin_s1`
-- PR: pending
-- Checks: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/287
+- Validated implementation head: `4161794c853d93c4e55a769c63dbb1b8484c1c84`
+- Checks: focused notebook pytest, py_compile, Ruff, structured notebook probe, added-line live-surface scan, and diff checks passed.
