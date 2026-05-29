@@ -218,13 +218,33 @@ def _validate_repo_relative_existing_paths(
     context: str,
 ) -> list[str]:
     issues: list[str] = []
+    repo_root = REPO_ROOT.resolve(strict=True)
     for path in paths:
         candidate = Path(path)
         if candidate.is_absolute():
             issues.append(f"{context} must be repo-relative: {path}")
             continue
-        if not (REPO_ROOT / candidate).is_file():
+        components = path.split("/")
+        if any(component in {"", "."} for component in components):
+            issues.append(
+                f"{context} must use normal repo-relative path components: {path}"
+            )
+            continue
+        if ".." in components:
+            issues.append(f"{context} must not contain traversal components: {path}")
+            continue
+        try:
+            resolved = (repo_root / candidate).resolve(strict=True)
+        except FileNotFoundError:
             issues.append(f"{context} repo-relative path does not exist: {path}")
+            continue
+        try:
+            resolved.relative_to(repo_root)
+        except ValueError:
+            issues.append(f"{context} must stay under repo root: {path}")
+            continue
+        if not resolved.is_file():
+            issues.append(f"{context} repo-relative path must be a file: {path}")
     return issues
 
 
