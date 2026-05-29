@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
@@ -90,7 +91,17 @@ logger: logging.Logger = logging.getLogger(__name__)
 JsonDict = dict[str, Any]
 
 MILESTONE = "M1"
-DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_rlhf")
+
+
+def _output_base() -> Path:
+    return Path(os.environ.get("NEMO_RUN_DIR", "."))
+
+
+def _default_output_dir() -> Path:
+    return _output_base() / "output/super3/m1_rlhf"
+
+
+DEFAULT_OUTPUT_DIR = _default_output_dir()
 USED_IN_TAG = "super3_rlhf_v0"
 MIX_NAME = "rlhf"
 
@@ -424,7 +435,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--m0-input-dir", type=Path, default=None)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=_default_output_dir())
     parser.add_argument("--max-records-per-env", type=int, default=None)
     parser.add_argument("--max-val-records-per-env", type=int, default=None)
     return parser

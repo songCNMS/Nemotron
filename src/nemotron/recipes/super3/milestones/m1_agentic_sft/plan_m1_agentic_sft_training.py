@@ -18,8 +18,22 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_PACKED_SFT_DIR: Path | None = None
-DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0/train-plans")
-DEFAULT_SAVE_DIR = Path("../output/super3/m1_agentic_sft_v0/checkpoints")
+
+
+def _output_base() -> Path:
+    return Path(os.environ.get("NEMO_RUN_DIR", "."))
+
+
+def _default_output_dir() -> Path:
+    return _output_base() / "output/super3/m1_agentic_sft_v0/train-plans"
+
+
+def _default_save_dir() -> Path:
+    return _output_base() / "output/super3/m1_agentic_sft_v0/checkpoints"
+
+
+DEFAULT_OUTPUT_DIR = _default_output_dir()
+DEFAULT_SAVE_DIR = _default_save_dir()
 DEFAULT_CONFIG_PATH = Path("src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml")
 DEFAULT_SCRIPT_PATH = Path("src/nemotron/recipes/super3/stage1_sft/train.py")
 DEFAULT_REPO_DIR: Path | None = None
@@ -502,8 +516,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--pretrained-checkpoint", type=Path, default=None)
     parser.add_argument("--tokenizer-model", default=None)
     parser.add_argument("--qwen-hf-model", default=None)
-    parser.add_argument("--save-dir", type=Path, default=DEFAULT_SAVE_DIR)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--save-dir", type=Path, default=_default_save_dir())
+    parser.add_argument("--output-dir", type=Path, default=_default_output_dir())
     parser.add_argument("--run-name", default=None)
     parser.add_argument("--repo-dir", type=Path, default=DEFAULT_REPO_DIR)
     parser.add_argument("--script-path", type=Path, default=DEFAULT_SCRIPT_PATH)
