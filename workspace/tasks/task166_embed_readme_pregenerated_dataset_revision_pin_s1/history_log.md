@@ -12,3 +12,7 @@
   default Stage0 SDG config revision
   `1c0d1856f3fb595b2dda98d4b61061fa6d782d51`.
 - Added focused static README/config guard coverage.
+- Verified focused pytest, `py_compile`, Ruff, static unpinned-example grep,
+  added-line live-surface scan, `git diff --check`, and
+  `git diff --cached --check`.
+- Opened PR #272 to `main`: https://github.com/songCNMS/Nemotron/pull/272.

@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task166_embed_readme_pregenerated_dataset_revision_pin_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/272 |
 | Session | 1 |
-| Recent Progress | Created task166 branch from origin/main 83ffb47; pinning Embed README pre-generated dataset examples and adding static README/config guard |
+| Recent Progress | PR #272 opened for Embed README pre-generated dataset revision pins after focused pytest, py_compile, Ruff, static grep, live-surface scan, and diff checks passed |

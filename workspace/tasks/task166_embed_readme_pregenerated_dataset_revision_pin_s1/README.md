@@ -1,6 +1,6 @@
 # task166_embed_readme_pregenerated_dataset_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -30,3 +30,7 @@ Hugging Face revision already used by the default Stage0 SDG config.
 - No live `load_dataset`, HF download, Embed SDG/data prep/finetune/eval,
   endpoint calls, W&B, cluster jobs, deploy, artifact ops, direct
   `main`/`master` push, or self-merge.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/272
