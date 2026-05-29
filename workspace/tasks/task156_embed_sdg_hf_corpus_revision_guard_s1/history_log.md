@@ -1,6 +1,6 @@
 # task156_embed_sdg_hf_corpus_revision_guard_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -16,3 +16,14 @@
 - Verified focused pytest, `py_compile`, Ruff, structured mock no-download
   probe for unpinned/floating refs, and `git diff --check` before staging.
 - Opened PR #263 to `main`: https://github.com/songCNMS/Nemotron/pull/263.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #263 was squash-merged into `main` at
+  `0b31358436c38e698c7c2bc3a89871df273df21c` after independent exact-head
+  PASS and merged-main verification.
+- Recorded that no live HF download, corpus generation, data prep, train/eval,
+  endpoint, W&B, cluster, deploy, or artifact download was performed.
+- Synced local `origin/main` and `main` to merge commit
+  `0b31358436c38e698c7c2bc3a89871df273df21c`.
+- Transitioned status to idle because no new dev assignment is active.

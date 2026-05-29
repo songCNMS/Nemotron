@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task156_embed_sdg_hf_corpus_revision_guard_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=none,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
-| Current Task | task156_embed_sdg_hf_corpus_revision_guard_s1 |
+| Status | Idle |
+| Current Task | none |
 | PR | https://github.com/songCNMS/Nemotron/pull/263 |
-| Session | 1 |
-| Recent Progress | Opened PR #263 for Embed SDG hf:// pinned SHA guard after focused pytest, py_compile, Ruff, structured mock probe, and diff checks passed |
+| Session | 2 |
+| Recent Progress | PR #263 squash-merged to main at 0b31358436c38e698c7c2bc3a89871df273df21c; local main synced; waiting for next assignment |
