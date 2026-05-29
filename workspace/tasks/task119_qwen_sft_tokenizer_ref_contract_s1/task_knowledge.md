@@ -1,6 +1,6 @@
 # task119_qwen_sft_tokenizer_ref_contract_s1 knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Working Notes
 
@@ -16,3 +16,5 @@
   required lineage when a training tokenizer is supplied, and rejects present
   tokenizer URIs that are not recognizably Qwen even without a training
   tokenizer argument.
+- Session 20 added no new task119 implementation knowledge. The active work is
+  the separate task122 Omni3 Valor32k tar extraction guard.

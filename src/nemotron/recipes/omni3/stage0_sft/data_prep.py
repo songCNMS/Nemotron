@@ -72,13 +72,13 @@ import logging
 import os
 import re
 import shutil
-import subprocess
 import sys
+import tarfile
 import time
 import zipfile
 from dataclasses import dataclass, field
 from io import BytesIO
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from urllib.request import urlopen
 
 from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
@@ -311,6 +311,94 @@ def _download_valor32k_qa(output_dir: Path, qa_zip_url: str, *, timeout_sec: int
             logger.info(f"  Extracted {target.name}")
 
 
+def _member_path_parts(member_name: str) -> tuple[str, ...]:
+    path = PurePosixPath(member_name)
+    if path.is_absolute():
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member_name!r}: absolute paths are not allowed"
+        )
+    parts = path.parts
+    if not parts or any(part in ("", ".", "..") for part in parts):
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member_name!r}: empty, '.', and '..' "
+            "path components are not allowed"
+        )
+    return parts
+
+
+def _resolve_stripped_tar_target(
+    member: tarfile.TarInfo,
+    *,
+    videos_dir: Path,
+    videos_root: Path,
+    strip_components: int,
+) -> Path:
+    if member.issym() or member.islnk():
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member.name!r}: symlinks and hardlinks are not allowed"
+        )
+    if not member.isfile() and not member.isdir():
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member.name!r}: only regular files and directories are allowed"
+        )
+
+    parts = _member_path_parts(member.name)
+    stripped_parts = parts[strip_components:]
+    if not stripped_parts:
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member.name!r}: strip_components={strip_components} "
+            "removes the full path"
+        )
+    if any(part in ("", ".", "..") for part in stripped_parts):
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member.name!r}: stripped target contains an unsafe path component"
+        )
+
+    target = videos_dir.joinpath(*stripped_parts)
+    target_resolved = target.resolve(strict=False)
+    if target_resolved != videos_root and videos_root not in target_resolved.parents:
+        raise ValueError(
+            f"Unsafe Valor32k tar member {member.name!r}: extraction target escapes {videos_dir}"
+        )
+    return target
+
+
+def _extract_guarded_tar_members(
+    tar: tarfile.TarFile,
+    *,
+    videos_dir: Path,
+    strip_components: int,
+) -> None:
+    if strip_components < 0:
+        raise ValueError(f"strip_components must be non-negative; got {strip_components}")
+
+    videos_root = videos_dir.resolve(strict=False)
+    planned: list[tuple[tarfile.TarInfo, Path]] = []
+    for member in tar.getmembers():
+        planned.append(
+            (
+                member,
+                _resolve_stripped_tar_target(
+                    member,
+                    videos_dir=videos_dir,
+                    videos_root=videos_root,
+                    strip_components=strip_components,
+                ),
+            )
+        )
+
+    for member, target in planned:
+        if member.isdir():
+            target.mkdir(parents=True, exist_ok=True)
+            continue
+        source = tar.extractfile(member)
+        if source is None:
+            raise ValueError(f"Unable to read Valor32k tar member {member.name!r}")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with source, target.open("wb") as dst:
+            shutil.copyfileobj(source, dst)
+
+
 def _extract_valor32k_tar(
     source_tar: Path,
     videos_dir: Path,
@@ -334,10 +422,12 @@ def _extract_valor32k_tar(
         f"Extracting source tar {source_tar} into {videos_dir} "
         "(this can take 5-10 min on shared storage)"
     )
-    subprocess.check_call(
-        ["tar", "xf", str(source_tar), "-C", str(videos_dir),
-         f"--strip-components={strip_components}"]
-    )
+    with tarfile.open(source_tar) as tar:
+        _extract_guarded_tar_members(
+            tar,
+            videos_dir=videos_dir,
+            strip_components=strip_components,
+        )
 
     if any(videos_dir.glob("*.mp4")):
         return
