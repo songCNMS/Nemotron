@@ -31,6 +31,21 @@ from nemotron.data_prep.utils.filesystem import get_filesystem
 logger = logging.getLogger(__name__)
 
 
+def _remove_stale_parquet_entries(split_dir: Path, desired_names: set[str]) -> None:
+    """Remove stale managed parquet entries from a generated split directory."""
+    for entry in split_dir.iterdir():
+        if entry.suffix != ".parquet" or entry.name in desired_names:
+            continue
+        if entry.is_symlink() or entry.is_file():
+            entry.unlink()
+            logger.info("Removed stale parquet split entry: %s", entry)
+            continue
+        raise RuntimeError(
+            "Cannot remove stale parquet split entry because it is not a file "
+            f"or symlink: {entry}"
+        )
+
+
 def distribute_shards_to_splits(
     data_paths: list[str],
     num_shards: int,
@@ -159,6 +174,8 @@ def realize_packed_shards_into_split_dirs(
         # path_list format: ["weight", "path", "weight", "path", ...]
         # Extract just the paths (odd indices)
         shard_paths = [path_list[i] for i in range(1, len(path_list), 2)]
+        desired_parquet_names = {f"{Path(shard_path).name}.parquet" for shard_path in shard_paths}
+        _remove_stale_parquet_entries(split_dir, desired_parquet_names)
 
         created_count = 0
         missing_paths = []
@@ -179,6 +196,11 @@ def realize_packed_shards_into_split_dirs(
             link_path = split_dir / parquet_path.name
 
             if link_path.exists() or link_path.is_symlink():
+                if not (link_path.is_symlink() or link_path.is_file()):
+                    raise RuntimeError(
+                        "Cannot replace parquet split entry because it is not a file "
+                        f"or symlink: {link_path}"
+                    )
                 # Remove existing link/file to update
                 link_path.unlink()
 
