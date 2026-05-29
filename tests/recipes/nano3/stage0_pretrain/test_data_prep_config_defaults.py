@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pytest
 
+from nemotron.recipes.nano3.stage0_pretrain.data_prep import PreTrainDataPrepConfig
+
 yaml = pytest.importorskip("yaml")
+OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
@@ -16,6 +19,18 @@ CONFIG_DIR = (
 CONFIGS = {
     "default": CONFIG_DIR / "default.yaml",
     "tiny": CONFIG_DIR / "tiny.yaml",
+}
+EXPECTED_BLEND_PATHS = {
+    "default": "src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw.json",
+    "tiny": "src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json",
+}
+EXPECTED_OUTPUT_DIRS = {
+    "default": "${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain",
+    "tiny": "${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain_tiny",
+}
+EXPECTED_OUTPUT_SUFFIXES = {
+    "default": Path("output/nano3/stage0_pretrain"),
+    "tiny": Path("output/nano3/stage0_pretrain_tiny"),
 }
 REQUIRED_FIELDS = (
     "blend_path",
@@ -66,7 +81,19 @@ def test_nano3_stage0_pretrain_configs_keep_required_fields(
 
 
 @pytest.mark.parametrize(("config_name", "config_path"), CONFIGS.items())
-def test_nano3_stage0_pretrain_output_dirs_are_portable(
+def test_nano3_stage0_pretrain_blend_paths_are_repo_relative(
+    config_name: str, config_path: Path
+) -> None:
+    text = config_path.read_text(encoding="utf-8")
+    blend_path = yaml.safe_load(text)["blend_path"]
+
+    assert blend_path == EXPECTED_BLEND_PATHS[config_name]
+    assert "${oc.env:PWD}/src/" not in text
+    assert Path(blend_path).is_relative_to("src/nemotron/recipes/nano3")
+
+
+@pytest.mark.parametrize(("config_name", "config_path"), CONFIGS.items())
+def test_nano3_stage0_pretrain_output_dirs_are_nemo_run_dir_relative(
     config_name: str, config_path: Path
 ) -> None:
     text = config_path.read_text(encoding="utf-8")
@@ -74,13 +101,64 @@ def test_nano3_stage0_pretrain_output_dirs_are_portable(
 
     assert "/lustre" not in output_dir
     assert "users/mromeijn" not in output_dir
+    assert output_dir == EXPECTED_OUTPUT_DIRS[config_name]
+    assert "${oc.env:PWD}" not in output_dir
+    assert "/../output/" not in output_dir
+    assert output_dir.startswith("${oc.env:NEMO_RUN_DIR,.}/output/nano3/")
     assert "/lustre" not in text
     assert "users/mromeijn" not in text
 
 
-def test_nano3_stage0_default_output_dir_matches_dataclass_default_contract() -> None:
-    data = yaml.safe_load(CONFIGS["default"].read_text(encoding="utf-8"))
+@pytest.mark.parametrize(("config_name", "config_path"), CONFIGS.items())
+def test_nano3_stage0_pretrain_output_dirs_resolve_under_run_dir(
+    config_name: str,
+    config_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setenv("NEMO_RUN_DIR", str(tmp_path))
 
-    assert data["output_dir"] == (
-        "${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain"
-    )
+    cfg = OmegaConf.load(config_path)
+    output_dir = Path(cfg.output_dir)
+
+    assert output_dir == tmp_path / EXPECTED_OUTPUT_SUFFIXES[config_name]
+    assert output_dir.is_relative_to(tmp_path / "output" / "nano3")
+
+
+@pytest.mark.parametrize("config_name", sorted(CONFIGS))
+def test_nano3_stage0_pretrain_dataclass_resolves_repo_blend_from_non_repo_cwd(
+    config_name: str,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    cfg = PreTrainDataPrepConfig(blend_path=EXPECTED_BLEND_PATHS[config_name])
+
+    assert cfg.blend_path == REPO_ROOT / EXPECTED_BLEND_PATHS[config_name]
+    assert cfg.blend_path.is_file()
+
+
+def test_nano3_stage0_pretrain_dataclass_preserves_absolute_blend_override(
+    tmp_path: Path,
+) -> None:
+    absolute_override = tmp_path / "blend.json"
+
+    cfg = PreTrainDataPrepConfig(blend_path=absolute_override)
+
+    assert cfg.blend_path == absolute_override
+
+
+@pytest.mark.parametrize(
+    "relative_override",
+    [
+        Path("custom/blend.json"),
+        Path("src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw.json"),
+    ],
+)
+def test_nano3_stage0_pretrain_dataclass_preserves_arbitrary_relative_blend_override(
+    relative_override: Path,
+) -> None:
+    cfg = PreTrainDataPrepConfig(blend_path=relative_override)
+
+    assert cfg.blend_path == relative_override

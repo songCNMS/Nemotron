@@ -8,10 +8,10 @@ run:
 #   nemotron nano3 data prep pretrain --config tiny
 
 # Path to data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json
+blend_path: src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json
 
 # Output directory for tokenized data
-output_dir: ${oc.env:PWD}/../output/stage0_pretrain_tiny
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage0_pretrain_tiny
 
 # Number of output shards - smaller for tiny config
 num_shards: 4

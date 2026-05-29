@@ -125,6 +125,7 @@ from nemotron.kit.train_script import (
     load_omegaconf_yaml,
     omegaconf_to_dataclass,
     parse_config_and_overrides,
+    resolve_repo_relative_source_path,
 )
 
 logger = logging.getLogger(__name__)
@@ -165,7 +166,7 @@ class SFTDataPrepConfig:
     blend_path: Path = field(default_factory=lambda: STAGE_PATH / "config/data_prep/data_blend_raw.json")
     """Path to data blend JSON file"""
 
-    output_dir: Path = field(default_factory=lambda: _OUTPUT_BASE / "stage1_sft")
+    output_dir: Path = field(default_factory=lambda: _OUTPUT_BASE / "output/nano3/stage1_sft")
     """Output directory for packed Parquet data"""
 
     # Sharding
@@ -260,6 +261,11 @@ class SFTDataPrepConfig:
         # Ensure paths are Path objects
         if isinstance(self.blend_path, str):
             self.blend_path = Path(self.blend_path)
+        self.blend_path = resolve_repo_relative_source_path(
+            self.blend_path,
+            anchor_file=__file__,
+            source_prefix=("src", "nemotron", "recipes", "nano3"),
+        )
         if isinstance(self.output_dir, str):
             self.output_dir = Path(self.output_dir)
 

@@ -8,11 +8,8 @@ run:
 #   nemotron nano3 data prep pretrain
 #   nemotron nano3 data prep pretrain sample=100 force=true
 #
-# Environment variables:
-#   PWD: Current working directory (for path resolution)
-
 # Path to data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw.json
+blend_path: src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw.json
 
 # Output directory for tokenized data
 # Uses the same NEMO_RUN_DIR-relative default as data_prep.py, with a local

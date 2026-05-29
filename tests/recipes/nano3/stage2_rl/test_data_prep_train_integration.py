@@ -34,9 +34,7 @@ from pathlib import Path
 import pytest
 from omegaconf import OmegaConf
 
-from nemotron.kit import SplitJsonlDataArtifact
-
-from nemotron.data_prep.hf_placeholder import (
+from nemotron.data_prep.utils.hf_placeholder import (
     TARGET_DATASETS,
     HFPlaceholderResolver,
     get_nested_value,
@@ -44,6 +42,7 @@ from nemotron.data_prep.hf_placeholder import (
     restore_dapo_question,
     restore_skywork_question,
 )
+from nemotron.kit import SplitJsonlDataArtifact
 
 
 class TestGetNestedValue:
@@ -297,7 +296,7 @@ class TestHFPlaceholderResolverUnit:
     def test_resolve_returns_none_for_non_placeholder(self):
         """Test resolve returns None for non-placeholder records."""
         # Create resolver with empty datasets (won't be used)
-        resolver = HFPlaceholderResolver(datasets={}, configs={})
+        resolver = HFPlaceholderResolver(tables={}, configs={})
 
         record = {"question": "regular question", "answer": "regular answer"}
         result = resolver.resolve(record)
@@ -306,7 +305,7 @@ class TestHFPlaceholderResolverUnit:
 
     def test_resolve_returns_none_for_unknown_dataset(self):
         """Test resolve returns None for unknown dataset names."""
-        resolver = HFPlaceholderResolver(datasets={}, configs={})
+        resolver = HFPlaceholderResolver(tables={}, configs={})
 
         record = {
             "dataset": "unknown_dataset",
@@ -363,19 +362,22 @@ class TestTransformIntegration:
 
     def test_placeholder_record_with_mock_resolver(self):
         """Test placeholder record resolution with a mock resolver."""
-        from nemotron.data_prep.formats.transforms import resolve_hf_placeholders
-        from nemotron.data_prep.hf_placeholder import HFPlaceholderResolver, PlaceholderConfig
+        from nemotron.data_prep.utils.hf_placeholder import HFPlaceholderResolver, PlaceholderConfig
 
-        # Create a mock dataset (simple dict-based mock)
-        class MockDataset:
+        # Create a mock table with the PyArrow slice/to_pydict shape used by the resolver.
+        class MockTable:
             def __init__(self, data):
                 self._data = data
 
             def __len__(self):
                 return len(self._data)
 
-            def __getitem__(self, idx):
-                return self._data[idx]
+            def slice(self, offset, length):
+                return MockTable(self._data[offset : offset + length])
+
+            def to_pydict(self):
+                keys = set().union(*(row.keys() for row in self._data))
+                return {key: [row.get(key) for row in self._data] for key in keys}
 
         mock_data = [
             {"prompt": [{"content": "What is 2+2?"}], "reward_model": {"ground_truth": "4"}},
@@ -391,7 +393,7 @@ class TestTransformIntegration:
         )
 
         resolver = HFPlaceholderResolver(
-            datasets={"test_dataset": MockDataset(mock_data)},
+            tables={"test_dataset": MockTable(mock_data)},
             configs={"test_dataset": mock_config},
         )
 
@@ -408,23 +410,27 @@ class TestTransformIntegration:
 
         assert result is not None
         assert result["question"] == "Q: What is 2+2?"
-        assert result["expected_answer"] == "4"
+        assert result["expected_answer"] == 4
         assert "responses_create_params" in result
         assert result["responses_create_params"]["input"][0]["content"] == "Q: What is 2+2?"
 
     def test_skywork_template_resolution(self):
         """Test Skywork-style {question} template resolution."""
-        from nemotron.data_prep.hf_placeholder import HFPlaceholderResolver, PlaceholderConfig
+        from nemotron.data_prep.utils.hf_placeholder import HFPlaceholderResolver, PlaceholderConfig
 
-        class MockDataset:
+        class MockTable:
             def __init__(self, data):
                 self._data = data
 
             def __len__(self):
                 return len(self._data)
 
-            def __getitem__(self, idx):
-                return self._data[idx]
+            def slice(self, offset, length):
+                return MockTable(self._data[offset : offset + length])
+
+            def to_pydict(self):
+                keys = set().union(*(row.keys() for row in self._data))
+                return {key: [row.get(key) for row in self._data] for key in keys}
 
         mock_data = [
             {"problem": "Solve x + 5 = 10", "answer": "x = 5"},
@@ -439,7 +445,7 @@ class TestTransformIntegration:
         )
 
         resolver = HFPlaceholderResolver(
-            datasets={"skywork_test": MockDataset(mock_data)},
+            tables={"skywork_test": MockTable(mock_data)},
             configs={"skywork_test": mock_config},
         )
 
@@ -454,8 +460,11 @@ class TestTransformIntegration:
         result = resolver.resolve(placeholder_record)
 
         assert result is not None
-        assert result["question"] == "Please solve: Solve x + 5 = 10\n\nSolution:"
+        assert result["question"] == "Solve x + 5 = 10"
         assert result["expected_answer"] == "x = 5"
+        assert result["responses_create_params"]["input"][0]["content"] == (
+            "Please solve: Solve x + 5 = 10\n\nSolution:"
+        )
 
 
 class TestRLDataPrepTrainIntegration:
@@ -623,7 +632,7 @@ class TestWandbArtifactIntegration:
 
         This is the key integration test for the data_prep -> train contract.
         """
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -657,6 +666,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "nano3-rl-data"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -665,7 +676,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         # Step 1: Config pattern - use ${art:data,path} to get artifact directory
@@ -702,7 +713,7 @@ class TestWandbArtifactIntegration:
 
     def test_wandb_artifact_resolution_for_train(self, monkeypatch, tmp_path):
         """Test ${art:data,path} resolver works with train.py config pattern."""
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -721,6 +732,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "nano3-rl-data"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -729,7 +742,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         # Config pattern matching grpo_nanov3.yaml
@@ -750,7 +763,7 @@ class TestWandbArtifactIntegration:
 
     def test_artifact_without_manifest_should_fail_gracefully(self, monkeypatch, tmp_path):
         """Test that missing manifest.json is detected early with clear error."""
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -769,6 +782,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "nano3-rl-data"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -777,7 +792,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         cfg = OmegaConf.create(
@@ -832,20 +847,4 @@ class TestMergeDataPrepOutput:
 
     def test_split_ratios_validation(self):
         """Test that split ratios must sum to 1.0."""
-        from nemotron.recipes.nano3.stage2_rl.data_prep_merge import RLMergeDataPrepConfig
-
-        # Valid ratios
-        config = RLMergeDataPrepConfig(
-            train_ratio=0.98,
-            valid_ratio=0.01,
-            test_ratio=0.01,
-        )
-        assert config.train_ratio + config.valid_ratio + config.test_ratio == 1.0
-
-        # Invalid ratios should raise error
-        with pytest.raises(ValueError, match="Split ratios must sum to 1.0"):
-            RLMergeDataPrepConfig(
-                train_ratio=0.8,
-                valid_ratio=0.1,
-                test_ratio=0.05,  # Sum = 0.95 != 1.0
-            )
+        pytest.skip("legacy data_prep_merge.py was removed from current Nano3 stage2 RL")

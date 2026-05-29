@@ -78,11 +78,9 @@ from pathlib import Path
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
 
+from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
 from nemotron.data_prep.blend import DataBlend
 from nemotron.data_prep.config import DatasetConfig, ObservabilityConfig
-from nemotron.data_prep.utils.discovery import get_dataset_metadata
-from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.data_prep.utils.hf_placeholder import HFPlaceholderResolver, NANO3_TARGET_DATASETS
 from nemotron.data_prep.observability import pipeline_wandb_hook
 from nemotron.data_prep.recipes.execution_mode import resolve_execution_mode
 from nemotron.data_prep.recipes.rl import (
@@ -98,17 +96,19 @@ from nemotron.data_prep.stages import (
 )
 from nemotron.data_prep.stages.jsonl_plan import JsonlPlanStageConfig
 from nemotron.data_prep.stages.jsonl_write import JsonlShardStage, JsonlShardStageConfig
-from nemotron.kit import SplitJsonlDataArtifact, print_step_complete
+from nemotron.data_prep.utils.discovery import get_dataset_metadata
+from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
+from nemotron.data_prep.utils.hf_placeholder import NANO3_TARGET_DATASETS, HFPlaceholderResolver
+from nemotron.kit import SplitJsonlDataArtifact, print_step_complete, wandb_kit
 from nemotron.kit.trackers import InputDatasetInfo
-from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
 from nemotron.kit.train_script import (
     apply_hydra_overrides,
     init_wandb_from_env,
     load_omegaconf_yaml,
     omegaconf_to_dataclass,
     parse_config_and_overrides,
+    resolve_repo_relative_source_path,
 )
-from nemotron.kit import wandb_kit
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +161,11 @@ class RLDataPrepConfig:
         # Ensure paths are Path objects
         if isinstance(self.blend_path, str):
             self.blend_path = Path(self.blend_path)
+        self.blend_path = resolve_repo_relative_source_path(
+            self.blend_path,
+            anchor_file=__file__,
+            source_prefix=("src", "nemotron", "recipes", "nano3"),
+        )
         if isinstance(self.output_dir, str):
             self.output_dir = Path(self.output_dir)
 
