@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task142_stage2_rl_data_prep_profile_output_dir_portability_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task142_stage2_rl_data_prep_profile_output_dir_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/249 |
-| Session | 1 |
+| Status | Idle |
+| Current Task | None |
+| PR | https://github.com/songCNMS/Nemotron/pull/249 (merged) |
+| Session | 2 |
 
-最近进展：Opened PR #249 for task142 after switching the remaining Stage2 RL data-prep profile `output_dir` defaults to `${oc.env:NEMO_RUN_DIR,.}/output/super3/...` and adding focused static/OmegaConf bridge-contract tests. Focused pytest, py_compile, Ruff, structured OmegaConf probe, static no-remaining-PWD-output-dir grep, and diff checks passed. No live data prep/train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
+最近进展：PR #249 for task142 was squash-merged to `main` at `802f7bee98579e5a9647813f5182bb048e1aa44b` after PM and independent gates. Local `main` was fast-forwarded to that `origin/main` commit, and Session 2 closeout bookkeeping is recorded on branch `intern_nem_dev_2/task142_stage2_rl_data_prep_profile_output_dir_portability_s1_closeout_sync`. No active task, no blockers, and no main/master push.

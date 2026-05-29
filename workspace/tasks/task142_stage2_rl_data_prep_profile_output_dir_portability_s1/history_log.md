@@ -1,6 +1,6 @@
 # task142_stage2_rl_data_prep_profile_output_dir_portability_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -18,3 +18,18 @@
 - Verified focused pytest, py_compile, Ruff, structured OmegaConf probe,
   static no-remaining-PWD-output-dir grep, and diff checks.
 - Opened PR #249 to `main`: https://github.com/songCNMS/Nemotron/pull/249.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #249 merged after PM and independent test gates.
+- Final tested head `25bce13035543f1f6933bdcd1d47c793d0516416` was
+  squash-merged to `main` at `802f7bee98579e5a9647813f5182bb048e1aa44b`.
+- Merged-main verification passed Stage2 RL/RLVR pytest, py_compile, Ruff,
+  structured OmegaConf probe, static no-PWD `output_dir` grep, and
+  `git diff --check`.
+- Fetched `origin/main`, fast-forwarded local `main` cleanly to
+  `802f7bee98579e5a9647813f5182bb048e1aa44b`, and created closeout branch
+  `intern_nem_dev_2/task142_stage2_rl_data_prep_profile_output_dir_portability_s1_closeout_sync`
+  for bookkeeping only.
+- No further task142 product/test action is required; no direct main/master
+  push was used.
