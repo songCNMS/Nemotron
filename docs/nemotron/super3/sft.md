@@ -249,7 +249,7 @@ torchrun --nproc-per-node=8 examples/models/nemotron_3/finetune_nemotron_3_super
     model.sequence_parallel=True
 ```
 
-See the [Megatron-Bridge Nemotron 3 Super documentation](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/docs/models/llm/nemotron3-super.md) for detailed configuration options.
+See the [Megatron-Bridge Nemotron 3 Super documentation](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/f570c0529c81b57cb2ae909bd31a19408c7f4583/docs/models/llm/nemotron3-super.md) for detailed configuration options.
 
 ### Configuration
 
@@ -421,7 +421,7 @@ After SFT completes, proceed to [Stage 2: RL](./rl/index.md) for reinforcement l
 ## Reference
 
 - [Nemotron 3 Super Tech Report](https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Super-Technical-Report.pdf) — SFT methodology
-- [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/docs/models/llm/nemotron3-super.md) — MB documentation and examples
+- [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/f570c0529c81b57cb2ae909bd31a19408c7f4583/docs/models/llm/nemotron3-super.md) — MB documentation and examples
 - [NVIDIA AI Stack](../nvidia-stack.md) — Megatron-Core, Megatron-Bridge documentation
 - [Artifact Lineage](../../nemo_runspec/artifacts.md) — W&B artifact system
 - [Stage 0: Pretraining](./pretrain.md) — Pretrain the base model

@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task182_runspec_docs_url_revision_pin_nano_super_s1,ROLE=dev,SESSION=2 -->
+<!-- METADATA:STATUS=Working,TASK=task185_super3_upstream_doc_links_revision_pins_s1,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task182_runspec_docs_url_revision_pin_nano_super_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/289 |
+| Current Task | task185_super3_upstream_doc_links_revision_pins_s1 |
+| PR | pending |
 | Session | 2 |
-| Recent Progress | Session 2 stop-hook bookkeeping updated for PR #289; branch remains pushed and ready for PM gate |
+| Recent Progress | Rebased task185 onto `origin/main` `f74e7c05668f96766d10c730fcd14ddec7191350`; Super3 upstream docs link pins and focused static tests are under validation |

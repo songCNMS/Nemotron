@@ -64,7 +64,7 @@ The 88-layer stack follows a periodic interleaving pattern where MoE layers are 
 
 This synergy enables up to **6.4x higher inference throughput** compared to similarly-sized Transformer MoEs (e.g., GPT-OSS-120B) under 8K input / 16K output workloads.
 
-> For implementation details, see [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/docs/models/llm/nemotron3-super.md).
+> For implementation details, see [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/f570c0529c81b57cb2ae909bd31a19408c7f4583/docs/models/llm/nemotron3-super.md).
 
 ### Pretraining Data
 
@@ -282,7 +282,7 @@ torchrun --nproc-per-node=8 examples/models/nemotron_3/pretrain_nemotron_3_super
     model.num_layers=7
 ```
 
-See the [Megatron-Bridge Nemotron 3 Super documentation](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/docs/models/llm/nemotron3-super.md) for detailed configuration options.
+See the [Megatron-Bridge Nemotron 3 Super documentation](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/f570c0529c81b57cb2ae909bd31a19408c7f4583/docs/models/llm/nemotron3-super.md) for detailed configuration options.
 
 ### Configuration
 
@@ -401,7 +401,7 @@ After pretraining completes, proceed to [Stage 1: SFT](./sft.md) for instruction
 ## Reference
 
 - [Nemotron 3 Super Tech Report](https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Super-Technical-Report.pdf) — Pretraining methodology
-- [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/docs/models/llm/nemotron3-super.md) — MB documentation and examples
+- [Megatron-Bridge Nemotron 3 Super](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/f570c0529c81b57cb2ae909bd31a19408c7f4583/docs/models/llm/nemotron3-super.md) — MB documentation and examples
 - [NVIDIA AI Stack](../nvidia-stack.md) — Megatron-Core, Megatron-Bridge documentation
 - [Artifact Lineage](../../nemo_runspec/artifacts.md) — W&B artifact system
 - **Recipe Source**: `src/nemotron/recipes/super3/stage0_pretrain/` — Implementation details
