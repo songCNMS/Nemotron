@@ -180,6 +180,14 @@ def _count_jsonl_rows(path: Path) -> int:
     return total_rows
 
 
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _validate_bridge_manifest_holdout(
     input_path: Path,
     holdout: _ValHoldoutResolution,
@@ -254,10 +262,12 @@ def split_local_jsonl(
 
     # Compute deterministic run hash for caching
     stat = input_path.stat()
+    input_sha256 = _file_sha256(input_path)
     run_config = {
         "input_path": str(input_path),
         "input_mtime": stat.st_mtime,
         "input_size": stat.st_size,
+        "input_sha256": input_sha256,
         "val_holdout": holdout.value,
         "val_holdout_source": holdout.source,
         "sample": sample,
@@ -267,6 +277,7 @@ def split_local_jsonl(
         run_config["bridge_manifest"] = str(holdout.manifest_path)
         run_config["bridge_manifest_mtime"] = manifest_stat.st_mtime
         run_config["bridge_manifest_size"] = manifest_stat.st_size
+        run_config["bridge_manifest_sha256"] = _file_sha256(holdout.manifest_path)
     config_hash = hashlib.sha256(
         json.dumps(run_config, sort_keys=True).encode()
     ).hexdigest()[:16]
@@ -376,6 +387,8 @@ def split_local_jsonl(
         "test": "",
         "mode": "local_split",
         "source": str(input_path),
+        "input_sha256": input_sha256,
+        "source_sha256": input_sha256,
         "run_hash": run_hash,
         "val_holdout": holdout.value,
         "val_holdout_source": holdout.source,
@@ -387,6 +400,7 @@ def split_local_jsonl(
             "path": str(holdout.manifest_path),
             "train_rows": holdout.manifest_train_rows,
             "val_rows": holdout.manifest_val_rows,
+            "sha256": run_config["bridge_manifest_sha256"],
         }
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2))
@@ -462,13 +476,21 @@ def run_resolve_and_split(
 
     # Compute run hash
     stat = input_path.stat()
+    input_sha256 = _file_sha256(input_path)
     resolve_config = {
         "input_path": str(input_path),
         "input_mtime": stat.st_mtime,
         "input_size": stat.st_size,
+        "input_sha256": input_sha256,
         "resolve_hf_placeholders": True,
         "sample": sample,
     }
+    if holdout.manifest_path is not None:
+        manifest_stat = holdout.manifest_path.stat()
+        resolve_config["bridge_manifest"] = str(holdout.manifest_path)
+        resolve_config["bridge_manifest_mtime"] = manifest_stat.st_mtime
+        resolve_config["bridge_manifest_size"] = manifest_stat.st_size
+        resolve_config["bridge_manifest_sha256"] = _file_sha256(holdout.manifest_path)
     config_hash = hashlib.sha256(
         json.dumps(resolve_config, sort_keys=True).encode()
     ).hexdigest()[:16]
