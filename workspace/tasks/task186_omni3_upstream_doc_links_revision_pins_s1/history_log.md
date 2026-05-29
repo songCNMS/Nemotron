@@ -17,6 +17,8 @@
   blob/tree links and confirms exact SHA links plus preserved branch context.
 - Verified focused pytest, `py_compile`, Ruff, and structured static probe on
   the corrected base.
+- Opened PR #293 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/293.
 - Boundaries preserved: no live git clone/fetch/checkout, build, download,
   recipe execution, data prep, train/eval, endpoint, W&B, cluster, deploy,
   artifact operation, `main`/`master` push, or self-merge.
