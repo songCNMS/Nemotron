@@ -1,6 +1,6 @@
 # task179_super_grpo_dapo_rl_checkout_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -21,7 +21,10 @@
 - Base: `67bb428e4a992c608b8795795ced4f3fa9b9271c`
 - Branch: `intern_nem_dev_3/task179_super_grpo_dapo_rl_checkout_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/285
-- Head: `841fad547609db32fc5a4975c60bd11601cb8c15`
+- PR head: `9b64e919381df048bd58b84b6051332103319604`
+- Merge SHA: `3394671e1fe0b5cf5aecd9d53b714f1c6e007b2f`
 - Checks: focused static notebook pytest, py_compile, Ruff, structured notebook
   probe, product stale branch-only grep, added-line live-surface scan, and
   `git diff --check` passed.
+- Session 2: PR #285 passed PM gate and independent exact-head gate, then
+  squash-merged to `main`; local `main` was synced to the merge SHA.
