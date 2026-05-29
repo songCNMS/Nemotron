@@ -1,6 +1,6 @@
 # task137_qwen_eval_task_audit_completeness_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Notes
 
@@ -11,3 +11,5 @@
   in `_tasks` as classification buckets.
 - Long-context, tool/agentic, and multilingual runnable tasks are explicit risk
   buckets instead of being silently omitted from the Qwen eval audit.
+- Session 3 added no new implementation knowledge; it only aligned durable
+  bookkeeping with the open PR state.
