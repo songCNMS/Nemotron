@@ -7,6 +7,8 @@ from pathlib import Path
 import pytest
 
 yaml = pytest.importorskip("yaml")
+omegaconf = pytest.importorskip("omegaconf")
+OmegaConf = omegaconf.OmegaConf
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -16,11 +18,19 @@ CONFIG_DIR = (
 )
 
 EXPECTED_OUTPUT_DIRS = {
-    "default": "${oc.env:PWD}/../output/super3/stage0_pretrain/phase1",
-    "phase1": "${oc.env:PWD}/../output/super3/stage0_pretrain/phase1",
-    "phase2": "${oc.env:PWD}/../output/super3/stage0_pretrain/phase2",
-    "long_context": "${oc.env:PWD}/../output/super3/stage0_pretrain/long_context",
-    "tiny": "${oc.env:PWD}/../output/super3/stage0_pretrain_tiny",
+    "default": "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain/phase1",
+    "phase1": "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain/phase1",
+    "phase2": "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain/phase2",
+    "long_context": "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain/long_context",
+    "tiny": "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain_tiny",
+}
+
+EXPECTED_OUTPUT_SUFFIXES = {
+    "default": Path("output/super3/stage0_pretrain/phase1"),
+    "phase1": Path("output/super3/stage0_pretrain/phase1"),
+    "phase2": Path("output/super3/stage0_pretrain/phase2"),
+    "long_context": Path("output/super3/stage0_pretrain/long_context"),
+    "tiny": Path("output/super3/stage0_pretrain_tiny"),
 }
 
 REQUIRED_TOP_LEVEL_FIELDS = {
@@ -58,7 +68,23 @@ def test_stage0_pretrain_data_prep_output_dirs_are_portable(
     assert "/lustre/" not in text
     assert "users/mromeijn" not in text
     assert data["output_dir"] == EXPECTED_OUTPUT_DIRS[config_name]
-    assert data["output_dir"].startswith("${oc.env:PWD}/../output/super3/")
+    assert "${oc.env:PWD}" not in data["output_dir"]
+    assert data["output_dir"].startswith("${oc.env:NEMO_RUN_DIR,.}/output/super3/")
+
+
+@pytest.mark.parametrize("config_name", sorted(EXPECTED_OUTPUT_DIRS))
+def test_stage0_pretrain_data_prep_output_dirs_resolve_under_run_dir(
+    config_name: str,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setenv("NEMO_RUN_DIR", str(tmp_path))
+
+    cfg = OmegaConf.load(CONFIG_DIR / f"{config_name}.yaml")
+    output_dir = Path(OmegaConf.to_container(cfg, resolve=True)["output_dir"])
+
+    assert output_dir == tmp_path / EXPECTED_OUTPUT_SUFFIXES[config_name]
+    assert output_dir.is_relative_to(tmp_path / "output" / "super3")
 
 
 @pytest.mark.parametrize("config_name", sorted(EXPECTED_OUTPUT_DIRS))
