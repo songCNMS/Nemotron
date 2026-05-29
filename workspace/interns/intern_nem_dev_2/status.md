@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task155_omni3_valor32k_config_comment_portability_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Working,TASK=task158_nemotron_cc_fasttext_hf_revision_pin_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task155_omni3_valor32k_config_comment_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/262 |
+| Current Task | task158_nemotron_cc_fasttext_hf_revision_pin_s1 |
+| PR | Pending |
 | Session | 1 |
 
-最近进展：Opened PR #262 for `task155_omni3_valor32k_config_comment_portability_s1`: https://github.com/songCNMS/Nemotron/pull/262. Base `795eb92359257ed82816a8685db0f9cae1c751ae`; implementation head before PR bookkeeping `ddc7a372e207efa52b461a419bb3c7ff546447e9`. Replaced the scoped Omni3 Valor32k config comment that named a DFW internal user path with neutral `OMNI3_VALOR32K_ENERGON_PATH` guidance and added a focused static Omni3 test. Checks passed: focused pytest (`1 passed`), py_compile, Ruff, scoped `valor32k.yaml` grep, `git diff --check`, and `git diff --cached --check`. No live Valor32k/HF download, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
+最近进展：Accepted PM assignment `task158_nemotron_cc_fasttext_hf_revision_pin_s1`, synced local `main` to `origin/main` `0b31358436c38e698c7c2bc3a89871df273df21c`, and created branch `intern_nem_dev_2/task158_nemotron_cc_fasttext_hf_revision_pin_s1`. Pinning the Nemotron-CC FastText `hf_hub_download` revision to `cd8b714a90f2dbcd3b02cf5fc972e5d7c7f4f107` with static/AST tests only. Boundaries: no live HF download, Nemotron-CC curation run, Ray/Curator pipeline execution, train/eval, endpoint, W&B, cluster, deploy, artifact upload/download, main/master push, or self-merge.
