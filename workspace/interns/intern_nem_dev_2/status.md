@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task152_super3_m1_agentic_docs_path_portability_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Working,TASK=task155_omni3_valor32k_config_comment_portability_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task152_super3_m1_agentic_docs_path_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/259 |
+| Current Task | task155_omni3_valor32k_config_comment_portability_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/262 |
 | Session | 1 |
 
-最近进展：Opened PR #259 for task152 from base `17ed7b0e5195878030ff09118fb79caee200b824`. Scoped Super3 M1 Agentic SFT docs/config-comment examples now use `${NEMO_RUN_DIR:-.}/output/super3/...` instead of named-user `/mnt/3fs/data/lei.song/nemotron` paths, with a focused static guard. Checks passed: focused pytest (`2 passed`), py_compile, Ruff, scoped static grep, diff checks, and added-line live-surface scan. No live M0/M1 data prep, SFT packing, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
+最近进展：Opened PR #262 for `task155_omni3_valor32k_config_comment_portability_s1`: https://github.com/songCNMS/Nemotron/pull/262. Base `795eb92359257ed82816a8685db0f9cae1c751ae`; implementation head before PR bookkeeping `ddc7a372e207efa52b461a419bb3c7ff546447e9`. Replaced the scoped Omni3 Valor32k config comment that named a DFW internal user path with neutral `OMNI3_VALOR32K_ENERGON_PATH` guidance and added a focused static Omni3 test. Checks passed: focused pytest (`1 passed`), py_compile, Ruff, scoped `valor32k.yaml` grep, `git diff --check`, and `git diff --cached --check`. No live Valor32k/HF download, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
