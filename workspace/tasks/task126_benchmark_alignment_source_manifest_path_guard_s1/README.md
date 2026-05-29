@@ -1,6 +1,6 @@
 # task126_benchmark_alignment_source_manifest_path_guard_s1 - Benchmark alignment source manifest path guard
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_2 -->
 
 ## Background
 
