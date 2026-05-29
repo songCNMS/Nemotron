@@ -1,6 +1,6 @@
 # task122_omni3_valor_tar_extraction_guard_s1 history
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 20 - 2026-05-29
 
@@ -24,3 +24,11 @@
   with base `190e8c53c59c08696348b1ae7ca7b58ac4fc8633`.
 - Updated task/status docs and external report evidence with PR URL, exact
   base/head SHAs, checks, blockers, and residual risk.
+
+## Session 22 - 2026-05-29
+
+- PM reported PR #229 merged through GitHub at merge commit
+  `dc6e00e741c4189051bc4db4052283dbc78d0c13` after PM gate, independent
+  `test_1` PASS, and merged-main verification.
+- Marked task122 status idle/merged. No further implementation action required
+  unless a follow-up is assigned.
