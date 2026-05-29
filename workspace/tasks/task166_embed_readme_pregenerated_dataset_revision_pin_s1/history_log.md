@@ -16,3 +16,7 @@
   added-line live-surface scan, `git diff --check`, and
   `git diff --cached --check`.
 - Opened PR #272 to `main`: https://github.com/songCNMS/Nemotron/pull/272.
+- Rebased onto latest `origin/main`
+  `83119f9ca83a4978773f4702ef0a4b48c0c4fe94` after PR #271 merged and
+  reran focused pytest, `py_compile`, Ruff, static grep, live-surface scan,
+  and diff checks.
