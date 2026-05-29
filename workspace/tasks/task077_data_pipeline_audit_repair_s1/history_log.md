@@ -214,4 +214,12 @@
 - Validation passed locally: focused packed parquet checksum pytest shard, py_compile, Ruff, product grep showing no `xxh64:unknown` in touched packed parquet product files, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #224: https://github.com/songCNMS/Nemotron/pull/224
 
+- Task120 follow-up in same Session 17:
+- Read PM assignment for `task120_m1_agentic_math_final_answer_dedup_s1`.
+- Fast-forwarded local `main` to `8e703277627132ee5277a1027034154d3726f163` and created branch `intern_nem_dev_1/task120_m1_agentic_math_final_answer_dedup_s1`.
+- Updated `_reasoning_target_from_reference()` to build one parser-readable final-answer line and reuse it for non-empty and empty reference-solution paths.
+- Added focused M1 Agentic SFT tests proving non-empty missing-boxed references get exactly one `Final answer: \\boxed{expected}` suffix, empty references emit one final-answer line, and already-boxed references are not appended.
+- Validation passed locally: focused M1 SFT pytest shard, py_compile, Ruff, structured helper/rendered-target probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #227: https://github.com/songCNMS/Nemotron/pull/227
+
 ---

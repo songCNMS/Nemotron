@@ -936,10 +936,11 @@ def _reasoning_target_from_reference(reference_solution: str, expected_answer: s
     expected_answer = expected_answer.strip()
     if expected_answer and not _contains_boxed_expected_answer(content, expected_answer):
         boxed_answer = _boxed_final_answer(expected_answer)
+        final_answer_line = f"Final answer: {boxed_answer}"
         if content:
-            content = f"{content}\n\nFinal answer: {boxed_answer}"
+            content = f"{content}\n\n{final_answer_line}"
         else:
-            content = f"Final answer: {boxed_answer}"
+            content = final_answer_line
     return content
 
 
