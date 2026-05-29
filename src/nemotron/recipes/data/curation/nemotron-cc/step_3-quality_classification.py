@@ -40,11 +40,9 @@ import time
 import numpy as np
 import pandas as pd
 from loguru import logger
-
 from nemo_curator.backends.experimental.ray_data import RayDataExecutor
 from nemo_curator.core.client import RayClient
 from nemo_curator.pipeline import Pipeline
-from nemo_curator.stages.base import ProcessingStage
 from nemo_curator.stages.function_decorators import processing_stage
 from nemo_curator.stages.text.classifiers.fineweb_edu import (
     FineWebMixtralEduClassifier,
@@ -78,6 +76,7 @@ CLASSIFIER_SCORES = {
 
 FASTTEXT_HQ_MODEL_REPO = "mlfoundations/fasttext-oh-eli5"
 FASTTEXT_HQ_MODEL_FILENAME = "openhermes_reddit_eli5_vs_rw_v2_bigram_200k_train.bin"
+FASTTEXT_HQ_MODEL_REVISION = "cd8b714a90f2dbcd3b02cf5fc972e5d7c7f4f107"
 
 
 # ---------------------------------------------------------------------------
@@ -184,6 +183,7 @@ def run_classification(args: argparse.Namespace) -> None:
     fasttext_model_path = hf_hub_download(
         repo_id=FASTTEXT_HQ_MODEL_REPO,
         filename=FASTTEXT_HQ_MODEL_FILENAME,
+        revision=FASTTEXT_HQ_MODEL_REVISION,
     )
     logger.info(f"FastText quality model path: {fasttext_model_path}")
 
