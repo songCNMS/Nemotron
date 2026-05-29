@@ -1,11 +1,11 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=InReview,TASK=task091_omni3_stage1_rl_config_portability_s1 -->
+<!-- METADATA:STATUS=Working,TASK=task091_omni3_stage1_rl_config_portability_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | InReview |
+| Status | Working |
 | Current Task | task091_omni3_stage1_rl_config_portability_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/216 |
 | Session | 13 |
