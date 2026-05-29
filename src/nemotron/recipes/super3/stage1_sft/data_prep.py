@@ -127,6 +127,7 @@ from nemotron.kit.train_script import (
     load_omegaconf_yaml,
     omegaconf_to_dataclass,
     parse_config_and_overrides,
+    resolve_repo_relative_source_path,
 )
 
 logger = logging.getLogger(__name__)
@@ -268,6 +269,10 @@ class SFTDataPrepConfig:
         # Ensure paths are Path objects
         if isinstance(self.blend_path, str):
             self.blend_path = Path(self.blend_path)
+        self.blend_path = resolve_repo_relative_source_path(
+            self.blend_path,
+            anchor_file=__file__,
+        )
         if isinstance(self.output_dir, str):
             self.output_dir = Path(self.output_dir)
 

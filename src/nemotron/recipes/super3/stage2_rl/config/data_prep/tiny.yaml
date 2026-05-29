@@ -9,7 +9,7 @@ run:
 #   nemotron super3 data prep rl --config tiny --run prep
 
 # Path to data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json
+blend_path: src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json
 
 # Output directory for resolved JSONL data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_tiny

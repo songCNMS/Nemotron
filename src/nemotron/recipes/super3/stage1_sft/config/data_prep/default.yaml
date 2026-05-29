@@ -9,11 +9,10 @@ run:
 #   nemotron super3 data prep sft sample=100 force=true
 #
 # Environment variables:
-#   PWD: Current working directory (for source blend path resolution)
 #   NEMO_RUN_DIR: Run directory root for portable outputs
 
 # Path to Super3-owned data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json
+blend_path: src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json
 
 # Output directory for packed Parquet data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft

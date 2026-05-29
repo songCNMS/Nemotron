@@ -11,7 +11,7 @@ run:
 # Running without --config uses this file, which is identical to phase1.
 
 # Path to data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase1.json
+blend_path: src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase1.json
 
 # Output directory for tokenized data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage0_pretrain/phase1

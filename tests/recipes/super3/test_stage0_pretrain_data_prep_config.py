@@ -6,6 +6,9 @@ from pathlib import Path
 
 import pytest
 
+from nemotron.kit.train_script import resolve_repo_relative_source_path
+from nemotron.recipes.super3.stage0_pretrain.data_prep import PreTrainDataPrepConfig
+
 yaml = pytest.importorskip("yaml")
 omegaconf = pytest.importorskip("omegaconf")
 OmegaConf = omegaconf.OmegaConf
@@ -33,6 +36,17 @@ EXPECTED_OUTPUT_SUFFIXES = {
     "tiny": Path("output/super3/stage0_pretrain_tiny"),
 }
 
+EXPECTED_BLEND_PATHS = {
+    "default": "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase1.json",
+    "phase1": "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase1.json",
+    "phase2": "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/data_blend_raw_phase2.json",
+    "long_context": (
+        "src/nemotron/recipes/super3/stage0_pretrain/config/data_prep/"
+        "data_blend_raw_long_context.json"
+    ),
+    "tiny": "src/nemotron/recipes/nano3/stage0_pretrain/config/data_prep/data_blend_raw_small.json",
+}
+
 REQUIRED_TOP_LEVEL_FIELDS = {
     "blend_path",
     "output_dir",
@@ -57,6 +71,46 @@ def _read_config(config_name: str) -> tuple[str, dict]:
     path = CONFIG_DIR / f"{config_name}.yaml"
     text = path.read_text(encoding="utf-8")
     return text, yaml.safe_load(text)
+
+
+@pytest.mark.parametrize("config_name", sorted(EXPECTED_BLEND_PATHS))
+def test_stage0_pretrain_data_prep_blend_paths_are_repo_local(
+    config_name: str,
+) -> None:
+    text, data = _read_config(config_name)
+
+    assert data["blend_path"] == EXPECTED_BLEND_PATHS[config_name]
+    assert "${oc.env:PWD}/src/" not in text
+
+
+@pytest.mark.parametrize("config_name", sorted(EXPECTED_BLEND_PATHS))
+def test_stage0_pretrain_data_prep_blend_paths_resolve_from_non_repo_cwd(
+    config_name: str,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    _, data = _read_config(config_name)
+
+    blend_path = resolve_repo_relative_source_path(
+        data["blend_path"],
+        anchor_file=CONFIG_DIR / f"{config_name}.yaml",
+    )
+
+    assert blend_path == REPO_ROOT / EXPECTED_BLEND_PATHS[config_name]
+    assert blend_path.is_file()
+
+
+def test_stage0_pretrain_config_dataclass_resolves_repo_local_blend_path() -> None:
+    cfg = PreTrainDataPrepConfig(blend_path=EXPECTED_BLEND_PATHS["phase1"])
+
+    assert cfg.blend_path == REPO_ROOT / EXPECTED_BLEND_PATHS["phase1"]
+
+
+def test_stage0_pretrain_config_dataclass_preserves_relative_override() -> None:
+    cfg = PreTrainDataPrepConfig(blend_path="custom/blend.json")
+
+    assert cfg.blend_path == Path("custom/blend.json")
 
 
 @pytest.mark.parametrize("config_name", sorted(EXPECTED_OUTPUT_DIRS))
