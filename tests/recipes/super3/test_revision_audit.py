@@ -6,8 +6,8 @@ Coverage:
 - ``is_pinned`` predicate (40-char SHAs accepted; floating refs +
   empty + None + non-string rejected)
 - ``find_unpinned_revisions`` walks live registries — today: zero
-  blockers (every m0_data row carries a SHA), 3 informational
-  (pref_data candidates awaiting task018 Session 2 pin)
+  blockers and zero informational findings (M0 rows and required RLHF
+  pref candidates carry revision pins)
 - Synthetic broken fixtures (missing field / floating ref) trigger
   blockers + exit 1
 - CLI ``--check-revision-pins`` end-to-end behavior + exit codes
@@ -102,16 +102,10 @@ def test_find_unpinned_revisions_live_has_zero_blockers() -> None:
     )
 
 
-def test_find_unpinned_revisions_live_surfaces_pref_candidates() -> None:
-    """Pref data registry today carries 3 candidate sources
-    (HelpSteer-2 / UltraFeedback / Orca DPO pairs) with
-    ``hf_revision_pin_required: true``. None have a pin yet — task018
-    Session 2 picks one. They should show as informational."""
+def test_find_unpinned_revisions_live_has_no_pref_informational_findings() -> None:
+    """Live RLHF pref candidates requiring revision pins are now pinned."""
     audit = find_unpinned_revisions()
-    informational_ids = {row["row_id"] for row in audit["informational"]}
-    assert "helpsteer2" in informational_ids
-    assert "ultrafeedback" in informational_ids
-    assert "distilabel_orca_pairs" in informational_ids
+    assert audit["informational"] == []
 
 
 # ---------- Synthetic broken fixtures ----------
@@ -222,6 +216,49 @@ registries:
     assert audit["informational"] == []
 
 
+def test_pref_data_with_pin_required_but_missing_revision_is_informational(
+    tmp_path: Path,
+) -> None:
+    """Synthetic required pref candidates without pins remain visible as
+    informational findings instead of blockers."""
+    pref_reg = tmp_path / "pref_data.yaml"
+    pref_reg.write_text(
+        """schema_version: 1
+milestone: M1
+datasets:
+  - id: stub_required_pref
+    hf_dataset: stub/required-pref
+    license: apache-2.0
+    hf_revision_pin_required: true
+""",
+        encoding="utf-8",
+    )
+    index = tmp_path / "unified_index.yaml"
+    index.write_text(
+        f"""schema_version: 1
+milestone: M1
+registries:
+  - id: stub_pref
+    kind: pref_data_registry
+    path: {pref_reg.name}
+    summary: stub
+""",
+        encoding="utf-8",
+    )
+
+    audit = find_unpinned_revisions(index)
+    assert audit["blockers"] == []
+    assert audit["informational"] == [
+        {
+            "registry_id": "stub_pref",
+            "kind": "pref_data_registry",
+            "row_id": "stub_required_pref",
+            "hf_dataset": "stub/required-pref",
+            "hf_revision": None,
+        }
+    ]
+
+
 # ---------- format_revision_audit_report ----------
 
 
@@ -289,11 +326,12 @@ def _run_script(*extra_args: str) -> subprocess.CompletedProcess[str]:
 
 
 def test_check_revision_pins_cli_clean_main_exits_zero() -> None:
-    """Live main has zero blockers + 3 informational → exit 0."""
+    """Live main has zero blockers and zero informational findings."""
     result = _run_script("--check-revision-pins")
     assert result.returncode == 0, result.stderr
-    assert "informational" in result.stdout
-    assert "helpsteer2" in result.stdout
+    assert "all production data registry rows pinned" in result.stdout
+    assert "informational" not in result.stdout
+    assert "helpsteer2" not in result.stdout
     # No blockers → no "BLOCKER" header in the report.
     assert "BLOCKER" not in result.stdout
 

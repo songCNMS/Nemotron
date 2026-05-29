@@ -20,10 +20,9 @@ This module surfaces two classes of finding:
   by the M0 prep but don't carry a pinned commit SHA. Exit 1 in CI
   mode so PR pre-merge gates fire.
 - **Informational** — rows in ``pref_data_registry`` that declare
-  ``hf_revision_pin_required: true`` but don't have a pin yet. Those
-  are *candidate* preference sources (HelpSteer-2 / UltraFeedback /
-  Orca DPO pairs); task018 Session 2 picks one and pins it. Reporting
-  them keeps the to-do visible without failing CI.
+  ``hf_revision_pin_required: true`` but don't have a pin yet. Candidate
+  preference sources should be pinned before promotion; synthetic or
+  exploratory unpinned required rows remain visible without failing CI.
 
 Sandbox-runnable; consumed by ``scripts/validate_data_registries.py
 --check-revision-pins``.
@@ -88,8 +87,8 @@ def find_unpinned_revisions(
       drift here propagates downstream silently.
     - **informational**: ``pref_data_registry`` rows that *declare*
       ``hf_revision_pin_required: true`` but haven't been pinned yet.
-      Tracking issue rather than a release blocker — those are
-      candidate sources waiting to be picked.
+      Tracking issue rather than a release blocker for synthetic or
+      exploratory candidates.
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
@@ -163,7 +162,7 @@ def format_revision_audit_report(result: Mapping[str, list]) -> str:
     if informational:
         lines.append(
             f"revision-pin audit: {len(informational)} informational — "
-            "pref_data_registry candidate(s) pending task018 Session 2 pin"
+            "pref_data_registry candidate(s) missing required revision pin"
         )
         lines.append("")
         for finding in informational:

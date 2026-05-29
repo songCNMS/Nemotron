@@ -151,7 +151,24 @@ def test_pref_data_registry_loads_with_expected_candidates() -> None:
     assert "helpsteer2" in ids
     assert "ultrafeedback" in ids
     for row in pref:
-        assert {"id", "hf_dataset", "license"} <= row.keys()
+        assert {"id", "hf_dataset", "license", "hf_revision"} <= row.keys()
+
+
+def test_pref_data_registry_pins_required_hf_revisions() -> None:
+    pref = load_rlhf_pref_data_registry()
+    rows = {row["id"]: row for row in pref}
+    assert rows["helpsteer2"]["hf_revision_pin_required"] is True
+    assert rows["helpsteer2"]["hf_revision"] == (
+        "990b2711a36180dd19d9c94b8627844866f8982a"
+    )
+    assert rows["ultrafeedback"]["hf_revision_pin_required"] is True
+    assert rows["ultrafeedback"]["hf_revision"] == (
+        "40b436560ca83a8dba36114c22ab3c66e43f6d5e"
+    )
+    assert rows["distilabel_orca_pairs"]["hf_revision_pin_required"] is True
+    assert rows["distilabel_orca_pairs"]["hf_revision"] == (
+        "0b10ec0df32c919f95126b203c8f5962b6875896"
+    )
 
 
 def test_pref_data_registry_path_resolves_to_yaml_in_module() -> None:

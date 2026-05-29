@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Knowledge Entries
 
@@ -31,3 +31,6 @@
 12. session 16 note: Stage1 RLVR train loading should fail fast if the
     NeMo-Gym datum converter is unavailable; local empty-datum fallbacks can
     drop bridge payloads and bypass the Qwen `<|im_end|>` stop contract.
+13. session 17 note: RLHF preference registry rows can remain candidates while
+    still carrying pinned Hugging Face revisions; synthetic unpinned required
+    pref fixtures remain informational in the audit.

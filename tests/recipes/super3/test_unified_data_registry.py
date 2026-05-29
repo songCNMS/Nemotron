@@ -29,12 +29,10 @@ from nemotron.recipes.super3.milestones.data_registries.unified_index_loader imp
     INDEX_PATH,
     hf_dataset_inventory,
     licenses_inventory,
-    load_registry_file,
     load_unified_index,
     m0_to_downstream_inventory,
     validate_unified_index,
 )
-
 
 yaml = pytest.importorskip("yaml")
 
@@ -375,15 +373,12 @@ def test_hf_dataset_inventory_enumerates_data_registries() -> None:
 
 
 def test_hf_dataset_inventory_carries_revision_pin_status() -> None:
-    """M0 production datasets are pinned to a hf_revision; pref data
-    candidates carry hf_revision_pin_required since the actual revision
-    isn't pinned until Session 2 of task018 picks one and ingests it.
+    """M0 production datasets and required pref candidates carry pins.
 
     Post-task018-Session-2 ``nvidia/HelpSteer2`` appears in *two*
-    registries — the m0_data row (revision pinned per cluster pass) and
-    the pref_data candidate row (still carries the
-    ``hf_revision_pin_required: true`` flag). The test asserts the
-    pref-candidate flag holds on whichever entry carries it."""
+    registries — the m0_data row and the pref_data candidate row. The
+    pref candidate keeps ``hf_revision_pin_required: true`` and now also
+    carries its HF revision pin for source-lineage stability."""
     inventory = hf_dataset_inventory()
     gsm8k_entry = inventory["openai/gsm8k"][0]
     assert gsm8k_entry["hf_revision"], "gsm8k should be revision-pinned"
@@ -394,6 +389,9 @@ def test_hf_dataset_inventory_carries_revision_pin_status() -> None:
     ]
     assert helpsteer_pref_entries, "pref_data_registry entry for HelpSteer2 missing"
     assert helpsteer_pref_entries[0].get("hf_revision_pin_required") is True
+    assert helpsteer_pref_entries[0].get("hf_revision") == (
+        "990b2711a36180dd19d9c94b8627844866f8982a"
+    )
 
 
 def test_m0_to_downstream_cross_walk_shows_active_paths() -> None:
