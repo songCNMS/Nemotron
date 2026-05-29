@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Super AutoModel Text2SQL BIRD notebook:
   `usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-automodel/automodel_lora_cookbook.ipynb`.
@@ -11,3 +11,5 @@
     `9e351e0057819f1b0917debb83c8e12f321157a4`
 - The task is docs/static-test only; do not execute the notebook or call
   `load_dataset`.
+- Session 2 only corrected bookkeeping after the stop-hook; dataset pins and
+  implementation scope are unchanged.

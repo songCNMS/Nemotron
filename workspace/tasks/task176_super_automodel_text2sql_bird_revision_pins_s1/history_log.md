@@ -1,6 +1,17 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-05-29
+
+- Corrected stop-hook bookkeeping for task176 by advancing task/status metadata
+  to Session 2 and recording this Session 2 history entry.
+- No product/test code changed; PR #283 remains ready for PM gate.
+- Re-ran `git diff --check` and `git diff --cached --check` for the docs-only
+  bookkeeping commit.
+- No notebook execution, live `load_dataset`, HF/dataset download, data prep,
+  training/eval, endpoint, W&B, cluster, deploy, artifact ops, main push, or
+  self-merge was performed.
 
 ## Session 1 - 2026-05-29
 

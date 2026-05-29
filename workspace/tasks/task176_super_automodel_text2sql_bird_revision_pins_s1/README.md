@@ -1,6 +1,6 @@
 # task176_super_automodel_text2sql_bird_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -26,3 +26,4 @@
 - Checks: focused static notebook pytest, py_compile, Ruff, structured notebook
   probe, unpinned-call grep, added-line live-surface scan, and diff checks
   passed.
+- Session 2: stop-hook bookkeeping corrected; PR remains ready for PM gate.
