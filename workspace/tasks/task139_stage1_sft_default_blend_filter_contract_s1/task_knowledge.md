@@ -1,6 +1,6 @@
 # task139_stage1_sft_default_blend_filter_contract_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Notes
 

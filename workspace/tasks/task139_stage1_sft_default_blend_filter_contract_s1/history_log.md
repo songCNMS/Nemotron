@@ -1,6 +1,6 @@
 # task139_stage1_sft_default_blend_filter_contract_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-29
 
@@ -17,3 +17,29 @@
   blend datasets, and row-filter behavior for missing `used_in`.
 - Verified focused pytest, py_compile, Ruff, and structured YAML probe.
 - Opened PR #246 to `main`: https://github.com/songCNMS/Nemotron/pull/246.
+
+## Session 2 - 2026-05-29
+
+- Recorded PR #246 URL in the task README and intern status after opening the
+  pull request.
+- Pushed the PR metadata commit to
+  `intern_nem_dev_2/task139_stage1_sft_default_blend_filter_contract_s1`.
+
+## Session 3 - 2026-05-29
+
+- Verified the branch remained clean after PR #246 metadata push.
+- Reported final head `b3548cf744cfbfa371d850c9d3a82ca32c38e96c` to PM for
+  gate review.
+
+## Session 4 - 2026-05-29
+
+- Stop-hook audit checked task bookkeeping after the PR handoff response.
+- Confirmed task139 product/test changes were already committed and pushed on
+  PR #246.
+
+## Session 5 - 2026-05-29
+
+- Stop-hook audit flagged that task139 history did not contain a Session 5
+  entry after the handoff response.
+- Added this Session 5 bookkeeping entry and bumped task139 session metadata
+  without changing product code or test files.
