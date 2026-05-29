@@ -2024,6 +2024,8 @@ def audit_data_quality(
     }
     training_sidecar_rows = training_sidecar_rows or {}
     if training_sidecar_rows:
+        base_train_reference_keys = set(source_keys_by_split["train"])
+        base_train_reference_prompt_hashes = set(prompt_hashes_by_split["train"])
         validation_reference_keys = set(source_keys_by_split["val_shadow"])
         validation_reference_prompt_hashes = set(prompt_hashes_by_split["val_shadow"])
         if sidecar_validation_rows:
@@ -2035,6 +2037,12 @@ def audit_data_quality(
         training_sidecar_audits: dict[str, JsonDict] = {}
         for name, rows in sorted(training_sidecar_rows.items()):
             sidecar_audit, source_keys, prompt_hashes = _audit_source_metadata_rows(rows)
+            base_train_source_key_overlaps = sorted(
+                source_keys & base_train_reference_keys
+            )
+            base_train_prompt_overlaps = sorted(
+                prompt_hashes & base_train_reference_prompt_hashes
+            )
             validation_source_key_overlaps = sorted(
                 source_keys & validation_reference_keys
             )
@@ -2043,6 +2051,18 @@ def audit_data_quality(
             )
             sidecar_audit.update(
                 {
+                    "base_train_source_key_overlap_count": len(
+                        base_train_source_key_overlaps
+                    ),
+                    "base_train_source_key_overlap_examples": _sample_keys(
+                        base_train_source_key_overlaps
+                    ),
+                    "base_train_normalized_prompt_overlap_count": len(
+                        base_train_prompt_overlaps
+                    ),
+                    "base_train_normalized_prompt_overlap_examples": _sample_keys(
+                        base_train_prompt_overlaps
+                    ),
                     "validation_source_key_overlap_count": len(
                         validation_source_key_overlaps
                     ),
@@ -2113,6 +2133,12 @@ def strict_data_quality_issue_counts(data_quality: Mapping[str, Any]) -> dict[st
             )
             duplicate_prompt_hash_count += _count_value(
                 split_info.get("duplicate_normalized_prompt_hash_count")
+            )
+            sidecar_source_key_overlap_count += _count_value(
+                split_info.get("base_train_source_key_overlap_count")
+            )
+            sidecar_prompt_overlap_count += _count_value(
+                split_info.get("base_train_normalized_prompt_overlap_count")
             )
             sidecar_source_key_overlap_count += _count_value(
                 split_info.get("validation_source_key_overlap_count")
@@ -2431,9 +2457,10 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     "### Training sidecar data quality",
                     "",
                     "| Sidecar | Rows | Missing source metadata | Duplicate source keys | "
-                    "Duplicate normalized prompts | Validation source-key overlaps | "
+                    "Duplicate normalized prompts | Base-train source-key overlaps | "
+                    "Base-train normalized-prompt overlaps | Validation source-key overlaps | "
                     "Validation normalized-prompt overlaps |",
-                    "|---|---:|---:|---:|---:|---:|---:|",
+                    "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
                 ]
             )
             for sidecar_name, info in sorted(training_sidecars.items()):
@@ -2444,6 +2471,8 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     f"| {sidecar_name} | {info.get('rows', 0)} | {missing} | "
                     f"{info.get('duplicate_source_key_count', 0)} | "
                     f"{info.get('duplicate_normalized_prompt_hash_count', 0)} | "
+                    f"{info.get('base_train_source_key_overlap_count', 0)} | "
+                    f"{info.get('base_train_normalized_prompt_overlap_count', 0)} | "
                     f"{info.get('validation_source_key_overlap_count', 0)} | "
                     f"{info.get('validation_normalized_prompt_overlap_count', 0)} |"
                 )
