@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 - Super AutoModel Text2SQL BIRD notebook:
   `usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-automodel/automodel_lora_cookbook.ipynb`.
@@ -13,3 +13,6 @@
   `load_dataset`.
 - Session 2 only corrected bookkeeping after the stop-hook; dataset pins and
   implementation scope are unchanged.
+- Session 3 closeout: PR #283 was squash-merged to `main` at
+  `01edd08a5f456514e975e8b9370970b2c32d4041`; no additional technical
+  knowledge beyond the merge/closeout state.

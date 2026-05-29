@@ -1,6 +1,6 @@
 # task176_super_automodel_text2sql_bird_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=3 -->
 
 ## Scope
 
@@ -23,7 +23,11 @@
 - Base: `4077e2e155ec4ed5d3d4594793514e088cae873e`
 - Branch: `intern_nem_dev_3/task176_super_automodel_text2sql_bird_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/283
+- Final branch head: `fc3e4cafe4b9b760bdbd05cf17147910366ad59d`
+- Merge SHA: `01edd08a5f456514e975e8b9370970b2c32d4041`
 - Checks: focused static notebook pytest, py_compile, Ruff, structured notebook
   probe, unpinned-call grep, added-line live-surface scan, and diff checks
   passed.
 - Session 2: stop-hook bookkeeping corrected; PR remains ready for PM gate.
+- Session 3: PR #283 passed PM gate and independent exact-head gate, then
+  squash-merged to `main`; local `main` was synced to the merge SHA.

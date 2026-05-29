@@ -1,6 +1,19 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
+
+## Session 3 - 2026-05-29
+
+- Recorded PM closeout for PR #283 after PM gate, independent exact-head gate,
+  final exact-ref check, and squash merge to `main` at
+  `01edd08a5f456514e975e8b9370970b2c32d4041`.
+- Updated task/status/report docs to mark task176 merged and return
+  intern_nem_dev_3 to Idle / Current Task None.
+- Synced local `main` to `origin/main` at
+  `01edd08a5f456514e975e8b9370970b2c32d4041`.
+- No notebook execution, live `load_dataset`, HF/dataset download, Text2SQL
+  data prep, AutoModel training/eval, endpoint, W&B, cluster, deploy, artifact
+  ops, direct `main`/`master` push, or self-merge was performed.
 
 ## Session 2 - 2026-05-29
 
