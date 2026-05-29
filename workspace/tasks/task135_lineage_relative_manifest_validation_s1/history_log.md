@@ -1,6 +1,6 @@
 # task135_lineage_relative_manifest_validation_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -18,3 +18,17 @@
 - Verified focused lineage tests, py_compile, Ruff, and a structured local
   relative-ref probe.
 - Opened PR #241 to `main`: https://github.com/songCNMS/Nemotron/pull/241.
+
+## Session 2 - 2026-05-29
+
+- Recorded PR #241 URL in the task README and intern status after opening the
+  pull request.
+- Pushed the PR metadata commit to
+  `intern_nem_dev_2/task135_lineage_relative_manifest_validation_s1`.
+
+## Session 3 - 2026-05-29
+
+- Stop-hook audit flagged that task135 history did not contain a Session 3
+  entry after the handoff response.
+- Added this Session 3 bookkeeping entry and bumped task135 session metadata
+  without changing product code or test files.

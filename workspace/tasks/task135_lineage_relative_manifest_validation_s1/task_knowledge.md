@@ -1,6 +1,6 @@
 # task135_lineage_relative_manifest_validation_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Notes
 
