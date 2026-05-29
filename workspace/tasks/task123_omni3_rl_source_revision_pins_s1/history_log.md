@@ -1,6 +1,6 @@
 # task123_omni3_rl_source_revision_pins_s1 - History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 1 - 2026-05-29
 
@@ -33,3 +33,10 @@
 - Re-ran focused pytest, py_compile, Ruff, metadata source-pin probe, static
   unpinned-source probe, guard probe, and diff whitespace checks.
 - Opened PR #231 to `main`: https://github.com/songCNMS/Nemotron/pull/231.
+
+## Session 3 - 2026-05-29
+
+- PM reported PR #231 was squash-merged and merged-main verification passed.
+- Synced local `main` to `origin/main`
+  `7d49d91a5cc2c49e17d617690d63d8a92ecb696b`.
+- Marked the task123 workspace record completed on the closeout sync branch.

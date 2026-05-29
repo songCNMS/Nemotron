@@ -1,6 +1,6 @@
 # task123_omni3_rl_source_revision_pins_s1 - Omni3 RL source revision pins
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nem_dev_2,SESSION=19 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_2,SESSION=20 -->
 
 ## Background
 

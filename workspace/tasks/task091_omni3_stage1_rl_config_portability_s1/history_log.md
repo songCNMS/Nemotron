@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 1 - 2026-05-28
 
@@ -135,3 +135,14 @@
   case and recorded this Session 19 bookkeeping entry.
 - Opened task123 PR #231 to `main`:
   https://github.com/songCNMS/Nemotron/pull/231.
+
+## Session 20 - 2026-05-29
+
+- PM reported PR #231 for `task123_omni3_rl_source_revision_pins_s1` was
+  squash-merged through the GitHub PR flow.
+- Confirmed local task branch was clean, switched to `main`, fetched
+  `origin/main`, and fast-forwarded local `main` to merged-main commit
+  `7d49d91a5cc2c49e17d617690d63d8a92ecb696b`.
+- Recorded closeout bookkeeping on branch
+  `intern_nem_dev_2/task123_omni3_rl_source_revision_pins_s1_closeout_sync`
+  without pushing `main` or `master`.

@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Knowledge Entries
 
@@ -41,3 +41,6 @@
 15. session 19 note: when Omni3 text data-prep sets `source_revision`, the
     configured `source_uri` must match at least one blend dataset row; otherwise
     URI drift can bypass the config/blend consistency guard.
+16. session 20 note: after PM merge notice, sync local `main` by fast-forward
+    only to the reported merged-main commit before taking more work; record
+    closeout bookkeeping on an owned branch rather than pushing `main`.
