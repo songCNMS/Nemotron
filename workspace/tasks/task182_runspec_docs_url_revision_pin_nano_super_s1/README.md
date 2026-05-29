@@ -22,6 +22,9 @@
 
 - Base: `df45842edade40c19fd0496f3844ef20653a94cc`
 - Branch: `intern_nem_dev_1/task182_runspec_docs_url_revision_pin_nano_super_s1`
-- PR: pending
-- Head: pending validation and commit
-- Checks: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/289
+- Validated implementation head: `daea92a02ba9cf6b7dbb211560cec91197ca88b7`
+- Checks: focused static pytest, py_compile, Ruff on the new test,
+  structured static probe, product-scope stale URL grep, added-line
+  live-surface scan, `git diff --check`, and `git diff --cached --check`
+  passed.
