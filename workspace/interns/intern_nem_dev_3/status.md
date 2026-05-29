@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task159_super3_stage2_rl_persistent_cache_comment_portability_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/264 |
 | Session | 1 |
-| Recent Progress | Implemented Stage2 RL persistent_cache comment portability; focused pytest, py_compile, Ruff, static grep/probe, live-surface scan, and diff check passed |
+| Recent Progress | Opened PR #264 for Stage2 RL persistent_cache comment portability after focused pytest, py_compile, Ruff, static grep/probe, live-surface scan, and diff checks passed |

@@ -16,3 +16,4 @@
 - Verified focused pytest, `py_compile`, Ruff, scoped `/lustre/` grep,
   structured YAML/text probe, added-line live-surface scan, and
   `git diff --check` before staging.
+- Opened PR #264 to `main`: https://github.com/songCNMS/Nemotron/pull/264.
