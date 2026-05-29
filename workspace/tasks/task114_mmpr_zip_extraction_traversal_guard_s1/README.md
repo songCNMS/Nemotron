@@ -36,8 +36,8 @@ the intended temporary extraction root before later layout checks ran.
   outside the intended extraction root.
 - [x] Focused pytest, py_compile, Ruff, structured zip probe, and diff
   whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending branch push.
+- https://github.com/songCNMS/Nemotron/pull/222
