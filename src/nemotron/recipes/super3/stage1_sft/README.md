@@ -79,15 +79,15 @@ Generate the local blend first:
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
-  --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516
+  --m0-input-dir ${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516-100x25 \
+  --output-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516
 ```
 
 Then run the existing packed SFT pipeline with the generated blend:
 
 ```bash
 uv run nemotron super3 data prep sft \
-  blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
+  blend_path=${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 
 For a single-GPU smoke test against already-packed M1 data, first create or
