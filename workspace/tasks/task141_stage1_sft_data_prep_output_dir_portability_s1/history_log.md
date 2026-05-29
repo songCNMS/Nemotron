@@ -1,6 +1,6 @@
 # task141_stage1_sft_data_prep_output_dir_portability_s1 history
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 1 - 2026-05-29
 
@@ -26,3 +26,14 @@
 - Stop-hook audit required this task history to carry a Session 24 entry.
 - Added Session 24 bookkeeping after PR #248 was already open and pushed.
 - No product code, config, or test behavior changed in this session.
+
+## Session 25 - 2026-05-29
+
+- PM reported PR #248 merged after PM and independent test gates.
+- Recorded final tested head `c6f955fb0f53f9b6d06e6b1024f7437d28ad7b2c`.
+- Recorded squash merge/new main commit `6013e06eed8277acc26229e5df95a256c6b5c3ee`.
+- PM merged-main checks passed: Stage1 SFT/Qwen config pytest 31 passed,
+  py_compile, Ruff, structured OmegaConf probe, and `git diff --check`.
+- Fetched `origin/main` and fast-forwarded local `main` to
+  `6013e06eed8277acc26229e5df95a256c6b5c3ee`.
+- No further task141 product action remains.
