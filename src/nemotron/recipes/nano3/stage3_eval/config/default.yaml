@@ -52,7 +52,7 @@ run:
     user: ${oc.env:USER}
     account: null
     partition: batch
-    remote_job_dir: ${oc.env:PWD}/.nemotron
+    remote_job_dir: ${oc.env:NEMO_RUN_DIR,.}/.nemotron
     time: "04:00:00"
 
   # W&B config - populated from env.toml [wandb] section
