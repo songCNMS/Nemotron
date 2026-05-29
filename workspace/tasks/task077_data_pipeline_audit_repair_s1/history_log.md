@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ---
 
@@ -268,5 +268,18 @@
 - Added focused split utility tests covering stale regular files, stale broken symlinks, sidecar preservation, stale/current directory blockers, and missing train shards.
 - Validation passed locally: focused split utility pytest, Stage1 SFT roundtrip smoke, py_compile, Ruff, structured stale-cleanup probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #242: https://github.com/songCNMS/Nemotron/pull/242
+
+## Session 22 - 2026-05-29 - Task138 Stage2 RL data-prep output portability
+
+**Executor**: intern_nem_dev_1
+
+- Read PM assignment for `task138_stage2_rl_data_prep_output_dir_portability_s1`.
+- Created branch `intern_nem_dev_1/task138_stage2_rl_data_prep_output_dir_portability_s1` from `origin/main` at `0408b1242723f797b9622043c593bdbd7f7fbebc`.
+- Rebasing follow-up: after PM reported PR #244 merged, fetched latest `origin/main` at `70d3541cdbc993fa113bdc62fa9be61f83b72d9e` and rebased the branch onto it before opening the PR.
+- Updated generic Super3 Stage2 RL data-prep `default.yaml` so `output_dir` uses `${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_resolved`.
+- Preserved `tiny.yaml` and bridge consumer profile defaults.
+- Added focused Stage2 RL defaults tests proving the YAML uses `NEMO_RUN_DIR`, stays under `output/super3/stage2_rl_resolved`, and matches `RLDataPrepConfig().output_dir` under the default environment.
+- Validation passed locally: focused Stage2 RL defaults pytest, py_compile, Ruff, structured OmegaConf probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #245: https://github.com/songCNMS/Nemotron/pull/245
 
 ---
