@@ -1,6 +1,6 @@
 # task107_stage2_rl_bridge_manifest_val_holdout_s1 - Stage2 RL bridge manifest val holdout
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=13 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_2,SESSION=13 -->
 
 ## Background
 
@@ -34,8 +34,8 @@ mis-split bridge outputs when the real validation count was not 100.
 - [x] Explicit integer holdout still works for plain local JSONL.
 - [x] Focused pytest, py_compile, Ruff, structured fixture probe, and diff
   whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending branch push.
+- https://github.com/songCNMS/Nemotron/pull/216

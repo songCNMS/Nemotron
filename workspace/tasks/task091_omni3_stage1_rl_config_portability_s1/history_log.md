@@ -66,5 +66,5 @@
   `ac90f15ee5dfbbb9a35ef7f3753581632e1d4d0e` and worked on branch
   `intern_nem_dev_2/task107_stage2_rl_bridge_manifest_val_holdout_s1`.
 - Added bridge manifest-inferred Stage2 RL data-prep holdouts for SWE1, SWE2,
-  and RLHF, added focused tests/probe coverage, and recorded this Session 13
-  bookkeeping entry.
+  and RLHF, added focused tests/probe coverage, opened PR #216, and recorded
+  this Session 13 bookkeeping entry.

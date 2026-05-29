@@ -20,3 +20,4 @@
   manifest count failure.
 - Verified locally with focused Stage2 RL bridge/data-prep tests, py_compile,
   Ruff, and a structured fixture probe with `counts.val=4`.
+- Opened PR #216 to `main`: https://github.com/songCNMS/Nemotron/pull/216.
