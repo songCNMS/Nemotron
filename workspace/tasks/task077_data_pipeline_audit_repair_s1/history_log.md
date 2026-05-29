@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=20 -->
 
 ---
 
@@ -242,5 +242,18 @@
 - Added focused tests proving `qwen_agentic_v0` and env variants pass, runnable defaults select `qwen_agentic_v0`, legacy Super3 configs remain valid with non-Qwen tokenizer refs, and Qwen-looking legacy overrides fail with actionable messages.
 - Validation passed locally: requested SFT/Qwen planner pytest shard, py_compile, Ruff, structured OmegaConf/env probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #234: https://github.com/songCNMS/Nemotron/pull/234
+
+## Session 20 - 2026-05-29 - Task131 RL local split content hash
+
+**Executor**: intern_nem_dev_1
+
+- Read PM assignment for `task131_stage2_rl_local_split_content_hash_s1`.
+- Synced `origin/main` at `df587d239f573503347f7e36f5f8354ff581a186` and created branch `intern_nem_dev_1/task131_stage2_rl_local_split_content_hash_s1`.
+- Added deterministic SHA-256 content fingerprints for `split_local_jsonl()` input JSONL files in cache/run config and output manifests.
+- Added bridge manifest SHA-256 to `val_holdout=auto` cache identity and manifest lineage while preserving existing mtime/size fields.
+- Added input content SHA-256 to `run_resolve_and_split()` pre-resolution run config so same-size/same-mtime source mutations change resolved-output cache identity.
+- Added focused stale-cache tests for direct split, bridge-manifest auto holdout, and resolve-and-split source content identity.
+- Validation passed locally: required stage2 RL bridge/default and RLVR smoke pytest shard, py_compile, Ruff, structured stale-cache probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #237: https://github.com/songCNMS/Nemotron/pull/237
 
 ---

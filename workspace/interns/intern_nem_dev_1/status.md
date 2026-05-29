@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task127_sft_qwen_target_family_guard_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/234 |
-| Session | 18 |
-| Recent Progress | Opened PR #234 adding a fail-fast Qwen-looking SFT data-prep target-family guard; focused SFT/Qwen planner shards, py_compile, Ruff, structured OmegaConf/env probe, and diff checks passed |
+| Current Task | task131_stage2_rl_local_split_content_hash_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/237 |
+| Session | 20 |
+| Recent Progress | Opened PR #237 adding RL local split source-content SHA-256 cache identity; focused stage2 RL bridge/default tests, py_compile, Ruff, stale-cache probe, and diff checks passed |
