@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task134_sft_split_dir_stale_shard_cleanup_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/242 |
-| Session | 21 |
-| Recent Progress | Opened PR #242 cleaning stale SFT split-dir parquet entries; focused split utility tests, Stage1 SFT roundtrip smoke, py_compile, Ruff, structured stale-cleanup probe, and diff checks passed |
+| Current Task | task138_stage2_rl_data_prep_output_dir_portability_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/245 |
+| Session | 22 |
+| Recent Progress | Opened PR #245 aligning generic Stage2 RL data-prep output_dir with the NEMO_RUN_DIR-relative Super3 contract; focused Stage2 RL defaults tests, py_compile, Ruff, OmegaConf probe, and diff checks passed |

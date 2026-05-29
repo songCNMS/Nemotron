@@ -18,13 +18,14 @@ run:
 #   nemotron super3 data prep rl sample=100 force=true
 #
 # Environment variables:
-#   PWD: Current working directory (for path resolution)
+#   PWD: Current working directory (for source blend path resolution)
+#   NEMO_RUN_DIR: Run directory root for portable outputs
 
 # Path to data blend JSON file
 blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json
 
-# Output directory for resolved JSONL data (outputs to job directory for persistence)
-output_dir: ${oc.env:PWD}/../output/stage2_rl_resolved
+# Output directory for resolved JSONL data
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_resolved
 
 # Limit rows per dataset for quick tests (null = no limit)
 sample: null

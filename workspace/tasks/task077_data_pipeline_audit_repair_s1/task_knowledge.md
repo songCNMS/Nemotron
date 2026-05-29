@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -122,5 +122,10 @@
 110. file change: `splits.py` now removes stale `.parquet` file/symlink entries whose names are not in the current desired shard set, preserves non-parquet sidecars, and fails clearly on stale/current parquet directories or non-file blockers.
 111. test evidence: Task134 focused split utility tests passed with 4 tests; Stage1 SFT roundtrip smoke passed; py_compile, Ruff, structured stale-cleanup probe, and diff checks passed.
 112. file change: PR #242 opened against `main` for task134 SFT split-dir stale shard cleanup.
+113. supervisor request: PM assigned task138 to align generic Super3 Stage2 RL data-prep default YAML output portability with `RLDataPrepConfig`.
+114. technical fact: `RLDataPrepConfig.output_dir` defaults to `NEMO_RUN_DIR`-relative `output/super3/stage2_rl_resolved`, while the generic YAML previously used `${oc.env:PWD}/../output/stage2_rl_resolved`.
+115. file change: `stage2_rl/config/data_prep/default.yaml` now uses `${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_resolved` for `output_dir`; `tiny.yaml` and bridge consumer configs were unchanged.
+116. test evidence: Task138 focused Stage2 RL defaults shard passed with 17 tests; py_compile, Ruff, structured OmegaConf probe, and diff checks passed.
+117. file change: PR #245 opened against `main` for task138 Stage2 RL data-prep output portability.
 
 ---
