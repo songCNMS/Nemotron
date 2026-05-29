@@ -30,6 +30,9 @@ DATA_PREP_MPO = DATA_PREP_DIR / "mpo.yaml"
 DATA_PREP_TEXT = DATA_PREP_DIR / "text.yaml"
 DATA_PREP_VISION = DATA_PREP_DIR / "vision.yaml"
 DATA_BLEND_RAW = DATA_PREP_DIR / "data_blend_raw.json"
+TEXT_BLEND_REPO_RELATIVE = (
+    "src/nemotron/recipes/omni3/stage1_rl/config/data_prep/data_blend_raw.json"
+)
 
 CONFIGS = (
     pytest.param("mpo-default", MPO_DEFAULT, id="mpo-default"),
@@ -247,6 +250,64 @@ def test_omni3_stage1_rl_data_prep_has_no_unpinned_hf_sources() -> None:
     for dataset in blend["datasets"]:
         assert dataset.get("path", "").startswith("hf://")
         assert dataset.get("revision"), "text blend HF dataset missing revision"
+
+
+def test_text_data_prep_blend_path_is_repo_relative_without_pwd() -> None:
+    text = DATA_PREP_TEXT.read_text(encoding="utf-8")
+    data = _load_config(DATA_PREP_TEXT)
+
+    assert "${oc.env:PWD}" not in text
+    assert data["blend_path"] == TEXT_BLEND_REPO_RELATIVE
+
+
+def test_text_data_prep_blend_path_resolves_from_non_repo_cwd(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    data = OmegaConf.to_container(OmegaConf.load(DATA_PREP_TEXT), resolve=True)
+    cfg = Omni3RLDataPrepConfig(**data)
+
+    assert cfg.blend_path == DATA_BLEND_RAW.resolve()
+
+
+def test_omni3_rl_data_prep_config_resolves_repo_relative_blend_path(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    cfg = Omni3RLDataPrepConfig(blend_path=TEXT_BLEND_REPO_RELATIVE)
+
+    assert cfg.blend_path == DATA_BLEND_RAW.resolve()
+
+
+def test_omni3_rl_data_prep_config_preserves_blend_path_overrides(
+    tmp_path: Path,
+) -> None:
+    absolute_blend = tmp_path / "blend.json"
+    relative_blend = Path("custom/blend.json")
+
+    absolute_cfg = Omni3RLDataPrepConfig(blend_path=absolute_blend)
+    relative_cfg = Omni3RLDataPrepConfig(
+        source_uri="hf://example/source",
+        source_revision="a" * 40,
+        blend_path=relative_blend,
+        output_dir=tmp_path / "out",
+        sample=7,
+        force=True,
+        execution_mode="batch",
+    )
+
+    assert absolute_cfg.blend_path == absolute_blend
+    assert relative_cfg.blend_path == relative_blend
+    assert relative_cfg.source_uri == "hf://example/source"
+    assert relative_cfg.source_revision == "a" * 40
+    assert relative_cfg.output_dir == tmp_path / "out"
+    assert relative_cfg.sample == 7
+    assert relative_cfg.force is True
+    assert relative_cfg.execution_mode == "batch"
 
 
 def test_text_data_prep_rejects_source_revision_without_matching_blend_row(

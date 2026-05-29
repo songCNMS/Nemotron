@@ -75,6 +75,19 @@ from nemotron.kit.train_script import (
 logger = logging.getLogger(__name__)
 
 _OUTPUT_BASE = Path(os.environ.get("NEMO_RUN_DIR", "."))
+_REPO_ROOT = Path(__file__).resolve().parents[5]
+_OMNI3_DATA_PREP_SOURCE_ROOT = Path("src/nemotron/recipes/omni3/stage1_rl/config/data_prep")
+
+
+def _resolve_omni3_repo_relative_source_path(path: Path) -> Path:
+    """Resolve checked-in Omni3 data-prep source paths from any caller CWD."""
+    if path.is_absolute():
+        return path
+    try:
+        path.relative_to(_OMNI3_DATA_PREP_SOURCE_ROOT)
+    except ValueError:
+        return path
+    return (_REPO_ROOT / path).resolve()
 
 
 class Omni3RLDataArtifact(Artifact):
@@ -178,6 +191,8 @@ class Omni3RLDataPrepConfig:
             self.output_dir = Path(self.output_dir)
         if isinstance(self.blend_path, str):
             self.blend_path = Path(self.blend_path)
+        if self.blend_path is not None:
+            self.blend_path = _resolve_omni3_repo_relative_source_path(self.blend_path)
         if isinstance(self.runs_root, str):
             self.runs_root = Path(self.runs_root)
 
