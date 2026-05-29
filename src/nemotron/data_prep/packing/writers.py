@@ -20,6 +20,7 @@ from typing import Any
 import numpy as np
 import pyarrow as pa
 import pyarrow.parquet as pq
+import xxhash
 
 
 def _normalize_compression(compression: str | None) -> str | None:
@@ -54,6 +55,30 @@ def _move_atomic(
         return
 
     raise RuntimeError(f"PyArrow filesystem does not support move/copy_file+delete_file for: {type(filesystem)}")
+
+
+def _file_xxh64_info(
+    path: str,
+    filesystem: pa.fs.FileSystem | None,
+) -> tuple[int, str]:
+    hasher = xxhash.xxh64()
+    total_bytes = 0
+
+    if filesystem is None:
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                hasher.update(chunk)
+                total_bytes += len(chunk)
+    else:
+        with filesystem.open_input_file(path) as f:
+            while True:
+                chunk = f.read(1024 * 1024)
+                if not chunk:
+                    break
+                hasher.update(chunk)
+                total_bytes += len(chunk)
+
+    return total_bytes, f"xxh64:{hasher.hexdigest()}"
 
 
 class ParquetShardWriter:
@@ -154,12 +179,18 @@ class ParquetShardWriter:
         self._writer.close()
 
         _move_atomic(src=self.tmp_path, dst=self.output_path, filesystem=self.filesystem)
+        total_bytes, checksum = _file_xxh64_info(
+            self.output_path,
+            filesystem=self.filesystem,
+        )
 
         return {
             "format": "parquet",
             "compression": self.compression or "none",
             "num_bins": int(self._total_bins),
             "row_group_size": int(self.row_group_size),
+            "bytes": int(total_bytes),
+            "checksum": checksum,
         }
 
 

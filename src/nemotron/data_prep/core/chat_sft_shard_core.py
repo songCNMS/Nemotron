@@ -27,24 +27,23 @@ import pyarrow.parquet as pq
 from fsspec import AbstractFileSystem
 from transformers import PreTrainedTokenizerBase
 
+from nemotron.data_prep.config import FileInfo
 from nemotron.data_prep.core.chat_template import (
     create_masked_messages,
     replace_json_args,
     split_system_user_chunks,
     validate_conversation,
 )
-from nemotron.data_prep.config import FileInfo
-from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, read_json
 from nemotron.data_prep.packing.algorithms import get_packer
 from nemotron.data_prep.packing.bin_assignment import BinAssignment
 from nemotron.data_prep.packing.materialize import materialize_bin_arrays
-from nemotron.data_prep.packing.writers import ParquetShardWriter
 from nemotron.data_prep.packing.spool import (
     SequenceSpoolPaths,
     SequenceSpoolReader,
     SequenceSpoolWriter,
 )
-
+from nemotron.data_prep.packing.writers import ParquetShardWriter
+from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, read_json
 
 _BUILTIN_TEMPLATES = {"nano3", "super3"}
 _TOKENIZER_TEMPLATE_ALIASES = {"tokenizer", "tokenizer_default", "tokenizer-default"}
@@ -286,7 +285,11 @@ def process_chat_sft_spool_core(
             format_check_path.endswith(".jsonl") or format_check_path.endswith(".json")
         )
 
-        record_iter = _iter_parquet_records(normalized, input_fs) if is_parquet else _iter_jsonl_records(normalized, input_fs)
+        record_iter = (
+            _iter_parquet_records(normalized, input_fs)
+            if is_parquet
+            else _iter_jsonl_records(normalized, input_fs)
+        )
 
         if file_info.row_modulus is not None and file_info.row_remainder is not None:
             record_iter = _apply_row_filter(record_iter, file_info.row_modulus, file_info.row_remainder)
@@ -459,7 +462,12 @@ def process_chat_sft_parquet_from_spool_core(
         try:
             parquet_bytes = int(output_fs.size(parquet_path))
         except Exception:
-            parquet_bytes = 0
+            parquet_bytes = int(writer_result.get("bytes", 0) or 0)
+        if parquet_bytes <= 0:
+            parquet_bytes = int(writer_result.get("bytes", 0) or 0)
+        parquet_checksum = writer_result.get("checksum")
+        if not isinstance(parquet_checksum, str) or not parquet_checksum:
+            parquet_checksum = "xxh64:empty" if parquet_bytes == 0 else "xxh64:missing"
 
         stats: dict[str, Any] = {
             "num_sequences": num_sequences,
@@ -483,7 +491,7 @@ def process_chat_sft_parquet_from_spool_core(
             "parquet": {
                 "path": f"{shard_id}.parquet",
                 "bytes": parquet_bytes,
-                "checksum": "xxh64:unknown",
+                "checksum": parquet_checksum,
             },
             "input_files": [str(x) for x in input_files],
         }
