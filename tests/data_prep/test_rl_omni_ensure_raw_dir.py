@@ -24,6 +24,7 @@ from nemotron.data_prep.recipes.rl_omni import (
     _normalize_hf_repo_id,
     _raw_dir_is_present,
     ensure_raw_dir,
+    setup_rl_omni_run,
 )
 
 
@@ -56,7 +57,6 @@ class TestEnsureRawDirSkipsWhenStaged:
         (tmp_path / "mmpr_tiny.parquet").write_bytes(b"")
         # Trip-wire: if the helper tries to import snapshot_download we
         # know it didn't take the early-return path.
-        import nemotron.data_prep.recipes.rl_omni as mod
 
         original_import = __import__
 
@@ -101,8 +101,15 @@ class TestEnsureRawDirDownloads:
     ):
         calls: list[dict] = []
 
-        def fake_snapshot_download(*, repo_id, repo_type, local_dir):
-            calls.append({"repo_id": repo_id, "repo_type": repo_type, "local_dir": local_dir})
+        def fake_snapshot_download(*, repo_id, repo_type, local_dir, revision):
+            calls.append(
+                {
+                    "repo_id": repo_id,
+                    "repo_type": repo_type,
+                    "local_dir": local_dir,
+                    "revision": revision,
+                }
+            )
             # Simulate the real download by populating the expected files.
             Path(local_dir).mkdir(parents=True, exist_ok=True)
             (Path(local_dir) / "images.zip").write_bytes(b"")
@@ -121,17 +128,19 @@ class TestEnsureRawDirDownloads:
             flavor="tiny",
             raw_dir=tmp_path / "raw",
             source_uri="hf://OpenGVLab/MMPR-Tiny",
+            source_revision="eb493212c9614b69ca49cd6e66719413c514459b",
         )
 
         assert len(calls) == 1
         assert calls[0]["repo_id"] == "OpenGVLab/MMPR-Tiny"  # hf:// stripped
         assert calls[0]["repo_type"] == "dataset"
         assert calls[0]["local_dir"] == str((tmp_path / "raw").resolve())
+        assert calls[0]["revision"] == "eb493212c9614b69ca49cd6e66719413c514459b"
 
     def test_raises_when_download_doesnt_satisfy_requirements(
         self, tmp_path: Path, monkeypatch
     ):
-        def fake_snapshot_download(*, repo_id, repo_type, local_dir):
+        def fake_snapshot_download(*, repo_id, repo_type, local_dir, revision):
             # Simulate a download that succeeds but doesn't produce the
             # expected files (e.g. dataset layout changed).
             Path(local_dir).mkdir(parents=True, exist_ok=True)
@@ -151,3 +160,40 @@ class TestEnsureRawDirDownloads:
                 raw_dir=tmp_path / "raw",
                 source_uri="OpenGVLab/MMPR-Tiny",
             )
+
+
+class TestSetupRlOmniRunSourceIdentity:
+    def test_source_revision_changes_run_hash_and_config(self, tmp_path: Path):
+        raw_dir = tmp_path / "raw"
+        raw_dir.mkdir()
+        (raw_dir / "images.zip").write_bytes(b"")
+        (raw_dir / "mmpr_tiny.parquet").write_bytes(b"")
+        output_dir = tmp_path / "out"
+        runs_root = tmp_path / "runs"
+
+        _, ctx_a = setup_rl_omni_run(
+            flavor="tiny",
+            raw_dir=raw_dir,
+            output_dir=output_dir,
+            runs_root=runs_root,
+            meta_name="meta_public.json",
+            source_uri="hf://OpenGVLab/MMPR-Tiny",
+            source_revision="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        )
+        _, ctx_b = setup_rl_omni_run(
+            flavor="tiny",
+            raw_dir=raw_dir,
+            output_dir=output_dir,
+            runs_root=runs_root,
+            meta_name="meta_public.json",
+            source_uri="hf://OpenGVLab/MMPR-Tiny",
+            source_revision="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        )
+
+        assert ctx_a.run_hash != ctx_b.run_hash
+        config_a = (Path(ctx_a.run_dir) / "config.json").read_text(encoding="utf-8")
+        assert '"source_uri": "hf://OpenGVLab/MMPR-Tiny"' in config_a
+        assert (
+            '"source_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"'
+            in config_a
+        )

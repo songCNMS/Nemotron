@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 1 - 2026-05-28
 
@@ -112,3 +112,26 @@
 - Pinned the three M1 RLHF pref-data registry Hugging Face revisions, updated
   revision-audit tests, verified focused checks, and recorded this Session 17
   bookkeeping entry.
+
+## Session 18 - 2026-05-29
+
+- PM assigned `task123_omni3_rl_source_revision_pins_s1` while active intern
+  bookkeeping still requires task091 Session 18 records.
+- Synced local `main` to `origin/main`
+  `dc6e00e741c4189051bc4db4052283dbc78d0c13` and worked on branch
+  `intern_nem_dev_2/task123_omni3_rl_source_revision_pins_s1`.
+- Pinned Omni3 Stage1 RL MPO, Vision, and Text Hugging Face source revisions,
+  threaded source revision identity through RL-Omni download/cache/artifact
+  lineage, added focused tests/probes, and recorded this Session 18
+  bookkeeping entry.
+
+## Session 19 - 2026-05-29
+
+- PM added a pre-PR task123 guard request while active intern bookkeeping still
+  requires task091 Session 19 records.
+- Tightened Omni3 text data-prep validation so a configured `source_revision`
+  fails when `source_uri` has no matching dataset row in the loaded blend.
+- Added focused negative test/probe coverage for the missing matching blend row
+  case and recorded this Session 19 bookkeeping entry.
+- Opened task123 PR #231 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/231.

@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 import pytest
 import yaml
 from omegaconf import OmegaConf
+
+from nemotron.recipes.omni3.stage1_rl._data_prep_base import (
+    Omni3RLDataPrepConfig,
+    _prepare_text,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 MPO_DEFAULT = (
@@ -18,6 +25,11 @@ MPO_TINY = (
 TEXT_DEFAULT = (
     REPO_ROOT / "src/nemotron/recipes/omni3/stage1_rl/stage2_text_rl/config/default.yaml"
 )
+DATA_PREP_DIR = REPO_ROOT / "src/nemotron/recipes/omni3/stage1_rl/config/data_prep"
+DATA_PREP_MPO = DATA_PREP_DIR / "mpo.yaml"
+DATA_PREP_TEXT = DATA_PREP_DIR / "text.yaml"
+DATA_PREP_VISION = DATA_PREP_DIR / "vision.yaml"
+DATA_BLEND_RAW = DATA_PREP_DIR / "data_blend_raw.json"
 
 CONFIGS = (
     pytest.param("mpo-default", MPO_DEFAULT, id="mpo-default"),
@@ -75,6 +87,15 @@ PORTABLE_DEFAULT_BY_CONFIG_KEY = {
     "CONTAINER_ROOT": "output/omni3/stage1_rl/containers",
     "USER_ROOT": "output/omni3",
     "CACHE_ROOT": "output/omni3/.cache",
+}
+
+LOWER_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+EXPECTED_DATA_PREP_REVISIONS = {
+    "hf://OpenGVLab/MMPR": "fe3f35704dcfc2709a072b07df0ecab6046b2c0c",
+    "hf://OpenGVLab/MMPR-Tiny": "eb493212c9614b69ca49cd6e66719413c514459b",
+    "hf://nvidia/Nemotron-3-Nano-RL-Training-Blend": (
+        "ffd169f2b74bb492ec607d64bd56f7435054972b"
+    ),
 }
 
 
@@ -194,3 +215,67 @@ def test_mpo_tiny_keeps_tiny_job_name_and_one_node_defaults() -> None:
         "${oc.env:OMNI3_MPO_JOB_NAME,mpo-nanov3omni-mmpr-public-tiny}"
     )
     assert env_vars["NUM_NODES"] == "${oc.env:OMNI3_MPO_NUM_NODES,1}"
+
+
+def test_omni3_stage1_rl_data_prep_sources_are_revision_pinned() -> None:
+    configs = [
+        _load_config(DATA_PREP_MPO),
+        _load_config(DATA_PREP_TEXT),
+        _load_config(DATA_PREP_VISION),
+    ]
+    for data in configs:
+        source_uri = data["source_uri"]
+        expected_revision = EXPECTED_DATA_PREP_REVISIONS[source_uri]
+        assert data["source_revision"] == expected_revision
+        assert LOWER_SHA_RE.match(data["source_revision"])
+
+    blend = json.loads(DATA_BLEND_RAW.read_text(encoding="utf-8"))
+    datasets = blend["datasets"]
+    assert len(datasets) == 1
+    assert datasets[0]["path"] == "hf://nvidia/Nemotron-3-Nano-RL-Training-Blend"
+    assert datasets[0]["revision"] == EXPECTED_DATA_PREP_REVISIONS[datasets[0]["path"]]
+    assert LOWER_SHA_RE.match(datasets[0]["revision"])
+
+
+def test_omni3_stage1_rl_data_prep_has_no_unpinned_hf_sources() -> None:
+    for path in (DATA_PREP_MPO, DATA_PREP_TEXT, DATA_PREP_VISION):
+        data = _load_config(path)
+        assert data.get("source_uri")
+        assert data.get("source_revision"), f"{path.name} missing source_revision"
+
+    blend = json.loads(DATA_BLEND_RAW.read_text(encoding="utf-8"))
+    for dataset in blend["datasets"]:
+        assert dataset.get("path", "").startswith("hf://")
+        assert dataset.get("revision"), "text blend HF dataset missing revision"
+
+
+def test_text_data_prep_rejects_source_revision_without_matching_blend_row(
+    tmp_path: Path,
+) -> None:
+    blend_path = tmp_path / "blend.json"
+    blend_path.write_text(
+        json.dumps(
+            {
+                "datasets": [
+                    {
+                        "name": "other",
+                        "path": "hf://example/Other-Dataset",
+                        "revision": "ffd169f2b74bb492ec607d64bd56f7435054972b",
+                        "split": "train",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cfg = Omni3RLDataPrepConfig(
+        stage="text",
+        dataset_name="text_only_rl_stage1",
+        source_uri="hf://nvidia/Nemotron-3-Nano-RL-Training-Blend",
+        source_revision="ffd169f2b74bb492ec607d64bd56f7435054972b",
+        blend_path=blend_path,
+        output_dir=tmp_path / "out",
+    )
+
+    with pytest.raises(ValueError, match="has no matching dataset row in blend"):
+        _prepare_text(cfg, tracking=None)

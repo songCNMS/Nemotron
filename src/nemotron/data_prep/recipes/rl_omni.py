@@ -109,6 +109,8 @@ class RlOmniRunContext:
     receipts_dir: str
     flavor: Literal["tiny", "mpo"]
     meta_name: str
+    source_uri: str | None = None
+    source_revision: str | None = None
 
 
 @dataclass(frozen=True)
@@ -162,6 +164,7 @@ def ensure_raw_dir(
     flavor: Literal["tiny", "mpo"],
     raw_dir: Path,
     source_uri: str | None,
+    source_revision: str | None = None,
 ) -> None:
     """Materialize the raw HF download under ``raw_dir`` if absent.
 
@@ -177,6 +180,8 @@ def ensure_raw_dir(
         source_uri: HF repo id (with or without ``hf://`` prefix) to
             download from. Read from the per-stage YAML
             (``vision.yaml`` / ``mpo.yaml``) by callers.
+        source_revision: Optional immutable HF revision passed through to
+            snapshot_download for reproducible source materialization.
     """
     raw_dir = raw_dir.expanduser().resolve()
     if _raw_dir_is_present(raw_dir, flavor):
@@ -212,6 +217,7 @@ def ensure_raw_dir(
         repo_id=repo_id,
         repo_type="dataset",
         local_dir=str(raw_dir),
+        revision=source_revision,
     )
     if not _raw_dir_is_present(raw_dir, flavor):
         # Defensive: HF snapshots can place files at unexpected paths
@@ -236,6 +242,8 @@ def _build_run_hash(
     meta_name: str,
     builder_command: str | None,
     force: bool,
+    source_uri: str | None,
+    source_revision: str | None,
 ) -> str:
     """Deterministic hash for the run; ``force`` salts with current time."""
     payload = {
@@ -245,6 +253,8 @@ def _build_run_hash(
         "output_dir": str(output_dir),
         "meta_name": meta_name,
         "builder_command": builder_command,
+        "source_uri": source_uri,
+        "source_revision": source_revision,
     }
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
     return digest if not force else f"{digest}_{int(time.time())}"
@@ -260,6 +270,7 @@ def setup_rl_omni_run(
     builder_command: str | None = None,
     force: bool = False,
     source_uri: str | None = None,
+    source_revision: str | None = None,
 ) -> tuple[list[VlmPreferencePrepWorkItem], RlOmniRunContext]:
     """Build the single work item driving the prep stage.
 
@@ -281,6 +292,8 @@ def setup_rl_omni_run(
         source_uri: HF repo id (e.g. ``hf://OpenGVLab/MMPR-Tiny``) used
             to auto-download into ``raw_dir`` when absent. Pre-staged
             ``raw_dir`` paths skip the download.
+        source_revision: Optional immutable HF revision used for download,
+            run hash identity, and persisted run config lineage.
 
     Returns:
         (work_items, context). Work items contain exactly one element.
@@ -293,7 +306,12 @@ def setup_rl_omni_run(
     # prep stage's missing-file diagnostics never fire on a
     # source_uri-equipped run. Pre-staged operators (raw_dir already
     # populated) get a no-op.
-    ensure_raw_dir(flavor=flavor, raw_dir=raw_dir, source_uri=source_uri)
+    ensure_raw_dir(
+        flavor=flavor,
+        raw_dir=raw_dir,
+        source_uri=source_uri,
+        source_revision=source_revision,
+    )
 
     # Receipts MUST live outside output_dir so a forced rebuild
     # (clear_output_dir(output_dir)) doesn't drop them. We exposed
@@ -320,6 +338,8 @@ def setup_rl_omni_run(
         meta_name=meta_name,
         builder_command=builder_command,
         force=force,
+        source_uri=source_uri,
+        source_revision=source_revision,
     )
     run_dir = str(runs_root / run_hash)
     Path(run_dir).mkdir(parents=True, exist_ok=True)
@@ -350,6 +370,8 @@ def setup_rl_omni_run(
                 "output_dir": str(output_dir),
                 "meta_name": meta_name,
                 "builder_command": builder_command,
+                "source_uri": source_uri,
+                "source_revision": source_revision,
             },
             indent=2,
         )
@@ -362,6 +384,8 @@ def setup_rl_omni_run(
         receipts_dir=receipts_dir,
         flavor=flavor,
         meta_name=meta_name,
+        source_uri=source_uri,
+        source_revision=source_revision,
     )
     return [work_item], context
 
@@ -422,6 +446,7 @@ def run_rl_omni_pipeline(
     observability: ObservabilityConfig | None = None,
     execution_mode: ExecutionModeRequest = "auto",
     source_uri: str | None = None,
+    source_revision: str | None = None,
 ) -> RlOmniPrepResult:
     """Convenience wrapper: setup → run pipeline → finalize.
 
@@ -441,6 +466,7 @@ def run_rl_omni_pipeline(
         builder_command=builder_command,
         force=force,
         source_uri=source_uri,
+        source_revision=source_revision,
     )
 
     pipeline_ctx = PipelineContext(

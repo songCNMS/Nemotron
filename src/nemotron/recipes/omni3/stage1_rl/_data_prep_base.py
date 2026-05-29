@@ -61,7 +61,7 @@ from nemotron.data_prep.recipes.rl_omni import (
     run_rl_omni_pipeline,
 )
 from nemotron.data_prep.utils.discovery import get_dataset_metadata
-from nemotron.data_prep.utils.hf_placeholder import HFPlaceholderResolver, NANO3_TARGET_DATASETS
+from nemotron.data_prep.utils.hf_placeholder import NANO3_TARGET_DATASETS, HFPlaceholderResolver
 from nemotron.kit import Artifact, SplitJsonlDataArtifact, print_step_complete, wandb_kit
 from nemotron.kit.trackers import InputDatasetInfo
 from nemotron.kit.train_script import (
@@ -88,6 +88,7 @@ class Omni3RLDataArtifact(Artifact):
     stage: str
     dataset_name: str
     source_uri: str | None = None
+    source_revision: str | None = None
 
     def _get_output_dir(self) -> Path:
         return self.path.parent if self.path.is_file() or self.path.suffix else self.path
@@ -122,6 +123,7 @@ class Omni3RLDataPrepConfig:
         stage: One of ``"mpo"``, ``"text"``, ``"vision"``.
         dataset_name: Logical dataset identifier for artifact lineage.
         source_uri: Upstream HF dataset URI for lineage tracking.
+        source_revision: Immutable upstream HF source revision/SHA.
         output_dir: Where the prepared cache / JSONL lands.
         force: Salt the run hash with the current time to bypass cache.
         sample: Optional row cap for quick tests (text flavor only).
@@ -138,6 +140,7 @@ class Omni3RLDataPrepConfig:
     stage: str = "vision"
     dataset_name: str = "mmpr_tiny"
     source_uri: str | None = None
+    source_revision: str | None = None
     output_dir: Path = field(default_factory=lambda: _OUTPUT_BASE / "stage1_rl/data_prep")
     force: bool = False
 
@@ -223,6 +226,7 @@ def _prepare_mpo(
         builder_command=cfg.builder_command,
         force=cfg.force,
         source_uri=cfg.source_uri,
+        source_revision=cfg.source_revision,
     )
 
     meta_path = result.output_dir / cfg.meta_name
@@ -231,10 +235,13 @@ def _prepare_mpo(
         stage=cfg.stage,
         dataset_name=cfg.dataset_name,
         source_uri=cfg.source_uri,
+        source_revision=cfg.source_revision,
         name="omni3/rl/mpo/data",
     )
     artifact.metadata["elapsed_sec"] = time.time() - start_time
     artifact.metadata["run_hash"] = result.run_hash
+    artifact.metadata["source_uri"] = cfg.source_uri
+    artifact.metadata["source_revision"] = cfg.source_revision
     _emit(artifact, tracking)
     return artifact
 
@@ -258,6 +265,22 @@ def _prepare_text(
         )
 
     blend = DataBlend.load(cfg.blend_path)
+    if cfg.source_revision:
+        matching_datasets = [
+            dataset for dataset in (blend.datasets or []) if dataset.path == cfg.source_uri
+        ]
+        if not matching_datasets:
+            raise ValueError(
+                f"stage='text' source_uri {cfg.source_uri!r} has no matching "
+                f"dataset row in blend {cfg.blend_path!s}"
+            )
+        blend_revisions = {dataset.revision for dataset in matching_datasets}
+        if blend_revisions and blend_revisions != {cfg.source_revision}:
+            blend_revision_display = sorted(repr(revision) for revision in blend_revisions)
+            raise ValueError(
+                f"stage='text' source_revision {cfg.source_revision!r} does not "
+                f"match blend revisions {blend_revision_display!r} for {cfg.source_uri!r}"
+            )
     output_dir = cfg.output_dir.expanduser()
     if cfg.sample is not None:
         output_dir = output_dir / f"sample-{cfg.sample}"
@@ -270,6 +293,8 @@ def _prepare_text(
     seen_keys: set[str] = set()
     for dataset in blend.datasets:
         key = f"{dataset.path}|{dataset.subset or ''}"
+        if dataset.revision:
+            key = f"{key}|{dataset.revision}"
         if key in seen_keys:
             continue
         seen_keys.add(key)
@@ -278,6 +303,7 @@ def _prepare_text(
             path=dataset.path,
             split=dataset.split,
             subset=dataset.subset,
+            revision=dataset.revision,
             text_field=dataset.text_field,
         )
         hf_metadata = get_dataset_metadata(ds_config)
@@ -288,6 +314,7 @@ def _prepare_text(
                 weight=dataset.weight,
                 split=dataset.split,
                 subset=dataset.subset,
+                revision=dataset.revision,
                 text_field=dataset.text_field,
                 num_rows=hf_metadata.num_rows,
                 size_bytes=hf_metadata.size_bytes,
@@ -369,6 +396,7 @@ def _prepare_vision(
         builder_command=None,  # tiny flavor uses vendored logic
         force=cfg.force,
         source_uri=cfg.source_uri,
+        source_revision=cfg.source_revision,
     )
 
     artifact = Omni3RLDataArtifact(
@@ -376,10 +404,13 @@ def _prepare_vision(
         stage=cfg.stage,
         dataset_name=cfg.dataset_name,
         source_uri=cfg.source_uri,
+        source_revision=cfg.source_revision,
         name="omni3/rl/vision/data",
     )
     artifact.metadata["elapsed_sec"] = time.time() - start_time
     artifact.metadata["run_hash"] = result.run_hash
+    artifact.metadata["source_uri"] = cfg.source_uri
+    artifact.metadata["source_revision"] = cfg.source_revision
     artifact.metadata["row_stats"] = result.stats
     _emit(artifact, tracking)
     return artifact

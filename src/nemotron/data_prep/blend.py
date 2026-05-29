@@ -31,6 +31,7 @@ class Dataset(BaseModel):
         weight: Relative weight in the blend (default: 1.0)
         split: HuggingFace split name (required for hf:// paths)
         subset: HuggingFace config/subset name
+        revision: Optional HuggingFace dataset revision/SHA
         text_field: Field containing text to tokenize (default: "text")
     """
 
@@ -39,6 +40,7 @@ class Dataset(BaseModel):
     weight: float = 1.0
     split: str | None = None
     subset: str | None = None
+    revision: str | None = None
     text_field: str = "text"
 
 
