@@ -5,7 +5,7 @@
 Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task173_super_vllm_cookbook_reasoning_parser_revision_pins_s1`
-Base: `3c1751adeea4eb26b7e6e8f41f9bb445ebc58f2d`
+Base: `e8c748fa834bb62acff2b81d1e26279994b84440`
 PR: https://github.com/songCNMS/Nemotron/pull/280
 
 ## Summary
