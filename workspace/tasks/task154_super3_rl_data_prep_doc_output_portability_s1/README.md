@@ -1,6 +1,6 @@
 # task154_super3_rl_data_prep_doc_output_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Scope
 
@@ -22,3 +22,4 @@
 - Branch: `intern_nem_dev_1/task154_super3_rl_data_prep_doc_output_portability_s1`
 - Base: `795eb92359257ed82816a8685db0f9cae1c751ae`
 - PR: https://github.com/songCNMS/Nemotron/pull/261
+- Merged: `f39a05f5181fcfc81273603cc6a0db2fdb7362fe`
