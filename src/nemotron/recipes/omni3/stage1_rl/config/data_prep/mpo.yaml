@@ -1,6 +1,7 @@
 stage: mpo
 dataset_name: mmpr_public
 source_uri: hf://OpenGVLab/MMPR
+source_revision: fe3f35704dcfc2709a072b07df0ecab6046b2c0c
 input_dir: ${oc.env:OMNI3_MMPR_PUBLIC_RAW,data/mmpr_public/raw}
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/stage1_rl/data_prep/mpo/MMPR-v1.2
 meta_name: meta_public.json

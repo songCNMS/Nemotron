@@ -37,30 +37,30 @@ import hashlib
 import json
 import logging
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Literal
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
 from fsspec import AbstractFileSystem
 
 from nemotron.data_prep.config import DatasetConfig, ObservabilityConfig
-from nemotron.data_prep.core.planning import PlanRequest, verify_jsonl_output
-from nemotron.data_prep.observability import pipeline_wandb_hook
-from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.core.finalize import scan_dataset_receipts
+from nemotron.data_prep.core.planning import PlanRequest, verify_jsonl_output
+from nemotron.data_prep.core.work_items import JsonlDatasetWorkItem, JsonlShardWorkItem
+from nemotron.data_prep.observability import pipeline_wandb_hook
+from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 from nemotron.data_prep.stages import (
     DownloadStage,
     DownloadStageConfig,
-    PlanStage,
     PipelineContext,
+    PlanStage,
 )
 from nemotron.data_prep.stages.jsonl_plan import JsonlPlanStageConfig
 from nemotron.data_prep.stages.jsonl_write import JsonlShardStage, JsonlShardStageConfig
+from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.data_prep.core.work_items import JsonlDatasetWorkItem, JsonlShardWorkItem
-from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 
 if TYPE_CHECKING:
     from nemotron.data_prep.blend import DataBlend
@@ -118,6 +118,7 @@ class JsonlPlanAdapter:
                 weight=item.weight,
                 split=item.split,
                 subset=item.subset,
+                revision=item.revision,
                 text_field=item.text_field,
             ),
             num_shards=item.num_shards,
@@ -161,7 +162,7 @@ class JsonlPlanAdapter:
 
 
 def setup_rl_run(
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     *,
     sample: int | None,
@@ -196,7 +197,7 @@ def setup_rl_run(
         dataset_path = dataset_path[5:]
 
     # Discover available splits from HF
-    available_splits = get_dataset_split_names(dataset_path)
+    available_splits = get_dataset_split_names(dataset_path, revision=dataset.revision)
 
     # Normalize split names for output directories
     split_name_mapping = {
@@ -217,6 +218,7 @@ def setup_rl_run(
             "path": dataset.path,
             "split": None,  # We process all splits
             "subset": dataset.subset,
+            "revision": dataset.revision,
             "text_field": getattr(dataset, "text_field", None) or "text",
         }],
         "output": {
@@ -253,6 +255,7 @@ def setup_rl_run(
                 weight=dataset.weight,
                 split=hf_split,
                 subset=dataset.subset,
+                revision=dataset.revision,
                 text_field=getattr(dataset, "text_field", None) or "text",
                 run_hash=run_hash,
                 run_dir=run_dir,
@@ -286,7 +289,10 @@ def finalize_rl_run(
         "validation": "val",
         "test": "test",
     }
-    split_dataset_names = [f"{dataset_name_base}__{split_name_mapping.get(split, split)}" for split in available_splits]
+    split_dataset_names = [
+        f"{dataset_name_base}__{split_name_mapping.get(split, split)}"
+        for split in available_splits
+    ]
     by_dataset = scan_dataset_receipts(run_dir, split_dataset_names, fs)
 
     split_paths: dict[str, str] = {}
@@ -353,7 +359,7 @@ def finalize_rl_run(
 
 def run_rl_resolve_pipeline(
     *,
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     sample: int | None = None,
     force: bool = False,

@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,10 @@
 13. session 17 note: RLHF preference registry rows can remain candidates while
     still carrying pinned Hugging Face revisions; synthetic unpinned required
     pref fixtures remain informational in the audit.
+14. session 18 note: Omni3 RL data-prep source revisions should participate in
+    both source materialization and cache identity; optional blend-level
+    revision fields keep text RL pins explicit without breaking existing
+    `DataBlend` users.
+15. session 19 note: when Omni3 text data-prep sets `source_revision`, the
+    configured `source_uri` must match at least one blend dataset row; otherwise
+    URI drift can bypass the config/blend consistency guard.

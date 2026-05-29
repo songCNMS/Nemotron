@@ -25,8 +25,8 @@ from typing import TYPE_CHECKING, Any, Protocol
 from urllib.parse import quote
 
 if TYPE_CHECKING:
-    from nemotron.kit.artifact import Artifact
     from nemo_runspec.artifact_registry import ArtifactRegistry
+    from nemotron.kit.artifact import Artifact
 
 
 @dataclass
@@ -42,6 +42,7 @@ class InputDatasetInfo:
         weight: Weight in the blend (default: 1.0)
         split: HuggingFace split name
         subset: HuggingFace config/subset name
+        revision: HuggingFace source revision/SHA
         text_field: Field containing text to tokenize
         num_rows: Number of rows (from HF metadata)
         size_bytes: Size in bytes (from HF metadata)
@@ -53,6 +54,7 @@ class InputDatasetInfo:
     weight: float = 1.0
     split: str | None = None
     subset: str | None = None
+    revision: str | None = None
     text_field: str = "text"
     # Discovered metadata from planning phase
     num_rows: int | None = None
@@ -309,6 +311,8 @@ class WandbTracker:
                 metadata["split"] = ds.split
             if ds.subset:
                 metadata["subset"] = ds.subset
+            if ds.revision:
+                metadata["revision"] = ds.revision
             if ds.text_field != "text":
                 metadata["text_field"] = ds.text_field
             # Include discovered metadata from planning phase

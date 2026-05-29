@@ -289,6 +289,7 @@ class JsonlDatasetWorkItem:
     compression: Literal["none", "zstd"] = "none"
     max_rows: int | None = None
     resolve_hf_placeholders: bool = False
+    revision: str | None = None
 
 
 @dataclass

@@ -3,6 +3,7 @@
     {
       "name": "nemotron-3-nano-rl-training-blend",
       "path": "hf://nvidia/Nemotron-3-Nano-RL-Training-Blend",
+      "revision": "ffd169f2b74bb492ec607d64bd56f7435054972b",
       "split": "train",
       "weight": 1.0
     }

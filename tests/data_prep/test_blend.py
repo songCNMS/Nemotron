@@ -21,7 +21,6 @@ from pydantic import ValidationError
 
 from nemotron.data_prep.blend import DataBlend, Dataset
 
-
 # =============================================================================
 # Dataset
 # =============================================================================
@@ -36,6 +35,7 @@ class TestDataset:
         assert ds.text_field == "text"
         assert ds.split is None
         assert ds.subset is None
+        assert ds.revision is None
 
     def test_all_fields(self) -> None:
         ds = Dataset(
@@ -44,11 +44,13 @@ class TestDataset:
             weight=2.5,
             split="train",
             subset="en",
+            revision="1234567890abcdef1234567890abcdef12345678",
             text_field="content",
         )
         assert ds.weight == 2.5
         assert ds.split == "train"
         assert ds.subset == "en"
+        assert ds.revision == "1234567890abcdef1234567890abcdef12345678"
         assert ds.text_field == "content"
 
     def test_missing_required_fields(self) -> None:
@@ -152,7 +154,12 @@ class TestDataBlendLoad:
     def test_load_single_blend(self, tmp_path) -> None:
         data = {
             "datasets": [
-                {"name": "pile", "path": "hf://EleutherAI/pile", "split": "train"},
+                {
+                    "name": "pile",
+                    "path": "hf://EleutherAI/pile",
+                    "revision": "1234567890abcdef1234567890abcdef12345678",
+                    "split": "train",
+                },
             ]
         }
         path = tmp_path / "blend.json"
@@ -162,6 +169,7 @@ class TestDataBlendLoad:
         assert not blend.is_per_split
         assert len(blend.datasets) == 1
         assert blend.datasets[0].name == "pile"
+        assert blend.datasets[0].revision == "1234567890abcdef1234567890abcdef12345678"
 
     def test_load_per_split(self, tmp_path) -> None:
         data = {
