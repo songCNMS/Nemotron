@@ -13,6 +13,7 @@ import pytest
 from nemotron.data_prep.recipes import rl_local
 from nemotron.data_prep.recipes.rl_local import run_resolve_and_split, split_local_jsonl
 from nemotron.kit.train_script import resolve_repo_relative_source_path
+from nemotron.recipes.super3.stage2_rl._data_prep_base import SubStageDataPrepConfig
 from nemotron.recipes.super3.stage2_rl.data_prep import RLDataPrepConfig
 
 yaml = pytest.importorskip("yaml")
@@ -21,6 +22,7 @@ OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 STAGE2_RL_ROOT = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl"
+DATA_PREP_BASE = STAGE2_RL_ROOT / "_data_prep_base.py"
 GENERIC_DEFAULT_CONFIG = STAGE2_RL_ROOT / "config/data_prep/default.yaml"
 TINY_CONFIG = STAGE2_RL_ROOT / "config/data_prep/tiny.yaml"
 
@@ -79,6 +81,7 @@ RUNTIME_CONFIGS = {
     "rlhf": STAGE2_RL_ROOT / "stage3_rlhf/config/default.yaml",
 }
 EXPECTED_PERSISTENT_CACHE_GUIDANCE = "${NEMO_RUN_DIR:-.}/cache/super3/stage2_rl"
+EXPECTED_INPUT_PATH_EXAMPLE = "${NEMO_RUN_DIR:-.}/output/super3/stage2_rl/rlvr1.jsonl"
 
 
 def _load_yaml(path: Path) -> tuple[str, dict[str, object]]:
@@ -98,6 +101,20 @@ def test_stage2_rl_runtime_persistent_cache_comment_is_portable(
     assert "/lustre/" not in text
     assert data["run"]["env"]["persistent_cache"] == "", profile
     assert EXPECTED_PERSISTENT_CACHE_GUIDANCE in text
+
+
+def test_stage2_rl_data_prep_base_input_path_docstring_is_portable() -> None:
+    text = DATA_PREP_BASE.read_text(encoding="utf-8")
+
+    assert "/lustre/" not in text
+    assert EXPECTED_INPUT_PATH_EXAMPLE in text
+
+
+def test_stage2_rl_substage_data_prep_defaults_unchanged() -> None:
+    cfg = SubStageDataPrepConfig()
+
+    assert cfg.input_path == Path("data.jsonl")
+    assert cfg.output_dir.as_posix().endswith("output/super3/stage2_rl")
 
 
 @pytest.mark.parametrize("profile", sorted(CORE_BLEND_CONFIGS))
