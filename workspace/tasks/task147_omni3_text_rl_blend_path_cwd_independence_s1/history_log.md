@@ -18,3 +18,4 @@
   Ruff, structured non-repo CWD probe, static stale-PWD grep, no
   `train_script.py` diff, added-line live-surface scan, and diff check before
   staging.
+- Opened PR #254 to `main`: https://github.com/songCNMS/Nemotron/pull/254.
