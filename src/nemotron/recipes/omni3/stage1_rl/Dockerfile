@@ -14,11 +14,13 @@
 #     build steps) means upstream changes to NeMo-RL's Dockerfile
 #     can be re-pulled in by bumping ``NEMO_RL_REF``.
 #
-# Bump ``NEMO_RL_REF`` to the post-release branch (e.g. ``main`` or
-# a versioned tag) once the model ships and the omni branch is merged.
+# ``NEMO_RL_BRANCH`` keeps operator context visible, while
+# ``NEMO_RL_REF`` pins the expected branch head so mutable branch
+# movement cannot silently change this image.
 
 ARG BASE_IMAGE=nvcr.io/nvidia/cuda-dl-base:25.05-cuda12.9-devel-ubuntu24.04
-ARG NEMO_RL_REF=nano-v3-omni
+ARG NEMO_RL_BRANCH=nano-v3-omni
+ARG NEMO_RL_REF=98ba11c0a77e177a903cd3756570684437a08e8d
 ARG UV_VERSION=0.9.7
 ARG PYTHON_VERSION=3.12
 ARG MAX_JOBS=4
@@ -28,6 +30,7 @@ ARG NVIDIA_BUILD_REF
 
 FROM ${BASE_IMAGE} AS base
 
+ARG NEMO_RL_BRANCH
 ARG NEMO_RL_REF
 ARG UV_VERSION
 ARG PYTHON_VERSION
@@ -61,6 +64,9 @@ ENV TORCH_CUDA_ARCH_LIST="9.0 10.0"
 
 FROM base AS hermetic
 
+ARG NEMO_RL_BRANCH
+ARG NEMO_RL_REF
+
 WORKDIR /opt/nemo-rl
 
 # Recursive clone brings in NeMo-RL's submodules — most importantly the
@@ -68,8 +74,11 @@ WORKDIR /opt/nemo-rl
 # ``.gitmodules`` to point at ``aroshanghias-nvd/vllm`` for the omni
 # release).
 RUN git clone --recurse-submodules --depth 1 --shallow-submodules \
-        --branch ${NEMO_RL_REF} \
-        https://github.com/NVIDIA/NeMo-RL.git /opt/nemo-rl
+        --branch "${NEMO_RL_BRANCH}" \
+        https://github.com/NVIDIA/NeMo-RL.git /opt/nemo-rl && \
+    cd /opt/nemo-rl && \
+    test "$(git rev-parse HEAD)" = "${NEMO_RL_REF}" || \
+        (echo "NeMo-RL ${NEMO_RL_BRANCH} resolved to $(git rev-parse HEAD), expected ${NEMO_RL_REF}" >&2; exit 1)
 
 ARG MAX_JOBS
 ENV MAX_JOBS=${MAX_JOBS}

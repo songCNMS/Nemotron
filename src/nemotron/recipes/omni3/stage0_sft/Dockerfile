@@ -4,22 +4,32 @@
 # Bump as new RCs land and this image is re-tested.
 FROM nvcr.io/nvidian/nemo:26.04.rc7
 
+ARG MEGATRON_BRIDGE_BRANCH=nemotron_3_omni
+ARG MEGATRON_BRIDGE_REF=648756cb99eed872d9e577243495840b9395a6f7
+ARG MEGATRON_LM_BRANCH=nemotron_3_omni
+ARG MEGATRON_LM_REF=bdecae692af213add7d8434e129ae482465d9731
+
 # Use ``git clone`` rather than ``ADD <git-url>``: BuildKit's ADD strips
 # the .git directory, which breaks ``git submodule update`` and the
 # downstream ``git fetch`` in 3rdparty/Megatron-LM.
 #
 # The ``nemotron_3_omni`` branch is the current release branch for
-# the Nemotron 3 Omni model. Bump to a versioned tag (or ``main``)
-# when these changes merge upstream.
-RUN git clone --recurse-submodules --branch nemotron_3_omni \
-        https://github.com/NVIDIA-NeMo/Megatron-Bridge.git /workspace/Megatron-Bridge
+# the Nemotron 3 Omni model. ``MEGATRON_BRIDGE_REF`` pins the expected
+# branch head so mutable branch movement cannot silently change this image.
+RUN git clone --recurse-submodules --branch "${MEGATRON_BRIDGE_BRANCH}" \
+        https://github.com/NVIDIA-NeMo/Megatron-Bridge.git /workspace/Megatron-Bridge && \
+    cd /workspace/Megatron-Bridge && \
+    test "$(git rev-parse HEAD)" = "${MEGATRON_BRIDGE_REF}" || \
+        (echo "Megatron-Bridge ${MEGATRON_BRIDGE_BRANCH} resolved to $(git rev-parse HEAD), expected ${MEGATRON_BRIDGE_REF}" >&2; exit 1)
 
 WORKDIR /workspace/Megatron-Bridge
 
 RUN cd 3rdparty/Megatron-LM && \
     (git remote add adlr https://github.com/NVIDIA/Megatron-LM.git || true) && \
-    git fetch adlr nemotron_3_omni && \
-    git checkout adlr/nemotron_3_omni
+    git fetch adlr "${MEGATRON_LM_BRANCH}" && \
+    git checkout "adlr/${MEGATRON_LM_BRANCH}" && \
+    test "$(git rev-parse HEAD)" = "${MEGATRON_LM_REF}" || \
+        (echo "Megatron-LM ${MEGATRON_LM_BRANCH} resolved to $(git rev-parse HEAD), expected ${MEGATRON_LM_REF}" >&2; exit 1)
 
 # The base image sets ``VIRTUAL_ENV=/opt/venv``, which would make uv
 # install into the pre-existing base venv. That venv has many packages
