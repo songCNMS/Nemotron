@@ -22,5 +22,6 @@
 
 - Base: `e8c748fa834bb62acff2b81d1e26279994b84440`
 - Branch: `intern_nem_dev_1/task174_nano2_vl_invoice_parquet_revision_pin_s1`
-- PR: pending
-- Checks: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/281
+- Validated implementation head: `eb5502d255955dd23967a989aa43b33683d2d52d`
+- Checks: focused notebook pytest, py_compile, Ruff, structured notebook probe, added-line live-surface scan, and diff checks passed.

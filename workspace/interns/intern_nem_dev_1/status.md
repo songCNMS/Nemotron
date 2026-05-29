@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task174_nano2_vl_invoice_parquet_revision_pin_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/281 |
 | Session | 1 |
-| Recent Progress | Started task174 from origin/main e8c748fa834bb62acff2b81d1e26279994b84440; pinning Nano2-VL invoice parquet URL with static notebook coverage |
+| Recent Progress | Opened PR #281 for task174; Nano2-VL invoice parquet URL is pinned and static notebook checks passed |

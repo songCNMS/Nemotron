@@ -10,3 +10,7 @@
 - Cleared stale output for the touched notebook invoice cell.
 - Added focused static notebook JSON tests for the pinned URL, no floating
   `main` invoice URL, and no stale invoice download output.
+- Ran focused pytest, py_compile, Ruff, structured notebook probe,
+  added-line live-surface scan, `git diff --check`, and
+  `git diff --cached --check`.
+- Opened PR #281: https://github.com/songCNMS/Nemotron/pull/281
