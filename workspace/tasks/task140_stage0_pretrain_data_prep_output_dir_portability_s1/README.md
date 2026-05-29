@@ -23,4 +23,4 @@
 - Branch:
   `intern_nem_dev_3/task140_stage0_pretrain_data_prep_output_dir_portability_s1`
 - Base: `70d3541cdbc993fa113bdc62fa9be61f83b72d9e`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/247

@@ -11,3 +11,6 @@
   `${oc.env:NEMO_RUN_DIR,.}/output/super3/...`.
 - Added focused config tests for static defaults and OmegaConf resolution under
   a temporary `NEMO_RUN_DIR`.
+- Verified focused pytest, py_compile, Ruff, structured OmegaConf probe, and
+  diff checks before staging.
+- Opened PR #247 to `main`: https://github.com/songCNMS/Nemotron/pull/247.
