@@ -1,12 +1,13 @@
 # task160_omni3_valor32k_qa_zip_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: Ready for PM gate
+Status: Merged
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task160_omni3_valor32k_qa_zip_revision_pin_s1`
 Base: `9efec596f0401ab2fbe4909ac54e82be8872ec55`
-PR: https://github.com/songCNMS/Nemotron/pull/268
+PR: https://github.com/songCNMS/Nemotron/pull/268 (merged)
+Merge commit: `f437b05cd751a2fee36e40fd289f22d0744c0e5c`
 
 ## Summary
 
@@ -34,3 +35,12 @@ instead of the floating `refs/heads/main` ref.
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
 - PASS: added-line live-surface scan showed static revision pin, manifest metadata, tests, and task/status docs only
+
+## Closeout
+
+PM reported PR #268 merged and verified on `main` at
+`f437b05cd751a2fee36e40fd289f22d0744c0e5c`. Local `main` was
+fast-forwarded to the merge commit. No live Valor32k QA ZIP download,
+HF/dataset download, SFT data prep, ffmpeg/audio extraction, train/eval,
+endpoint, W&B, cluster, deploy, artifact upload/download, direct
+`main`/`master` push, or self-merge occurred.
