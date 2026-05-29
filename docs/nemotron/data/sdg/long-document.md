@@ -47,7 +47,7 @@ Each stage works in two modes:
    ```bash
    nemotron data sdg long-document ocr --batch <profile> -c 02-ocr \
        vllm_endpoint=http://compute-node:8000/v1 \
-       seed_path=/lustre/.../seed.parquet \
+       seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
        num_records=100
    ```
 
@@ -65,7 +65,7 @@ Producer stages (`ocr`, `text-qa`, `page-classification`, `visual-qa`, `single-p
 # runs the recipe against it, tears the deployment down on exit.
 nemotron data sdg long-document ocr --batch prep --serve \
     -c 02-ocr \
-    seed_path=/lustre/.../seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=100
 ```
 
@@ -115,7 +115,7 @@ See the [recipe README](https://github.com/NVIDIA/nemotron/tree/main/src/nemotro
 Once the pipeline runs, the resulting parquet files can be:
 
 - Published to Hugging Face Hub as a public dataset.
-- Stored in internal Lustre and registered as a Nemotron / W&B artifact.
+- Stored in internal shared output storage and registered as a Nemotron / W&B artifact.
 - Consumed directly by training recipes via `dataset.path` or HF-dataset-id config.
 
 The recipe README has copy-pasteable templates for both publish paths.
