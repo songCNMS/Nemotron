@@ -1,6 +1,6 @@
 # task125_qwen_eval_source_manifest_path_escape_guard_s1 knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Working Notes
 
@@ -10,3 +10,5 @@
   detect symlink escapes outside the repository.
 - The source-manifest helper now rejects directories after resolving the final
   target, preserving clear missing-file versus non-file messages.
+- Session 23 added bookkeeping only; no product behavior changed after PR #232
+  opened.
