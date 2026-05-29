@@ -26,20 +26,19 @@ run in sandbox CI without booting Megatron-Bridge / torch.
 from __future__ import annotations
 
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
 from nemotron.recipes.super3.milestones.data_registries.schema import (
-    KNOWN_BRIDGE_STATUSES,
     KNOWN_KINDS,
     bridge_mix_validator_factory,
     bridge_status_validator,
     m0_contamination_against_validator,
+    pref_contamination_against_validator,
     validate_rows,
     validate_top_level,
 )
-
 
 JsonDict = dict[str, Any]
 
@@ -133,6 +132,8 @@ def validate_unified_index(
         extra_validators = []
         if entry["kind"] == "m0_data_registry":
             extra_validators.append(m0_contamination_against_validator)
+        if entry["kind"] == "pref_data_registry":
+            extra_validators.append(pref_contamination_against_validator)
         if entry["kind"] == "bridge_env_registry":
             extra_validators.append(bridge_status_validator)
             if "expected_mixes" in entry:

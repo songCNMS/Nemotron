@@ -338,6 +338,11 @@ def test_rlhf_pref_data_registry_marks_helpsteer2_as_m0_landed() -> None:
     assert helpsteer2 is not None
     assert helpsteer2.get("m0_landed") is True
     assert helpsteer2.get("m0_data_row") == "m0_helpsteer2_pref"
+    assert helpsteer2["contamination_against"] == [
+        "MT-Bench",
+        "HelpSteer1",
+        "internal RLHF holdouts",
+    ]
 
 
 def test_rlhf_env_registry_genrm_compare_stays_blocked_external() -> None:

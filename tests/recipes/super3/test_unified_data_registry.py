@@ -22,6 +22,7 @@ from nemotron.recipes.super3.milestones.data_registries.schema import (
     bridge_mix_validator_factory,
     bridge_status_validator,
     m0_contamination_against_validator,
+    pref_contamination_against_validator,
     validate_rows,
     validate_top_level,
 )
@@ -119,6 +120,40 @@ def test_m0_contamination_against_validator_enforces_list_of_strings() -> None:
     )
     assert "non-empty strings" in (
         m0_contamination_against_validator({"contamination_against": ["GSM8K test", ""]}, 0) or ""
+    )
+
+
+def test_pref_contamination_against_validator_enforces_required_rows() -> None:
+    exploratory = {"hf_revision_pin_required": False}
+    assert pref_contamination_against_validator(exploratory, 0) is None
+    assert "non-empty list" in (
+        pref_contamination_against_validator({"hf_revision_pin_required": True}, 0) or ""
+    )
+    assert "non-empty" in (
+        pref_contamination_against_validator(
+            {"m0_landed": True, "contamination_against": []}, 0
+        )
+        or ""
+    )
+    assert "entries must be non-empty strings" in (
+        pref_contamination_against_validator(
+            {
+                "hf_revision_pin_required": True,
+                "contamination_against": ["MT-Bench", ""],
+            },
+            0,
+        )
+        or ""
+    )
+    assert (
+        pref_contamination_against_validator(
+            {
+                "hf_revision_pin_required": True,
+                "contamination_against": ["MT-Bench"],
+            },
+            0,
+        )
+        is None
     )
 
 
@@ -317,6 +352,39 @@ registries:
 
     issues = validate_unified_index(index)
     assert any("contamination_against entries must be non-empty strings" in issue for issue in issues)
+
+
+def test_unified_index_rejects_required_pref_without_contamination_targets(
+    tmp_path: Path,
+) -> None:
+    pref_registry = tmp_path / "pref_registry.yaml"
+    pref_registry.write_text(
+        """schema_version: 1
+milestone: M1
+description: synthetic invalid pref data registry
+datasets:
+  - id: pref_missing_targets
+    hf_dataset: stub/pref
+    hf_revision_pin_required: true
+    license: mit
+""",
+        encoding="utf-8",
+    )
+    index = tmp_path / "unified_index.yaml"
+    index.write_text(
+        f"""schema_version: 1
+milestone: M1
+registries:
+  - id: pref_data_bad
+    kind: pref_data_registry
+    path: {pref_registry.name}
+    summary: bad pref contamination target fixture
+""",
+        encoding="utf-8",
+    )
+
+    issues = validate_unified_index(index)
+    assert any("contamination_against must be a non-empty list" in issue for issue in issues)
 
 
 # ---------- Live validation: every registry on main passes ----------

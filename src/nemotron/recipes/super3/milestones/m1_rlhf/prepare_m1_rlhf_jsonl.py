@@ -114,6 +114,7 @@ def load_rlhf_pref_data_registry(path: Path | None = None) -> list[JsonDict]:
     import yaml
 
     from nemotron.recipes.super3.milestones.data_registries.schema import (
+        pref_contamination_against_validator,
         validate_rows,
         validate_top_level,
     )
@@ -125,6 +126,7 @@ def load_rlhf_pref_data_registry(path: Path | None = None) -> list[JsonDict]:
     validate_rows(
         data,
         kind="pref_data_registry",
+        extra_validators=(pref_contamination_against_validator,),
         fail_fast=True,
         source_path=target,
     )

@@ -12,10 +12,10 @@ task058 license/contamination follow-up (task030 Session 7). Sister
 module to ``license_audit.py`` (share-alike cascade) and
 ``revision_audit.py`` (HF pin lint).
 
-Today's schema layer only enforces that ``contamination_against`` is a
-*present* required field on every ``m0_data_registry`` row. A row can
-ship as ``contamination_against: []`` or ``["TBD"]`` and the validator
-accepts it — the gap this module closes.
+Today's schema layer enforces that ``contamination_against`` is present
+on every ``m0_data_registry`` row and on operationally relevant
+``pref_data_registry`` rows. This audit verifies the field is meaningful
+rather than an empty list or placeholder-only list.
 
 Two classes of finding:
 
@@ -37,7 +37,6 @@ from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
-
 
 JsonDict = dict[str, Any]
 
@@ -168,8 +167,9 @@ def find_weak_contamination(
           ],
         }
 
-    pref_data_registry rows don't carry ``contamination_against`` —
-    skipped (handled separately by pref-data-specific audit if needed).
+    ``pref_data_registry`` rows are included only after they are promoted
+    enough to be operationally relevant: either ``m0_landed`` is true or
+    ``hf_revision_pin_required`` is true.
     """
     from nemotron.recipes.super3.milestones.data_registries.unified_index_loader import (
         INDEX_PATH,
@@ -181,7 +181,7 @@ def find_weak_contamination(
     blockers: list[JsonDict] = []
     informational: list[JsonDict] = []
     for entry in load_unified_index(target):
-        if entry["kind"] != "m0_data_registry":
+        if entry["kind"] not in ("m0_data_registry", "pref_data_registry"):
             continue
         registry_path = (target.parent / entry["path"]).resolve()
         if not registry_path.is_file():
@@ -189,6 +189,12 @@ def find_weak_contamination(
         data = load_registry_file(registry_path)
         for row in data.get("datasets") or []:
             if not isinstance(row, Mapping):
+                continue
+            if (
+                entry["kind"] == "pref_data_registry"
+                and not row.get("m0_landed")
+                and not row.get("hf_revision_pin_required")
+            ):
                 continue
             blocker_reasons, informational_reasons = _classify_row(row)
             if not blocker_reasons and not informational_reasons:
@@ -211,7 +217,10 @@ def format_contamination_report(result: Mapping[str, list]) -> str:
     blockers = result.get("blockers", [])
     informational = result.get("informational", [])
     if not blockers and not informational:
-        return "contamination audit: every m0_data_registry row has a real contamination_against list ✓\n"
+        return (
+            "contamination audit: every audited m0_data_registry and "
+            "pref_data_registry row has a real contamination_against list ✓\n"
+        )
     lines: list[str] = []
     if blockers:
         lines.append(
