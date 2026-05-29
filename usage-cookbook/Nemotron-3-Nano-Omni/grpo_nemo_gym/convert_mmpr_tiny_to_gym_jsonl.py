@@ -81,6 +81,21 @@ from pathlib import Path
 import pandas as pd
 from huggingface_hub import hf_hub_download
 
+try:
+    from nemotron.data_prep.utils.safe_zip import safe_extract_zip
+except ModuleNotFoundError:
+    # Support direct execution from a source checkout.
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
+    from nemotron.data_prep.utils.safe_zip import safe_extract_zip
+
+
+MMPR_TINY_REPO = "OpenGVLab/MMPR-Tiny"
+MMPR_TINY_REVISION = "eb493212c9614b69ca49cd6e66719413c514459b"
+MMPR_TINY_IMAGES_FILENAME = "images.zip"
+MMPR_TINY_PARQUET_FILENAME = "mmpr_tiny.parquet"
+
 
 # ---------------------------------------------------------------------------
 # Agent routing helpers (mirrors scripts/convert_to_gym_format.py)
@@ -142,29 +157,42 @@ def _unify_answer_format(question: str) -> str:
 # MMPR-Tiny download / loading
 # ---------------------------------------------------------------------------
 def _ensure_downloaded(cache_dir: str) -> None:
-    images_dir = os.path.join(cache_dir, "MMPR-Tiny", "images")
-    parquet_path = os.path.join(cache_dir, "mmpr_tiny.parquet")
-    ready_marker = os.path.join(cache_dir, ".mmpr_ready")
-    if os.path.exists(ready_marker):
+    cache_root = Path(cache_dir)
+    images_dir = cache_root / "MMPR-Tiny" / "images"
+    parquet_path = cache_root / MMPR_TINY_PARQUET_FILENAME
+    ready_marker = cache_root / ".mmpr_ready"
+    if ready_marker.exists():
         return
-    if os.path.exists(images_dir) and os.path.exists(parquet_path):
-        Path(ready_marker).write_text("ready\n")
+    if images_dir.exists() and parquet_path.exists():
+        ready_marker.write_text("ready\n")
         return
 
     print(f"Downloading MMPR-Tiny to {cache_dir} ...")
-    os.makedirs(cache_dir, exist_ok=True)
+    cache_root.mkdir(parents=True, exist_ok=True)
 
-    zip_path = hf_hub_download("OpenGVLab/MMPR-Tiny", "images.zip", repo_type="dataset")
+    zip_path = hf_hub_download(
+        MMPR_TINY_REPO,
+        MMPR_TINY_IMAGES_FILENAME,
+        repo_type="dataset",
+        revision=MMPR_TINY_REVISION,
+    )
+    tmp = cache_root / "_tmp_extract"
+    shutil.rmtree(tmp, ignore_errors=True)
     with zipfile.ZipFile(zip_path, "r") as zf:
-        tmp = os.path.join(cache_dir, "_tmp_extract")
-        zf.extractall(tmp)
-        shutil.move(os.path.join(tmp, "images"), images_dir)
-        os.rmdir(tmp)
+        safe_extract_zip(zf, tmp)
+        images_dir.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(tmp / "images"), images_dir)
+        shutil.rmtree(tmp)
 
-    pq = hf_hub_download("OpenGVLab/MMPR-Tiny", "mmpr_tiny.parquet", repo_type="dataset")
+    pq = hf_hub_download(
+        MMPR_TINY_REPO,
+        MMPR_TINY_PARQUET_FILENAME,
+        repo_type="dataset",
+        revision=MMPR_TINY_REVISION,
+    )
     shutil.copy(pq, parquet_path)
 
-    Path(ready_marker).write_text("ready\n")
+    ready_marker.write_text("ready\n")
     print("Download complete.")
 
 
