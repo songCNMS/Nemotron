@@ -170,6 +170,49 @@ def _resolve_val_holdout(input_path: Path, val_holdout: int | str) -> _ValHoldou
     return _ValHoldoutResolution(value=val_holdout, source="explicit")
 
 
+def _count_jsonl_rows(path: Path) -> int:
+    logger.info(f"Counting rows in {path}...")
+    total_rows = 0
+    with open(path) as f:
+        for _ in f:
+            total_rows += 1
+    logger.info(f"Total rows: {total_rows}")
+    return total_rows
+
+
+def _validate_bridge_manifest_holdout(
+    input_path: Path,
+    holdout: _ValHoldoutResolution,
+    *,
+    total_rows: int,
+    sample: int | None,
+) -> None:
+    if holdout.manifest_train_rows is not None and holdout.manifest_val_rows is not None:
+        manifest_total = holdout.manifest_train_rows + holdout.manifest_val_rows
+        if manifest_total != total_rows:
+            raise ValueError(
+                "Bridge manifest row count does not match combined JSONL: "
+                f"{holdout.manifest_path} counts train+val={manifest_total}, "
+                f"{input_path} rows={total_rows}. Regenerate the bridge output or "
+                "override val_holdout=<N> for manual/non-bridge inputs."
+            )
+
+    if holdout.source != "bridge_manifest":
+        return
+
+    if sample is not None and sample < total_rows:
+        raise ValueError(
+            "sample cannot truncate a bridge combined JSONL when val_holdout=auto "
+            f"(sample={sample}, rows={total_rows}). Set sample=null or override val_holdout=<N>."
+        )
+
+    if total_rows < holdout.value:
+        raise ValueError(
+            "Bridge manifest counts.val exceeds available combined JSONL rows: "
+            f"counts.val={holdout.value}, rows={total_rows}"
+        )
+
+
 # =============================================================================
 # Direct Path: split_local_jsonl
 # =============================================================================
@@ -182,6 +225,7 @@ def split_local_jsonl(
     val_holdout: int | str = 100,
     sample: int | None = None,
     force: bool = False,
+    _resolved_val_holdout: _ValHoldoutResolution | None = None,
 ) -> LocalSplitResult:
     """Split a local JSONL file into train/val by holding out the last N rows.
 
@@ -206,7 +250,7 @@ def split_local_jsonl(
     if not input_path.exists():
         raise FileNotFoundError(f"Input JSONL file not found: {input_path}")
 
-    holdout = _resolve_val_holdout(input_path, val_holdout)
+    holdout = _resolved_val_holdout or _resolve_val_holdout(input_path, val_holdout)
 
     # Compute deterministic run hash for caching
     stat = input_path.stat()
@@ -259,40 +303,18 @@ def split_local_jsonl(
     # Save run config
     (run_dir / "config.json").write_text(json.dumps(run_config, indent=2))
 
-    # Count total lines (streaming, memory-efficient)
-    logger.info(f"Counting rows in {input_path}...")
-    total_rows = 0
-    with open(input_path) as f:
-        for _ in f:
-            total_rows += 1
-    logger.info(f"Total rows: {total_rows}")
-
-    if holdout.manifest_train_rows is not None and holdout.manifest_val_rows is not None:
-        manifest_total = holdout.manifest_train_rows + holdout.manifest_val_rows
-        if manifest_total != total_rows:
-            raise ValueError(
-                "Bridge manifest row count does not match combined JSONL: "
-                f"{holdout.manifest_path} counts train+val={manifest_total}, "
-                f"{input_path} rows={total_rows}. Regenerate the bridge output or "
-                "override val_holdout=<N> for manual/non-bridge inputs."
-            )
-
-    if holdout.source == "bridge_manifest" and sample is not None and sample < total_rows:
-        raise ValueError(
-            "sample cannot truncate a bridge combined JSONL when val_holdout=auto "
-            f"(sample={sample}, rows={total_rows}). Set sample=null or override val_holdout=<N>."
-        )
+    total_rows = _count_jsonl_rows(input_path)
+    _validate_bridge_manifest_holdout(
+        input_path,
+        holdout,
+        total_rows=total_rows,
+        sample=sample,
+    )
 
     # Apply sample limit
     effective_total = min(total_rows, sample) if sample else total_rows
 
     # Compute split point
-    if holdout.source == "bridge_manifest" and effective_total < holdout.value:
-        raise ValueError(
-            "Bridge manifest counts.val exceeds available combined JSONL rows: "
-            f"counts.val={holdout.value}, rows={effective_total}"
-        )
-
     if holdout.source == "bridge_manifest" and effective_total == holdout.value:
         train_end = 0
         val_start = 0
@@ -424,6 +446,16 @@ def run_resolve_and_split(
     if not input_path.exists():
         raise FileNotFoundError(f"Input JSONL file not found: {input_path}")
 
+    holdout = _resolve_val_holdout(input_path, val_holdout)
+    if holdout.source == "bridge_manifest":
+        total_rows = _count_jsonl_rows(input_path)
+        _validate_bridge_manifest_holdout(
+            input_path,
+            holdout,
+            total_rows=total_rows,
+            sample=sample,
+        )
+
     # Phase 1: Resolve placeholders via xenna pipeline
     # Output goes to a 'resolved' subdirectory
     resolved_dir = output_dir / "resolved"
@@ -526,9 +558,10 @@ def run_resolve_and_split(
     return split_local_jsonl(
         resolved_path,
         output_dir,
-        val_holdout=val_holdout,
+        val_holdout=holdout.value,
         sample=None,  # Already applied during resolution
         force=force,
+        _resolved_val_holdout=holdout,
     )
 
 

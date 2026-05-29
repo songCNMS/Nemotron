@@ -20,8 +20,9 @@ input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr3/combined.jsonl
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/rlvr3
 
-# Number of rows to hold out for validation (from end of file)
-val_holdout: 100
+# Infer validation holdout from sibling manifest.json counts.val.
+# Override with an integer for manual/non-bridge JSONL inputs.
+val_holdout: auto
 
 # Limit rows per dataset for quick tests (null = no limit)
 sample: null

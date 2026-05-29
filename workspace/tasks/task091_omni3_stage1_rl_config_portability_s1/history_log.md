@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 1 - 2026-05-28
 
@@ -68,3 +68,14 @@
 - Added bridge manifest-inferred Stage2 RL data-prep holdouts for SWE1, SWE2,
   and RLHF, added focused tests/probe coverage, opened PR #216, and recorded
   this Session 13 bookkeeping entry.
+
+## Session 14 - 2026-05-29
+
+- PM assigned `task111_rlvr_bridge_manifest_val_holdout_auto_s1` while active
+  intern bookkeeping still requires task091 Session 14 records.
+- Synced local `main` to `origin/main`
+  `4bb920fd0e942a4d807394893c8bba5f2bb87952` and worked on branch
+  `intern_nem_dev_2/task111_rlvr_bridge_manifest_val_holdout_auto_s1`.
+- Extended bridge manifest-inferred validation holdouts to RLVR1/RLVR2/RLVR3,
+  patched the resolve-and-split path, added focused tests/probes, and recorded
+  this Session 14 bookkeeping entry.
