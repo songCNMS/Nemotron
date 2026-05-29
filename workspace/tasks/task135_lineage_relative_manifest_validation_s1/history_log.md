@@ -1,6 +1,6 @@
 # task135_lineage_relative_manifest_validation_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 - 2026-05-29
 
@@ -32,3 +32,11 @@
   entry after the handoff response.
 - Added this Session 3 bookkeeping entry and bumped task135 session metadata
   without changing product code or test files.
+
+## Session 4 - 2026-05-29
+
+- PM assigned task136 after PR #241 merged. GitHub reported PR #241 merged via
+  merge commit `691d50dfdad536409b2879638bc811355d6b7b20`.
+- Synced local `main` cleanly to `origin/main`
+  `691d50dfdad536409b2879638bc811355d6b7b20` before creating the task136
+  branch.
