@@ -78,7 +78,10 @@ receipts with structured ground-truth JSON labels.
 import json
 from datasets import load_dataset
 
-dataset = load_dataset("naver-clova-ix/cord-v2")
+dataset = load_dataset(
+    "naver-clova-ix/cord-v2",
+    revision="7f0115a4b758a71d6473b8d085751692da2fef98",
+)
 
 print(f"Train      : {len(dataset['train'])} samples")
 print(f"Validation : {len(dataset['validation'])} samples")
@@ -336,7 +339,10 @@ if hasattr(model, "vision_model") and hasattr(model.vision_model, "radio_model")
     model.vision_model.radio_model.summary_idxs = None
 model.eval()
 
-dataset = load_dataset("naver-clova-ix/cord-v2")
+dataset = load_dataset(
+    "naver-clova-ix/cord-v2",
+    revision="7f0115a4b758a71d6473b8d085751692da2fef98",
+)
 tokenizer = processor.tokenizer
 
 for i in [0, 20, 40, 60, 80]:
@@ -407,7 +413,10 @@ if hasattr(model, "vision_model") and hasattr(model.vision_model, "radio_model")
 
 model.eval()
 
-dataset = load_dataset("naver-clova-ix/cord-v2")
+dataset = load_dataset(
+    "naver-clova-ix/cord-v2",
+    revision="7f0115a4b758a71d6473b8d085751692da2fef98",
+)
 # Placeholder-expansion metadata, not `generate()` kwargs — drop before forwarding.
 PROCESSOR_METADATA_KEYS = ("num_patches", "num_tokens", "imgs_sizes")
 
