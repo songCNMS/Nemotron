@@ -1,6 +1,6 @@
 # task181_nano_omni_megatron_bridge_checkout_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -24,7 +24,10 @@
 - Base: `3394671e1fe0b5cf5aecd9d53b714f1c6e007b2f`
 - Branch: `intern_nem_dev_3/task181_nano_omni_megatron_bridge_checkout_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/288
-- Head: `b7a13b55617032fc90f781a48f3b98134d109821`
+- PR head: `485b8bf5f10cb990d487e6570b2bd6a929297e0b`
+- Merge SHA: `df45842edade40c19fd0496f3844ef20653a94cc`
 - Checks: focused static notebook pytest, adjacent Nano-Omni CORD-v2 notebook
   pytest, py_compile, Ruff, structured notebook probe, stale-branch grep,
   added-line live-surface scan, and `git diff --check` passed.
+- Session 2: PR #288 passed PM gate and independent exact-head gate, then
+  squash-merged to `main`; local `main` was synced to the merge SHA.
