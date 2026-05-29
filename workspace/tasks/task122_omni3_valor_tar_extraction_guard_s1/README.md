@@ -20,4 +20,4 @@
 
 - Branch: `intern_nem_dev_3/task122_omni3_valor_tar_extraction_guard_s1`
 - Base: `190e8c53c59c08696348b1ae7ca7b58ac4fc8633`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/229

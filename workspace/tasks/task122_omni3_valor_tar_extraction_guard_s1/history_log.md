@@ -1,6 +1,6 @@
 # task122_omni3_valor_tar_extraction_guard_s1 history
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 20 - 2026-05-29
 
@@ -16,4 +16,11 @@
   pre-existing symlink escape rejection.
 - Verified focused Omni3 pytest, py_compile, Ruff, structured tar probe,
   product shellout grep, and `git diff --check` before staging.
-- PR: pending.
+- Opened PR #229 to `main`: https://github.com/songCNMS/Nemotron/pull/229.
+
+## Session 21 - 2026-05-29
+
+- Responded to PM status check by confirming PR #229 was open against `main`
+  with base `190e8c53c59c08696348b1ae7ca7b58ac4fc8633`.
+- Updated task/status docs and external report evidence with PR URL, exact
+  base/head SHAs, checks, blockers, and residual risk.

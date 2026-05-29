@@ -1,6 +1,6 @@
 # task122_omni3_valor_tar_extraction_guard_s1 knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Working Notes
 
@@ -10,3 +10,5 @@
   member types or paths before any member is written.
 - Existing post-extraction MP4 layout checks remain in place after guarded
   extraction.
+- Session 21 added no implementation change; it recorded PR #229 readiness and
+  status/report evidence.
