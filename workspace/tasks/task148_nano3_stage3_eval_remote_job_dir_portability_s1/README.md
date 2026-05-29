@@ -1,6 +1,6 @@
 # task148_nano3_stage3_eval_remote_job_dir_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Scope
 
@@ -21,4 +21,6 @@
 
 - Branch: `intern_nem_dev_1/task148_nano3_stage3_eval_remote_job_dir_portability_s1`
 - Base: `311a407294be2de5413de3d300770b3c51afa986`
+- Final tested base: `652534e4865e20b72f4c80bf62b6c0cea5973fd1`
 - PR: https://github.com/songCNMS/Nemotron/pull/255
+- Merged: `5e1276eeba18cc0b1b55129363a4a51bf169b792`

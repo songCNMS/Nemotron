@@ -1,6 +1,6 @@
 # task148_nano3_stage3_eval_remote_job_dir_portability_s1 history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -29,3 +29,16 @@
   eval files.
 - Confirmed PR #255 is mergeable with clean merge state, so no rebase was
   needed.
+
+## Session 3 - 2026-05-29
+
+- Received PM confirmation that PR #255 merged after replacement exact-head PM
+  gate and independent test pass.
+- Recorded final tested base/head
+  `652534e4865e20b72f4c80bf62b6c0cea5973fd1` /
+  `e8d0180eb6abe23ff9c1ad4cc6003b8d331c243e`.
+- Recorded squash merge commit
+  `5e1276eeba18cc0b1b55129363a4a51bf169b792`.
+- Updated task and intern status bookkeeping from working to idle/completed.
+- No live eval, endpoint, W&B, cluster, deploy, data prep, training, artifact
+  download, direct `main`/`master` push, or self-merge was performed.
