@@ -19,7 +19,7 @@ Three properties of Nemotron 3 Super that directly affect inference configuratio
 Both vLLM and TRT-LLM require the Nemotron 3 Super reasoning parser. Download it before starting the server:
 
 ```bash
-wget https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4/raw/main/super_v3_reasoning_parser.py
+wget https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4/resolve/4f0cf9daaeb7a4d5e23f80a00e7ed15f0e03caf6/super_v3_reasoning_parser.py
 ```
 
 ---
@@ -35,7 +35,7 @@ vllm/vllm-openai:cu130-nightly
 ### Serve Command
 
 ```bash
-wget https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4/raw/main/super_v3_reasoning_parser.py
+wget https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4/resolve/4f0cf9daaeb7a4d5e23f80a00e7ed15f0e03caf6/super_v3_reasoning_parser.py
 
 docker run --rm -it --gpus all \
   -e VLLM_NVFP4_GEMM_BACKEND=marlin \
