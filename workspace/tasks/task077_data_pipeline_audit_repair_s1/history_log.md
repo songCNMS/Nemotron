@@ -170,4 +170,12 @@
 - Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, structured separate model/tokenizer render probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #210: https://github.com/songCNMS/Nemotron/pull/210
 
+- Task106 follow-up in same Session 17:
+- Read PM assignment for `task106_qwen_sft_data_prep_tokenizer_env_contract_s1`.
+- Fast-forwarded local `main` to `3ef4feb069d08748ae823af83678a908adb43335` and created branch `intern_nem_dev_1/task106_qwen_sft_data_prep_tokenizer_env_contract_s1`.
+- Updated `qwen_agentic_v0.yaml` so Qwen SFT data prep `tokenizer.model` prefers `SUPER3_M1_TOKENIZER_MODEL` and falls back to `SUPER3_M1_QWEN_HF_MODEL`.
+- Added focused Qwen config tests for both-env tokenizer preference and Qwen-HF fallback, with `validate_qwen_data_prep_config` on each resolved config.
+- Validation passed locally: focused Qwen/M1 SFT pytest shard, py_compile for touched test, Ruff for touched test, structured OmegaConf both-env/fallback probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #213: https://github.com/songCNMS/Nemotron/pull/213
+
 ---
