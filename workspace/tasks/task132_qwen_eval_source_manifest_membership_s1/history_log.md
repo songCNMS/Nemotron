@@ -14,3 +14,4 @@
   and an undeclared existing repo YAML is rejected.
 - Verified focused pytest, py_compile, Ruff, structured membership probe, and
   diff check before staging.
+- Opened PR #238 to `main`: https://github.com/songCNMS/Nemotron/pull/238.

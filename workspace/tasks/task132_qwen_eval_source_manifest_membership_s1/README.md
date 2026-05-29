@@ -22,4 +22,4 @@
 
 - Branch: `intern_nem_dev_3/task132_qwen_eval_source_manifest_membership_s1`
 - Base: `df587d239f573503347f7e36f5f8354ff581a186`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/238
