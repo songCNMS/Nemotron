@@ -39,6 +39,7 @@ REQUIRED_REFERENCE_MODEL_FIELDS = (
 REQUIRED_EVAL_PATH_FIELDS = (
     "endpoint_type",
     "chat_route",
+    "completions_route",
     "endpoint_url_shape",
     "chat_template_kwargs",
     "parser_contract",
@@ -331,6 +332,10 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
         if eval_path.get("chat_route") != "/v1/chat/completions":
             issues.append(
                 "intended_eval_path.chat_route must be /v1/chat/completions"
+            )
+        if eval_path.get("completions_route") != "/v1/completions":
+            issues.append(
+                "intended_eval_path.completions_route must be /v1/completions"
             )
         issues.extend(
             _validate_chat_template_kwargs(

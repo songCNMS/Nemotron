@@ -78,6 +78,7 @@ def test_qwen_eval_repro_gate_loads_valid_qwen_first_contract() -> None:
         "openai_chat_completions"
     )
     assert gate["intended_eval_path"]["chat_route"] == "/v1/chat/completions"
+    assert gate["intended_eval_path"]["completions_route"] == "/v1/completions"
 
 
 @requires_production_gate
@@ -334,6 +335,44 @@ def test_qwen_eval_repro_gate_rejects_missing_invalid_surface_type() -> None:
     issues = validate_qwen_eval_repro_gate(data)
 
     assert any("invalid_task_findings must cover issue types" in issue for issue in issues)
+
+
+def test_qwen_eval_repro_gate_validator_requires_slashless_intended_eval_routes() -> None:
+    data = deepcopy(_gate_data())
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert issues == []
+    assert data["intended_eval_path"]["chat_route"] == "/v1/chat/completions"
+    assert data["intended_eval_path"]["completions_route"] == "/v1/completions"
+
+
+def test_qwen_eval_repro_gate_rejects_missing_intended_completions_route() -> None:
+    data = deepcopy(_gate_data())
+    data["intended_eval_path"].pop("completions_route")
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "intended_eval_path missing required field 'completions_route'" in issue
+        for issue in issues
+    )
+    assert any(
+        "intended_eval_path.completions_route must be /v1/completions" in issue
+        for issue in issues
+    )
+
+
+def test_qwen_eval_repro_gate_rejects_trailing_slash_intended_completions_route() -> None:
+    data = deepcopy(_gate_data())
+    data["intended_eval_path"]["completions_route"] = "/v1/completions/"
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "intended_eval_path.completions_route must be /v1/completions" in issue
+        for issue in issues
+    )
 
 
 @requires_production_gate

@@ -1,6 +1,6 @@
 # task115_eval_openai_route_normalization_s1 knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Working Notes
 
@@ -10,3 +10,6 @@
   `m1_full_basket_launcher_available` inherit `default.yaml`; the focused
   loader test asserts the resolved launcher configs keep those inherited routes
   slashless.
+- Session 17 added no new task115 implementation knowledge. The follow-up
+  task117 enforces the same slashless route contract in the Qwen eval repro
+  gate's intended eval path.
