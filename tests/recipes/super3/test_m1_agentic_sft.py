@@ -564,6 +564,29 @@ def _prepare_quality_gate_args(
     )
 
 
+def _prepare_math_sidecar_quality_gate_args(
+    tmp_path: Path,
+    *,
+    fail_on_data_quality_issues: bool,
+) -> Namespace:
+    return Namespace(
+        m0_input_dir=tmp_path / "base_m0",
+        math_sidecar_m0_input_dir=tmp_path / "sidecar_m0",
+        math_sidecar_max_records_per_env=None,
+        math_sidecar_max_val_shadow_per_env=None,
+        output_dir=tmp_path / "out",
+        m0_health_baseline=None,
+        max_records_per_env=None,
+        max_val_shadow_per_env=None,
+        overwrite=False,
+        fail_on_data_quality_issues=fail_on_data_quality_issues,
+        math_supervision_strategy=MATH_SUPERVISION_STRATEGY_V3,
+        math_v3_verified_full_solution_weight=0.0,
+        math_v3_final_answer_aux_weight=1.0,
+        math_v3_format_repair_weight=0.0,
+    )
+
+
 def test_prepare_writes_train_shadow_and_blend(tmp_path) -> None:
     m0_root = tmp_path / "m0"
     env_dir = m0_root / "math_reasoning_numeric"
@@ -693,6 +716,132 @@ def test_prepare_strict_data_quality_gate_passes_clean_fixture(tmp_path) -> None
     )
 
     manifest = prepare(args)
+
+    strict = manifest["data_quality"]["strict_enforcement"]
+    assert strict == {
+        "enabled": True,
+        "checked_issue_counts": {
+            "missing_required_source_metadata_count": 0,
+            "duplicate_source_key_count": 0,
+            "duplicate_normalized_prompt_hash_count": 0,
+            "train_val_source_key_overlap_count": 0,
+            "train_val_normalized_prompt_overlap_count": 0,
+        },
+        "failing_checks": [],
+        "passed": True,
+    }
+
+
+def test_prepare_strict_data_quality_gate_fails_on_math_sidecar_issues(tmp_path) -> None:
+    args = _prepare_math_sidecar_quality_gate_args(
+        tmp_path,
+        fail_on_data_quality_issues=True,
+    )
+    _write_quality_gate_splits(
+        args.m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="base-train-source",
+                question="Base train prompt?",
+                source_row_index=1,
+            )
+        ],
+        val_records=[
+            _quality_gate_record(
+                source_id="base-val-source",
+                question="Base validation prompt?",
+                source_row_index=2,
+            )
+        ],
+    )
+    _write_quality_gate_splits(
+        args.math_sidecar_m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="sidecar-dup-source",
+                question="Sidecar prompt one?",
+                source_row_index=7,
+                include_license=False,
+            ),
+            _quality_gate_record(
+                source_id="sidecar-dup-source",
+                question="Sidecar prompt two?",
+                source_row_index=7,
+            ),
+        ],
+        val_records=[],
+    )
+
+    with pytest.raises(ValueError, match="strict data-quality gate failed"):
+        prepare(args)
+
+    manifest = json.loads((args.output_dir / "manifest.json").read_text(encoding="utf-8"))
+    base_quality = manifest["data_quality"]
+    assert base_quality["source_metadata"]["train"]["missing_required_fields"] == {}
+    assert base_quality["source_metadata"]["val_shadow"]["missing_required_fields"] == {}
+    assert base_quality["split_routing"]["train_val_source_key_overlap_count"] == 0
+
+    sidecar_quality = base_quality["training_sidecars"][MATH_BUCKET_FINAL_ANSWER_AUX]
+    assert sidecar_quality["rows"] == 2
+    assert sidecar_quality["missing_required_fields"] == {"license": 1}
+    assert sidecar_quality["duplicate_source_key_count"] == 1
+
+    strict = base_quality["strict_enforcement"]
+    assert strict["enabled"] is True
+    assert strict["passed"] is False
+    assert strict["checked_issue_counts"]["missing_required_source_metadata_count"] == 1
+    assert strict["checked_issue_counts"]["duplicate_source_key_count"] == 1
+    assert "missing_required_source_metadata_count" in strict["failing_checks"]
+    assert "duplicate_source_key_count" in strict["failing_checks"]
+
+    report_md = (args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "### Training sidecar data quality" in report_md
+    assert MATH_BUCKET_FINAL_ANSWER_AUX in report_md
+
+
+def test_prepare_strict_data_quality_gate_passes_clean_math_sidecar(tmp_path) -> None:
+    args = _prepare_math_sidecar_quality_gate_args(
+        tmp_path,
+        fail_on_data_quality_issues=True,
+    )
+    _write_quality_gate_splits(
+        args.m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="base-train-source",
+                question="Base train prompt?",
+                source_row_index=1,
+            )
+        ],
+        val_records=[
+            _quality_gate_record(
+                source_id="base-val-source",
+                question="Base validation prompt?",
+                source_row_index=2,
+            )
+        ],
+    )
+    _write_quality_gate_splits(
+        args.math_sidecar_m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="sidecar-clean-source",
+                question="Clean sidecar prompt?",
+                source_row_index=3,
+            )
+        ],
+        val_records=[],
+    )
+
+    manifest = prepare(args)
+
+    sidecar_quality = manifest["data_quality"]["training_sidecars"][
+        MATH_BUCKET_FINAL_ANSWER_AUX
+    ]
+    assert sidecar_quality["rows"] == 1
+    assert sidecar_quality["missing_required_fields"] == {}
+    assert sidecar_quality["duplicate_source_key_count"] == 0
+    assert sidecar_quality["validation_source_key_overlap_count"] == 0
 
     strict = manifest["data_quality"]["strict_enforcement"]
     assert strict == {
