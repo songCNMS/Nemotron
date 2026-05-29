@@ -12,7 +12,7 @@
 input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe2/combined.jsonl
 
 # Output directory
-output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/swe2
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl/swe2
 
 # Infer the bridge validation row count from sibling manifest.json counts.val.
 # Override with an integer for manual/non-bridge JSONL inputs.

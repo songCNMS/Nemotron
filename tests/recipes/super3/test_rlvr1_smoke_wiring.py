@@ -211,7 +211,9 @@ def test_data_prep_rlvr_defaults_preserve_data_prep_base_fields(mix: str) -> Non
     data = _load_data_prep_config(mix)
     for field in ("input_path", "output_dir", "val_holdout", "sample", "force"):
         assert field in data, f"data_prep {mix}.yaml missing field {field}"
-    assert data["output_dir"] == f"${{oc.env:PWD}}/../output/super3/stage2_rl/{mix}"
+    assert data["output_dir"] == (
+        f"${{oc.env:NEMO_RUN_DIR,.}}/output/super3/stage2_rl/{mix}"
+    )
     assert data["val_holdout"] == "auto"
     assert data["sample"] is None
     assert data["force"] is False

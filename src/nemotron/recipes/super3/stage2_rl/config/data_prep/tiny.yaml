@@ -12,7 +12,7 @@ run:
 blend_path: ${oc.env:PWD}/src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json
 
 # Output directory for resolved JSONL data
-output_dir: ${oc.env:PWD}/../output/super3/stage2_rl_tiny
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_tiny
 
 # Limit rows per dataset for quick tests - small sample for tiny
 sample: 1000
