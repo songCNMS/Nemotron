@@ -40,7 +40,7 @@ is on the shared mount and can then be reused from the `NemTron` node.
 ```bash
 source /work-agents/.venv/bin/activate
 python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516 \
+  --output-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516" \
   --max-train-per-dataset 100 \
   --max-val-per-dataset 25
 ```
@@ -63,7 +63,7 @@ model quality number.
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m0_data_env/run_m0_health_baseline.py \
-  --input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516 \
+  --input-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516" \
   --best-k 2
 ```
 
