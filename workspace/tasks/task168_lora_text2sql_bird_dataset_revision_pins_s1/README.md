@@ -1,12 +1,13 @@
 # task168_lora_text2sql_bird_dataset_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Idle,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Merged and verified
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task168_lora_text2sql_bird_dataset_revision_pins_s1`
 Base: `6328c018a86da7448e11a03bc1c71afc38e067f2`
-PR: https://github.com/songCNMS/Nemotron/pull/275
+PR: https://github.com/songCNMS/Nemotron/pull/275 (merged)
+Merge Commit: `6500fdaa27735197da87ca25d641a2883b00e8e6`
 
 ## Summary
 

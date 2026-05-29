@@ -1,6 +1,14 @@
 # task168_lora_text2sql_bird_dataset_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Closeout Notes
+
+- PR #275 was squash-merged and verified on `main` at
+  `6500fdaa27735197da87ca25d641a2883b00e8e6`.
+- Local `main` has been synced to the verified merge commit.
+- No new product behavior was added in Session 2; this session is closeout
+  bookkeeping only.
 
 ## Working Notes
 
