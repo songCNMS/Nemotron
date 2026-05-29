@@ -22,4 +22,4 @@
 - Branch:
   `intern_nem_dev_2/task142_stage2_rl_data_prep_profile_output_dir_portability_s1`
 - Base: `494eb6d147dd4e3d5a7f959df3a5cb57fcfe77db`
-- PR: Pending
+- PR: https://github.com/songCNMS/Nemotron/pull/249

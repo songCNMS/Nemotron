@@ -15,3 +15,6 @@
 - Added focused config tests for static defaults, OmegaConf resolution under a
   temporary `NEMO_RUN_DIR`, no remaining Stage2 RL data-prep `output_dir`
   `PWD` templates, and preserved bridge input/auto-holdout contracts.
+- Verified focused pytest, py_compile, Ruff, structured OmegaConf probe,
+  static no-remaining-PWD-output-dir grep, and diff checks.
+- Opened PR #249 to `main`: https://github.com/songCNMS/Nemotron/pull/249.
