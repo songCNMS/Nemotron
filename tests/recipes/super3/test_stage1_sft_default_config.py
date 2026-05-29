@@ -34,12 +34,11 @@ CORE_BLEND_CONFIGS = {
     ),
     "tiny": (
         DATA_PREP_CONFIG_DIR / "tiny.yaml",
-        "src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json",
+        "src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_tiny.json",
     ),
 }
-SUPER3_BLEND = (
-    DATA_PREP_CONFIG_DIR / "data_blend_raw.json"
-)
+SUPER3_BLEND = DATA_PREP_CONFIG_DIR / "data_blend_raw.json"
+SUPER3_TINY_BLEND = DATA_PREP_CONFIG_DIR / "data_blend_tiny.json"
 
 
 def test_super3_stage1_sft_default_uses_super3_blend() -> None:
@@ -60,6 +59,7 @@ def test_stage1_sft_core_blend_paths_are_repo_local(
     config = yaml.safe_load(text)
 
     assert config["blend_path"] == expected, profile
+    assert "/nano3/" not in config["blend_path"], profile
     assert "${oc.env:PWD}/src/" not in text
 
 
@@ -96,10 +96,21 @@ def test_stage1_sft_config_dataclass_preserves_relative_override() -> None:
     assert cfg.blend_path == Path("custom/blend.json")
 
 
-def test_super3_stage1_sft_default_has_no_nano_used_in_filter() -> None:
-    config = yaml.safe_load(DEFAULT_CONFIG.read_text(encoding="utf-8"))
+def test_stage1_sft_config_dataclass_preserves_absolute_override(tmp_path: Path) -> None:
+    override = tmp_path / "custom" / "blend.json"
+    cfg = SFTDataPrepConfig(blend_path=override)
 
-    assert config["used_in_filter"] is None
+    assert cfg.blend_path == override
+
+
+@pytest.mark.parametrize("profile", sorted(CORE_BLEND_CONFIGS))
+def test_super3_stage1_sft_core_profiles_have_no_nano_used_in_filter(
+    profile: str,
+) -> None:
+    config_path, _expected = CORE_BLEND_CONFIGS[profile]
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    assert config["used_in_filter"] is None, profile
 
 
 def test_super3_stage1_sft_blend_has_datasets() -> None:
@@ -107,6 +118,31 @@ def test_super3_stage1_sft_blend_has_datasets() -> None:
 
     assert isinstance(blend.get("datasets"), list)
     assert blend["datasets"], "Super3 stage1 SFT blend must not be empty"
+
+
+def test_super3_stage1_sft_tiny_blend_has_datasets() -> None:
+    blend = json.loads(SUPER3_TINY_BLEND.read_text(encoding="utf-8"))
+
+    assert isinstance(blend.get("datasets"), list)
+    assert blend["datasets"], "Super3 stage1 SFT tiny blend must not be empty"
+    assert all("/nano3/" not in json.dumps(dataset) for dataset in blend["datasets"])
+
+
+def test_super3_stage1_sft_tiny_preserves_non_blend_semantics() -> None:
+    config = yaml.safe_load((DATA_PREP_CONFIG_DIR / "tiny.yaml").read_text(encoding="utf-8"))
+
+    assert config["output_dir"] == "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_tiny"
+    assert config["num_shards"] == 4
+    assert config["tokenizer"] == {
+        "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+        "add_bos": False,
+        "add_eos": True,
+    }
+    assert config["pack_size"] == 4096
+    assert config["algorithm"] == "first_fit_shuffle"
+    assert config["chat_template"] == "super3"
+    assert config["sample"] == 1000
+    assert config["config_name"] == "tiny"
 
 
 @pytest.mark.parametrize(("profile", "config_path_suffix"), DATA_PREP_CONFIGS.items())

@@ -8,9 +8,8 @@ run:
 #   nemotron super3 data prep sft --config tiny
 #   nemotron super3 data prep sft --config tiny --run prep
 
-# Path to data blend JSON file
-# TODO(super3): Replace with super3-specific data blend once available
-blend_path: src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json
+# Path to Super3-owned tiny data blend JSON file
+blend_path: src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_tiny.json
 
 # Output directory for packed Parquet data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_tiny
@@ -53,9 +52,8 @@ messages_field: messages
 # Field name for tools definition in input records
 tools_field: tools
 
-# Filter to only include records where used_in contains this value
-# TODO(super3): Replace with super3-specific filter once available
-used_in_filter: nano_v3
+# Generic Super3 tiny blend rows are not required to carry a used_in tag.
+used_in_filter: null
 
 # Field name for used_in filtering
 used_in_field: used_in
