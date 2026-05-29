@@ -1,6 +1,6 @@
 # task143_m1_bridge_cli_output_dir_portability_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1 - 2026-05-29
 
@@ -16,3 +16,8 @@
 - Verified focused bridge/planner pytest shard, py_compile, Ruff, structured
   default-path probe, static stale-literal grep, and diff check before staging.
 - Opened PR #250 to `main`: https://github.com/songCNMS/Nemotron/pull/250.
+
+## Session 6 - 2026-05-29
+
+- Added stop-hook bookkeeping for the already-open PR #250; no product or test
+  code changes were made in this session.
