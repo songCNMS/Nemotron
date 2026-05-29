@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task169_usage_cookbook_automodel_cord_v2_revision_pin_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=none,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
-| Current Task | task169_usage_cookbook_automodel_cord_v2_revision_pin_s1 |
+| Status | Idle |
+| Current Task | none |
 | PR | https://github.com/songCNMS/Nemotron/pull/276 |
-| Session | 1 |
-| Recent Progress | PR #276 opened for Nano-Omni AutoModel CORD-v2 cookbook revision pins after focused pytest, py_compile, Ruff, static probe/grep, live-surface scan, and diff checks passed |
+| Session | 2 |
+| Recent Progress | PR #276 merged and verified on main at 9cf231a697ab0decdcbbb890a805c61badbb1529; local main synced, closeout recorded, no live runs or main push |

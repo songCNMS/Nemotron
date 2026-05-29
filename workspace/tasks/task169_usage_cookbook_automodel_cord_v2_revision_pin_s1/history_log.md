@@ -1,6 +1,6 @@
 # task169_usage_cookbook_automodel_cord_v2_revision_pin_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -16,3 +16,14 @@
   probe, static unpinned-call grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check`.
 - Opened PR #276 to `main`: https://github.com/songCNMS/Nemotron/pull/276.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #276 exact-head gated, squash-merged, and verified on `main`
+  at `9cf231a697ab0decdcbbb890a805c61badbb1529`; tested head was
+  `11297b92ff25b5167a5cf69b509f7747b6160d82`.
+- Synced local `main` to `origin/main`
+  `9cf231a697ab0decdcbbb890a805c61badbb1529`.
+- Recorded closeout/status/report; no live `load_dataset`, HF download,
+  AutoModel training/inference, endpoint, W&B, cluster, deploy, artifact ops,
+  direct `main`/`master` push, or self-merge was performed.

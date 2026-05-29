@@ -1,6 +1,6 @@
 # task169_usage_cookbook_automodel_cord_v2_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -31,3 +31,9 @@ to the PM-verified Hugging Face dataset revision.
 ## PR
 
 - https://github.com/songCNMS/Nemotron/pull/276
+
+## Merge
+
+- Merged to `main` at `9cf231a697ab0decdcbbb890a805c61badbb1529`.
+- PM merged-main verification passed for focused pytest, `py_compile`, Ruff,
+  diff checks, and the structured Markdown/code-block revision probe.
