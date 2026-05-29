@@ -22,6 +22,7 @@ from typing import Any
 from nemotron.recipes.super3.milestones.m1_eval_basket.qwen_eval_repro_gate import (
     VALID_ARTIFACT_CHECK_STATUSES,
     is_remote_artifact_reference,
+    validate_local_raw_artifact_fingerprints,
     validate_raw_artifact_paths,
 )
 
@@ -531,6 +532,13 @@ def _validate_evidence_records(
                 f"{prefix}: missing raw artifact evidence cannot count as "
                 f"benchmark improvement evidence ({issue})"
             )
+        issues.extend(
+            validate_local_raw_artifact_fingerprints(
+                raw_paths,
+                record.get("raw_artifact_sha256"),
+                context=prefix,
+            )
+        )
         has_remote_raw_artifacts = isinstance(raw_paths, list) and any(
             isinstance(path, str) and is_remote_artifact_reference(path)
             for path in raw_paths
