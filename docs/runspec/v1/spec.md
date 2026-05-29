@@ -48,7 +48,7 @@ TOML table and its sub-tables.
 # /// script
 # [tool.runspec]
 # schema = "1"
-# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/main/docs/runspec/v1/spec.md"
+# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/510b6eec33edece3d212a3187b16db3d1b4a8a15/docs/runspec/v1/spec.md"
 # name = "nano3/pretrain"
 # image = "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano"
 # setup = "NeMo and all training dependencies are pre-installed in the image."
@@ -77,7 +77,7 @@ Each line is prefixed with `# ` per PEP 723 convention. The block starts with
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `schema` | `str` | `"1"` | Schema version. Always `"1"` for now. |
-| `docs` | `str` | `""` | URL to this specification. Enables agents and tools to fetch the spec for context. Use a raw GitHub URL (e.g., `https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/main/docs/runspec/v1/spec.md`). |
+| `docs` | `str` | `""` | URL to this specification. Enables agents and tools to fetch the spec for context. Use a raw GitHub URL (e.g., `https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/510b6eec33edece3d212a3187b16db3d1b4a8a15/docs/runspec/v1/spec.md`). |
 | `name` | `str` | `""` | Recipe identity (e.g., `"nano3/pretrain"`, `"nano3/data/prep/sft"`). Used in job names, display, and directory layout. |
 | `image` | `str?` | `null` | Default container image for remote execution. |
 | `setup` | `str` | `""` | Human-readable description of what the image provides or what setup is needed. |
