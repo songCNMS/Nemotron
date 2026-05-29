@@ -40,8 +40,8 @@ source-lineage report.
 - [x] Synthetic required pref candidates without pins remain informational.
 - [x] Focused pytest, registry validator, py_compile, Ruff, and diff
   whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending branch push.
+- https://github.com/songCNMS/Nemotron/pull/228
