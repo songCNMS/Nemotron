@@ -1,12 +1,14 @@
 # task178_nano_omni_grpo_rl_checkout_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Complete
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task178_nano_omni_grpo_rl_checkout_revision_pins_s1`
 Base: `67bb428e4a992c608b8795795ced4f3fa9b9271c`
 PR: https://github.com/songCNMS/Nemotron/pull/286
+PR head: `9e0f25c088a44d282792b649b6d34a62fe292b5f`
+Merged main: `c1781162a979bf62214d71f57313e68e8d237d9f`
 
 ## Summary
 
@@ -42,3 +44,16 @@ uses a fixed `nano-v3-omni` commit instead of a drifting branch head.
 - PASS: added-line live-surface scan showed notebook command examples and static docs/status only
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
+
+## Closeout
+
+- PM reported PR #286 passed PM gate, independent exact-head test, final exact-ref
+  check, and merged to `main` at
+  `c1781162a979bf62214d71f57313e68e8d237d9f`.
+- Local `main` was synced to the merged commit and closeout bookkeeping was
+  recorded on branch
+  `intern_nem_dev_2/task178_nano_omni_grpo_rl_checkout_revision_pins_s1_closeout_sync`.
+- No active task remains; status is Idle / Current Task None.
+- No notebook execution, live NeMo-RL git clone/fetch/checkout, container build,
+  data prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation,
+  `main`/`master` push, or self-merge was performed for closeout.
