@@ -7,7 +7,7 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task091_omni3_stage1_rl_config_portability_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/225 |
-| Session | 16 |
+| PR | Pending task121 PR |
+| Session | 17 |
 
-最近进展：Session 16 completed PM assignment `task118_stage1_rlvr_nemo_gym_fallback_contract_s1` from `origin/main` `40eab704f6d02dd65e94189f098e712be6a1f6f2`, branched `intern_nem_dev_2/task118_stage1_rlvr_nemo_gym_fallback_contract_s1`, removed the Stage1 RLVR empty NeMo-Gym fallback, verified focused tests/probes, and opened PR #225. No main/master push or self-merge; no live RL, NeMo-Gym launch, endpoint, W&B, cluster, or deploy runs.
+最近进展：Session 17 working PM assignment `task121_rlhf_pref_registry_revision_pins_s1` from `origin/main` `8e703277627132ee5277a1027034154d3726f163`, branched `intern_nem_dev_2/task121_rlhf_pref_registry_revision_pins_s1`, pinned the three RLHF preference-data registry HF revisions, and verified focused tests/probes. No main/master push or self-merge; no dataset download, data prep, train/eval, endpoint, W&B, cluster, or deploy runs.

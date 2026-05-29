@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 1 - 2026-05-28
 
@@ -101,3 +101,14 @@
 - Removed the Stage1 RLVR local NeMo-Gym converter fallback that could emit
   empty payloads with `stop_strings=None`, added focused tests/probes, and
   recorded this Session 16 bookkeeping entry.
+
+## Session 17 - 2026-05-29
+
+- PM assigned `task121_rlhf_pref_registry_revision_pins_s1` while active
+  intern bookkeeping still requires task091 Session 17 records.
+- Synced local `main` to `origin/main`
+  `8e703277627132ee5277a1027034154d3726f163` and worked on branch
+  `intern_nem_dev_2/task121_rlhf_pref_registry_revision_pins_s1`.
+- Pinned the three M1 RLHF pref-data registry Hugging Face revisions, updated
+  revision-audit tests, verified focused checks, and recorded this Session 17
+  bookkeeping entry.

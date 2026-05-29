@@ -23,6 +23,7 @@ datasets:
     # derived by tie-breaking on `helpfulness` + `coherence`. Session 2
     # converter handles the derivation.
     hf_revision_pin_required: true
+    hf_revision: 990b2711a36180dd19d9c94b8627844866f8982a
     source_url: https://huggingface.co/datasets/nvidia/HelpSteer2
     license: cc-by-4.0
     pref_pair_field: derived (helpfulness + coherence aggregate)
@@ -45,6 +46,7 @@ datasets:
     hf_split: train
     hf_val_split: null
     hf_revision_pin_required: true
+    hf_revision: 40b436560ca83a8dba36114c22ab3c66e43f6d5e
     source_url: https://huggingface.co/datasets/openbmb/UltraFeedback
     license: mit
     pref_pair_field: completions (per-completion fine-grained ratings; pair derived by aggregated score)
@@ -60,6 +62,7 @@ datasets:
     hf_split: train
     hf_val_split: null
     hf_revision_pin_required: true
+    hf_revision: 0b10ec0df32c919f95126b203c8f5962b6875896
     source_url: https://huggingface.co/datasets/argilla/distilabel-intel-orca-dpo-pairs
     license: apache-2.0
     pref_pair_field: "chosen + rejected (direct pair columns)"
