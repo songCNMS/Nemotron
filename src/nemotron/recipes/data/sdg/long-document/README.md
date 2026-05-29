@@ -99,7 +99,7 @@ The same stages, dispatched via `nemo-run`. Add `--run <profile>` (attached) or 
 ```bash
 nemotron data sdg long-document seed --batch prep \
     -c 01-seed num_docs=50 \
-    output_dir=/lustre/.../sdg/seeds
+    output_dir=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds
 ```
 
 For producer stages and the judge, you have two options for the model endpoint:
@@ -112,9 +112,9 @@ Same flow as standalone, plus `--run <profile>` / `--batch <profile>`. The recip
 nemotron data sdg long-document ocr --batch prep \
     -c 02-ocr \
     vllm_endpoint=http://compute-node-0001:8000/v1 \
-    seed_path=/lustre/.../seeds/seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=100 \
-    artifact_path=/lustre/.../sdg/ocr
+    artifact_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/ocr
 ```
 
 #### Option B — let the CLI auto-deploy with `--serve`
@@ -134,15 +134,15 @@ Drop the `vllm_endpoint=…` argument when using `--serve` — it's set automati
 # runs the recipe against it, tears the deployment down on exit.
 nemotron data sdg long-document ocr --batch prep --serve \
     -c 02-ocr \
-    seed_path=/lustre/.../seeds/seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=100 \
-    artifact_path=/lustre/.../sdg/ocr
+    artifact_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/ocr
 
 # Override the default deployment (e.g. test a different vLLM tuning):
 nemotron data sdg long-document single-page-qa --batch prep --serve \
     --serve-config qwen3-vl-30b \
     -c 06-single-page-qa \
-    seed_path=/lustre/.../seeds/seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=10000
 ```
 
@@ -170,9 +170,9 @@ nemotron data sdg long-document ocr  --batch prep --serve -c 02-ocr ...
 
 The `--serve` *serve* task always lands on a GPU partition (the cluster's `sdg_serve_partition` in `env.toml`, defaulting to `interactive`); the *client* task uses the regular `run_partition` / `batch_partition` of the env profile.
 
-### Lustre paths
+### Shared output paths
 
-- `seed_path`, `output_dir`, `artifact_path` should all be absolute paths on shared storage (Lustre on dlw). Relative paths resolve to the slurm job's working directory, which is generally not what you want.
+- `seed_path`, `output_dir`, `artifact_path` should all point at durable shared output storage. The examples below use `${NEMO_RUN_DIR:-.}/output/data/sdg/long-document`; set `NEMO_RUN_DIR` to a path visible to the client job and any manually launched model server for your cluster.
 - The serve sentinel lives at `${remote_job_dir}/sdg-deploy/<recipe-name>/<timestamp>/endpoint`.
 
 ### HF / API tokens
@@ -240,13 +240,13 @@ Slurm + Pyxis (1× H100):
 srun --partition=interactive --nodes=1 --ntasks=1 --gres=gpu:1 \
      --time=04:00:00 \
      --container-image=vllm/vllm-openai:v0.14.1 \
-     --container-mounts=/lustre:/lustre \
+     --container-mounts=${NEMO_RUN_DIR:-.}:${NEMO_RUN_DIR:-.} \
      bash -c "pip install open-clip-torch albumentations timm && \
               vllm serve nvidia/NVIDIA-Nemotron-Parse-v1.1 \
                 --tensor-parallel-size 1 \
                 --max-model-len 9000 \
                 --gpu-memory-utilization 0.85 \
-                --chat-template /lustre/.../chat_template.jinja \
+                --chat-template ${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/chat_template.jinja \
                 --trust-remote-code"
 ```
 
@@ -342,31 +342,31 @@ uv run --no-project 09-frontier-judge-sdg.py \
 # 1. Seed (CPU partition).
 nemotron data sdg long-document seed --batch prep \
     -c 01-seed \
-    output_dir=/lustre/.../sdg/seeds \
+    output_dir=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds \
     num_docs=1000
 
 # 2. OCR — auto-deploys nemotron-parse on a GPU node.
 nemotron data sdg long-document ocr --batch prep --serve \
     -c 02-ocr \
-    seed_path=/lustre/.../sdg/seeds/seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=10000 \
-    artifact_path=/lustre/.../sdg/ocr
+    artifact_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/ocr
 
 # 3. Single-page QA — auto-deploys Qwen3-VL-235B on 4× GPUs.
 nemotron data sdg long-document single-page-qa --batch prep --serve \
     -c 06-single-page-qa \
-    seed_path=/lustre/.../sdg/seeds/seed_per_page.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/seeds/seed_per_page.parquet \
     num_records=100000 \
-    artifact_path=/lustre/.../sdg/single_page_qa
+    artifact_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/single_page_qa
 
 # 4. Judge.
 nemotron data sdg long-document judge --batch prep \
     -c 09-judge \
-    seed_path=/lustre/.../sdg/single_page_qa/.../generated.parquet \
+    seed_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/single_page_qa/.../generated.parquet \
     endpoint=https://generativelanguage.googleapis.com/v1beta \
     model_id=gemini-2.5-flash-preview-04-17 \
     api_key_env=GEMINI_API_KEY \
-    artifact_path=/lustre/.../sdg/judged_single_page_qa
+    artifact_path=${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/judged_single_page_qa
 ```
 
 ## Troubleshooting
@@ -418,8 +418,9 @@ Recommended contents for `./published_dataset`:
 ### Private path: internal storage plus artifact registration
 
 ```bash
-mkdir -p /lustre/team/datasets/long-document-understanding-sdg/v1
-cp -R ./published_dataset/. /lustre/team/datasets/long-document-understanding-sdg/v1/
+export LONG_DOC_PUBLISH_DIR="${NEMO_RUN_DIR:-.}/output/data/sdg/long-document/internal/long-document-understanding-sdg/v1"
+mkdir -p "$LONG_DOC_PUBLISH_DIR"
+cp -R ./published_dataset/. "$LONG_DOC_PUBLISH_DIR"/
 ```
 
 If your environment uses Nemotron artifact logging:
@@ -427,7 +428,7 @@ If your environment uses Nemotron artifact logging:
 ```bash
 nemotron kit log-artifact data \
     --name omni3-long-document-sdg \
-    --path /lustre/team/datasets/long-document-understanding-sdg/v1
+    --path "$LONG_DOC_PUBLISH_DIR"
 ```
 
 Otherwise register manually through your standard W&B flow with `wandb.log_artifact`.
