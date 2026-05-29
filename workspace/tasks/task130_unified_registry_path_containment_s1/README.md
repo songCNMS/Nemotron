@@ -34,8 +34,8 @@ registry as clean, and inventory walks could read escaped registry files.
 - [x] Audit-only CLI regression proves escaped registry paths are rejected
   before a malicious row can be reported.
 - [x] Production unified index validation stays clean.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/239

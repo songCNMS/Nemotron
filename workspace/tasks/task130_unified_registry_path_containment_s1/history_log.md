@@ -28,3 +28,4 @@
   registry path instead of reading and reporting the malicious row.
 - Verified the expanded focused audit/registry shard, registry CLI, py_compile,
   Ruff, and structured audit CLI escape probe.
+- Opened PR #239 to `main`: https://github.com/songCNMS/Nemotron/pull/239.
