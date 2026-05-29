@@ -178,10 +178,10 @@ $ uv run nemotron nano3 pretrain --run YOUR-CLUSTER
 For direct execution outside this CLI, use the scripts in the [Megatron-Bridge](https://github.com/NVIDIA-NeMo/Megatron-Bridge) repository:
 
 ```bash
-# Clone the repository and checkout the nano-v3 branch
+# Clone the repository and checkout the pinned nano-v3 revision
 git clone https://github.com/NVIDIA-NeMo/Megatron-Bridge.git
 cd Megatron-Bridge
-git checkout nano-v3
+git checkout 1cedb0a9c5f79d2cd2b5226a86b794b9f0e048a8  # nano-v3
 
 # Run pretraining (inside container on compute node)
 python examples/recipes/nemotron_3/pretrain_nemotron_3_nano.py \

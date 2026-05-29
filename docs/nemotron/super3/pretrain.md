@@ -260,10 +260,10 @@ Each phase resumes from the previous phase's checkpoint automatically.
 For direct execution outside this CLI, use the scripts in the [Megatron-Bridge](https://github.com/NVIDIA-NeMo/Megatron-Bridge) repository:
 
 ```bash
-# Clone the repository and checkout the super-v3 branch
+# Clone the repository and checkout the pinned super-v3 revision
 git clone https://github.com/NVIDIA-NeMo/Megatron-Bridge.git
 cd Megatron-Bridge
-git checkout super-v3
+git checkout f570c0529c81b57cb2ae909bd31a19408c7f4583  # super-v3
 
 # Run pretraining with real data (inside container on compute node)
 torchrun --nproc-per-node=8 examples/models/nemotron_3/pretrain_nemotron_3_super.py \

@@ -109,10 +109,10 @@ Pass the desired config name via `--export-quant-cfg` to `quantize.py`.
 For direct execution, use the scripts in the [Megatron-Bridge](https://github.com/NVIDIA-NeMo/Megatron-Bridge) repository:
 
 ```bash
-# Clone the repository and checkout the super-v3 branch
+# Clone the repository and checkout the pinned super-v3 revision
 git clone https://github.com/NVIDIA-NeMo/Megatron-Bridge.git
 cd Megatron-Bridge
-git checkout super-v3
+git checkout f570c0529c81b57cb2ae909bd31a19408c7f4583  # super-v3
 ```
 
 ### Quantize
