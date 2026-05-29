@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task122_omni3_valor_tar_extraction_guard_s1,SESSION=21 -->
+<!-- METADATA:STATUS=Working,TASK=task125_qwen_eval_source_manifest_path_escape_guard_s1,SESSION=22 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task122_omni3_valor_tar_extraction_guard_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/229 |
-| Session | 21 |
-| Recent Progress | Opened PR #229 for Omni3 Valor32k guarded tar extraction and updated status/report evidence |
+| Current Task | task125_qwen_eval_source_manifest_path_escape_guard_s1 |
+| PR | pending |
+| Session | 22 |
+| Recent Progress | Hardened Qwen eval source-manifest path validation and passed focused pytest, py_compile, Ruff, structured probe, and diff check |
