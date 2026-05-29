@@ -1,6 +1,6 @@
 # task112_benchmark_alignment_local_artifact_fingerprint_s1 - Benchmark alignment local artifact fingerprint gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=15 -->
+<!-- METADATA:STATUS=InReview,ASSIGNEE=intern_nem_dev_3,SESSION=15 -->
 
 ## Background
 
@@ -36,8 +36,8 @@ pass with mutable local files and no content fingerprint.
   SHA mapping.
 - [x] Focused pytest, py_compile, Ruff, structured probe, and `git diff --check`
   pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/217

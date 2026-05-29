@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task112_benchmark_alignment_local_artifact_fingerprint_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/217 |
 | Session | 15 |
-| Recent Progress | Patched benchmark alignment validation to require SHA256 fingerprints for local raw artifacts while preserving remote PM-verified refs; focused pytest, py_compile, Ruff, and structured probe passed |
+| Recent Progress | Opened PR #217 for benchmark alignment local raw artifact SHA256 validation after focused pytest, py_compile, Ruff, structured probe, and diff checks passed |
