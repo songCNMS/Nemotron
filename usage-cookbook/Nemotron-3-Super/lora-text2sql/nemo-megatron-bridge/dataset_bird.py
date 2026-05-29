@@ -1,5 +1,8 @@
-from datasets import Dataset, load_dataset
 from base_sft_dataset import BaseSFTDataset
+from datasets import Dataset, load_dataset
+
+BIRD_SQL_DATASET_REPO = "xu3kev/BIRD-SQL-data-train"
+BIRD_SQL_DATASET_REVISION = "9122256f9d14752ed80fb9b7d158e21d9f9261aa"
 
 USER_MESSAGE_TEMPLATE = """
 {schema}
@@ -7,6 +10,7 @@ USER_MESSAGE_TEMPLATE = """
 {question}
 {evidence}
 """
+
 
 class DatasetBIRD(BaseSFTDataset):
 
@@ -36,7 +40,11 @@ class DatasetBIRD(BaseSFTDataset):
         }
 
     def _load_dataset(self) -> Dataset:
-        return load_dataset("xu3kev/BIRD-SQL-data-train", split="train")
+        return load_dataset(
+            BIRD_SQL_DATASET_REPO,
+            split="train",
+            revision=BIRD_SQL_DATASET_REVISION,
+        )
 
     def _prepare_dataset(self, dataset: Dataset):
         dataset = dataset.map(
