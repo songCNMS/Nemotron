@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task150_super3_stage1_sft_tiny_blend_contract_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/258 |
 | Session | 1 |
-| Recent Progress | Accepted task150 from origin/main 17ed7b0e5195878030ff09118fb79caee200b824; implementing Super3 Stage1 SFT tiny blend contract fix |
+| Recent Progress | Opened PR #258 for task150; Super3 Stage1 SFT tiny uses Super3-owned non-empty blend and null used_in_filter; focused checks passed |

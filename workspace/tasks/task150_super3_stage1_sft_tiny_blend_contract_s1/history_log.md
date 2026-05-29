@@ -16,3 +16,6 @@
 - Extended focused Stage1 SFT config tests for tiny/default blend ownership,
   non-repo CWD resolution, tiny blend contents, null filters, and override
   preservation.
+- Ran focused Stage1 SFT/Qwen pytest, py_compile, Ruff, structured YAML probe,
+  static stale-Nano3 blend grep, added-line live-surface scan, and diff checks.
+- Opened PR #258 to `main`: https://github.com/songCNMS/Nemotron/pull/258.
