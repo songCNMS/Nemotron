@@ -1,6 +1,6 @@
 # task158_nemotron_cc_fasttext_hf_revision_pin_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -18,3 +18,13 @@
   static/AST probe, `git diff --check`, `git diff --cached --check`, and
   added-line live-surface scan.
 - Opened PR #265 to `main`: https://github.com/songCNMS/Nemotron/pull/265.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #265 independently gated, squash-merged, and verified on
+  `main` at `9efec596f0401ab2fbe4909ac54e82be8872ec55`.
+- Confirmed PR #265 state `MERGED`; PR head was
+  `ac4627582d91f5cfcd4a250b107d3d89591203d2`.
+- Synced local `main` cleanly to merged `origin/main`
+  `9efec596f0401ab2fbe4909ac54e82be8872ec55`.
+- Recorded Session 2 closeout and returned status to idle with no active task.

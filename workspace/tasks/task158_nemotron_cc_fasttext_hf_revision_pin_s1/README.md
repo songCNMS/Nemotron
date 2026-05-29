@@ -1,12 +1,13 @@
 # task158_nemotron_cc_fasttext_hf_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: Ready for PM gate
+Status: Merged
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task158_nemotron_cc_fasttext_hf_revision_pin_s1`
 Base: `0b31358436c38e698c7c2bc3a89871df273df21c`
-PR: https://github.com/songCNMS/Nemotron/pull/265
+PR: https://github.com/songCNMS/Nemotron/pull/265 (merged)
+Merge commit: `9efec596f0401ab2fbe4909ac54e82be8872ec55`
 
 ## Summary
 
@@ -34,3 +35,12 @@ PM-provided Hugging Face commit revision.
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
 - PASS: added-line live-surface scan showed static revision pin, static test, and task/status docs only
+
+## Closeout
+
+PM reported PR #265 independently gated, squash-merged, and verified on
+`main` at `9efec596f0401ab2fbe4909ac54e82be8872ec55`. Local `main` was
+fast-forwarded to the merge commit. No live HF download, Nemotron-CC curation
+run, Ray/Curator pipeline execution, train/eval, endpoint, W&B, cluster,
+deploy, artifact upload/download, direct `main`/`master` push, or self-merge
+occurred.
