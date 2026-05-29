@@ -10,3 +10,7 @@
   `38b864d81d8bc42d6d7d892a0931f4c4c2517735`.
 - Added focused static notebook JSON tests for the pinned install reference,
   no floating `vllm.git@main`, and expected Nano2-VL vLLM cookbook context.
+- Ran focused pytest, py_compile, Ruff, structured notebook probe,
+  added-line live-surface scan, `git diff --check`, and
+  `git diff --cached --check`.
+- Opened PR #284: https://github.com/songCNMS/Nemotron/pull/284
