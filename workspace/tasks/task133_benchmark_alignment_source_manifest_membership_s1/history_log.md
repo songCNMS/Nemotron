@@ -16,3 +16,4 @@
   undeclared existing YAMLs, and preserved path guards.
 - Verified focused pytest, py_compile, Ruff, structured membership/path probe,
   and diff check before staging.
+- Opened PR #240 to `main`: https://github.com/songCNMS/Nemotron/pull/240.

@@ -21,4 +21,4 @@
 
 - Branch: `intern_nem_dev_3/task133_benchmark_alignment_source_manifest_membership_s1`
 - Base: `36101b1e2152fd3f52cea8b0af5770c57d881227`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/240
