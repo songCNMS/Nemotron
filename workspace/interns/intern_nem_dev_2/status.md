@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task160_omni3_valor32k_qa_zip_revision_pin_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Working,TASK=task165_data_blend_revision_propagation_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task160_omni3_valor32k_qa_zip_revision_pin_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/268 |
+| Current Task | task165_data_blend_revision_propagation_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/273 |
 | Session | 1 |
 
-最近进展：Opened PR #268 for `task160_omni3_valor32k_qa_zip_revision_pin_s1`: https://github.com/songCNMS/Nemotron/pull/268. Base `9efec596f0401ab2fbe4909ac54e82be8872ec55`; implementation head before PR bookkeeping `bf8b9e61855fa37f9d08749e99d341d81f1c076d`. Pinned the Omni3 Valor32k QA ZIP default away from floating `refs/heads/main` to exact commit `a1eeb58e16fbe84f43a3886fd72fe61fd208b7b2`, preserved operator overrides, and added focused static/AST tests. Checks passed: focused Valor32k pytest (`13 passed`), py_compile, Ruff, structured static/AST probe, diff checks, and added-line live-surface scan. No live Valor32k QA ZIP download, HF/dataset download, SFT data prep, ffmpeg/audio extraction, train/eval, endpoint, W&B, cluster, deploy, artifact upload/download, main/master push, or self-merge.
+最近进展：Opened PR #273 for `task165_data_blend_revision_propagation_s1`: https://github.com/songCNMS/Nemotron/pull/273. Base `83119f9ca83a4978773f4702ef0a4b48c0c4fe94`; implementation head before PR bookkeeping `2366df8f12f2d4ef4ccc82440568ccb977e2d1d6`. Threaded generic DataBlend dataset revisions through pretrain/SFT setup config, run hashes, work items, plan adapters, and artifact lineage; working state remains active until PM gate/merge. Checks passed: focused pytest (`6 passed`), py_compile, Ruff, structured revision propagation probe, offline AST probe, added-line live-surface scan, and diff checks. No live HF/dataset download, generic data prep run, train/eval, endpoint, W&B, cluster, deploy, artifact upload/download, main/master push, or self-merge.

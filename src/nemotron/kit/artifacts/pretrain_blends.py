@@ -104,15 +104,15 @@ class PretrainBlendsArtifact(Artifact):
     @classmethod
     def from_result(
         cls,
-        format_result: "FormatResult",
-        blend: "DataBlend",
+        format_result: FormatResult,
+        blend: DataBlend,
         tokenizer_model: str,
         blend_json_path: str | Path,
         *,
         text_field_default: str = "text",
         elapsed_sec: float = 0.0,
         name: str | None = None,
-    ) -> "PretrainBlendsArtifact":
+    ) -> PretrainBlendsArtifact:
         """Create artifact from pipeline format result.
 
         This is a convenience constructor that builds the source_datasets
@@ -137,6 +137,7 @@ class PretrainBlendsArtifact(Artifact):
                 weight=d.weight,
                 split=d.split,
                 subset=d.subset,
+                revision=d.revision,
                 text_field=d.text_field or text_field_default,
             )
             for d in blend.datasets

@@ -47,13 +47,12 @@ from __future__ import annotations
 import hashlib
 import json
 import time
+from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import TYPE_CHECKING, Any
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
-
-from collections.abc import Callable
 from fsspec import AbstractFileSystem
 
 from nemotron.data_prep.config import (
@@ -64,10 +63,11 @@ from nemotron.data_prep.config import (
     ObservabilityConfig,
     TokenizerConfig,
 )
-from nemotron.data_prep.observability import pipeline_wandb_hook
-from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.core.finalize import scan_dataset_receipts
 from nemotron.data_prep.core.planning import PlanRequest, resolve_tokenizer, verify_binidx_output
+from nemotron.data_prep.core.work_items import DatasetWorkItem, ShardWorkItem
+from nemotron.data_prep.observability import pipeline_wandb_hook
+from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 from nemotron.data_prep.stages import (
     BinIdxTokenizationStage,
     BinIdxTokenizationStageConfig,
@@ -77,9 +77,8 @@ from nemotron.data_prep.stages import (
     PlanStage,
     PlanStageConfig,
 )
+from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.data_prep.core.work_items import DatasetWorkItem, ShardWorkItem
-from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 
 if TYPE_CHECKING:
     from nemotron.data_prep.blend import DataBlend
@@ -122,6 +121,7 @@ class PretrainPlanAdapter:
                 weight=item.weight,
                 split=item.split,
                 subset=item.subset,
+                revision=item.revision,
                 text_field=item.text_field,
             ),
             num_shards=item.num_shards,
@@ -183,7 +183,7 @@ def _normalize_tokenizer(tokenizer: TokenizerConfig | Mapping[str, Any] | str) -
 
 
 def setup_pretrain_run(
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     tokenizer: TokenizerConfig | Mapping[str, Any] | str,
     *,
@@ -234,6 +234,7 @@ def setup_pretrain_run(
                 "weight": d.weight,
                 "split": d.split,
                 "subset": d.subset,
+                "revision": d.revision,
                 "text_field": getattr(d, "text_field", None) or text_field_default,
             }
             for d in blend.datasets
@@ -270,6 +271,7 @@ def setup_pretrain_run(
                 weight=d.weight,
                 split=d.split,
                 subset=d.subset,
+                revision=d.revision,
                 text_field=getattr(d, "text_field", None) or text_field_default,
                 run_hash=run_hash,
                 run_dir=run_dir,
@@ -297,7 +299,7 @@ def setup_pretrain_run(
 
 def finalize_pretrain_run(
     context: PretrainRunContext,
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
 ) -> FormatResult:
     """
@@ -360,7 +362,7 @@ def finalize_pretrain_run(
 
 
 def run_pretrain_pipeline(
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     tokenizer: TokenizerConfig | Mapping[str, Any] | str,
     *,
