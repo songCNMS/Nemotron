@@ -1,6 +1,6 @@
 # task166_embed_readme_pregenerated_dataset_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -34,3 +34,9 @@ Hugging Face revision already used by the default Stage0 SDG config.
 ## PR
 
 - https://github.com/songCNMS/Nemotron/pull/272
+
+## Merge
+
+- Merged to `main` at `07b55e3d96f36965a472a3b7eb89e5cc25c855fa`.
+- PM merged-main verification passed for focused pytest, `py_compile`, Ruff,
+  `git diff --check`, and the README/config revision-pin static guard.

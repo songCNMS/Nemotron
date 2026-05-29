@@ -1,6 +1,6 @@
 # task166_embed_readme_pregenerated_dataset_revision_pin_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -20,3 +20,13 @@
   `83119f9ca83a4978773f4702ef0a4b48c0c4fe94` after PR #271 merged and
   reran focused pytest, `py_compile`, Ruff, static grep, live-surface scan,
   and diff checks.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #272 merged and verified on `main` at
+  `07b55e3d96f36965a472a3b7eb89e5cc25c855fa`.
+- Synced local `main` to `origin/main`
+  `07b55e3d96f36965a472a3b7eb89e5cc25c855fa`.
+- Recorded closeout/status/report; no live `load_dataset`, HF download,
+  Embed SDG/data prep/finetune/eval, endpoint, W&B, cluster, deploy,
+  artifact ops, direct `main`/`master` push, or self-merge was performed.
