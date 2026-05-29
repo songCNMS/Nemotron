@@ -17,7 +17,7 @@ run:
 input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr2/combined.jsonl
 
 # Output directory
-output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/rlvr2
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl/rlvr2
 
 # Infer validation holdout from sibling manifest.json counts.val.
 # Override with an integer for manual/non-bridge JSONL inputs.

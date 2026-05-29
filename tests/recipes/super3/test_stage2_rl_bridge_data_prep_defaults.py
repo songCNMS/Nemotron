@@ -21,12 +21,96 @@ OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 REPO_ROOT = Path(__file__).resolve().parents[3]
 STAGE2_RL_ROOT = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl"
 GENERIC_DEFAULT_CONFIG = STAGE2_RL_ROOT / "config/data_prep/default.yaml"
+TINY_CONFIG = STAGE2_RL_ROOT / "config/data_prep/tiny.yaml"
 
 DEFAULTS = {
     "swe1": STAGE2_RL_ROOT / "stage2_swe1/config/data_prep/default.yaml",
     "swe2": STAGE2_RL_ROOT / "stage2_swe2/config/data_prep/default.yaml",
     "rlhf": STAGE2_RL_ROOT / "stage3_rlhf/config/data_prep/default.yaml",
 }
+
+PROFILE_CONFIGS = {
+    "tiny": TINY_CONFIG,
+    "rlvr1": STAGE2_RL_ROOT / "stage1_rlvr/config/data_prep/rlvr1.yaml",
+    "rlvr2": STAGE2_RL_ROOT / "stage1_rlvr/config/data_prep/rlvr2.yaml",
+    "rlvr3": STAGE2_RL_ROOT / "stage1_rlvr/config/data_prep/rlvr3.yaml",
+    **DEFAULTS,
+}
+
+EXPECTED_PROFILE_OUTPUT_SUFFIXES = {
+    "tiny": Path("output/super3/stage2_rl_tiny"),
+    "rlvr1": Path("output/super3/stage2_rl/rlvr1"),
+    "rlvr2": Path("output/super3/stage2_rl/rlvr2"),
+    "rlvr3": Path("output/super3/stage2_rl/rlvr3"),
+    "swe1": Path("output/super3/stage2_rl/swe1"),
+    "swe2": Path("output/super3/stage2_rl/swe2"),
+    "rlhf": Path("output/super3/stage2_rl/rlhf"),
+}
+
+EXPECTED_PROFILE_OUTPUT_DIRS = {
+    profile: f"${{oc.env:NEMO_RUN_DIR,.}}/{suffix.as_posix()}"
+    for profile, suffix in EXPECTED_PROFILE_OUTPUT_SUFFIXES.items()
+}
+
+EXPECTED_BRIDGE_INPUT_PATHS = {
+    "rlvr1": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr1/combined.jsonl",
+    "rlvr2": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr2/combined.jsonl",
+    "rlvr3": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr3/combined.jsonl",
+    "swe1": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe1/combined.jsonl",
+    "swe2": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_swe2/combined.jsonl",
+    "rlhf": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlhf/combined.jsonl",
+}
+
+
+def _load_yaml(path: Path) -> tuple[str, dict[str, object]]:
+    text = path.read_text(encoding="utf-8")
+    data = yaml.safe_load(text)
+    assert isinstance(data, dict), f"{path}: top-level YAML must be a mapping"
+    return text, data
+
+
+@pytest.mark.parametrize("profile", sorted(PROFILE_CONFIGS))
+def test_stage2_rl_data_prep_profile_output_dirs_are_portable(profile: str) -> None:
+    text, data = _load_yaml(PROFILE_CONFIGS[profile])
+
+    assert "/../output/super3/" not in text
+    assert data["output_dir"] == EXPECTED_PROFILE_OUTPUT_DIRS[profile]
+    assert "${oc.env:PWD}" not in data["output_dir"]
+    assert data["output_dir"].startswith("${oc.env:NEMO_RUN_DIR,.}/output/super3/")
+
+
+@pytest.mark.parametrize("profile", sorted(PROFILE_CONFIGS))
+def test_stage2_rl_data_prep_profile_output_dirs_resolve_under_run_dir(
+    profile: str,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setenv("NEMO_RUN_DIR", str(tmp_path))
+
+    cfg = OmegaConf.load(PROFILE_CONFIGS[profile])
+    output_dir = Path(cfg.output_dir)
+
+    assert output_dir == tmp_path / EXPECTED_PROFILE_OUTPUT_SUFFIXES[profile]
+    assert output_dir.is_relative_to(tmp_path / "output" / "super3")
+
+
+@pytest.mark.parametrize("profile", sorted(EXPECTED_BRIDGE_INPUT_PATHS))
+def test_stage2_rl_bridge_profiles_keep_input_and_auto_holdout(profile: str) -> None:
+    _, data = _load_yaml(PROFILE_CONFIGS[profile])
+
+    assert data["input_path"] == EXPECTED_BRIDGE_INPUT_PATHS[profile]
+    assert data["val_holdout"] == "auto"
+
+
+def test_stage2_rl_data_prep_output_dirs_do_not_use_pwd_template() -> None:
+    offenders = []
+    for path in STAGE2_RL_ROOT.rglob("config/data_prep/*.yaml"):
+        for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            stripped = line.strip()
+            if stripped.startswith("output_dir:") and "${oc.env:PWD}" in stripped:
+                offenders.append(f"{path.relative_to(REPO_ROOT)}:{line_no}:{stripped}")
+
+    assert offenders == []
 
 
 @pytest.mark.parametrize(("mix", "config_path"), DEFAULTS.items())
