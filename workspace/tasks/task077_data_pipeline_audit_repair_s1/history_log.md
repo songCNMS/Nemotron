@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ---
 
@@ -230,5 +230,17 @@
 - Added focused cross-registry coverage proving bundled active RLVR/SWE1/SWE2/RLHF rows satisfy the metadata contract, plus negative loader tests for missing active metadata and placeholder licenses.
 - Validation passed locally: required bridge pytest shard, py_compile, Ruff, structured registry active-row metadata probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #230: https://github.com/songCNMS/Nemotron/pull/230
+
+## Session 18 - 2026-05-29 - Task127 Qwen SFT target-family guard
+
+**Executor**: intern_nem_dev_1
+
+- Read PM assignment for `task127_sft_qwen_target_family_guard_s1`.
+- Synced and rebased the work onto current `origin/main` at `22d33bf428bed321c0277badc5d193ada62abf00` after PR #233.
+- Added a shared SFT data-prep target-family guard so recognizably Qwen tokenizer/model refs or Qwen tokenizer-template kwargs require `target_model_family=qwen` and `config_name=qwen_agentic_v0`.
+- Wired `SFTDataPrepConfig.__post_init__` through the shared guard while preserving legacy Super3/default/tiny/agentic_v0 configs with the Nemotron tokenizer and Super3 template.
+- Added focused tests proving `qwen_agentic_v0` and env variants pass, runnable defaults select `qwen_agentic_v0`, legacy Super3 configs remain valid with non-Qwen tokenizer refs, and Qwen-looking legacy overrides fail with actionable messages.
+- Validation passed locally: requested SFT/Qwen planner pytest shard, py_compile, Ruff, structured OmegaConf/env probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #234: https://github.com/songCNMS/Nemotron/pull/234
 
 ---

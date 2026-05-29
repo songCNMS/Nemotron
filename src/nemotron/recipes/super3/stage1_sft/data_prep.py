@@ -271,23 +271,21 @@ class SFTDataPrepConfig:
         if isinstance(self.output_dir, str):
             self.output_dir = Path(self.output_dir)
 
-        target_family = str(self.target_model_family).lower()
         config_name = str(self.config_name)
-        if target_family == "qwen" or config_name.startswith("qwen"):
-            from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
-                validate_qwen_data_prep_config,
-            )
+        from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (
+            validate_sft_data_prep_target_family_config,
+        )
 
-            validate_qwen_data_prep_config(
-                {
-                    "target_model_family": target_family,
-                    "config_name": config_name,
-                    "tokenizer": {"model": self.tokenizer.model},
-                    "chat_template": self.chat_template,
-                    "chat_template_kwargs": self.chat_template_kwargs,
-                },
-                config_path=config_name,
-            )
+        validate_sft_data_prep_target_family_config(
+            {
+                "target_model_family": str(self.target_model_family).lower(),
+                "config_name": config_name,
+                "tokenizer": {"model": self.tokenizer.model},
+                "chat_template": self.chat_template,
+                "chat_template_kwargs": self.chat_template_kwargs,
+            },
+            config_path=config_name,
+        )
 
         # Validate split ratios sum to 1.0
         total_ratio = self.train_ratio + self.valid_ratio + self.test_ratio

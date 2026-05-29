@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task124_bridge_active_row_metadata_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/230 |
-| Session | 17 |
-| Recent Progress | Opened PR #230 adding the shared active bridge-registry metadata guard; focused RLVR/SWE1/SWE2/RLHF bridge shards, py_compile, Ruff, structured registry probe, and diff checks passed |
+| Current Task | task127_sft_qwen_target_family_guard_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/234 |
+| Session | 18 |
+| Recent Progress | Opened PR #234 adding a fail-fast Qwen-looking SFT data-prep target-family guard; focused SFT/Qwen planner shards, py_compile, Ruff, structured OmegaConf/env probe, and diff checks passed |

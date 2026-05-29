@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -107,5 +107,10 @@
 95. file change: `_bridge_base.load_env_registry()` now rejects active rows with missing `m0_env_id`, `m0_verifier`, `nemo_gym_verifier`, `license`, or placeholder/unknown license values.
 96. test evidence: Task124 required RLVR/SWE1/SWE2/RLHF bridge shard passed with 79 tests; py_compile, Ruff, structured active-row metadata probe, and diff checks passed.
 97. file change: PR #230 opened against `main` for task124 bridge active-row metadata contract.
+98. supervisor request: PM assigned task127 to add a fail-fast SFT data-prep guard so Qwen-looking tokenizer/model/template settings cannot run under legacy Super3/default labels.
+99. technical fact: The previous `SFTDataPrepConfig.__post_init__` dispatched Qwen validation only when `target_model_family == qwen` or `config_name` started with `qwen`, leaving stale Super3 profiles with Qwen overrides weakly guarded.
+100. file change: `validate_sft_data_prep_target_family_config()` now detects Qwen tokenizer refs, Qwen tokenizer-template kwargs, or explicit Qwen labels and requires the full `qwen_agentic_v0` target-family contract.
+101. test evidence: Task127 focused SFT/Qwen planner shard passed with 137 tests and 1 skipped; py_compile, Ruff, structured OmegaConf/env probe, and diff checks passed.
+102. file change: PR #234 opened against `main` for task127 Qwen SFT target-family guard.
 
 ---

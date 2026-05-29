@@ -2386,15 +2386,19 @@ def test_tool_role_supervision_survives_to_chat_template_input() -> None:
 
 
 def test_qwen_sft_data_prep_contract_can_use_tokenizer_template() -> None:
+    from nemotron.data_prep.config import TokenizerConfig
     from nemotron.data_prep.core.chat_sft_shard_core import _apply_chat_template
     from nemotron.recipes.super3.stage1_sft.data_prep import SFTDataPrepConfig
 
     cfg = SFTDataPrepConfig(
+        tokenizer=TokenizerConfig(model="/models/Qwen/Qwen3-4B-Instruct-2507"),
         chat_template="tokenizer",
         chat_template_kwargs={
             "enable_thinking": False,
             "truncate_history_thinking": False,
         },
+        config_name="qwen_agentic_v0",
+        target_model_family="qwen",
     )
     assert cfg.chat_template == "tokenizer"
     assert cfg.chat_template_kwargs == {
@@ -2408,6 +2412,16 @@ def test_qwen_sft_data_prep_contract_can_use_tokenizer_template() -> None:
     tokenizer = _Tokenizer()
     _apply_chat_template(tokenizer, "tokenizer")
     assert tokenizer.chat_template == "qwen tokenizer template"
+
+
+def test_sft_data_prep_config_rejects_qwen_tokenizer_without_qwen_contract() -> None:
+    from nemotron.data_prep.config import TokenizerConfig
+    from nemotron.recipes.super3.stage1_sft.data_prep import SFTDataPrepConfig
+
+    with pytest.raises(ValueError, match="qwen_agentic_v0.yaml.*target_model_family='qwen'"):
+        SFTDataPrepConfig(
+            tokenizer=TokenizerConfig(model="/models/Qwen/Qwen3-4B-Instruct-2507"),
+        )
 
 
 def test_sft_data_artifact_records_chat_template_contract(tmp_path) -> None:

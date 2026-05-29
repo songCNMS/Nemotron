@@ -13,6 +13,7 @@ from nemotron.recipes.super3.stage1_sft.qwen_chat_contract import (  # noqa: E40
     QWEN_SFT_CHAT_TEMPLATE_KWARGS,
     validate_qwen_data_prep_config,
     validate_qwen_packed_sft_chat_contract,
+    validate_sft_data_prep_target_family_config,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -103,6 +104,7 @@ def test_qwen_data_prep_contract_rejects_non_qwen_tokenizer_ref() -> None:
 def test_qwen_agentic_config_file_is_self_guarded() -> None:
     config = yaml.safe_load(QWEN_CONFIG.read_text(encoding="utf-8"))
 
+    validate_sft_data_prep_target_family_config(config, config_path=QWEN_CONFIG)
     validate_qwen_data_prep_config(config, config_path=QWEN_CONFIG)
     assert config["target_model_family"] == "qwen"
     assert config["config_name"] == "qwen_agentic_v0"
@@ -110,9 +112,12 @@ def test_qwen_agentic_config_file_is_self_guarded() -> None:
 
 
 def test_sft_data_prep_runnable_defaults_select_qwen_profile() -> None:
+    from nemotron.recipes.super3.stage1_sft.data_prep import DEFAULT_CONFIG_PATH
+
     source = DATA_PREP_SCRIPT.read_text(encoding="utf-8")
     assert '# default = "qwen_agentic_v0"' in source
-    assert 'DEFAULT_CONFIG_PATH = STAGE_PATH / "config" / "data_prep" / "qwen_agentic_v0.yaml"' in source
+    assert DEFAULT_CONFIG_PATH == QWEN_CONFIG
+    assert DEFAULT_CONFIG_PATH.name == "qwen_agentic_v0.yaml"
 
 
 def test_qwen_agentic_config_prefers_tokenizer_env(
@@ -125,6 +130,7 @@ def test_qwen_agentic_config_prefers_tokenizer_env(
     config = omega_conf.to_container(omega_conf.load(QWEN_CONFIG), resolve=True)
 
     assert config["tokenizer"]["model"] == "/models/Qwen/Qwen3-4B-Tokenizer"
+    validate_sft_data_prep_target_family_config(config, config_path=QWEN_CONFIG)
     validate_qwen_data_prep_config(config, config_path=QWEN_CONFIG)
 
 
@@ -138,6 +144,7 @@ def test_qwen_agentic_config_falls_back_to_qwen_hf_model_env(
     config = omega_conf.to_container(omega_conf.load(QWEN_CONFIG), resolve=True)
 
     assert config["tokenizer"]["model"] == "/models/Qwen/Qwen3-4B-Instruct-2507"
+    validate_sft_data_prep_target_family_config(config, config_path=QWEN_CONFIG)
     validate_qwen_data_prep_config(config, config_path=QWEN_CONFIG)
 
 
@@ -160,7 +167,29 @@ def test_legacy_super3_configs_are_explicit_non_qwen(
     assert legacy.get("target_model_family") != "qwen"
     assert legacy["tokenizer"]["model"] == NEMOTRON_SUPER_TOKENIZER_DEFAULT
     assert legacy["chat_template"] == "super3"
+    validate_sft_data_prep_target_family_config(legacy, config_path=config_path)
     assert "default.yaml" not in source.split("DEFAULT_CONFIG_PATH =", 1)[1].splitlines()[0]
+
+
+@pytest.mark.parametrize(
+    "config_path",
+    [LEGACY_DEFAULT_CONFIG, LEGACY_AGENTIC_CONFIG, LEGACY_TINY_CONFIG],
+)
+def test_legacy_configs_reject_qwen_tokenizer_override(config_path: Path) -> None:
+    legacy = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    legacy["tokenizer"]["model"] = "/models/Qwen/Qwen3-4B-Instruct-2507"
+
+    with pytest.raises(ValueError, match="qwen_agentic_v0.yaml.*target_model_family='qwen'"):
+        validate_sft_data_prep_target_family_config(legacy, config_path=config_path)
+
+
+def test_legacy_config_rejects_qwen_template_kwargs_without_qwen_family() -> None:
+    legacy = yaml.safe_load(LEGACY_AGENTIC_CONFIG.read_text(encoding="utf-8"))
+    legacy["chat_template"] = "tokenizer"
+    legacy["chat_template_kwargs"] = dict(QWEN_SFT_CHAT_TEMPLATE_KWARGS)
+
+    with pytest.raises(ValueError, match="Qwen thinking chat_template_kwargs"):
+        validate_sft_data_prep_target_family_config(legacy, config_path=LEGACY_AGENTIC_CONFIG)
 
 
 def test_qwen_packed_contract_requires_tokenizer_uri_with_training_tokenizer(
