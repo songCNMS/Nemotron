@@ -1,6 +1,6 @@
 # task144_stage3_eval_remote_job_dir_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Scope
 
@@ -21,3 +21,4 @@
 - Branch: `intern_nem_dev_1/task144_stage3_eval_remote_job_dir_portability_s1`
 - Base: `802f7bee98579e5a9647813f5182bb048e1aa44b`
 - PR: https://github.com/songCNMS/Nemotron/pull/251
+- Merged: `7145c7de80f03555259a9b5657cc4066812f50d0`

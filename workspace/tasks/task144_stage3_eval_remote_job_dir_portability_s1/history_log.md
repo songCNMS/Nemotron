@@ -1,6 +1,6 @@
 # task144_stage3_eval_remote_job_dir_portability_s1 history
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 1 - 2026-05-29
 
@@ -28,3 +28,13 @@
 - Re-ran final branch hygiene checks: `git status --short --branch`,
   `git diff --check`, and `git diff --cached --check`.
 - Added this Session 26 closeout entry and updated intern status for PM gate.
+
+## Session 27 - 2026-05-29
+
+- Received PM confirmation that PR #251 merged after independent gate and
+  merged-main verification.
+- Recorded squash merge commit
+  `7145c7de80f03555259a9b5657cc4066812f50d0`.
+- Updated task status bookkeeping from working to idle/completed after merge.
+- No live eval, endpoint, W&B, cluster, data prep, training, artifact download,
+  deployment, direct `main`/`master` push, or self-merge was performed.
