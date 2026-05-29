@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -112,5 +112,6 @@
 100. file change: `validate_sft_data_prep_target_family_config()` now detects Qwen tokenizer refs, Qwen tokenizer-template kwargs, or explicit Qwen labels and requires the full `qwen_agentic_v0` target-family contract.
 101. test evidence: Task127 focused SFT/Qwen planner shard passed with 137 tests and 1 skipped; py_compile, Ruff, structured OmegaConf/env probe, and diff checks passed.
 102. file change: PR #234 opened against `main` for task127 Qwen SFT target-family guard.
+103. test evidence: PM reported PR #234 merged at `b0f36d5b3d514aa2c52baf1dc1c60f4245009050` after exact-head guard on `9b6825344e39ac8023a11b25877fdd52ee5547cc`; merged-main SFT/Qwen checks and probe passed.
 
 ---

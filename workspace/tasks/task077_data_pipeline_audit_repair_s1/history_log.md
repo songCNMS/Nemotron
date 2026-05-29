@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ---
 
@@ -242,5 +242,14 @@
 - Added focused tests proving `qwen_agentic_v0` and env variants pass, runnable defaults select `qwen_agentic_v0`, legacy Super3 configs remain valid with non-Qwen tokenizer refs, and Qwen-looking legacy overrides fail with actionable messages.
 - Validation passed locally: requested SFT/Qwen planner pytest shard, py_compile, Ruff, structured OmegaConf/env probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #234: https://github.com/songCNMS/Nemotron/pull/234
+
+## Session 19 - 2026-05-29 - Task127 merged
+
+**Executor**: intern_nem_dev_1
+
+- PM reported PR #234 for `task127_sft_qwen_target_family_guard_s1` merged after exact-head guard on `9b6825344e39ac8023a11b25877fdd52ee5547cc`.
+- Merge commit on `main`: `b0f36d5b3d514aa2c52baf1dc1c60f4245009050`.
+- Merged-main checks reported by PM: focused SFT/Qwen pytest 137 passed / 1 skipped, py_compile, Ruff, diff checks, and OmegaConf/env target-family probe.
+- No post-merge issue observed in the local handoff update.
 
 ---
