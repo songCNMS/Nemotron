@@ -14,3 +14,7 @@
   behavior, pipeline semantics, or output layout.
 - Added a focused static/AST test that does not import the heavy
   Curator/Ray-dependent module.
+- Verified focused pytest (`1 passed`), `py_compile`, Ruff, structured
+  static/AST probe, `git diff --check`, `git diff --cached --check`, and
+  added-line live-surface scan.
+- Opened PR #265 to `main`: https://github.com/songCNMS/Nemotron/pull/265.

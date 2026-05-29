@@ -1,6 +1,12 @@
 # task158_nemotron_cc_fasttext_hf_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+
+Status: Ready for PM gate
+Owner: intern_nem_dev_2
+Branch: `intern_nem_dev_2/task158_nemotron_cc_fasttext_hf_revision_pin_s1`
+Base: `0b31358436c38e698c7c2bc3a89871df273df21c`
+PR: https://github.com/songCNMS/Nemotron/pull/265
 
 ## Summary
 
@@ -21,8 +27,10 @@ PM-provided Hugging Face commit revision.
 
 ## Acceptance Checks
 
-- Focused pytest for the static/AST revision-pin test.
-- `py_compile` and Ruff on touched product/test files.
-- Structured static/AST probe for the revision constant, download keyword, and
-  unchanged repo/filename constants.
-- `git diff --check` and `git diff --cached --check`.
+- PASS: `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/data/test_nemotron_cc_fasttext_revision_pin.py` (1 passed)
+- PASS: `/work-agents/.venv/bin/python -m py_compile src/nemotron/recipes/data/curation/nemotron-cc/step_3-quality_classification.py tests/recipes/data/test_nemotron_cc_fasttext_revision_pin.py`
+- PASS: `/work-agents/.venv/bin/ruff check src/nemotron/recipes/data/curation/nemotron-cc/step_3-quality_classification.py tests/recipes/data/test_nemotron_cc_fasttext_revision_pin.py`
+- PASS: structured static/AST probe for the revision constant, download keyword, and unchanged repo/filename constants
+- PASS: `git diff --check`
+- PASS: `git diff --cached --check`
+- PASS: added-line live-surface scan showed static revision pin, static test, and task/status docs only
