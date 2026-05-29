@@ -1,6 +1,6 @@
 # task136_lineage_publisher_relative_manifest_refs_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-29
 
@@ -38,3 +38,12 @@
   entry after the handoff response.
 - Added this Session 4 bookkeeping entry and bumped task136 session metadata
   without changing product code or test files.
+
+## Session 5 - 2026-05-29
+
+- PM assigned task139 after PR #243 merged. GitHub reported PR #243 merged via
+  merge commit `0408b1242723f797b9622043c593bdbd7f7fbebc`; `origin/main`
+  later advanced to `70d3541cdbc993fa113bdc62fa9be61f83b72d9e`.
+- Synced local `main` cleanly to `origin/main`
+  `70d3541cdbc993fa113bdc62fa9be61f83b72d9e` before creating the task139
+  branch.
