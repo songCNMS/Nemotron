@@ -280,7 +280,11 @@ If you want to fine-tune an embedding model on NVIDIA-related content, you can *
 # Download the pre-generated dataset
 python -c "
 from datasets import load_dataset
-ds = load_dataset('nvidia/Retrieval-Synthetic-NVDocs-v1', split='train')
+ds = load_dataset(
+    'nvidia/Retrieval-Synthetic-NVDocs-v1',
+    split='train',
+    revision='1c0d1856f3fb595b2dda98d4b61061fa6d782d51',
+)
 ds.to_json('./output/embed/stage0_sdg/nv_docs_sdg.json')
 "
 
