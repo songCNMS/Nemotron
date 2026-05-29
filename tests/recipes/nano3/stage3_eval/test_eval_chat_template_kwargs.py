@@ -39,6 +39,14 @@ def _eval_extra() -> dict:
     return extra
 
 
+def _eval_default_endpoints() -> dict:
+    deployment = _eval_default_data().get("deployment")
+    assert isinstance(deployment, dict), "missing deployment block"
+    endpoints = deployment.get("endpoints")
+    assert isinstance(endpoints, dict), "missing deployment.endpoints block"
+    return endpoints
+
+
 def test_nano3_eval_default_pins_chat_template_kwargs() -> None:
     kwargs = _eval_extra().get("chat_template_kwargs")
 
@@ -52,6 +60,15 @@ def test_nano3_eval_default_keeps_tokenizer_fields_intact() -> None:
 
     assert extra["tokenizer"] == "${deployment.checkpoint_path}/tokenizer"
     assert extra["tokenizer_backend"] == "huggingface"
+
+
+def test_nano3_eval_default_uses_slashless_openai_routes() -> None:
+    endpoints = _eval_default_endpoints()
+
+    assert endpoints["chat"] == "/v1/chat/completions"
+    assert endpoints["completions"] == "/v1/completions"
+    assert not endpoints["chat"].endswith("/")
+    assert not endpoints["completions"].endswith("/")
 
 
 def test_nano3_eval_task_list_is_unchanged_by_chat_contract_pin() -> None:

@@ -1277,6 +1277,8 @@ def test_normalized_stage3_eval_configs_strip_repo_metadata(
     assert "corrected_math" not in config
     assert "tasks" not in config
     assert len(config.evaluation.tasks) == expected_task_count
+    assert config.deployment.endpoints.chat == "/v1/chat/completions"
+    assert config.deployment.endpoints.completions == "/v1/completions"
     assert config.evaluation.nemo_evaluator_config.config.params.extra.chat_template_kwargs == {
         "enable_thinking": False,
         "truncate_history_thinking": False,

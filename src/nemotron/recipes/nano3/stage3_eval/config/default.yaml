@@ -146,8 +146,8 @@ deployment:
 
   # Health check endpoints
   endpoints:
-    chat: /v1/chat/completions/
-    completions: /v1/completions/
+    chat: /v1/chat/completions
+    completions: /v1/completions
     health: /v1/health
 
 # =============================================================================

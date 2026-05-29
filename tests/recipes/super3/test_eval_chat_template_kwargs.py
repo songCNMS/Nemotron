@@ -64,6 +64,14 @@ def _qwen_chat_contract() -> dict:
     return contract
 
 
+def _eval_default_endpoints() -> dict:
+    deployment = _eval_default_data().get("deployment")
+    assert isinstance(deployment, dict), "missing deployment block"
+    endpoints = deployment.get("endpoints")
+    assert isinstance(endpoints, dict), "missing deployment.endpoints block"
+    return endpoints
+
+
 def test_eval_default_pins_enable_thinking() -> None:
     kwargs = _eval_chat_template_kwargs()
     assert "enable_thinking" in kwargs, (
@@ -116,6 +124,15 @@ def test_eval_qwen_contract_matches_eval_extra_kwargs() -> None:
     assert contract["sft"]["chat_template"] == "tokenizer"
     assert contract["sft"]["chat_template_kwargs"] == kwargs
     assert contract["eval"]["extra_chat_template_kwargs"] == kwargs
+
+
+def test_eval_default_uses_slashless_openai_routes() -> None:
+    endpoints = _eval_default_endpoints()
+
+    assert endpoints["chat"] == "/v1/chat/completions"
+    assert endpoints["completions"] == "/v1/completions"
+    assert not endpoints["chat"].endswith("/")
+    assert not endpoints["completions"].endswith("/")
 
 
 def test_eval_qwen_contract_calls_out_non_chat_and_parser_sensitive_tasks() -> None:
