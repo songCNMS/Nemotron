@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import logging
+import os
 import re
 import sys
 from collections import defaultdict
@@ -43,7 +44,17 @@ except ModuleNotFoundError:
 logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_M0_INPUT_DIR: Path | None = None
-DEFAULT_OUTPUT_DIR = Path("../output/super3/m1_agentic_sft_v0")
+
+
+def _output_base() -> Path:
+    return Path(os.environ.get("NEMO_RUN_DIR", "."))
+
+
+def _default_output_dir() -> Path:
+    return _output_base() / "output/super3/m1_agentic_sft_v0"
+
+
+DEFAULT_OUTPUT_DIR = _default_output_dir()
 USED_IN_TAG = "super3_agentic_sft_v0"
 MILESTONE = "M1"
 TOOL_CALLING_SYSTEM_PROMPT = "You are a tool-using assistant. Use the available functions when needed."
@@ -3194,7 +3205,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--m0-input-dir", type=Path, default=DEFAULT_M0_INPUT_DIR)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=_default_output_dir())
     parser.add_argument(
         "--m0-health-baseline",
         type=Path,
