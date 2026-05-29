@@ -17,5 +17,6 @@
 
 - Base: `9cf231a697ab0decdcbbb890a805c61badbb1529`
 - Branch: `intern_nem_dev_1/task171_omni3_rl_docs_source_revision_pins_s1`
-- PR: pending
-- Checks: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/278
+- Validated implementation head: `663a84d076b8931734e150564d7f1bf643d91f61`
+- Checks: focused docs pytest, py_compile, Ruff, structured docs/config probe, added-line live-surface scan, and diff checks passed.

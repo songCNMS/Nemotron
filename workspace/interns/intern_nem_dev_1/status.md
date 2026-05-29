@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task171_omni3_rl_docs_source_revision_pins_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/278 |
 | Session | 1 |
-| Recent Progress | Started task171 from origin/main 9cf231a697ab0decdcbbb890a805c61badbb1529; updating Omni3 RL docs/static tests for runtime source revision pins |
+| Recent Progress | Opened PR #278 for task171; Omni3 RL docs now show runtime source revision pins and focused static docs checks passed |
