@@ -1,6 +1,6 @@
 # task145_super3_core_blend_path_cwd_independence_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Notes
 

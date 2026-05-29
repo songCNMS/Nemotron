@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task145_super3_core_blend_path_cwd_independence_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task145_super3_core_blend_path_cwd_independence_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/252 |
-| Session | 1 |
+| Status | Idle |
+| Current Task | None |
+| PR | https://github.com/songCNMS/Nemotron/pull/252 (merged) |
+| Session | 2 |
 
-最近进展：Opened PR #252 for task145. Local `main` is synced to `origin/main` `802f7bee98579e5a9647813f5182bb048e1aa44b`; CWD-independent Super3 core blend-path defaults plus focused tests are implemented. Focused pytest, py_compile, Ruff, structured non-repo CWD probe, static no-PWD-source-blend grep, and diff checks passed. No live data prep/train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge.
+最近进展：PR #252 for task145 was squash-merged to `main` at `8d57aceb789606889c181e833fbfd12bf1ea3603` after PM and independent gates. Local `main` was fast-forwarded to that `origin/main` commit, and Session 2 closeout bookkeeping is recorded on branch `intern_nem_dev_2/task145_super3_core_blend_path_cwd_independence_s1_closeout_sync`. No active task, no blockers, and no main/master push.
