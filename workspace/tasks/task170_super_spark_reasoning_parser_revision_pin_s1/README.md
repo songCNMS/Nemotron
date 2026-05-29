@@ -1,12 +1,13 @@
 # task170_super_spark_reasoning_parser_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Complete
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task170_super_spark_reasoning_parser_revision_pin_s1`
 Base: `9cf231a697ab0decdcbbb890a805c61badbb1529`
-PR: https://github.com/songCNMS/Nemotron/pull/277
+PR: https://github.com/songCNMS/Nemotron/pull/277 (merged)
+Merged main: `3c1751adeea4eb26b7e6e8f41f9bb445ebc58f2d`
 
 ## Summary
 
@@ -42,3 +43,9 @@ Pin the Spark deployment guide examples that download
 - PASS: added-line live-surface scan showed only Spark guide static wget examples
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
+
+## Closeout
+
+- PM reported PR #277 merged and verified on `main` at
+  `3c1751adeea4eb26b7e6e8f41f9bb445ebc58f2d`.
+- Local `main` was fast-forwarded to the merged `origin/main`.
