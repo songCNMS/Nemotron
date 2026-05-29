@@ -6,7 +6,7 @@ Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task175_nano_omni_mb_cord_v2_dataset_revision_pin_s1`
 Base: `4077e2e155ec4ed5d3d4594793514e088cae873e`
-PR: pending
+PR: https://github.com/songCNMS/Nemotron/pull/282
 
 ## Summary
 

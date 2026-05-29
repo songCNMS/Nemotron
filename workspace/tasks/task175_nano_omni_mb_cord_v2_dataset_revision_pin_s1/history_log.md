@@ -19,3 +19,5 @@
   parse only the Python cell containing the CORD-v2 `load_dataset` call.
 - Verified focused pytest, `py_compile`, Ruff, structured static notebook
   probe, and diff checks before the implementation commit.
+- Opened PR #282 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/282.
