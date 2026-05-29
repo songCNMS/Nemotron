@@ -12,12 +12,15 @@ import pytest
 
 from nemotron.data_prep.recipes import rl_local
 from nemotron.data_prep.recipes.rl_local import run_resolve_and_split, split_local_jsonl
+from nemotron.recipes.super3.stage2_rl.data_prep import RLDataPrepConfig
 
 yaml = pytest.importorskip("yaml")
+OmegaConf = pytest.importorskip("omegaconf").OmegaConf
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 STAGE2_RL_ROOT = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl"
+GENERIC_DEFAULT_CONFIG = STAGE2_RL_ROOT / "config/data_prep/default.yaml"
 
 DEFAULTS = {
     "swe1": STAGE2_RL_ROOT / "stage2_swe1/config/data_prep/default.yaml",
@@ -50,6 +53,22 @@ def test_stage2_rl_default_preserves_data_prep_config_fields(
         assert field in data, f"{mix} data_prep default missing field {field}"
 
     assert data["val_holdout"] == "auto"
+
+
+def test_generic_stage2_rl_default_output_dir_is_nemo_run_dir_portable() -> None:
+    text = GENERIC_DEFAULT_CONFIG.read_text(encoding="utf-8")
+    data = yaml.safe_load(text)
+
+    assert data["output_dir"] == "${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_resolved"
+    assert "${oc.env:PWD}" not in data["output_dir"]
+    assert "/../output/stage2_rl_resolved" not in data["output_dir"]
+
+
+def test_generic_stage2_rl_default_output_dir_matches_dataclass_default() -> None:
+    cfg = OmegaConf.load(GENERIC_DEFAULT_CONFIG)
+
+    assert Path(cfg.output_dir) == RLDataPrepConfig().output_dir
+    assert Path(cfg.output_dir).as_posix().endswith("output/super3/stage2_rl_resolved")
 
 
 def _write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
