@@ -1,6 +1,6 @@
 # task184_qwen_eval_repro_gate_artifact_portability_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -20,10 +20,19 @@
 
 ## Status
 
-- Base: `df45842edade40c19fd0496f3844ef20653a94cc`
+- Original base: `df45842edade40c19fd0496f3844ef20653a94cc`
+- Tested/merged replacement base:
+  `c76c51dba5e8796d7b7f12c25fcd172f4c9c8bfa`
 - Branch: `intern_nem_dev_3/task184_qwen_eval_repro_gate_artifact_portability_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/291
-- Head: `1de97978412d564f93e3e39a45199fb77ea48c98`
+- Tested/merged head: `9456ed889081611380971457f2c579196f08390c`
+- Superseded head ignored:
+  `1de97978412d564f93e3e39a45199fb77ea48c98`
+- Merge SHA: `f74e7c05668f96766d10c730fcd14ddec7191350`
+- Local main sync: `main` and `origin/main` updated to
+  `f74e7c05668f96766d10c730fcd14ddec7191350`.
 - Checks: focused Qwen eval repro gate pytest, py_compile, Ruff, structured
   portability probe, product local-only artifact grep, added-line live-surface
-  scan, and `git diff --check` passed.
+  scan, and `git diff --check` passed before PR; PM merged-main verification
+  passed with focused pytest 50 passed, py_compile, Ruff, git diff checks, and
+  `PM_MERGED_QWEN_EVAL_REPRO_ARTIFACT_PORTABILITY_PROBE_PASS`.

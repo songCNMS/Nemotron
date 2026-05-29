@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -21,3 +21,20 @@
 - No live endpoint/eval run, live artifact probe, curl/wget/requests,
   HF/download, data prep, train/eval, W&B, cluster, deploy, artifact
   upload/download, direct `main`/`master` push, or self-merge was performed.
+
+## Session 2 - 2026-05-29
+
+- Recorded closeout after PR #291 was merged and verified on `main` at
+  `f74e7c05668f96766d10c730fcd14ddec7191350`.
+- Synced local `origin/main` and `main` to
+  `f74e7c05668f96766d10c730fcd14ddec7191350`.
+- PM reported tested/merged replacement base/head:
+  `c76c51dba5e8796d7b7f12c25fcd172f4c9c8bfa` /
+  `9456ed889081611380971457f2c579196f08390c`; superseded head
+  `1de97978412d564f93e3e39a45199fb77ea48c98` was ignored.
+- PM merged-main verification passed: focused Qwen eval repro gate pytest 50
+  passed, py_compile, Ruff, git diff checks, and structured probe
+  `PM_MERGED_QWEN_EVAL_REPRO_ARTIFACT_PORTABILITY_PROBE_PASS`.
+- Set intern status to Idle / Current Task None. No live endpoint/eval/artifact
+  probe/download, data prep, train/eval, W&B, cluster, deploy, artifact ops,
+  direct `main`/`master` push, or self-merge was performed.
