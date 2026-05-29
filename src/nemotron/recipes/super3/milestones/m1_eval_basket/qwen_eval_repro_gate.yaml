@@ -69,15 +69,28 @@ evidence_records:
       old_same_slice_invalid_rate: 1.0
       corrected_minus_old_same_slice_accuracy: 0.6178571428571429
     raw_artifact_paths:
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json
-      - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl
-    raw_artifact_sha256:
-      /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json: 930ee46c8c31944cada6065a5251a329f0bdf31d4b33d51c0cdc45222a97777b
-      /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl: 2d575c8a613c76833c74f7bf20372fb243352ff1d24db24f11aa5a411de0d085
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/mmlu_corrected_calibration_summary_original.json
+      - vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full/mmlu_pro/mmlu_corrected_calibration_results_original.jsonl
+    remote_artifact_check:
+      status: pm_verified
+      checked_at_utc: "2026-05-29T23:12:00Z"
+      checked_by: intern_nem_pm
+      check_result: |
+        PM assigned task184 after identifying that these MMLU-Pro calibration
+        raw artifacts were recorded only as workstation-local debug files. The
+        top-level source manifest for this evidence already declares the
+        portable remote artifact root
+        `vm4vpn:/tmp/task071_vpn_eval_qwen30b_original_full` and MMLU-Pro
+        artifact root. This gate now cites those checked remote references
+        instead of depending on workstation-local files; no fresh live artifact
+        probe was performed for this static portability fix.
     validity_notes: |
       Smallest recorded base-Qwen chat-completions reproduction smoke with a
       parser-compatible JSON answer contract. It demonstrates that the legacy
-      MMLU-Pro score was a harness/parser failure, not a Qwen baseline.
+      MMLU-Pro score was a harness/parser failure, not a Qwen baseline. The
+      original local debug paths are unavailable in clean workspaces, so checked
+      vm4vpn references are used for the reusable Qwen original MMLU-Pro
+      calibration artifacts instead of pretending missing local paths are valid.
 
   - evidence_id: qwen30b_original_math_probe_session37
     benchmark_id: aime25_hmmt_probe
