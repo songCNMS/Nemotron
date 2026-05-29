@@ -1,6 +1,6 @@
 # task136_lineage_publisher_relative_manifest_refs_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 - 2026-05-29
 
@@ -18,3 +18,23 @@
 - Verified focused publisher tests, py_compile, Ruff, and a structured local
   probe matching the PM finding.
 - Opened PR #243 to `main`: https://github.com/songCNMS/Nemotron/pull/243.
+
+## Session 2 - 2026-05-29
+
+- Recorded PR #243 URL in the task README and intern status after opening the
+  pull request.
+- Pushed the PR metadata commit to
+  `intern_nem_dev_2/task136_lineage_publisher_relative_manifest_refs_s1`.
+
+## Session 3 - 2026-05-29
+
+- Verified the branch remained clean after PR #243 metadata push.
+- Reported final head `74c409bcbc8ac0069cf788cca759fa38b8fe032c` to PM for
+  gate review.
+
+## Session 4 - 2026-05-29
+
+- Stop-hook audit flagged that task136 history did not contain a Session 4
+  entry after the handoff response.
+- Added this Session 4 bookkeeping entry and bumped task136 session metadata
+  without changing product code or test files.
