@@ -2,7 +2,7 @@
 # /// script
 # [tool.runspec]
 # schema = "1"
-# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/main/docs/runspec/v1/spec.md"
+# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/510b6eec33edece3d212a3187b16db3d1b4a8a15/docs/runspec/v1/spec.md"
 # name = "omni3/rl/vision"
 # image = "/home/${oc.env:USER}/.cache/nemotron/containers/omni3-rl.sqsh"
 # setup = "Build the Omni RL container with `nemotron omni3 build rl` before training."
