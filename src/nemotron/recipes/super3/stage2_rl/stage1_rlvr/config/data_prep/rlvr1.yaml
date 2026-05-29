@@ -21,7 +21,7 @@ run:
 #   3. Run this data_prep: `nemotron super3 data prep rl rlvr -c rlvr1`
 #      → re-splits combined.jsonl into train/val (idempotent because
 #        bridge already put val rows at the end and val_holdout below
-#        matches the bridge's val count)
+#        is inferred from manifest.json counts.val)
 #
 # Usage:
 #   nemotron super3 data prep rl rlvr -c rlvr1
@@ -39,20 +39,9 @@ input_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlvr/rlvr1/combined.jsonl
 # Output directory
 output_dir: ${oc.env:PWD}/../output/super3/stage2_rl/rlvr1
 
-# Number of rows to hold out for validation (from end of file).
-#
-# The bridge places val rows at the end of combined.jsonl, so for the
-# re-split to land on the same train/val boundary as the bridge, this
-# must match the bridge's actual val row count for the rlvr1 mix.
-# Inspect the bridge's manifest.json:
-#   jq '.counts.val | values | add' .../m1_rlvr/rlvr1/manifest.json
-# and override at the CLI:
-#   nemotron super3 data prep rl rlvr -c rlvr1 val_holdout=<N>
-#
-# 100 is a placeholder safe default — large enough that small-scale
-# bridge runs land val rows inside the holdout; the operator overrides
-# for production runs.
-val_holdout: 100
+# Infer validation holdout from sibling manifest.json counts.val.
+# Override with an integer for manual/non-bridge JSONL inputs.
+val_holdout: auto
 
 # Limit rows per dataset for quick tests (null = no limit)
 sample: null

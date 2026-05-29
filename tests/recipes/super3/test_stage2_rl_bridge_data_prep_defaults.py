@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
-from nemotron.data_prep.recipes.rl_local import split_local_jsonl
+from nemotron.data_prep.recipes import rl_local
+from nemotron.data_prep.recipes.rl_local import run_resolve_and_split, split_local_jsonl
 
 yaml = pytest.importorskip("yaml")
 
@@ -147,3 +149,90 @@ def test_split_local_jsonl_auto_holdout_rejects_bad_bridge_manifest_counts(
             val_holdout="auto",
             force=True,
         )
+
+
+def _install_fake_resolve_pipeline(
+    monkeypatch: pytest.MonkeyPatch,
+    resolved_path: Path,
+) -> None:
+    def _fake_run_pipeline(_spec: object) -> None:
+        return None
+
+    def _fake_finalize_rl_run(*_args: object, **_kwargs: object) -> object:
+        return SimpleNamespace(split_paths={"combined": str(resolved_path)})
+
+    monkeypatch.setattr(rl_local.pipelines_v1, "run_pipeline", _fake_run_pipeline)
+    monkeypatch.setattr(rl_local, "finalize_rl_run", _fake_finalize_rl_run)
+
+
+def test_run_resolve_and_split_infers_auto_holdout_from_original_bridge_manifest(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bridge_dir = tmp_path / "m1_rlvr" / "rlvr1"
+    bridge_dir.mkdir(parents=True)
+    combined_path = bridge_dir / "combined.jsonl"
+    train_rows = [{"id": f"train-{i}", "split": "train"} for i in range(5)]
+    val_rows = [{"id": f"val-{i}", "split": "val"} for i in range(4)]
+    all_rows = [*train_rows, *val_rows]
+    _write_jsonl(combined_path, all_rows)
+    (bridge_dir / "manifest.json").write_text(
+        json.dumps(
+            {
+                "counts": {
+                    "train": {"rlvr1": len(train_rows)},
+                    "val": {"rlvr1": len(val_rows)},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    resolved_dir = tmp_path / "resolved_without_manifest"
+    resolved_dir.mkdir()
+    resolved_path = resolved_dir / "resolved.jsonl"
+    _write_jsonl(resolved_path, all_rows)
+    _install_fake_resolve_pipeline(monkeypatch, resolved_path)
+
+    result = run_resolve_and_split(
+        input_path=combined_path,
+        output_dir=tmp_path / "rlvr_out",
+        val_holdout="auto",
+        force=True,
+        execution_mode="streaming",
+    )
+
+    assert result.train_rows == len(train_rows)
+    assert result.val_rows == len(val_rows)
+    assert _read_jsonl(Path(result.train_path)) == train_rows
+    assert result.val_path is not None
+    assert _read_jsonl(Path(result.val_path)) == val_rows
+    manifest = json.loads(Path(result.manifest_path).read_text(encoding="utf-8"))
+    assert manifest["val_holdout"] == len(val_rows)
+    assert manifest["val_holdout_source"] == "bridge_manifest"
+    assert manifest["bridge_manifest"]["path"].endswith("m1_rlvr/rlvr1/manifest.json")
+
+
+def test_run_resolve_and_split_preserves_explicit_numeric_holdout_for_plain_jsonl(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    input_path = tmp_path / "plain_rlvr.jsonl"
+    rows = [{"id": i} for i in range(6)]
+    _write_jsonl(input_path, rows)
+    resolved_path = tmp_path / "resolved.jsonl"
+    _write_jsonl(resolved_path, rows)
+    _install_fake_resolve_pipeline(monkeypatch, resolved_path)
+
+    result = run_resolve_and_split(
+        input_path=input_path,
+        output_dir=tmp_path / "plain_out",
+        val_holdout=2,
+        force=True,
+        execution_mode="streaming",
+    )
+
+    assert result.train_rows == 4
+    assert result.val_rows == 2
+    assert _read_jsonl(Path(result.train_path)) == rows[:4]
+    assert result.val_path is not None
+    assert _read_jsonl(Path(result.val_path)) == rows[-2:]

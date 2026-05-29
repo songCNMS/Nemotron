@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,6 @@
 9. session 13 note: Stage2 RL bridge `combined.jsonl` consumers should use the
    bridge manifest's `counts.val` boundary instead of a fixed holdout whenever
    the bridge emits train rows followed by validation rows.
+10. session 14 note: RLVR bridge consumers run placeholder resolution before
+    final local splitting, so auto holdout must be resolved from the original
+    bridge input manifest before the resolved intermediate JSONL is split.
