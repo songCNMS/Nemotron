@@ -1,6 +1,6 @@
 # task130_unified_registry_path_containment_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -29,3 +29,10 @@
 - Verified the expanded focused audit/registry shard, registry CLI, py_compile,
   Ruff, and structured audit CLI escape probe.
 - Opened PR #239 to `main`: https://github.com/songCNMS/Nemotron/pull/239.
+
+## Session 3 - 2026-05-29
+
+- PM reported next assignment after PR #239 had merged; GitHub showed PR #239
+  merged with head `966e3c83a76a335a1a285a09c8ba488916909382`.
+- Synced local `main` cleanly to `origin/main`
+  `36101b1e2152fd3f52cea8b0af5770c57d881227` before starting task135.

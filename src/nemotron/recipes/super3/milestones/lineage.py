@@ -147,7 +147,7 @@ class LineageRecord:
         }
 
     @classmethod
-    def from_jsonable(cls, data: Mapping[str, Any]) -> "LineageRecord":
+    def from_jsonable(cls, data: Mapping[str, Any]) -> LineageRecord:
         return cls(
             schema_version=int(data["schema_version"]),
             stage=str(data["stage"]),
@@ -188,14 +188,9 @@ def make_record(
     )
 
 
-def walk_chain(starting_manifest: Path) -> list[LineageRecord]:
-    """Walk the lineage chain back from a starting manifest.
-
-    Returns records ordered oldest → newest. Missing / unreadable manifest
-    files are silently skipped; this lets a partially-realized chain stay
-    inspectable while still flagging broken edges via `validate_chain`.
-    """
-    chain: list[LineageRecord] = []
+def _walk_chain_with_paths(starting_manifest: Path) -> list[tuple[Path, LineageRecord]]:
+    """Walk a lineage chain, preserving each record's declaring manifest path."""
+    chain: list[tuple[Path, LineageRecord]] = []
     visited: set[Path] = set()
 
     def _walk(path: Path) -> None:
@@ -224,10 +219,27 @@ def walk_chain(starting_manifest: Path) -> list[LineageRecord]:
             if not upstream.is_absolute():
                 upstream = resolved.parent / upstream
             _walk(upstream)
-        chain.append(record)
+        chain.append((resolved, record))
 
     _walk(starting_manifest)
     return chain
+
+
+def walk_chain(starting_manifest: Path) -> list[LineageRecord]:
+    """Walk the lineage chain back from a starting manifest.
+
+    Returns records ordered oldest → newest. Missing / unreadable manifest
+    files are silently skipped; this lets a partially-realized chain stay
+    inspectable while still flagging broken edges via `validate_chain`.
+    """
+    return [record for _, record in _walk_chain_with_paths(starting_manifest)]
+
+
+def _resolve_manifest_input_ref(declaring_manifest: Path, ref: str) -> Path:
+    ref_path = Path(ref)
+    if ref_path.is_absolute():
+        return ref_path
+    return declaring_manifest.parent / ref_path
 
 
 def validate_chain(starting_manifest: Path) -> list[str]:
@@ -244,7 +256,7 @@ def validate_chain(starting_manifest: Path) -> list[str]:
     if not starting_manifest.exists():
         return [f"starting manifest {starting_manifest} does not exist"]
 
-    chain = walk_chain(starting_manifest)
+    chain = _walk_chain_with_paths(starting_manifest)
     if not chain:
         issues.append(
             f"no lineage records found starting from {starting_manifest} — "
@@ -253,7 +265,7 @@ def validate_chain(starting_manifest: Path) -> list[str]:
         return issues
 
     visited_refs: set[Path] = set()
-    for index, record in enumerate(chain):
+    for index, (declaring_manifest, record) in enumerate(chain):
         # `KNOWN_ARTIFACT_TYPES` is a soft check — emit a warning-style
         # note but don't gate on it.
         if record.artifact_type not in KNOWN_ARTIFACT_TYPES:
@@ -271,18 +283,18 @@ def validate_chain(starting_manifest: Path) -> list[str]:
                 "`manifest` input — chain may be broken"
             )
         for inp in manifest_inputs:
-            ref_path = Path(inp.ref)
-            if not ref_path.is_absolute():
-                # Caller frames have no easy way to resolve relative refs
-                # without the producing manifest's directory; the walker
-                # already does this resolution, so just note it.
-                pass
-            if not ref_path.is_absolute() or not ref_path.exists():
-                if ref_path not in visited_refs:
+            ref_path = _resolve_manifest_input_ref(declaring_manifest, inp.ref)
+            try:
+                resolved_ref = ref_path.resolve(strict=False)
+            except OSError:
+                resolved_ref = ref_path
+            if not ref_path.is_file():
+                if resolved_ref not in visited_refs:
                     issues.append(
                         f"record {record.stage} input `manifest` ref {inp.ref} "
-                        "did not resolve to an existing file"
+                        f"declared in {declaring_manifest} did not resolve to "
+                        f"an existing file ({resolved_ref})"
                     )
-                    visited_refs.add(ref_path)
+                    visited_refs.add(resolved_ref)
 
     return issues

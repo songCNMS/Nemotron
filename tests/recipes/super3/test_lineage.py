@@ -20,8 +20,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from nemotron.recipes.super3.milestones.lineage import (
     KNOWN_ARTIFACT_TYPES,
     LINEAGE_SCHEMA_VERSION,
@@ -205,6 +203,67 @@ def test_validate_chain_on_clean_two_record_chain_is_silent(tmp_path: Path) -> N
     m1_manifest.write_text(json.dumps({"lineage": m1_record.to_jsonable()}), encoding="utf-8")
 
     assert validate_chain(m1_manifest) == []
+
+
+def test_validate_chain_accepts_relative_manifest_ref_from_declaring_dir(
+    tmp_path: Path,
+) -> None:
+    """Relative manifest refs validate against the manifest that declares them."""
+    m0_dir = tmp_path / "m0"
+    m0_dir.mkdir()
+    m0_manifest = m0_dir / "manifest.json"
+    m0_record = make_record(
+        stage="M0 data_env_foundation",
+        produced_by="prepare_m0_assets.py",
+        artifact_type=RAW_DATA_ARTIFACT,
+        artifact_name="m0-relative",
+        inputs=[LineageInput(kind="hf_dataset", ref="openai/gsm8k")],
+        outputs=[LineageOutput(kind="m0_jsonl_split", ref="train.jsonl")],
+    )
+    m0_manifest.write_text(json.dumps({"lineage": m0_record.to_jsonable()}), encoding="utf-8")
+
+    m1_dir = tmp_path / "m1"
+    m1_dir.mkdir()
+    m1_manifest = m1_dir / "manifest.json"
+    m1_record = make_record(
+        stage="M1 Agentic SFT v0",
+        produced_by="prepare_m1_agentic_sft.py",
+        artifact_type=SFT_DATA_ARTIFACT,
+        artifact_name="m1-relative",
+        inputs=[LineageInput(kind="manifest", ref="../m0/manifest.json")],
+        outputs=[LineageOutput(kind="m1_sft_jsonl", ref="train.jsonl")],
+    )
+    m1_manifest.write_text(json.dumps({"lineage": m1_record.to_jsonable()}), encoding="utf-8")
+
+    chain = walk_chain(m1_manifest)
+
+    assert [record.artifact_name for record in chain] == ["m0-relative", "m1-relative"]
+    assert validate_chain(m1_manifest) == []
+
+
+def test_validate_chain_flags_missing_relative_manifest_ref_from_declaring_dir(
+    tmp_path: Path,
+) -> None:
+    """Broken relative manifest refs still surface the declaring manifest path."""
+    m1_dir = tmp_path / "m1"
+    m1_dir.mkdir()
+    m1_manifest = m1_dir / "manifest.json"
+    m1_record = make_record(
+        stage="M1 Agentic SFT v0",
+        produced_by="prepare_m1_agentic_sft.py",
+        artifact_type=SFT_DATA_ARTIFACT,
+        artifact_name="m1-relative-broken",
+        inputs=[LineageInput(kind="manifest", ref="../m0/missing_manifest.json")],
+        outputs=[LineageOutput(kind="m1_sft_jsonl", ref="train.jsonl")],
+    )
+    m1_manifest.write_text(json.dumps({"lineage": m1_record.to_jsonable()}), encoding="utf-8")
+
+    issues = validate_chain(m1_manifest)
+
+    assert len(issues) == 1
+    assert "record M1 Agentic SFT v0 input `manifest` ref ../m0/missing_manifest.json" in issues[0]
+    assert str(m1_manifest.resolve()) in issues[0]
+    assert str(tmp_path / "m0" / "missing_manifest.json") in issues[0]
 
 
 def test_m1_prepare_emits_lineage_pointing_at_m0_manifest(tmp_path: Path) -> None:
