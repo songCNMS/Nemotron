@@ -1,12 +1,13 @@
 # task175_nano_omni_mb_cord_v2_dataset_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Complete
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task175_nano_omni_mb_cord_v2_dataset_revision_pin_s1`
 Base: `4077e2e155ec4ed5d3d4594793514e088cae873e`
-PR: https://github.com/songCNMS/Nemotron/pull/282
+PR: https://github.com/songCNMS/Nemotron/pull/282 (merged)
+Merged main: `0bbb85ff393343fe0cc391d068a074560336a5e4`
 
 ## Summary
 
@@ -39,3 +40,9 @@ the training-data preview does not follow a drifting Hugging Face `main` ref.
 - PASS: structured static notebook probe for exact CORD-v2 repo/revision and no unpinned train example
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
+
+## Closeout
+
+- PM reported PR #282 squash-merged and verified on `main` at
+  `0bbb85ff393343fe0cc391d068a074560336a5e4`.
+- Local `main` was fast-forwarded to the merged `origin/main`.
