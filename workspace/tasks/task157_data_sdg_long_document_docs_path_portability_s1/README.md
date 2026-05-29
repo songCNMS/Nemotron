@@ -15,4 +15,5 @@
 
 - Base: `0b31358436c38e698c7c2bc3a89871df273df21c`
 - Branch: `intern_nem_dev_1/task157_data_sdg_long_document_docs_path_portability_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/266
+- Checks: focused static docs pytest, py_compile, Ruff, no-`/lustre/` grep, structured portable examples probe, added-line live-surface scan, and diff checks passed.
