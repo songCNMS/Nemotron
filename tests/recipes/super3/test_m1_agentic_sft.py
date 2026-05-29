@@ -799,6 +799,77 @@ def test_prepare_strict_data_quality_gate_fails_on_math_sidecar_issues(tmp_path)
     assert MATH_BUCKET_FINAL_ANSWER_AUX in report_md
 
 
+def test_prepare_strict_data_quality_gate_fails_on_math_sidecar_train_overlap(
+    tmp_path,
+) -> None:
+    args = _prepare_math_sidecar_quality_gate_args(
+        tmp_path,
+        fail_on_data_quality_issues=True,
+    )
+    _write_quality_gate_splits(
+        args.m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="shared-train-source",
+                question="Shared train-sidecar prompt?",
+                source_row_index=11,
+            )
+        ],
+        val_records=[
+            _quality_gate_record(
+                source_id="base-val-source",
+                question="Base validation prompt?",
+                source_row_index=2,
+            )
+        ],
+    )
+    _write_quality_gate_splits(
+        args.math_sidecar_m0_input_dir,
+        train_records=[
+            _quality_gate_record(
+                source_id="shared-train-source",
+                question="Shared train-sidecar prompt?",
+                source_row_index=11,
+            )
+        ],
+        val_records=[],
+    )
+
+    with pytest.raises(ValueError, match="strict data-quality gate failed"):
+        prepare(args)
+
+    manifest = json.loads((args.output_dir / "manifest.json").read_text(encoding="utf-8"))
+    base_quality = manifest["data_quality"]
+    assert base_quality["source_metadata"]["train"]["duplicate_source_key_count"] == 0
+    assert base_quality["source_metadata"]["val_shadow"]["duplicate_source_key_count"] == 0
+    assert base_quality["split_routing"]["train_val_source_key_overlap_count"] == 0
+    assert base_quality["split_routing"]["train_val_normalized_prompt_overlap_count"] == 0
+
+    sidecar_quality = base_quality["training_sidecars"][MATH_BUCKET_FINAL_ANSWER_AUX]
+    assert sidecar_quality["duplicate_source_key_count"] == 0
+    assert sidecar_quality["base_train_source_key_overlap_count"] == 1
+    assert sidecar_quality["base_train_source_key_overlap_examples"]
+    assert sidecar_quality["base_train_normalized_prompt_overlap_count"] == 1
+    assert sidecar_quality["base_train_normalized_prompt_overlap_examples"]
+    assert sidecar_quality["validation_source_key_overlap_count"] == 0
+    assert sidecar_quality["validation_normalized_prompt_overlap_count"] == 0
+
+    strict = base_quality["strict_enforcement"]
+    assert strict["enabled"] is True
+    assert strict["passed"] is False
+    checked = strict["checked_issue_counts"]
+    assert checked["duplicate_source_key_count"] == 0
+    assert checked["duplicate_normalized_prompt_hash_count"] == 0
+    assert checked["train_val_source_key_overlap_count"] == 1
+    assert checked["train_val_normalized_prompt_overlap_count"] == 1
+    assert "train_val_source_key_overlap_count" in strict["failing_checks"]
+    assert "train_val_normalized_prompt_overlap_count" in strict["failing_checks"]
+
+    report_md = (args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "Base-train source-key overlaps" in report_md
+    assert "Base-train normalized-prompt overlaps" in report_md
+
+
 def test_prepare_strict_data_quality_gate_passes_clean_math_sidecar(tmp_path) -> None:
     args = _prepare_math_sidecar_quality_gate_args(
         tmp_path,
@@ -841,6 +912,8 @@ def test_prepare_strict_data_quality_gate_passes_clean_math_sidecar(tmp_path) ->
     assert sidecar_quality["rows"] == 1
     assert sidecar_quality["missing_required_fields"] == {}
     assert sidecar_quality["duplicate_source_key_count"] == 0
+    assert sidecar_quality["base_train_source_key_overlap_count"] == 0
+    assert sidecar_quality["base_train_normalized_prompt_overlap_count"] == 0
     assert sidecar_quality["validation_source_key_overlap_count"] == 0
 
     strict = manifest["data_quality"]["strict_enforcement"]
