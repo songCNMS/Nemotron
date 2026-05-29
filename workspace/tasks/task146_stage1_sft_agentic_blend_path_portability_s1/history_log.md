@@ -14,3 +14,6 @@
 - Added focused Stage1 SFT agentic blend-path tests covering raw YAML,
   OmegaConf resolution, producer default parity, and preserved Super3/Qwen
   fields.
+- Ran focused pytest, py_compile, Ruff, structured OmegaConf probe, static grep
+  probe, added-line live-surface scan, and diff checks.
+- Opened PR #253 to `main`: https://github.com/songCNMS/Nemotron/pull/253.

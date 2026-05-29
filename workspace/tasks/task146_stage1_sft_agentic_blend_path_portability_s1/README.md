@@ -22,4 +22,4 @@
 
 - Branch: `intern_nem_dev_1/task146_stage1_sft_agentic_blend_path_portability_s1`
 - Base: `7145c7de80f03555259a9b5657cc4066812f50d0`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/253

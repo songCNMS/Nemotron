@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task146_stage1_sft_agentic_blend_path_portability_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/253 |
 | Session | 1 |
-| Recent Progress | Accepted task146 from origin/main 7145c7de80f03555259a9b5657cc4066812f50d0; implementing NEMO_RUN_DIR-relative Stage1 SFT agentic blend_path defaults |
+| Recent Progress | Opened PR #253 for task146; Stage1 SFT agentic blend_path defaults now use NEMO_RUN_DIR-relative M1 producer output and focused tests/probes passed |
