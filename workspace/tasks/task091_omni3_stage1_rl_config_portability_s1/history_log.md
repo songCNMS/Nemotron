@@ -133,3 +133,5 @@
   fails when `source_uri` has no matching dataset row in the loaded blend.
 - Added focused negative test/probe coverage for the missing matching blend row
   case and recorded this Session 19 bookkeeping entry.
+- Opened task123 PR #231 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/231.

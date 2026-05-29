@@ -48,8 +48,8 @@ existing prepared-run cache or omit source lineage.
   dataset row.
 - [x] Focused pytest, py_compile, Ruff, metadata probe, static source-pin
   probe, and diff whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/231

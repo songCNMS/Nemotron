@@ -32,3 +32,4 @@
   structured local probe for the missing-row guard.
 - Re-ran focused pytest, py_compile, Ruff, metadata source-pin probe, static
   unpinned-source probe, guard probe, and diff whitespace checks.
+- Opened PR #231 to `main`: https://github.com/songCNMS/Nemotron/pull/231.
