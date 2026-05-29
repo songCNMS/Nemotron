@@ -1,6 +1,6 @@
 # task155_omni3_valor32k_config_comment_portability_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -15,3 +15,15 @@
 - Verified focused pytest (`1 passed`), `py_compile`, Ruff, scoped grep,
   `git diff --check`, and `git diff --cached --check`.
 - Opened PR #262 to `main`: https://github.com/songCNMS/Nemotron/pull/262.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #262 merged to `main` at
+  `d87f2873437547cccbb24e60ae028a41008a0426` after replacement-base PM gate,
+  independent exact-head test PASS, final ref check, and merged-main
+  verification.
+- Confirmed PR #262 state `MERGED`; PR head was
+  `8e36fc595c83057a0f49d4aec125a623babad745`.
+- Synced local `main` cleanly to merged `origin/main`
+  `d87f2873437547cccbb24e60ae028a41008a0426`.
+- Recorded Session 2 closeout and returned status to idle with no active task.

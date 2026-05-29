@@ -1,12 +1,13 @@
 # task155_omni3_valor32k_config_comment_portability_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: Ready for PM gate
+Status: Merged
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task155_omni3_valor32k_config_comment_portability_s1`
 Base: `795eb92359257ed82816a8685db0f9cae1c751ae`
-PR: https://github.com/songCNMS/Nemotron/pull/262
+PR: https://github.com/songCNMS/Nemotron/pull/262 (merged)
+Merge commit: `d87f2873437547cccbb24e60ae028a41008a0426`
 
 ## Summary
 
@@ -34,3 +35,12 @@ internal user path with neutral operator guidance to set
 - PASS: scoped grep over `valor32k.yaml` found no named-user Lustre path and preserved `OMNI3_VALOR32K_ENERGON_PATH`
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
+
+## Closeout
+
+PM reported PR #262 merged to `main` at
+`d87f2873437547cccbb24e60ae028a41008a0426` after replacement-base PM gate,
+independent exact-head test PASS, final ref check, and merged-main
+verification. Local `main` was fast-forwarded to the merge commit. No live
+Valor32k/HF download, data prep, train/eval, endpoint, W&B, cluster, deploy,
+artifact download, direct `main`/`master` push, or self-merge occurred.
