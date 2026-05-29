@@ -205,4 +205,13 @@
 - Validation passed locally: focused SFT pytest shard, py_compile, Ruff, structured sidecar/base-train overlap probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #220: https://github.com/songCNMS/Nemotron/pull/220
 
+- Task116 follow-up in same Session 17:
+- Read PM assignment for `task116_packed_sft_parquet_checksum_lineage_s1`.
+- Fast-forwarded local `main` to `bd5e907040647b760d82cd32315f2e85147bc4fd` and created branch `intern_nem_dev_1/task116_packed_sft_parquet_checksum_lineage_s1`.
+- Extended `ParquetShardWriter.finalize()` to compute deterministic `xxh64:<16 hex>` checksums and byte counts after final parquet promotion, supporting local and PyArrow filesystem paths.
+- Plumbed writer checksum/bytes into packed SFT parquet core file metadata and stage receipt payloads, with explicit `xxh64:empty` / `xxh64:missing` fallback metadata instead of `xxh64:unknown`.
+- Added focused data-prep tests proving real checksums are emitted, match file bytes, change when parquet contents change, and flow through core/stage metadata.
+- Validation passed locally: focused packed parquet checksum pytest shard, py_compile, Ruff, product grep showing no `xxh64:unknown` in touched packed parquet product files, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #224: https://github.com/songCNMS/Nemotron/pull/224
+
 ---
