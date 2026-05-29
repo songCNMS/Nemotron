@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task151_super3_stage0_pretrain_tiny_blend_contract_s1 |
-| PR | Not opened yet |
+| PR | https://github.com/songCNMS/Nemotron/pull/257 |
 | Session | 1 |
-| Recent Progress | Accepted task151 and made Super3 Stage0 tiny pretrain use a non-empty Super3-owned small blend |
+| Recent Progress | Opened PR #257 for Super3 Stage0 tiny pretrain blend ownership after focused pytest, py_compile, Ruff, structured/static probes, and diff checks passed |

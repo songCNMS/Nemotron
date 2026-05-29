@@ -23,4 +23,4 @@
 
 - Branch: `intern_nem_dev_3/task151_super3_stage0_pretrain_tiny_blend_contract_s1`
 - Base: `17ed7b0e5195878030ff09118fb79caee200b824`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/257

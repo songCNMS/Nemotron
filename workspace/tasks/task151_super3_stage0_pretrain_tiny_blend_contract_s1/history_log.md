@@ -15,3 +15,4 @@
   non-repo CWD resolution, and dataclass override preservation.
 - Verified focused pytest, py_compile, Ruff, structured YAML/dataclass probe,
   static Nano3 stale-path grep, and diff check before staging.
+- Opened PR #257 to `main`: https://github.com/songCNMS/Nemotron/pull/257.
