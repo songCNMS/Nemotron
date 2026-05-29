@@ -22,7 +22,7 @@
 
 - Base: `4077e2e155ec4ed5d3d4594793514e088cae873e`
 - Branch: `intern_nem_dev_3/task176_super_automodel_text2sql_bird_revision_pins_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/283
 - Checks: focused static notebook pytest, py_compile, Ruff, structured notebook
   probe, unpinned-call grep, added-line live-surface scan, and diff checks
   passed.
