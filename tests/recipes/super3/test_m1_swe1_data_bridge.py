@@ -124,6 +124,10 @@ def test_registry_rejects_non_swe1_mix(tmp_path: Path) -> None:
 envs:
   - nemo_gym_env: stub
     mix: rlvr1
+    m0_env_id: m0_stub
+    m0_verifier: exact_match
+    nemo_gym_verifier: exact_match
+    license: apache-2.0
     status: active
 """,
         encoding="utf-8",

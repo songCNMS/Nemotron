@@ -208,6 +208,10 @@ def test_env_registry_rejects_non_swe2_mix(tmp_path: Path) -> None:
 envs:
   - nemo_gym_env: stub
     mix: swe1
+    m0_env_id: m0_stub
+    m0_verifier: exact_match
+    nemo_gym_verifier: exact_match
+    license: apache-2.0
     status: active
 """,
         encoding="utf-8",
@@ -223,6 +227,10 @@ def test_env_registry_rejects_unknown_sif_source(tmp_path: Path) -> None:
 envs:
   - nemo_gym_env: stub
     mix: swe2
+    m0_env_id: m0_stub
+    m0_verifier: exact_match
+    nemo_gym_verifier: exact_match
+    license: apache-2.0
     status: active
     sif_source: not-a-source
 """,

@@ -102,5 +102,10 @@
 90. file change: `_reasoning_target_from_reference()` now builds one `final_answer_line` and reuses it for non-empty and empty reference-solution paths, preserving already-boxed behavior.
 91. test evidence: Task120 focused M1 SFT shard passed with 94 tests and 1 skipped; py_compile, Ruff, structured helper/rendered-target probe, and diff checks passed.
 92. file change: PR #227 opened against `main` for task120 M1 Agentic math final-answer de-duplication.
+93. supervisor request: PM assigned task124 to sync latest main, add a shared active-row metadata guard across RLVR/SWE1/SWE2/RLHF bridge registries, open a PR, and avoid live runs/main push/self-merge.
+94. technical fact: Active bridge registry rows are the rows that feed downstream data, so they now require non-empty M0 env/verifier, NeMo-Gym verifier, and reviewed license metadata; inactive blocker rows may still carry unknown/pending metadata.
+95. file change: `_bridge_base.load_env_registry()` now rejects active rows with missing `m0_env_id`, `m0_verifier`, `nemo_gym_verifier`, `license`, or placeholder/unknown license values.
+96. test evidence: Task124 required RLVR/SWE1/SWE2/RLHF bridge shard passed with 79 tests; py_compile, Ruff, structured active-row metadata probe, and diff checks passed.
+97. file change: PR #230 opened against `main` for task124 bridge active-row metadata contract.
 
 ---

@@ -57,6 +57,22 @@ SOURCE_METADATA_REQUIRED_FIELDS = (
     "license",
 )
 DATA_QUALITY_SAMPLE_LIMIT = 20
+ACTIVE_ROW_METADATA_FIELDS = (
+    "m0_env_id",
+    "m0_verifier",
+    "nemo_gym_verifier",
+    "license",
+)
+ACTIVE_ROW_PLACEHOLDER_LICENSES = frozenset(
+    {
+        "unknown",
+        "unknown-pending-review",
+        "unknown_pending_legal_review",
+        "license-pending-legal-review",
+        "placeholder-pending-source-selection",
+        "placeholder-pending-source-pin",
+    }
+)
 
 
 # --- JSONL / JSON I/O -----------------------------------------------------
@@ -344,6 +360,27 @@ def discover_m0_split_files(input_dir: Path) -> dict[str, dict[str, Path]]:
 # --- Generic env registry loader -----------------------------------------
 
 
+def _is_non_empty_registry_value(value: Any) -> bool:
+    return value is not None and str(value).strip() != ""
+
+
+def _active_row_metadata_validator(row: JsonDict, index: int) -> str | None:
+    if row.get("status") != STATUS_ACTIVE:
+        return None
+
+    for field in ACTIVE_ROW_METADATA_FIELDS:
+        if not _is_non_empty_registry_value(row.get(field)):
+            return f"active row requires non-empty {field!r}"
+
+    license_value = str(row["license"]).strip()
+    if license_value.lower() in ACTIVE_ROW_PLACEHOLDER_LICENSES:
+        return (
+            f"active row license {license_value!r} is placeholder/unknown; "
+            "use a reviewed source license before promoting the row"
+        )
+    return None
+
+
 def load_env_registry(
     path: Path,
     *,
@@ -416,6 +453,7 @@ def load_env_registry(
         source_path=path,
         extra_validators=[
             bridge_status_validator,
+            _active_row_metadata_validator,
             _mix_validator,
             _extra_row_adapter,
         ],
