@@ -1,6 +1,6 @@
 # task129_rlhf_pref_contamination_against_contract_s1 knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
 - PM replacement gate can validate the same head against a newer base before
   independent testing; keep the branch stable unless PM requests a rebase or
   fix.
+- After PR #236 merge, fast-forward local `main` to the PM-reported merge
+  commit before accepting more work, then record closeout on an owned branch.

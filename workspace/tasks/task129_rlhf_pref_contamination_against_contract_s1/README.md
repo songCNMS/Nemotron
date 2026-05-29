@@ -1,6 +1,6 @@
 # task129_rlhf_pref_contamination_against_contract_s1 - RLHF pref contamination targets
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_2 -->
 
 ## Background
 

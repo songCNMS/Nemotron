@@ -1,6 +1,6 @@
 # task129_rlhf_pref_contamination_against_contract_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -29,3 +29,14 @@
   live-surface scan.
 - Independent test assignment is waiting for PR #235 sequencing to avoid
   stale-base churn; no product/test change was needed in this session.
+
+## Session 3 - 2026-05-29
+
+- PM reported PR #236 was squash-merged through the GitHub PR flow.
+- Synced local `main` to merged-main commit
+  `df587d239f573503347f7e36f5f8354ff581a186`.
+- PM reported merged-main checks passed: focused pytest shard,
+  contamination CLI, py_compile, Ruff, diff checks, and required-pref
+  `contamination_against` probe.
+- Marked task129 completed and returned intern status to Idle on the closeout
+  sync branch without pushing `main` or `master`.
