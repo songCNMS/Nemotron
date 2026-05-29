@@ -1,5 +1,8 @@
-from datasets import Dataset, load_dataset
 from base_sft_dataset import BaseSFTDataset
+from datasets import Dataset, load_dataset
+
+BIRD_REASONING_DATASET_REPO = "meowterspace45/bird-sql-train-with-reasoning"
+BIRD_REASONING_DATASET_REVISION = "9e351e0057819f1b0917debb83c8e12f321157a4"
 
 USER_MESSAGE_TEMPLATE = """
 {schema}
@@ -7,6 +10,7 @@ USER_MESSAGE_TEMPLATE = """
 {question}
 {evidence}
 """
+
 
 class DatasetBIRDReasoning(BaseSFTDataset):
 
@@ -36,7 +40,11 @@ class DatasetBIRDReasoning(BaseSFTDataset):
         }
 
     def _load_dataset(self) -> Dataset:
-        return load_dataset("meowterspace45/bird-sql-train-with-reasoning", split="train")
+        return load_dataset(
+            BIRD_REASONING_DATASET_REPO,
+            split="train",
+            revision=BIRD_REASONING_DATASET_REVISION,
+        )
 
     def _prepare_dataset(self, dataset: Dataset):
         dataset = dataset.map(
