@@ -99,6 +99,34 @@ def test_qwen_eval_repro_gate_current_source_manifests_are_repo_relative_existin
         assert (REPO_ROOT / path).is_file(), manifest
 
 
+def test_qwen_eval_repro_gate_current_evidence_source_manifests_are_declared() -> None:
+    gate = _gate_data()
+    declared = set(gate["source_manifests"])
+
+    assert validate_qwen_eval_repro_gate(gate) == []
+    for record in gate["evidence_records"]:
+        assert record["source_manifest"] in declared, record["evidence_id"]
+
+
+def test_qwen_eval_repro_gate_rejects_undeclared_evidence_source_manifest() -> None:
+    data = deepcopy(_gate_data())
+    undeclared_manifest = (
+        "src/nemotron/recipes/super3/milestones/m1_eval_basket/"
+        "qwen_eval_repro_gate.yaml"
+    )
+    assert (REPO_ROOT / undeclared_manifest).is_file()
+    assert undeclared_manifest not in data["source_manifests"]
+    data["evidence_records"][0]["source_manifest"] = undeclared_manifest
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "evidence_records[0].source_manifest is not declared in top-level "
+        "source_manifests" in issue
+        for issue in issues
+    )
+
+
 def test_qwen_eval_repro_gate_rejects_source_manifest_traversal_paths() -> None:
     data = deepcopy(_gate_data())
     data["source_manifests"] = ["../instruction.md"]
