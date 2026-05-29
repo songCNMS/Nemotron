@@ -15,3 +15,4 @@
   calling `snapshot_download`.
 - Verified focused pytest, `py_compile`, Ruff, structured mock no-download
   probe for unpinned/floating refs, and `git diff --check` before staging.
+- Opened PR #263 to `main`: https://github.com/songCNMS/Nemotron/pull/263.
