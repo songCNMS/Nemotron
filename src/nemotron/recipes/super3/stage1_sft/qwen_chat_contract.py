@@ -201,6 +201,64 @@ def validate_qwen_data_prep_config(
             )
 
 
+def _uses_qwen_chat_template_kwargs(config: Mapping[str, Any]) -> bool:
+    chat_template = _config_value(config, "chat_template")
+    chat_template_kwargs = _config_value(config, "chat_template_kwargs")
+    if chat_template != QWEN_SFT_CHAT_TEMPLATE or not isinstance(chat_template_kwargs, Mapping):
+        return False
+    return any(key in chat_template_kwargs for key in QWEN_SFT_CHAT_TEMPLATE_KWARGS)
+
+
+def validate_sft_data_prep_target_family_config(
+    config: Mapping[str, Any],
+    *,
+    config_path: str | Path | None = None,
+) -> None:
+    """Require the Qwen data-prep contract for recognizably Qwen settings.
+
+    Legacy Super3 configs remain valid when they use Super3/Nemotron tokenizer
+    and template defaults. A config becomes Qwen-targeted as soon as it carries a
+    Qwen tokenizer/model reference, Qwen tokenizer-template kwargs, or explicit
+    Qwen profile labels.
+    """
+
+    label = str(config_path) if config_path is not None else "SFT data-prep config"
+    target_family = _config_value(config, "target_model_family")
+    config_name = _config_value(config, "config_name")
+    tokenizer_model = _config_value(config, "tokenizer_model")
+
+    tokenizer_is_qwen = _is_qwen_ref(tokenizer_model)
+    qwen_template_kwargs = _uses_qwen_chat_template_kwargs(config)
+    qwen_labeled = target_family == QWEN_DATA_PREP_TARGET_FAMILY or (
+        isinstance(config_name, str) and config_name.startswith("qwen")
+    )
+    if not (tokenizer_is_qwen or qwen_template_kwargs or qwen_labeled):
+        return
+
+    if target_family != QWEN_DATA_PREP_TARGET_FAMILY or config_name != QWEN_DATA_PREP_CONFIG_NAME:
+        signals: list[str] = []
+        if tokenizer_is_qwen:
+            signals.append(f"tokenizer.model={tokenizer_model!r}")
+        if qwen_template_kwargs:
+            signals.append(
+                "chat_template='tokenizer' with Qwen thinking chat_template_kwargs"
+            )
+        if target_family == QWEN_DATA_PREP_TARGET_FAMILY:
+            signals.append(f"target_model_family={target_family!r}")
+        if isinstance(config_name, str) and config_name.startswith("qwen"):
+            signals.append(f"config_name={config_name!r}")
+        signal_text = ", ".join(signals) if signals else "Qwen settings"
+        raise ValueError(
+            f"{label} has Qwen data-prep settings ({signal_text}) but is not using "
+            "the Qwen SFT data-prep contract. Use config/data_prep/qwen_agentic_v0.yaml "
+            f"or set target_model_family={QWEN_DATA_PREP_TARGET_FAMILY!r} and "
+            f"config_name={QWEN_DATA_PREP_CONFIG_NAME!r}; got "
+            f"target_model_family={target_family!r}, config_name={config_name!r}."
+        )
+
+    validate_qwen_data_prep_config(config, config_path=config_path)
+
+
 def _is_qwen_ref(value: str | None) -> bool:
     if not value:
         return False
@@ -412,5 +470,6 @@ __all__ = [
     "qwen_local_packed_sft_dir_default",
     "validate_qwen_data_prep_config",
     "validate_qwen_packed_sft_chat_contract",
+    "validate_sft_data_prep_target_family_config",
     "validate_qwen_training_pipeline_contract",
 ]
