@@ -1,10 +1,11 @@
 # task152_super3_m1_agentic_docs_path_portability_s1
 
-Status: Ready for PM gate
+Status: Merged
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task152_super3_m1_agentic_docs_path_portability_s1`
 Base: `17ed7b0e5195878030ff09118fb79caee200b824`
-PR: https://github.com/songCNMS/Nemotron/pull/259
+PR: https://github.com/songCNMS/Nemotron/pull/259 (merged)
+Merge commit: `bc717911b917fbab63f785163da75773effc4872`
 
 ## Scope
 
@@ -30,3 +31,7 @@ Docs/comments/static-test only. Do not touch task150/task151 tiny blend files, p
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
 - PASS: added-line live-surface scan showed docs/status-only expected matches
+
+## Closeout
+
+PM reported PR #259 merged after independent exact-head gate PASS. Merged-main checks passed: focused docs pytest (`2 passed`), py_compile, Ruff, `git diff --check`, scoped named-user path grep, and structured docs probe. No live M0/M1 data prep, SFT packing, train/eval, endpoint, W&B, cluster, deploy, artifact download, main/master push, or self-merge occurred.
