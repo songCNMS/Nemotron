@@ -32,8 +32,8 @@ the Qwen stop-string contract.
   the payload supplied by the converter.
 - [x] RLVR smoke shard, focused pytest, py_compile, Ruff, static fallback probe,
   and diff whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending branch push.
+- https://github.com/songCNMS/Nemotron/pull/225

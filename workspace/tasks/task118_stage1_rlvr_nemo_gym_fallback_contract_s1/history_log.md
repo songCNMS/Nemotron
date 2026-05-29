@@ -16,3 +16,4 @@
   converter delegation, and source-level absence of the old fallback.
 - Verified RLVR smoke plus focused pytest, py_compile, Ruff, static fallback
   probe, and diff whitespace checks.
+- Opened PR #225 to `main`: https://github.com/songCNMS/Nemotron/pull/225.
