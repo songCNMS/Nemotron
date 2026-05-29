@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -117,5 +117,10 @@
 105. file change: `rl_local.py` now records input JSONL SHA-256 in run config and manifests, bridge manifest SHA-256 for `val_holdout=auto`, and pre-resolution input SHA-256 for `run_resolve_and_split()`.
 106. test evidence: Task131 focused stage2 RL bridge/default and RLVR smoke shard passed with 33 tests; py_compile, Ruff, structured stale-cache probe, and diff checks passed.
 107. file change: PR #237 opened against `main` for task131 RL local split source-content cache identity.
+108. supervisor request: PM assigned task134 to reconcile generated SFT split directories so stale `.parquet` entries cannot leak old packed shards into later training reruns.
+109. technical fact: `realize_packed_shards_into_split_dirs()` manages `output_dir/splits/{split}` symlinks from current `split_to_paths`, while Stage1 SFT training discovers parquet files from those split directories.
+110. file change: `splits.py` now removes stale `.parquet` file/symlink entries whose names are not in the current desired shard set, preserves non-parquet sidecars, and fails clearly on stale/current parquet directories or non-file blockers.
+111. test evidence: Task134 focused split utility tests passed with 4 tests; Stage1 SFT roundtrip smoke passed; py_compile, Ruff, structured stale-cleanup probe, and diff checks passed.
+112. file change: PR #242 opened against `main` for task134 SFT split-dir stale shard cleanup.
 
 ---

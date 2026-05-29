@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task131_stage2_rl_local_split_content_hash_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/237 |
-| Session | 20 |
-| Recent Progress | Opened PR #237 adding RL local split source-content SHA-256 cache identity; focused stage2 RL bridge/default tests, py_compile, Ruff, stale-cache probe, and diff checks passed |
+| Current Task | task134_sft_split_dir_stale_shard_cleanup_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/242 |
+| Session | 21 |
+| Recent Progress | Opened PR #242 cleaning stale SFT split-dir parquet entries; focused split utility tests, Stage1 SFT roundtrip smoke, py_compile, Ruff, structured stale-cleanup probe, and diff checks passed |

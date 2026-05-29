@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ---
 
@@ -255,5 +255,18 @@
 - Added focused stale-cache tests for direct split, bridge-manifest auto holdout, and resolve-and-split source content identity.
 - Validation passed locally: required stage2 RL bridge/default and RLVR smoke pytest shard, py_compile, Ruff, structured stale-cache probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #237: https://github.com/songCNMS/Nemotron/pull/237
+
+## Session 21 - 2026-05-29 - Task134 SFT split-dir stale shard cleanup
+
+**Executor**: intern_nem_dev_1
+
+- Read PM assignment for `task134_sft_split_dir_stale_shard_cleanup_s1`.
+- Confirmed `origin/main` at PM base `36101b1e2152fd3f52cea8b0af5770c57d881227` and worked on branch `intern_nem_dev_1/task134_sft_split_dir_stale_shard_cleanup_s1`.
+- Updated `realize_packed_shards_into_split_dirs()` to reconcile generated split directories by removing stale `.parquet` file/symlink entries not in the current desired shard set.
+- Preserved non-parquet sidecars, current shard relative symlinks, missing train-shard failure, and remote filesystem existence checks.
+- Added clear failures for stale/current `.parquet` entries that are directories or unexpected non-file blockers.
+- Added focused split utility tests covering stale regular files, stale broken symlinks, sidecar preservation, stale/current directory blockers, and missing train shards.
+- Validation passed locally: focused split utility pytest, Stage1 SFT roundtrip smoke, py_compile, Ruff, structured stale-cleanup probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #242: https://github.com/songCNMS/Nemotron/pull/242
 
 ---
