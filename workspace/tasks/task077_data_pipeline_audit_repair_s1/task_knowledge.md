@@ -97,5 +97,10 @@
 85. file change: Packed SFT parquet core/stage metadata now consumes writer checksum/bytes and uses explicit `xxh64:empty` or `xxh64:missing` fallback metadata instead of `xxh64:unknown`.
 86. test evidence: Task116 focused data-prep checksum shard passed with 3 tests; py_compile, Ruff, product grep for no `xxh64:unknown`, and diff checks passed.
 87. file change: PR #224 opened against `main` for task116 packed SFT parquet checksum lineage.
+88. supervisor request: PM assigned task120 to sync latest main, fix M1 Agentic SFT math reasoning final-answer duplication in `_reasoning_target_from_reference()`, add focused tests/probe, open a PR, and avoid live runs/main push/self-merge.
+89. technical fact: `_reasoning_target_from_reference()` should append a parser-readable `Final answer: \\boxed{expected}` tail exactly once only when the reference solution lacks the expected boxed answer.
+90. file change: `_reasoning_target_from_reference()` now builds one `final_answer_line` and reuses it for non-empty and empty reference-solution paths, preserving already-boxed behavior.
+91. test evidence: Task120 focused M1 SFT shard passed with 94 tests and 1 skipped; py_compile, Ruff, structured helper/rendered-target probe, and diff checks passed.
+92. file change: PR #227 opened against `main` for task120 M1 Agentic math final-answer de-duplication.
 
 ---
