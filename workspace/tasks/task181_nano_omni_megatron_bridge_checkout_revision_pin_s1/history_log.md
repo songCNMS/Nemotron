@@ -15,6 +15,7 @@
 - Ran focused static notebook pytest, adjacent Nano-Omni CORD-v2 notebook
   pytest, py_compile, Ruff, structured notebook probe, stale-branch grep,
   added-line live-surface scan, and `git diff --check`.
+- Opened PR #288 to `main`: https://github.com/songCNMS/Nemotron/pull/288.
 - No notebook execution, live git clone/fetch/checkout, container build,
   dataset download, data prep, train/eval, endpoint, W&B, cluster job, deploy,
   artifact op, direct `main`/`master` push, or self-merge was performed.
