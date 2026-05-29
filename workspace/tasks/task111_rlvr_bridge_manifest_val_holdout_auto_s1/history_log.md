@@ -19,3 +19,4 @@
   numeric holdout compatibility.
 - Verified focused pytest, py_compile, Ruff, structured RLVR fixture probe, and
   static RLVR config probe.
+- Opened PR #218 to `main`: https://github.com/songCNMS/Nemotron/pull/218.

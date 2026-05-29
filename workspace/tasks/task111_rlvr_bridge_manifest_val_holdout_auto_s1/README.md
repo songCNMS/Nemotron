@@ -38,8 +38,8 @@ from the original bridge input before placeholder resolution.
 - [x] Explicit numeric holdout still works for plain local JSONL.
 - [x] Focused pytest, py_compile, Ruff, structured fixture probe, static config
   probe, and diff whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending branch push.
+- https://github.com/songCNMS/Nemotron/pull/218
