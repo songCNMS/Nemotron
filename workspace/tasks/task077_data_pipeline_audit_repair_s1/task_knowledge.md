@@ -76,5 +76,10 @@
 64. file change: Qwen SFT data prep `qwen_agentic_v0.yaml` now sets `tokenizer.model` from `${oc.env:SUPER3_M1_TOKENIZER_MODEL,${oc.env:SUPER3_M1_QWEN_HF_MODEL}}`.
 65. test evidence: Task106 focused Qwen/M1 SFT pytest shard passed with 95 tests and 1 skipped; py_compile, Ruff, structured OmegaConf both-env/fallback probe, and diff checks passed.
 66. file change: PR #213 opened against `main` for task106 Qwen SFT data-prep tokenizer env contract.
+67. supervisor request: PM assigned task108 to sync latest main, add a Qwen scale-up planner path for `prepare_m1_agentic_sft.py --fail-on-data-quality-issues`, record the setting in manifest/report, run focused planner checks, open a PR, and avoid live runs/main push/self-merge.
+68. technical fact: `prepare_m1_agentic_sft.py` has an opt-in strict data-quality gate, but Qwen scale-up planning previously generated the local data-prep command without a way to enable it.
+69. file change: Qwen scale-up planner now exposes explicit `--fail-on-data-quality-issues`, records it under `manifest["data"]["fail_on_data_quality_issues"]`, reports `Strict data-quality gate`, and renders the prepare flag when enabled.
+70. test evidence: Task108 focused Qwen scale-up planner shard passed with 23 tests; py_compile, Ruff, structured strict-gate render probe, `git diff --check`, and `git diff --cached --check` passed.
+71. file change: PR #214 opened against `main` for task108 Qwen scale-up strict data-quality planning.
 
 ---

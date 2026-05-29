@@ -309,6 +309,17 @@ def test_scaleup_planner_can_emit_uncapped_m0_data_prep(tmp_path) -> None:
     assert "--max-val-per-dataset" not in local_script
 
 
+def test_scaleup_planner_can_enable_strict_data_quality_gate(tmp_path) -> None:
+    manifest = build_manifest(_args(tmp_path, "--fail-on-data-quality-issues"))
+    local_script = render_local_data_prep_script(manifest)
+    report = render_report(manifest)
+
+    assert manifest["data"]["fail_on_data_quality_issues"] is True
+    assert "prepare_m1_agentic_sft.py" in local_script
+    assert "--fail-on-data-quality-issues" in local_script
+    assert "Strict data-quality gate: `True`" in report
+
+
 def test_scaleup_planner_can_emit_math_reasoning_replay_v3_data_prep(tmp_path) -> None:
     args = build_parser().parse_args(
         [

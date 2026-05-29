@@ -178,4 +178,13 @@
 - Validation passed locally: focused Qwen/M1 SFT pytest shard, py_compile for touched test, Ruff for touched test, structured OmegaConf both-env/fallback probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #213: https://github.com/songCNMS/Nemotron/pull/213
 
+- Task108 follow-up in same Session 17:
+- Read PM assignment for `task108_qwen_scaleup_strict_data_quality_plan_s1`.
+- Fast-forwarded local `main` to `ac90f15ee5dfbbb9a35ef7f3753581632e1d4d0e` and created branch `intern_nem_dev_1/task108_qwen_scaleup_strict_data_quality_plan_s1`.
+- Added an explicit Qwen scale-up planner `--fail-on-data-quality-issues` flag.
+- Recorded the strict data-quality setting in the generated manifest/report and rendered `--fail-on-data-quality-issues` into the local `prepare_m1_agentic_sft.py` command when enabled.
+- Added focused planner coverage proving the enabled strict gate is present in manifest/report output and generated local data-prep script content.
+- Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, structured strict-gate render probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #214: https://github.com/songCNMS/Nemotron/pull/214
+
 ---
