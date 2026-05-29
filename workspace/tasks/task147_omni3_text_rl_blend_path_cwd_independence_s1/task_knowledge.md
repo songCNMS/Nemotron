@@ -1,6 +1,6 @@
 # task147_omni3_text_rl_blend_path_cwd_independence_s1 knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Notes
 
@@ -11,3 +11,5 @@
   user paths such as `custom/blend.json` remain caller-relative.
 - Session 8 added no new implementation knowledge; it only aligned durable
   bookkeeping with the open PR state.
+- Session 9 added no new implementation knowledge; it only recorded PR #254
+  merge completion and PM merged-main verification.

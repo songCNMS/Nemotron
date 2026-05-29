@@ -1,6 +1,6 @@
 # task147_omni3_text_rl_blend_path_cwd_independence_s1 history
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 1 - 2026-05-29
 
@@ -24,3 +24,10 @@
 
 - Added stop-hook bookkeeping for the already-open PR #254; no product or test
   code changes were made in this session.
+
+## Session 9 - 2026-05-29
+
+- Recorded PM notice that PR #254 merged from exact head
+  `e964138b191570c7f28ef26411981a20f1dc751a`; squash merge/new main is
+  `652534e4865e20b72f4c80bf62b6c0cea5973fd1` and PM merged-main
+  verification passed.
