@@ -32,15 +32,13 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
 from nemotron.data_prep.recipes.rl_local import (
-    LocalSplitResult,
     run_resolve_and_split,
     split_local_jsonl,
 )
-from nemotron.kit import SplitJsonlDataArtifact, print_step_complete
-from nemotron.kit import wandb_kit
+from nemotron.kit import SplitJsonlDataArtifact, print_step_complete, wandb_kit
 from nemotron.kit.trackers import InputDatasetInfo
-from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
 from nemotron.kit.train_script import (
     apply_hydra_overrides,
     init_wandb_from_env,
@@ -65,7 +63,9 @@ class SubStageDataPrepConfig:
     Attributes:
         input_path: Path to the source JSONL file (e.g., /lustre/.../rlvr1.jsonl).
         output_dir: Output directory for processed data.
-        val_holdout: Number of rows to hold out for validation (from end of file).
+        val_holdout: Number of rows to hold out for validation (from end of file),
+            or "auto" to infer a bridge combined.jsonl holdout from sibling
+            manifest.json counts.val.
         sample: Limit total rows per dataset (for quick tests).
         force: Force new run, ignoring cache.
         resolve_hf_placeholders: Whether to resolve _hf_placeholder entries.
@@ -79,8 +79,8 @@ class SubStageDataPrepConfig:
     output_dir: Path = field(default_factory=lambda: _OUTPUT_BASE / "output/super3/stage2_rl")
     """Output directory for processed data"""
 
-    val_holdout: int = 100
-    """Number of rows to hold out for validation (from end of file)"""
+    val_holdout: int | str = 100
+    """Number of rows to hold out for validation, or "auto" for bridge manifests"""
 
     sample: int | None = None
     """Limit total rows (for quick tests)"""
