@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 1 - 2026-05-28
 
@@ -90,3 +90,14 @@
 - Added guarded zip extraction for MMPR public, MMPR-Tiny, and VLM preference
   prep paths, added focused synthetic zip tests/probes, and recorded this
   Session 15 bookkeeping entry.
+
+## Session 16 - 2026-05-29
+
+- PM assigned `task118_stage1_rlvr_nemo_gym_fallback_contract_s1` while active
+  intern bookkeeping still requires task091 Session 16 records.
+- Synced local `main` to `origin/main`
+  `40eab704f6d02dd65e94189f098e712be6a1f6f2` and worked on branch
+  `intern_nem_dev_2/task118_stage1_rlvr_nemo_gym_fallback_contract_s1`.
+- Removed the Stage1 RLVR local NeMo-Gym converter fallback that could emit
+  empty payloads with `stop_strings=None`, added focused tests/probes, and
+  recorded this Session 16 bookkeeping entry.

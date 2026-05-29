@@ -114,7 +114,7 @@ def convert_megatron_to_hf(
         print(f"HF checkpoint already exists at {output_path}, skipping conversion")
         return str(output_path)
 
-    print(f"Converting Megatron checkpoint to HuggingFace format...")
+    print("Converting Megatron checkpoint to HuggingFace format...")
     print(f"  Source: {megatron_path}")
     print(f"  HF model ID: {hf_model_id}")
     print(f"  Output: {output_path}")
@@ -152,7 +152,7 @@ def setup_initial_checkpoint(initial_checkpoint_path: str, checkpoint_dir: str) 
 
     if not initial_path.exists():
         print(f"ERROR: Initial checkpoint path does not exist: {initial_path}")
-        print(f"  Checking parent directory...")
+        print("  Checking parent directory...")
         parent = initial_path.parent
         if parent.exists():
             print(f"  Parent exists: {parent}")
@@ -199,25 +199,9 @@ def setup_initial_checkpoint(initial_checkpoint_path: str, checkpoint_dir: str) 
 
 def setup_single_nemo_gym_dataset(jsonl_fpath: str, tokenizer, num_repeats: int | None = None):
     """Load and prepare a NeMo-Gym dataset from JSONL file."""
-    import torch
-
     from nemo_rl.data.datasets import AllTaskProcessedDataset
     from nemo_rl.data.interfaces import DatumSpec
-
-    try:
-        from nemo_rl.environments.nemo_gym import nemo_gym_example_to_nemo_rl_datum_spec
-    except ImportError:
-        def nemo_gym_example_to_nemo_rl_datum_spec(nemo_gym_example: dict, idx: int) -> DatumSpec:
-            return DatumSpec(
-                message_log=[{"role": "user", "content": "", "token_ids": torch.tensor([])}],
-                length=0,
-                extra_env_info=nemo_gym_example,
-                loss_multiplier=1.0,
-                idx=idx,
-                task_name="nemo_gym",
-                stop_strings=None,
-                token_ids=[],
-            )
+    from nemo_rl.environments.nemo_gym import nemo_gym_example_to_nemo_rl_datum_spec
 
     with open(jsonl_fpath) as f:
         nemo_gym_examples = list(map(json.loads, f))

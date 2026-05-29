@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,6 @@
 11. session 15 note: data-prep zip extraction should validate every archive
     member before writing any file, reject POSIX absolute paths, Windows drive
     paths, `..` components, and resolved targets outside the extraction root.
+12. session 16 note: Stage1 RLVR train loading should fail fast if the
+    NeMo-Gym datum converter is unavailable; local empty-datum fallbacks can
+    drop bridge payloads and bypass the Qwen `<|im_end|>` stop contract.
