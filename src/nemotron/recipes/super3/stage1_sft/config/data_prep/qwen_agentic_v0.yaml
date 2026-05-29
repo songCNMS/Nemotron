@@ -12,7 +12,7 @@ run:
 # model path and output directories, but target_model_family/config_name make
 # data_prep.py fail fast if this profile drifts back to Super3 defaults.
 
-blend_path: ${oc.env:PWD}/../output/super3/m1_agentic_sft_v0/data_blend_agentic_sft_v0.json
+blend_path: ${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_agentic_sft_v0/data_blend_agentic_sft_v0.json
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_agentic_v0_qwen
 
 num_shards: 16
