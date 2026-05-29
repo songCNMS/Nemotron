@@ -112,3 +112,21 @@ def test_benchmark_alignment_ledger_surfaces_bad_evidence_source_manifests() -> 
         and "must not contain traversal components" in issue
         for issue in issues
     ), issues
+
+
+def test_benchmark_alignment_rejects_directory_local_raw_artifacts(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_alignment_ledger_data())
+    artifact_dir = tmp_path / "raw_artifact_dir"
+    artifact_dir.mkdir()
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(artifact_dir)]
+    record["raw_artifact_sha256"] = {str(artifact_dir): "a" * 64}
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any(
+        "raw_artifact_paths local path must be a regular file" in issue
+        for issue in issues
+    ), issues

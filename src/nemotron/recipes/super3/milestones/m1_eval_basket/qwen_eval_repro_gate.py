@@ -187,9 +187,9 @@ def _validate_remote_artifact_check(
 def validate_raw_artifact_paths(paths: Any, *, context: str) -> list[str]:
     """Validate raw artifact paths used as gate evidence.
 
-    Local paths must exist in the current filesystem. Remote references are
-    allowed only when they use an explicit checked remote prefix such as
-    ``vm4vpn:``; the caller validates the corresponding check metadata.
+    Local paths must be regular files in the current filesystem. Remote
+    references are allowed only when they use an explicit checked remote prefix
+    such as ``vm4vpn:``; the caller validates the corresponding check metadata.
     """
     if (
         not isinstance(paths, list)
@@ -202,10 +202,17 @@ def validate_raw_artifact_paths(paths: Any, *, context: str) -> list[str]:
     for path in paths:
         if is_remote_artifact_reference(path):
             continue
-        if not Path(path).expanduser().exists():
+        local_path = Path(path).expanduser()
+        if not local_path.exists():
             issues.append(
                 f"{context} local path does not exist and is not a checked "
                 f"remote artifact reference: {path}"
+            )
+            continue
+        if not local_path.is_file():
+            issues.append(
+                f"{context} local path must be a regular file and is not a "
+                f"checked remote artifact reference: {path}"
             )
     return issues
 

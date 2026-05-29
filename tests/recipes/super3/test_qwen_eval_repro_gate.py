@@ -262,6 +262,24 @@ def test_qwen_eval_repro_gate_rejects_missing_local_raw_artifacts() -> None:
     assert any("local path does not exist" in issue for issue in issues)
 
 
+def test_qwen_eval_repro_gate_rejects_directory_local_raw_artifacts(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_gate_data())
+    artifact_dir = tmp_path / "raw_artifact_dir"
+    artifact_dir.mkdir()
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(artifact_dir)]
+    record["raw_artifact_sha256"] = {str(artifact_dir): "a" * 64}
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any(
+        "raw_artifact_paths local path must be a regular file" in issue
+        for issue in issues
+    )
+
+
 def test_remote_raw_artifact_refs_require_check_metadata() -> None:
     data = _gate_data()
     data["evidence_records"][0]["raw_artifact_paths"] = [

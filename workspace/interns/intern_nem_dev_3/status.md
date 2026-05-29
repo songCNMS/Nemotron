@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task125_qwen_eval_source_manifest_path_escape_guard_s1,SESSION=23 -->
+<!-- METADATA:STATUS=Working,TASK=task128_eval_raw_artifact_file_guard_s1,SESSION=1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task125_qwen_eval_source_manifest_path_escape_guard_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/232 |
-| Session | 23 |
-| Recent Progress | Added Session 23 stop-hook bookkeeping for PR #232; branch remains pushed and ready for PM gate |
+| Current Task | task128_eval_raw_artifact_file_guard_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/235 |
+| Session | 1 |
+| Recent Progress | Opened PR #235 for local raw artifact regular-file guard after focused pytest, py_compile, Ruff, structured probe, and diff checks passed |
