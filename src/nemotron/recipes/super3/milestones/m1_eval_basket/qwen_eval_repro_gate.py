@@ -217,7 +217,7 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _validate_local_raw_artifact_fingerprints(
+def validate_local_raw_artifact_fingerprints(
     paths: Any,
     fingerprints: Any,
     *,
@@ -409,7 +409,7 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
                 )
             )
             issues.extend(
-                _validate_local_raw_artifact_fingerprints(
+                validate_local_raw_artifact_fingerprints(
                     raw_paths,
                     record.get("raw_artifact_sha256"),
                     context=prefix,
@@ -566,6 +566,7 @@ __all__ = [
     "is_remote_artifact_reference",
     "load_qwen_eval_repro_gate",
     "qwen_repro_evidence_by_benchmark",
+    "validate_local_raw_artifact_fingerprints",
     "validate_raw_artifact_paths",
     "validate_qwen_eval_repro_gate",
 ]

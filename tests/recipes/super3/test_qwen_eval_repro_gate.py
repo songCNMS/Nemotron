@@ -414,6 +414,7 @@ def test_qwen_eval_repro_gate_validator_pins_chat_template_kwarg_values() -> Non
 def test_qwen_benchmark_alignment_ledger_loads_and_records_no_task071_improvement() -> None:
     ledger = load_benchmark_alignment_ledger()
 
+    assert validate_benchmark_alignment_ledger(_alignment_ledger_data()) == []
     corrected = next(
         suite
         for suite in ledger["target_suites"]
@@ -473,6 +474,49 @@ def test_qwen_benchmark_alignment_rejects_missing_raw_artifacts() -> None:
     issues = validate_benchmark_alignment_ledger(data)
 
     assert any("missing raw artifact evidence cannot count" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_missing_local_raw_artifact_fingerprint(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_alignment_ledger_data())
+    local_artifact = tmp_path / "local_artifact.json"
+    local_artifact.write_text("{}\n", encoding="utf-8")
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(local_artifact)]
+    record.pop("raw_artifact_sha256", None)
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("raw_artifact_sha256 must be a mapping" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_rejects_stale_local_raw_artifact_fingerprint(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_alignment_ledger_data())
+    local_artifact = tmp_path / "local_artifact.json"
+    local_artifact.write_text("{}\n", encoding="utf-8")
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(local_artifact)]
+    record["raw_artifact_sha256"] = {str(local_artifact): "0" * 64}
+
+    issues = validate_benchmark_alignment_ledger(data)
+
+    assert any("raw_artifact_sha256 mismatch" in issue for issue in issues)
+
+
+def test_qwen_benchmark_alignment_remote_raw_artifacts_do_not_require_local_fingerprints() -> None:
+    data = deepcopy(_alignment_ledger_data())
+    for record in data["evidence_records"]:
+        assert any(
+            isinstance(path, str) and path.startswith(("vm4vpn:", "vpn:"))
+            for path in record["raw_artifact_paths"]
+        )
+        assert record["artifact_check"]["status"] == "pm_verified"
+        record.pop("raw_artifact_sha256", None)
+
+    assert validate_benchmark_alignment_ledger(data) == []
 
 
 def test_qwen_benchmark_alignment_rejects_unverified_artifact_check_statuses() -> None:

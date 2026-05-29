@@ -1,6 +1,6 @@
 # task109_qwen_eval_local_raw_artifact_fingerprint_s1 knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Working Notes
 
@@ -14,3 +14,5 @@
   summary JSON, and
   `2d575c8a613c76833c74f7bf20372fb243352ff1d24db24f11aa5a411de0d085` for the
   result JSONL.
+- Session 15 adds no new task109-specific implementation knowledge; task112
+  carries the benchmark-alignment reuse of the local fingerprint validator.
