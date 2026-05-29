@@ -17,3 +17,4 @@
   relative upstream manifest ref with declaring-manifest diagnostics.
 - Verified focused lineage tests, py_compile, Ruff, and a structured local
   relative-ref probe.
+- Opened PR #241 to `main`: https://github.com/songCNMS/Nemotron/pull/241.

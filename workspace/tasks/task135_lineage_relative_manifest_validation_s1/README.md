@@ -26,8 +26,8 @@ valid self-contained relative lineage manifests fail validation.
 - [x] Existing absolute-ref behavior stays covered.
 - [x] Focused lineage pytest, py_compile, Ruff, structured probe, and diff
   checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending
+- https://github.com/songCNMS/Nemotron/pull/241

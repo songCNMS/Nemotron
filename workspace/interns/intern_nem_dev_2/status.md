@@ -7,7 +7,7 @@
 | Name | intern_nem_dev_2 |
 | Status | Working |
 | Current Task | task135_lineage_relative_manifest_validation_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/241 |
 | Session | 1 |
 
-最近进展：PR #239 merged; synced `main` to `origin/main` `36101b1e2152fd3f52cea8b0af5770c57d881227` and started task135 on branch `intern_nem_dev_2/task135_lineage_relative_manifest_validation_s1`. Lineage relative manifest validation fix and focused checks are in progress. No main/master push; no live W&B, data prep, training/eval, endpoint, cluster, deploy, or artifact download.
+最近进展：PR #241 opened for task135 on branch `intern_nem_dev_2/task135_lineage_relative_manifest_validation_s1`; lineage relative manifest validation fix and focused offline checks are complete. No main/master push; no live W&B, data prep, training/eval, endpoint, cluster, deploy, or artifact download.
