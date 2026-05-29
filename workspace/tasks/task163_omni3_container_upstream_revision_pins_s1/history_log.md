@@ -1,6 +1,6 @@
 # task163_omni3_container_upstream_revision_pins_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -17,3 +17,15 @@
   probe, no-unguarded-branch grep, added-line live-surface scan, and diff
   checks.
 - Opened PR #270 to `main`: https://github.com/songCNMS/Nemotron/pull/270.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #270 merged and verified on `main` at
+  `83ffb47e2e7053ac189b9557011f3a9e6c9ea92c`; exact PR head
+  `f03d3b43e6dc3dc62ace532b47fc0812aa802774` was merged with
+  `--match-head-commit`.
+- Synced local `main` to `origin/main`
+  `83ffb47e2e7053ac189b9557011f3a9e6c9ea92c`.
+- Recorded closeout/status/report; no container build, live upstream
+  clone/fetch, HF/data prep/train/eval/deploy/artifact ops, direct `main`
+  push, or self-merge was performed.

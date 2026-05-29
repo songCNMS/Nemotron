@@ -1,6 +1,6 @@
 # task163_omni3_container_upstream_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -31,3 +31,9 @@ paired with immutable 40-character SHA pins and fail fast if branch heads move.
 ## PR
 
 - https://github.com/songCNMS/Nemotron/pull/270
+
+## Merge
+
+- Merged to `main` at `83ffb47e2e7053ac189b9557011f3a9e6c9ea92c`.
+- PM merged-main verification passed for focused pytest, `py_compile`, Ruff,
+  `git diff --check`, and Dockerfile revision-pin probe.
