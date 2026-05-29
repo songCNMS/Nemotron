@@ -13,3 +13,4 @@
   preserving portable output/input examples.
 - Verified focused pytest guard, `py_compile`, Ruff, scoped static grep,
   added-line live-surface scan, and `git diff --check` before staging.
+- Opened PR #260 to `main`: https://github.com/songCNMS/Nemotron/pull/260.
