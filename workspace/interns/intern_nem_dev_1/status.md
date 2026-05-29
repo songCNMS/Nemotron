@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task171_omni3_rl_docs_source_revision_pins_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task174_nano2_vl_invoice_parquet_revision_pin_s1,ROLE=dev,SESSION=1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task171_omni3_rl_docs_source_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/278 |
+| Current Task | task174_nano2_vl_invoice_parquet_revision_pin_s1 |
+| PR | pending |
 | Session | 1 |
-| Recent Progress | Opened PR #278 for task171; Omni3 RL docs now show runtime source revision pins and focused static docs checks passed |
+| Recent Progress | Started task174 from origin/main e8c748fa834bb62acff2b81d1e26279994b84440; pinning Nano2-VL invoice parquet URL with static notebook coverage |
