@@ -114,8 +114,8 @@ This recipe is the cookbook view of the upstream Megatron-Bridge omni
 SFT flow. Cross-references for operators who want to dig into the
 upstream source:
 
-- **[Megatron-Bridge `nemotron_3_omni` README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/nemotron_3_omni/examples/models/vlm/nemotron_3_omni/README.md)** — canonical SFT recipe, hyperparameters, and config tables
-- **[Megatron-Bridge `nemotron_3_omni` branch root](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/nemotron_3_omni)** — full source for the `nemotron_omni_*sft_config` / `*peft_config` recipes used by `train.py`
+- **[Megatron-Bridge `nemotron_3_omni` README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/648756cb99eed872d9e577243495840b9395a6f7/examples/models/vlm/nemotron_3_omni/README.md)** — canonical SFT recipe, hyperparameters, and config tables
+- **[Megatron-Bridge `nemotron_3_omni` branch root](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/648756cb99eed872d9e577243495840b9395a6f7)** — full source for the `nemotron_omni_*sft_config` / `*peft_config` recipes used by `train.py`
 - **[Release blog](https://developer.nvidia.com/blog/nvidia-nemotron-3-nano-omni-powers-multimodal-agent-reasoning-in-a-single-efficient-open-model/)** — model-level positioning, benchmarks, training-data scale
 - **[Architecture deep-dive](../../../../docs/nemotron/omni3/architecture.md)** — Mamba+transformer hybrid, encoders, EVS rationale
 

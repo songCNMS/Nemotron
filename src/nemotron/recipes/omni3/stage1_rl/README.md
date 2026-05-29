@@ -110,8 +110,8 @@ This recipe is the cookbook view of the upstream NeMo-RL omni RL flow.
 Cross-references for operators who want to dig into the upstream
 source:
 
-- **[NeMo-RL `nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/nano-v3-omni/docs/guides/nemotron-3-nano-omni.md)** — canonical end-to-end walkthrough (build, data prep, MPO/text/vision launchers, `.env` setup)
-- **[NeMo-RL `nano-v3-omni` branch root](https://github.com/NVIDIA-NeMo/RL/tree/nano-v3-omni)** — full source for the `examples/run_vlm_mpo.py` / `examples/omni/` configs / `tools/build-custom-vllm.sh` referenced by this Dockerfile
+- **[NeMo-RL `nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/98ba11c0a77e177a903cd3756570684437a08e8d/docs/guides/nemotron-3-nano-omni.md)** — canonical end-to-end walkthrough (build, data prep, MPO/text/vision launchers, `.env` setup)
+- **[NeMo-RL `nano-v3-omni` branch root](https://github.com/NVIDIA-NeMo/RL/tree/98ba11c0a77e177a903cd3756570684437a08e8d)** — full source for the `examples/run_vlm_mpo.py` / `examples/omni/` configs / `tools/build-custom-vllm.sh` referenced by this Dockerfile
 - **[Omni vllm fork (`aroshanghias-nvd/vllm`)](https://github.com/aroshanghias-nvd/vllm/tree/nano-v3-vl)** — pulled in via NeMo-RL's `3rdparty/vllm` submodule on the `nano-v3-vl` branch
 - **[Release blog](https://developer.nvidia.com/blog/nvidia-nemotron-3-nano-omni-powers-multimodal-agent-reasoning-in-a-single-efficient-open-model/)** — model-level positioning, RL training-data scale (20 datasets / 25 envs / 2.3M rollouts)
 - **[RL data prep deep-dive](../../../../docs/nemotron/omni3/rl/data-prep.md)** — auto-download semantics, helper scripts, output layouts

@@ -183,13 +183,13 @@ After SFT completes, proceed to [Stage 1: RL](./rl.md).
 This stage is the cookbook view of the upstream Megatron-Bridge omni
 SFT flow. For the canonical recipe (hyperparameters, config tables,
 model-level training notes), see the **[Megatron-Bridge `nemotron_3_omni`
-README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/nemotron_3_omni/examples/models/vlm/nemotron_3_omni/README.md)**.
+README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/648756cb99eed872d9e577243495840b9395a6f7/examples/models/vlm/nemotron_3_omni/README.md)**.
 The Dockerfile in this stage pins `NVIDIA-NeMo/Megatron-Bridge @ nemotron_3_omni` (and `NVIDIA/Megatron-LM @ nemotron_3_omni` as a recursive submodule fetch); bump those branches once they merge to a versioned tag.
 
 ## Reference
 
 - **Recipe source:** [`src/nemotron/recipes/omni3/stage0_sft/`](https://github.com/NVIDIA-NeMo/Nemotron/tree/main/src/nemotron/recipes/omni3/stage0_sft) ([README](https://github.com/NVIDIA-NeMo/Nemotron/blob/main/src/nemotron/recipes/omni3/stage0_sft/README.md))
-- **Upstream**: [Megatron-Bridge omni SFT recipe](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/nemotron_3_omni/examples/models/vlm/nemotron_3_omni/README.md)
+- **Upstream**: [Megatron-Bridge omni SFT recipe](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/648756cb99eed872d9e577243495840b9395a6f7/examples/models/vlm/nemotron_3_omni/README.md)
 - [Architecture deep-dive](./architecture.md)
 - [Inference & deployment](./inference.md)
 - [Back to Overview](./README.md)

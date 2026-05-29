@@ -55,8 +55,8 @@ This recipe folder is the cookbook view; upstream sources are:
 
 | Stage | Upstream guide | Branch root |
 |---|---|---|
-| SFT (Megatron-Bridge) | [`nemotron_3_omni` README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/nemotron_3_omni/examples/models/vlm/nemotron_3_omni/README.md) | [`Megatron-Bridge` `nemotron_3_omni`](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/nemotron_3_omni) |
-| RL (NeMo-RL) | [`nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/nano-v3-omni/docs/guides/nemotron-3-nano-omni.md) | [`NeMo-RL` `nano-v3-omni`](https://github.com/NVIDIA-NeMo/RL/tree/nano-v3-omni) |
+| SFT (Megatron-Bridge) | [`nemotron_3_omni` README](https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/648756cb99eed872d9e577243495840b9395a6f7/examples/models/vlm/nemotron_3_omni/README.md) | [`Megatron-Bridge` `nemotron_3_omni`](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/648756cb99eed872d9e577243495840b9395a6f7) |
+| RL (NeMo-RL) | [`nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/98ba11c0a77e177a903cd3756570684437a08e8d/docs/guides/nemotron-3-nano-omni.md) | [`NeMo-RL` `nano-v3-omni`](https://github.com/NVIDIA-NeMo/RL/tree/98ba11c0a77e177a903cd3756570684437a08e8d) |
 | Evaluation | Same Megatron-Bridge path | (above) |
 | Image training data | — | [`huggingface.co/datasets/nvidia/Nemotron-Image-Training-v3`](https://huggingface.co/datasets/nvidia/Nemotron-Image-Training-v3) |
 | Long-document SDG | [Long-document SDG guide](../data/sdg/long-document.md) | [`src/nemotron/recipes/data/sdg/long-document/`](https://github.com/NVIDIA-NeMo/Nemotron/tree/main/src/nemotron/recipes/data/sdg/long-document) (structure released; bodies port at upstream release) |
@@ -206,7 +206,7 @@ Omni SFT owns its own `Dockerfile`, `data_prep.py`, and `train.py` (built via th
 
 ### Stage 1: RL
 
-The RL stack uses one shared NeMo-RL container and three sub-stages, mirroring the upstream [`nano-v3-omni` flow](https://github.com/NVIDIA-NeMo/RL/tree/nano-v3-omni):
+The RL stack uses one shared NeMo-RL container and three sub-stages, mirroring the upstream [`nano-v3-omni` flow](https://github.com/NVIDIA-NeMo/RL/tree/98ba11c0a77e177a903cd3756570684437a08e8d):
 
 1. **MPO** — multimodal preference optimization on the public MMPR dataset (~83K-row preference triples per subset)
 2. **Text RL** — GRPO continuation of alignment on `nvidia/Nemotron-3-Nano-RL-Training-Blend`
