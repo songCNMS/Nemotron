@@ -14,3 +14,4 @@
   escapes, directory paths, and valid repo-local files.
 - Verified focused Qwen eval repro gate pytest, py_compile, Ruff, structured
   validator probe, and diff checks.
+- Opened PR #232 to `main`: https://github.com/songCNMS/Nemotron/pull/232.

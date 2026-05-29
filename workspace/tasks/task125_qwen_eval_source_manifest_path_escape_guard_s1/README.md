@@ -20,4 +20,4 @@
 
 - Branch: `intern_nem_dev_3/task125_qwen_eval_source_manifest_path_escape_guard_s1`
 - Base: `dc6e00e741c4189051bc4db4052283dbc78d0c13`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/232
