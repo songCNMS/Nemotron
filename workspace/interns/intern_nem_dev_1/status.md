@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task164_long_document_finepdfs_revision_pin_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task164_long_document_finepdfs_revision_pin_s1 |
+| Status | Idle |
+| Current Task | none |
 | PR | https://github.com/songCNMS/Nemotron/pull/271 |
-| Session | 1 |
-| Recent Progress | Opened PR #271 for task164; FinePDFs seed loading now has config-threaded revision pin and offline AST/static checks passed |
+| Session | 2 |
+| Recent Progress | PR #271 for task164 was merged and verified on main at 83119f9ca83a4978773f4702ef0a4b48c0c4fe94; local main synced and closeout recorded |
