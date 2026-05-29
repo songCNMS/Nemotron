@@ -1,6 +1,6 @@
 # task179_super_grpo_dapo_rl_checkout_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
 
 ## Scope
 
@@ -20,7 +20,8 @@
 
 - Base: `67bb428e4a992c608b8795795ced4f3fa9b9271c`
 - Branch: `intern_nem_dev_3/task179_super_grpo_dapo_rl_checkout_revision_pin_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/285
+- Head: `841fad547609db32fc5a4975c60bd11601cb8c15`
 - Checks: focused static notebook pytest, py_compile, Ruff, structured notebook
   probe, product stale branch-only grep, added-line live-surface scan, and
   `git diff --check` passed.
