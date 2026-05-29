@@ -31,6 +31,9 @@ from nemotron.recipes.super3.milestones.lineage import (
     RLVR2_ARTIFACT,
     LineageRecord,
 )
+from nemotron.recipes.super3.milestones.m1_rlhf.prepare_m1_rlhf_jsonl import (
+    load_rlhf_env_registry,
+)
 from nemotron.recipes.super3.milestones.m1_rlvr.prepare_m1_rlvr_jsonl import (
     KNOWN_STATUSES,
     MIX_PROFILES,
@@ -43,6 +46,33 @@ from nemotron.recipes.super3.milestones.m1_rlvr.prepare_m1_rlvr_jsonl import (
     load_rlvr_env_registry,
     prepare,
     tag_record,
+)
+from nemotron.recipes.super3.milestones.m1_swe1.prepare_m1_swe1_jsonl import (
+    load_swe1_env_registry,
+)
+from nemotron.recipes.super3.milestones.m1_swe2.prepare_m1_swe2_jsonl import (
+    load_swe2_env_registry,
+)
+
+ACTIVE_ROW_METADATA_FIELDS = (
+    "m0_env_id",
+    "m0_verifier",
+    "nemo_gym_verifier",
+    "license",
+)
+PLACEHOLDER_LICENSES = (
+    "unknown",
+    "unknown-pending-review",
+    "unknown_pending_legal_review",
+    "license-pending-legal-review",
+    "placeholder-pending-source-selection",
+    "placeholder-pending-source-pin",
+)
+BRIDGE_REGISTRY_LOADERS = (
+    ("rlvr", load_rlvr_env_registry),
+    ("swe1", load_swe1_env_registry),
+    ("swe2", load_swe2_env_registry),
+    ("rlhf", load_rlhf_env_registry),
 )
 
 
@@ -92,6 +122,14 @@ def _build_m0_dir(
     return root
 
 
+def _write_registry(path: Path, row: Mapping[str, Any]) -> None:
+    lines = ["schema_version: 1", "envs:", "  -"]
+    for field, value in row.items():
+        rendered = "null" if value is None else json.dumps(value)
+        lines.append(f"    {field}: {rendered}")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def _args(m0_root: Path, out_dir: Path, *, mix: str = "rlvr1") -> argparse.Namespace:
     return argparse.Namespace(
         m0_input_dir=m0_root,
@@ -118,6 +156,25 @@ def test_registry_loads_with_expected_shape() -> None:
         assert row["mix"] in {"rlvr1", "rlvr2", "rlvr3"}
 
 
+def test_bundled_active_bridge_rows_have_complete_source_metadata() -> None:
+    """All active rows across bridge registries must carry lineage metadata."""
+    active_counts: dict[str, int] = {}
+    for label, loader in BRIDGE_REGISTRY_LOADERS:
+        active_rows = [row for row in loader() if row["status"] == "active"]
+        active_counts[label] = len(active_rows)
+        assert active_rows, f"{label} registry should have at least one active row"
+        for row in active_rows:
+            missing = [
+                field
+                for field in ACTIVE_ROW_METADATA_FIELDS
+                if row.get(field) is None or str(row.get(field)).strip() == ""
+            ]
+            assert missing == [], f"{label} active row {row['nemo_gym_env']!r} missing {missing}"
+            assert str(row["license"]).strip().lower() not in PLACEHOLDER_LICENSES
+
+    assert set(active_counts) == {"rlvr", "swe1", "swe2", "rlhf"}
+
+
 def test_registry_path_resolves_to_yaml_in_module() -> None:
     """The bundled registry must live next to the script so direct-script
     execution (PEP 723 banner) and packaged import both find it."""
@@ -141,6 +198,71 @@ envs:
     )
     with pytest.raises(ValueError, match="status"):
         load_rlvr_env_registry(bad)
+
+
+@pytest.mark.parametrize("missing_field", ACTIVE_ROW_METADATA_FIELDS)
+def test_registry_rejects_active_rows_missing_source_metadata(
+    tmp_path: Path,
+    missing_field: str,
+) -> None:
+    row: dict[str, Any] = {
+        "nemo_gym_env": "stub",
+        "mix": "rlvr1",
+        "m0_env_id": "m0_stub",
+        "m0_verifier": "exact_match",
+        "nemo_gym_verifier": "exact_match",
+        "license": "apache-2.0",
+        "status": "active",
+    }
+    row.pop(missing_field)
+    bad = tmp_path / "registry.yaml"
+    _write_registry(bad, row)
+
+    with pytest.raises(ValueError, match=rf"active row requires non-empty '{missing_field}'"):
+        load_rlvr_env_registry(bad)
+
+
+@pytest.mark.parametrize("license_value", (*PLACEHOLDER_LICENSES, "   "))
+def test_registry_rejects_active_rows_with_placeholder_license(
+    tmp_path: Path,
+    license_value: str,
+) -> None:
+    bad = tmp_path / "registry.yaml"
+    _write_registry(
+        bad,
+        {
+            "nemo_gym_env": "stub",
+            "mix": "rlvr1",
+            "m0_env_id": "m0_stub",
+            "m0_verifier": "exact_match",
+            "nemo_gym_verifier": "exact_match",
+            "license": license_value,
+            "status": "active",
+        },
+    )
+
+    with pytest.raises(ValueError, match="active row .*license"):
+        load_rlvr_env_registry(bad)
+
+
+def test_registry_allows_inactive_rows_with_pending_source_metadata(tmp_path: Path) -> None:
+    registry_path = tmp_path / "registry.yaml"
+    _write_registry(
+        registry_path,
+        {
+            "nemo_gym_env": "stub",
+            "mix": "rlvr1",
+            "m0_env_id": None,
+            "m0_verifier": None,
+            "nemo_gym_verifier": "",
+            "license": "unknown-pending-review",
+            "status": "m0_missing",
+        },
+    )
+
+    registry = load_rlvr_env_registry(registry_path)
+
+    assert registry[0]["status"] == "m0_missing"
 
 
 def test_derive_env_map_filters_to_active_with_m0_source(tmp_path: Path) -> None:
