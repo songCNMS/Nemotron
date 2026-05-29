@@ -1,6 +1,6 @@
 # task163_omni3_container_upstream_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -27,3 +27,7 @@ paired with immutable 40-character SHA pins and fail fast if branch heads move.
 - No container builds, live `git clone`/`git fetch`, downloads, data prep,
   SFT/RL train/eval, endpoint calls, W&B, cluster jobs, deploy, artifact ops,
   direct `main`/`master` push, or self-merge.
+
+## PR
+
+- https://github.com/songCNMS/Nemotron/pull/270

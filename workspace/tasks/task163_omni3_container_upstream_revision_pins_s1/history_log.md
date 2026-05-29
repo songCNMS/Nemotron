@@ -13,3 +13,7 @@
   pinned SHA after clone/fetch checkout.
 - Added focused static tests for exact pins, lowercase SHA shape, branch+pin
   guard logic, and absence of direct mutable branch clone paths.
+- Verified focused pytest, `py_compile`, Ruff, structured Dockerfile pin
+  probe, no-unguarded-branch grep, added-line live-surface scan, and diff
+  checks.
+- Opened PR #270 to `main`: https://github.com/songCNMS/Nemotron/pull/270.
