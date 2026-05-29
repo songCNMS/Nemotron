@@ -1,6 +1,6 @@
 # task141_stage1_sft_data_prep_output_dir_portability_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
   `qwen_agentic_v0 -> stage1_sft_agentic_v0_qwen`.
 - The task intentionally does not change blend inputs, tokenizer/chat-template
   contracts, `used_in_filter` semantics, training configs, or launch commands.
+- Session 24 added no new implementation knowledge; it only aligned durable
+  bookkeeping with the stop-hook requirement.
