@@ -53,9 +53,9 @@ from __future__ import annotations
 
 import math
 import os
+import re
 import sys
 from pathlib import Path
-from typing import List
 
 from pydantic import ConfigDict, Field, model_validator
 
@@ -69,6 +69,7 @@ _OUTPUT_BASE = Path(os.environ.get("NEMO_RUN_DIR", "."))
 
 # HuggingFace URI prefix for downloading datasets
 _HF_PREFIX = "hf://"
+_PINNED_HF_REVISION_RE = re.compile(r"[0-9a-f]{40}")
 
 
 class SDGConfig(RecipeSettings):
@@ -82,24 +83,80 @@ class SDGConfig(RecipeSettings):
     model_config = ConfigDict(extra="forbid")
 
     # --- Core paths -----------------------------------------------------------
-    corpus_id: str = Field(default="my_corpus", description="Identifier for your corpus (used in output naming).")
-    corpus_dir: str = Field(default="./data/corpus", description="Local path or hf:// URI to directory containing document files (.txt, .md, etc.).")
-    output_dir: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage0_sdg", description="Output directory for generated synthetic data.")
-    file_extensions: str | None = Field(default=None, description="Comma-separated list of file extensions to process.")
-    nvidia_api_key: str | None = Field(default=None, description="NVIDIA API key for LLM access. If None, uses NVIDIA_API_KEY env var.")
+    corpus_id: str = Field(
+        default="my_corpus",
+        description="Identifier for your corpus (used in output naming).",
+    )
+    corpus_dir: str = Field(
+        default="./data/corpus",
+        description=(
+            "Local path or hf:// URI to directory containing document files "
+            "(.txt, .md, etc.). hf:// URIs must include a pinned 40-character "
+            "lowercase commit SHA revision."
+        ),
+    )
+    output_dir: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage0_sdg",
+        description="Output directory for generated synthetic data.",
+    )
+    file_extensions: str | None = Field(
+        default=None,
+        description="Comma-separated list of file extensions to process.",
+    )
+    nvidia_api_key: str | None = Field(
+        default=None,
+        description="NVIDIA API key for LLM access. If None, uses NVIDIA_API_KEY env var.",
+    )
 
     # --- Document processing ---------------------------------------------------
-    min_text_length: int = Field(default=50, ge=0, description="Minimum text length (characters) for documents to include.")
-    sentences_per_chunk: int = Field(default=5, gt=0, description="Number of sentences per chunk for text splitting.")
-    num_sections: int = Field(default=1, gt=0, description="Number of sections to divide chunks into.")
-    num_files: int | None = Field(default=None, gt=0, description="Maximum number of files to process. None means process all files.")
+    min_text_length: int = Field(
+        default=50,
+        ge=0,
+        description="Minimum text length (characters) for documents to include.",
+    )
+    sentences_per_chunk: int = Field(
+        default=5,
+        gt=0,
+        description="Number of sentences per chunk for text splitting.",
+    )
+    num_sections: int = Field(
+        default=1,
+        gt=0,
+        description="Number of sections to divide chunks into.",
+    )
+    num_files: int | None = Field(
+        default=None,
+        gt=0,
+        description="Maximum number of files to process. None means process all files.",
+    )
 
     # --- Generation parameters -------------------------------------------------
-    max_artifacts_per_type: int = Field(default=2, gt=0, description="Maximum number of artifacts to extract per type.")
-    num_pairs: int = Field(default=5, gt=0, description="Number of question-answer pairs to generate per document.")
-    min_hops: int = Field(default=1, ge=1, description="Minimum number of hops for multi-hop questions.")
-    max_hops: int = Field(default=3, ge=1, description="Maximum number of hops for multi-hop questions.")
-    min_complexity: int = Field(default=2, ge=1, le=5, description="Minimum complexity level for questions (1-5).")
+    max_artifacts_per_type: int = Field(
+        default=2,
+        gt=0,
+        description="Maximum number of artifacts to extract per type.",
+    )
+    num_pairs: int = Field(
+        default=5,
+        gt=0,
+        description="Number of question-answer pairs to generate per document.",
+    )
+    min_hops: int = Field(
+        default=1,
+        ge=1,
+        description="Minimum number of hops for multi-hop questions.",
+    )
+    max_hops: int = Field(
+        default=3,
+        ge=1,
+        description="Maximum number of hops for multi-hop questions.",
+    )
+    min_complexity: int = Field(
+        default=2,
+        ge=1,
+        le=5,
+        description="Minimum complexity level for questions (1-5).",
+    )
 
     @model_validator(mode="after")
     def _check_hops_order(self):
@@ -108,32 +165,97 @@ class SDGConfig(RecipeSettings):
         return self
 
     # --- Batch processing ------------------------------------------------------
-    batch_size: int = Field(default=200, gt=0, description="Number of records to process per batch.")
-    start_batch_index: int = Field(default=0, ge=0, description="Batch index to start from (for resuming failed runs).")
-    end_batch_index: int = Field(default=-1, description="Batch index to end at (exclusive). -1 means all batches.")
+    batch_size: int = Field(
+        default=200,
+        gt=0,
+        description="Number of records to process per batch.",
+    )
+    start_batch_index: int = Field(
+        default=0,
+        ge=0,
+        description="Batch index to start from (for resuming failed runs).",
+    )
+    end_batch_index: int = Field(
+        default=-1,
+        description="Batch index to end at (exclusive). -1 means all batches.",
+    )
 
     # --- Multi-document bundling -----------------------------------------------
-    multi_doc: bool = Field(default=False, description="Enable multi-document bundling mode.")
-    bundle_size: int = Field(default=2, gt=0, description="Number of documents per bundle in multi-doc mode.")
-    bundle_strategy: str = Field(default="sequential", description="Segment splitting strategy: 'sequential', 'doc_balanced', or 'interleaved'.")
-    max_docs_per_bundle: int = Field(default=3, gt=0, description="Maximum documents allowed per bundle.")
-    multi_doc_manifest: str | None = Field(default=None, description="Path to manifest file defining explicit bundles (JSON/YAML).")
+    multi_doc: bool = Field(
+        default=False,
+        description="Enable multi-document bundling mode.",
+    )
+    bundle_size: int = Field(
+        default=2,
+        gt=0,
+        description="Number of documents per bundle in multi-doc mode.",
+    )
+    bundle_strategy: str = Field(
+        default="sequential",
+        description="Segment splitting strategy: 'sequential', 'doc_balanced', or 'interleaved'.",
+    )
+    max_docs_per_bundle: int = Field(
+        default=3,
+        gt=0,
+        description="Maximum documents allowed per bundle.",
+    )
+    multi_doc_manifest: str | None = Field(
+        default=None,
+        description="Path to manifest file defining explicit bundles (JSON/YAML).",
+    )
 
     # --- Model configuration ---------------------------------------------------
-    artifact_extraction_model: str = Field(default="nvidia/nemotron-3-nano-30b-a3b", description="Model name for artifact extraction.")
-    artifact_extraction_provider: str = Field(default="nvidia", description="Provider for artifact extraction model.")
-    qa_generation_model: str = Field(default="nvidia/nemotron-3-nano-30b-a3b", description="Model name for QA generation.")
-    qa_generation_provider: str = Field(default="nvidia", description="Provider for QA generation model.")
-    quality_judge_model: str = Field(default="nvidia/nemotron-3-nano-30b-a3b", description="Model name for quality judge.")
-    quality_judge_provider: str = Field(default="nvidia", description="Provider for quality judge model.")
-    embed_model: str = Field(default="nvidia/llama-3.2-nv-embedqa-1b-v2", description="Model name for embeddings.")
-    embed_provider: str = Field(default="nvidia", description="Provider for embedding model.")
-    max_parallel_requests_for_gen: int | None = Field(default=None, gt=0, description="Maximum parallel requests for generation models. None uses the library default.")
+    artifact_extraction_model: str = Field(
+        default="nvidia/nemotron-3-nano-30b-a3b",
+        description="Model name for artifact extraction.",
+    )
+    artifact_extraction_provider: str = Field(
+        default="nvidia",
+        description="Provider for artifact extraction model.",
+    )
+    qa_generation_model: str = Field(
+        default="nvidia/nemotron-3-nano-30b-a3b",
+        description="Model name for QA generation.",
+    )
+    qa_generation_provider: str = Field(
+        default="nvidia",
+        description="Provider for QA generation model.",
+    )
+    quality_judge_model: str = Field(
+        default="nvidia/nemotron-3-nano-30b-a3b",
+        description="Model name for quality judge.",
+    )
+    quality_judge_provider: str = Field(
+        default="nvidia",
+        description="Provider for quality judge model.",
+    )
+    embed_model: str = Field(
+        default="nvidia/llama-3.2-nv-embedqa-1b-v2",
+        description="Model name for embeddings.",
+    )
+    embed_provider: str = Field(
+        default="nvidia",
+        description="Provider for embedding model.",
+    )
+    max_parallel_requests_for_gen: int | None = Field(
+        default=None,
+        gt=0,
+        description="Maximum parallel requests for generation models. None uses the library default.",
+    )
 
     # --- Runtime options -------------------------------------------------------
-    artifact_path: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage0_sdg/artifacts", description="Path to store Data Designer artifacts.")
-    preview: bool = Field(default=False, description="Preview the generation without actually running.")
-    log_level: str = Field(default="INFO", description="Logging level: DEBUG, INFO, WARNING, or ERROR.")
+    artifact_path: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage0_sdg/artifacts",
+        description="Path to store Data Designer artifacts.",
+    )
+    preview: bool = Field(
+        default=False,
+        description="Preview the generation without actually running.",
+    )
+    log_level: str = Field(
+        default="INFO",
+        description="Logging level: DEBUG, INFO, WARNING, or ERROR.",
+    )
 
 
 def _resolve_corpus_dir(corpus_dir: str) -> Path:
@@ -141,8 +263,7 @@ def _resolve_corpus_dir(corpus_dir: str) -> Path:
 
     Supports URIs of the form::
 
-        hf://org/dataset/subdir/path
-        hf://org/dataset@revision/subdir/path
+        hf://org/dataset@0123456789abcdef0123456789abcdef01234567/subdir/path
 
     Files are cached by huggingface_hub so subsequent calls are a no-op.
 
@@ -155,32 +276,44 @@ def _resolve_corpus_dir(corpus_dir: str) -> Path:
     if not corpus_dir.startswith(_HF_PREFIX):
         return Path(corpus_dir).resolve()
 
-    from huggingface_hub import snapshot_download
-
-    # Parse hf://org/dataset[@revision][/subdir/path]
+    # Parse hf://org/dataset@<40-char lowercase sha>[/subdir/path]
     rest = corpus_dir[len(_HF_PREFIX):]
     parts = rest.split("/", 2)
     if len(parts) < 2:
         print(f"Error: Invalid hf:// URI: {corpus_dir}", file=sys.stderr)
-        print("  Expected: hf://org/dataset[@revision][/subdir/path]", file=sys.stderr)
+        print("  Expected: hf://org/dataset@<40-char-lowercase-commit-sha>[/subdir/path]", file=sys.stderr)
         sys.exit(1)
 
-    # Extract optional revision from dataset name (org/dataset@revision)
+    # Extract required pinned revision from dataset name (org/dataset@revision).
     repo_id = f"{parts[0]}/{parts[1]}"
-    revision = None
-    if "@" in parts[1]:
-        dataset_name, revision = parts[1].rsplit("@", 1)
-        repo_id = f"{parts[0]}/{dataset_name}"
+    if "@" not in parts[1]:
+        print(f"Error: hf:// corpus URI must include a pinned commit SHA revision: {corpus_dir}", file=sys.stderr)
+        print("  Expected: hf://org/dataset@<40-char-lowercase-commit-sha>[/subdir/path]", file=sys.stderr)
+        sys.exit(1)
+
+    dataset_name, revision = parts[1].rsplit("@", 1)
+    repo_id = f"{parts[0]}/{dataset_name}"
+    if not _PINNED_HF_REVISION_RE.fullmatch(revision):
+        print(
+            f"Error: hf:// corpus URI revision must be a 40-character lowercase commit SHA: {corpus_dir}",
+            file=sys.stderr,
+        )
+        print(
+            "  Floating refs such as main, master, dev, branches, tags, and refs/* are not allowed.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     subdir = parts[2] if len(parts) > 2 else None
+
+    from huggingface_hub import snapshot_download
 
     print(f"📥 Downloading corpus from HuggingFace ({repo_id})...")
     kwargs = {
         "repo_id": repo_id,
         "repo_type": "dataset",
+        "revision": revision,
     }
-    if revision:
-        kwargs["revision"] = revision
     if subdir:
         kwargs["allow_patterns"] = f"{subdir}/**"
 
@@ -192,7 +325,7 @@ def _resolve_corpus_dir(corpus_dir: str) -> Path:
 
 def _validate_corpus(
     corpus_dir: Path,
-    file_extensions: List[str] | None,
+    file_extensions: list[str] | None,
     min_text_length: int,
     num_pairs: int,
     batch_size: int,
@@ -287,7 +420,7 @@ def _validate_corpus(
     num_batches = math.ceil(num_docs / batch_size)
 
     # --- Print summary --------------------------------------------------------
-    print(f"\nCorpus summary:")
+    print("\nCorpus summary:")
     print(f"  Files found:       {num_docs} (matching extensions: {ext_display})")
     if skipped_short:
         print(f"  Skipped:           {len(skipped_short)} (below min_text_length={min_text_length})")
@@ -295,12 +428,12 @@ def _validate_corpus(
     print(f"  Avg file size:     {avg_chars:,} chars")
     print(f"  Size range:        {min_chars:,} - {max_chars:,} chars")
     print()
-    print(f"Generation plan:")
+    print("Generation plan:")
     print(f"  Documents:         {num_docs}")
     print(f"  QA pairs/doc:      {num_pairs}")
     print(f"  Expected QA pairs: ~{expected_pairs:,}")
     print(f"  Batches:           {num_batches} (batch_size={batch_size})")
-    print(f"  API stages/batch:  4 (artifact extraction -> QA generation -> dedup -> quality eval)")
+    print("  API stages/batch:  4 (artifact extraction -> QA generation -> dedup -> quality eval)")
 
     # --- Warnings -------------------------------------------------------------
     warnings_printed = False
@@ -368,7 +501,7 @@ def run_sdg(cfg: SDGConfig) -> Path:
     if cfg.file_extensions:
         file_extensions = [ext.strip() for ext in cfg.file_extensions.split(",") if ext.strip()]
 
-    print(f"🚀 Starting synthetic data generation...")
+    print("🚀 Starting synthetic data generation...")
     print(f"   Corpus ID: {cfg.corpus_id}")
     print(f"   Input:  {corpus_dir}")
     print(f"   Output: {output_dir}")
@@ -424,14 +557,14 @@ def run_sdg(cfg: SDGConfig) -> Path:
             embed_provider=cfg.embed_provider,
         )
     except FileNotFoundError as exc:
-        print(f"\nError: SDG pipeline could not find an intermediate file.", file=sys.stderr)
+        print("\nError: SDG pipeline could not find an intermediate file.", file=sys.stderr)
         print(f"  Missing: {exc}", file=sys.stderr)
         print(f"  Artifacts dir: {artifact_path}", file=sys.stderr)
-        print(f"\nThis usually means a previous step produced no output.", file=sys.stderr)
-        print(f"Common causes:", file=sys.stderr)
-        print(f"  - NVIDIA_API_KEY is invalid or expired", file=sys.stderr)
-        print(f"  - The LLM API returned errors (check output above for 4xx/5xx)", file=sys.stderr)
-        print(f"  - The corpus documents were too short after chunking", file=sys.stderr)
+        print("\nThis usually means a previous step produced no output.", file=sys.stderr)
+        print("Common causes:", file=sys.stderr)
+        print("  - NVIDIA_API_KEY is invalid or expired", file=sys.stderr)
+        print("  - The LLM API returned errors (check output above for 4xx/5xx)", file=sys.stderr)
+        print("  - The corpus documents were too short after chunking", file=sys.stderr)
         print(f"\nCheck {artifact_path} for partial output to diagnose.", file=sys.stderr)
         sys.exit(1)
     except Exception as exc:
@@ -440,35 +573,35 @@ def run_sdg(cfg: SDGConfig) -> Path:
 
         # Authentication / API key errors
         if "Authentication" in exc_name or "api key" in exc_str.lower():
-            print(f"\nError: NVIDIA API key is invalid or expired.", file=sys.stderr)
-            print(f"  Set a valid key via:  export NVIDIA_API_KEY=nvapi-...", file=sys.stderr)
-            print(f"  Or in your config:    nvidia_api_key: nvapi-...", file=sys.stderr)
+            print("\nError: NVIDIA API key is invalid or expired.", file=sys.stderr)
+            print("  Set a valid key via:  export NVIDIA_API_KEY=nvapi-...", file=sys.stderr)
+            print("  Or in your config:    nvidia_api_key: nvapi-...", file=sys.stderr)
             sys.exit(1)
 
         # Generation errors (wraps auth errors and other data-designer failures)
         if "Generation" in exc_name:
             # Extract the inner message — data-designer wraps it with an emoji prefix
             inner = exc_str.removeprefix("🛑 Error generating dataset:").strip()
-            print(f"\nError: SDG generation failed.", file=sys.stderr)
+            print("\nError: SDG generation failed.", file=sys.stderr)
             print(f"  {inner}", file=sys.stderr)
             sys.exit(1)
 
         # Profiling errors (missing intermediate files)
         if "Profiling" in exc_name or "profiling" in exc_str.lower():
-            print(f"\nError: SDG data profiling failed — intermediate files are missing.", file=sys.stderr)
+            print("\nError: SDG data profiling failed — intermediate files are missing.", file=sys.stderr)
             print(f"  {exc_name}: {exc}", file=sys.stderr)
             print(f"  Artifacts dir: {artifact_path}", file=sys.stderr)
-            print(f"\nThis usually means the LLM generation step produced no output.", file=sys.stderr)
-            print(f"Common causes:", file=sys.stderr)
-            print(f"  - NVIDIA_API_KEY is invalid or expired", file=sys.stderr)
-            print(f"  - The LLM API returned errors (check output above for 4xx/5xx)", file=sys.stderr)
-            print(f"  - The corpus documents were too short after chunking", file=sys.stderr)
+            print("\nThis usually means the LLM generation step produced no output.", file=sys.stderr)
+            print("Common causes:", file=sys.stderr)
+            print("  - NVIDIA_API_KEY is invalid or expired", file=sys.stderr)
+            print("  - The LLM API returned errors (check output above for 4xx/5xx)", file=sys.stderr)
+            print("  - The corpus documents were too short after chunking", file=sys.stderr)
             print(f"\nCheck {artifact_path} for partial output to diagnose.", file=sys.stderr)
             sys.exit(1)
 
         raise
 
-    print(f"\n✅ Synthetic data generation complete!")
+    print("\n✅ Synthetic data generation complete!")
     print(f"   Output: {output_dir}")
 
     return output_dir

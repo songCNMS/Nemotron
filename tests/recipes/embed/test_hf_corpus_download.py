@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -35,29 +34,24 @@ class TestResolveCorpusDirHF:
     """Tests for hf:// URI parsing and download."""
 
     @patch(_PATCH_TARGET)
-    def test_basic_uri(self, mock_download, tmp_path):
-        mock_download.return_value = str(tmp_path)
-        result = _resolve_corpus_dir("hf://nvidia/my-dataset/subdir/path")
+    @pytest.mark.parametrize(
+        "uri",
+        [
+            "hf://nvidia/my-dataset",
+            "hf://nvidia/my-dataset/subdir/path",
+            "hf://nvidia/my-dataset@abc123/subdir",
+            "hf://nvidia/my-dataset@main",
+            "hf://nvidia/my-dataset@master/subdir",
+            "hf://nvidia/my-dataset@dev/subdir",
+            "hf://nvidia/my-dataset@refs/heads/main/subdir",
+            "hf://nvidia/my-dataset@4D3874EB983D6C653CC478CBA53F3DE42A8F0D24/data",
+        ],
+    )
+    def test_unpinned_or_floating_uri_rejected_without_download(self, mock_download, uri):
+        with pytest.raises(SystemExit):
+            _resolve_corpus_dir(uri)
 
-        mock_download.assert_called_once_with(
-            repo_id="nvidia/my-dataset",
-            repo_type="dataset",
-            allow_patterns="subdir/path/**",
-        )
-        assert result == tmp_path / "subdir" / "path"
-
-    @patch(_PATCH_TARGET)
-    def test_uri_with_revision(self, mock_download, tmp_path):
-        mock_download.return_value = str(tmp_path)
-        result = _resolve_corpus_dir("hf://nvidia/my-dataset@abc123/subdir")
-
-        mock_download.assert_called_once_with(
-            repo_id="nvidia/my-dataset",
-            repo_type="dataset",
-            revision="abc123",
-            allow_patterns="subdir/**",
-        )
-        assert result == tmp_path / "subdir"
+        mock_download.assert_not_called()
 
     @patch(_PATCH_TARGET)
     def test_uri_with_long_sha_revision(self, mock_download, tmp_path):
@@ -74,36 +68,32 @@ class TestResolveCorpusDirHF:
 
     @patch(_PATCH_TARGET)
     def test_uri_no_subdir(self, mock_download, tmp_path):
+        sha = "4d3874eb983d6c653cc478cba53f3de42a8f0d24"
         mock_download.return_value = str(tmp_path)
-        result = _resolve_corpus_dir("hf://nvidia/my-dataset")
+        result = _resolve_corpus_dir(f"hf://nvidia/my-dataset@{sha}")
 
         mock_download.assert_called_once_with(
             repo_id="nvidia/my-dataset",
             repo_type="dataset",
+            revision=sha,
         )
         assert result == tmp_path
 
     @patch(_PATCH_TARGET)
-    def test_uri_revision_no_subdir(self, mock_download, tmp_path):
-        mock_download.return_value = str(tmp_path)
-        result = _resolve_corpus_dir("hf://nvidia/my-dataset@main")
-
-        mock_download.assert_called_once_with(
-            repo_id="nvidia/my-dataset",
-            repo_type="dataset",
-            revision="main",
-        )
-        assert result == tmp_path
-
-    def test_invalid_uri_missing_org(self):
+    def test_invalid_uri_missing_org_does_not_download(self, mock_download):
         with pytest.raises(SystemExit):
             _resolve_corpus_dir("hf://just-a-name")
+
+        mock_download.assert_not_called()
 
     @patch(_PATCH_TARGET)
     def test_default_config_uri(self, mock_download, tmp_path):
         """Test the actual default config URI parses correctly."""
         mock_download.return_value = str(tmp_path)
-        uri = "hf://nvidia/Retrieval-Synthetic-NVDocs-v1@1c0d1856f3fb595b2dda98d4b61061fa6d782d51/sample_corpus/nv_pp_random"
+        uri = (
+            "hf://nvidia/Retrieval-Synthetic-NVDocs-v1"
+            "@1c0d1856f3fb595b2dda98d4b61061fa6d782d51/sample_corpus/nv_pp_random"
+        )
         result = _resolve_corpus_dir(uri)
 
         mock_download.assert_called_once_with(
