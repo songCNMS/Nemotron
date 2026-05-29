@@ -71,6 +71,9 @@ evidence_records:
     raw_artifact_paths:
       - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json
       - /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl
+    raw_artifact_sha256:
+      /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_summary_original.json: 930ee46c8c31944cada6065a5251a329f0bdf31d4b33d51c0cdc45222a97777b
+      /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/mmlu_corrected_calibration_results_original.jsonl: 2d575c8a613c76833c74f7bf20372fb243352ff1d24db24f11aa5a411de0d085
     validity_notes: |
       Smallest recorded base-Qwen chat-completions reproduction smoke with a
       parser-compatible JSON answer contract. It demonstrates that the legacy
