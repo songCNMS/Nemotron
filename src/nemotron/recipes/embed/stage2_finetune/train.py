@@ -2,7 +2,7 @@
 # /// script
 # [tool.runspec]
 # schema = "1"
-# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/main/docs/runspec/v1/spec.md"
+# docs = "https://raw.githubusercontent.com/NVIDIA-NeMo/Nemotron/510b6eec33edece3d212a3187b16db3d1b4a8a15/docs/runspec/v1/spec.md"
 # name = "embed/finetune"
 # image = "nvcr.io/nvidia/pytorch:25.12-py3"
 # setup = "PyTorch pre-installed. Stage dependencies resolved via UV at runtime."
