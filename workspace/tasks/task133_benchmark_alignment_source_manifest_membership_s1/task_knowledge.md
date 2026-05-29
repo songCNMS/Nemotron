@@ -1,6 +1,6 @@
 # task133_benchmark_alignment_source_manifest_membership_s1 knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Notes
 
@@ -14,3 +14,5 @@
   evidence source manifests.
 - Session 2 added no new implementation knowledge; it only records stop-hook
   bookkeeping after PR #240 opened.
+- Session 3 added no new task133 implementation knowledge; task133 is merged
+  and task137 starts from the merged main base.

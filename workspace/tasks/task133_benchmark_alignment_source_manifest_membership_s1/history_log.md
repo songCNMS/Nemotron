@@ -1,6 +1,6 @@
 # task133_benchmark_alignment_source_manifest_membership_s1 history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -25,3 +25,11 @@
   `intern_nem_dev_3/task133_benchmark_alignment_source_manifest_membership_s1`
   remains pushed and ready for PM gate with no product behavior changes in this
   session.
+
+## Session 3 - 2026-05-29
+
+- Confirmed PR #240 was merged with exact tested head
+  `c0afa3fef60a919bc4579b55f7634d1218ca3eb6`.
+- Started follow-up task137 from merged `origin/main`
+  `c917636a006c0d3e5f7bcff6db97189bad6f8c13`.
+- No task133 product behavior changed in this session.
