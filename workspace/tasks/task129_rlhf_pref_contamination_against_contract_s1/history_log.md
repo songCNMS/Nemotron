@@ -1,6 +1,6 @@
 # task129_rlhf_pref_contamination_against_contract_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -18,3 +18,14 @@
   skipped.
 - Added focused tests and verified the required static/offline checks.
 - Opened PR #236 to `main`: https://github.com/songCNMS/Nemotron/pull/236.
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #236 passed replacement gate on base
+  `b0f36d5b3d514aa2c52baf1dc1c60f4245009050`, head
+  `79e00dfdbf9b3c218316a21f078c5fd6655cc06b`.
+- PM gate checks passed: focused pytest shard, contamination CLI,
+  py_compile, Ruff, diff checks, structured pref contamination probe, and
+  live-surface scan.
+- Independent test assignment is waiting for PR #235 sequencing to avoid
+  stale-base churn; no product/test change was needed in this session.

@@ -1,6 +1,6 @@
 # task129_rlhf_pref_contamination_against_contract_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Notes
 
@@ -10,3 +10,6 @@
   discovery can stay lightweight.
 - Reuse the M0 `contamination_against` shape: non-empty list of non-empty
   strings, with placeholder-only lists tracked by the contamination audit.
+- PM replacement gate can validate the same head against a newer base before
+  independent testing; keep the branch stable unless PM requests a rebase or
+  fix.
