@@ -17,3 +17,4 @@
   `hf_revision_pin_required` pref rows while keeping exploratory pref rows
   skipped.
 - Added focused tests and verified the required static/offline checks.
+- Opened PR #236 to `main`: https://github.com/songCNMS/Nemotron/pull/236.

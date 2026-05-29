@@ -29,8 +29,8 @@ carried prose contamination strings, even when a row was `m0_landed` or marked
 - [x] Contamination audit and CLI include landed or pin-required pref rows.
 - [x] Focused pytest, contamination CLI, py_compile, Ruff, structured probe,
   and diff whitespace checks pass.
-- [ ] PR opened to `main`.
+- [x] PR opened to `main`.
 
 ## PR
 
-- Pending.
+- https://github.com/songCNMS/Nemotron/pull/236
