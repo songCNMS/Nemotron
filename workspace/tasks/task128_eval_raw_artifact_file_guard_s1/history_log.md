@@ -13,3 +13,4 @@
   local raw artifacts fail even with a 64-character SHA entry.
 - Verified focused pytest, py_compile, Ruff, structured directory
   raw-artifact probe, and diff checks before staging.
+- Opened PR #235 to `main`: https://github.com/songCNMS/Nemotron/pull/235.

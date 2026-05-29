@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task128_eval_raw_artifact_file_guard_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/235 |
 | Session | 1 |
-| Recent Progress | Implemented local raw artifact regular-file guard and passed focused pytest, py_compile, Ruff, structured probe, and diff check |
+| Recent Progress | Opened PR #235 for local raw artifact regular-file guard after focused pytest, py_compile, Ruff, structured probe, and diff checks passed |

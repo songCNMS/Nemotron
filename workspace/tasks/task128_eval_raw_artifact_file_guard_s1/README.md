@@ -20,4 +20,4 @@
 
 - Branch: `intern_nem_dev_3/task128_eval_raw_artifact_file_guard_s1`
 - Base: `22d33bf428bed321c0277badc5d193ada62abf00`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/235
