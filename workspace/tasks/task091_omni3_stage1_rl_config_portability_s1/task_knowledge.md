@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -25,3 +25,6 @@
 10. session 14 note: RLVR bridge consumers run placeholder resolution before
     final local splitting, so auto holdout must be resolved from the original
     bridge input manifest before the resolved intermediate JSONL is split.
+11. session 15 note: data-prep zip extraction should validate every archive
+    member before writing any file, reject POSIX absolute paths, Windows drive
+    paths, `..` components, and resolved targets outside the extraction root.

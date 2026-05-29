@@ -66,6 +66,21 @@ from typing import Any
 
 from tqdm.auto import tqdm
 
+try:
+    from nemotron.data_prep.utils.safe_zip import (
+        safe_extract_zip_member,
+        validate_zip_members,
+    )
+except ModuleNotFoundError:
+    # Support direct repo-checkout execution, e.g. `python scripts/...`.
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from nemotron.data_prep.utils.safe_zip import (
+        safe_extract_zip_member,
+        validate_zip_members,
+    )
+
 
 # Required keys per ``meta.json`` entry. The dataset-card schema has been
 # stable across MMPR-v1.0/1.1/1.2 — if an upstream bump introduces new
@@ -201,10 +216,10 @@ def _extract_zip_to_named_subdir(
 
     print(f"Extracting {zip_path} to {final_dir}...")
     with zipfile.ZipFile(zip_path) as zf:
-        members = zf.infolist()
+        members = validate_zip_members(zf, temp_dir)
         with tqdm(members, total=len(members), desc=desc, unit="file") as progress:
             for member in progress:
-                zf.extract(member, temp_dir)
+                safe_extract_zip_member(zf, member, temp_dir)
 
     extracted = _find_extracted_subdir(temp_dir, target_name=subdir_name_in_zip)
     final_dir.parent.mkdir(parents=True, exist_ok=True)

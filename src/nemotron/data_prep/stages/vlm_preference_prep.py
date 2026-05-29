@@ -78,6 +78,7 @@ from nemotron.data_prep.core.receipt import ReceiptManager
 from nemotron.data_prep.core.work_items import VlmPreferencePrepWorkItem
 from nemotron.data_prep.stages.context import PipelineContext
 from nemotron.data_prep.utils.filesystem import get_filesystem, read_json
+from nemotron.data_prep.utils.safe_zip import safe_extract_zip
 
 logger = logging.getLogger(__name__)
 
@@ -263,7 +264,7 @@ def _extract_images_if_needed(images_zip_path: Path, output_dir: Path) -> Path:
 
     logger.info("Extracting %s to %s", images_zip_path, images_dir)
     with zipfile.ZipFile(images_zip_path) as zf:
-        zf.extractall(temp_dir)
+        safe_extract_zip(zf, temp_dir)
 
     extracted_images_dir = _find_extracted_images_dir(temp_dir)
     images_dir.parent.mkdir(parents=True, exist_ok=True)
