@@ -5,8 +5,8 @@
 Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task170_super_spark_reasoning_parser_revision_pin_s1`
-Base: `6500fdaa27735197da87ca25d641a2883b00e8e6`
-PR: pending
+Base: `9cf231a697ab0decdcbbb890a805c61badbb1529`
+PR: https://github.com/songCNMS/Nemotron/pull/277
 
 ## Summary
 
