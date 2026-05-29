@@ -94,6 +94,28 @@ def load_omegaconf_yaml(path: str | Path) -> DictConfig:
     return OmegaConf.load(path)
 
 
+def resolve_repo_relative_source_path(path: str | Path, *, anchor_file: str | Path) -> Path:
+    """Resolve repo-relative ``src/nemotron/recipes/...`` paths from any CWD.
+
+    Explicit absolute paths and arbitrary relative user overrides are preserved.
+    This only resolves source-tree paths used by checked-in recipe defaults.
+    """
+    path = Path(path)
+    if path.is_absolute():
+        return path
+
+    parts = path.parts
+    if len(parts) < 3 or parts[:3] != ("src", "nemotron", "recipes"):
+        return path
+
+    anchor = Path(anchor_file).resolve()
+    for parent in (anchor.parent, *anchor.parents):
+        if (parent / "src" / "nemotron").is_dir():
+            return (parent / path).resolve()
+
+    return path
+
+
 def apply_hydra_overrides(config: DictConfig, overrides: list[str]) -> DictConfig:
     """Apply Hydra-style CLI overrides to OmegaConf config.
 

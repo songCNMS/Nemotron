@@ -8,6 +8,8 @@ from pathlib import Path
 import pytest
 
 from nemotron.data_prep.core.chat_sft_shard_core import _matches_used_in_filter
+from nemotron.kit.train_script import resolve_repo_relative_source_path
+from nemotron.recipes.super3.stage1_sft.data_prep import SFTDataPrepConfig
 
 yaml = pytest.importorskip("yaml")
 OmegaConf = pytest.importorskip("omegaconf").OmegaConf
@@ -25,6 +27,16 @@ DATA_PREP_CONFIGS = {
         "stage1_sft_agentic_v0_qwen",
     ),
 }
+CORE_BLEND_CONFIGS = {
+    "default": (
+        DEFAULT_CONFIG,
+        "src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json",
+    ),
+    "tiny": (
+        DATA_PREP_CONFIG_DIR / "tiny.yaml",
+        "src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json",
+    ),
+}
 SUPER3_BLEND = (
     DATA_PREP_CONFIG_DIR / "data_blend_raw.json"
 )
@@ -36,6 +48,52 @@ def test_super3_stage1_sft_default_uses_super3_blend() -> None:
 
     assert "/super3/stage1_sft/config/data_prep/data_blend_raw.json" in blend_path
     assert "/nano3/" not in blend_path
+
+
+@pytest.mark.parametrize(("profile", "config_path_expected"), CORE_BLEND_CONFIGS.items())
+def test_stage1_sft_core_blend_paths_are_repo_local(
+    profile: str,
+    config_path_expected: tuple[Path, str],
+) -> None:
+    config_path, expected = config_path_expected
+    text = config_path.read_text(encoding="utf-8")
+    config = yaml.safe_load(text)
+
+    assert config["blend_path"] == expected, profile
+    assert "${oc.env:PWD}/src/" not in text
+
+
+@pytest.mark.parametrize(("profile", "config_path_expected"), CORE_BLEND_CONFIGS.items())
+def test_stage1_sft_core_blend_paths_resolve_from_non_repo_cwd(
+    profile: str,
+    config_path_expected: tuple[Path, str],
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    config_path, expected = config_path_expected
+    monkeypatch.chdir(tmp_path)
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    blend_path = resolve_repo_relative_source_path(
+        config["blend_path"],
+        anchor_file=config_path,
+    )
+
+    assert blend_path == REPO_ROOT / expected, profile
+    assert blend_path.is_file()
+
+
+def test_stage1_sft_config_dataclass_resolves_repo_local_blend_path() -> None:
+    _, expected = CORE_BLEND_CONFIGS["default"]
+    cfg = SFTDataPrepConfig(blend_path=expected)
+
+    assert cfg.blend_path == REPO_ROOT / expected
+
+
+def test_stage1_sft_config_dataclass_preserves_relative_override() -> None:
+    cfg = SFTDataPrepConfig(blend_path="custom/blend.json")
+
+    assert cfg.blend_path == Path("custom/blend.json")
 
 
 def test_super3_stage1_sft_default_has_no_nano_used_in_filter() -> None:

@@ -12,6 +12,7 @@ import pytest
 
 from nemotron.data_prep.recipes import rl_local
 from nemotron.data_prep.recipes.rl_local import run_resolve_and_split, split_local_jsonl
+from nemotron.kit.train_script import resolve_repo_relative_source_path
 from nemotron.recipes.super3.stage2_rl.data_prep import RLDataPrepConfig
 
 yaml = pytest.importorskip("yaml")
@@ -61,12 +62,60 @@ EXPECTED_BRIDGE_INPUT_PATHS = {
     "rlhf": "${oc.env:NEMO_RUN_DIR,.}/output/super3/m1_rlhf/combined.jsonl",
 }
 
+CORE_BLEND_CONFIGS = {
+    "default": GENERIC_DEFAULT_CONFIG,
+    "tiny": TINY_CONFIG,
+}
+
+EXPECTED_CORE_BLEND_PATH = (
+    "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
+)
+
 
 def _load_yaml(path: Path) -> tuple[str, dict[str, object]]:
     text = path.read_text(encoding="utf-8")
     data = yaml.safe_load(text)
     assert isinstance(data, dict), f"{path}: top-level YAML must be a mapping"
     return text, data
+
+
+@pytest.mark.parametrize("profile", sorted(CORE_BLEND_CONFIGS))
+def test_stage2_rl_core_blend_paths_are_repo_local(profile: str) -> None:
+    text, data = _load_yaml(CORE_BLEND_CONFIGS[profile])
+
+    assert data["blend_path"] == EXPECTED_CORE_BLEND_PATH
+    assert "${oc.env:PWD}/src/" not in text
+
+
+@pytest.mark.parametrize("profile", sorted(CORE_BLEND_CONFIGS))
+def test_stage2_rl_core_blend_paths_resolve_from_non_repo_cwd(
+    profile: str,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    config_path = CORE_BLEND_CONFIGS[profile]
+    monkeypatch.chdir(tmp_path)
+    _, data = _load_yaml(config_path)
+
+    blend_path = resolve_repo_relative_source_path(
+        data["blend_path"],
+        anchor_file=config_path,
+    )
+
+    assert blend_path == REPO_ROOT / EXPECTED_CORE_BLEND_PATH
+    assert blend_path.is_file()
+
+
+def test_stage2_rl_config_dataclass_resolves_repo_local_blend_path() -> None:
+    cfg = RLDataPrepConfig(blend_path=EXPECTED_CORE_BLEND_PATH)
+
+    assert cfg.blend_path == REPO_ROOT / EXPECTED_CORE_BLEND_PATH
+
+
+def test_stage2_rl_config_dataclass_preserves_relative_override() -> None:
+    cfg = RLDataPrepConfig(blend_path="custom/blend.json")
+
+    assert cfg.blend_path == Path("custom/blend.json")
 
 
 @pytest.mark.parametrize("profile", sorted(PROFILE_CONFIGS))

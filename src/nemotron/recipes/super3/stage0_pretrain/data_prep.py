@@ -69,9 +69,9 @@ from pathlib import Path
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
 
+from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
 from nemotron.data_prep.blend import DataBlend
 from nemotron.data_prep.config import ObservabilityConfig, TokenizerConfig
-from nemotron.data_prep.utils.splits import distribute_shards_to_splits
 from nemotron.data_prep.observability import pipeline_wandb_hook
 from nemotron.data_prep.recipes.execution_mode import resolve_execution_mode
 from nemotron.data_prep.recipes.pretrain import (
@@ -89,16 +89,16 @@ from nemotron.data_prep.stages import (
     PlanStageConfig,
 )
 from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.kit import PretrainBlendsArtifact, print_step_complete
-from nemo_runspec.artifacts import ArtifactTrackingResult, log_artifact, setup_artifact_tracking
+from nemotron.data_prep.utils.splits import distribute_shards_to_splits
+from nemotron.kit import PretrainBlendsArtifact, print_step_complete, wandb_kit
 from nemotron.kit.train_script import (
     apply_hydra_overrides,
     init_wandb_from_env,
     load_omegaconf_yaml,
     omegaconf_to_dataclass,
     parse_config_and_overrides,
+    resolve_repo_relative_source_path,
 )
-from nemotron.kit import wandb_kit
 
 STAGE_PATH = Path(__file__).parent
 
@@ -195,6 +195,10 @@ class PreTrainDataPrepConfig:
         # Ensure paths are Path objects
         if isinstance(self.blend_path, str):
             self.blend_path = Path(self.blend_path)
+        self.blend_path = resolve_repo_relative_source_path(
+            self.blend_path,
+            anchor_file=__file__,
+        )
         if isinstance(self.output_dir, str):
             self.output_dir = Path(self.output_dir)
 

@@ -10,7 +10,7 @@ run:
 
 # Path to data blend JSON file
 # TODO(super3): Replace with super3-specific data blend once available
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json
+blend_path: src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json
 
 # Output directory for packed Parquet data
 output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_tiny
