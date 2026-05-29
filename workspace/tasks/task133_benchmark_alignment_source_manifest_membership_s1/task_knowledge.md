@@ -1,6 +1,6 @@
 # task133_benchmark_alignment_source_manifest_membership_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Notes
 
@@ -12,3 +12,5 @@
 - `qwen_eval_repro_gate.yaml` and `qwen_benchmark_alignment_ledger.yaml` are
   existing repo YAMLs but are not result manifests and must not count as
   evidence source manifests.
+- Session 2 added no new implementation knowledge; it only records stop-hook
+  bookkeeping after PR #240 opened.
