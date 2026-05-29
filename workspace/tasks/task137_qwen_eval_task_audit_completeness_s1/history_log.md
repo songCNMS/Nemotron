@@ -1,6 +1,6 @@
 # task137_qwen_eval_task_audit_completeness_s1 history
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 - 2026-05-29
 
@@ -22,3 +22,9 @@
 
 - Updated status/report bookkeeping for PR #244 after restart validation; no
   product or test code changes were made in this session.
+
+## Session 4 - 2026-05-29
+
+- Recorded PM notice that PR #244 merged after independent test PASS; squash
+  merge/new main is `70d3541cdbc993fa113bdc62fa9be61f83b72d9e` and PM
+  merged-main verification passed.

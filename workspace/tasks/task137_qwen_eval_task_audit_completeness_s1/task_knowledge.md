@@ -1,6 +1,6 @@
 # task137_qwen_eval_task_audit_completeness_s1 knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
   buckets instead of being silently omitted from the Qwen eval audit.
 - Session 3 added no new implementation knowledge; it only aligned durable
   bookkeeping with the open PR state.
+- Session 4 added no new implementation knowledge; it only recorded PR #244
+  merge completion and PM merged-main verification.
