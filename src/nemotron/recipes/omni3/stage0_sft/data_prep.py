@@ -107,7 +107,11 @@ RAY = True
 # All knowledge of Valor32k's source layout (URL, tar structure, filename
 # convention, QA shape) lives in this file. The shared SFT-Omni recipe
 # (nemotron.data_prep.recipes.sft_omni) is generic over these.
-VALOR32K_QA_ZIP_URL = "https://github.com/inesriahi/valor32k-avqa-2/raw/refs/heads/main/data.zip"
+VALOR32K_QA_ZIP_REVISION = "a1eeb58e16fbe84f43a3886fd72fe61fd208b7b2"
+VALOR32K_QA_ZIP_URL = (
+    "https://github.com/inesriahi/valor32k-avqa-2/raw/"
+    f"{VALOR32K_QA_ZIP_REVISION}/data.zip"
+)
 # Valor32k filenames have the form {youtube_id}_{start.sss}_{end.sss}.mp4.
 # QA records key by the bare youtube_id, so we strip the timestamp suffix.
 _VALOR32K_TS_SUFFIX_RE = re.compile(r"^(.+)_\d+\.\d+_\d+\.\d+$")
@@ -604,6 +608,7 @@ def _run_valor32k_pipeline(
             "dataset_path": str(dataset_path),
             "raw_dir": str(raw_dir),
             "source_tar": str(cfg.source_tar) if cfg.source_tar else None,
+            "qa_zip_url": cfg.qa_zip_url,
             "samples_per_shard": cfg.samples_per_shard,
             "sample": cfg.sample,
             "split_sample_counts": format_result.split_sample_counts,
