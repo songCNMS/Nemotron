@@ -8,14 +8,11 @@ run:
 #   nemotron nano3 data prep sft
 #   nemotron nano3 data prep sft sample=100 force=true
 #
-# Environment variables:
-#   PWD: Current working directory (for path resolution)
-
 # Path to data blend JSON file
-blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_raw.json
+blend_path: src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_raw.json
 
 # Output directory for packed Parquet data
-output_dir: ${oc.env:PWD}/../output/stage1_sft
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/nano3/stage1_sft
 
 # Number of output shards for parallel loading
 num_shards: 128

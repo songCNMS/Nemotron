@@ -94,7 +94,12 @@ def load_omegaconf_yaml(path: str | Path) -> DictConfig:
     return OmegaConf.load(path)
 
 
-def resolve_repo_relative_source_path(path: str | Path, *, anchor_file: str | Path) -> Path:
+def resolve_repo_relative_source_path(
+    path: str | Path,
+    *,
+    anchor_file: str | Path,
+    source_prefix: tuple[str, ...] = ("src", "nemotron", "recipes"),
+) -> Path:
     """Resolve repo-relative ``src/nemotron/recipes/...`` paths from any CWD.
 
     Explicit absolute paths and arbitrary relative user overrides are preserved.
@@ -105,7 +110,7 @@ def resolve_repo_relative_source_path(path: str | Path, *, anchor_file: str | Pa
         return path
 
     parts = path.parts
-    if len(parts) < 3 or parts[:3] != ("src", "nemotron", "recipes"):
+    if len(parts) < len(source_prefix) or parts[: len(source_prefix)] != source_prefix:
         return path
 
     anchor = Path(anchor_file).resolve()

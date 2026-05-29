@@ -33,8 +33,8 @@ from pathlib import Path
 import pytest
 from omegaconf import OmegaConf
 
-from nemotron.data_prep.filesystem import get_filesystem
-from nemotron.data_prep.pipeline import _distribute_shards_to_splits
+from nemotron.data_prep.utils.filesystem import get_filesystem
+from nemotron.data_prep.utils.splits import distribute_shards_to_splits as _distribute_shards_to_splits
 from nemotron.kit import PretrainBlendsArtifact
 
 
@@ -249,7 +249,7 @@ class TestWandbArtifactIntegration:
 
         This is the key integration test for the data_prep -> train contract.
         """
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -282,6 +282,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "TestBlendsArtifact"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -290,7 +292,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         # Step 1: Config pattern matching train.py default.yaml
@@ -341,7 +343,7 @@ class TestWandbArtifactIntegration:
 
     def test_artifact_without_blend_json_should_fail_gracefully(self, monkeypatch, tmp_path):
         """Test that missing blend.json is detected early with clear error."""
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -360,6 +362,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "TestBlendsArtifact"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -368,7 +372,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         cfg = OmegaConf.create(
@@ -387,7 +391,7 @@ class TestWandbArtifactIntegration:
 
     def test_wandb_artifact_resolution_for_train(self, monkeypatch, tmp_path):
         """Test ${art:data,path} resolver works with train.py config pattern."""
-        from nemotron.kit import resolvers
+        from nemo_runspec.config import resolvers
 
         resolvers.clear_artifact_cache()
 
@@ -406,6 +410,8 @@ class TestWandbArtifactIntegration:
                 self.version = "v5"
                 self.name = "TestBlendsArtifact"
                 self.type = "dataset"
+                self.metadata = {}
+                self.manifest = None
 
             def download(self, skip_cache=True):
                 return str(downloaded_dir)
@@ -414,7 +420,7 @@ class TestWandbArtifactIntegration:
             def artifact(self, ref):
                 return FakeArtifact(ref)
 
-        fake_wandb = types.SimpleNamespace(Api=lambda: FakeApi())
+        fake_wandb = types.SimpleNamespace(Api=lambda **_: FakeApi())
         monkeypatch.setitem(sys.modules, "wandb", fake_wandb)
 
         # Config pattern matching train.py test.yaml
