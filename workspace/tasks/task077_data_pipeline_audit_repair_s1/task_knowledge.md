@@ -81,5 +81,10 @@
 69. file change: Qwen scale-up planner now exposes explicit `--fail-on-data-quality-issues`, records it under `manifest["data"]["fail_on_data_quality_issues"]`, reports `Strict data-quality gate`, and renders the prepare flag when enabled.
 70. test evidence: Task108 focused Qwen scale-up planner shard passed with 23 tests; py_compile, Ruff, structured strict-gate render probe, `git diff --check`, and `git diff --cached --check` passed.
 71. file change: PR #214 opened against `main` for task108 Qwen scale-up strict data-quality planning.
+72. supervisor request: PM assigned task110 to sync latest main, extend M1 Agentic SFT strict data-quality checks to math sidecar/bucket rows that enter the training blend, add focused tests, open a PR, and avoid live runs/main push/self-merge.
+73. technical fact: Before task110, `audit_data_quality()` and strict enforcement covered base `train` and `val_shadow` rows but did not audit math sidecar rows loaded through `--math-sidecar-m0-input-dir` and written as bucket sidecar datasets.
+74. file change: `prepare_m1_agentic_sft.py` now records `data_quality.training_sidecars` for non-heldout math bucket sidecars, reports that table, and folds sidecar missing metadata, duplicate keys/prompts, and validation overlaps into strict issue counts.
+75. test evidence: Task110 focused SFT pytest shard passed with 91 tests and 1 skipped; py_compile, Ruff, structured sidecar strict-failure/clean-pass probe, and diff checks passed.
+76. file change: PR #219 opened against `main` for task110 SFT math sidecar data-quality gate.
 
 ---

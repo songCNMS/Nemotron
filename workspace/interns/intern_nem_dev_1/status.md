@@ -6,7 +6,7 @@
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task108_qwen_scaleup_strict_data_quality_plan_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/214 |
+| Current Task | task110_sft_math_sidecar_data_quality_gate_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/219 |
 | Session | 17 |
-| Recent Progress | Opened PR #214 adding an explicit Qwen scale-up strict data-quality gate with manifest/report recording; focused planner checks passed |
+| Recent Progress | Opened PR #219 extending M1 Agentic SFT strict data-quality enforcement to math sidecar bucket rows that enter the training blend; focused SFT checks passed |
