@@ -1,6 +1,14 @@
 # task165_data_blend_revision_propagation_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Closeout Notes
+
+- PR #273 was merged and verified on `main` at
+  `0e190d301348990990650449485aa057eb7405ce`.
+- Local `main` has been synced to the verified merge commit.
+- No new product behavior was added in Session 2; this session is closeout
+  bookkeeping only.
 
 ## Working Notes
 

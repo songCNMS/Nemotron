@@ -1,6 +1,19 @@
 # task165_data_blend_revision_propagation_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-05-29
+
+- PM reported PR #273 merged and verified on `main` at merge commit
+  `0e190d301348990990650449485aa057eb7405ce`.
+- Synced local `main` to `origin/main` at
+  `0e190d301348990990650449485aa057eb7405ce`.
+- Created closeout branch
+  `intern_nem_dev_2/task165_data_blend_revision_propagation_s1_closeout_sync`
+  for bookkeeping-only status/task doc updates.
+- Recorded task closeout with no active blockers and no live HF/dataset
+  download, generic data prep run, train/eval, endpoint, W&B, cluster, deploy,
+  artifact upload/download, main/master push, or self-merge.
 
 ## Session 1 - 2026-05-29
 
