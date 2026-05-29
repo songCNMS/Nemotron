@@ -1,10 +1,11 @@
 # task149_nano3_core_data_prep_path_portability_s1
 
-Status: Ready for PM gate
+Status: Merged
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task149_nano3_core_data_prep_path_portability_s1`
 Base: `652534e4865e20b72f4c80bf62b6c0cea5973fd1`
-PR: https://github.com/songCNMS/Nemotron/pull/256
+PR: https://github.com/songCNMS/Nemotron/pull/256 (merged)
+Merge commit: `17ed7b0e5195878030ff09118fb79caee200b824`
 
 ## Scope
 
@@ -30,3 +31,7 @@ No live HF download, Nano3 data prep, SFT packing, training/eval, endpoint calls
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`
 - PASS: added-line live-surface scan showed only static path/default/test/docs/status matches
+
+## Closeout
+
+PM reported PR #256 merged after exact-head gate and independent test PASS. Merged-main verification passed the Nano3 pytest shard (`126 passed, 2 skipped`), Super3 regression shard (`89 passed`), py_compile, Ruff, `git diff --check`, static stale-path grep, and structured non-repo-CWD portability probe. No live HF/download/data prep/train/eval/endpoint/W&B/cluster/deploy/artifact actions were run.

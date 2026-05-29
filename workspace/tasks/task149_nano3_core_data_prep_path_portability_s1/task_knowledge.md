@@ -1,4 +1,4 @@
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 # Task Knowledge
 
@@ -8,3 +8,4 @@
 - Nano3 data-prep output defaults should live under `${oc.env:NEMO_RUN_DIR,.}/output/nano3/...`.
 - Current `nemo_runspec` artifact resolvers preserve numeric metadata values, so refreshed integration tests should assert integer `pack_size` instead of stringified values.
 - Current `HFPlaceholderResolver` is table-backed (`tables`, `configs`) and Skywork records keep the raw `question` field while putting the template-applied prompt into `responses_create_params.input[0].content`.
+- PR #256 was squash-merged to `main` at `17ed7b0e5195878030ff09118fb79caee200b824`; PM verified merged-main checks without live HF/download/data prep/train/eval/endpoint/W&B/cluster/deploy/artifact actions.

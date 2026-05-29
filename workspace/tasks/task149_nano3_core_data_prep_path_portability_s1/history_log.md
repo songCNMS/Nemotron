@@ -1,4 +1,4 @@
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 # History Log
 
@@ -18,3 +18,11 @@
 - Stop-hook audit requested Session 2 bookkeeping for task149 after PR #256 was opened.
 - Bumped task149 history/task knowledge/status session metadata to Session 2 and preserved the ready-for-gate report.
 - No product, config, or test files changed in this bookkeeping correction.
+
+## Session 3 - 2026-05-29
+
+- PM reported PR #256 merged after exact-head gate and independent test PASS.
+- Synced local `main` cleanly to merged `origin/main` `17ed7b0e5195878030ff09118fb79caee200b824`.
+- PM merged-main verification passed: Nano3 pytest shard (`126 passed, 2 skipped`), Super3 regression shard (`89 passed`), py_compile, Ruff, `git diff --check`, static stale-path grep, and structured non-repo-CWD portability probe.
+- Recorded closeout bookkeeping on branch `intern_nem_dev_2/task149_nano3_core_data_prep_path_portability_s1_closeout_sync`.
+- No live HF/download/data prep/train/eval/endpoint/W&B/cluster/deploy/artifact actions were run, and no direct main/master push was used.
