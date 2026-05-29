@@ -1,6 +1,6 @@
 # task139_stage1_sft_default_blend_filter_contract_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1 - 2026-05-29
 
@@ -43,3 +43,17 @@
   entry after the handoff response.
 - Added this Session 5 bookkeeping entry and bumped task139 session metadata
   without changing product code or test files.
+
+## Session 6 - 2026-05-29
+
+- PM reported PR #246 merged after independent test pass.
+- Squash merge on `main` is `b2aaf885220419038e6b01e7174c2ccd0c212da5`;
+  PM merged-main verification passed focused Qwen chat/default SFT config
+  pytest, py_compile, Ruff, structured Super3 blend/filter probe, and
+  `git diff --check`.
+- Fetched `origin/main`, fast-forwarded local `main` cleanly to
+  `b2aaf885220419038e6b01e7174c2ccd0c212da5`, and created closeout branch
+  `intern_nem_dev_2/task139_stage1_sft_default_blend_filter_contract_s1_closeout_sync`
+  for bookkeeping only.
+- No further task139 product/test action is required; no direct main/master
+  push was used.
