@@ -1,6 +1,6 @@
 # task146_stage1_sft_agentic_blend_path_portability_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-29
 
@@ -17,3 +17,15 @@
 - Ran focused pytest, py_compile, Ruff, structured OmegaConf probe, static grep
   probe, added-line live-surface scan, and diff checks.
 - Opened PR #253 to `main`: https://github.com/songCNMS/Nemotron/pull/253.
+
+## Session 2 - 2026-05-29
+
+- Received PM confirmation that PR #253 merged after independent gate and
+  merged-main verification.
+- Recorded final exact-head merge input
+  `5ac9d526722eca265c65de2f3397ce152483da24`.
+- Recorded new main squash merge commit
+  `311a407294be2de5413de3d300770b3c51afa986`.
+- Updated task and intern status bookkeeping from working to idle/completed.
+- No live M1 data prep, SFT packing, train/eval, endpoint, W&B, cluster,
+  deploy, direct `main`/`master` push, or self-merge was performed.

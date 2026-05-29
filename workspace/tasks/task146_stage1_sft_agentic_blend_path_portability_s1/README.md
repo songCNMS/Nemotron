@@ -1,6 +1,6 @@
 # task146_stage1_sft_agentic_blend_path_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1 -->
 
 ## Scope
 
@@ -23,3 +23,4 @@
 - Branch: `intern_nem_dev_1/task146_stage1_sft_agentic_blend_path_portability_s1`
 - Base: `7145c7de80f03555259a9b5657cc4066812f50d0`
 - PR: https://github.com/songCNMS/Nemotron/pull/253
+- Merged: `311a407294be2de5413de3d300770b3c51afa986`
