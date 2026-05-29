@@ -1,6 +1,6 @@
 # task162_long_document_public_docs_path_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -18,4 +18,5 @@
 - Base: `2cb891846c6f86d8917cd6289070c687dfdd6f91`
 - Branch: `intern_nem_dev_1/task162_long_document_public_docs_path_portability_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/269
+- Merge commit: `a9b324bf28cd6cb0470b58eec47fd17336fdec0f`
 - Checks: focused static docs pytest, py_compile, Ruff, no-`/lustre/` grep, structured public-doc portability probe, added-line live-surface scan, and diff checks passed.
