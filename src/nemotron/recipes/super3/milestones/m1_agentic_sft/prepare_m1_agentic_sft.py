@@ -1927,10 +1927,62 @@ def _sample_keys(keys: Sequence[str]) -> list[str]:
     return list(keys[:DATA_QUALITY_SAMPLE_LIMIT])
 
 
+def _audit_source_metadata_rows(
+    rows: Sequence[Mapping[str, Any]],
+) -> tuple[JsonDict, set[str], set[str]]:
+    missing_required_fields: dict[str, int] = defaultdict(int)
+    missing_examples: list[JsonDict] = []
+    source_keys: list[str] = []
+    prompt_hashes: list[str] = []
+    for index, row in enumerate(rows):
+        metadata = _metadata_for_audit(row)
+        missing = [
+            field
+            for field in SOURCE_METADATA_REQUIRED_FIELDS
+            if metadata.get(field) in (None, "")
+        ]
+        if missing:
+            for field in missing:
+                missing_required_fields[field] += 1
+            if len(missing_examples) < DATA_QUALITY_SAMPLE_LIMIT:
+                missing_examples.append(
+                    {
+                        "row_index": index,
+                        "environment": metadata.get("m0_environment"),
+                        "missing_fields": missing,
+                    }
+                )
+        source_key = _source_key_for_audit(row)
+        if source_key is not None:
+            source_keys.append(source_key)
+        prompt_hashes.append(_normalized_prompt_hash(row))
+
+    duplicate_source_keys = _duplicate_counts(source_keys)
+    duplicate_prompt_hashes = _duplicate_counts(prompt_hashes)
+    return (
+        {
+            "rows": len(rows),
+            "required_source_metadata_fields": list(SOURCE_METADATA_REQUIRED_FIELDS),
+            "missing_required_fields": dict(sorted(missing_required_fields.items())),
+            "missing_required_field_examples": missing_examples,
+            "duplicate_source_key_count": len(duplicate_source_keys),
+            "duplicate_source_key_examples": _sample_keys(list(duplicate_source_keys)),
+            "duplicate_normalized_prompt_hash_count": len(duplicate_prompt_hashes),
+            "duplicate_normalized_prompt_hash_examples": _sample_keys(
+                list(duplicate_prompt_hashes)
+            ),
+        },
+        set(source_keys),
+        set(prompt_hashes),
+    )
+
+
 def audit_data_quality(
     *,
     train_rows: Sequence[Mapping[str, Any]],
     val_rows: Sequence[Mapping[str, Any]],
+    training_sidecar_rows: Mapping[str, Sequence[Mapping[str, Any]]] | None = None,
+    sidecar_validation_rows: Sequence[Mapping[str, Any]] = (),
 ) -> JsonDict:
     """Return static source, split, and duplicate audit metadata for M1 rows."""
 
@@ -1943,49 +1995,10 @@ def audit_data_quality(
     prompt_hashes_by_split: dict[str, set[str]] = {}
 
     for split, rows in by_split.items():
-        missing_required_fields: dict[str, int] = defaultdict(int)
-        missing_examples: list[JsonDict] = []
-        source_keys: list[str] = []
-        prompt_hashes: list[str] = []
-        for index, row in enumerate(rows):
-            metadata = _metadata_for_audit(row)
-            missing = [
-                field
-                for field in SOURCE_METADATA_REQUIRED_FIELDS
-                if metadata.get(field) in (None, "")
-            ]
-            if missing:
-                for field in missing:
-                    missing_required_fields[field] += 1
-                if len(missing_examples) < DATA_QUALITY_SAMPLE_LIMIT:
-                    missing_examples.append(
-                        {
-                            "row_index": index,
-                            "environment": metadata.get("m0_environment"),
-                            "missing_fields": missing,
-                        }
-                    )
-            source_key = _source_key_for_audit(row)
-            if source_key is not None:
-                source_keys.append(source_key)
-            prompt_hashes.append(_normalized_prompt_hash(row))
-
-        duplicate_source_keys = _duplicate_counts(source_keys)
-        duplicate_prompt_hashes = _duplicate_counts(prompt_hashes)
-        source_keys_by_split[split] = set(source_keys)
-        prompt_hashes_by_split[split] = set(prompt_hashes)
-        split_audits[split] = {
-            "rows": len(rows),
-            "required_source_metadata_fields": list(SOURCE_METADATA_REQUIRED_FIELDS),
-            "missing_required_fields": dict(sorted(missing_required_fields.items())),
-            "missing_required_field_examples": missing_examples,
-            "duplicate_source_key_count": len(duplicate_source_keys),
-            "duplicate_source_key_examples": _sample_keys(list(duplicate_source_keys)),
-            "duplicate_normalized_prompt_hash_count": len(duplicate_prompt_hashes),
-            "duplicate_normalized_prompt_hash_examples": _sample_keys(
-                list(duplicate_prompt_hashes)
-            ),
-        }
+        split_audit, source_keys, prompt_hashes = _audit_source_metadata_rows(rows)
+        source_keys_by_split[split] = source_keys
+        prompt_hashes_by_split[split] = prompt_hashes
+        split_audits[split] = split_audit
 
     overlapping_source_keys = sorted(
         source_keys_by_split["train"] & source_keys_by_split["val_shadow"]
@@ -1993,7 +2006,7 @@ def audit_data_quality(
     overlapping_prompt_hashes = sorted(
         prompt_hashes_by_split["train"] & prompt_hashes_by_split["val_shadow"]
     )
-    return {
+    data_quality = {
         "source_metadata": split_audits,
         "split_routing": {
             "train_val_source_key_overlap_count": len(overlapping_source_keys),
@@ -2009,6 +2022,44 @@ def audit_data_quality(
             "sample_limit": DATA_QUALITY_SAMPLE_LIMIT,
         },
     }
+    training_sidecar_rows = training_sidecar_rows or {}
+    if training_sidecar_rows:
+        validation_reference_keys = set(source_keys_by_split["val_shadow"])
+        validation_reference_prompt_hashes = set(prompt_hashes_by_split["val_shadow"])
+        if sidecar_validation_rows:
+            _, sidecar_validation_keys, sidecar_validation_prompt_hashes = (
+                _audit_source_metadata_rows(sidecar_validation_rows)
+            )
+            validation_reference_keys |= sidecar_validation_keys
+            validation_reference_prompt_hashes |= sidecar_validation_prompt_hashes
+        training_sidecar_audits: dict[str, JsonDict] = {}
+        for name, rows in sorted(training_sidecar_rows.items()):
+            sidecar_audit, source_keys, prompt_hashes = _audit_source_metadata_rows(rows)
+            validation_source_key_overlaps = sorted(
+                source_keys & validation_reference_keys
+            )
+            validation_prompt_overlaps = sorted(
+                prompt_hashes & validation_reference_prompt_hashes
+            )
+            sidecar_audit.update(
+                {
+                    "validation_source_key_overlap_count": len(
+                        validation_source_key_overlaps
+                    ),
+                    "validation_source_key_overlap_examples": _sample_keys(
+                        validation_source_key_overlaps
+                    ),
+                    "validation_normalized_prompt_overlap_count": len(
+                        validation_prompt_overlaps
+                    ),
+                    "validation_normalized_prompt_overlap_examples": _sample_keys(
+                        validation_prompt_overlaps
+                    ),
+                }
+            )
+            training_sidecar_audits[name] = sidecar_audit
+        data_quality["training_sidecars"] = training_sidecar_audits
+    return data_quality
 
 
 def _count_value(value: Any) -> int:
@@ -2045,16 +2096,43 @@ def strict_data_quality_issue_counts(data_quality: Mapping[str, Any]) -> dict[st
             split_info.get("duplicate_normalized_prompt_hash_count")
         )
 
+    sidecar_source_key_overlap_count = 0
+    sidecar_prompt_overlap_count = 0
+    training_sidecars = data_quality.get("training_sidecars")
+    if isinstance(training_sidecars, Mapping):
+        for split_info in training_sidecars.values():
+            if not isinstance(split_info, Mapping):
+                continue
+            missing_fields = split_info.get("missing_required_fields")
+            if isinstance(missing_fields, Mapping):
+                missing_metadata_count += sum(
+                    _count_value(count) for count in missing_fields.values()
+                )
+            duplicate_source_key_count += _count_value(
+                split_info.get("duplicate_source_key_count")
+            )
+            duplicate_prompt_hash_count += _count_value(
+                split_info.get("duplicate_normalized_prompt_hash_count")
+            )
+            sidecar_source_key_overlap_count += _count_value(
+                split_info.get("validation_source_key_overlap_count")
+            )
+            sidecar_prompt_overlap_count += _count_value(
+                split_info.get("validation_normalized_prompt_overlap_count")
+            )
+
     return {
         "missing_required_source_metadata_count": missing_metadata_count,
         "duplicate_source_key_count": duplicate_source_key_count,
         "duplicate_normalized_prompt_hash_count": duplicate_prompt_hash_count,
         "train_val_source_key_overlap_count": _count_value(
             split_routing.get("train_val_source_key_overlap_count")
-        ),
+        )
+        + sidecar_source_key_overlap_count,
         "train_val_normalized_prompt_overlap_count": _count_value(
             split_routing.get("train_val_normalized_prompt_overlap_count")
-        ),
+        )
+        + sidecar_prompt_overlap_count,
     }
 
 
@@ -2344,6 +2422,30 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
                     f"| {split} | {info.get('rows', 0)} | {missing} | "
                     f"{info.get('duplicate_source_key_count', 0)} | "
                     f"{info.get('duplicate_normalized_prompt_hash_count', 0)} |"
+                )
+        training_sidecars = data_quality.get("training_sidecars") or {}
+        if isinstance(training_sidecars, Mapping) and training_sidecars:
+            lines.extend(
+                [
+                    "",
+                    "### Training sidecar data quality",
+                    "",
+                    "| Sidecar | Rows | Missing source metadata | Duplicate source keys | "
+                    "Duplicate normalized prompts | Validation source-key overlaps | "
+                    "Validation normalized-prompt overlaps |",
+                    "|---|---:|---:|---:|---:|---:|---:|",
+                ]
+            )
+            for sidecar_name, info in sorted(training_sidecars.items()):
+                if not isinstance(info, Mapping):
+                    continue
+                missing = sum((info.get("missing_required_fields") or {}).values())
+                lines.append(
+                    f"| {sidecar_name} | {info.get('rows', 0)} | {missing} | "
+                    f"{info.get('duplicate_source_key_count', 0)} | "
+                    f"{info.get('duplicate_normalized_prompt_hash_count', 0)} | "
+                    f"{info.get('validation_source_key_overlap_count', 0)} | "
+                    f"{info.get('validation_normalized_prompt_overlap_count', 0)} |"
                 )
         split_routing = data_quality.get("split_routing") or {}
         if isinstance(split_routing, Mapping):
@@ -2696,7 +2798,22 @@ def prepare(args: argparse.Namespace) -> JsonDict:
         MATH_FINAL_ANSWER_SIDECAR_WEIGHT if legacy_sidecar_in_blend else 0.0
     )
 
-    data_quality = audit_data_quality(train_rows=train_rows, val_rows=val_rows)
+    training_sidecar_quality_rows: dict[str, Sequence[Mapping[str, Any]]] = {}
+    sidecar_validation_rows: list[Mapping[str, Any]] = []
+    if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
+        for bucket in math_bucket_order:
+            rows = math_bucket_rows.get(bucket, [])
+            if bucket == MATH_BUCKET_HELDOUT_EVAL:
+                sidecar_validation_rows.extend(rows)
+            elif rows:
+                training_sidecar_quality_rows[bucket] = rows
+
+    data_quality = audit_data_quality(
+        train_rows=train_rows,
+        val_rows=val_rows,
+        training_sidecar_rows=training_sidecar_quality_rows,
+        sidecar_validation_rows=sidecar_validation_rows,
+    )
     data_quality["strict_enforcement"] = data_quality_strict_enforcement(
         data_quality,
         enabled=bool(getattr(args, "fail_on_data_quality_issues", False)),

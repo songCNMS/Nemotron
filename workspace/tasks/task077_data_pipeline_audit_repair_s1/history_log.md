@@ -187,4 +187,13 @@
 - Validation passed locally: focused Qwen scale-up planner pytest shard, py_compile, Ruff, structured strict-gate render probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #214: https://github.com/songCNMS/Nemotron/pull/214
 
+- Task110 follow-up in same Session 17:
+- Read PM assignment for `task110_sft_math_sidecar_data_quality_gate_s1`.
+- Fast-forwarded local `main` to `4bb920fd0e942a4d807394893c8bba5f2bb87952` and created branch `intern_nem_dev_1/task110_sft_math_sidecar_data_quality_gate_s1`.
+- Extended M1 Agentic SFT data-quality auditing with `training_sidecars` evidence for math bucket sidecar rows that are written into the training blend.
+- Folded sidecar missing source metadata, duplicate source keys/prompts, and validation/heldout overlaps into strict data-quality issue counts while preserving default report-only behavior unless `--fail-on-data-quality-issues` is enabled.
+- Added focused tests proving strict mode fails after manifest/report writing when a math sidecar row has missing license plus duplicate source key and passes with a clean sidecar fixture.
+- Validation passed locally: focused SFT pytest shard, py_compile, Ruff, structured sidecar strict-failure/clean-pass probe, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #219: https://github.com/songCNMS/Nemotron/pull/219
+
 ---
