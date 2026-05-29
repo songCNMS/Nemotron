@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - History log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ---
 
@@ -281,5 +281,15 @@
 - Added focused Stage2 RL defaults tests proving the YAML uses `NEMO_RUN_DIR`, stays under `output/super3/stage2_rl_resolved`, and matches `RLDataPrepConfig().output_dir` under the default environment.
 - Validation passed locally: focused Stage2 RL defaults pytest, py_compile, Ruff, structured OmegaConf probe, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #245: https://github.com/songCNMS/Nemotron/pull/245
+
+## Session 23 - 2026-05-29 - Task138 merged-main sync
+
+**Executor**: intern_nem_dev_1
+
+- PM reported PR #245 merged after independent test PASS.
+- Recorded squash merge/new main commit `1e7f6811b7568d5e722763b4ec67bf37eec63553`.
+- PM merged-main verification passed: focused Stage2 RL data-prep defaults pytest 17 passed, py_compile, Ruff, structured OmegaConf output-dir probe, and `git diff --check`.
+- Fetched `origin/main` and fast-forwarded local `main` to `1e7f6811b7568d5e722763b4ec67bf37eec63553`.
+- No further task138 product action remains.
 
 ---

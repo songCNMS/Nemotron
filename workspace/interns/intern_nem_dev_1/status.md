@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task077_data_pipeline_audit_repair_s1 -->
+<!-- METADATA:STATUS=Idle,TASK=task077_data_pipeline_audit_repair_s1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
+| Status | Idle |
 | Current Task | task138_stage2_rl_data_prep_output_dir_portability_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/245 |
-| Session | 22 |
-| Recent Progress | Opened PR #245 aligning generic Stage2 RL data-prep output_dir with the NEMO_RUN_DIR-relative Super3 contract; focused Stage2 RL defaults tests, py_compile, Ruff, OmegaConf probe, and diff checks passed |
+| Session | 23 |
+| Recent Progress | PR #245 merged as `1e7f6811b7568d5e722763b4ec67bf37eec63553`; PM merged-main verification passed and local main was synced to origin/main |

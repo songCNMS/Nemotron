@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -127,5 +127,7 @@
 115. file change: `stage2_rl/config/data_prep/default.yaml` now uses `${oc.env:NEMO_RUN_DIR,.}/output/super3/stage2_rl_resolved` for `output_dir`; `tiny.yaml` and bridge consumer configs were unchanged.
 116. test evidence: Task138 focused Stage2 RL defaults shard passed with 17 tests; py_compile, Ruff, structured OmegaConf probe, and diff checks passed.
 117. file change: PR #245 opened against `main` for task138 Stage2 RL data-prep output portability.
+118. file change: PR #245 squash merged to `main` as `1e7f6811b7568d5e722763b4ec67bf37eec63553`.
+119. test evidence: PM reported merged-main verification passed for task138 with focused Stage2 RL data-prep defaults pytest 17 passed, py_compile, Ruff, structured OmegaConf output-dir probe, and `git diff --check`.
 
 ---
