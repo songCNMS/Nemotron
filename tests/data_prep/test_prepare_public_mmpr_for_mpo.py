@@ -12,23 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for ``scripts/prepare_public_mmpr_for_mpo.py``.
-
-We focus on the meta-rewrite logic — the only real judgment call in the
-script. Zip extraction is delegated to ``zipfile`` and the directory-
-shape glob is mirror-of-mmpr-tiny code already exercised in production.
-"""
+"""Tests for ``scripts/prepare_public_mmpr_for_mpo.py``."""
 
 from __future__ import annotations
 
 import importlib.util
 import json
 import sys
+import zipfile
 from pathlib import Path
 from typing import Any
 
 import pytest
-
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "scripts" / "prepare_public_mmpr_for_mpo.py"
@@ -51,6 +46,12 @@ def _load_script_module():
 
 
 SCRIPT = _load_script_module()
+
+
+def _write_zip(path: Path, members: dict[str, str]) -> None:
+    with zipfile.ZipFile(path, "w") as zf:
+        for name, content in members.items():
+            zf.writestr(name, content)
 
 
 class TestRelpathForMeta:
@@ -168,3 +169,52 @@ class TestRewriteMeta:
 
         with pytest.raises(ValueError, match="Expected meta.json to be a dict"):
             SCRIPT.rewrite_meta(meta_in, ann_dir, tmp_path / "out.json")
+
+
+class TestSafeZipExtraction:
+    def test_extracts_normal_nested_directory(self, tmp_path: Path):
+        zip_path = tmp_path / "annotations.zip"
+        output_dir = tmp_path / "cache"
+        _write_zip(
+            zip_path,
+            {
+                "MMPR/annotations/subset.jsonl": "{}\n",
+                "MMPR/annotations/nested/extra.jsonl": "{\"ok\": true}\n",
+            },
+        )
+
+        extracted = SCRIPT._extract_zip_to_named_subdir(
+            zip_path=zip_path,
+            output_dir=output_dir,
+            relative_target=SCRIPT.PurePosixPath("MMPR/annotations"),
+            subdir_name_in_zip="annotations",
+            desc="test annotations",
+        )
+
+        assert extracted == output_dir / "MMPR" / "annotations"
+        assert (extracted / "subset.jsonl").read_text(encoding="utf-8") == "{}\n"
+        assert (extracted / "nested" / "extra.jsonl").exists()
+
+    def test_rejects_traversal_member_without_writing_escape(self, tmp_path: Path):
+        zip_path = tmp_path / "annotations.zip"
+        output_dir = tmp_path / "cache"
+        _write_zip(
+            zip_path,
+            {
+                "MMPR/annotations/subset.jsonl": "{}\n",
+                "../escape.txt": "outside\n",
+            },
+        )
+
+        with pytest.raises(ValueError, match="Unsafe zip member path"):
+            SCRIPT._extract_zip_to_named_subdir(
+                zip_path=zip_path,
+                output_dir=output_dir,
+                relative_target=SCRIPT.PurePosixPath("MMPR/annotations"),
+                subdir_name_in_zip="annotations",
+                desc="test annotations",
+            )
+
+        assert not (tmp_path / "escape.txt").exists()
+        assert not (output_dir / "escape.txt").exists()
+        assert not (output_dir / "MMPR" / "annotations").exists()

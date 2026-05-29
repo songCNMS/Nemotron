@@ -1,6 +1,6 @@
 # task091_omni3_stage1_rl_config_portability_s1 - History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 1 - 2026-05-28
 
@@ -79,3 +79,14 @@
 - Extended bridge manifest-inferred validation holdouts to RLVR1/RLVR2/RLVR3,
   patched the resolve-and-split path, added focused tests/probes, opened
   PR #218, and recorded this Session 14 bookkeeping entry.
+
+## Session 15 - 2026-05-29
+
+- PM assigned `task114_mmpr_zip_extraction_traversal_guard_s1` while active
+  intern bookkeeping still requires task091 Session 15 records.
+- Started from local `main` fast-forwarded to `origin/main`
+  `d64cbd067a15cca222b9eba200af1eb1ec5b7788` and worked on branch
+  `intern_nem_dev_2/task114_mmpr_zip_extraction_traversal_guard_s1`.
+- Added guarded zip extraction for MMPR public, MMPR-Tiny, and VLM preference
+  prep paths, added focused synthetic zip tests/probes, and recorded this
+  Session 15 bookkeeping entry.

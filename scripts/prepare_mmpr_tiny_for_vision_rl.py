@@ -51,6 +51,21 @@ from typing import Any
 import pandas as pd
 from tqdm.auto import tqdm
 
+try:
+    from nemotron.data_prep.utils.safe_zip import (
+        safe_extract_zip_member,
+        validate_zip_members,
+    )
+except ModuleNotFoundError:
+    # Support direct repo-checkout execution, e.g. `python scripts/...`.
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from nemotron.data_prep.utils.safe_zip import (
+        safe_extract_zip_member,
+        validate_zip_members,
+    )
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -225,7 +240,7 @@ def extract_images_if_needed(images_zip_path: Path, output_dir: Path) -> Path:
 
     print(f"Extracting images from {images_zip_path} to {images_dir}...")
     with zipfile.ZipFile(images_zip_path) as zf:
-        members = zf.infolist()
+        members = validate_zip_members(zf, temp_dir)
         with tqdm(
             members,
             total=len(members),
@@ -233,7 +248,7 @@ def extract_images_if_needed(images_zip_path: Path, output_dir: Path) -> Path:
             unit="file",
         ) as progress:
             for member in progress:
-                zf.extract(member, temp_dir)
+                safe_extract_zip_member(zf, member, temp_dir)
 
     extracted_images_dir = find_extracted_images_dir(temp_dir)
     images_dir.parent.mkdir(parents=True, exist_ok=True)
