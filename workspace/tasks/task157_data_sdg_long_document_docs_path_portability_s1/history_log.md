@@ -1,5 +1,7 @@
 # History Log
 
+<!-- METADATA:STATUS=Working,TASK=task157_data_sdg_long_document_docs_path_portability_s1,ROLE=dev,SESSION=1 -->
+
 ## 2026-05-29
 
 - Started task157 from `origin/main` at `0b31358436c38e698c7c2bc3a89871df273df21c`.
