@@ -71,12 +71,33 @@ EXPECTED_CORE_BLEND_PATH = (
     "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
 )
 
+RUNTIME_CONFIGS = {
+    "default": STAGE2_RL_ROOT / "config/default.yaml",
+    "rlvr": STAGE2_RL_ROOT / "stage1_rlvr/config/default.yaml",
+    "swe1": STAGE2_RL_ROOT / "stage2_swe1/config/default.yaml",
+    "swe2": STAGE2_RL_ROOT / "stage2_swe2/config/default.yaml",
+    "rlhf": STAGE2_RL_ROOT / "stage3_rlhf/config/default.yaml",
+}
+EXPECTED_PERSISTENT_CACHE_GUIDANCE = "${NEMO_RUN_DIR:-.}/cache/super3/stage2_rl"
+
 
 def _load_yaml(path: Path) -> tuple[str, dict[str, object]]:
     text = path.read_text(encoding="utf-8")
     data = yaml.safe_load(text)
     assert isinstance(data, dict), f"{path}: top-level YAML must be a mapping"
     return text, data
+
+
+@pytest.mark.parametrize(("profile", "config_path"), sorted(RUNTIME_CONFIGS.items()))
+def test_stage2_rl_runtime_persistent_cache_comment_is_portable(
+    profile: str,
+    config_path: Path,
+) -> None:
+    text, data = _load_yaml(config_path)
+
+    assert "/lustre/" not in text
+    assert data["run"]["env"]["persistent_cache"] == "", profile
+    assert EXPECTED_PERSISTENT_CACHE_GUIDANCE in text
 
 
 @pytest.mark.parametrize("profile", sorted(CORE_BLEND_CONFIGS))

@@ -7,7 +7,7 @@ run:
       container: ""  # Set to nemo-skills-sandbox image path/URI
       port: 6000
       command: "/start-with-nginx.sh"
-    persistent_cache: ""  # Set to shared cache dir (e.g. /lustre/.../cache)
+    persistent_cache: ""  # Set to shared cache dir (e.g. ${NEMO_RUN_DIR:-.}/cache/super3/stage2_rl)
     env_vars:
       NRL_WG_USE_RAY_REF: "1"
       NRL_VLLM_USE_V1: "1"
