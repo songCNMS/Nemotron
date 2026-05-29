@@ -1,6 +1,12 @@
 # task155_omni3_valor32k_config_comment_portability_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_2 -->
+
+Status: Ready for PM gate
+Owner: intern_nem_dev_2
+Branch: `intern_nem_dev_2/task155_omni3_valor32k_config_comment_portability_s1`
+Base: `795eb92359257ed82816a8685db0f9cae1c751ae`
+PR: https://github.com/songCNMS/Nemotron/pull/262
 
 ## Summary
 
@@ -22,7 +28,9 @@ internal user path with neutral operator guidance to set
 
 ## Acceptance Checks
 
-- Focused pytest for the Omni3 static test.
-- `py_compile` and Ruff on touched test files.
-- Scoped grep over `valor32k.yaml`.
-- `git diff --check` and `git diff --cached --check`.
+- PASS: `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/omni3/test_stage0_sft_valor32k_config_portability.py` (1 passed)
+- PASS: `/work-agents/.venv/bin/python -m py_compile tests/recipes/omni3/test_stage0_sft_valor32k_config_portability.py`
+- PASS: `/work-agents/.venv/bin/ruff check tests/recipes/omni3/test_stage0_sft_valor32k_config_portability.py`
+- PASS: scoped grep over `valor32k.yaml` found no named-user Lustre path and preserved `OMNI3_VALOR32K_ENERGON_PATH`
+- PASS: `git diff --check`
+- PASS: `git diff --cached --check`

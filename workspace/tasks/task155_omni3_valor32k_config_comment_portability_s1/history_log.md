@@ -12,3 +12,6 @@
 - Added a focused static Omni3 test proving the config no longer references
   the named-user path and still documents/preserves the Valor32k env-var
   dataset path contract.
+- Verified focused pytest (`1 passed`), `py_compile`, Ruff, scoped grep,
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #262 to `main`: https://github.com/songCNMS/Nemotron/pull/262.
