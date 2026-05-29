@@ -1,6 +1,6 @@
 # task172_docs_upstream_branch_checkout_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForGate,ASSIGNEE=intern_nem_dev_3 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3 -->
 
 ## Summary
 
@@ -41,3 +41,9 @@ clone or checkout upstream release branches to PM-verified exact commit SHAs.
 ## PR
 
 - https://github.com/songCNMS/Nemotron/pull/279
+
+## Merge
+
+- Merged to `main` at `cb04003551bb3277831466deb35b0e9e95f17f3c`.
+- PM merged-main verification passed for focused pytest, `py_compile`, Ruff,
+  diff checks, and the structured Markdown/static probe.

@@ -1,6 +1,6 @@
 # task172_docs_upstream_branch_checkout_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Notes
 
@@ -15,3 +15,7 @@
     `7dfec6130ddf675cc9721d1619945dcc743f0095`
 - This task is docs/static-test only; no live upstream clone/fetch/checkout
   or build/run activity is in scope.
+- Closeout: PR #279 merged to `main` at
+  `cb04003551bb3277831466deb35b0e9e95f17f3c`; PM merged-main verification
+  passed focused upstream checkout revision pytest, `py_compile`, Ruff, diff
+  checks, and the structured Markdown/static probe.
