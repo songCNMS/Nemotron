@@ -7,6 +7,8 @@
 - Synced local `main` to
   `259938c631c64bd6beef1ef08d55080e12d37fe6` and created branch
   `intern_nem_dev_3/task119_qwen_sft_tokenizer_ref_contract_s1`.
+- Rebased the branch onto current `origin/main`
+  `2f1a4ddd4b85ec1352e1dc91d1c5e8bc6cbb6b6e` after main advanced.
 - Reused the existing Qwen reference detection helper in
   `validate_qwen_data_prep_config()` so `/models/Llama-3-tokenizer` and other
   non-Qwen tokenizer refs fail during data-prep validation.
@@ -29,5 +31,5 @@
   `https://huggingface.co/Qwen/...`, and `hf://models/Qwen/...` normalization
   cases.
 - Re-verified focused pytest, py_compile, Ruff, structured validator probe,
-  and `git diff --check` before staging.
-- PR: pending.
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #226 to `main`: https://github.com/songCNMS/Nemotron/pull/226.

@@ -23,5 +23,5 @@
 ## Status
 
 - Branch: `intern_nem_dev_3/task119_qwen_sft_tokenizer_ref_contract_s1`
-- Base: `259938c631c64bd6beef1ef08d55080e12d37fe6`
-- PR: pending
+- Base: `2f1a4ddd4b85ec1352e1dc91d1c5e8bc6cbb6b6e`
+- PR: https://github.com/songCNMS/Nemotron/pull/226

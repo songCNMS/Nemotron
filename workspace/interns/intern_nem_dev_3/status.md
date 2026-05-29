@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task119_qwen_sft_tokenizer_ref_contract_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/226 |
 | Session | 19 |
-| Recent Progress | Added Qwen data-prep tokenizer ref validation plus packed metadata tokenizer_uri lineage checks; focused pytest, py_compile, Ruff, structured probe, and diff check passed before staging |
+| Recent Progress | Opened PR #226 for Qwen data-prep tokenizer ref validation plus packed metadata tokenizer_uri lineage checks after focused tests/probes passed |
