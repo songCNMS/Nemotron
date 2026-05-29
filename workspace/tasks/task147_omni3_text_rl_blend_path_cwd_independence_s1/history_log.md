@@ -1,6 +1,6 @@
 # task147_omni3_text_rl_blend_path_cwd_independence_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 1 - 2026-05-29
 
@@ -19,3 +19,8 @@
   `train_script.py` diff, added-line live-surface scan, and diff check before
   staging.
 - Opened PR #254 to `main`: https://github.com/songCNMS/Nemotron/pull/254.
+
+## Session 8 - 2026-05-29
+
+- Added stop-hook bookkeeping for the already-open PR #254; no product or test
+  code changes were made in this session.
