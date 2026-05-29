@@ -1,6 +1,6 @@
 # task077_data_pipeline_audit_repair_s1 - Task knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=20 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -112,5 +112,10 @@
 100. file change: `validate_sft_data_prep_target_family_config()` now detects Qwen tokenizer refs, Qwen tokenizer-template kwargs, or explicit Qwen labels and requires the full `qwen_agentic_v0` target-family contract.
 101. test evidence: Task127 focused SFT/Qwen planner shard passed with 137 tests and 1 skipped; py_compile, Ruff, structured OmegaConf/env probe, and diff checks passed.
 102. file change: PR #234 opened against `main` for task127 Qwen SFT target-family guard.
+103. supervisor request: PM assigned task131 to add deterministic content fingerprints to Stage2 RL local split cache identity and lineage, including bridge manifest content for auto holdout and pre-resolution cache identity.
+104. technical fact: `split_local_jsonl()` previously hashed path, mtime, size, holdout, and sample but not JSONL content, so same-size/same-mtime content rewrites could reuse stale split outputs.
+105. file change: `rl_local.py` now records input JSONL SHA-256 in run config and manifests, bridge manifest SHA-256 for `val_holdout=auto`, and pre-resolution input SHA-256 for `run_resolve_and_split()`.
+106. test evidence: Task131 focused stage2 RL bridge/default and RLVR smoke shard passed with 33 tests; py_compile, Ruff, structured stale-cache probe, and diff checks passed.
+107. file change: PR #237 opened against `main` for task131 RL local split source-content cache identity.
 
 ---
