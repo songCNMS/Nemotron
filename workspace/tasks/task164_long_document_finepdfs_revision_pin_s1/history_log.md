@@ -8,3 +8,4 @@
 - Added a default FinePDFs revision pin and config-threaded `load_dataset(..., revision=...)` path.
 - Added focused AST/static tests for the repo id, exact revision SHA, config field/default, `load_dataset` revision keyword, and YAML default.
 - Ran focused pytest, py_compile, Ruff, structured AST probe, added-line live-surface scan, and `git diff --check` without calling `load_dataset` or running seed generation.
+- Opened PR #271: https://github.com/songCNMS/Nemotron/pull/271

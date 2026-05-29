@@ -17,4 +17,5 @@
 
 - Base: `a9b324bf28cd6cb0470b58eec47fd17336fdec0f`
 - Branch: `intern_nem_dev_1/task164_long_document_finepdfs_revision_pin_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/271
+- Checks: focused static pytest, py_compile, Ruff, structured AST probe, added-line live-surface scan, and diff checks passed.
