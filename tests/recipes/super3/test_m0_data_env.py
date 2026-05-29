@@ -39,6 +39,7 @@ SFT_RAW_BLEND_PATH = (
     REPO_ROOT / "src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json"
 )
 RL_RAW_BLEND_PATH = REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/config/data_prep/data_blend_raw.json"
+M0_DATA_ENV_README_PATH = REPO_ROOT / "src/nemotron/recipes/super3/milestones/m0_data_env/README.md"
 OLD_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-3-Super-RL-Training-Blends"
 LIVE_SUPER3_RL_BLEND_SLUG = "nvidia/Nemotron-RL-Super-Training-Blends"
 
@@ -96,6 +97,14 @@ def test_super3_rl_blend_uses_live_hf_slug_and_docs_drop_old_slug() -> None:
     ]
     for path in checked_paths:
         assert OLD_SUPER3_RL_BLEND_SLUG not in path.read_text()
+
+
+def test_m0_data_env_readme_uses_portable_output_examples() -> None:
+    readme = M0_DATA_ENV_README_PATH.read_text()
+
+    assert "/mnt/3fs/data/lei.song/nemotron" not in readme
+    assert '--output-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516"' in readme
+    assert '--input-dir "${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516"' in readme
 
 
 def test_super3_rl_blend_slug_resolves_on_hf_when_network_available() -> None:
