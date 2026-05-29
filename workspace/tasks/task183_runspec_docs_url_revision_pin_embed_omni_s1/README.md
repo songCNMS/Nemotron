@@ -7,7 +7,7 @@ Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task183_runspec_docs_url_revision_pin_embed_omni_s1`
 Base: `df45842edade40c19fd0496f3844ef20653a94cc`
 Assignment base: `510b6eec33edece3d212a3187b16db3d1b4a8a15`
-PR: Pending branch push
+PR: https://github.com/songCNMS/Nemotron/pull/290
 
 ## Summary
 

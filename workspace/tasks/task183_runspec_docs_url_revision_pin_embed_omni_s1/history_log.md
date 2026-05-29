@@ -30,6 +30,8 @@
   PM-specified docs commit `510b6eec33edece3d212a3187b16db3d1b4a8a15`.
 - Reran focused pytest, `py_compile`, Ruff, structured static probe, scoped
   old-URL grep, and added-line live-surface scan on the refreshed base.
+- Opened PR #290 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/290.
 - Boundaries preserved: no recipe execution, job submission, data prep,
   train/eval, endpoint, W&B, cluster, deploy, artifact operation,
   `main`/`master` push, or self-merge.
