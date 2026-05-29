@@ -17,15 +17,15 @@ The entry is intentionally narrow:
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
-  --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516
+  --m0-input-dir ${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516-100x25 \
+  --output-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516
 ```
 
 The generated blend can then drive the packed SFT data-prep stage:
 
 ```bash
 uv run nemotron super3 data prep sft -c agentic_v0 \
-  blend_path=/mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
+  blend_path=${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516/data_blend_agentic_sft_v0.json
 ```
 
 For CPU workspaces that do not have the full Xenna runtime and HuggingFace
@@ -36,7 +36,7 @@ loss-mask checks:
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/run_m1_sft_roundtrip_smoke.py \
-  --m1-jsonl /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516/agentic_sft_v0_train.jsonl \
+  --m1-jsonl ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516/agentic_sft_v0_train.jsonl \
   --output-dir /tmp/nemotron-m1-agentic-sft-roundtrip \
   --require-environment terminal_basic_shell \
   --require-environment swe_pivot_patch_supervision \
@@ -49,10 +49,10 @@ plan and launch script:
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_m1_agentic_sft_training.py \
-  --packed-sft-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/packed-expanded-20260517-300x80/splits \
-  --pretrained-checkpoint /mnt/3fs/data/lei.song/nemotron/checkpoints/super3-pretrain/checkpoints \
-  --save-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/training-runs/m1-agentic-sft-v0/checkpoints \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/train-plans \
+  --packed-sft-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/packed-expanded-20260517-300x80/splits \
+  --pretrained-checkpoint ${NEMO_RUN_DIR:-.}/output/super3/checkpoints/super3-pretrain/checkpoints \
+  --save-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/training-runs/m1-agentic-sft-v0/checkpoints \
+  --output-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/train-plans \
   --run-name m1-agentic-sft-v0
 ```
 
@@ -132,9 +132,9 @@ stratify before launching SFT.
 
 ```bash
 python src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py \
-  --m0-input-dir /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25 \
-  --output-dir /mnt/3fs/data/lei.song/nemotron/m1_agentic_sft_v0/from-m0-smoke-20260516 \
-  --m0-health-baseline /mnt/3fs/data/lei.song/nemotron/m0_data_env_foundation/smoke-20260516-100x25/health_baseline/health_baseline_report.json
+  --m0-input-dir ${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516-100x25 \
+  --output-dir ${NEMO_RUN_DIR:-.}/output/super3/m1_agentic_sft_v0/from-m0-smoke-20260516 \
+  --m0-health-baseline ${NEMO_RUN_DIR:-.}/output/super3/m0_data_env_foundation/smoke-20260516-100x25/health_baseline/health_baseline_report.json
 ```
 
 When `--m0-health-baseline` is omitted, the script auto-discovers
