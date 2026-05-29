@@ -13,7 +13,7 @@ run:
 blend_path: ${oc.env:PWD}/src/nemotron/recipes/nano3/stage1_sft/config/data_prep/data_blend_tiny.json
 
 # Output directory for packed Parquet data
-output_dir: ${oc.env:PWD}/../output/super3/stage1_sft_tiny
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_tiny
 
 # Number of output shards - smaller for tiny config
 num_shards: 4

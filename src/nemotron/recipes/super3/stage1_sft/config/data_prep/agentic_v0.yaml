@@ -13,7 +13,7 @@ run:
 #   nemotron super3 data prep sft -c agentic_v0
 
 blend_path: ${oc.env:PWD}/../output/super3/m1_agentic_sft_v0/data_blend_agentic_sft_v0.json
-output_dir: ${oc.env:PWD}/../output/super3/stage1_sft_agentic_v0
+output_dir: ${oc.env:NEMO_RUN_DIR,.}/output/super3/stage1_sft_agentic_v0
 
 num_shards: 16
 
