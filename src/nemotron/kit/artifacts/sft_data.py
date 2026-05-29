@@ -174,6 +174,7 @@ class SFTDataArtifact(Artifact):
                 weight=d.weight,
                 split=d.split,
                 subset=d.subset,
+                revision=d.revision,
                 text_field=d.text_field or messages_field_default,
             )
             for d in blend.datasets

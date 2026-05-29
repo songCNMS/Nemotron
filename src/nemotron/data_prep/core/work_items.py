@@ -50,6 +50,9 @@ class DatasetWorkItem:
     sample: str | int | None
     sample_seed: int
 
+    # Source revision propagated from DataBlend.Dataset for deterministic HF discovery.
+    revision: str | None = None
+
     # Resolved tokenizer config (for plan creation)
     tokenizer_config: dict = field(default_factory=dict)
 
@@ -94,6 +97,9 @@ class SftDatasetWorkItem:
     max_rows: int | None
     sample: str | int | None
     sample_seed: int
+
+    # Source revision propagated from DataBlend.Dataset for deterministic HF discovery.
+    revision: str | None = None
 
     # Resolved tokenizer config (for plan creation)
     tokenizer_config: dict = field(default_factory=dict)

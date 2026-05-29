@@ -46,13 +46,12 @@ from __future__ import annotations
 import hashlib
 import json
 import time
+from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import TYPE_CHECKING, Any
 
 import cosmos_xenna.pipelines.v1 as pipelines_v1
-
-from collections.abc import Callable
 from fsspec import AbstractFileSystem
 
 from nemotron.data_prep.config import (
@@ -63,10 +62,11 @@ from nemotron.data_prep.config import (
     ObservabilityConfig,
     TokenizerConfig,
 )
-from nemotron.data_prep.observability import pipeline_wandb_hook
-from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.core.finalize import scan_dataset_receipts
 from nemotron.data_prep.core.planning import PlanRequest, resolve_tokenizer, verify_parquet_output
+from nemotron.data_prep.core.work_items import SftDatasetWorkItem, SftShardWorkItem
+from nemotron.data_prep.observability import pipeline_wandb_hook
+from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 from nemotron.data_prep.stages import (
     DownloadStage,
     DownloadStageConfig,
@@ -76,9 +76,8 @@ from nemotron.data_prep.stages import (
     PlanStage,
     SftPlanStageConfig,
 )
+from nemotron.data_prep.utils.filesystem import ensure_dir, get_filesystem, write_json
 from nemotron.data_prep.utils.hf_env import detect_hf_env_vars
-from nemotron.data_prep.core.work_items import SftDatasetWorkItem, SftShardWorkItem
-from nemotron.data_prep.recipes.execution_mode import ExecutionModeRequest, resolve_execution_mode
 
 if TYPE_CHECKING:
     from nemotron.data_prep.blend import DataBlend
@@ -121,6 +120,7 @@ class SftPlanAdapter:
                 weight=item.weight,
                 split=item.split,
                 subset=item.subset,
+                revision=item.revision,
                 text_field=item.messages_field,
             ),
             num_shards=item.num_shards,
@@ -190,7 +190,7 @@ def _normalize_tokenizer(tokenizer: TokenizerConfig | Mapping[str, Any] | str) -
 
 
 def setup_sft_run(
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     tokenizer: TokenizerConfig | Mapping[str, Any] | str,
     *,
@@ -257,6 +257,7 @@ def setup_sft_run(
                 "weight": d.weight,
                 "split": d.split,
                 "subset": d.subset,
+                "revision": d.revision,
                 "messages_field": getattr(d, "messages_field", None) or messages_field_default,
                 "tools_field": getattr(d, "tools_field", None) or tools_field_default,
             }
@@ -304,6 +305,7 @@ def setup_sft_run(
                 weight=d.weight,
                 split=d.split,
                 subset=d.subset,
+                revision=d.revision,
                 run_hash=run_hash,
                 run_dir=run_dir,
                 config_hash=config_hash,
@@ -340,7 +342,7 @@ def setup_sft_run(
 
 def finalize_sft_run(
     context: SftRunContext,
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
 ) -> FormatResult:
     """
@@ -403,7 +405,7 @@ def finalize_sft_run(
 
 
 def run_sft_pipeline(
-    blend: "DataBlend",
+    blend: DataBlend,
     output_dir: str | Path,
     tokenizer: TokenizerConfig | Mapping[str, Any] | str,
     *,
