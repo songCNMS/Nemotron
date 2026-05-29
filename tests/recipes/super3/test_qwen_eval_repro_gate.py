@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 from copy import deepcopy
 from pathlib import Path
 
@@ -57,6 +58,10 @@ def _gate_data() -> dict:
 
 def _alignment_ledger_data() -> dict:
     return yaml.safe_load(BENCHMARK_ALIGNMENT_LEDGER_PATH.read_text(encoding="utf-8"))
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 @requires_production_gate
@@ -231,6 +236,7 @@ def test_local_raw_artifacts_allow_local_workspace_verified_status(
     local_artifact.write_text("{}\n", encoding="utf-8")
     record = data["evidence_records"][0]
     record["raw_artifact_paths"] = [str(local_artifact)]
+    record["raw_artifact_sha256"] = {str(local_artifact): _sha256(local_artifact)}
     record["remote_artifact_check"] = {
         "status": "local_workspace_verified",
         "checked_at_utc": "2026-05-28T20:46:00Z",
@@ -240,6 +246,36 @@ def test_local_raw_artifacts_allow_local_workspace_verified_status(
     issues = validate_qwen_eval_repro_gate(data)
 
     assert issues == []
+
+
+def test_qwen_eval_repro_gate_rejects_missing_local_raw_artifact_fingerprint(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_gate_data())
+    local_artifact = tmp_path / "local_artifact.json"
+    local_artifact.write_text("{}\n", encoding="utf-8")
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(local_artifact)]
+    record.pop("raw_artifact_sha256", None)
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any("raw_artifact_sha256 must be a mapping" in issue for issue in issues)
+
+
+def test_qwen_eval_repro_gate_rejects_stale_local_raw_artifact_fingerprint(
+    tmp_path: Path,
+) -> None:
+    data = deepcopy(_gate_data())
+    local_artifact = tmp_path / "local_artifact.json"
+    local_artifact.write_text("{}\n", encoding="utf-8")
+    record = data["evidence_records"][0]
+    record["raw_artifact_paths"] = [str(local_artifact)]
+    record["raw_artifact_sha256"] = {str(local_artifact): "0" * 64}
+
+    issues = validate_qwen_eval_repro_gate(data)
+
+    assert any("raw_artifact_sha256 mismatch" in issue for issue in issues)
 
 
 @requires_production_gate

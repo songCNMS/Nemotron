@@ -1,6 +1,6 @@
 # task104_qwen_eval_source_manifest_lineage_gate_s1 knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Working Notes
 
@@ -13,3 +13,5 @@
 - The focused tests intentionally do not depend on loading local raw artifacts,
   so source-manifest lineage validation remains covered even when production
   raw artifact paths are unavailable in a clean sandbox.
+- Session 14 adds no new task104-specific implementation knowledge; task109
+  carries the Qwen eval local raw artifact fingerprint gate.

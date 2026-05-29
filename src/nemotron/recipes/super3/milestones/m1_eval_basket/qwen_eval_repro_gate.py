@@ -17,6 +17,7 @@ contract, raw artifacts, and known harness mismatches.
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -208,6 +209,61 @@ def validate_raw_artifact_paths(paths: Any, *, context: str) -> list[str]:
     return issues
 
 
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_local_raw_artifact_fingerprints(
+    paths: Any,
+    fingerprints: Any,
+    *,
+    context: str,
+) -> list[str]:
+    if not isinstance(paths, list):
+        return []
+    local_paths = [
+        path
+        for path in paths
+        if _is_non_empty_string(path) and not is_remote_artifact_reference(path)
+    ]
+    if not local_paths:
+        return []
+    if not isinstance(fingerprints, Mapping):
+        return [f"{context}.raw_artifact_sha256 must be a mapping for local raw artifact paths"]
+
+    issues: list[str] = []
+    for path in local_paths:
+        expected = fingerprints.get(path)
+        if not _is_non_empty_string(expected):
+            issues.append(
+                f"{context}.raw_artifact_sha256 missing SHA256 for local raw artifact path: {path}"
+            )
+            continue
+        normalized_expected = str(expected).strip().lower()
+        if len(normalized_expected) != 64 or any(
+            char not in "0123456789abcdef" for char in normalized_expected
+        ):
+            issues.append(
+                f"{context}.raw_artifact_sha256 must be a 64-character hex SHA256 for {path}"
+            )
+            continue
+
+        local_path = Path(path).expanduser()
+        if not local_path.is_file():
+            continue
+        actual = _sha256_file(local_path)
+        if normalized_expected != actual:
+            issues.append(
+                f"{context}.raw_artifact_sha256 mismatch for {path}: "
+                f"expected {normalized_expected}, actual {actual}"
+            )
+    return issues
+
+
 def _validate_repo_relative_existing_paths(
     paths: list[str],
     *,
@@ -350,6 +406,13 @@ def validate_qwen_eval_repro_gate(data: Mapping[str, Any]) -> list[str]:
                 validate_raw_artifact_paths(
                     raw_paths,
                     context=f"{prefix}.raw_artifact_paths",
+                )
+            )
+            issues.extend(
+                _validate_local_raw_artifact_fingerprints(
+                    raw_paths,
+                    record.get("raw_artifact_sha256"),
+                    context=prefix,
                 )
             )
             if isinstance(raw_paths, list) and any(
