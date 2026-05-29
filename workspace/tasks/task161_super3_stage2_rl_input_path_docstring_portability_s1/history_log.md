@@ -15,3 +15,4 @@
 - Verified focused pytest, full Stage2 RL bridge/default pytest shard,
   `py_compile`, Ruff, static `/lustre/` grep, structured defaults probe,
   added-line live-surface scan, and `git diff --check` before staging.
+- Opened PR #267 to `main`: https://github.com/songCNMS/Nemotron/pull/267.
