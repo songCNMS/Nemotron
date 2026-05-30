@@ -1,6 +1,6 @@
 # task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
 
 ## Scope
 
@@ -25,5 +25,18 @@
 - Base: `f74e7c05668f96766d10c730fcd14ddec7191350`
 - Branch:
   `intern_nem_dev_3/task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1`
-- PR: Not opened yet
-- Head: In progress
+- PR: https://github.com/songCNMS/Nemotron/pull/294
+- Implementation SHA: `5bd77089555a9ce9f2531fa26daf1f541a80941c`
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_super_grpo_dapo_rl_checkout_revision.py`
+    -> 7 passed
+  - `/work-agents/.venv/bin/python -m py_compile tests/usage_cookbook/test_super_grpo_dapo_rl_checkout_revision.py`
+    -> passed
+  - `/work-agents/.venv/bin/ruff check tests/usage_cookbook/test_super_grpo_dapo_rl_checkout_revision.py`
+    -> passed
+  - Structured notebook probe ->
+    `STRUCTURED_SUPER_GRPO_DAPO_DOC_LINK_PIN_PROBE_PASS`
+  - Added-line live-surface scan -> expected notebook static URL/test/task/status
+    text only
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed

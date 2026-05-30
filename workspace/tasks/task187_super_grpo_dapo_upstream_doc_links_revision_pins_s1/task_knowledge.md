@@ -13,3 +13,4 @@
   `https://github.com/NVIDIA-NeMo/RL/blob/main/docs/...`.
 - Preserve visible `super-v3` branch context prose; the executable checkout
   remains pinned and guarded by the previous task's contract.
+- PR: https://github.com/songCNMS/Nemotron/pull/294.

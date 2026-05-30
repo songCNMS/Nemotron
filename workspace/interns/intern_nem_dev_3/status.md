@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1 |
-| PR | Not opened yet |
+| PR | https://github.com/songCNMS/Nemotron/pull/294 |
 | Session | 1 |
-| Recent Progress | Started task187 from main f74e7c05668f96766d10c730fcd14ddec7191350; scoped notebook docs links and focused static test updates in progress |
+| Recent Progress | PR #294 opened for task187 after focused pytest, py_compile, Ruff, structured notebook probe, added-line live-surface scan, and diff checks passed |

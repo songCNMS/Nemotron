@@ -11,3 +11,11 @@
 - Boundaries recorded: no notebook execution, live git clone/fetch/checkout,
   build, download, recipe/data-prep/train/eval, endpoint, W&B, cluster,
   deploy, artifact operation, direct `main`/`master` push, or self-merge.
+- Pinned the scoped notebook's NeMo-RL Super-v3 guide and Docker guide links to
+  `bb0a7d43931950a74522e159f7117543a87b580b` while preserving visible
+  `super-v3` branch context prose.
+- Added focused static notebook tests for pinned docs links, absence of mutable
+  NeMo-RL docs branch URLs in notebook source, and clear touched markdown cells.
+- Ran focused pytest, py_compile, Ruff, structured notebook probe, added-line
+  live-surface scan, `git diff --check`, and `git diff --cached --check`.
+- Opened PR #294 to `main`: https://github.com/songCNMS/Nemotron/pull/294.
