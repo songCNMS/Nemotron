@@ -1,12 +1,12 @@
-# intern_nem_dev_1 - 状态
+# intern_nem_dev_1 - Status
 
-<!-- METADATA:STATUS=Working,TASK=task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task211_qwen_sft_mamba_packed_seq_params_compat_s1,ROLE=dev,SESSION=2 -->
 
-| 字段 | 值 |
+| Field | Value |
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/308 |
-| Session | 1 |
-| Recent Progress | Opened PR #308 for PM gate; focused static checks passed |
+| Current Task | task211_qwen_sft_mamba_packed_seq_params_compat_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/309 |
+| Session | 2 |
+| Recent Progress | PR #309 open and mergeable; final checks passed; pushing Session 2 status/report closeout |

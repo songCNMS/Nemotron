@@ -24,10 +24,12 @@ import importlib
 from collections.abc import Callable
 from typing import Any
 
-
 # Short-name → ``module:attr`` import spec. New entries land here.
 _STEP_FUNCTIONS: dict[str, str] = {
     "gpt_step": "megatron.bridge.training.gpt_step:forward_step",
+    "super3_packed_seq_compat_gpt_step": (
+        "nemotron.recipes.super3.stage1_sft.packed_compat_step:forward_step"
+    ),
     "super3_sample_level_step": (
         "nemotron.recipes.super3.stage1_sft.sample_level_step:forward_step"
     ),
