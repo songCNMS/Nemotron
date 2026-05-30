@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -19,6 +19,19 @@
   the corrected base.
 - Opened PR #293 to `main`:
   https://github.com/songCNMS/Nemotron/pull/293.
+- Boundaries preserved: no live git clone/fetch/checkout, build, download,
+  recipe execution, data prep, train/eval, endpoint, W&B, cluster, deploy,
+  artifact operation, `main`/`master` push, or self-merge.
+
+## Session 3 - 2026-05-29
+
+- Stop-hook requested task186 Session 3 bookkeeping after PR #293 was opened.
+- Bumped intern status session metadata and task knowledge/history metadata to
+  Session 3.
+- Confirmed PR #293 remains open from branch
+  `intern_nem_dev_2/task186_omni3_upstream_doc_links_revision_pins_s1` with
+  implementation head `21f8a1fd17931c128b6d4b42424880f4db7f0d95`.
+- No product/test behavior changed in this bookkeeping correction.
 - Boundaries preserved: no live git clone/fetch/checkout, build, download,
   recipe execution, data prep, train/eval, endpoint, W&B, cluster, deploy,
   artifact operation, `main`/`master` push, or self-merge.

@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Notes
 
@@ -12,3 +12,8 @@
 - NeMo-RL `nano-v3-omni` link SHA:
   `98ba11c0a77e177a903cd3756570684437a08e8d`.
 - Do not touch Super3 docs or PR #291 Qwen files in this task.
+
+## Session 3 Notes
+
+- Session 3 is bookkeeping-only after stop-hook audit; no new product or
+  validation knowledge was added.
