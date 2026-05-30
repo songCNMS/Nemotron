@@ -59,7 +59,7 @@ This recipe folder is the cookbook view; upstream sources are:
 | RL (NeMo-RL) | [`nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/98ba11c0a77e177a903cd3756570684437a08e8d/docs/guides/nemotron-3-nano-omni.md) | [`NeMo-RL` `nano-v3-omni`](https://github.com/NVIDIA-NeMo/RL/tree/98ba11c0a77e177a903cd3756570684437a08e8d) |
 | Evaluation | Same Megatron-Bridge path | (above) |
 | Image training data | — | [`huggingface.co/datasets/nvidia/Nemotron-Image-Training-v3`](https://huggingface.co/datasets/nvidia/Nemotron-Image-Training-v3) |
-| Long-document SDG | [Long-document SDG guide](../data/sdg/long-document.md) | [`src/nemotron/recipes/data/sdg/long-document/`](https://github.com/NVIDIA-NeMo/Nemotron/tree/main/src/nemotron/recipes/data/sdg/long-document) (structure released; bodies port at upstream release) |
+| Long-document SDG | [Long-document SDG guide](../data/sdg/long-document.md) | [`src/nemotron/recipes/data/sdg/long-document/`](https://github.com/NVIDIA-NeMo/Nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/src/nemotron/recipes/data/sdg/long-document) (structure released; bodies port at upstream release) |
 
 ## Current Limitations
 
