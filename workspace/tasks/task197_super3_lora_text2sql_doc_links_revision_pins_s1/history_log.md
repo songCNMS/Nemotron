@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -19,3 +19,14 @@
   cells.
 - Ran focused pytest, py_compile, Ruff, structured static probe, added-line
   live-surface scan, and `git diff --check`.
+- Opened PR #304 to `main`: https://github.com/songCNMS/Nemotron/pull/304.
+
+## Session 2 - 2026-05-30
+
+- Confirmed PR #304 is open to `main` from branch
+  `intern_nem_dev_3/task197_super3_lora_text2sql_doc_links_revision_pins_s1`.
+- Confirmed exact base remains
+  `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21` and initial PR head was
+  `5ec3f6d9fa72f59f03f4d7b2a52d50680b93943a`.
+- Updated status/task docs for Session 2 and preserved the static-only
+  boundaries.

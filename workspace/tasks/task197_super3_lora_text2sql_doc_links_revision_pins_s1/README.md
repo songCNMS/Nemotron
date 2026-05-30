@@ -1,6 +1,6 @@
 # task197_super3_lora_text2sql_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -28,7 +28,8 @@
 - Base SHA: `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`
 - Branch:
   `intern_nem_dev_3/task197_super3_lora_text2sql_doc_links_revision_pins_s1`
-- PR: Not opened yet
+- PR: https://github.com/songCNMS/Nemotron/pull/304
+- Implementation SHA: `5ec3f6d9fa72f59f03f4d7b2a52d50680b93943a`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_super3_lora_text2sql_doc_links_revision_pins.py`
     -> 3 passed

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Scoped README:
   `usage-cookbook/Nemotron-3-Super/lora-text2sql/README.md`.
@@ -14,3 +14,4 @@
   - `https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-megatron-bridge/README.md`
   - `https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-automodel/README.md`
   - `https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/vllm_cookbook.ipynb`
+- PR: https://github.com/songCNMS/Nemotron/pull/304.
