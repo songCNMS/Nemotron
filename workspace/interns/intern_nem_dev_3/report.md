@@ -1,5 +1,43 @@
 # intern_nem_dev_3 Report
 
+## 2026-05-30 19:50:00 UTC - task217_mamba_causal_conv_train_stack_unblock_probe_s1
+
+- Status: No-launch diagnostic evidence complete / ready for PM review
+- Branch:
+  `intern_nem_dev_3/task217_mamba_causal_conv_train_stack_unblock_probe_s1`
+- Base: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task217`
+- Root cause:
+  - Task216 used `/usr/local/bin/torchrun`, shebang `/usr/bin/python3`, with
+    task209 Session 5 mamba `pip_target`, task209 Session 4 venv
+    site-packages, and task216 repo `src` in `PYTHONPATH`.
+  - In that exact context, `mamba_ssm==2.3.2.post1` and
+    `selective_scan_cuda` import successfully.
+  - `causal-conv1d` package metadata is missing; `causal_conv1d`,
+    `causal_conv1d.causal_conv1d_interface`, and `causal_conv1d_cuda` are not
+    importable.
+  - `mamba_ssm.ops.triton.ssd_combined.causal_conv1d_fwd_function` is `None`,
+    matching task216's `TypeError: 'NoneType' object is not callable`.
+- Unblock recommendation:
+  - Build/install compatible `causal-conv1d` into a task-owned contained target
+    and prepend it to the task216 `PYTHONPATH`.
+  - Candidate: `causal-conv1d==1.6.2.post1`; mamba metadata requires
+    `causal-conv1d>=1.2.0`, README recommends `>=1.4.0`.
+  - PM assigned dev_1 task218 to own the contained build/probe; task217 did not
+    duplicate package build/install work.
+- Key artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task217/logs/01_runtime_context_probe.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task217/logs/02_exact_python_import_function_probe.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task217/logs/03_mamba_source_and_artifact_search.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task217/logs/04_venv_python_import_function_probe.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task217/logs/05_mamba_metadata_dependency_probe.log`
+  - `workspace/tasks/task217_mamba_causal_conv_train_stack_unblock_probe_s1/validation_report.md`
+- Boundaries:
+  - No training launch, benchmark, endpoint, package install, shared/global env
+    mutation, model copy/download, W&B/cluster deploy, artifact upload,
+    main/master push, or self-merge.
+
 ## 2026-05-21 12:41:52 UTC - task026_m2_swe_multi_harness_s1
 
 - Status: PR ready for PM gate
