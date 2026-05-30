@@ -1,6 +1,54 @@
 # History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
+
+## Session 5 - 2026-05-30
+
+- Accepted PM Session 5 continuation to unblock `mamba_ssm` within task-owned
+  paths only. Boundaries observed: no NemTron network, no system site mutation,
+  no package install outside the task-owned venv/target, no multi-GPU/full
+  train, and no W&B/cluster/deploy/artifact upload.
+- Probed NemTron toolchain and GPU state. `/usr/local/cuda/bin/nvcc` exists,
+  `gcc/g++` are 13.3.0, `cmake` is 3.31.1, `ninja` is present, Torch is
+  `2.9.1+cu129`, `torch.version.cuda` is 12.9, CUDA is available with eight
+  H200 devices, and no GPU compute apps were present.
+- Searched existing local/VPN/NemTron stores for compatible `mamba-ssm` artifacts.
+  No ready binary wheel was found. Fetched the `mamba_ssm-2.3.2.post1` sdist
+  from the local package index into the task root, with SHA256
+  `104cc47e9101e5401a675fa2b784f2952b9b037f3b1dd83b5ac544394e95d028`, and
+  staged it to NemTron under `session5/source_artifacts`.
+- Ran a contained forced source build on NemTron using the Session 4 venv and
+  task-owned build target:
+
+  ```bash
+  TMPDIR="$BUILD_ROOT/tmp" PIP_CACHE_DIR="$BUILD_ROOT/cache" MAX_JOBS=1 \
+  MAMBA_FORCE_BUILD=TRUE MAMBA_FORCE_CXX11_ABI=TRUE \
+    "$VENV/bin/python" -m pip install --no-index --no-deps \
+    --no-build-isolation --no-clean --target "$BUILD_ROOT/pip_target" "$SDIST"
+  ```
+
+  Result: `mamba_force_build_attempt_rc=0`. Built wheel:
+  `mamba_ssm-2.3.2.post1-cp312-cp312-linux_x86_64.whl`, size `322163289`,
+  SHA256 `45c1c2cb89f982f32f0739e871e9d4dadbbdb8c39b707673369a1ab8a34dfb55`.
+- Persisted import evidence in
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/10_mamba_import_probe.log`.
+  `mamba_ssm` and `selective_scan_cuda` import from
+  `session5/build_mamba_force/pip_target`; Session 4 venv imports still pass for
+  `nemo_run`, `megatron.energon`, `nvidia_resiliency_ext`, `torch`,
+  `megatron`, and `megatron.bridge`.
+- Ran final GPU/task210/SGLang preflight before any train launch. GPUs were idle
+  and no compute apps were listed, but `ss` reported a listener on `0.0.0.0:8000`.
+  Follow-up owner probe could not attribute the listener through `ss`, `lsof`,
+  or `fuser`. Because the PM condition required no task210/SGLang/port/process
+  before launching, no one-iteration smoke was started.
+- Checkpoint state after the hold: Session 5
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/checkpoints_one_iter`
+  is missing because no Session 5 train was launched. The older task root
+  `checkpoints_one_iter` directory exists but no Session 5 checkpoint was
+  created.
+- Current status: train-stack import blockers are cleared in the user-owned venv
+  plus Session 5 `pip_target`; remaining launch blocker is the unattributed
+  `:8000` listener / task210 port preflight condition.
 
 ## Session 4 - 2026-05-30
 

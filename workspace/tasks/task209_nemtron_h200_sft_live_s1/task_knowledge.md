@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 - Baseline commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task209_nemtron_h200_sft_live_s1`.
@@ -51,6 +51,33 @@
   argument 'packed_seq_params'`.
 - PM task210 hold: SGLang TP=8 is active on all NemTron H200s. Do not launch
   any train smoke until PM explicitly releases GPUs.
+- Session 5 mamba source-build root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force`.
+- Session 5 staged mamba sdist:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/source_artifacts/mamba_ssm-2.3.2.post1.tar.gz`
+  with SHA256
+  `104cc47e9101e5401a675fa2b784f2952b9b037f3b1dd83b5ac544394e95d028`.
+- Session 5 contained build result: `mamba_ssm-2.3.2.post1` built successfully
+  with `MAMBA_FORCE_BUILD=TRUE`, `MAMBA_FORCE_CXX11_ABI=TRUE`, `MAX_JOBS=1`,
+  `--no-index`, `--no-deps`, `--no-build-isolation`, and `--target
+  session5/build_mamba_force/pip_target`; no system Python/site-packages were
+  modified.
+- Session 5 import status: with `PYTHONPATH` prepending
+  `session5/build_mamba_force/pip_target` and the Session 4 venv site-packages,
+  `mamba_ssm`, `selective_scan_cuda`, `nemo_run`, `megatron.energon`,
+  `nvidia_resiliency_ext`, `torch`, `megatron`, and `megatron.bridge` import.
+  `causal_conv1d` remains absent, but the direct `mamba_ssm` and
+  `selective_scan_cuda` import probe passed.
+- Session 5 final GPU preflight found all eight H200s idle and no compute apps,
+  but `0.0.0.0:8000` was listening and could not be attributed by `ss`, `lsof`,
+  or `fuser`; no one-iteration train was launched under the PM
+  no-task210/SGLang/port/process condition.
+- Prepared Session 5 canonical single-GPU command if PM clears the port hold:
+  use `PYTHONPATH=/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target:/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv/lib/python3.12/site-packages:src`,
+  `NEMO_RUN_DIR=/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5`,
+  `SUPER3_M1_AGENTIC_PACKED_DIR=/mnt/cephfs/data/processing/nemotron-live-validation/task209/input_task208_sample4/splits`,
+  and checkpoint save
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/checkpoints_one_iter`.
 - NemTron has no network: do not download packages, models, containers, or run
   `git pull` on NemTron.
 - dev_2/task209 owns heavy NemTron GPU usage until release or PM handoff.

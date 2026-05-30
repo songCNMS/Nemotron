@@ -1,6 +1,6 @@
 # task209 Validation Report
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Baseline
 
@@ -262,3 +262,174 @@ CUDA_VISIBLE_DEVICES=0 \
   artifacts.wandb=false \
   artifacts.manifest.root=null"
 ```
+
+## Session 5 Mamba Source-Build Unblock Probe
+
+Session 5 root:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5`
+
+### Logs
+
+- Toolchain/GPU probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/01_nemtron_toolchain_gpu_probe.log`
+- Artifact searches:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/02_local_mamba_artifact_search.log`
+  through
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/04_nemtron_mamba_artifact_search.log`
+- Local sdist fetch and inspection:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/06_local_direct_fetch_mamba_sdist.log`
+  and
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/07_local_inspect_mamba_sdist_setup.log`
+- Staged sdist to NemTron:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/08_stage_mamba_sdist_to_nemtron.log`
+- Contained source build:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/09_nemtron_mamba_force_build_attempt.log`
+- Import probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/10_mamba_import_probe.log`
+- Final GPU/task210/SGLang preflight:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/11_final_gpu_sglang_preflight.log`
+- Port owner probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/12_port8000_owner_probe.log`
+- Checkpoint state:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/logs/13_checkpoint_state_no_launch.log`
+
+### Toolchain And Artifact Result
+
+NemTron toolchain probe passed for a contained source-build attempt:
+`/usr/local/cuda/bin/nvcc` exists, `gcc/g++` are 13.3.0, `cmake` is 3.31.1,
+`ninja` is available, Torch is `2.9.1+cu129`, Torch CUDA is 12.9, and CUDA sees
+eight H200 devices.
+
+No ready local/VPN/NemTron binary wheel was found. The staged sdist was:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/source_artifacts/mamba_ssm-2.3.2.post1.tar.gz`
+
+SHA256:
+
+`104cc47e9101e5401a675fa2b784f2952b9b037f3b1dd83b5ac544394e95d028`
+
+### Build Command And Result
+
+```bash
+TMPDIR="$BUILD_ROOT/tmp" PIP_CACHE_DIR="$BUILD_ROOT/cache" MAX_JOBS=1 \
+MAMBA_FORCE_BUILD=TRUE MAMBA_FORCE_CXX11_ABI=TRUE \
+  "$VENV/bin/python" -m pip install --no-index --no-deps \
+  --no-build-isolation --no-clean --target "$BUILD_ROOT/pip_target" "$SDIST"
+```
+
+Where:
+
+- `VENV=/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv`
+- `SDIST=/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/source_artifacts/mamba_ssm-2.3.2.post1.tar.gz`
+- `BUILD_ROOT=/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force`
+
+Result: `mamba_force_build_attempt_rc=0`.
+
+Built wheel:
+
+- File: `mamba_ssm-2.3.2.post1-cp312-cp312-linux_x86_64.whl`
+- Size: `322163289`
+- SHA256:
+  `45c1c2cb89f982f32f0739e871e9d4dadbbdb8c39b707673369a1ab8a34dfb55`
+
+Install target:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target`
+
+No install was made into NemTron system Python or system site-packages.
+
+### Import Probe
+
+Command shape:
+
+```bash
+PYTHONPATH="$TARGET:$VENV/lib/python3.12/site-packages" \
+  "$VENV/bin/python" - <<'PY'
+import mamba_ssm
+from mamba_ssm.ops.selective_scan_interface import selective_scan_fn
+import selective_scan_cuda
+PY
+```
+
+Result: `import_probe_rc=0`.
+
+Confirmed imports:
+
+- `mamba_ssm` from
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target/mamba_ssm/__init__.py`
+- `selective_scan_cuda` from
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target/selective_scan_cuda.cpython-312-x86_64-linux-gnu.so`
+- Session 4 venv remains usable for `nemo_run`, `megatron.energon`,
+  `nvidia_resiliency_ext`, `torch`, `megatron`, and `megatron.bridge`.
+
+`causal_conv1d` was not present, but the direct `mamba_ssm` and
+`selective_scan_cuda` import probe passed.
+
+### Final Launch Preflight And Hold
+
+Final GPU preflight at `2026-05-30T17:34:03Z` showed all eight H200s idle with
+about 1 MiB used per GPU and no compute apps. The same preflight found a
+listener on `0.0.0.0:8000`.
+
+Follow-up owner probe:
+
+```bash
+ss -ltnp "( sport = :8000 )"
+lsof -nP -iTCP:8000 -sTCP:LISTEN
+fuser -v 8000/tcp
+```
+
+Result: `ss` still showed `0.0.0.0:8000` listening, while `lsof` and `fuser`
+did not attribute an owner. Because PM's Session 5 condition required no
+task210/SGLang/port/process before launch, the canonical one-iteration smoke was
+not started.
+
+Prepared but not launched:
+
+```bash
+ssh -o BatchMode=yes NemTron "cd '/mnt/cephfs/data/processing/nemotron-live-validation/task209/Nemotron' && \
+PYTHONPATH='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target:/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv/lib/python3.12/site-packages:src' \
+NEMO_RUN_DIR='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5' \
+SUPER3_M1_AGENTIC_PACKED_DIR='/mnt/cephfs/data/processing/nemotron-live-validation/task209/input_task208_sample4/splits' \
+SUPER3_M1_TOKENIZER_MODEL=/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507 \
+SUPER3_M1_QWEN_HF_MODEL=/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507 \
+SUPER3_M1_TRAINING_PROFILE=qwen \
+SUPER3_M1_SFT_SMOKE_SAVE='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/checkpoints_one_iter' \
+CUDA_VISIBLE_DEVICES=0 \
+/usr/local/bin/torchrun --nproc_per_node=1 \
+  src/nemotron/recipes/super3/stage1_sft/test_train.py \
+  --config '/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/m1_agentic_smoke_qwen_contract.yaml' \
+  train.train_iters=1 \
+  checkpoint.save_interval=1 \
+  artifacts.wandb=false \
+  artifacts.manifest.root=null"
+```
+
+### Checkpoint State
+
+- Session 5 checkpoint path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/checkpoints_one_iter`
+  is missing because no Session 5 train was launched.
+- Older task root checkpoint directory exists:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/checkpoints_one_iter`
+- Session 4 checkpoint path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/checkpoints_one_iter`
+  is missing.
+
+### Estimates And Resource Request
+
+- One-iteration smoke: ready to run after PM clears or attributes the `:8000`
+  listener; expected command is above and uses one H200 through
+  `CUDA_VISIBLE_DEVICES=0`.
+- Small pilot: still gated on one-iteration evidence. A safe next pilot should
+  use the staged sample or a single full shard after PM review, W&B disabled,
+  and an explicit checkpoint path under the task root.
+- Full train: task208 full split metadata reports `987770` packed sequences and
+  `672687706` tokens across 16 shards. With the smoke config's
+  `global_batch_size=1`, one full pass would be `987770` optimizer iterations;
+  reliable wall-clock cannot be estimated until the one-iteration smoke produces
+  real step-time evidence on the intended config.
+
+Current blocker: `READY_HELD_PORT_BUSY`; imports are unblocked, GPUs are idle,
+but `0.0.0.0:8000` is still listening and unattributed.
