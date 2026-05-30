@@ -13,6 +13,18 @@ NOTEBOOK = (
 
 NEMO_RL_REPO = "https://github.com/NVIDIA-NeMo/RL.git"
 EXPECTED_REVISION = "bb0a7d43931950a74522e159f7117543a87b580b"
+EXPECTED_BRANCH_GUIDE_URL = (
+    "https://github.com/NVIDIA-NeMo/RL/blob/"
+    f"{EXPECTED_REVISION}/docs/guides/nemotron-3-super.md"
+)
+EXPECTED_DOCKER_GUIDE_URL = (
+    "https://github.com/NVIDIA-NeMo/RL/blob/"
+    f"{EXPECTED_REVISION}/docs/docker.md"
+)
+MUTABLE_DOC_URL_PARTS = (
+    "github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/",
+    "github.com/NVIDIA-NeMo/RL/blob/main/docs/",
+)
 
 
 def _notebook() -> dict[str, object]:
@@ -48,6 +60,17 @@ def _nemo_rl_setup_cells() -> list[dict[str, object]]:
     ]
 
 
+def _cells_containing(marker: str) -> list[dict[str, object]]:
+    notebook = _notebook()
+    cells = notebook["cells"]
+    assert isinstance(cells, list)
+    return [
+        cell
+        for cell in cells
+        if isinstance(cell, dict) and marker in _cell_text(cell, "source")
+    ]
+
+
 def test_super_grpo_dapo_nemo_rl_checkout_uses_exact_revision() -> None:
     source = _notebook_source()
 
@@ -62,8 +85,27 @@ def test_super_grpo_dapo_preserves_super_v3_branch_context() -> None:
     source = _notebook_source()
 
     assert "NemoRL Super-v3 branch" in source
-    assert "blob/super-v3/docs/guides/nemotron-3-super.md" in source
+    assert EXPECTED_BRANCH_GUIDE_URL in source
     assert f"git clone -b super-v3 {NEMO_RL_REPO}" in source
+
+
+def test_super_grpo_dapo_nemo_rl_docs_links_are_pinned() -> None:
+    source = _notebook_source()
+
+    assert EXPECTED_BRANCH_GUIDE_URL in source
+    assert EXPECTED_DOCKER_GUIDE_URL in source
+    for mutable_url_part in MUTABLE_DOC_URL_PARTS:
+        assert mutable_url_part not in source
+
+
+def test_super_grpo_dapo_pinned_docs_cells_are_markdown_and_clear() -> None:
+    for expected_url in (EXPECTED_BRANCH_GUIDE_URL, EXPECTED_DOCKER_GUIDE_URL):
+        cells = _cells_containing(expected_url)
+        assert len(cells) == 1
+        cell = cells[0]
+        assert cell["cell_type"] == "markdown"
+        assert cell.get("execution_count") is None
+        assert cell.get("outputs", []) == []
 
 
 def test_super_grpo_dapo_nemo_rl_setup_cell_is_guarded_and_outputs_are_clear() -> None:
