@@ -1,13 +1,28 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task199_sdg_long_document_doc_links_revision_pins_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task199_sdg_long_document_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/306 |
+| Status | Idle |
+| Current Task | None |
+| PR | evidence-only branch |
 | Session | 1 |
 
-最近进展：Opened PR #306 for `task199_sdg_long_document_doc_links_revision_pins_s1`; assignment base was `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`, and the branch was rebased before PR open to current `origin/main` `e690bdac75ae5a85e1a167e3553d631d29732d32` after main advanced. Scoped change pins the three SDG long-document self-repo links in `docs/nemotron/data/sdg/long-document.md` to `306b2f1217e000b5972155c1f2b1ba6660c994bd` and adds focused docs/static coverage. Required focused pytest, py_compile, Ruff, structured probe, live-surface scan, stale-link grep, and diff checks passed. Static-only boundaries preserved: no live ops, no main/master push, and no self-merge.
+最近进展：Completed task216 evidence-only live validation on branch
+`intern_nem_dev_2/task216_qwen_sft_one_iter_post_task215_live_s1`. The
+canonical single-GPU Qwen-contract Stage1 SFT one-iteration smoke ran on
+NemTron from exact merged main `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+using a task-owned checkout, task-owned config with
+`step_function: super3_packed_seq_compat_gpt_step`, task208 sample packed data
+staged under task209, and the task209 train stack. Preflight passed with no
+SGLang/task210 process, no `:13000`, no H200 compute apps, free master port
+`29571`, and `:8000` documented/untouched. Exactly one torchrun was launched.
+It reached upstream Bridge `gpt_step` and Mamba model forward, confirming the
+task215 state-injection path advanced past the prior missing-`model` failure,
+then failed with `TypeError: 'NoneType' object is not callable` at
+`mamba_ssm/ops/triton/ssd_combined.py` calling `causal_conv1d_fwd_function`.
+Checkpoint path is missing and post-run GPU/port cleanup passed. Current
+blocker: `MAMBA_SSM_CAUSAL_CONV1D_FWD_FUNCTION_NONE`. No second run or
+workaround was attempted; dev_2 is Idle / Current Task None.
