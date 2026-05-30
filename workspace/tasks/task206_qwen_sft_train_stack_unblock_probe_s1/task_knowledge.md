@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 - Base commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task206_qwen_sft_train_stack_unblock_probe_s1`.
@@ -33,3 +33,7 @@
     `/tmp/nemotron-live-validation/task206/checkpoints`.
   - One-iteration smoke skipped because prerequisites were missing.
   - Focused validators passed with `33 passed, 2 skipped`.
+- Session 3 handoff: task209 will attempt the live SFT smoke on `NemTron`
+  using the cephfs model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` and
+  artifact root `/mnt/cephfs/data/nemotron-live-validation/task209`.

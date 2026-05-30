@@ -1,6 +1,19 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
+
+## Session 3 - 2026-05-30
+
+- PM assigned follow-up `task209_nemtron_h200_sft_live_s1` to use the
+  supervisor-provided NemTron H200 node after task206 proved the local workspace
+  lacks the training stack, GPU visibility, and Qwen model path needed for the
+  one-iteration smoke.
+- Preserved task206 evidence branch
+  `intern_nem_dev_2/task206_qwen_sft_train_stack_unblock_probe_s1` at pushed
+  head `9c82e5737a55af15bde2e4e45c0e299eee9040ef`.
+- This session is handoff bookkeeping only; no additional task206 probes,
+  package installs, cluster launches, training/eval, endpoint, W&B, deploy,
+  artifact upload, direct `main`/`master` push, or self-merge were performed.
 
 ## Session 2 - 2026-05-30
 
