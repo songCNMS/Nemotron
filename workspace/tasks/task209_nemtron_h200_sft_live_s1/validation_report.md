@@ -1,6 +1,6 @@
 # task209 Validation Report
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Baseline
 
@@ -433,3 +433,137 @@ CUDA_VISIBLE_DEVICES=0 \
 
 Current blocker: `READY_HELD_PORT_BUSY`; imports are unblocked, GPUs are idle,
 but `0.0.0.0:8000` is still listening and unattributed.
+
+## Session 6 Canonical One-Iteration Smoke
+
+Session 6 root:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6`
+
+### Logs
+
+- Preflight:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/01_session6_preflight_port_gpu.log`
+- Canonical torchrun:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/02_session6_canonical_one_iter_torchrun.log`
+- Checkpoint/GPU state after run:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/03_session6_checkpoint_gpu_state_after_run.log`
+- Local-visible log copy manifest:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`
+
+### Preflight
+
+PM tightened the Session 6 port rule: keep `:8000` untouched, but require no
+SGLang/task210 process, no `:13000` listener, no H200 compute apps, and an
+explicit free high torchrun master port.
+
+Preflight result:
+
+- no SGLang/task210 process found
+- no `:13000` listener
+- no H200 compute apps
+- eight H200s idle, about 1 MiB used and 0% utilization
+- `:29531` free and selected as the torchrun master port
+- `:8000` still listening on `0.0.0.0:8000`; documented and left untouched
+
+### Command
+
+Exactly one canonical single-GPU Qwen-contract smoke was launched:
+
+```bash
+ssh -o BatchMode=yes NemTron 'cd "/mnt/cephfs/data/processing/nemotron-live-validation/task209/Nemotron" && \
+PYTHONPATH="/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/build_mamba_force/pip_target:/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv/lib/python3.12/site-packages:src" \
+NEMO_RUN_DIR="/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6" \
+SUPER3_M1_AGENTIC_PACKED_DIR="/mnt/cephfs/data/processing/nemotron-live-validation/task209/input_task208_sample4/splits" \
+SUPER3_M1_TOKENIZER_MODEL="/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507" \
+SUPER3_M1_QWEN_HF_MODEL="/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507" \
+SUPER3_M1_TRAINING_PROFILE="qwen" \
+SUPER3_M1_SFT_SMOKE_SAVE="/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter" \
+CUDA_VISIBLE_DEVICES=0 \
+/usr/local/bin/torchrun --nproc_per_node=1 --master_addr=127.0.0.1 --master_port=29531 \
+  src/nemotron/recipes/super3/stage1_sft/test_train.py \
+  --config "/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/m1_agentic_smoke_qwen_contract.yaml" \
+  train.train_iters=1 \
+  checkpoint.save_interval=1 \
+  artifacts.wandb=false \
+  artifacts.manifest.root=null'
+```
+
+### Result
+
+Result: `session6_torchrun_rc=1`.
+
+The run successfully passed the previous missing-package blockers:
+
+- `mamba_ssm` / `selective_scan_cuda` loaded from the Session 5 `pip_target`
+- `nemo_run`, `megatron.energon`, `nvidia_resiliency_ext`, Torch/CUDA,
+  Megatron, and Megatron Bridge were available through the Session 4 venv and
+  system site packages
+- distributed initialization completed
+- Qwen tokenizer was built from
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`
+- hybrid Mamba/MoE tiny model, optimizer, scheduler, and packed-data iterators
+  were built
+- training loop started at iteration 0
+
+Failure:
+
+```text
+TypeError: MambaModel.forward() got an unexpected keyword argument 'packed_seq_params'
+```
+
+This occurred during the first training forward pass through
+`megatron.bridge.training.gpt_step._forward_step_common` into the wrapped
+`MambaModel`. The smoke stopped after this single run as requested.
+
+### Checkpoint State
+
+Checkpoint target:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter`
+
+State: missing. No checkpoint was created because the first forward pass failed
+before the configured `checkpoint.save_interval=1` save point.
+
+Post-run state:
+
+- no H200 compute apps
+- all eight H200s idle
+- no `:13000` listener
+- no `:29531` listener
+- `:8000` still listening and untouched
+
+### Evidence Visibility
+
+PM noted that the local/test view of the shared artifact root could see only
+Session 5 logs `01` through `09`. I copied the referenced NemTron-only logs into
+the local-visible shared artifact root without rerunning probes:
+
+- `session5/logs/10_mamba_import_probe.log`
+- `session5/logs/11_final_gpu_sglang_preflight.log`
+- `session5/logs/12_port8000_owner_probe.log`
+- `session5/logs/13_checkpoint_state_no_launch.log`
+- `session6/logs/01_session6_preflight_port_gpu.log`
+- `session6/logs/02_session6_canonical_one_iter_torchrun.log`
+- `session6/logs/03_session6_checkpoint_gpu_state_after_run.log`
+
+Manifest:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`
+
+Remote and local SHA256s matched for the copied NemTron logs. The copy command
+returned `copy_rc=0`.
+
+### Current Blocker And Estimate
+
+Current blocker: `MAMBA_PACKED_SEQ_PARAMS_API_MISMATCH`. The canonical train
+stack now reaches the first training forward pass, but the Mamba model forward
+path does not accept the packed-sequence argument emitted by the Megatron Bridge
+packed SFT forward step.
+
+Small/full continuation remains blocked until this API mismatch is fixed or PM
+approves a non-packed/attention-only alternative. Full train estimate is still
+gated on a successful one-iteration step-time measurement. The full task208
+metadata remains `987770` packed sequences and `672687706` tokens across 16
+shards; with `global_batch_size=1`, one full pass would require `987770`
+optimizer iterations.

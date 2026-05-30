@@ -1,6 +1,43 @@
 # History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
+
+## Session 6 - 2026-05-30
+
+- Accepted PM Session 6 direction to proceed under the tighter port rule:
+  keep `:8000` untouched, require no SGLang/task210 process, no `:13000`
+  listener, no H200 compute apps, and an explicit free torchrun master port.
+- Ran/read-log preflight at
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/01_session6_preflight_port_gpu.log`.
+  Result: no SGLang/task210 process, no `:13000` listener, no compute apps,
+  eight H200s idle, `:29531` free, and `:8000` still listening but documented
+  only.
+- Ran exactly one canonical single-GPU Qwen-contract smoke with:
+  `CUDA_VISIBLE_DEVICES=0`, `--master_addr=127.0.0.1`,
+  `--master_port=29531`, task208 staged sample splits, Session 5
+  `mamba_ssm` `pip_target`, Session 4 venv site-packages, W&B disabled,
+  manifest root null, `train.train_iters=1`, and `checkpoint.save_interval=1`.
+  Log:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/02_session6_canonical_one_iter_torchrun.log`.
+- Result: `session6_torchrun_rc=1`. The run passed import blockers, initialized
+  distributed, built the Qwen tokenizer, built the hybrid Mamba/MoE tiny model,
+  built optimizer and packed-data iterators, then entered the training loop.
+  It failed during the first forward pass with
+  `TypeError: MambaModel.forward() got an unexpected keyword argument
+  'packed_seq_params'`.
+- Captured checkpoint/GPU/port state after the run in
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/03_session6_checkpoint_gpu_state_after_run.log`.
+  No Session 6 checkpoint directory was created. H200s returned to idle, no
+  compute apps were listed, `:13000` and `:29531` were clear, and `:8000`
+  remained untouched/listening.
+- Applied PM evidence-hygiene addendum by copying NemTron-only Session 5 logs
+  `10_mamba_import_probe.log` through `13_checkpoint_state_no_launch.log` and
+  Session 6 logs `01` through `03` into the local-visible shared artifact root.
+  Copy manifest:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`.
+- Current blocker: canonical train stack now reaches the training loop, but the
+  Megatron Bridge/Mamba model path rejects packed-sequence forward argument
+  `packed_seq_params`.
 
 ## Session 5 - 2026-05-30
 

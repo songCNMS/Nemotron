@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 - Baseline commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task209_nemtron_h200_sft_live_s1`.
@@ -78,6 +78,29 @@
   `SUPER3_M1_AGENTIC_PACKED_DIR=/mnt/cephfs/data/processing/nemotron-live-validation/task209/input_task208_sample4/splits`,
   and checkpoint save
   `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session5/checkpoints_one_iter`.
+- Session 6 PM port rule: `:8000` may remain listening and must not be killed;
+  before torchrun require no SGLang/task210 process, no `:13000` listener, no
+  H200 compute apps, and choose an explicit free high master port.
+- Session 6 preflight selected torchrun master port `29531`; no SGLang/task210
+  process, no `:13000` listener, no compute apps, and eight idle H200s were
+  observed. `:8000` remained listening and untouched.
+- Session 6 canonical one-iteration smoke command used `CUDA_VISIBLE_DEVICES=0`,
+  `--master_addr=127.0.0.1`, `--master_port=29531`, Session 5 mamba
+  `pip_target`, Session 4 venv site-packages, staged task208 sample splits, and
+  checkpoint save
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter`.
+- Session 6 canonical run result: `session6_torchrun_rc=1`. The run reached
+  training-loop forward and failed with `TypeError:
+  MambaModel.forward() got an unexpected keyword argument 'packed_seq_params'`.
+  This is no longer a missing-package blocker.
+- Session 6 checkpoint state: no
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter`
+  directory was created because the first forward pass failed before the
+  configured checkpoint save interval.
+- Evidence visibility fix: Session 5 logs `10` through `13` and Session 6 logs
+  `01` through `03` were copied from the NemTron namespace into the local-visible
+  shared artifact root; manifest with hashes is
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`.
 - NemTron has no network: do not download packages, models, containers, or run
   `git pull` on NemTron.
 - dev_2/task209 owns heavy NemTron GPU usage until release or PM handoff.
