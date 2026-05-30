@@ -1,6 +1,6 @@
 # task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_1,SESSION=3 -->
 
 ## Scope
 
@@ -25,11 +25,16 @@
 - Base: `a2adec564cace06edf9f1cd91ba174f4aa2429ec`
 - Branch:
   `intern_nem_dev_1/task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1`
+- Closeout branch:
+  `intern_nem_dev_1/task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1_closeout`
 - PR: https://github.com/songCNMS/Nemotron/pull/302
+- Tested/merged head: `93b06bb04cedb6a11e94ff58e169f3e9271454f2`
+- Merge SHA: `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`
 - Validated implementation head: `c25eb4fe954d606a708177662ac476e67b04e9f1`
 - Follow-up PR-ready status head before Session 2 bookkeeping:
   `e59f0b725fc7c86ceb2310f2504b55668b94fbaa`
-- PR state: open, mergeable, merge state `CLEAN`.
+- PM merged-main verification: PR #302 independently gated, squash-merged, and
+  verified on main `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_nvidia_stack_megatron_core_revision_pin.py`
     -> 2 passed.

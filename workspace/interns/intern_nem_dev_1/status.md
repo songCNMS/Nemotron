@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1,ROLE=dev,SESSION=2 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=3 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/302 |
-| Session | 2 |
-| Recent Progress | Follow-up verified PR #302 is open and branch was clean; recording Session 2 PR-ready handoff |
+| Session | 3 |
+| Recent Progress | PR #302 merged and verified on main `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`; closeout recorded |
