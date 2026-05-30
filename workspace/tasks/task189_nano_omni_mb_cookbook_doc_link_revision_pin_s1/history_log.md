@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-30
 
@@ -36,3 +36,19 @@
 - Boundaries remained unchanged: no notebook execution, live git/build/download,
   recipe/data-prep/train/eval, endpoint, W&B, cluster, deploy, artifact ops,
   direct `main`/`master` push, or self-merge.
+
+## Session 3 - 2026-05-30
+
+- Recorded closeout after PR #296 was squash-merged and verified on `main` at
+  `11368049de13b6a632af1d862bfb6f83c4894404`.
+- Synced local `origin/main` and `main` to
+  `11368049de13b6a632af1d862bfb6f83c4894404`.
+- PM reported tested/merged head:
+  `a99292273700a2a4dfadd38405646066c5e4493a`.
+- PM merged-main verification passed: focused pytest 6 passed, py_compile,
+  Ruff, `git diff --check`, `git diff --cached --check`, scoped stale
+  examples-link grep, and structured notebook probe.
+- Set intern status to Idle / Current Task None. No notebook execution, live
+  git build/download/recipe/data-prep/train/eval, endpoint, W&B, cluster,
+  deploy, artifact ops, direct `main`/`master` push, or self-merge was
+  performed.

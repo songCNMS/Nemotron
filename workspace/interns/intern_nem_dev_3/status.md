@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1,SESSION=2 -->
+<!-- METADATA:STATUS=Idle,TASK=None,SESSION=3 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
-| Current Task | task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/296 |
-| Session | 2 |
-| Recent Progress | Rebased PR #296 to replacement base a1878fa7e48eb43ba1d467fa93c064b41333c01e; focused pytest, py_compile, Ruff, structured probe, live-surface scan, and diff checks passed |
+| Session | 3 |
+| Recent Progress | PR #296 merged and verified on main 11368049de13b6a632af1d862bfb6f83c4894404; local main/origin main synced, closeout docs recorded, no live runs or main push |

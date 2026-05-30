@@ -1,6 +1,6 @@
 # task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=3 -->
 
 ## Scope
 
@@ -30,6 +30,10 @@
 - PR: https://github.com/songCNMS/Nemotron/pull/296
 - Rebased implementation SHA: `108d654b907c094114a89f7df2d55bfbb3d1e540`
 - Rebased pre-docs head: `f5f5308100117af01e9ba36ead8a2a07450aa345`
+- Tested/merged head: `a99292273700a2a4dfadd38405646066c5e4493a`
+- Merge SHA: `11368049de13b6a632af1d862bfb6f83c4894404`
+- Local main sync: `main` and `origin/main` updated to
+  `11368049de13b6a632af1d862bfb6f83c4894404`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_nano_omni_megatron_bridge_checkout_revision.py`
     -> 6 passed
@@ -44,3 +48,6 @@
   - `git diff --cached --check` -> passed
   - Replacement-base rerun on `a1878fa7e48eb43ba1d467fa93c064b41333c01e`
     passed the same focused checks.
+  - PM merged-main verification passed: focused pytest 6 passed, py_compile,
+    Ruff, diff checks, scoped stale examples-link grep, and structured notebook
+    probe.
