@@ -1,6 +1,6 @@
 # task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -23,11 +23,13 @@
 
 ## Status
 
-- Base: `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`
+- Original base: `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`
+- Replacement base: `a1878fa7e48eb43ba1d467fa93c064b41333c01e`
 - Branch:
   `intern_nem_dev_3/task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/296
-- Implementation SHA: `62087bd30828282ac3b2ff32439812632f57db81`
+- Rebased implementation SHA: `108d654b907c094114a89f7df2d55bfbb3d1e540`
+- Rebased pre-docs head: `f5f5308100117af01e9ba36ead8a2a07450aa345`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_nano_omni_megatron_bridge_checkout_revision.py`
     -> 6 passed
@@ -40,3 +42,5 @@
     text only
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+  - Replacement-base rerun on `a1878fa7e48eb43ba1d467fa93c064b41333c01e`
+    passed the same focused checks.

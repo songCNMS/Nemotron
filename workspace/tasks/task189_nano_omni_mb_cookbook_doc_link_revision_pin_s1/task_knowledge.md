@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Scoped notebook:
   `usage-cookbook/Nemotron-3-Nano-Omni/Megatron-bridge/mbridge_lora_cord_v2_cookbook.ipynb`.
@@ -15,3 +15,6 @@
 - Preserve visible `nemotron_3_omni` branch-context prose; the executable
   checkout remains pinned and guarded by the previous task's contract.
 - PR: https://github.com/songCNMS/Nemotron/pull/296.
+- Base correction: task189 was rebased from original base
+  `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb` to replacement base
+  `a1878fa7e48eb43ba1d467fa93c064b41333c01e`.
