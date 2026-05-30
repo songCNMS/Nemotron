@@ -1,13 +1,25 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task199_sdg_long_document_doc_links_revision_pins_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task199_sdg_long_document_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/306 |
+| Status | Idle |
+| Current Task | None |
+| PR | None |
 | Session | 1 |
 
-最近进展：Opened PR #306 for `task199_sdg_long_document_doc_links_revision_pins_s1`; assignment base was `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`, and the branch was rebased before PR open to current `origin/main` `e690bdac75ae5a85e1a167e3553d631d29732d32` after main advanced. Scoped change pins the three SDG long-document self-repo links in `docs/nemotron/data/sdg/long-document.md` to `306b2f1217e000b5972155c1f2b1ba6660c994bd` and adds focused docs/static coverage. Required focused pytest, py_compile, Ruff, structured probe, live-surface scan, stale-link grep, and diff checks passed. Static-only boundaries preserved: no live ops, no main/master push, and no self-merge.
+最近进展：Completed evidence-only live validation
+`task220_qwen_sft_8gpu_full_data_one_iter_live_s1` on branch
+`intern_nem_dev_2/task220_qwen_sft_8gpu_full_data_one_iter_live_s1` from exact
+product commit `1d037329f5a02cdc04f2a09a16e7342721be4c87`. One canonical
+8-GPU NemTron torchrun using full staged task208 packed data returned
+`task220_torchrun_rc=0`, reached iteration `1/1`, reported
+`lm loss: 1.226097E+01`, skipped/nan `0/0`, validated, and saved a `399G`
+checkpoint at
+`/mnt/cephfs/data/processing/nemotron-live-validation/task220/session1/checkpoints_one_iter`.
+Post-run cleanup found no H200 compute apps, `:13000` and master port `29591`
+clear, and `:8000` documented/untouched. No second run, package/system mutation,
+process kill, endpoint/eval/benchmark, W&B, cluster/deploy, artifact upload,
+main/master push, or self-merge.
