@@ -1,6 +1,6 @@
 # task210_nemtron_vpn_endpoint_eval_live_s1
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nem_dev_3,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPMReview,ASSIGNEE=intern_nem_dev_3,SESSION=5 -->
 
 ## Scope
 
@@ -43,6 +43,50 @@
     `/mnt/cephfs/data/processing/nemotron-live-validation/task210/task210_evidence_summary.json`
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+
+## Session 4 Staged Endpoint Smoke
+
+- Artifact root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4`
+- PM-authorized staged model path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/staged_model/Qwen3-30B-A3B-Instruct-2507`
+- Staging result: PASS. Copy exit `0`; destination has 16 safetensor shards;
+  file-size manifest match `true`; small-file SHA256 match `true`.
+- SGLang relaunch result: PASS from the staged model path.
+  - PID: `1430020`
+  - Port: `13000`
+  - Served model: `qwen3-30b-a3b-instruct-2507-staged`
+  - Tensor parallel: 8 H200 GPUs
+- Corrected sanitized `/v1/chat/completions` smoke result: PASS.
+  - Request used `max_tokens=8`, no benchmark prompt, and
+    `chat_template_kwargs={enable_thinking:false, truncate_history_thinking:false}`.
+  - HTTP `200`; `message.content` was non-null (`OK`);
+    `message.reasoning_content` was null; usage was 12 prompt, 2 completion,
+    14 total tokens.
+- Corrected direct math smoke result: PASS with the same
+  `chat_template_kwargs`, using an artifact-local wrapper and 1 AIME + 1 HMMT
+  sample.
+  - Total requests: 2
+  - Status: 2/2 `ok`
+  - Content: 2/2 non-null, 0 null
+  - AIME: parsed 1/1, correct 1/1
+  - HMMT: parsed 1/1, correct 1/1
+  - Runtime: 37.736 seconds in the runner summary
+- Full 27-target benchmark: held; not run without fresh PM approval.
+- Cleanup: PASS. SGLang was stopped after the smoke runs; final verification
+  shows no `:13000` listener, no SGLang processes, and all 8 H200s idle at
+  1 MiB used / 0% utilization.
+- Session 4 evidence summary:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/task210_session4_evidence_summary.md`
+- Key artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/copy/manifest_compare_result.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/nemtron/session4_sglang_relaunch_command.txt`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/nemtron/session4_relaunch_ready_state.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/endpoint_smoke/session4_chat_smoke_with_kwargs_sanitized.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs_command.txt`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs/summary.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs/results.jsonl`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/gpu/final_cleanup_verification_after_with_kwargs.log`
 
 ## Session 3 Live Continuation
 

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=5 -->
 
 - Required baseline: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Corrected artifact root:
@@ -29,3 +29,22 @@
 - Session 3 artifacts:
   - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3/task210_session3_evidence_summary.md`
   - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3/endpoint_smoke/endpoint_smoke_sanitized.json`
+- Session 4 staged model path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/staged_model/Qwen3-30B-A3B-Instruct-2507`.
+- Session 4 serving command uses the staged model path, `--port 13000`,
+  `--tensor-parallel-size 8`, and `--reasoning-parser qwen3`.
+- Qwen/SGLang schema finding: requests without
+  `chat_template_kwargs={enable_thinking:false, truncate_history_thinking:false}`
+  can return `message.content=null` with text in reasoning fields, which breaks
+  the direct corrected-math parser. Include those kwargs in sanitized smoke and
+  direct math smoke requests.
+- Corrected Session 4 endpoint smoke artifact:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/endpoint_smoke/session4_chat_smoke_with_kwargs_sanitized.json`.
+- Corrected Session 4 direct math smoke artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs_command.txt`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs/summary.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/eval/direct_corrected_math_live_smoke_with_kwargs/results.jsonl`
+- Final Session 4 cleanup artifact:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/gpu/final_cleanup_verification_after_with_kwargs.log`.
+- Session 5 finalization keeps the full 27-target benchmark held pending fresh
+  PM approval; only evidence/status docs were finalized.

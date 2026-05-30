@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-30
 
@@ -47,3 +47,39 @@
 - Sent PM a blocker report and did not copy, hardlink, download, or stage model
   weights without explicit approval.
 - Ran `git diff --check` and `git diff --cached --check`; both passed.
+
+## Session 4 - 2026-05-30
+
+- PM authorized staging the local CPU-visible Qwen model shards into the
+  task-owned NemTron-visible path under the corrected task210 artifact root.
+- Staged config/tokenizer/index files and all 16 safetensor shards to
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/staged_model/Qwen3-30B-A3B-Instruct-2507`.
+- Verified staging with `copy_exit=0`, 16 visible shards, matching file-size
+  manifest, and matching small-file SHA256 manifest.
+- Launched SGLang from the staged model path on 8 H200 GPUs and port `13000`;
+  initial direct math smoke showed why the old request schema failed:
+  SGLang returned `message.content=null` when Qwen chat template kwargs were
+  omitted.
+- Applied PM's Session 4 schema correction by sending
+  `chat_template_kwargs={enable_thinking:false, truncate_history_thinking:false}`.
+- Reran sanitized endpoint smoke with `max_tokens=8`; it passed with HTTP `200`,
+  `message.content=OK`, and `reasoning_content=null`.
+- Reran direct corrected math live smoke through an artifact-local wrapper that
+  injects the same kwargs; AIME and HMMT limit-1 samples both returned non-null
+  content, parsed boxed answers, and were correct.
+- Did not run the full 27-target benchmark because fresh PM approval is still
+  required.
+- Stopped SGLang after the smoke runs and verified no port `13000` listener, no
+  SGLang processes, and all 8 H200 GPUs idle so task209 can use the node.
+
+## Session 5 - 2026-05-30
+
+- PM reviewed Session 4 artifacts and confirmed staged model, SGLang relaunch,
+  corrected endpoint smoke, direct corrected math smoke, and cleanup evidence
+  were complete and successful.
+- Finalized the evidence-only docs/status/report bookkeeping for the replacement
+  branch head.
+- Kept full 27-target benchmark held; no full benchmark ran without fresh PM
+  approval.
+- No additional live endpoint/eval, training, W&B/cluster deploy, artifact
+  upload, main/master push, or self-merge was performed during finalization.

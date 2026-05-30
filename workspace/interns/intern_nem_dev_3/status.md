@@ -1,6 +1,6 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task210_nemtron_vpn_endpoint_eval_live_s1,SESSION=3 -->
+<!-- METADATA:STATUS=Working,TASK=task210_nemtron_vpn_endpoint_eval_live_s1,SESSION=5 -->
 
 | 字段 | 值 |
 |------|-----|
@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task210_nemtron_vpn_endpoint_eval_live_s1 |
 | PR | Evidence-only; no PR unless bug fix required |
-| Session | 3 |
-| Recent Progress | Task210 live continuation attempted: NemTron was idle, SGLang launch on 8 H200s exited before readiness because NemTron sees only config/tokenizer/index at the Qwen model path and no safetensor shards; no live request/eval/full benchmark ran; cleanup state is no port 13000 listener, no compute apps, GPUs idle; Session 3 artifacts saved under /mnt/cephfs/data/processing/nemotron-live-validation/task210/session3 |
+| Session | 5 |
+| Recent Progress | Task210 finalization: PM accepted Session 4 evidence; staged model, SGLang relaunch, corrected endpoint smoke, direct AIME/HMMT 1+1 math smoke, and cleanup all passed; full 27-target benchmark held pending fresh PM approval; docs/status ready for evidence-only branch push |
