@@ -18,3 +18,5 @@
 - Ran focused pytest, py_compile, Ruff, structured static probe, scoped
   stale-link grep, added-line live-surface scan, `git diff --check`, and
   `git diff --cached --check`.
+- Opened PR #305 to `main` at implementation head
+  `c7035d4c84eb774f351dc08f9539d829440875c6`.

@@ -27,7 +27,9 @@
 
 - Base: `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`
 - Branch: `intern_nem_dev_1/task198_embed_recipe_upstream_doc_links_revision_pins_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/305
+- Validated implementation head: `c7035d4c84eb774f351dc08f9539d829440875c6`
+- PR state: open, mergeable, merge state `CLEAN`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/embed/test_upstream_doc_links_revision_pins.py`
     -> 2 passed.
