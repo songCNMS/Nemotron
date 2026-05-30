@@ -1,6 +1,18 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-05-30
+
+- Stop-hook follow-up required a task206 Session 2 history entry after the
+  evidence report was pushed.
+- Confirmed branch
+  `intern_nem_dev_2/task206_qwen_sft_train_stack_unblock_probe_s1` remains the
+  active evidence branch and that Session 1 already contains the completed
+  probe results.
+- Added this Session 2 bookkeeping entry only; no additional probes, product
+  changes, package installs, cluster launches, training/eval, endpoint, W&B,
+  deploy, artifact upload, main/master push, or self-merge were performed.
 
 ## Session 1 - 2026-05-30
 
