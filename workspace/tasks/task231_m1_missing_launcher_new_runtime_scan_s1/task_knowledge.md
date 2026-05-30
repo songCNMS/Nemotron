@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 - Bounded task231 artifact search found only the task225 launcher runtime and
   wheelhouse under `/mnt/cephfs/data/processing/nemotron-live-validation`:
@@ -13,3 +13,5 @@
   described as contamination detection; it is not an exact TerminalBench eval.
 - Exact safe mappings for the five M1 missing targets require a newer
   approved launcher package or benchmark-owner supplied task names/contracts.
+- Stop-hook validation for this workspace expects the active task history file
+  to include an explicit heading for the current session number.

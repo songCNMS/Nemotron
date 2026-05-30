@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 1 - 2026-05-30
 
@@ -19,3 +19,10 @@
   `codec` contamination tasks for TerminalBench/SWE-Bench, ToolTalk/BFCL for
   Tool-Decathlon, and no MCP-Mark mapping.
 - Produced the task231 validation report and mirrored it to the artifact root.
+
+## Session 4 - 2026-05-30
+
+- Fixed stop-hook bookkeeping after branch push: updated task231 metadata to
+  Session 4 and added this explicit Session 4 entry.
+- Re-ran final diff whitespace checks and pushed a replacement task231 branch
+  head with no product code changes.
