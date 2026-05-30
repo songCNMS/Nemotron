@@ -57,7 +57,7 @@ Deploy on a single DGX Spark with 128 GB unified memory using vLLM (nightly) and
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Ultra Base
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Ultra-Base
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/a2adec564cace06edf9f1cd91ba174f4aa2429ec/usage-cookbook/Nemotron-3-Ultra-Base
 :link-type: url
 
 550B total / 55B active parameter base model checkpoint announced at GTC 2026. A starting point for custom fine-tuning and RL post-training pipelines — not yet instruction-tuned.
@@ -84,7 +84,7 @@ Use Nemotron 3 Super with OpenCode, OpenClaw, Kilo Code CLI, and OpenHands via O
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron Nano 2 VL
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Nano2-VL
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/a2adec564cace06edf9f1cd91ba174f4aa2429ec/usage-cookbook/Nemotron-Nano2-VL
 :link-type: url
 
 Notebooks for the 12B multimodal model that unifies visual and textual understanding. Covers NIM inference via build.nvidia.com and local Hugging Face deployment.
@@ -93,7 +93,7 @@ Notebooks for the 12B multimodal model that unifies visual and textual understan
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron Parse v1.1
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Parse-v1.1
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/a2adec564cace06edf9f1cd91ba174f4aa2429ec/usage-cookbook/Nemotron-Parse-v1.1
 :link-type: url
 
 Notebook for the document-parsing VLM that converts PDFs and unstructured documents into structured JSON, LaTeX, and Markdown. Available via NIM at build.nvidia.com.
