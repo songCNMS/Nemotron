@@ -1,6 +1,6 @@
 # task200_safety_guard_v3_guardrails_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -33,6 +33,10 @@
   `intern_nem_dev_3/task200_safety_guard_v3_guardrails_doc_link_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/307
 - Implementation SHA: `83a91f1e2646b48b1d04dee95318eda017527da5`
+- Tested/merged head SHA: `e0b998c75c5ae280562df0b5777cd7ac6a071e79`
+- Merge SHA: `85867c86ed9890845e8508afa6cedad837e971f7`
+- Local main sync: `origin/main` and `main` updated to
+  `85867c86ed9890845e8508afa6cedad837e971f7`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_safety_guard_v3_guardrails_revision_pin.py`
     -> 3 passed
@@ -46,3 +50,7 @@
     text only
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+  - PM merged-main verification -> focused pytest 3 passed, py_compile, Ruff,
+    `git diff --check`, `git diff --cached --check`, scoped stale Guardrails
+    develop-link grep, and structured probe
+    `PM_MERGED_SAFETY_GUARD_V3_GUARDRAILS_LINK_PIN_PROBE_PASS`

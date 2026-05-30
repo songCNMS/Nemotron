@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -20,3 +20,15 @@
 - Ran focused pytest, py_compile, Ruff, structured static probe, added-line
   live-surface scan, and `git diff --check`.
 - Opened PR #307 to `main`: https://github.com/songCNMS/Nemotron/pull/307.
+
+## Session 2 - 2026-05-30
+
+- Received PM closeout: PR #307 passed independent gate, merged, and was
+  verified on main.
+- Recorded tested/merged head
+  `e0b998c75c5ae280562df0b5777cd7ac6a071e79` and new main
+  `85867c86ed9890845e8508afa6cedad837e971f7`.
+- Synced local `main` and `origin/main` to
+  `85867c86ed9890845e8508afa6cedad837e971f7`.
+- Updated status to Idle / Current Task None and preserved the static-only
+  no-live-run/no-main-push boundaries.
