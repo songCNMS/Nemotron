@@ -28,6 +28,56 @@ AUTOMODEL_COOKBOOK = (
     REPO_ROOT
     / "usage-cookbook/Nemotron-3-Nano-Omni/automodel/automodel_training_cookbook.md"
 )
+SUPER3_UPSTREAM_DOC_LINK_SCOPE = (
+    REPO_ROOT / "docs/nemotron/super3/README.md",
+    REPO_ROOT / "docs/nemotron/super3/pretrain.md",
+    REPO_ROOT / "docs/nemotron/super3/sft.md",
+    REPO_ROOT / "docs/nemotron/super3/quantization.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/index.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/rlvr.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/rlhf.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/swe.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/README.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage2_swe1/README.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage2_swe2/README.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage3_rlhf/README.md",
+)
+
+MUTABLE_SUPER3_UPSTREAM_LINKS = (
+    "https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/super-v3/",
+    "https://github.com/NVIDIA-NeMo/RL/blob/super-v3/",
+)
+PINNED_SUPER3_MEGATRON_BRIDGE_DOC_LINK = (
+    "https://github.com/NVIDIA-NeMo/Megatron-Bridge/blob/"
+    f"{SUPER_V3_SHA}/docs/models/llm/nemotron3-super.md"
+)
+PINNED_SUPER3_NEMO_RL_EXAMPLES_LINK = (
+    "https://github.com/NVIDIA-NeMo/RL/blob/"
+    f"{NEMO_RL_SUPER_V3_SHA}/examples/nemotron_3_super/README.md"
+)
+PINNED_SUPER3_NEMO_RL_GUIDE_LINK = (
+    "https://github.com/NVIDIA-NeMo/RL/blob/"
+    f"{NEMO_RL_SUPER_V3_SHA}/docs/guides/nemotron-3-super.md"
+)
+
+SUPER3_MEGATRON_BRIDGE_LINK_DOCS = (
+    REPO_ROOT / "docs/nemotron/super3/README.md",
+    REPO_ROOT / "docs/nemotron/super3/pretrain.md",
+    REPO_ROOT / "docs/nemotron/super3/sft.md",
+    REPO_ROOT / "docs/nemotron/super3/quantization.md",
+)
+SUPER3_NEMO_RL_EXAMPLES_LINK_DOCS = (
+    REPO_ROOT / "docs/nemotron/super3/rl/index.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/rlvr.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/rlhf.md",
+    REPO_ROOT / "docs/nemotron/super3/rl/swe.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage1_rlvr/README.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage3_rlhf/README.md",
+)
+SUPER3_NEMO_RL_GUIDE_LINK_DOCS = (
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage2_swe1/README.md",
+    REPO_ROOT / "src/nemotron/recipes/super3/stage2_rl/stage2_swe2/README.md",
+)
 
 
 def _read(path: Path) -> str:
@@ -59,6 +109,28 @@ def test_super3_megatron_bridge_docs_pin_super_v3_revision() -> None:
             sha=SUPER_V3_SHA,
         )
         assert "git checkout super-v3" not in _read(path)
+
+
+def test_super3_upstream_doc_links_pin_super_v3_revisions() -> None:
+    _assert_lower_sha(SUPER_V3_SHA)
+    _assert_lower_sha(NEMO_RL_SUPER_V3_SHA)
+    scoped_text = "\n".join(_read(path) for path in SUPER3_UPSTREAM_DOC_LINK_SCOPE)
+
+    assert "super-v3" in scoped_text
+
+    for path in SUPER3_UPSTREAM_DOC_LINK_SCOPE:
+        text = _read(path)
+        for mutable_link in MUTABLE_SUPER3_UPSTREAM_LINKS:
+            assert mutable_link not in text, f"{path} still uses {mutable_link}"
+
+    for path in SUPER3_MEGATRON_BRIDGE_LINK_DOCS:
+        assert PINNED_SUPER3_MEGATRON_BRIDGE_DOC_LINK in _read(path), path
+
+    for path in SUPER3_NEMO_RL_EXAMPLES_LINK_DOCS:
+        assert PINNED_SUPER3_NEMO_RL_EXAMPLES_LINK in _read(path), path
+
+    for path in SUPER3_NEMO_RL_GUIDE_LINK_DOCS:
+        assert PINNED_SUPER3_NEMO_RL_GUIDE_LINK in _read(path), path
 
 
 def test_nano3_megatron_bridge_docs_pin_nano_v3_revision() -> None:

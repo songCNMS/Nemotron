@@ -231,7 +231,7 @@ All RL stages use the base NeMo-RL container:
 nvcr.io/nvidia/nemo-rl:v0.5.0.nemotron_3_super
 ```
 
-To build the container yourself (e.g. for ARM), see the [upstream training guide](https://github.com/NVIDIA-NeMo/RL/blob/super-v3/examples/nemotron_3_super/README.md).
+To build the container yourself (e.g. for ARM), see the [upstream training guide](https://github.com/NVIDIA-NeMo/RL/blob/bb0a7d43931950a74522e159f7117543a87b580b/examples/nemotron_3_super/README.md).
 
 #### SWE Container
 

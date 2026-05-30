@@ -81,7 +81,7 @@ SLURM_ACCOUNT=$SLURM_ACCOUNT \
 bash super_launch.sh
 ```
 
-See the [upstream training guide](https://github.com/NVIDIA-NeMo/RL/blob/super-v3/examples/nemotron_3_super/README.md) for full details on environment variables.
+See the [upstream training guide](https://github.com/NVIDIA-NeMo/RL/blob/bb0a7d43931950a74522e159f7117543a87b580b/examples/nemotron_3_super/README.md) for full details on environment variables.
 
 ## References
 
