@@ -36,3 +36,14 @@
   artifact root and recorded a local visibility manifest.
 - Stopped live validation per PM one-run boundary; no second launch or
   workaround was attempted.
+
+## Session 2 - 2026-05-30
+
+- Stop-hook audit flagged invalid `Blocked` status metadata in the intern
+  status file; corrected dev status to legal `Idle` with `Current Task None`.
+- Kept the task214 evidence and blocker unchanged:
+  `PACKED_COMPAT_STEP_BRIDGE_STATE_INJECTION_DETECTION`.
+- Recorded that PM routed the product fix to dev_1 task215 and dev_2 has no
+  active task after pushing the evidence-only task214 branch.
+- No train launch, package mutation, endpoint, benchmark, full train, main push,
+  or self-merge was run during this correction.

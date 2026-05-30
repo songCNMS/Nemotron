@@ -1,6 +1,6 @@
 # task214_qwen_sft_one_iter_post_task213_live_s1
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,ASSIGNEE=intern_nem_dev_2,SESSION=2 -->
 
 ## Scope
 
