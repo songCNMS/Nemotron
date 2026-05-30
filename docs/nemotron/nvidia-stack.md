@@ -65,7 +65,7 @@ Distribute MoE experts across GPUs, which is central to Nemotron's sparse MoE ar
 
 ### Documentation
 
-- [Megatron-Core GitHub](https://github.com/NVIDIA/Megatron-LM/tree/main/megatron/core)
+- [Megatron-Core GitHub](https://github.com/NVIDIA/Megatron-LM/tree/6e0d14a68e8defd1e2b65826a1d689b98bfdc62a/megatron/core)
 - [Parallelism Tutorial](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/features/parallelisms.html)
 
 ## Megatron-Bridge
