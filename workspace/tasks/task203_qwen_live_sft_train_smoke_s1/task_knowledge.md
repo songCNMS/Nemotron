@@ -15,3 +15,18 @@
   `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
 - Dry-run command must set `SUPER3_M1_TRAINING_PROFILE=qwen`,
   `artifacts.wandb=false`, and `artifacts.manifest.root=null`.
+- Session 1 evidence:
+  - Dry-run passed with `rc=0` in 3s.
+  - Resolved train script:
+    `src/nemotron/recipes/super3/stage1_sft/test_train.py`.
+  - Resolved packed data path:
+    `/work-agents/intern_nemontron_code_reading/outputs/task071_qwen30b_a3b_hard_math_clean_final_v8/packed_qwen/splits`.
+  - Resolved tokenizer path:
+    `/mnt/3fs/data/shared_models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+  - Resolved `training_contract.model_profile`: `qwen`.
+  - Resolved checkpoint save path:
+    `/tmp/nemotron-live-validation/task203/checkpoints`.
+  - Focused validators passed with `33 passed, 2 skipped`.
+  - Live one-iteration smoke was skipped because `torch`, `megatron`, and
+    `megatron.bridge` are not installed/importable in `/work-agents/.venv`, the
+    requested Qwen path is absent, and CUDA availability cannot be established.
