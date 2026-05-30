@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task192_super3_cookbook_index_doc_links_revision_pins_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task195_super3_quantization_model_optimizer_doc_link_revision_pin_s1,SESSION=1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task192_super3_cookbook_index_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/299 |
+| Current Task | task195_super3_quantization_model_optimizer_doc_link_revision_pin_s1 |
+| PR | Not opened yet |
 | Session | 1 |
-| Recent Progress | PR #299 opened for task192 after focused pytest, py_compile, Ruff, structured static probe, added-line live-surface scan, and diff checks passed |
+| Recent Progress | Started task195 from main a2adec564cace06edf9f1cd91ba174f4aa2429ec; scoped Super3 quantization Model Optimizer doc-link pin and focused static docs test in progress |

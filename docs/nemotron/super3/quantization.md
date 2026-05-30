@@ -15,7 +15,7 @@ Two quantized checkpoints are released:
 | **FP8** (W8A8) | Hopper (H100) | FP8 weights and activations | Balanced accuracy/throughput |
 | **NVFP4** (W4A4) | Blackwell (B200) | NVFP4 weights and activations | 1.5--2.2x higher GEMM FLOPS than FP8 |
 
-Both checkpoints are produced using [Model Optimizer](https://github.com/NVIDIA/Model-Optimizer/tree/main/examples/llm_ptq) PTQ with [Megatron-Bridge](../nvidia-stack.md#megatron-bridge).
+Both checkpoints are produced using [Model Optimizer](https://github.com/NVIDIA/Model-Optimizer/tree/40a4dd326d8eed63d3153611201341a32bfab329/examples/llm_ptq) PTQ with [Megatron-Bridge](../nvidia-stack.md#megatron-bridge).
 
 ---
 
