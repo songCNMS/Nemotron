@@ -1,6 +1,6 @@
 # task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -27,6 +27,8 @@
   `intern_nem_dev_1/task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/302
 - Validated implementation head: `c25eb4fe954d606a708177662ac476e67b04e9f1`
+- Follow-up PR-ready status head before Session 2 bookkeeping:
+  `e59f0b725fc7c86ceb2310f2504b55668b94fbaa`
 - PR state: open, mergeable, merge state `CLEAN`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_nvidia_stack_megatron_core_revision_pin.py`
