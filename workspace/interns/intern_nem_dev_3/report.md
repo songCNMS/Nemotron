@@ -1,5 +1,26 @@
 # intern_nem_dev_3 Report
 
+## 2026-05-30 22:10 UTC - task226_qwen_m1_m2_full_benchmark_gap_audit_s1
+
+- Status: complete; gap audit and release checklist produced; benchmark execution remains HOLD.
+- Branch: `intern_nem_dev_3/task226_qwen_m1_m2_full_benchmark_gap_audit_s1`
+- Base SHA: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root: `/mnt/cephfs/data/processing/nemotron-live-validation/task226`
+- Scope delivered:
+  - Read task221 prepared plan/artifacts and task223 verified live endpoint/eval evidence.
+  - Generated `target_inventory.json` with 19 M1 targets, 14 M1 launcher-available targets, 5 M1 missing exact launcher mappings, 8 M2 config/runtime targets, and 27 total targets.
+  - Generated `release_checklist.md`, held/run command templates, and `validation_report.md`.
+  - Listed exact config/registry/mapping paths, M2 missing asset/API/database/sandbox/baseline surfaces, required official runtime dependency, expected outputs, pass/fail validators, and updated wall-clock estimates.
+- Key artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task226/validation_report.md`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task226/target_inventory.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task226/release_checklist.md`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task226/commands`
+- Blockers:
+  - M1 subset remains blocked until task225 supplies an approved runtime with `nemo_evaluator_launcher` module and `nemo-evaluator-launcher` CLI.
+  - Full 27-target benchmark remains blocked by five M1 missing exact launcher mappings plus all M2 live asset/API/database/sandbox/Qwen3.5-122B-A10B baseline gaps.
+- Boundaries observed: no SGLang launch, endpoint request, eval/benchmark run, package install/build, model copy, process kill, W&B, cluster/deploy, artifact upload, product code edit, main/master push, or self-merge.
+
 ## 2026-05-21 12:41:52 UTC - task026_m2_swe_multi_harness_s1
 
 - Status: PR ready for PM gate

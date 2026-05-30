@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Scoped notebook:
   `usage-cookbook/Llama-3.1-Nemotron-Safety-Guard-V3/nim_cookbook.ipynb`.

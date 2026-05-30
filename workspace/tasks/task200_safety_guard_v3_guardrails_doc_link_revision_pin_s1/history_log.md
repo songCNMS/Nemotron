@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -20,3 +20,9 @@
 - Ran focused pytest, py_compile, Ruff, structured static probe, added-line
   live-surface scan, and `git diff --check`.
 - Opened PR #307 to `main`: https://github.com/songCNMS/Nemotron/pull/307.
+
+## Session 2 - 2026-05-30
+
+- Session bookkeeping update only. Active PM assignment for this turn was
+  `task226_qwen_m1_m2_full_benchmark_gap_audit_s1`; no task200 product,
+  notebook, test, or PR changes were made.
