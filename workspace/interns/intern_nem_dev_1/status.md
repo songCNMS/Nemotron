@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task188_nano_omni_grpo_cookbook_doc_links_revision_pins_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/295 |
 | Session | 1 |
-| Recent Progress | Branched from `main` `a655174376be9b1880fc9b756cc37af76590f747`; scoped Nano-Omni GRPO notebook doc links pinned and focused static test extended |
+| Recent Progress | Opened PR #295 for task188 at head `fe83e181cfa19922a9aec9569a9bc600fa0668ee`; focused notebook/static checks passed |

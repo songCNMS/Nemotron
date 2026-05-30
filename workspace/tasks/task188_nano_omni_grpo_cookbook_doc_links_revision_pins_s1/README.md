@@ -25,7 +25,8 @@
 
 - Base: `a655174376be9b1880fc9b756cc37af76590f747`
 - Branch: `intern_nem_dev_1/task188_nano_omni_grpo_cookbook_doc_links_revision_pins_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/295
+- Head: `fe83e181cfa19922a9aec9569a9bc600fa0668ee`
 - Checks: focused notebook pytest, py_compile, Ruff, structured notebook
   probe, scoped stale-link grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check` passed.
