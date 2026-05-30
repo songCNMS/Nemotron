@@ -14,7 +14,7 @@
 
 # Base configuration for biencoder fine-tuning using nemo-automodel
 # This file provides defaults that will be overridden by the Nemotron CLI
-# Source: https://github.com/NVIDIA-NeMo/Automodel/blob/main/examples/biencoder/llama3_2_1b_biencoder.yaml
+# Source: https://github.com/NVIDIA-NeMo/Automodel/blob/7dc827ca9108b2e45eb3beaba8a3cd148bfc658f/examples/biencoder/llama3_2_1b_biencoder.yaml
 
 seed: 42
 

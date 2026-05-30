@@ -37,7 +37,7 @@
 
 Exports fine-tuned embedding models to ONNX format and optionally converts
 to TensorRT for optimized inference. Based on the NeMo Export-Deploy tutorial:
-https://github.com/NVIDIA-NeMo/Export-Deploy/blob/main/tutorials/onnx_tensorrt/embedding/llama_embedding.ipynb
+https://github.com/NVIDIA-NeMo/Export-Deploy/blob/e025bcd888d92ae226cccd4556f0a790bf714ec7/tutorials/onnx_tensorrt/embedding/llama_embedding.ipynb
 
 Usage:
     # With default config
@@ -74,28 +74,58 @@ class ExportConfig(RecipeSettings):
     model_config = ConfigDict(extra="forbid")
 
     # Model path
-    model_path: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage2_finetune/checkpoints/LATEST/model/consolidated", description="Path to fine-tuned HuggingFace model checkpoint.")
+    model_path: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage2_finetune/checkpoints/LATEST/model/consolidated",
+        description="Path to fine-tuned HuggingFace model checkpoint.",
+    )
 
     # Model settings
-    pooling_mode: Literal["avg", "cls", "last"] = Field(default="avg", description="Pooling method in the embedding model (avg, cls, last).")
+    pooling_mode: Literal["avg", "cls", "last"] = Field(
+        default="avg",
+        description="Pooling method in the embedding model (avg, cls, last).",
+    )
     normalize: bool = Field(default=True, description="Whether to L2 normalize embeddings in the model.")
-    attn_implementation: Literal["eager", "sdpa", "flash_attention_2"] = Field(default="eager", description="Attention implementation: 'eager', 'sdpa', or 'flash_attention_2'.")
-    use_dimension_arg: bool = Field(default=True, description="Whether dimension argument is used in the model forward function.")
+    attn_implementation: Literal["eager", "sdpa", "flash_attention_2"] = Field(
+        default="eager",
+        description="Attention implementation: 'eager', 'sdpa', or 'flash_attention_2'.",
+    )
+    use_dimension_arg: bool = Field(
+        default=True,
+        description="Whether dimension argument is used in the model forward function.",
+    )
 
     # Quantization settings
-    quant_cfg: Literal["fp8", "int8_sq"] | None = Field(default=None, description="Quantization config: 'fp8', 'int8_sq', or None (no quantization).")
+    quant_cfg: Literal["fp8", "int8_sq"] | None = Field(
+        default=None,
+        description="Quantization config: 'fp8', 'int8_sq', or None (no quantization).",
+    )
     calibration_batch_size: int = Field(default=64, gt=0, description="Batch size for quantization calibration.")
 
     # ONNX export settings
-    onnx_export_path: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export/onnx", description="Output path for ONNX model.")
+    onnx_export_path: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export/onnx",
+        description="Output path for ONNX model.",
+    )
     opset: int = Field(default=17, gt=0, description="ONNX opset version.")
-    export_dtype: Literal["fp32", "fp16"] = Field(default="fp32", description="ONNX export data precision (fp32, fp16).")
+    export_dtype: Literal["fp32", "fp16"] = Field(
+        default="fp32",
+        description="ONNX export data precision (fp32, fp16).",
+    )
 
     # TensorRT settings
     export_to_trt: bool = Field(default=False, description="Whether to export ONNX model to TensorRT.")
-    trt_model_path: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export/tensorrt", description="Output path for TensorRT .plan file.")
-    override_layernorm_precision_to_fp32: bool = Field(default=True, description="Whether to override LayerNorm precision to fp32 for stability.")
-    override_layers_to_fp32: list[str] = Field(default_factory=lambda: ["/model/norm/", "/pooling_module", "/ReduceL2", "/Div"], description="Layer patterns to override precision to fp32.")
+    trt_model_path: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export/tensorrt",
+        description="Output path for TensorRT .plan file.",
+    )
+    override_layernorm_precision_to_fp32: bool = Field(
+        default=True,
+        description="Whether to override LayerNorm precision to fp32 for stability.",
+    )
+    override_layers_to_fp32: list[str] = Field(
+        default_factory=lambda: ["/model/norm/", "/pooling_module", "/ReduceL2", "/Div"],
+        description="Layer patterns to override precision to fp32.",
+    )
     profiling_verbosity: str = Field(default="layer_names_only", description="TensorRT profiling verbosity level.")
 
     # TensorRT input profiles (min, opt, max shapes)
@@ -113,13 +143,20 @@ class ExportConfig(RecipeSettings):
         if self.trt_opt_batch > self.trt_max_batch:
             raise ValueError(f"trt_opt_batch ({self.trt_opt_batch}) must be <= trt_max_batch ({self.trt_max_batch})")
         if self.trt_min_seq_len > self.trt_opt_seq_len:
-            raise ValueError(f"trt_min_seq_len ({self.trt_min_seq_len}) must be <= trt_opt_seq_len ({self.trt_opt_seq_len})")
+            raise ValueError(
+                f"trt_min_seq_len ({self.trt_min_seq_len}) must be <= trt_opt_seq_len ({self.trt_opt_seq_len})"
+            )
         if self.trt_opt_seq_len > self.trt_max_seq_len:
-            raise ValueError(f"trt_opt_seq_len ({self.trt_opt_seq_len}) must be <= trt_max_seq_len ({self.trt_max_seq_len})")
+            raise ValueError(
+                f"trt_opt_seq_len ({self.trt_opt_seq_len}) must be <= trt_max_seq_len ({self.trt_max_seq_len})"
+            )
         return self
 
     # Output settings
-    output_dir: Path = Field(default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export", description="Base output directory for export artifacts.")
+    output_dir: Path = Field(
+        default_factory=lambda: _OUTPUT_BASE / "output/embed/stage4_export",
+        description="Base output directory for export artifacts.",
+    )
 
 
 def load_embedding_model(
@@ -141,9 +178,8 @@ def load_embedding_model(
     Returns:
         Tuple of (model, tokenizer).
     """
-    from nemo_export.model_adapters.embedding.embedding_adapter import Pooling, LlamaBidirectionalHFAdapter
-    from transformers import AutoTokenizer, AutoModel
-
+    from nemo_export.model_adapters.embedding.embedding_adapter import LlamaBidirectionalHFAdapter, Pooling
+    from transformers import AutoModel, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=trust_remote_code)
     pooling_mode = pooling_mode or "avg"
@@ -332,7 +368,7 @@ def export_onnx_to_tensorrt(onnx_exporter: Any, cfg: ExportConfig) -> None:
             }
         ]
 
-    print(f"  Converting to TensorRT...")
+    print("  Converting to TensorRT...")
     print(f"    Batch sizes: min={cfg.trt_min_batch}, opt={cfg.trt_opt_batch}, max={cfg.trt_max_batch}")
     print(f"    Seq lengths: min={cfg.trt_min_seq_len}, opt={cfg.trt_opt_seq_len}, max={cfg.trt_max_seq_len}")
 
@@ -373,8 +409,8 @@ def run_export(cfg: ExportConfig) -> dict:
     Returns:
         Dictionary with export paths.
     """
-    print(f"🚀 Embedding Model Export to ONNX/TensorRT")
-    print(f"=" * 60)
+    print("🚀 Embedding Model Export to ONNX/TensorRT")
+    print("=" * 60)
     print(f"Model path:      {cfg.model_path}")
     print(f"Pooling mode:    {cfg.pooling_mode}")
     print(f"Normalize:       {cfg.normalize}")
@@ -384,7 +420,7 @@ def run_export(cfg: ExportConfig) -> dict:
     print(f"Export to TRT:   {cfg.export_to_trt}")
     if cfg.export_to_trt:
         print(f"TRT output:      {cfg.trt_model_path}")
-    print(f"=" * 60)
+    print("=" * 60)
     print()
 
     # Validate model path exists
@@ -412,11 +448,11 @@ def run_export(cfg: ExportConfig) -> dict:
         normalize=cfg.normalize,
         attn_implementation=cfg.attn_implementation,
     )
-    print(f"   Model loaded successfully")
+    print("   Model loaded successfully")
     print()
 
     # Step 2: Export to ONNX
-    print(f"📤 Exporting to ONNX...")
+    print("📤 Exporting to ONNX...")
     onnx_exporter = export_to_onnx(model, tokenizer, cfg)
     print(f"   ONNX model saved to: {cfg.onnx_export_path}")
     print()
@@ -427,13 +463,13 @@ def run_export(cfg: ExportConfig) -> dict:
 
     # Step 4: Export to TensorRT (optional)
     if cfg.export_to_trt:
-        print(f"⚡ Exporting to TensorRT...")
+        print("⚡ Exporting to TensorRT...")
         export_onnx_to_tensorrt(onnx_exporter, cfg)
         results["trt_path"] = str(cfg.trt_model_path)
         print(f"   TensorRT engine saved to: {cfg.trt_model_path}")
         print()
 
-    print(f"✅ Export complete!")
+    print("✅ Export complete!")
     print(f"   ONNX model:     {cfg.onnx_export_path}")
     if cfg.export_to_trt:
         print(f"   TensorRT model: {cfg.trt_model_path}")
