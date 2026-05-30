@@ -12,3 +12,4 @@
   `https://github.com/NVIDIA-NeMo/Guardrails/blob/develop/docs/getting-started/installation-guide.md`.
 - Pinned scoped link:
   `https://github.com/NVIDIA-NeMo/Guardrails/blob/a6fc06f7c3d28b84f3b5c2759ce2366dc8fac5de/docs/getting-started/installation-guide.md`.
+- PR: https://github.com/songCNMS/Nemotron/pull/307.

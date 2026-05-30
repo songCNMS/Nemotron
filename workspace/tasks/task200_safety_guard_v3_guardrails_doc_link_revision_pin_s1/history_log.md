@@ -19,3 +19,4 @@
   and clear touched markdown cells.
 - Ran focused pytest, py_compile, Ruff, structured static probe, added-line
   live-surface scan, and `git diff --check`.
+- Opened PR #307 to `main`: https://github.com/songCNMS/Nemotron/pull/307.
