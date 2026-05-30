@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - Status
 
-<!-- METADATA:STATUS=Working,TASK=task211_qwen_sft_mamba_packed_seq_params_compat_s1,ROLE=dev,SESSION=2 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=3 -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task211_qwen_sft_mamba_packed_seq_params_compat_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/309 |
-| Session | 2 |
-| Recent Progress | PR #309 open and mergeable; final checks passed; pushing Session 2 status/report closeout |
+| Status | Idle |
+| Current Task | None |
+| PR | None |
+| Session | 3 |
+| Recent Progress | task211 PR #309 merged to main as f65dafdb15b28342c1fbd4a5ead807052bcdd264; closeout branch in progress |

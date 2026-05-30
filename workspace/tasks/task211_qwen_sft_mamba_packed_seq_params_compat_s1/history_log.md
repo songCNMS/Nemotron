@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-30
 
@@ -36,3 +36,18 @@
 - Re-ran focused pytest, py_compile, Ruff, structured dispatch/config probe,
   `git diff --check`, and `git diff --cached --check` before pushing the
   Session 2 status/docs closeout.
+
+## Session 3 - 2026-05-30
+
+- Received PM closeout notice: task211 PR #309 merged to `main` as
+  `f65dafdb15b28342c1fbd4a5ead807052bcdd264` after replacement exact-head
+  gate PASS.
+- Synced local `main` to `origin/main`
+  `f65dafdb15b28342c1fbd4a5ead807052bcdd264`.
+- Created closeout/status branch
+  `intern_nem_dev_1/task211_closeout_status_s3`.
+- Updated task README, task knowledge session metadata, dev status, and
+  `/work-agents/intern_nem_dev_1/report.md` for merged closeout.
+- Kept closeout to status/docs/report only; no product code edits or live
+  train/package install/endpoint/benchmark/W&B/cluster/deploy/artifact upload
+  were run.

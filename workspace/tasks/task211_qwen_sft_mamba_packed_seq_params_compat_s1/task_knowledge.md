@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 - Task209 Session 6 failure log:
   `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/02_session6_canonical_one_iter_torchrun.log`.
@@ -17,3 +17,6 @@
 - Compatibility rule: keep `packed_seq_params` for model forward chains that
   explicitly accept it; drop it only when common `.module` unwrapping reaches a
   leaf forward that does not accept the keyword.
+- PR #309 merged to `main` as
+  `f65dafdb15b28342c1fbd4a5ead807052bcdd264` after replacement exact-head
+  gate PASS on final PR head `0880c34fe80e15a2c43c01d92fc6a5a724ae48f2`.

@@ -1,6 +1,6 @@
 # task211_qwen_sft_mamba_packed_seq_params_compat_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=3 -->
 
 ## Scope
 
@@ -26,6 +26,12 @@
 - PR: https://github.com/songCNMS/Nemotron/pull/309
 - Implementation head at PR open:
   `5d53b2396288c0a0cd4f570e0b22300d2468747e`.
+- Final gated head:
+  `0880c34fe80e15a2c43c01d92fc6a5a724ae48f2`.
+- Merge commit on `main`:
+  `f65dafdb15b28342c1fbd4a5ead807052bcdd264`.
+- Closeout branch:
+  `intern_nem_dev_1/task211_closeout_status_s3`.
 - PR state at open: open, mergeable, merge state `CLEAN`.
 - Session 2 closeout: status/report docs updated after PR open; current PR
   head is reported in `/work-agents/intern_nem_dev_1/report.md`.
@@ -48,6 +54,12 @@
   - `git diff --cached --check` -> passed before implementation commit.
   - Session 2 final `git diff --check` / `git diff --cached --check` ->
     passed before docs/status closeout commit.
-- Blockers: none currently.
+- Merge/closeout:
+  - PR #309 was merged to `main` as
+    `f65dafdb15b28342c1fbd4a5ead807052bcdd264` after replacement exact-head
+    gate PASS.
+  - Local `main` was fast-forwarded to the merge commit.
+  - Dev status set to Idle / Current Task None.
+- Blockers: none.
 - Residual risk: no live training rerun performed per PM boundary; verification
   is static/unit coverage plus the prior task209 live failure log.
