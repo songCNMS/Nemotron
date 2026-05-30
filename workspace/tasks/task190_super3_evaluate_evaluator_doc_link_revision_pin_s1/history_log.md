@@ -26,3 +26,7 @@
 - Scope and boundaries remain unchanged: only
   `docs/nemotron/super3/evaluate.md`, focused docs/static test, and task/status
   docs; no Nano-Omni files, task189 files, Omni3 docs, or other Super3 docs.
+- Reran focused pytest, py_compile, Ruff, structured static probe, added-line
+  live-surface scan, `git diff --check`, and `git diff --cached --check` on the
+  replacement base.
+- Opened PR #297 to `main`: https://github.com/songCNMS/Nemotron/pull/297.
