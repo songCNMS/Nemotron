@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Working Notes
 
@@ -17,3 +17,9 @@
 
 - Session 3 is bookkeeping-only after stop-hook audit; no new product or
   validation knowledge was added.
+
+## Session 4 Notes
+
+- Session 4 is an exact-head bookkeeping correction after PM held PR #293 due
+  to the previous ready note naming a superseded head.
+- No new product or validation knowledge was added.
