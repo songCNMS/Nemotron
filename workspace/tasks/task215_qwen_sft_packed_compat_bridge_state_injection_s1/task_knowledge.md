@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Megatron-Bridge `prepare_forward_step_func` injects GlobalState only when a
   forward-step function exposes a compatible annotation or its first parameter
@@ -14,3 +14,6 @@
 - The adapter first parameter must be named `state`, and Bridge-injected runtime
   behavior should be modeled as `partial(forward_step, state)(data_iterator,
   model)`.
+- Closeout note: PR #311 merged this fix into `main` at
+  `1d037329f5a02cdc04f2a09a16e7342721be4c87`; no new product behavior was
+  added during closeout.

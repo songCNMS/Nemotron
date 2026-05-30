@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - Status
 
-<!-- METADATA:STATUS=Working,TASK=task215_qwen_sft_packed_compat_bridge_state_injection_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=2 -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task215_qwen_sft_packed_compat_bridge_state_injection_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/311 |
-| Session | 1 |
-| Recent Progress | Opened PR #311 for packed compat Bridge state injection; focused and broader SFT/Qwen checks passed |
+| Session | 2 |
+| Recent Progress | Task215 PR #311 merged to main at 1d037329f5a02cdc04f2a09a16e7342721be4c87; closeout docs updated |

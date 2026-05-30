@@ -1,6 +1,6 @@
 # task215_qwen_sft_packed_compat_bridge_state_injection_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -26,7 +26,12 @@
 - PR: https://github.com/songCNMS/Nemotron/pull/311
 - Implementation head at PR open:
   `51fc113044039887410c8a4ff9da807940fc41ac`.
-- PR state at open: open, mergeable, merge state `CLEAN`.
+- Replacement ready-for-gate head:
+  `3538f89b3885cc5f9f8c0523f83d144ad55daac8`.
+- PR state: merged to `main` at
+  `1d037329f5a02cdc04f2a09a16e7342721be4c87`.
+- Closeout branch:
+  `intern_nem_dev_1/task215_closeout_status_s2`.
 - Current implementation:
   - Renamed `packed_compat_step.forward_step` first parameter to `state` so
     Bridge state-injection detection can wrap it before Megatron-Core schedule
@@ -50,4 +55,5 @@
   - `git diff --check` -> passed.
   - `git diff --cached --check` -> passed before implementation commit.
 - Blockers: none currently.
+- Blockers at closeout: none.
 - Residual risk: no live SFT training rerun per PM boundary.
