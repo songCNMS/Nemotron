@@ -11,6 +11,8 @@ run:
 # The tiny Super3 model provider and recipe are defined in test_train.py.
 # run.train_script above tells the CLI to use it instead of train.py.
 
+step_function: super3_packed_seq_compat_gpt_step
+
 dataset:
   super3_packed_sft_dir: ${art:data,path}
   seq_length: ${art:data,pack_size}
