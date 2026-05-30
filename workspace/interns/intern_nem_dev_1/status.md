@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task198_embed_recipe_upstream_doc_links_revision_pins_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1,ROLE=dev,SESSION=1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
 | Status | Working |
-| Current Task | task198_embed_recipe_upstream_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/305 |
+| Current Task | task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/308 |
 | Session | 1 |
-| Recent Progress | Opened PR #305 for PM gate; focused static checks passed |
+| Recent Progress | Opened PR #308 for PM gate; focused static checks passed |

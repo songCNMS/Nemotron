@@ -76,7 +76,7 @@ At 1K GPU scale, intermittent failures from hardware and software issues require
 ## Prerequisites
 
 - **NeMo-RL repo**: Clone the `super-v3` branch of [NeMo-RL](https://github.com/NVIDIA-NeMo/RL)
-- **Sandbox container**: Required for code execution environments (NeMo-Skills tools, Lean4 proof verification). See [NeMo-Skills Dockerfile](https://github.com/NVIDIA-NeMo/Skills/blob/main/dockerfiles/Dockerfile.sandbox).
+- **Sandbox container**: Required for code execution environments (NeMo-Skills tools, Lean4 proof verification). See [NeMo-Skills Dockerfile](https://github.com/NVIDIA-NeMo/Skills/blob/f53fb0b9d84a09411b0d13c21ea08a3ae9141d2a/dockerfiles/Dockerfile.sandbox).
 
 ## Usage
 
