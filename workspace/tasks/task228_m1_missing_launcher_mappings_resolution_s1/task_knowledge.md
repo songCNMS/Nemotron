@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 - `m1_eval_launcher_mapping.yaml` intentionally separates the intended M1
   benchmark registry from concrete `nemo-evaluator-launcher` task names.
@@ -22,3 +22,5 @@
 - ToolTalk and BFCL are tool-use tasks but are not safe replacements for
   Tool-Decathlon without benchmark-owner confirmation and an exact scoring
   contract.
+- Workspace stop-hook status metadata accepts only `Idle` or `Working`; for an
+  evidence branch awaiting PM disposition, use `Working`.

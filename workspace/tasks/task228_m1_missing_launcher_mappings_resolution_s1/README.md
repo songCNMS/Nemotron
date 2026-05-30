@@ -1,6 +1,6 @@
 # task228_m1_missing_launcher_mappings_resolution_s1
 
-<!-- METADATA:STATUS=ReadyForPM,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nem_dev_1,SESSION=3 -->
 
 ## Scope
 
@@ -30,6 +30,8 @@
   `workspace/tasks/task228_m1_missing_launcher_mappings_resolution_s1/validation_report.md`.
 - Decision: no product config/test changes. Existing `status=missing` rows in
   `m1_eval_launcher_mapping.yaml` remain correct for launcher `0.2.5`.
+- Workspace status: evidence/status branch pushed; task remains `Working`
+  pending PM disposition because no PR/merge closeout has occurred.
 
 ## Evidence
 

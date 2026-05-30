@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-30
 
@@ -22,3 +22,12 @@
   `swe_bench_verified`.
 - Chose evidence/status branch outcome instead of product config changes
   because all found candidates are semantically unsafe substitutions.
+
+## Session 3 - 2026-05-30
+
+- Fixed stop-hook bookkeeping after the evidence/status branch push: changed
+  repo-local intern status metadata from an invalid ready-for-PM label to
+  allowed `Working`, recorded Session 3 in task docs, and kept task228 open
+  pending PM disposition because no PR/merge closeout occurred.
+- Re-ran final diff whitespace checks after the bookkeeping update and pushed
+  a replacement task228 branch head.
