@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Scoped notebook:
   `usage-cookbook/Nemotron-3-Super/grpo-dapo/grpo_training_cookbook.ipynb`.
@@ -14,3 +14,6 @@
 - Preserve visible `super-v3` branch context prose; the executable checkout
   remains pinned and guarded by the previous task's contract.
 - PR: https://github.com/songCNMS/Nemotron/pull/294.
+- Closeout: PR #294 merged and verified on `main` at
+  `512910a3466012fef675dbcb35b93750e0eba4b4`; tested/merged head was
+  `f2b51ec0c58915b8c1a55bd3de14bc7ed849b12a`.

@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=None,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
-| Status | Working |
-| Current Task | task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/294 |
-| Session | 1 |
-| Recent Progress | PR #294 opened for task187 after focused pytest, py_compile, Ruff, structured notebook probe, added-line live-surface scan, and diff checks passed |
+| Session | 2 |
+| Recent Progress | PR #294 merged and verified on main 512910a3466012fef675dbcb35b93750e0eba4b4; local main/origin main synced, closeout docs recorded, no live runs or main push |

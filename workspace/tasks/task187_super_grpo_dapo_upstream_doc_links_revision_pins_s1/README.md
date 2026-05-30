@@ -1,6 +1,6 @@
 # task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -27,6 +27,10 @@
   `intern_nem_dev_3/task187_super_grpo_dapo_upstream_doc_links_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/294
 - Implementation SHA: `5bd77089555a9ce9f2531fa26daf1f541a80941c`
+- Tested/merged head: `f2b51ec0c58915b8c1a55bd3de14bc7ed849b12a`
+- Merge SHA: `512910a3466012fef675dbcb35b93750e0eba4b4`
+- Local main sync: `main` and `origin/main` updated to
+  `512910a3466012fef675dbcb35b93750e0eba4b4`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_super_grpo_dapo_rl_checkout_revision.py`
     -> 7 passed
@@ -40,3 +44,4 @@
     text only
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+  - PM merged-main verification passed for PR #294.
