@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -19,3 +19,18 @@
 - Ran focused pytest, py_compile, Ruff, structured static probe, added-line
   live-surface scan, `git diff --check`, and `git diff --cached --check`.
 - Opened PR #301 to `main`: https://github.com/songCNMS/Nemotron/pull/301.
+
+## Session 2 - 2026-05-30
+
+- Recorded closeout after PR #301 was squash-merged and verified on `main` at
+  `6325ff21988b8db30c11573dc783a5a8de0276fb`.
+- Synced local `origin/main` and `main` to
+  `6325ff21988b8db30c11573dc783a5a8de0276fb`.
+- PM reported tested/merged head:
+  `b052cf3588424d72acfe2ca317b88e6a0e49437b`.
+- PM merged-main verification passed: focused pytest 2 passed, py_compile,
+  Ruff, diff checks, scoped stale Model Optimizer main-link grep, and structured
+  probe `PM_MERGED_SUPER3_QUANTIZATION_MODEL_OPTIMIZER_PIN_PROBE_PASS`.
+- Set intern status to Idle / Current Task None. No live URL probe,
+  build/download, recipe/data-prep/train/eval, endpoint, W&B, cluster, deploy,
+  artifact ops, direct `main`/`master` push, or self-merge was performed.

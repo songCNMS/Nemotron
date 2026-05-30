@@ -1,6 +1,6 @@
 # task195_super3_quantization_model_optimizer_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
 
 ## Scope
 
@@ -27,6 +27,10 @@
   `intern_nem_dev_3/task195_super3_quantization_model_optimizer_doc_link_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/301
 - Implementation SHA: `3a3b1e64c420c3c2bef7ba08cf1cf94aa6f0e003`
+- Tested/merged head: `b052cf3588424d72acfe2ca317b88e6a0e49437b`
+- Merge SHA: `6325ff21988b8db30c11573dc783a5a8de0276fb`
+- Local main sync: `main` and `origin/main` updated to
+  `6325ff21988b8db30c11573dc783a5a8de0276fb`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_super3_quantization_model_optimizer_revision_pin.py`
     -> 2 passed
@@ -40,3 +44,7 @@
     only
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+  - PM merged-main verification passed: focused pytest 2 passed, py_compile,
+    Ruff, diff checks, scoped stale Model Optimizer main-link grep, and
+    structured probe
+    `PM_MERGED_SUPER3_QUANTIZATION_MODEL_OPTIMIZER_PIN_PROBE_PASS`.
