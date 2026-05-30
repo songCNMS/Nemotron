@@ -1,12 +1,12 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task200_safety_guard_v3_guardrails_doc_link_revision_pin_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task207_qwen_endpoint_eval_unblock_probe_s1,SESSION=1 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_3 |
 | Status | Working |
-| Current Task | task200_safety_guard_v3_guardrails_doc_link_revision_pin_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/307 |
+| Current Task | task207_qwen_endpoint_eval_unblock_probe_s1 |
+| PR | Evidence-only; no PR unless bug fix required |
 | Session | 1 |
-| Recent Progress | PR #307 opened for task200 after focused pytest, py_compile, Ruff, structured static probe, added-line live-surface scan, and diff checks passed |
+| Recent Progress | Task207 evidence collected: corrected math dry-run passed, validators passed 136/8 warnings, Qwen endpoint/model/key unavailable under strict-redacted probe, no live request made, artifacts under /tmp/nemotron-live-validation/task207 |
