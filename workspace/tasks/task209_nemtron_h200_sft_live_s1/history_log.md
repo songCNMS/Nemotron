@@ -1,6 +1,31 @@
 # History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
+
+## Session 7 - 2026-05-30
+
+- Accepted PM stop/finalization instruction after Session 6 observation. No
+  further live launch, train workaround, full benchmark, package install,
+  system mutation, process kill, endpoint, W&B, cluster, deploy, or artifact
+  upload was attempted.
+- Finalized the evidence-only task report with the exact Session 6 outcome:
+  preflight passed with no SGLang/task210 process, no `:13000` listener, no
+  H200 compute apps, and free torchrun master port `29531`; `:8000` remained
+  documented-only and untouched.
+- Session 6 canonical one-GPU Qwen-contract one-iteration smoke launched with
+  `CUDA_VISIBLE_DEVICES=0`, reached model/dataloader setup and the training
+  loop, then failed `rc=1` with `TypeError: MambaModel.forward() got an
+  unexpected keyword argument 'packed_seq_params'`.
+- Checkpoint state remains missing at
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter`.
+  Post-run evidence recorded H200s idle, no compute apps, `:13000` and `:29531`
+  clear, and `:8000` still listening/documented-only.
+- Final Session 6 evidence logs are under
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs`:
+  `01_session6_preflight_port_gpu.log`,
+  `02_session6_canonical_one_iter_torchrun.log`,
+  `03_session6_checkpoint_gpu_state_after_run.log`, and
+  `04_local_visibility_copy_manifest.log`.
 
 ## Session 6 - 2026-05-30
 

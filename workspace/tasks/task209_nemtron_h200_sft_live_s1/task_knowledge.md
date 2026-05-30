@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 - Baseline commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task209_nemtron_h200_sft_live_s1`.
@@ -100,6 +100,14 @@
 - Evidence visibility fix: Session 5 logs `10` through `13` and Session 6 logs
   `01` through `03` were copied from the NemTron namespace into the local-visible
   shared artifact root; manifest with hashes is
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`.
+- Session 7 PM instruction: stop live launches and do not attempt another train
+  workaround. PM is routing a product fix task for the
+  `MambaModel.forward(... packed_seq_params)` blocker.
+- Final Session 6 log paths:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/01_session6_preflight_port_gpu.log`,
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/02_session6_canonical_one_iter_torchrun.log`,
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/03_session6_checkpoint_gpu_state_after_run.log`, and
   `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`.
 - NemTron has no network: do not download packages, models, containers, or run
   `git pull` on NemTron.

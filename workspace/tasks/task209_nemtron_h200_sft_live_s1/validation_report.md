@@ -1,6 +1,6 @@
 # task209 Validation Report
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Baseline
 
@@ -567,3 +567,32 @@ gated on a successful one-iteration step-time measurement. The full task208
 metadata remains `987770` packed sequences and `672687706` tokens across 16
 shards; with `global_batch_size=1`, one full pass would require `987770`
 optimizer iterations.
+
+## Session 7 Evidence Finalization
+
+PM observed Session 6 and directed that live launches stop. No additional train
+launch, workaround, full benchmark, package install, system mutation, process
+kill, endpoint, W&B, cluster, deploy, or artifact upload was attempted after the
+Session 6 canonical run.
+
+Final task209 live evidence is the Session 6 result:
+
+- preflight PASS: no SGLang/task210 process, no `:13000` listener, no H200
+  compute apps, and torchrun master port `29531` free
+- `:8000` remained documented-only and untouched
+- canonical one-GPU Qwen-contract one-iteration smoke launched with
+  `CUDA_VISIBLE_DEVICES=0`
+- run reached model/dataloader setup and the training loop
+- run failed `rc=1` with `TypeError: MambaModel.forward() got an unexpected
+  keyword argument 'packed_seq_params'`
+- checkpoint path
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/checkpoints_one_iter`
+  is missing
+- post-run H200 GPUs were idle and `:13000` / `:29531` were clear
+
+Session 6 logs:
+
+- `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/01_session6_preflight_port_gpu.log`
+- `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/02_session6_canonical_one_iter_torchrun.log`
+- `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/03_session6_checkpoint_gpu_state_after_run.log`
+- `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session6/logs/04_local_visibility_copy_manifest.log`
