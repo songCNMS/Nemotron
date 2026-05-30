@@ -1,6 +1,6 @@
 # task218_causal_conv1d_contained_train_stack_unblock_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
 
 ## Scope
 
@@ -29,5 +29,28 @@
   `intern_nem_dev_1/task218_causal_conv1d_contained_train_stack_unblock_s1`.
 - Evidence root:
   `/mnt/cephfs/data/processing/nemotron-live-validation/task218`.
-- Current status: accepted; context inspection and contained artifact probe in
-  progress.
+- Current status: complete; evidence branch ready for PM handoff.
+- Validation report:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task218/validation_report.md`
+  with SHA-256
+  `9bcd69ed88e12533d671321bc147fb20157320bd30d9f3c7bcdb7831eb53af09`.
+- Source artifact:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task218/source_artifacts/causal_conv1d-1.6.2.post1.tar.gz`
+  with SHA-256
+  `245e314ea21064ded7a5bf6b3b842b644aa6f92e45cecfe3e935629744c35ff4`.
+- Built wheel:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task218/wheelhouse/causal_conv1d-1.6.2.post1-cp312-cp312-linux_x86_64.whl`
+  with SHA-256
+  `347a4cf7d1b629162ce891cda40bdf5c20e1fa1da81ccc2e78467828e8f5ce6e`.
+- Installed extension:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task218/pip_target/causal_conv1d_cuda.cpython-312-x86_64-linux-gnu.so`
+  with SHA-256
+  `b9b896d914d4dc90284863335bbc10a93099c2c49cdd969c0e57dcbded9e3497`.
+- Required no-launch import/function probe:
+  `TASK218_IMPORT_FUNCTION_PROBE_PASS`.
+- Optional tiny direct CUDA extension smoke:
+  `TASK218_TINY_CUDA_SMOKE_PASS`.
+- Containment probe without task218 `pip_target`:
+  `TASK218_CONTAINMENT_PROBE_PASS`.
+- Blockers: none for causal-conv1d import/function unblock.
+- Residual risk: no training rerun was launched by task218 boundary.
