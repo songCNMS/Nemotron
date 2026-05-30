@@ -129,8 +129,8 @@ class _PackedSeqParamsFilteringCallable:
 
 
 def forward_step(
-    state_or_data_iterator: Any,
-    data_iterator_or_model: Any,
+    state: Any,
+    data_iterator: Any,
     model: Any | None = None,
     return_schedule_plan: bool = False,
 ):  # pragma: no cover - cluster path
@@ -138,8 +138,10 @@ def forward_step(
 
     Megatron-Bridge has shipped both ``forward_step(data_iterator, model)`` and
     ``forward_step(state, data_iterator, model, return_schedule_plan=False)``.
-    Keep both call shapes so local static tests and runtime Bridge training use
-    the same compatibility adapter.
+    The first parameter is intentionally named ``state`` so Bridge's
+    ``prepare_forward_step_func`` injects GlobalState before Megatron-Core's
+    schedule calls the resulting partial as ``(data_iterator, model)``.  Keep
+    the direct two-argument shape for local static tests.
     """
     try:
         from megatron.bridge.training.gpt_step import forward_step as upstream_forward_step
@@ -151,13 +153,11 @@ def forward_step(
         ) from exc
 
     if model is None:
-        data_iterator = state_or_data_iterator
-        model = data_iterator_or_model
+        direct_data_iterator = state
+        model = data_iterator
         with _drop_unsupported_packed_seq_params(model) as compat_model:
-            return upstream_forward_step(data_iterator, compat_model)
+            return upstream_forward_step(direct_data_iterator, compat_model)
 
-    state = state_or_data_iterator
-    data_iterator = data_iterator_or_model
     with _drop_unsupported_packed_seq_params(model) as compat_model:
         return upstream_forward_step(
             state,
