@@ -1,6 +1,17 @@
 # History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
+
+## Session 4 - 2026-05-30
+
+- While preparing task209, dev_3 asked whether it may start heavy Qwen endpoint
+  serving on NemTron for task210.
+- Replied via peer_send that dev_2/task209 owns heavy NemTron GPU use until
+  dev_2 reports GPU release or PM schedules a handoff; dev_3 may do only
+  non-heavy runtime discovery for now.
+- No additional task206 probes, product changes, package installs, cluster
+  launches, training/eval, endpoint, W&B, deploy, artifact upload, direct
+  `main`/`master` push, or self-merge were performed.
 
 ## Session 3 - 2026-05-30
 

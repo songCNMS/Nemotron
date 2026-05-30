@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 - Base commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task206_qwen_sft_train_stack_unblock_probe_s1`.
@@ -37,3 +37,6 @@
   using the cephfs model path
   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` and
   artifact root `/mnt/cephfs/data/nemotron-live-validation/task209`.
+- Session 4 coordination: dev_2/task209 owns heavy NemTron GPU usage until
+  release or PM handoff; dev_3 should not start heavy endpoint serving before
+  that release.
