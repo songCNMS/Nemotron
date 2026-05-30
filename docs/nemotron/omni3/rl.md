@@ -161,7 +161,7 @@ After RL completes, run benchmarks via `nemotron omni3 model eval` (a dedicated 
 This stage is the cookbook view of the upstream NeMo-RL omni RL flow.
 For the canonical end-to-end walkthrough (build, data prep,
 MPO/text/vision launchers, `.env` setup), see the **[NeMo-RL
-`nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/nano-v3-omni/docs/guides/nemotron-3-nano-omni.md)**.
+`nano-v3-omni` Nemotron 3 Nano Omni guide](https://github.com/NVIDIA-NeMo/RL/blob/98ba11c0a77e177a903cd3756570684437a08e8d/docs/guides/nemotron-3-nano-omni.md)**.
 The Dockerfile in this stage pins `NVIDIA/NeMo-RL @ nano-v3-omni`,
 which carries the omni vllm fork at
 [`aroshanghias-nvd/vllm` `nano-v3-vl`](https://github.com/aroshanghias-nvd/vllm/tree/nano-v3-vl)
@@ -171,7 +171,7 @@ to a versioned tag.
 ## Reference
 
 - **Recipe source:** [`src/nemotron/recipes/omni3/stage1_rl/`](https://github.com/NVIDIA-NeMo/Nemotron/tree/main/src/nemotron/recipes/omni3/stage1_rl) ([README](https://github.com/NVIDIA-NeMo/Nemotron/blob/main/src/nemotron/recipes/omni3/stage1_rl/README.md))
-- **Upstream**: [NeMo-RL `nano-v3-omni` guide](https://github.com/NVIDIA-NeMo/RL/blob/nano-v3-omni/docs/guides/nemotron-3-nano-omni.md)
+- **Upstream**: [NeMo-RL `nano-v3-omni` guide](https://github.com/NVIDIA-NeMo/RL/blob/98ba11c0a77e177a903cd3756570684437a08e8d/docs/guides/nemotron-3-nano-omni.md)
 - [RL data prep deep-dive](./rl/data-prep.md)
 - [Architecture deep-dive](./architecture.md)
 - [Inference & deployment](./inference.md)

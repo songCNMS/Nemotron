@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task183_runspec_docs_url_revision_pin_embed_omni_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Working,TASK=task186_omni3_upstream_doc_links_revision_pins_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
 | Status | Working |
-| Current Task | task183_runspec_docs_url_revision_pin_embed_omni_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/290 |
-| Session | 2 |
+| Current Task | task186_omni3_upstream_doc_links_revision_pins_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/293 |
+| Session | 5 |
 
-最近进展：Opened PR #290 for `task183_runspec_docs_url_revision_pin_embed_omni_s1` after rebasing onto updated `origin/main` `df45842edade40c19fd0496f3844ef20653a94cc`; scope unchanged and the run-spec docs URL remains pinned to PM-specified commit `510b6eec33edece3d212a3187b16db3d1b4a8a15`. Checks passed on the refreshed base: focused pytest, py_compile, Ruff, structured static probe, scoped old-URL grep, added-line live-surface scan, and diff checks. No recipe execution, jobs, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation, main/master push, or self-merge.
+最近进展：PM held PR #293 on replacement base `a655174376be9b1880fc9b756cc37af76590f747` / head `cc8937770fe0c018070c90bb8f0be7988db1124d` because the scoped stale mutable upstream grep still found Omni3 public docs links in `docs/nemotron/omni3/architecture.md`. Rebased the task branch onto `origin/main` `a655174376be9b1880fc9b756cc37af76590f747`, pinned the `architecture.md` Megatron-Bridge and NeMo-RL tree URLs to the task SHAs while preserving branch context prose, and extended focused static test scope. Required checks and replacement exact-head push are in progress. No live git clone/fetch/checkout beyond normal repo sync, build, download, recipe execution, data prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation, main/master push, or self-merge.
