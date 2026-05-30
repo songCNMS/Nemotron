@@ -1,6 +1,6 @@
 # task213_qwen_sft_packed_compat_gpt_step_arity_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=3 -->
 
 ## Scope
 
@@ -26,6 +26,12 @@
 - PR: https://github.com/songCNMS/Nemotron/pull/310
 - Implementation head at PR open:
   `469984005a6c6f9148715c507429a66973ed0231`.
+- Tested/merged head:
+  `d441af6bd9450ba79400a234debb625712da9de7`.
+- Merge commit on `main`:
+  `4fe9454e46343821f68e43c47cdeba1aaf0fef84`.
+- Closeout branch:
+  `intern_nem_dev_1/task213_closeout_status_s3`.
 - PR state at open: open, mergeable, merge state `CLEAN`.
 - Session 2 ready-for-gate docs/status follow-up: committed after PR open;
   replacement exact head is reported in `/work-agents/intern_nem_dev_1/report.md`.
@@ -52,5 +58,10 @@
     `PM_TASK213_PACKED_COMPAT_ARITY_STRUCTURED_PROBE_PASS`.
   - `git diff --check` -> passed.
   - `git diff --cached --check` -> passed before implementation commit.
-- Blockers: none currently.
+- Merge/closeout:
+  - PR #310 merged to `main` as
+    `4fe9454e46343821f68e43c47cdeba1aaf0fef84`.
+  - Local `main` synced to the merge commit.
+  - Dev status set to Idle / Current Task None.
+- Blockers: none.
 - Residual risk: no live SFT training rerun per PM boundary.

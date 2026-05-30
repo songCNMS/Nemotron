@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - Status
 
-<!-- METADATA:STATUS=Working,TASK=task213_qwen_sft_packed_compat_gpt_step_arity_s1,ROLE=dev,SESSION=2 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=3 -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task213_qwen_sft_packed_compat_gpt_step_arity_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/310 |
-| Session | 2 |
-| Recent Progress | PR #310 open; committing and pushing docs/status ready-for-gate update |
+| Status | Idle |
+| Current Task | None |
+| PR | None |
+| Session | 3 |
+| Recent Progress | task213 PR #310 merged to main as 4fe9454e46343821f68e43c47cdeba1aaf0fef84; closeout branch in progress |
