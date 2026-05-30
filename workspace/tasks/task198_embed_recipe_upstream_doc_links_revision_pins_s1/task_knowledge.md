@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Task198 is limited to two Embed recipe upstream links and one focused static
   test.
@@ -11,3 +11,5 @@
 - `export.py` had pre-existing Ruff issues; fixing them in the scoped touched
   file was required for the task's Ruff gate and did not alter runtime
   semantics.
+- PR #305 merged at `ea252765464a50d3b2fc46a5ab7922bf8285a6aa`; closeout only
+  records status/report updates and does not alter product source/tests.

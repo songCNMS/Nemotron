@@ -1,6 +1,6 @@
 # task198_embed_recipe_upstream_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -27,9 +27,14 @@
 
 - Base: `3d75a20d56ba4931457ca91d0fd8fdfe79b37c21`
 - Branch: `intern_nem_dev_1/task198_embed_recipe_upstream_doc_links_revision_pins_s1`
+- Closeout branch:
+  `intern_nem_dev_1/task198_embed_recipe_upstream_doc_links_revision_pins_s1_closeout`
 - PR: https://github.com/songCNMS/Nemotron/pull/305
+- Tested/merged head: `5b7e95713d3f22faadfbe4efc1fe0c423fdb65da`
+- Merge SHA: `ea252765464a50d3b2fc46a5ab7922bf8285a6aa`
 - Validated implementation head: `c7035d4c84eb774f351dc08f9539d829440875c6`
-- PR state: open, mergeable, merge state `CLEAN`.
+- PM merged-main verification: PR #305 independently gated, squash-merged, and
+  verified on main `ea252765464a50d3b2fc46a5ab7922bf8285a6aa`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/embed/test_upstream_doc_links_revision_pins.py`
     -> 2 passed.
