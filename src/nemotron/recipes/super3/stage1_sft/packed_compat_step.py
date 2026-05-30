@@ -128,8 +128,19 @@ class _PackedSeqParamsFilteringCallable:
         return getattr(self._model, name)
 
 
-def forward_step(data_iterator: Any, model: Any):  # pragma: no cover - cluster path
-    """GPT forward step with Mamba packed-sequence keyword compatibility."""
+def forward_step(
+    state_or_data_iterator: Any,
+    data_iterator_or_model: Any,
+    model: Any | None = None,
+    return_schedule_plan: bool = False,
+):  # pragma: no cover - cluster path
+    """GPT forward step with Mamba packed-sequence keyword compatibility.
+
+    Megatron-Bridge has shipped both ``forward_step(data_iterator, model)`` and
+    ``forward_step(state, data_iterator, model, return_schedule_plan=False)``.
+    Keep both call shapes so local static tests and runtime Bridge training use
+    the same compatibility adapter.
+    """
     try:
         from megatron.bridge.training.gpt_step import forward_step as upstream_forward_step
     except ImportError as exc:
@@ -139,8 +150,21 @@ def forward_step(data_iterator: Any, model: Any):  # pragma: no cover - cluster 
             "SFT `step_function`."
         ) from exc
 
+    if model is None:
+        data_iterator = state_or_data_iterator
+        model = data_iterator_or_model
+        with _drop_unsupported_packed_seq_params(model) as compat_model:
+            return upstream_forward_step(data_iterator, compat_model)
+
+    state = state_or_data_iterator
+    data_iterator = data_iterator_or_model
     with _drop_unsupported_packed_seq_params(model) as compat_model:
-        return upstream_forward_step(data_iterator, compat_model)
+        return upstream_forward_step(
+            state,
+            data_iterator,
+            compat_model,
+            return_schedule_plan=return_schedule_plan,
+        )
 
 
 __all__ = [
