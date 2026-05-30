@@ -54,6 +54,28 @@ live pipeline beyond local dry-runs.
   but were not staged or launched because the one-iteration smoke is blocked
   before train start and PM review is required before any continuation.
 
+## Session 4 Evidence Summary
+
+- Searched existing NemTron, VPN, and local offline train-stack resources
+  without mutating system paths. No ready conda/venv/container/wheelhouse was
+  found for the missing train stack.
+- Built a user-owned local wheelhouse and staged it to NemTron at
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/wheelhouse`.
+- Created a user-owned NemTron venv with `--system-site-packages` at
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv`.
+- Installed staged wheels only into that venv. No NemTron network download and
+  no `/usr/bin/python3` or system site-packages mutation was performed.
+- Final venv import probe passed for `nemo_run`, `megatron.energon`,
+  `nvidia_resiliency_ext`, `hydra`, `bracex`, `wcmatch.glob`, `torch`,
+  `megatron`, and `megatron.bridge`; `mamba_ssm` remains missing.
+- Canonical one-iteration smoke with the Qwen contract config reaches Megatron
+  model build, then fails because `MambaSSM is not installed`.
+- A bounded attention-only tiny-pattern probe, launched before PM's GPU hold
+  arrived, reached the training loop but failed with
+  `MambaModel.forward() got an unexpected keyword argument 'packed_seq_params'`.
+- PM placed a GPU scheduling hold because task210 SGLang TP=8 is active on all
+  H200s. No further train launch is allowed until PM explicitly releases GPUs.
+
 ## Boundaries
 
 - No package, model, or container downloads on NemTron.

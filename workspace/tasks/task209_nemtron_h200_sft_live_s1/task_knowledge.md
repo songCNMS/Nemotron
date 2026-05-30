@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 - Baseline commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task209_nemtron_h200_sft_live_s1`.
@@ -30,6 +30,27 @@
   (`total_sequences=987770`, `total_tokens=672687706`, `num_shards=16`,
   `pack_size=4096`, `elapsed_sec=254`). Do not launch full/small continuation
   until PM reviews the one-iteration evidence.
+- Session 4 user-owned wheelhouse path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/wheelhouse`.
+- Session 4 user-owned NemTron venv path:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv`.
+- Session 4 venv import status: `nemo_run`, `megatron.energon`,
+  `nvidia_resiliency_ext`, `hydra`, `bracex`, `wcmatch.glob`, `torch`,
+  `megatron`, and `megatron.bridge` import; `mamba_ssm` does not.
+- Resolver note: normal offline `pip install --no-index` reached Torch metadata
+  requiring `nvidia-cudnn-cu12==9.10.2.21`, while the system has
+  `nvidia-cudnn-cu12==9.16.0.29` and Torch/CUDA imports. Do not downgrade CUDA
+  runtime packages without PM approval.
+- Canonical Qwen-contract smoke config copy:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/m1_agentic_smoke_qwen_contract.yaml`.
+- Canonical one-iteration command remains blocked by missing `mamba-ssm` in the
+  NemTron environment; binary wheel probe for `mamba-ssm` returned no matching
+  distribution from the local package index.
+- Noncanonical attention-only tiny-pattern probe avoided `mamba-ssm` but failed
+  at train-loop forward with `MambaModel.forward() got an unexpected keyword
+  argument 'packed_seq_params'`.
+- PM task210 hold: SGLang TP=8 is active on all NemTron H200s. Do not launch
+  any train smoke until PM explicitly releases GPUs.
 - NemTron has no network: do not download packages, models, containers, or run
   `git pull` on NemTron.
 - dev_2/task209 owns heavy NemTron GPU usage until release or PM handoff.

@@ -1,6 +1,6 @@
 # task209 Validation Report
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Baseline
 
@@ -132,3 +132,133 @@ any continuation.
 
 Post-fallback GPU probe showed eight H200s at 1 MiB used, 0% utilization, and
 no compute processes.
+
+## Session 4 Train-Stack Unblock Probe
+
+Session 4 root:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4`
+
+### Existing Resource Search
+
+Logs:
+
+- NemTron resource search:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/01_nemtron_offline_resource_search.log`
+- Local resource search:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/02b_local_narrow_resource_search.log`
+- VPN resource search:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/03_vpn_offline_resource_search.log`
+
+Result: no ready offline conda/venv/container/wheelhouse was found. Local
+`/work-agents/.venv` had `nemo_run` but no Megatron stack.
+
+### Wheelhouse And Venv
+
+- Local wheelhouse build:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/local_wheelhouse_build`
+- Staged NemTron wheelhouse:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/wheelhouse`
+- User-owned NemTron venv:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv`
+
+Key logs:
+
+- Initial target wheel download:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/04_local_wheelhouse_download_nodeps.log`
+- Dependency presence probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/06_nemtron_dependency_presence_probe.log`
+- Wheelhouse staging:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/08_stage_wheelhouse_to_nemtron.log`
+- Resolver install attempts:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/09_nemtron_create_venv_install_attempt1.log`
+  through
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/21_nemtron_venv_install_attempt4.log`
+- Final no-deps venv install:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/23_nemtron_venv_install_attempt5_nodeps_all_wheels.log`
+- Additional runtime dependency installs:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/26_stage_install_bracex.log`
+  and
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/28_local_stage_install_hydra_core.log`
+
+Final import probe:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/35_session4_final_import_probe_no_launch.log`
+
+Result:
+
+- Import passes: `nemo_run`, `megatron.energon`, `nvidia_resiliency_ext`,
+  `hydra`, `bracex`, `wcmatch.glob`, `torch`, `megatron`, `megatron.bridge`.
+- Import fails: `mamba_ssm`.
+
+No package was installed into `/usr/bin/python3` or system site-packages. NemTron
+network was not used.
+
+### One-Iteration Smoke Attempts
+
+These were run before the PM task210 SGLang GPU hold arrived, except the
+attention-only probe was already in flight when the hold message arrived.
+
+- Venv site-packages run:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/24_session4_direct_torchrun_one_iter.log`
+  failed on missing `bracex`.
+- After `bracex`:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/27_session4_direct_torchrun_one_iter_after_bracex.log`
+  failed on missing `hydra`.
+- After `hydra`:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/29_session4_direct_torchrun_one_iter_after_hydra.log`
+  failed the Qwen training contract because `test_train.py` is not a Qwen
+  entrypoint.
+- CLI entrypoint override attempt:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/30_session4_direct_torchrun_one_iter_with_qwen_entrypoint_override.log`
+  failed because Hydra could not override `training_contract.train_entrypoint`
+  on the Megatron recipe struct.
+- Session4 Qwen contract config:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/m1_agentic_smoke_qwen_contract.yaml`
+- Canonical Qwen-contract run:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/32_session4_direct_torchrun_one_iter_qwen_contract_config.log`
+  reached Megatron model build and failed with `MambaSSM is not installed`.
+- `mamba-ssm` binary probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/33_local_wheelhouse_download_mamba_ssm_binary_probe.log`
+  found no matching binary wheel in the local index.
+- Noncanonical attention-only tiny-pattern probe:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/34_session4_direct_torchrun_one_iter_attention_only_probe.log`
+  reached the training loop and failed with
+  `MambaModel.forward() got an unexpected keyword argument 'packed_seq_params'`.
+
+### GPU Hold
+
+PM issued a scheduling hold because task210 SGLang TP=8 is active on NemTron.
+No further train smoke may be launched until PM explicitly releases GPUs.
+
+GPU state log:
+
+`/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/logs/36_nemtron_gpu_state_after_pm_hold.log`
+
+Result: all eight H200s had `sglang::scheduler_TP*` compute processes with
+about 132 GB allocated per GPU.
+
+### Prepared Command After PM Release
+
+Do not run this until PM releases NemTron GPUs. It is the canonical
+Qwen-contract one-iteration command, but it is expected to remain blocked by
+missing `mamba-ssm` unless PM provides or authorizes a compatible package/env:
+
+```bash
+ssh -o BatchMode=yes NemTron "cd '/mnt/cephfs/data/processing/nemotron-live-validation/task209/Nemotron' && \
+PYTHONPATH='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/venv/lib/python3.12/site-packages:src' \
+NEMO_RUN_DIR='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4' \
+SUPER3_M1_AGENTIC_PACKED_DIR='/mnt/cephfs/data/processing/nemotron-live-validation/task209/input_task208_sample4/splits' \
+SUPER3_M1_TOKENIZER_MODEL=/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507 \
+SUPER3_M1_QWEN_HF_MODEL=/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507 \
+SUPER3_M1_TRAINING_PROFILE=qwen \
+SUPER3_M1_SFT_SMOKE_SAVE='/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/checkpoints_one_iter' \
+CUDA_VISIBLE_DEVICES=0 \
+/usr/local/bin/torchrun --nproc_per_node=1 \
+  src/nemotron/recipes/super3/stage1_sft/test_train.py \
+  --config '/mnt/cephfs/data/processing/nemotron-live-validation/task209/session4/m1_agentic_smoke_qwen_contract.yaml' \
+  train.train_iters=1 \
+  checkpoint.save_interval=1 \
+  artifacts.wandb=false \
+  artifacts.manifest.root=null"
+```
