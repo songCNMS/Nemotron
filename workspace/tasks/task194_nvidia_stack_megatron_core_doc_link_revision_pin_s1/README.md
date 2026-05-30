@@ -25,7 +25,9 @@
 - Base: `a2adec564cace06edf9f1cd91ba174f4aa2429ec`
 - Branch:
   `intern_nem_dev_1/task194_nvidia_stack_megatron_core_doc_link_revision_pin_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/302
+- Validated implementation head: `c25eb4fe954d606a708177662ac476e67b04e9f1`
+- PR state: open, mergeable, merge state `CLEAN`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_nvidia_stack_megatron_core_revision_pin.py`
     -> 2 passed.
@@ -39,3 +41,7 @@
     static test assertions/constants, and task/status docs.
   - `git diff --check` -> passed.
   - `git diff --cached --check` -> passed.
+- Blockers: none for PM gate.
+- Residual risk: static docs/test-only coverage; no live URL probe, build,
+  download, recipe/data-prep, train/eval, endpoint, W&B, cluster, deploy,
+  artifact operation, direct `main`/`master` push, or self-merge was performed.
