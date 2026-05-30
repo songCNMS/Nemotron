@@ -15,6 +15,14 @@ MEGATRON_BRIDGE_REPO = "https://github.com/NVIDIA-NeMo/Megatron-Bridge.git"
 EXPECTED_BRANCH = "nemotron_3_omni"
 STALE_BRANCH = "nemotron-3-omni"
 EXPECTED_REVISION = "648756cb99eed872d9e577243495840b9395a6f7"
+EXPECTED_EXAMPLES_URL = (
+    "https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/"
+    f"{EXPECTED_REVISION}/examples/models/vlm/nemotron_3_omni"
+)
+STALE_EXAMPLES_URL = (
+    "https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/"
+    f"{EXPECTED_BRANCH}/examples/models/vlm/nemotron_3_omni"
+)
 
 
 def _notebook() -> dict[str, object]:
@@ -51,6 +59,17 @@ def _megatron_bridge_setup_cells() -> list[dict[str, object]]:
     ]
 
 
+def _cells_containing(marker: str) -> list[dict[str, object]]:
+    notebook = _notebook()
+    cells = notebook["cells"]
+    assert isinstance(cells, list)
+    return [
+        cell
+        for cell in cells
+        if isinstance(cell, dict) and marker in _cell_text(cell, "source")
+    ]
+
+
 def test_nano_omni_megatron_bridge_setup_uses_exact_revision() -> None:
     setup_cells = _megatron_bridge_setup_cells()
 
@@ -68,10 +87,28 @@ def test_nano_omni_megatron_bridge_branch_context_is_corrected() -> None:
     setup_source = _cell_text(_megatron_bridge_setup_cells()[0], "source")
 
     assert EXPECTED_BRANCH in source
-    assert f"tree/{EXPECTED_BRANCH}/examples/models/vlm/nemotron_3_omni" in source
+    assert f"`{EXPECTED_BRANCH}` branch context" in source
+    assert EXPECTED_EXAMPLES_URL in source
     assert f'git clone -b "${{MEGATRON_BRIDGE_BRANCH}}" {MEGATRON_BRIDGE_REPO}' in setup_source
     assert f"MEGATRON_BRIDGE_BRANCH={EXPECTED_BRANCH}" in setup_source
     assert STALE_BRANCH not in source
+
+
+def test_nano_omni_megatron_bridge_examples_link_is_pinned() -> None:
+    source = _notebook_source()
+
+    assert EXPECTED_EXAMPLES_URL in source
+    assert STALE_EXAMPLES_URL not in source
+
+
+def test_nano_omni_megatron_bridge_examples_link_cell_is_clear() -> None:
+    cells = _cells_containing(EXPECTED_EXAMPLES_URL)
+
+    assert len(cells) == 1
+    cell = cells[0]
+    assert cell["cell_type"] == "markdown"
+    assert cell.get("execution_count") is None
+    assert cell.get("outputs", []) == []
 
 
 def test_nano_omni_megatron_bridge_setup_cell_is_guarded_and_outputs_clear() -> None:
