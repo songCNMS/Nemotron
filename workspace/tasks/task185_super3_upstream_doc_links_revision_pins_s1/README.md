@@ -1,6 +1,6 @@
 # task185_super3_upstream_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=3 -->
 
 ## Scope
 
@@ -25,7 +25,11 @@
 - Base: `f74e7c05668f96766d10c730fcd14ddec7191350`
 - Branch: `intern_nem_dev_1/task185_super3_upstream_doc_links_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/292
+- Merge SHA: `a655174376be9b1880fc9b756cc37af76590f747`
+- Final PR head: `db13cd97ed91cbf2b068f96d6ebcac407250bf38`
 - Validated implementation head: `a832efc15a9e22e745febb96c5f4e8bf6cc9e9f5`
 - Checks: focused docs revision-pin pytest, py_compile, Ruff, structured
   static probe, scoped stale-link grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check` passed.
+- Merged-main verification: PR #292 was squash-merged and verified on main
+  `a655174376be9b1880fc9b756cc37af76590f747`.

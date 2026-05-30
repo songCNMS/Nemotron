@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 - Super3 upstream doc links should use exact upstream commit URLs, while clone
   and checkout snippets can still mention `super-v3` to preserve branch context.
@@ -11,3 +11,5 @@
 - Some scoped files, such as `docs/nemotron/super3/README.md`, can contain a
   pinned upstream link without local `super-v3` prose; branch-context
   preservation is checked across the scoped Super3 docs corpus.
+- Task185 was squash-merged and verified on main
+  `a655174376be9b1880fc9b756cc37af76590f747`.

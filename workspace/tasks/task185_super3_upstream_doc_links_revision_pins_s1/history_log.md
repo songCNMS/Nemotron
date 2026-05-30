@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-29
 
@@ -28,3 +28,11 @@
   stale-link grep, added-line live-surface scan, `git diff --check`, and
   `git diff --cached --check`.
 - Opened PR #292: https://github.com/songCNMS/Nemotron/pull/292
+
+## Session 3 - 2026-05-30
+
+- Synced local `main` to merged `origin/main`
+  `a655174376be9b1880fc9b756cc37af76590f747`; no main/master push was made.
+- Recorded PM closeout for PR #292/task185 after squash merge and merged-main
+  verification.
+- Set intern status to Idle / Current Task None on the closeout branch.
