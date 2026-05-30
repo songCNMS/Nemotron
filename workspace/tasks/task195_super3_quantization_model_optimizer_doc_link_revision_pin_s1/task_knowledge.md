@@ -11,3 +11,4 @@
   `https://github.com/NVIDIA/Model-Optimizer/tree/main/examples/llm_ptq`.
 - Pinned scoped link:
   `https://github.com/NVIDIA/Model-Optimizer/tree/40a4dd326d8eed63d3153611201341a32bfab329/examples/llm_ptq`.
+- PR: https://github.com/songCNMS/Nemotron/pull/301.
