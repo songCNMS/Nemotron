@@ -23,7 +23,10 @@
 - Base: `4fe9454e46343821f68e43c47cdeba1aaf0fef84`.
 - Branch:
   `intern_nem_dev_1/task215_qwen_sft_packed_compat_bridge_state_injection_s1`.
-- PR: pending.
+- PR: https://github.com/songCNMS/Nemotron/pull/311
+- Implementation head at PR open:
+  `51fc113044039887410c8a4ff9da807940fc41ac`.
+- PR state at open: open, mergeable, merge state `CLEAN`.
 - Current implementation:
   - Renamed `packed_compat_step.forward_step` first parameter to `state` so
     Bridge state-injection detection can wrap it before Megatron-Core schedule
@@ -45,5 +48,6 @@
   - Structured Bridge state-injection / no-live-surface probe ->
     `PM_TASK215_BRIDGE_STATE_INJECTION_STRUCTURED_PROBE_PASS`.
   - `git diff --check` -> passed.
+  - `git diff --cached --check` -> passed before implementation commit.
 - Blockers: none currently.
 - Residual risk: no live SFT training rerun per PM boundary.
