@@ -1,6 +1,6 @@
 # task211_qwen_sft_mamba_packed_seq_params_compat_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -23,7 +23,12 @@
 
 - Base: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_1/task211_qwen_sft_mamba_packed_seq_params_compat_s1`.
-- PR: pending.
+- PR: https://github.com/songCNMS/Nemotron/pull/309
+- Implementation head at PR open:
+  `5d53b2396288c0a0cd4f570e0b22300d2468747e`.
+- PR state at open: open, mergeable, merge state `CLEAN`.
+- Session 2 closeout: status/report docs updated after PR open; current PR
+  head is reported in `/work-agents/intern_nem_dev_1/report.md`.
 - Current implementation:
   - Added `super3_packed_seq_compat_gpt_step` dispatch target.
   - Routed the tiny Stage1 SFT smoke config through the compatibility step.
@@ -37,7 +42,12 @@
     -> passed.
   - `/work-agents/.venv/bin/ruff check src/nemotron/recipes/super3/stage1_sft/packed_compat_step.py src/nemotron/recipes/super3/stage1_sft/step_dispatch.py tests/recipes/super3/test_sft_forward_step_dispatch.py tests/recipes/super3/test_sft_packed_compat_step.py`
     -> passed after import formatting fix.
+  - Structured dispatch/config probe ->
+    `PM_TASK211_PACKED_COMPAT_STRUCTURED_PROBE_PASS`.
   - `git diff --check` -> passed.
+  - `git diff --cached --check` -> passed before implementation commit.
+  - Session 2 final `git diff --check` / `git diff --cached --check` ->
+    passed before docs/status closeout commit.
 - Blockers: none currently.
 - Residual risk: no live training rerun performed per PM boundary; verification
   is static/unit coverage plus the prior task209 live failure log.

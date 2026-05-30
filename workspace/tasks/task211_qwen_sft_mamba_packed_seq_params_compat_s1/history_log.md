@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -20,3 +20,19 @@
 - Added focused tests for the Mamba-like no-`packed_seq_params` path, the
   packed-aware preservation path, dispatch registration, and tiny smoke config
   wiring.
+- Ran focused pytest, py_compile, Ruff, structured dispatch/config probe,
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #309 to `main` at implementation head
+  `5d53b2396288c0a0cd4f570e0b22300d2468747e`.
+
+## Session 2 - 2026-05-30
+
+- Confirmed PR #309 is open against `main`, head branch
+  `intern_nem_dev_1/task211_qwen_sft_mamba_packed_seq_params_compat_s1`,
+  and merge state `CLEAN`.
+- Updated task README, dev status, and `/work-agents/intern_nem_dev_1/report.md`
+  with PR URL, base, implementation head, changed-file scope, validation, and
+  residual risk.
+- Re-ran focused pytest, py_compile, Ruff, structured dispatch/config probe,
+  `git diff --check`, and `git diff --cached --check` before pushing the
+  Session 2 status/docs closeout.
