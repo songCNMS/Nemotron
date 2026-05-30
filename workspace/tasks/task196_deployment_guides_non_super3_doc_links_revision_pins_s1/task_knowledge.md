@@ -11,3 +11,4 @@
   - `https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Ultra-Base`
   - `https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Nano2-VL`
   - `https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Parse-v1.1`
+- PR: https://github.com/songCNMS/Nemotron/pull/303.
