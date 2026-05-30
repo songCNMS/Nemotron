@@ -10,3 +10,4 @@
   `https://github.com/NVIDIA/nemotron/tree/main/src/nemotron/recipes/data/sdg/long-document`.
 - Pinned URL prefix:
   `https://github.com/NVIDIA/nemotron/tree/306b2f1217e000b5972155c1f2b1ba6660c994bd/src/nemotron/recipes/data/sdg/long-document`.
+- PR: https://github.com/songCNMS/Nemotron/pull/306.

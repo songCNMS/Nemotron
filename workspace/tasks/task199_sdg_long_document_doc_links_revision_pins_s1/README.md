@@ -26,5 +26,20 @@
 - Base: `e690bdac75ae5a85e1a167e3553d631d29732d32`
 - Original assignment base: `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`
 - Branch: `intern_nem_dev_2/task199_sdg_long_document_doc_links_revision_pins_s1`
-- PR: Pending
-- Checks: Pending
+- PR: https://github.com/songCNMS/Nemotron/pull/306
+- Implementation SHA: `9a69561b55e5069bb92552d61a660de95f4a4025`
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_sdg_long_document_revision_pins.py`
+    -> 1 passed
+  - `/work-agents/.venv/bin/python -m py_compile tests/docs/test_sdg_long_document_revision_pins.py`
+    -> passed
+  - `/work-agents/.venv/bin/ruff check tests/docs/test_sdg_long_document_revision_pins.py`
+    -> passed
+  - Structured static probe ->
+    `PM_TASK199_SDG_LONG_DOCUMENT_DOC_LINK_PIN_PROBE_PASS`
+  - Added-line live-surface scan -> expected pinned SDG long-document doc URLs
+    and static test/task docs only
+  - Scoped stale product-doc grep for `tree/main` long-document links -> no
+    matches
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed

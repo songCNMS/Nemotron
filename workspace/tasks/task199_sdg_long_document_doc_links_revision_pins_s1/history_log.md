@@ -17,3 +17,7 @@
 - Boundaries recorded: no live URL probe, build/download, recipe execution,
   SDG data generation, data-prep/train/eval, endpoint, W&B, cluster, deploy,
   artifact operation, direct `main`/`master` push, or self-merge.
+- Ran focused pytest, py_compile, Ruff, structured static probe, added-line
+  live-surface scan, scoped stale product-doc grep, `git diff --check`, and
+  `git diff --cached --check` on the refreshed base.
+- Opened PR #306 to `main`: https://github.com/songCNMS/Nemotron/pull/306.
