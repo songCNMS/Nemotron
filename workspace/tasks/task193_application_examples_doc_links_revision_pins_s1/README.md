@@ -1,6 +1,6 @@
 # task193_application_examples_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2,SESSION=2 -->
 
 ## Scope
 
@@ -26,6 +26,8 @@
 - Branch: `intern_nem_dev_2/task193_application_examples_doc_links_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/300
 - Implementation SHA: `d7ae289d03e03efde244d48a52efd986d89bd5c9`
+- Tested/merged head: `a51b6eb3f89bd1b98c7b9ab09acb3df63e192d56`
+- Merged main: `a2adec564cace06edf9f1cd91ba174f4aa2429ec`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_application_examples_revision_pins.py`
     -> 1 passed

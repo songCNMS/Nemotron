@@ -1,13 +1,13 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task193_application_examples_doc_links_revision_pins_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task193_application_examples_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/300 |
-| Session | 1 |
+| Status | Idle |
+| Current Task | None |
+| PR | None |
+| Session | 2 |
 
-最近进展：Opened PR #300 for `task193_application_examples_doc_links_revision_pins_s1` on base `89a6da531c4c693da585a7cc9ac96c51492bffa4`. Scoped change pins the seven self-repo `use-case-examples` links in `docs/application-examples.md` to `89a6da531c4c693da585a7cc9ac96c51492bffa4` and adds focused docs/static coverage. Required focused pytest, py_compile, Ruff, structured probe, live-surface scan, and diff checks passed. Static-only boundaries preserved: no live ops, no main/master push, and no self-merge.
+最近进展：PR #300 / task193 was squash-merged and verified on `main` at `a2adec564cace06edf9f1cd91ba174f4aa2429ec` with tested head `a51b6eb3f89bd1b98c7b9ab09acb3df63e192d56`. Local `main` was fast-forwarded to the merged commit, and Session 2 closeout is being recorded on branch `intern_nem_dev_2/task193_application_examples_doc_links_revision_pins_s1_closeout_sync`. Current task is None / Idle. No live URL/build/download/recipe/data-prep/train/eval/endpoint/W&B/cluster/deploy/artifact operation, main/master push, or self-merge.
