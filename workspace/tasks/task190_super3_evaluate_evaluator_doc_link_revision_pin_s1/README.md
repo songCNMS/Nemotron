@@ -1,6 +1,6 @@
 # task190_super3_evaluate_evaluator_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_2,SESSION=2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2,SESSION=3 -->
 
 ## Scope
 
@@ -27,6 +27,8 @@
   `intern_nem_dev_2/task190_super3_evaluate_evaluator_doc_link_revision_pin_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/297
 - Implementation SHA: `40df6c7a7a72278389a3ca6c66453cbe671750bc`
+- Tested/merged head: `c80fd9696984fc251b9c7d9574bcb87a8d7864a6`
+- Merged main: `89a6da531c4c693da585a7cc9ac96c51492bffa4`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_super3_evaluate_evaluator_revision_pin.py`
     -> 1 passed
