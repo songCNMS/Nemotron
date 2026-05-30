@@ -12,6 +12,7 @@ NEMO_RL_SHA = "98ba11c0a77e177a903cd3756570684437a08e8d"
 
 SCOPED_DOCS = (
     REPO_ROOT / "docs/nemotron/omni3/README.md",
+    REPO_ROOT / "docs/nemotron/omni3/architecture.md",
     REPO_ROOT / "docs/nemotron/omni3/sft.md",
     REPO_ROOT / "docs/nemotron/omni3/rl.md",
     REPO_ROOT / "src/nemotron/recipes/omni3/stage0_sft/README.md",

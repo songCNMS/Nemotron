@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 history
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-29
 
@@ -41,6 +41,26 @@
 - Boundaries preserved: no live git clone/fetch/checkout, build, download,
   recipe execution, data prep, train/eval, endpoint, W&B, cluster, deploy,
   artifact operation, `main`/`master` push, or self-merge.
+
+## Session 5 - 2026-05-30
+
+- PM held PR #293 on replacement base
+  `a655174376be9b1880fc9b756cc37af76590f747` and head
+  `cc8937770fe0c018070c90bb8f0be7988db1124d` because scoped stale mutable
+  upstream grep still found Omni3 public docs links in
+  `docs/nemotron/omni3/architecture.md`.
+- Rebased the task branch onto `origin/main`
+  `a655174376be9b1880fc9b756cc37af76590f747`.
+- Pinned the `architecture.md` Megatron-Bridge `tree/nemotron_3_omni` link to
+  `648756cb99eed872d9e577243495840b9395a6f7` and the NeMo-RL
+  `tree/nano-v3-omni` link to
+  `98ba11c0a77e177a903cd3756570684437a08e8d`, preserving the visible branch
+  context prose.
+- Extended the focused static docs test scope to include
+  `docs/nemotron/omni3/architecture.md`.
+- No Super3 docs, PR #291 Qwen files, runtime code, recipe execution, data
+  prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation,
+  `main`/`master` push, or self-merge.
 
 ## Session 3 - 2026-05-29
 

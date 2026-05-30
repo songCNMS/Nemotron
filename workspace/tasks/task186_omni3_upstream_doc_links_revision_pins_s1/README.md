@@ -5,7 +5,7 @@
 Status: In progress
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task186_omni3_upstream_doc_links_revision_pins_s1`
-Base: `f74e7c05668f96766d10c730fcd14ddec7191350`
+Base: `a655174376be9b1880fc9b756cc37af76590f747`
 Original assignment base: `c76c51dba5e8796d7b7f12c25fcd172f4c9c8bfa`
 PR: https://github.com/songCNMS/Nemotron/pull/293
 
@@ -17,6 +17,7 @@ so docs references do not drift while preserving branch names in visible prose.
 ## Scope
 
 - `docs/nemotron/omni3/README.md`
+- `docs/nemotron/omni3/architecture.md`
 - `docs/nemotron/omni3/sft.md`
 - `docs/nemotron/omni3/rl.md`
 - `src/nemotron/recipes/omni3/stage0_sft/README.md`
@@ -44,6 +45,7 @@ so docs references do not drift while preserving branch names in visible prose.
 - PASS: `/work-agents/.venv/bin/python -m py_compile tests/docs/test_omni3_upstream_doc_links_revision_pins.py`
 - PASS: `/work-agents/.venv/bin/ruff check tests/docs/test_omni3_upstream_doc_links_revision_pins.py`
 - PASS: structured static probe for scoped branch-link removal, exact SHA links, and preserved branch context prose
+- PASS: scoped stale mutable upstream grep over Omni3 docs/recipe READMEs
 - PASS: added-line live-surface scan; hits are static GitHub URL pins, static tests, and task/status docs only
 - PASS: `git diff --check`
 - PASS: `git diff --cached --check`

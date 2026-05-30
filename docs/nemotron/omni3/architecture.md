@@ -95,5 +95,5 @@ The model is released under the **NVIDIA Nemotron Open Model License**, which pe
 - **[Release blog](https://developer.nvidia.com/blog/nvidia-nemotron-3-nano-omni-powers-multimodal-agent-reasoning-in-a-single-efficient-open-model/)** — the canonical positioning + benchmark source for this doc
 - **[Model weights — `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16)**
 - **[Image training data — `nvidia/Nemotron-Image-Training-v3`](https://huggingface.co/datasets/nvidia/Nemotron-Image-Training-v3)**
-- **Upstream pre-training recipe**: [`NVIDIA-NeMo/Megatron-Bridge` `nemotron_3_omni`](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/nemotron_3_omni/examples/models/vlm/nemotron_3_omni)
-- **Upstream RL recipe**: [`NVIDIA-NeMo/RL` `nano-v3-omni`](https://github.com/NVIDIA-NeMo/RL/tree/nano-v3-omni)
+- **Upstream pre-training recipe**: [`NVIDIA-NeMo/Megatron-Bridge` `nemotron_3_omni`](https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/648756cb99eed872d9e577243495840b9395a6f7/examples/models/vlm/nemotron_3_omni)
+- **Upstream RL recipe**: [`NVIDIA-NeMo/RL` `nano-v3-omni`](https://github.com/NVIDIA-NeMo/RL/tree/98ba11c0a77e177a903cd3756570684437a08e8d)

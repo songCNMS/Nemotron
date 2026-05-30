@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Notes
 
@@ -23,3 +23,9 @@
 - Session 4 is an exact-head bookkeeping correction after PM held PR #293 due
   to the previous ready note naming a superseded head.
 - No new product or validation knowledge was added.
+
+## Session 5 Notes
+
+- PM's scoped stale mutable upstream grep includes Omni3 public docs beyond the
+  original README list. `docs/nemotron/omni3/architecture.md` is in task scope
+  for the same Megatron-Bridge and NeMo-RL branch-link pinning contract.
