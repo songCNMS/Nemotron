@@ -1,5 +1,30 @@
 # intern_nem_dev_3 Report
 
+## 2026-05-30 20:45 UTC - task221_qwen_eval_full_benchmark_prepare_s1
+
+- Status: evidence/preparation complete; live endpoint/eval HOLD pending PM release after task220.
+- Branch: `intern_nem_dev_3/task221_qwen_eval_full_benchmark_prepare_s1`
+- Base SHA: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root: `/mnt/cephfs/data/processing/nemotron-live-validation/task221`
+- Scope delivered:
+  - Prepared exact held SGLang launch command for the task210 NemTron-visible staged Qwen model path.
+  - Prepared sanitized endpoint smoke request/command with `chat_template_kwargs.enable_thinking=false` and `truncate_history_thinking=false`.
+  - Prepared corrected math smoke command, M1 launcher-available subset command, and full 27-target M1/M2 run plan.
+  - Verified local stable model visibility and NemTron staged model visibility without starting endpoint or using H200 compute.
+  - Recorded target inventory: 19 M1 intended targets, 14 M1 launcher-available targets, 5 M1 missing mappings, 8 M2 config-only/runtime-deferred targets.
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/super3/test_qwen_eval_repro_gate.py tests/recipes/super3/test_benchmark_alignment_path_guards.py tests/recipes/super3/test_m1_eval_full_basket.py tests/recipes/super3/test_m2_eval_basket_s1.py tests/recipes/super3/test_m2_eval_basket_s2.py` -> 136 passed, 8 warnings.
+  - Corrected math exact-command dry-run -> passed.
+  - M1 launcher-available exact-command dry-run -> passed.
+  - Prompt/no-secret scan -> no secret values in prepared commands; dry-run logs include placeholder env var names only.
+- Blockers/residual risk:
+  - PM release required before H200 SGLang serving or live eval.
+  - Must recheck NemTron GPU/process/port state at release time.
+  - Local CPU cannot see staged model path; NemTron can.
+  - Local `/work-agents/.venv` lacks `nemo_evaluator_launcher`; official live eval needs an evaluator runtime with it.
+  - Five M1 exact launcher mappings and all M2 runtime assets remain unresolved for full 27-target benchmark.
+  - Full benchmark was held/not run.
+
 ## 2026-05-21 12:41:52 UTC - task026_m2_swe_multi_harness_s1
 
 - Status: PR ready for PM gate
