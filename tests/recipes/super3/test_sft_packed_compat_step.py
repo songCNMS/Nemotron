@@ -4,6 +4,7 @@ import inspect
 import sys
 import types
 from collections.abc import Callable
+from functools import partial
 from typing import Any
 
 from nemotron.recipes.super3.stage1_sft import packed_compat_step
@@ -74,12 +75,17 @@ def _two_arg_upstream(data_iterator: Any, model: Any) -> tuple[Any, Any]:
     return output, lambda output_tensor: output_tensor
 
 
-def test_packed_compat_step_signature_supports_state_aware_bridge_arity() -> None:
+def test_packed_compat_step_signature_requests_bridge_state_injection() -> None:
+    """Bridge injects GlobalState when the first parameter is named ``state``.
+
+    This keeps the runtime schedule call ``partial(forward_step, state)(
+    data_iterator, model)`` on the state-aware upstream gpt_step path.
+    """
     signature = inspect.signature(packed_compat_step.forward_step)
 
     assert list(signature.parameters) == [
-        "state_or_data_iterator",
-        "data_iterator_or_model",
+        "state",
+        "data_iterator",
         "model",
         "return_schedule_plan",
     ]
@@ -102,7 +108,7 @@ def test_packed_compat_step_keeps_existing_two_arg_stub_behavior() -> None:
     assert leaf.calls == [{"tokens": "batch", "position_ids": None}]
 
 
-def test_packed_compat_step_drops_packed_seq_params_for_state_aware_mamba_like_leaf() -> None:
+def test_packed_compat_step_bridge_partial_drops_packed_seq_params_for_mamba_like_leaf() -> None:
     upstream_calls: list[dict[str, Any]] = []
 
     def state_aware_upstream(
@@ -127,7 +133,8 @@ def test_packed_compat_step_drops_packed_seq_params_for_state_aware_mamba_like_l
 
     _install_stub_gpt_step(state_aware_upstream)
     try:
-        output, _loss = packed_compat_step.forward_step("state", data_iterator, model)
+        bridge_injected_step = partial(packed_compat_step.forward_step, "state")
+        output, _loss = bridge_injected_step(data_iterator, model)
     finally:
         _remove_stub_gpt_step()
 
@@ -138,7 +145,7 @@ def test_packed_compat_step_drops_packed_seq_params_for_state_aware_mamba_like_l
     ]
 
 
-def test_packed_compat_step_preserves_packed_seq_params_for_state_aware_supported_leaf() -> None:
+def test_packed_compat_step_bridge_partial_preserves_packed_seq_params_for_supported_leaf() -> None:
     upstream_calls: list[dict[str, Any]] = []
 
     def state_aware_upstream(
@@ -164,12 +171,12 @@ def test_packed_compat_step_preserves_packed_seq_params_for_state_aware_supporte
 
     _install_stub_gpt_step(state_aware_upstream)
     try:
-        output, _loss = packed_compat_step.forward_step(
+        bridge_injected_step = partial(
+            packed_compat_step.forward_step,
             "state",
-            data_iterator,
-            model,
             return_schedule_plan=True,
         )
+        output, _loss = bridge_injected_step(data_iterator, model)
     finally:
         _remove_stub_gpt_step()
 
