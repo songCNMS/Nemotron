@@ -30,7 +30,7 @@ Deployment guides, fine-tuning recipes, and agentic usage examples for Nemotron 
 :gutter: 3
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Super
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/usage-cookbook/Nemotron-3-Super
 :link-type: url
 
 Notebooks for deploying the 120B/12B-active hybrid Mamba-Transformer MoE model with vLLM, SGLang, and TensorRT-LLM.
@@ -39,7 +39,7 @@ Notebooks for deploying the 120B/12B-active hybrid Mamba-Transformer MoE model w
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super — LoRA Text2SQL
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Super/lora-text2sql
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/usage-cookbook/Nemotron-3-Super/lora-text2sql
 :link-type: url
 
 Supervised fine-tuning with LoRA for Text2SQL using the BIRD SQL benchmark. Includes recipes for both NeMo AutoModel and Megatron Bridge.
@@ -48,7 +48,7 @@ Supervised fine-tuning with LoRA for Text2SQL using the BIRD SQL benchmark. Incl
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super on DGX Spark
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Super/SparkDeploymentGuide
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/usage-cookbook/Nemotron-3-Super/SparkDeploymentGuide
 :link-type: url
 
 Deploy on a single DGX Spark with 128 GB unified memory using vLLM (nightly) and TensorRT-LLM, including NVFP4 quantization and MTP speculative decoding.
@@ -66,7 +66,7 @@ Deploy on a single DGX Spark with 128 GB unified memory using vLLM (nightly) and
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super on GRPO/DAPO RL Training
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/usage-cookbook/Nemotron-3-Super/grpo-dapo
 :link-type: url
 
 Full-weight RL training from a base model using the GRPO/DAPO algorithm to reproduce emergent math reasoning. Requires 5× GB200 or 3× B200 nodes.
@@ -75,7 +75,7 @@ Full-weight RL training from a base model using the GRPO/DAPO algorithm to repro
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super on Agentic Coding
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-3-Super/OpenScaffoldingResources
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/usage-cookbook/Nemotron-3-Super/OpenScaffoldingResources
 :link-type: url
 
 Use Nemotron 3 Super with OpenCode, OpenClaw, Kilo Code CLI, and OpenHands via OpenRouter and build.nvidia.com.
