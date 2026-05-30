@@ -1,13 +1,27 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task199_sdg_long_document_doc_links_revision_pins_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Blocked,TASK=task214_qwen_sft_one_iter_post_task213_live_s1,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task199_sdg_long_document_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/306 |
+| Status | Blocked |
+| Current Task | task214_qwen_sft_one_iter_post_task213_live_s1 |
+| PR | evidence-only branch |
 | Session | 1 |
 
-最近进展：Opened PR #306 for `task199_sdg_long_document_doc_links_revision_pins_s1`; assignment base was `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`, and the branch was rebased before PR open to current `origin/main` `e690bdac75ae5a85e1a167e3553d631d29732d32` after main advanced. Scoped change pins the three SDG long-document self-repo links in `docs/nemotron/data/sdg/long-document.md` to `306b2f1217e000b5972155c1f2b1ba6660c994bd` and adds focused docs/static coverage. Required focused pytest, py_compile, Ruff, structured probe, live-surface scan, stale-link grep, and diff checks passed. Static-only boundaries preserved: no live ops, no main/master push, and no self-merge.
+最近进展：Ran the task214 canonical single-GPU Qwen-contract Stage1 SFT
+one-iteration smoke on NemTron from exact merged main
+`4fe9454e46343821f68e43c47cdeba1aaf0fef84` using a task-owned checkout,
+task-owned config with `step_function: super3_packed_seq_compat_gpt_step`,
+task208 sample packed data staged under task209, and the task209 train stack.
+Preflight passed with no SGLang/task210 process, no `:13000`, no H200 compute
+apps, free master port `29561`, and `:8000` documented/untouched. Exactly one
+torchrun was launched and failed after reaching training loop iteration 0 with
+`TypeError: forward_step() missing 1 required positional argument: 'model'`
+from `packed_compat_step.py`; checkpoint path is missing and post-run GPU/port
+cleanup passed. Current blocker:
+`PACKED_COMPAT_STEP_BRIDGE_STATE_INJECTION_DETECTION`: Bridge did not inject
+`GlobalState` because the adapter first parameter was `state_or_data_iterator`,
+then the two-argument branch delegated to state-aware upstream `gpt_step`
+without state. No second run or workaround was attempted.
