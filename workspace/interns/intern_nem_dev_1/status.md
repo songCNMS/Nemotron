@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task191_omni3_self_repo_doc_links_revision_pins_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task191_omni3_self_repo_doc_links_revision_pins_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/298 |
-| Session | 1 |
-| Recent Progress | Opened PR #298 at implementation head `caeca4ffc75131a8a80dcd0ee49bb8f429bcdcee`; focused static docs checks passed |
+| Session | 2 |
+| Recent Progress | PR #298 merged and verified on main `14a3c985a86eb07d68652a5452b54da19a1b0666`; closeout recorded |
