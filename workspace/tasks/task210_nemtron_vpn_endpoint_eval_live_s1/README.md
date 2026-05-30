@@ -1,6 +1,6 @@
 # task210_nemtron_vpn_endpoint_eval_live_s1
 
-<!-- METADATA:STATUS=ReadyForPM,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nem_dev_3,SESSION=3 -->
 
 ## Scope
 
@@ -43,3 +43,25 @@
     `/mnt/cephfs/data/processing/nemotron-live-validation/task210/task210_evidence_summary.json`
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+
+## Session 3 Live Continuation
+
+- Artifact root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3`
+- Prelaunch state: NemTron had no compute apps, no `:13000` listener, and 8
+  H200 GPUs idle at 1 MiB used / 0% utilization.
+- Launch attempted with SGLang PID `1359959` on port `13000`, GPUs `0-7`,
+  `tensor_parallel_size=8`, model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- Launch failed before readiness: SGLang exited while loading weights with
+  `RuntimeError: Cannot find any model weights with` the requested model path.
+- Model-path blocker: NemTron sees config/tokenizer files and
+  `model.safetensors.index.json`, but no `model-000xx-of-00016.safetensors`
+  shards. The local CPU view of the same path has all 16 safetensor shards.
+- Endpoint smoke -> not run because no endpoint became ready.
+- Corrected math live eval and launcher-available M1 subset -> not run because
+  endpoint smoke did not pass.
+- Cleanup state: no SGLang process, no port `13000` listener, no compute apps,
+  all 8 H200s back to 1 MiB used / 0% utilization.
+- Session 3 evidence summary:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3/task210_session3_evidence_summary.md`

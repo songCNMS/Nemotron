@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-30
 
@@ -28,3 +28,22 @@
   use.
 - Ran `git diff --check` and `git diff --cached --check`; both passed.
 - Prepared final docs/status branch for push with corrected artifact paths.
+
+## Session 3 - 2026-05-30
+
+- PM released task210 live continuation after task209 reported NemTron H200 GPUs
+  idle and training blocked before start.
+- Verified NemTron had no compute apps, no port `13000` listener, and 8 H200s
+  idle before launch.
+- Started prepared SGLang endpoint command on NemTron with PID `1359959`,
+  GPUs `0-7`, port `13000`, and model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- SGLang exited before readiness with missing-weight-shard error from the
+  NemTron view of the model path.
+- Confirmed cleanup state: no server process, no `:13000` listener, no compute
+  apps, and all GPUs back idle.
+- Did not run live chat smoke, corrected math live eval, launcher-available M1
+  subset, or full benchmark because endpoint smoke could not pass.
+- Sent PM a blocker report and did not copy, hardlink, download, or stage model
+  weights without explicit approval.
+- Ran `git diff --check` and `git diff --cached --check`; both passed.

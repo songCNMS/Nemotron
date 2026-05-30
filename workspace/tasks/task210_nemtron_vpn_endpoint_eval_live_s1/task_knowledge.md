@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 - Required baseline: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Corrected artifact root:
@@ -18,3 +18,14 @@
   - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/task210_evidence_summary.md`
   - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/task210_evidence_summary.json`
   - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/corrected_artifact_listing.txt`
+- Session 3 blocker:
+  - NemTron sees the Qwen model directory but not the 16
+    `model-000xx-of-00016.safetensors` shards required by
+    `model.safetensors.index.json`.
+  - Local CPU sees the shards at the same path, so the model-path visibility is
+    inconsistent across hosts.
+  - Do not retry SGLang from that path until the NemTron-visible model shards
+    are restored or PM authorizes a specific staging workaround.
+- Session 3 artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3/task210_session3_evidence_summary.md`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task210/session3/endpoint_smoke/endpoint_smoke_sanitized.json`
