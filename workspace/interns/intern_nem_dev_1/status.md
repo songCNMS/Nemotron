@@ -1,12 +1,12 @@
 # intern_nem_dev_1 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1,ROLE=dev,SESSION=1 -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=dev,SESSION=2 -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_1 |
-| Status | Working |
-| Current Task | task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1 |
+| Status | Idle |
+| Current Task | None |
 | PR | https://github.com/songCNMS/Nemotron/pull/308 |
-| Session | 1 |
-| Recent Progress | Opened PR #308 for PM gate; focused static checks passed |
+| Session | 2 |
+| Recent Progress | PR #308 merged and verified on main `0460c1f0262875fb27ae530d30cd80d805752851`; closeout recorded |

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -18,3 +18,11 @@
   stale-link grep, added-line live-surface scan, and `git diff --check`.
 - Opened PR #308 to `main` at implementation head
   `65f95f85532b3fda71aa9625f49e553e93189830`.
+
+## Session 2 - 2026-05-30
+
+- PM reported PR #308/task201 independently gated, merged, and verified.
+- Synced local `main` to `origin/main`
+  `0460c1f0262875fb27ae530d30cd80d805752851`.
+- Recorded closeout status as Idle / Current Task None on closeout branch
+  `intern_nem_dev_1/task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1_closeout`.

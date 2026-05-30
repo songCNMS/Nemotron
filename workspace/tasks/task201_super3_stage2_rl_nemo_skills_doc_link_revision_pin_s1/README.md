@@ -1,6 +1,6 @@
 # task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -27,9 +27,14 @@
 
 - Base: `ea252765464a50d3b2fc46a5ab7922bf8285a6aa`
 - Branch: `intern_nem_dev_1/task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1`
+- Closeout branch:
+  `intern_nem_dev_1/task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1_closeout`
 - PR: https://github.com/songCNMS/Nemotron/pull/308
+- Tested/merged head: `0f1820a6c972e0b2fa257628bc488fa09e62f1da`
+- Merge SHA: `0460c1f0262875fb27ae530d30cd80d805752851`
 - Validated implementation head: `65f95f85532b3fda71aa9625f49e553e93189830`
-- PR state: open, mergeable, merge state `CLEAN`.
+- PM merged-main verification: PR #308 independently gated, squash-merged, and
+  verified on main `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/super3/test_stage2_rl_nemo_skills_doc_link_revision_pin.py`
     -> 2 passed.
@@ -42,6 +47,7 @@
   - Added-line live-surface scan -> hits limited to the static pinned
     NeMo-Skills URL, test constants/assertions, and task/status docs.
   - `git diff --check` -> passed.
+  - `git diff --cached --check` -> passed.
 - Blockers: none for PM gate.
 - Residual risk: static README/test/docs-only coverage; no live URL probe,
   NeMo-Skills clone/build/download, recipe execution, data-prep/train/eval,
