@@ -1,6 +1,6 @@
 # task193_application_examples_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
 
 ## Scope
 
@@ -24,5 +24,18 @@
 
 - Base: `89a6da531c4c693da585a7cc9ac96c51492bffa4`
 - Branch: `intern_nem_dev_2/task193_application_examples_doc_links_revision_pins_s1`
-- PR: Pending
-- Checks: Pending
+- PR: https://github.com/songCNMS/Nemotron/pull/300
+- Implementation SHA: `d7ae289d03e03efde244d48a52efd986d89bd5c9`
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_application_examples_revision_pins.py`
+    -> 1 passed
+  - `/work-agents/.venv/bin/python -m py_compile tests/docs/test_application_examples_revision_pins.py`
+    -> passed
+  - `/work-agents/.venv/bin/ruff check tests/docs/test_application_examples_revision_pins.py`
+    -> passed
+  - Structured static probe ->
+    `PM_TASK193_APPLICATION_EXAMPLES_DOC_LINK_PIN_PROBE_PASS`
+  - Added-line live-surface scan -> expected pinned application-example doc
+    URLs only
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed

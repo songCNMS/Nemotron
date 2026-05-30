@@ -10,3 +10,4 @@
   `https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/...`.
 - Pinned URL prefix:
   `https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/`.
+- PR: https://github.com/songCNMS/Nemotron/pull/300.
