@@ -1,6 +1,6 @@
 # task222_qwen_pipeline_live_evidence_matrix_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
 
 ## Scope
 
@@ -26,4 +26,13 @@
   `intern_nem_dev_1/task222_qwen_pipeline_live_evidence_matrix_s1`.
 - Evidence root:
   `/mnt/cephfs/data/processing/nemotron-live-validation/task222`.
-- Current status: accepted; evidence collection in progress.
+- Validation report:
+  `workspace/tasks/task222_qwen_pipeline_live_evidence_matrix_s1/validation_report.md`
+  and mirrored to
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task222/validation_report.md`.
+  SHA-256:
+  `a38dd6c784f3b5fa0ee7884705ffdee1d514b2ec29f8b09d8ec7dd3d0b332b37`.
+- Current status: complete; evidence matrix assembled from existing verified
+  task208/task210/task218/task219 evidence, with task220/task221 recorded as
+  pending unless their current staging/readiness logs prove only prepare-state
+  progress.

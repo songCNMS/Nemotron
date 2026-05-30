@@ -10,3 +10,12 @@
 - Scope is read-only/no-live-ops pipeline evidence matrix assembly from
   existing task208/task210/task218/task219 evidence, with task220/task221
   recorded as pending unless existing reports prove otherwise.
+- Built `validation_report.md` with owner/branch/head/base, commands where
+  available, artifact paths, pass/fail, blockers, residual risks,
+  local-vs-NemTron namespace notes, model/staged-model notes, remaining proof
+  gaps, and estimates for full train/full benchmark.
+- Mirrored the report to
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task222/validation_report.md`.
+- No live GPU, endpoint, train, eval, benchmark, package install, model
+  copy/download, W&B, cluster/deploy, artifact upload, product-code edit,
+  main/master push, or self-merge was performed for task222.
