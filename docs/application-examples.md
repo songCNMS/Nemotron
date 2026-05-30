@@ -27,7 +27,7 @@ End-to-end applications built on Nemotron models, including agentic workflows, R
 :gutter: 3
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Nemotron 3 Super Getting Started Guide
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/Nemotron-3-Super-Getting-Started-Guide
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/Nemotron-3-Super-Getting-Started-Guide
 :link-type: url
 
 Introductory notebook covering Nemotron 3 Super's reasoning features: thinking, reasoning budget, low effort mode, streaming responses, tool-call streaming, and Perplexity Search integration using the OpenAI-compatible API.
@@ -36,7 +36,7 @@ Introductory notebook covering Nemotron 3 Super's reasoning features: thinking, 
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` SQL LoRA Fine-tuning and Deployment
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/sql-lora-finetuning-and-deployment
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/sql-lora-finetuning-and-deployment
 :link-type: url
 
 End-to-end LoRA fine-tuning of Nemotron 3 Nano on Text2SQL (BIRD SQL) with deployment via NVIDIA NIM or vLLM using NeMo AutoModel or Megatron Bridge.
@@ -45,7 +45,7 @@ End-to-end LoRA fine-tuning of Nemotron 3 Nano on Text2SQL (BIRD SQL) with deplo
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Intelligent Document Processing
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/Intelligent%20Document%20Processing%20with%20Nemotron%20RAG
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/Intelligent%20Document%20Processing%20with%20Nemotron%20RAG
 :link-type: url
 
 IDP pipeline that extracts and queries complex enterprise documents — financial reports, charts, and tables — using NeMo Retriever and multimodal Nemotron models.
@@ -54,7 +54,7 @@ IDP pipeline that extracts and queries complex enterprise documents — financia
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Voice RAG Agent
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/nemotron-voice-rag-agent-example
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/nemotron-voice-rag-agent-example
 :link-type: url
 
 End-to-end voice-driven RAG agent combining speech-to-text, multimodal retrieval, 1M-token reasoning, and safety guardrails using open Nemotron models.
@@ -63,7 +63,7 @@ End-to-end voice-driven RAG agent combining speech-to-text, multimodal retrieval
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Simple Nemotron 3 Nano Usage
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/Simple%20Nemotron-3-Nano%20Usage%20Example
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/Simple%20Nemotron-3-Nano%20Usage%20Example
 :link-type: url
 
 Introductory notebook covering basic inference, reasoning mode toggling, and multi-agent systems using the OpenAI-compatible API via OpenRouter and LangChain.
@@ -72,7 +72,7 @@ Introductory notebook covering basic inference, reasoning mode toggling, and mul
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` Data Science ML Agent
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/Data%20Science%20ML%20Agent
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/Data%20Science%20ML%20Agent
 :link-type: url
 
 Natural language-driven ML agent built on Nemotron Nano 9B with GPU-accelerated data exploration and model training using RAPIDS cuDF and cuML.
@@ -81,7 +81,7 @@ Natural language-driven ML agent built on Nemotron Nano 9B with GPU-accelerated 
 :::
 
 :::{grid-item-card} {octicon}`mark-github;1.5em;sd-mr-1` RAG Agent
-:link: https://github.com/NVIDIA-NeMo/nemotron/tree/main/use-case-examples/RAG%20Agent%20with%20Nemotron%20RAG%20Models
+:link: https://github.com/NVIDIA-NeMo/nemotron/tree/89a6da531c4c693da585a7cc9ac96c51492bffa4/use-case-examples/RAG%20Agent%20with%20Nemotron%20RAG%20Models
 :link-type: url
 
 Production-ready RAG agent using local Hugging Face embedding and reranking models with NVIDIA AI Endpoints for LLM inference, built on LangGraph.
