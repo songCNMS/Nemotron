@@ -6,3 +6,5 @@
   links in four Omni3 docs; local relative Markdown links stay relative.
 - Nemotron self-repo docs link revision:
   `89a6da531c4c693da585a7cc9ac96c51492bffa4`.
+- Focused static coverage checks that scoped `tree/main` / `blob/main`
+  self-repo links are gone while local Omni3 relative links remain unchanged.

@@ -26,7 +26,12 @@
 
 - Base: `89a6da531c4c693da585a7cc9ac96c51492bffa4`
 - Branch: `intern_nem_dev_1/task191_omni3_self_repo_doc_links_revision_pins_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/298
+- Validated implementation head: `caeca4ffc75131a8a80dcd0ee49bb8f429bcdcee`
 - Checks: focused static docs pytest, py_compile, Ruff, structured static
   probe, scoped stale-link grep, added-line live-surface scan,
   `git diff --check`, and `git diff --cached --check` passed.
+- Blockers: none for PM gate.
+- Residual risk: static docs/test-only coverage; no live recipe, data-prep,
+  train/eval, endpoint, W&B, cluster, deploy, artifact operation,
+  `main`/`master` push, or self-merge was performed.

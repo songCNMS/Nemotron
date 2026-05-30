@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_1 |
 | Status | Working |
 | Current Task | task191_omni3_self_repo_doc_links_revision_pins_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/298 |
 | Session | 1 |
-| Recent Progress | Branched from `main` `89a6da531c4c693da585a7cc9ac96c51492bffa4`; scoped Omni3 self-repo docs links pinned and focused static test added |
+| Recent Progress | Opened PR #298 at implementation head `caeca4ffc75131a8a80dcd0ee49bb8f429bcdcee`; focused static docs checks passed |
