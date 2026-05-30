@@ -71,3 +71,24 @@
   - Live judge inference path for safety, jailbreak, and over-refusal scoring.
   - Production benchmark source selection and revision pins.
   - SIF/Docker/cluster smoke for judge runtime paths.
+
+## 2026-05-30 22:20:50 UTC - task229_m2_runtime_asset_inventory_s1
+
+- Status: evidence/status branch ready; Current Task None / Idle.
+- Branch: `intern_nem_dev_3/task229_m2_runtime_asset_inventory_s1`
+- Base/product commit: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root: `/mnt/cephfs/data/processing/nemotron-live-validation/task229`
+- Artifacts:
+  - `validation_report.md`
+  - `m2_runtime_asset_inventory.json`
+  - `artifact_listing.txt`
+  - `probes/*.txt`
+- Result:
+  - Converted task226 M2 blockers into concrete per-target assets/APIs/databases/sandboxes/baseline inventory.
+  - Found local candidate assets for HLE, BrowseComp, MCPMark, related tool-agent candidates, and multilingual HumanEval/IFEval surfaces.
+  - BIRD real-execution DB assets, exact Tool Decathlon assets, full BFCL assets, service credentials, cluster sandboxes, run-visible staging, and all frozen Qwen3.5-122B-A10B M2 baselines remain blockers.
+- Boundaries: no endpoint request, eval/benchmark run, package install/build, model copy, process kill, W&B/cluster/deploy, artifact upload, product code edit, main/master push, or self-merge.
+- Checks:
+  - Structured JSON probe for task id, 8 targets, and all 8 missing 122B baselines -> passed
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed
