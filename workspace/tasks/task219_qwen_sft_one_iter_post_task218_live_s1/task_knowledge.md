@@ -16,3 +16,12 @@
   task218 `pip_target`, task209 session5 Mamba target, task209 session4 venv
   site-packages, then task219 code checkout `src`.
 - Re-probe GPU/process/port state before any PM-released train launch.
+- Released task219 one-iteration smoke passed with task218 `pip_target` first
+  in `PYTHONPATH`: `task219_torchrun_rc=0`, iteration `1/1`, loss
+  `1.195105E+01`, skipped/nan `0/0`.
+- Checkpoint saved under
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task219/session1/checkpoints_one_iter`
+  on NemTron, size `1.2G`.
+- Local CPU namespace did not see the checkpoint directory after the run, so
+  checkpoint inventory/hash evidence is preserved in local-visible log
+  `04_checkpoint_gpu_state_after_run.log`.

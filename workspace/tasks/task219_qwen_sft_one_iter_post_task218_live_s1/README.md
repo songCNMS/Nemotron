@@ -4,9 +4,10 @@
 
 ## Scope
 
-- Prepare-only assignment for a later Qwen-contract Stage1 SFT one-iteration
-  smoke after task218 causal-conv1d train-stack work is accepted by PM.
-- Do not launch train until PM explicitly releases the run.
+- Qwen-contract Stage1 SFT one-iteration smoke after task218 causal-conv1d
+  train-stack work was accepted by PM.
+- PM released the single canonical run after task218 read-only verification
+  passed.
 - Base / product commit remains
   `1d037329f5a02cdc04f2a09a16e7342721be4c87`.
 - Prepared branch:
@@ -16,11 +17,10 @@
 
 ## Boundaries
 
-- No torchrun/train launch until PM release.
+- Exactly one canonical torchrun only.
 - No process kill, package install/build, endpoint, eval, benchmark, model copy,
   system mutation, full or multi-GPU train, W&B, cluster, deploy, artifact
   upload, direct `main`/`master` push, or self-merge.
-- Read-only/preflight checks and command/config validation only.
 
 ## Prepared Inputs
 
@@ -42,7 +42,7 @@
 
 ## Read-Only Probe
 
-Prepare-only read-only probe on NemTron:
+Pre-run read-only probe on NemTron:
 
 - Confirmed task218 `pip_target`, task209 Mamba target, task209 venv
   site-packages, task208 staged sample splits, and Qwen model path exist.
@@ -64,10 +64,7 @@ Prepare-only read-only probe on NemTron:
   compute apps, free candidate master port `29581`, and `:8000`
   documented/untouched.
 
-## Prepared Command
-
-Do not run this command until PM releases task219 after task218 exact-head
-read-only verification passes.
+## Command
 
 ```bash
 cd /mnt/cephfs/data/processing/nemotron-live-validation/task219/Nemotron
@@ -85,9 +82,22 @@ CUDA_VISIBLE_DEVICES=0 \
   train.train_iters=1 checkpoint.save_interval=1 artifacts.wandb=false artifacts.manifest.root=null
 ```
 
-## Hold State
+## Result
 
-- Blocker: waiting for PM release after task218 exact-head read-only PASS.
-- Task-owned code checkout/config under task219 were intentionally not staged
-  during prepare-only work.
-- No train launch was run.
+- PASS: `task219_torchrun_rc=0`.
+- Reached iteration `1/1` with `lm loss: 1.195105E+01`, grad norm `5.380`,
+  skipped iterations `0`, and nan iterations `0`.
+- Saved checkpoint at iteration 1 under
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task219/session1/checkpoints_one_iter`.
+- NemTron checkpoint size: `1.2G`.
+- Post-run cleanup passed: no H200 compute apps, `:13000` clear, `:29581`
+  clear, and `:8000` documented-only/untouched.
+- Local-visible manifest notes the checkpoint directory itself is not visible
+  from the local CPU namespace; checkpoint inventory and sha256 evidence are in
+  local-visible log
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task219/session1/logs/04_checkpoint_gpu_state_after_run.log`.
+
+## Blockers
+
+- None for the one-iteration task219 smoke.
+- No second run or workaround was attempted.
