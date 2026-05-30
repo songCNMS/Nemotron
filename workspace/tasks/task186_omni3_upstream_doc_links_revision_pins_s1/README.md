@@ -1,13 +1,15 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_2 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2 -->
 
-Status: In progress
+Status: Complete
 Owner: intern_nem_dev_2
 Branch: `intern_nem_dev_2/task186_omni3_upstream_doc_links_revision_pins_s1`
 Base: `a655174376be9b1880fc9b756cc37af76590f747`
 Original assignment base: `c76c51dba5e8796d7b7f12c25fcd172f4c9c8bfa`
 PR: https://github.com/songCNMS/Nemotron/pull/293
+Merged main: `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`
+Tested/merged head: `4966cbff36d020a23c59a28954c5da9a0c916727`
 
 ## Summary
 

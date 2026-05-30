@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Working Notes
 
@@ -29,3 +29,9 @@
 - PM's scoped stale mutable upstream grep includes Omni3 public docs beyond the
   original README list. `docs/nemotron/omni3/architecture.md` is in task scope
   for the same Megatron-Bridge and NeMo-RL branch-link pinning contract.
+
+## Session 6 Notes
+
+- PR #293 merged and verified on `main` at
+  `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`; no new implementation knowledge
+  was added during closeout.

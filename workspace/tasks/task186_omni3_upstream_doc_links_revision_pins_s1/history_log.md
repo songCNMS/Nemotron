@@ -1,6 +1,6 @@
 # task186_omni3_upstream_doc_links_revision_pins_s1 history
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 1 - 2026-05-29
 
@@ -60,6 +60,20 @@
   `docs/nemotron/omni3/architecture.md`.
 - No Super3 docs, PR #291 Qwen files, runtime code, recipe execution, data
   prep, train/eval, endpoint, W&B, cluster, deploy, artifact operation,
+  `main`/`master` push, or self-merge.
+
+## Session 6 - 2026-05-30
+
+- PM reported PR #293 / task186 merged and verified on `main` at
+  `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb` with tested/merged head
+  `4966cbff36d020a23c59a28954c5da9a0c916727`.
+- Synced local `main` by fast-forwarding to
+  `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`.
+- Recorded closeout on branch
+  `intern_nem_dev_2/task186_omni3_upstream_doc_links_revision_pins_s1_closeout_sync`.
+- Moved intern status to Idle / Current Task None.
+- Boundaries preserved: no live git/build/download/recipe/data prep,
+  train/eval, endpoint, W&B, cluster, deploy, artifact operation,
   `main`/`master` push, or self-merge.
 
 ## Session 3 - 2026-05-29
