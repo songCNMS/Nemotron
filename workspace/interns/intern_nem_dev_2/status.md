@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task203_qwen_live_sft_train_smoke_s1 |
 | PR | Evidence-only branch: intern_nem_dev_2/task203_qwen_live_sft_train_smoke_s1 |
-| Session | 1 |
+| Session | 2 |
 
-最近进展：Completed evidence-only `task203_qwen_live_sft_train_smoke_s1` validation on branch `intern_nem_dev_2/task203_qwen_live_sft_train_smoke_s1` from synced `main` `0460c1f0262875fb27ae530d30cd80d805752851`. Dry-run passed (`rc=0`, 3s) with resolved evidence for `test_train.py`, fallback packed data, Qwen profile, requested tokenizer path, and checkpoint save path. Focused SFT/Qwen validators passed (`33 passed, 2 skipped`, 3s). One-iteration local smoke was not run because `/work-agents/.venv` lacks `torch`, `megatron`, and `megatron.bridge`; the requested `/mnt/3fs` Qwen model path is absent, so CUDA availability cannot be established. Evidence logs are under `/tmp/nemotron-live-validation/task203/logs`. Boundaries preserved: no full training, endpoint evals, W&B/cluster/deploy/artifact upload, direct main/master push, or self-merge.
+最近进展：Completed and reported evidence-only `task203_qwen_live_sft_train_smoke_s1`; PM assigned follow-up `task206_qwen_sft_train_stack_unblock_probe_s1` to probe train-stack/GPU resources and rerun the dry-run under `/tmp/nemotron-live-validation/task206`. Task203 evidence remains on pushed branch `intern_nem_dev_2/task203_qwen_live_sft_train_smoke_s1` at `04da8522607056c3a8e6c6137b84c2ae4c118e65`; no product code edits, full training/eval, endpoint, W&B/cluster/deploy/artifact upload, direct main/master push, or self-merge were performed.

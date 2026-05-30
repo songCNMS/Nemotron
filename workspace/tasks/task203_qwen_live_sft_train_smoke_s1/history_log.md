@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-05-30
+
+- PM assigned follow-up
+  `task206_qwen_sft_train_stack_unblock_probe_s1` to probe local/project
+  train-stack resources after task203 found the one-iteration SFT smoke blocked
+  by missing dependencies/resources.
+- Preserved task203 evidence branch
+  `intern_nem_dev_2/task203_qwen_live_sft_train_smoke_s1` at
+  `04da8522607056c3a8e6c6137b84c2ae4c118e65`.
+- Task203 remains evidence-complete: dry-run passed, focused validators passed,
+  and the one-iteration smoke was skipped for the recorded missing `torch`,
+  `megatron`, `megatron.bridge`, Qwen model path, and CUDA probe blockers.
+- No new task203 product or validation work was added in this session; this is
+  handoff bookkeeping before starting task206.
 
 ## Session 1 - 2026-05-30
 

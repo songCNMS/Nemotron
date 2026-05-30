@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Base commit: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_2/task203_qwen_live_sft_train_smoke_s1`.
@@ -30,3 +30,7 @@
   - Live one-iteration smoke was skipped because `torch`, `megatron`, and
     `megatron.bridge` are not installed/importable in `/work-agents/.venv`, the
     requested Qwen path is absent, and CUDA availability cannot be established.
+- Session 2 handoff: PM created follow-up
+  `task206_qwen_sft_train_stack_unblock_probe_s1` specifically to inventory
+  local/project Python environments and GPU/model resources before deciding
+  whether the one-iteration smoke can run.
