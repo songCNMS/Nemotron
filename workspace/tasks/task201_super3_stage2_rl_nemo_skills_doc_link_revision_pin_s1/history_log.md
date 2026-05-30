@@ -16,3 +16,5 @@
   preserved RLVR sandbox/Lean context.
 - Ran focused pytest, py_compile, Ruff, structured static probe, scoped
   stale-link grep, added-line live-surface scan, and `git diff --check`.
+- Opened PR #308 to `main` at implementation head
+  `65f95f85532b3fda71aa9625f49e553e93189830`.

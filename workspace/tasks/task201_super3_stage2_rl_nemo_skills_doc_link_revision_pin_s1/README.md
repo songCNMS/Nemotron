@@ -27,7 +27,9 @@
 
 - Base: `ea252765464a50d3b2fc46a5ab7922bf8285a6aa`
 - Branch: `intern_nem_dev_1/task201_super3_stage2_rl_nemo_skills_doc_link_revision_pin_s1`
-- PR: pending
+- PR: https://github.com/songCNMS/Nemotron/pull/308
+- Validated implementation head: `65f95f85532b3fda71aa9625f49e553e93189830`
+- PR state: open, mergeable, merge state `CLEAN`.
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/recipes/super3/test_stage2_rl_nemo_skills_doc_link_revision_pin.py`
     -> 2 passed.
