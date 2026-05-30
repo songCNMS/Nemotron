@@ -1,6 +1,6 @@
 # task197_super3_lora_text2sql_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=2 -->
+<!-- METADATA:STATUS=Merged,ASSIGNEE=intern_nem_dev_3,SESSION=3 -->
 
 ## Scope
 
@@ -30,6 +30,10 @@
   `intern_nem_dev_3/task197_super3_lora_text2sql_doc_links_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/304
 - Implementation SHA: `5ec3f6d9fa72f59f03f4d7b2a52d50680b93943a`
+- Tested/merged head SHA: `4f4084f5888d2d15f922fbf0bf6f919b8ccef55f`
+- Merge SHA: `e690bdac75ae5a85e1a167e3553d631d29732d32`
+- Local main sync: `origin/main` and `main` updated to
+  `e690bdac75ae5a85e1a167e3553d631d29732d32`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_super3_lora_text2sql_doc_links_revision_pins.py`
     -> 3 passed
@@ -43,3 +47,5 @@
     text only
   - `git diff --check` -> passed
   - `git diff --cached --check` -> passed
+  - PM merged-main verification -> focused pytest 3 passed, py_compile, Ruff,
+    `git diff --check`, and `git diff --cached --check`

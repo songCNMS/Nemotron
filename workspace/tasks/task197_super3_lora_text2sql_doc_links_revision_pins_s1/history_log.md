@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-05-30
 
@@ -30,3 +30,15 @@
   `5ec3f6d9fa72f59f03f4d7b2a52d50680b93943a`.
 - Updated status/task docs for Session 2 and preserved the static-only
   boundaries.
+
+## Session 3 - 2026-05-30
+
+- Received PM closeout: PR #304 passed independent gate, merged, and was
+  verified on main.
+- Recorded tested/merged head
+  `4f4084f5888d2d15f922fbf0bf6f919b8ccef55f` and new main
+  `e690bdac75ae5a85e1a167e3553d631d29732d32`.
+- Synced local `main` and `origin/main` to
+  `e690bdac75ae5a85e1a167e3553d631d29732d32`.
+- Updated status to Idle / Current Task None and preserved the static-only
+  no-live-run/no-main-push boundaries.

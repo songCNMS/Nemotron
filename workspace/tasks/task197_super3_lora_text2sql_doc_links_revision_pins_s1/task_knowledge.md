@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 - Scoped README:
   `usage-cookbook/Nemotron-3-Super/lora-text2sql/README.md`.
@@ -15,3 +15,7 @@
   - `https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Super/lora-text2sql/nemo-automodel/README.md`
   - `https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/vllm_cookbook.ipynb`
 - PR: https://github.com/songCNMS/Nemotron/pull/304.
+- Tested/merged head:
+  `4f4084f5888d2d15f922fbf0bf6f919b8ccef55f`.
+- Merge SHA:
+  `e690bdac75ae5a85e1a167e3553d631d29732d32`.
