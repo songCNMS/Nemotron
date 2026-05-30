@@ -1,16 +1,17 @@
 # task208_ceph_qwen_packing_live_s1
 
-<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
-- Evidence-only live Qwen SFT data-prep packing attempt using the supervisor
-  provided cephfs Qwen model/tokenizer path.
-- Run real `sample=4`, `num_shards=1` packing first into the requested cephfs
-  artifact root, without `--dry-run`.
-- Run full `sample=null`, `num_shards=16` packing only if sample packing and
-  validators pass.
-- Run the focused static packing/decontamination validator shard.
+- Evidence-only live Qwen SFT data-prep packing using the supervisor-provided
+  cephfs Qwen model/tokenizer path.
+- First run real `sample=4`, `num_shards=1` packing without `--dry-run`.
+- If sample packing and focused validators pass, run full `sample=null`,
+  `num_shards=16` packing.
+- Preserve the original unwritable-root failure as historical evidence, but use
+  the corrected `/mnt/cephfs/data/processing/...` root as the final artifact
+  root.
 
 ## Boundaries
 
@@ -23,41 +24,49 @@
 - Baseline / validated product commit:
   `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Branch: `intern_nem_dev_1/task208_ceph_qwen_packing_live_s1`.
+- Superseded historical evidence head:
+  `e197fb1af7ca4ad48e0573707fbe74edbb935311`.
+- Corrected artifact root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task208`.
 - Cephfs model path was present:
   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
-- Verified model files: `config.json`, `tokenizer.json`,
-  `tokenizer_config.json`, `model.safetensors.index.json`, and 16 safetensors
-  shards.
-- Sample packing failed before tokenization/packing because the process cannot
-  create the requested artifact root:
-  `PermissionError: [Errno 13] Permission denied:
-  '/mnt/cephfs/data/nemotron-live-validation'`.
-- Focused validators passed: `53 passed in 2.12s`.
-- Full 16-shard packing was not started because the sample packing gate did not
-  pass.
+- Corrected-root sample packing: passed.
+- Focused validators after sample: passed, `53 passed in 2.09s`.
+- Corrected-root full 16-shard packing: passed.
 
-## Artifacts
+## Final Artifacts
 
-- Requested artifact root:
-  `/mnt/cephfs/data/nemotron-live-validation/task208`.
-- Requested cephfs artifact root and both requested output directories are
-  absent:
-  - `/mnt/cephfs/data/nemotron-live-validation`
-  - `/mnt/cephfs/data/nemotron-live-validation/task208`
-  - `/mnt/cephfs/data/nemotron-live-validation/task208/packed_qwen_sample4`
-  - `/mnt/cephfs/data/nemotron-live-validation/task208/packed_qwen_full`
-- Local fallback logs, because cephfs log creation failed:
-  - `/tmp/nemotron-live-validation/task208/logs/qwen_sample4_packing_ceph_permission_failure.log`
-  - `/tmp/nemotron-live-validation/task208/logs/qwen_sample4_packing_failure_summary.txt`
-  - `/tmp/nemotron-live-validation/task208/logs/static_validators_pytest.log`
-- Local generated job configs from the failed sample command:
-  - `.nemotron/jobs/20260530-160629-super3-data-prep-sft/job.yaml`
-  - `.nemotron/jobs/20260530-160629-super3-data-prep-sft/train.yaml`
-  - `.nemotron/jobs/20260530-160845-super3-data-prep-sft/job.yaml`
-  - `.nemotron/jobs/20260530-160845-super3-data-prep-sft/train.yaml`
-
-No `blend.json`, `splits/`, `runs/*/config.json`, packed shards, manifest, or
-parquet checksum files were produced.
+- Sample splits:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task208/packed_qwen_sample4/sample-4/splits`.
+- Sample metrics: `total_sequences=8`, `total_tokens=5488`,
+  `num_shards=1`, `pack_size=4096`, `elapsed_sec=115.67831802368164`.
+- Sample artifacts include:
+  - `packed_qwen_sample4/sample-4/blend.json`
+  - `packed_qwen_sample4/sample-4/splits/metadata.json`
+  - `packed_qwen_sample4/sample-4/runs/eb259e9d416487c5/config.json`
+  - 2 parquet data files and 1 train split symlink.
+- Full splits:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task208/packed_qwen_full/splits`.
+- Full metrics: `total_sequences=987770`, `total_tokens=672687706`,
+  `num_shards=16`, `pack_size=4096`, `elapsed_sec=253.65463423728943`.
+- Full artifacts include:
+  - `packed_qwen_full/blend.json`
+  - `packed_qwen_full/splits/metadata.json`
+  - `packed_qwen_full/runs/7f636cefa24d6f6a/config.json`
+  - 32 parquet data files and 18 split symlinks
+    (`train=16`, `valid=1`, `test=1`).
+- Artifact sizes:
+  - task208 root: `4.0G`
+  - sample output: `57K`
+  - full output: `4.0G`
+  - logs: `94K`
+- Checksum manifest:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task208/logs/task208_output_checksums.sha256`
+  with 47 entries.
+- Logs:
+  - `logs/qwen_sample4_packing.log`
+  - `logs/static_validators_pytest.log`
+  - `logs/qwen_full_packing.log`
 
 ## Resource Evidence
 
@@ -77,11 +86,21 @@ parquet checksum files were produced.
   `d5a1101ab5cb3bcb302ac8b6afe6f578adb65c43fb27edbf4a3c806c9042e7b8`.
 - Source blend workload: `987943` rows, `3408133421` input bytes.
 
-## Blocker
+## Historical Root Failure
 
-Grant this host/process write permission to create and write below:
+- The first task208 root
+  `/mnt/cephfs/data/nemotron-live-validation/task208` was unwritable from the
+  local CPU process.
+- The historical sample command failed before packing with:
+  `PermissionError: [Errno 13] Permission denied:
+  '/mnt/cephfs/data/nemotron-live-validation'`.
+- Local fallback historical log:
+  `/tmp/nemotron-live-validation/task208/logs/qwen_sample4_packing_ceph_permission_failure.log`.
 
-`/mnt/cephfs/data/nemotron-live-validation`
+## Residual Risk
 
-Then rerun the sample command first. Full 16-shard packing should remain gated
-on sample packing success plus validator success.
+- PM reported a cross-node visibility mismatch: local CPU can see the corrected
+  root artifacts under `/mnt/cephfs/data/processing/...`, but dev_2/NemTron
+  cannot see those local CPU-created task208 artifacts at the same path.
+- dev_2 has been told to stage sample/full artifacts to a NemTron-visible
+  task209 input path via SSH tar/rsync.

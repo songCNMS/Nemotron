@@ -9,4 +9,4 @@
 | Current Task | None |
 | PR | N/A |
 | Session | 1 |
-| Recent Progress | Completed evidence-only task208 ceph Qwen packing attempt on branch `intern_nem_dev_1/task208_ceph_qwen_packing_live_s1`; blocked by ceph artifact-root permission before sample packing |
+| Recent Progress | Completed corrected-root task208 Qwen sample and full packing on branch `intern_nem_dev_1/task208_ceph_qwen_packing_live_s1`; artifacts are local CPU-visible under `/mnt/cephfs/data/processing/nemotron-live-validation/task208` |
