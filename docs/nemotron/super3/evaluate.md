@@ -2,7 +2,7 @@
 
 Evaluate trained Nemotron 3 Super models against standard benchmarks using [NeMo Evaluator](https://github.com/NVIDIA-NeMo/Evaluator).
 
-The evaluation recipe here covers a subset of the benchmarks used in the full tech report — enough to validate training quality during development. For the complete benchmark suite and reproduction instructions, see the [Nemotron 3 Super reproducibility doc](https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) in the NeMo Evaluator repo.
+The evaluation recipe here covers a subset of the benchmarks used in the full tech report — enough to validate training quality during development. For the complete benchmark suite and reproduction instructions, see the [Nemotron 3 Super reproducibility doc](https://github.com/NVIDIA-NeMo/Evaluator/blob/eb3ddf2acc7f2e1fa03aeba168afea636562779c/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) in the NeMo Evaluator repo.
 
 > **Different execution pattern**: Unlike training stages that submit Python scripts via NeMo-Run, evaluation compiles the YAML config and passes it directly to [nemo-evaluator-launcher](https://github.com/NVIDIA-NeMo/Evaluator). There is no recipe script—the CLI handles config compilation and artifact resolution, then delegates to the launcher.
 
@@ -247,7 +247,7 @@ uv run nemotron super3 eval --run YOUR-CLUSTER -t adlr_mmlu -t hellaswag -t arc_
 
 You can run evaluation standalone without the `nemotron` CLI by using `nemo-evaluator-launcher` directly. This is useful for custom setups or when integrating into existing pipelines.
 
-> **Upstream reproducibility guide**: For full reproduction instructions (including config files and expected scores), see the [Nemotron 3 Super reproducibility doc](https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) in the NeMo Evaluator repo.
+> **Upstream reproducibility guide**: For full reproduction instructions (including config files and expected scores), see the [Nemotron 3 Super reproducibility doc](https://github.com/NVIDIA-NeMo/Evaluator/blob/eb3ddf2acc7f2e1fa03aeba168afea636562779c/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) in the NeMo Evaluator repo.
 
 **1. Create a virtual environment and install:**
 
@@ -366,7 +366,7 @@ This stage uses the following components:
 ## Reference
 
 - [NeMo Evaluator](https://github.com/NVIDIA-NeMo/Evaluator) — Upstream evaluation framework
-- [Nemotron 3 Super Reproducibility Guide](https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) — Full reproduction instructions with configs and expected scores
+- [Nemotron 3 Super Reproducibility Guide](https://github.com/NVIDIA-NeMo/Evaluator/blob/eb3ddf2acc7f2e1fa03aeba168afea636562779c/packages/nemo-evaluator-launcher/examples/nemotron/nemotron-3-super/reproducibility.md) — Full reproduction instructions with configs and expected scores
 - [Artifact Lineage](../../nemo_runspec/artifacts.md) — W&B artifact system
 - [Execution through NeMo-Run](../../nemo_runspec/nemo-run.md) — Cluster configuration
 - [W&B Integration](../wandb.md) — Credentials and export setup
