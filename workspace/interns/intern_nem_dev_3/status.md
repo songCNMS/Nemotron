@@ -1,6 +1,6 @@
 # intern_nem_dev_3 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task207_qwen_endpoint_eval_unblock_probe_s1,SESSION=1 -->
+<!-- METADATA:STATUS=Working,TASK=task207_qwen_endpoint_eval_unblock_probe_s1,SESSION=3 -->
 
 | 字段 | 值 |
 |------|-----|
@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task207_qwen_endpoint_eval_unblock_probe_s1 |
 | PR | Evidence-only; no PR unless bug fix required |
-| Session | 1 |
-| Recent Progress | Task207 evidence collected: corrected math dry-run passed, validators passed 136/8 warnings, Qwen endpoint/model/key unavailable under strict-redacted probe, no live request made, artifacts under /tmp/nemotron-live-validation/task207 |
+| Session | 3 |
+| Recent Progress | Task207 evidence branch finalized and pushed; added Session 3 history closeout for stop-hook validation, with diff checks passing and no product code edits |

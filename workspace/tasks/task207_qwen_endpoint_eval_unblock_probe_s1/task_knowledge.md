@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 - Required baseline: `0460c1f0262875fb27ae530d30cd80d805752851`.
 - Task artifacts root: `/tmp/nemotron-live-validation/task207`.
