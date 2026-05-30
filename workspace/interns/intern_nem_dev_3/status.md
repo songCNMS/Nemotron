@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1 |
-| PR | Not opened yet |
+| PR | https://github.com/songCNMS/Nemotron/pull/296 |
 | Session | 1 |
-| Recent Progress | Started task189 from main 75a994bc2f12f5e5084d2f234a0aca7989fa0ccb; scoped Nano-Omni Megatron-Bridge cookbook doc-link pin and focused static test updates in progress |
+| Recent Progress | PR #296 opened for task189 after focused pytest, py_compile, Ruff, structured notebook probe, added-line live-surface scan, and diff checks passed |

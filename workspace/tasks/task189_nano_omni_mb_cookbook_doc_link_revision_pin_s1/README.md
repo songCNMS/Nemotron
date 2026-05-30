@@ -1,6 +1,6 @@
 # task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
 
 ## Scope
 
@@ -26,5 +26,17 @@
 - Base: `75a994bc2f12f5e5084d2f234a0aca7989fa0ccb`
 - Branch:
   `intern_nem_dev_3/task189_nano_omni_mb_cookbook_doc_link_revision_pin_s1`
-- PR: Not opened yet
-- Head: In progress
+- PR: https://github.com/songCNMS/Nemotron/pull/296
+- Implementation SHA: `62087bd30828282ac3b2ff32439812632f57db81`
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/usage_cookbook/test_nano_omni_megatron_bridge_checkout_revision.py`
+    -> 6 passed
+  - `/work-agents/.venv/bin/python -m py_compile tests/usage_cookbook/test_nano_omni_megatron_bridge_checkout_revision.py`
+    -> passed
+  - `/work-agents/.venv/bin/ruff check tests/usage_cookbook/test_nano_omni_megatron_bridge_checkout_revision.py`
+    -> passed
+  - Structured notebook probe -> `STRUCTURED_NANO_OMNI_MB_DOC_LINK_PIN_PROBE_PASS`
+  - Added-line live-surface scan -> expected notebook static URL/test/task/status
+    text only
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed

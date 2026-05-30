@@ -14,3 +14,4 @@
   `https://github.com/NVIDIA-NeMo/Megatron-Bridge/tree/nemotron_3_omni/examples/models/vlm/nemotron_3_omni`.
 - Preserve visible `nemotron_3_omni` branch-context prose; the executable
   checkout remains pinned and guarded by the previous task's contract.
+- PR: https://github.com/songCNMS/Nemotron/pull/296.
