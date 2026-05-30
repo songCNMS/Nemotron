@@ -1,0 +1,15 @@
+# Task Knowledge
+
+<!-- METADATA:SESSION=1 -->
+
+- Bounded task231 artifact search found only the task225 launcher runtime and
+  wheelhouse under `/mnt/cephfs/data/processing/nemotron-live-validation`:
+  no newer `nemo_evaluator_launcher` package was present.
+- The local project venv `/work-agents/.venv` has no
+  `nemo_evaluator_launcher` module or package metadata.
+- Task225 local runtime, VPN copied freeze, and task227 official-runtime probe
+  all point to `nemo-evaluator-launcher==0.2.5`.
+- In that runtime, `terminalbench` resolves through the `codec` harness and is
+  described as contamination detection; it is not an exact TerminalBench eval.
+- Exact safe mappings for the five M1 missing targets require a newer
+  approved launcher package or benchmark-owner supplied task names/contracts.
