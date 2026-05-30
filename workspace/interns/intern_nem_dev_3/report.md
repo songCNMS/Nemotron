@@ -1,5 +1,28 @@
 # intern_nem_dev_3 Report
 
+## 2026-05-30 21:30 UTC - task223_qwen_endpoint_eval_live_after_task220_s1
+
+- Status: evidence branch complete; endpoint/eval smoke passed, M1/full benchmark held.
+- Branch: `intern_nem_dev_3/task223_qwen_endpoint_eval_live_after_task220_s1`
+- Base SHA: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root: `/mnt/cephfs/data/processing/nemotron-live-validation/task223`
+- Results:
+  - Preflight PASS: no task220/Qwen/torchrun/SGLang processes, no `:13000` listener, no H200 compute apps, 8 H200s visible, staged model visible with 16 shards and required files; `:8000` documented and untouched.
+  - SGLang endpoint PASS on port `13000`, served model `qwen3-30b-a3b-instruct-2507-staged`, TP=8, context 16384, `--reasoning-parser qwen3`.
+  - Sanitized endpoint smoke PASS: HTTP 200, content `OK`, non-null message content, `max_tokens=8`, no benchmark prompt, no secrets.
+  - Corrected math live smoke PASS via validated direct wrapper fallback: AIME 1/1 parsed/correct and HMMT 1/1 parsed/correct, content non-null 2/2.
+  - Cleanup PASS: no SGLang processes, no `:13000` listener, no H200 compute apps, all H200s idle.
+- Holds/blockers:
+  - `OFFICIAL_EVAL_RUNTIME_BLOCKED`: local `/work-agents/.venv` lacks `nemo_evaluator_launcher`.
+  - M1 launcher-available subset HOLD/not run per PM instruction because official launcher runtime is unavailable.
+  - Full 27-target benchmark HOLD/not run pending fresh PM release plus remaining missing M1 mappings and M2 runtime assets/APIs/databases/sandboxes/baselines.
+- Key artifacts:
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task223/validation_report.md`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task223/preflight/nemtron_preflight.log`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task223/remote_copies/endpoint_smoke/sanitized_endpoint_smoke_sanitized.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task223/eval/direct_corrected_math_live_smoke_with_kwargs/summary.json`
+  - `/mnt/cephfs/data/processing/nemotron-live-validation/task223/cleanup/final_cleanup_verification.log`
+
 ## 2026-05-21 12:41:52 UTC - task026_m2_swe_multi_harness_s1
 
 - Status: PR ready for PM gate
