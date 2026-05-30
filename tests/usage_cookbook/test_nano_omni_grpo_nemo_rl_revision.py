@@ -8,6 +8,29 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_REVISION = "98ba11c0a77e177a903cd3756570684437a08e8d"
 EXPECTED_BRANCH = "nano-v3-omni"
 NEMO_RL_REPO = "https://github.com/NVIDIA-NeMo/RL"
+PRIVATE_NEMO_RL_GUIDE_LINK = (
+    "https://gitlab-master.nvidia.com/jseppanen/nemo-rl/-/tree/"
+    "nano-v3-omni-recipes/docs/omni-guides"
+)
+MUTABLE_NEMO_RL_DOC_LINKS = (
+    f"{NEMO_RL_REPO}/blob/main/docs/docker.md",
+    f"{NEMO_RL_REPO}/blob/main/docs/cluster.md",
+)
+PINNED_NEMO_RL_GUIDE_LINK = (
+    f"{NEMO_RL_REPO}/blob/{EXPECTED_REVISION}/"
+    "docs/guides/nemotron-3-nano-omni.md"
+)
+PINNED_NEMO_RL_DOCKER_LINK = (
+    f"{NEMO_RL_REPO}/blob/{EXPECTED_REVISION}/docs/docker.md"
+)
+PINNED_NEMO_RL_CLUSTER_LINK = (
+    f"{NEMO_RL_REPO}/blob/{EXPECTED_REVISION}/docs/cluster.md"
+)
+PINNED_NEMO_RL_DOC_LINKS = (
+    PINNED_NEMO_RL_GUIDE_LINK,
+    PINNED_NEMO_RL_DOCKER_LINK,
+    PINNED_NEMO_RL_CLUSTER_LINK,
+)
 NOTEBOOKS = {
     "grpo": REPO_ROOT
     / "usage-cookbook/Nemotron-3-Nano-Omni/grpo/grpo_training_cookbook.ipynb",
@@ -51,6 +74,18 @@ def _nemo_rl_setup_cells(path: Path) -> list[dict[str, object]]:
     ]
 
 
+def _pinned_doc_link_cells(path: Path) -> list[dict[str, object]]:
+    notebook = _notebook(path)
+    cells = notebook["cells"]
+    assert isinstance(cells, list)
+    return [
+        cell
+        for cell in cells
+        if isinstance(cell, dict)
+        and any(link in _cell_source(cell) for link in PINNED_NEMO_RL_DOC_LINKS)
+    ]
+
+
 def test_nano_omni_grpo_notebooks_pin_nemo_rl_checkout_revision() -> None:
     assert re.fullmatch(r"[0-9a-f]{40}", EXPECTED_REVISION)
 
@@ -75,7 +110,33 @@ def test_nano_omni_grpo_notebooks_have_no_unguarded_branch_only_clone() -> None:
             assert branch_only_clone in source
             assert EXPECTED_REVISION in source
             assert 'git checkout "$NEMO_RL_REVISION"' in source
-            assert 'test "$(git rev-parse HEAD)" = "$NEMO_RL_REVISION"' in source
+        assert 'test "$(git rev-parse HEAD)" = "$NEMO_RL_REVISION"' in source
+
+
+def test_nano_omni_grpo_notebooks_pin_nemo_rl_doc_links() -> None:
+    grpo_source = _notebook_source(NOTEBOOKS["grpo"])
+    gym_source = _notebook_source(NOTEBOOKS["grpo_nemo_gym"])
+
+    assert PINNED_NEMO_RL_GUIDE_LINK in grpo_source
+    assert PINNED_NEMO_RL_DOCKER_LINK in grpo_source
+    assert grpo_source.count(PINNED_NEMO_RL_CLUSTER_LINK) == 1
+    assert gym_source.count(PINNED_NEMO_RL_CLUSTER_LINK) == 2
+
+    for source in (grpo_source, gym_source):
+        assert EXPECTED_BRANCH in source
+        assert PRIVATE_NEMO_RL_GUIDE_LINK not in source
+        for link in MUTABLE_NEMO_RL_DOC_LINKS:
+            assert link not in source
+
+
+def test_nano_omni_grpo_doc_link_cells_are_markdown_only() -> None:
+    for path in NOTEBOOKS.values():
+        doc_cells = _pinned_doc_link_cells(path)
+        assert doc_cells
+        for cell in doc_cells:
+            assert cell["cell_type"] == "markdown"
+            assert cell.get("outputs", []) == []
+            assert cell.get("execution_count") is None
 
 
 def test_nano_omni_grpo_nemo_rl_setup_cells_have_cleared_outputs() -> None:
