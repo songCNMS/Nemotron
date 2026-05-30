@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Runtime Megatron-Bridge `gpt_step.forward_step` in the task212 environment
   has signature `(state, data_iterator, model, return_schedule_plan=False)`.

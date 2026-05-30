@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -18,3 +18,20 @@
   and adapter signature/dispatch wiring.
 - Began focused and broader SFT/Qwen validation; no live training or forbidden
   operations were run.
+- Ran focused packed compat/dispatch pytest, Qwen selector pytest, broader
+  SFT/Qwen validator shard, py_compile, Ruff, structured arity/config probe,
+  `git diff --check`, and `git diff --cached --check`.
+- Opened PR #310 to `main` at implementation head
+  `469984005a6c6f9148715c507429a66973ed0231`; GitHub reports merge state
+  `CLEAN`.
+
+## Session 2 - 2026-05-30
+
+- Received PM note that PR #310 is visible at head
+  `469984005a6c6f9148715c507429a66973ed0231`, but local docs/status edits
+  remained uncommitted after PR creation.
+- Chose the commit/push path rather than reverting, so task README, history,
+  task knowledge session metadata, and dev status stay aligned with the
+  ready-for-gate report.
+- Kept follow-up scope to docs/status only; no product code edits or live
+  train/package/endpoint/benchmark/W&B/cluster/deploy/artifact upload were run.

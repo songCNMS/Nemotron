@@ -1,6 +1,6 @@
 # task213_qwen_sft_packed_compat_gpt_step_arity_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_1,SESSION=2 -->
 
 ## Scope
 
@@ -23,7 +23,12 @@
 
 - Base: `f65dafdb15b28342c1fbd4a5ead807052bcdd264`.
 - Branch: `intern_nem_dev_1/task213_qwen_sft_packed_compat_gpt_step_arity_s1`.
-- PR: pending.
+- PR: https://github.com/songCNMS/Nemotron/pull/310
+- Implementation head at PR open:
+  `469984005a6c6f9148715c507429a66973ed0231`.
+- PR state at open: open, mergeable, merge state `CLEAN`.
+- Session 2 ready-for-gate docs/status follow-up: committed after PR open;
+  replacement exact head is reported in `/work-agents/intern_nem_dev_1/report.md`.
 - Current implementation:
   - `packed_compat_step.forward_step` now accepts the runtime
     state-aware Bridge call shape and passes `state`, `data_iterator`, `model`,
@@ -41,5 +46,11 @@
     -> `136 passed, 1 skipped`.
   - `/work-agents/.venv/bin/ruff check src/nemotron/recipes/super3/stage1_sft/packed_compat_step.py tests/recipes/super3/test_sft_packed_compat_step.py tests/recipes/super3/test_sft_forward_step_dispatch.py`
     -> passed.
+  - `/work-agents/.venv/bin/python -m py_compile src/nemotron/recipes/super3/stage1_sft/packed_compat_step.py tests/recipes/super3/test_sft_packed_compat_step.py tests/recipes/super3/test_sft_forward_step_dispatch.py`
+    -> passed.
+  - Structured arity/config probe ->
+    `PM_TASK213_PACKED_COMPAT_ARITY_STRUCTURED_PROBE_PASS`.
+  - `git diff --check` -> passed.
+  - `git diff --cached --check` -> passed before implementation commit.
 - Blockers: none currently.
 - Residual risk: no live SFT training rerun per PM boundary.
