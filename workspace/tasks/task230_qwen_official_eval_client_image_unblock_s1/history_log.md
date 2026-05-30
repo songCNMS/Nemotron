@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -19,3 +19,11 @@
 - Preserved boundaries: no endpoint launch, live eval, benchmark, Docker
   pull/build/run, package install/build/download, model copy, unrelated process
   kill, upload, main/master push, or self-merge.
+
+## Session 2 - 2026-05-30
+
+- Stop-hook follow-up: added explicit Session 2 bookkeeping for task230 after
+  the evidence branch was pushed at
+  `7e7a6d661cca928846a6adbe0d6a125475435ebd`.
+- No additional Docker, image, package, endpoint, eval, benchmark, or runtime
+  action was performed.

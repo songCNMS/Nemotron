@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - `nemo-evaluator-launcher` maps the task227 corrected-math smoke and 14-task
   M1 launcher-available subset to 11 unique `nvcr.io/nvidia/eval-factory/*:26.03`
