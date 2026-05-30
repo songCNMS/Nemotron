@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 1 - 2026-05-30
 
@@ -18,3 +18,14 @@
   stale-link grep, added-line live-surface scan, `git diff --check`, and
   `git diff --cached --check`.
 - Opened PR #295: https://github.com/songCNMS/Nemotron/pull/295
+
+## Session 2 - 2026-05-30
+
+- PM base correction: main advanced after PR #294 to replacement base
+  `512910a3466012fef675dbcb35b93750e0eba4b4`.
+- Rebased the task188 PR branch onto updated `origin/main`; no conflicts.
+- Confirmed post-rebase diff remains scoped to the two Nano-Omni GRPO
+  notebooks, the focused usage-cookbook test, and status/task docs.
+- Reran focused pytest, py_compile, Ruff, structured notebook probe, scoped
+  stale-link grep, added-line live-surface scan, and `git diff --check` on
+  replacement base `512910a3466012fef675dbcb35b93750e0eba4b4`.
