@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Scoped doc: `docs/deployment-guides.md`.
 - Focused static test:
@@ -12,3 +12,6 @@
   - `https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Nano2-VL`
   - `https://github.com/NVIDIA-NeMo/nemotron/tree/main/usage-cookbook/Nemotron-Parse-v1.1`
 - PR: https://github.com/songCNMS/Nemotron/pull/303.
+- Session 2 closeout: PR #303 merged and verified on `main` at
+  `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`; no new implementation knowledge
+  was added during closeout.

@@ -1,6 +1,6 @@
 # task196_deployment_guides_non_super3_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_2,SESSION=1 -->
+<!-- METADATA:STATUS=Complete,ASSIGNEE=intern_nem_dev_2,SESSION=2 -->
 
 ## Scope
 
@@ -27,6 +27,8 @@
   `intern_nem_dev_2/task196_deployment_guides_non_super3_doc_links_revision_pins_s1`
 - PR: https://github.com/songCNMS/Nemotron/pull/303
 - Implementation SHA: `a73ec6b974c6a84d58c2792a1616a68b14d2fa24`
+- Tested/merged head: `a8a52896794ec13ddd7be0bbdb1cd1028843a0ac`
+- Merged main: `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`
 - Checks:
   - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_deployment_guides_non_super3_revision_pins.py`
     -> 1 passed
