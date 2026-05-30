@@ -1,13 +1,26 @@
 # intern_nem_dev_2 - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task199_sdg_long_document_doc_links_revision_pins_s1,ROLE=independent -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=independent -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_nem_dev_2 |
-| Status | Working |
-| Current Task | task199_sdg_long_document_doc_links_revision_pins_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/306 |
+| Status | Idle |
+| Current Task | None |
+| PR | evidence-only branch |
 | Session | 1 |
 
-最近进展：Opened PR #306 for `task199_sdg_long_document_doc_links_revision_pins_s1`; assignment base was `d926c40f4ea393d42f7bd38a3fbfe84e2ec72815`, and the branch was rebased before PR open to current `origin/main` `e690bdac75ae5a85e1a167e3553d631d29732d32` after main advanced. Scoped change pins the three SDG long-document self-repo links in `docs/nemotron/data/sdg/long-document.md` to `306b2f1217e000b5972155c1f2b1ba6660c994bd` and adds focused docs/static coverage. Required focused pytest, py_compile, Ruff, structured probe, live-surface scan, stale-link grep, and diff checks passed. Static-only boundaries preserved: no live ops, no main/master push, and no self-merge.
+最近进展：Prepared task219 branch
+`intern_nem_dev_2/task219_qwen_sft_one_iter_post_task218_live_s1` from exact
+baseline `1d037329f5a02cdc04f2a09a16e7342721be4c87`. This was prepare-only:
+no torchrun/train launch, no package install/build, no process kill, no
+endpoint/eval/benchmark/model copy, and no system mutation. Recorded the exact
+future one-GPU Qwen-contract command using task218 `pip_target` first in
+`PYTHONPATH`, followed by task209 session5 Mamba target, task209 session4 venv
+site-packages, and task219 code checkout `src`. Read-only NemTron probe found
+task218 `causal_conv1d` and `causal_conv1d_cuda` import-visible, and
+`mamba_ssm.ops.triton.ssd_combined.causal_conv1d_fwd_function` resolved to a
+function object. Preflight found no SGLang/task210 process, no `:13000`, no
+H200 compute apps, candidate master port `29581` free, and `:8000`
+documented/untouched. Waiting for PM release after task218 exact-head
+read-only PASS; dev_2 is Idle / Current Task None.
