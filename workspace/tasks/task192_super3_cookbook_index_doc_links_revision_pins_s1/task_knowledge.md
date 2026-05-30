@@ -13,3 +13,4 @@
   `https://github.com/NVIDIA-NeMo/{Nemotron,nemotron}/{blob,tree}/main/usage-cookbook/Nemotron-3-Super...`.
 - Preserve non-Super3 deployment guide links because they are out of task192
   scope.
+- PR: https://github.com/songCNMS/Nemotron/pull/299.

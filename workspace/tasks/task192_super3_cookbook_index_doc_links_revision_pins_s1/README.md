@@ -1,6 +1,6 @@
 # task192_super3_cookbook_index_doc_links_revision_pins_s1
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nem_dev_3,SESSION=1 -->
 
 ## Scope
 
@@ -29,5 +29,18 @@
 - Base: `89a6da531c4c693da585a7cc9ac96c51492bffa4`
 - Branch:
   `intern_nem_dev_3/task192_super3_cookbook_index_doc_links_revision_pins_s1`
-- PR: Not opened yet
-- Head: In progress
+- PR: https://github.com/songCNMS/Nemotron/pull/299
+- Implementation SHA: `842dc3e91a06e346b4aab1f80b0ffb90e8226e83`
+- Checks:
+  - `PYTHONPATH=src /work-agents/.venv/bin/python -m pytest -q tests/docs/test_super3_cookbook_index_doc_links_revision_pins.py`
+    -> 4 passed
+  - `/work-agents/.venv/bin/python -m py_compile tests/docs/test_super3_cookbook_index_doc_links_revision_pins.py`
+    -> passed
+  - `/work-agents/.venv/bin/ruff check tests/docs/test_super3_cookbook_index_doc_links_revision_pins.py`
+    -> passed
+  - Structured static probe ->
+    `STRUCTURED_SUPER3_COOKBOOK_INDEX_DOC_LINK_PIN_PROBE_PASS`
+  - Added-line live-surface scan -> expected static docs/test/task/status text
+    only
+  - `git diff --check` -> passed
+  - `git diff --cached --check` -> passed

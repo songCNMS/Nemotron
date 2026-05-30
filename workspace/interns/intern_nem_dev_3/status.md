@@ -7,6 +7,6 @@
 | Name | intern_nem_dev_3 |
 | Status | Working |
 | Current Task | task192_super3_cookbook_index_doc_links_revision_pins_s1 |
-| PR | Not opened yet |
+| PR | https://github.com/songCNMS/Nemotron/pull/299 |
 | Session | 1 |
-| Recent Progress | Started task192 from main 89a6da531c4c693da585a7cc9ac96c51492bffa4; scoped Super3 cookbook/deployment self-repo doc-link pins and focused static docs test in progress |
+| Recent Progress | PR #299 opened for task192 after focused pytest, py_compile, Ruff, structured static probe, added-line live-surface scan, and diff checks passed |
