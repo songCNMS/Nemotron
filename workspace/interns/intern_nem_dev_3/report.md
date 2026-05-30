@@ -71,3 +71,47 @@
   - Live judge inference path for safety, jailbreak, and over-refusal scoring.
   - Production benchmark source selection and revision pins.
   - SIF/Docker/cluster smoke for judge runtime paths.
+
+## 2026-05-30 23:23:51 UTC - task232_m2_resource_request_release_packet_s1
+
+- Status: evidence branch complete; M2 release remains HOLD pending resources.
+- Branch: `intern_nem_dev_3/task232_m2_resource_request_release_packet_s1`
+- Base SHA: `1d037329f5a02cdc04f2a09a16e7342721be4c87`
+- Artifact root:
+  `/mnt/cephfs/data/processing/nemotron-live-validation/task232`
+- Scope delivered:
+  - Produced PM-ready `validation_report.md`.
+  - Produced structured release packet in JSON and YAML:
+    `m2_resource_request_release_packet.json` and
+    `m2_resource_request_release_packet.yaml`.
+  - Produced 8 per-target smoke command templates, 8 config templates, and
+    8 Qwen3.5-122B-A10B baseline request templates.
+  - Covered M2 targets `hle`, `browsecomp`, `bird_real_execution`,
+    `bfcl_full`, `mcp_mark`, `tool_decathlon`,
+    `multilingual_ifeval`, and `multilingual_humaneval`.
+- Result:
+  - All 8 targets remain `HOLD_resource_missing`.
+  - Resource requests are separated into mount/stage paths, credentials and
+    services, Docker/sandbox provisioning, and frozen baseline generation.
+  - All 8 targets require frozen Qwen3.5-122B-A10B baseline artifacts before
+    candidate comparison.
+- Checks/probes:
+  - Structured JSON packet probe passed for task name, 8 targets, and
+    required PM-ready summary sections.
+  - Secret scan reviewed as false positives only; no secret values were
+    recorded.
+  - `git diff --check` and `git diff --cached --check` passed at closeout.
+- Boundaries:
+  - No endpoint request, eval/benchmark launch, SGLang, Docker pull/build/run,
+    package install/build/download, environment mutation, model copy, process
+    kill, artifact upload, product code edit, main/master push, or self-merge
+    was performed.
+- Blockers/residual risk:
+  - `M2_RELEASE_HELD`: PM release still required before any smoke or full
+    benchmark.
+  - `M2_122B_BASELINES_MISSING`: frozen Qwen3.5-122B-A10B baselines are
+    missing for all 8 M2 targets.
+  - `M2_RUN_VISIBLE_ASSETS_MISSING`: accepted target assets/databases must be
+    mounted or staged on the approved evaluator host.
+  - `M2_CREDENTIALS_AND_SANDBOXES_MISSING`: target-specific credentials,
+    services, and sandboxes remain owner-provided resources.
