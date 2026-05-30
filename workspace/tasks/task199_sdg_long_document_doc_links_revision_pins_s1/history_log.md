@@ -1,6 +1,22 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-05-30
+
+- PM reported PR #306 independently gated, merged, and verified on `main` at
+  `65606c993528918f92a45e0a62d7198b615dde40`; tested/merged head was
+  `da838430e2ed41f039991c2f22f376261bd5b9b1`.
+- Synced local `main` by fast-forward to
+  `65606c993528918f92a45e0a62d7198b615dde40`.
+- Recorded closeout on branch
+  `intern_nem_dev_2/task199_sdg_long_document_doc_links_revision_pins_s1_closeout_sync`
+  and set dev_2 status to Idle / Current Task None.
+- No additional product, test, or docs-link changes were needed after merge;
+  closeout is bookkeeping only.
+- Boundaries preserved: no live URL probe, build/download, recipe execution,
+  SDG data generation, data-prep/train/eval, endpoint, W&B, cluster, deploy,
+  artifact operation, direct `main`/`master` push, or self-merge.
 
 ## Session 1 - 2026-05-30
 
