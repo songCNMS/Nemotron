@@ -53,3 +53,42 @@
   blocker report yet.
 - Global gate remains `NO-GO/HOLD` pending candidate FT artifacts and task243
   same-harness FT-vs-base comparison against the accepted Qwen3-4B base `11/30`.
+
+## Session 3 - 2026-06-01 UTC - Unofficial training plan observed
+
+- During final lead monitoring after the no-output snapshot, a task255 output
+  root appeared at
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/`.
+- Observed files are planning artifacts only:
+  - `training_plan/qwen4b_v10_pilot_1iter_2gpu/report.md`
+    sha256 `1a49d3e5c48efb1b505c18265f1e8f103072a2c603e8aad8d5b24183b66b796b`;
+  - `training_plan/qwen4b_v10_pilot_1iter_2gpu/training_manifest.json`
+    sha256 `4437ee9b1a5cc9d8ffcee850da515d3ebb12e837682fea9439cbbf4a3b74e939`;
+  - `training_plan/qwen4b_v10_pilot_1iter_2gpu/run_m1_agentic_sft.sh`
+    sha256 `9b45d806210a7145500845177cc701ba9d039daa6cbec8b82e0b908c6cd99795`;
+  - `logs/plan_training.log`
+    sha256 `57f25c5d7621c8adde95b508219a223abeafd471a0135b70391243a50e5e1210`;
+  - `logs/plan_training_with_pythonpath.log`
+    sha256 `8f61244e1f5c4768d9c509753e4467242723e1d57b306e5704805d61ec0af143`.
+- Plan summary observed read-only:
+  - Qwen3-4B base
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - task253 packed splits as input;
+  - run name `qwen4b_v10_pilot_1iter_2gpu`;
+  - `train_iters=1`, `global_batch_size=2`, `micro_batch_size=1`,
+    `seq_length=8192`, `gpus_per_node=2`;
+  - save dir `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/checkpoints`;
+  - run script changes into
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/Nemotron`.
+- Read-only checks found no checkpoint/export files, no blocker report, no
+  `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1` files, and no
+  running `task255`/`qwen_local_train`/`torch.distributed` process.
+- No official worker_2 mailbox report had arrived for these artifacts at the
+  time of observation.
+- Lead sent delivered follow-up asking worker_2 to classify the current output
+  as planning-only, launched pilot, or blocker, and to provide official
+  commands/env/host/resources, sync path, checksums, and checkpoint/export or
+  blocker paths.
+- Global gate remains `NO-GO/HOLD`: planning artifacts are not candidate FT
+  checkpoint/export artifacts and do not authorize task243 comparison,
+  promotion, or 30B/8-GPU.

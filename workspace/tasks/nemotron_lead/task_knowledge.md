@@ -90,3 +90,4 @@
 84. task255 dispatch to worker_2 is permission for bounded Qwen3-4B pilot checkpoint/export artifact production only; it is not permission for task243 comparison, FT live eval, promotion, 30B/8-GPU, or use of AIME2025 as trainable data.
 85. task255 worker_2 branch head `1dbe7665384765785048adef32fbf52fc1521dc3` is acceptance/docs-only evidence; global gate stays HOLD until worker_2 provides a candidate FT checkpoint/export artifact or exact blocker and task243 later compares FT against the accepted `11/30` base.
 86. A no-change task255 monitor pass with no mailbox, no PR, no output root, and branch still at `1dbe7665384765785048adef32fbf52fc1521dc3` should be reported as HOLD monitoring, not as a blocker or approval transition.
+87. task255 training-plan artifacts are not enough to advance the gate; lead needs worker_2's official report plus checkpoint/export artifacts or an exact blocker before assigning task243 comparison or any further review.

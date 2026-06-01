@@ -2462,3 +2462,34 @@
   Qwen3-4B base `11/30`.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Monitor - 2026-06-01 UTC - task255 training plan appeared
+
+- A final read-only artifact check after the no-output monitor found a new
+  task255 output root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/`.
+- Observed planning artifacts under
+  `training_plan/qwen4b_v10_pilot_1iter_2gpu/`:
+  - report sha256
+    `1a49d3e5c48efb1b505c18265f1e8f103072a2c603e8aad8d5b24183b66b796b`;
+  - training manifest sha256
+    `4437ee9b1a5cc9d8ffcee850da515d3ebb12e837682fea9439cbbf4a3b74e939`;
+  - run script sha256
+    `9b45d806210a7145500845177cc701ba9d039daa6cbec8b82e0b908c6cd99795`.
+- The plan targets Qwen3-4B
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, task253 packed
+  splits, `train_iters=1`, `global_batch_size=2`, `micro_batch_size=1`,
+  `seq_length=8192`, and `2` GPUs, with save dir
+  `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/checkpoints`.
+- Read-only checks found no checkpoint/export files, no blocker report, no
+  `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1` files, and no
+  running task255 training process.
+- No official worker_2 mailbox report had arrived for the plan artifacts, so
+  lead treats them as unofficial planning evidence only.
+- Lead read mailbox before follow-up and sent delivered peer_send asking
+  worker_2 to classify the output as planning-only, launched pilot, or blocker
+  and to report commands/env/host/resources, sync path, checksums, and
+  checkpoint/export or blocker paths.
+- Gate remains `NO-GO/HOLD`: no candidate FT checkpoint/export artifact exists
+  and task243 has no same-harness FT-vs-base comparison against the accepted
+  Qwen3-4B base `11/30`.

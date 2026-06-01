@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task255 still at worker_2 acceptance head 1dbe766; no pilot artifact/blocker yet; gate HOLD |
+| PR | task255 plan output observed unofficially; awaiting worker report/checkpoint/export or blocker; gate HOLD |
 | Session | 61 |

@@ -14,3 +14,6 @@
 6. Worker_2 acceptance at `1dbe7665384765785048adef32fbf52fc1521dc3` is
    branch/docs ownership evidence only; it is not a checkpoint/export artifact
    or blocker report.
+7. The observed `qwen4b_v10_pilot_1iter_2gpu` training plan is planning
+   evidence only until worker_2 sends an official report and either provides
+   checkpoint/export artifacts or an exact blocker.
