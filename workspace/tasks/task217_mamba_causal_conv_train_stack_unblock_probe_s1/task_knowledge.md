@@ -1,6 +1,6 @@
 # task217_mamba_causal_conv_train_stack_unblock_probe_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Knowledge Entries
 
