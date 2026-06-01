@@ -45,6 +45,7 @@
   `tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py`.
 - Wrote `v11_canary_retention_report.md` with canary source hashes, retention
   schema, checks, and boundaries.
+- Opened PR #335 to `main` for task264 code/config/docs closeout.
 - Checks run: `git diff --check`; `python3 -m py_compile
   src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_aime2025_base_vs_ft_gate.py`;
   `PYTHONPATH=src pytest -q

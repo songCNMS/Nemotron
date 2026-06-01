@@ -23,3 +23,4 @@
 8. The first pytest attempt without `PYTHONPATH=src` cannot import `nemotron`;
    the focused test command for this repo is `PYTHONPATH=src pytest -q
    tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py`.
+9. PR #335 is the task264 V11 canary/retention gate closeout PR to `main`.

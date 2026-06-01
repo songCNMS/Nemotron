@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | |
-| PR | Pending |
+| PR | #335 |
 | Session | 1 |
-| Progress | Completed task264 V11 canary/retention gate implementation and report; awaiting PR number and lead gate. No live AIME eval/training/endpoints were run. |
+| Progress | Completed task264 V11 canary/retention gate implementation and report in PR #335; awaiting lead gate. No live AIME eval/training/endpoints were run. |

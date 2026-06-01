@@ -7,7 +7,7 @@
 - Task: `task264_qwen_aime_v11_eval_gate_canary_retention_s1`
 - Branch:
   `intern_nemotron_worker_3/task264_qwen_aime_v11_eval_gate_canary_retention_s1`
-- PR: pending at report-authoring time
+- PR: #335
 - Base commit: `origin/main` at
   `513fefa1f1ace94302b56413769c78fb7224624c`
 - Lead docs source:
