@@ -24,6 +24,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -237,6 +238,12 @@ def test_prepare_v9_requires_decontamination_corpus(tmp_path: Path) -> None:
         prepare(args)
 
 
+def test_prepare_v10_requires_decontamination_corpus(tmp_path: Path) -> None:
+    args = _prepare_args(tmp_path, strategy=MATH_SUPERVISION_STRATEGY_V10)
+    with pytest.raises(ValueError, match="decontaminate-math-against-corpus"):
+        prepare(args)
+
+
 def test_prepare_v7_skip_flag_allows_run_without_corpus(tmp_path: Path) -> None:
     args = _prepare_args(
         tmp_path, strategy=MATH_SUPERVISION_STRATEGY_V7, skip_check=True
@@ -282,6 +289,90 @@ def test_prepare_v7_with_corpus_drops_contaminated_row(tmp_path: Path) -> None:
     assert base["scanned_rows"] >= 1
     assert base["blocker_threshold"] == 0.5
     assert base["ngram_size"] == 5
+
+
+def test_prepare_v10_with_corpus_keeps_aime25_prompt_out_of_train_and_sidecar(
+    tmp_path: Path,
+) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    def v10_record(prompt: str, answer: str) -> dict:
+        record = _base_record("math_competition_numeric", user_prompt=prompt)
+        record["question"] = prompt
+        record["expected_answer"] = answer
+        record["extra_env_info"]["reference_solution"] = "\n".join(
+            [
+                "Encode the chosen chairs by ones and the empty chairs by zeroes.",
+                "Let dp[i][j][r] count prefixes by length, chosen seats, and trailing run length.",
+                "A zero resets the run length and a one extends it when no three consecutive ones appear.",
+                "The dynamic programming recurrence transitions between these small states.",
+                ("The table records every binary string prefix and every possible "
+                 "trailing run length, so the recurrence counts each constrained "
+                 "chair arrangement exactly once. " * 36).strip(),
+                f"The computed remainder is {answer}.",
+                rf"Therefore the final answer is \boxed{{{answer}}}.",
+            ]
+        )
+        return record
+
+    aime25_prompt = (
+        "How many ways are there to choose 8 occupied chairs from 16 chairs "
+        "arranged in a row if no occupied chair has two occupied neighbors? "
+        "Equivalently, count binary strings of length 16 with exactly 8 ones "
+        "and no three consecutive ones, then give the remainder modulo 1000."
+    )
+    clean_prompt = (
+        "Determine the number of bit strings of length 14 with exactly six "
+        "ones in which the substring 111 never appears. Use a dynamic "
+        "programming table over trailing run length and return the answer "
+        "modulo 1000."
+    )
+    write_split(
+        "math_competition_numeric",
+        "train",
+        [v10_record(aime25_prompt, "907"), v10_record(clean_prompt, "441")],
+    )
+    write_split("math_competition_numeric", "val", [])
+
+    corpus_path = tmp_path / "aime25_corpus.jsonl"
+    corpus_path.write_text(
+        json.dumps({"id": "aime25_aime06", "prompt": aime25_prompt}) + "\n",
+        encoding="utf-8",
+    )
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V10
+        decontaminate_math_against_corpus = corpus_path
+        decontaminate_math_ngram_size = 5
+        decontaminate_math_blocker_threshold = 0.5
+        skip_math_decontamination_check = False
+
+    manifest = prepare(Args())
+    assert manifest["math_decontamination"]["applied"] is True
+    assert manifest["math_decontamination"]["base_train"]["dropped_rows"] == 1
+
+    train_text = Path(manifest["train_path"]).read_text(encoding="utf-8")
+    hard_sidecar_text = (
+        Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl"
+    ).read_text(encoding="utf-8")
+    assert aime25_prompt not in train_text
+    assert aime25_prompt not in hard_sidecar_text
+    assert clean_prompt in train_text
+    assert clean_prompt in hard_sidecar_text
 
 
 # ---- _has_boxed_answer_near_end nested-brace handling ----
