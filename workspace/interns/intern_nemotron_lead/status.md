@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task260/task261 dispatched to workers; waiting mailbox reports; gate NO-GO/HOLD |
-| Session | 76 |
+| PR | task260/task261 accepted on worker branches; waiting reports; gate NO-GO/HOLD |
+| Session | 77 |

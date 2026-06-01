@@ -149,3 +149,7 @@
 110. Lead branch `c866509` assigns task260 to worker_3 for task255 eval-output
    forensics and task261 to worker_1 for data/training root-cause audit; both
    peer_send assignments were delivered after mailbox unread checks.
+111. task260 acceptance branch head is
+   `fd508a73bbcc29c2b3bc9b2954fb83d7810d1bcb`; task261 acceptance branch head is
+   `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`. Both diffs are worker
+   status/task-docs only; formal reports are still pending.
