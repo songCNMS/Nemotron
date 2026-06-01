@@ -3103,4 +3103,49 @@
   `Report content commit`/`PR` metadata fields. No technical finding changed.
 - Lead mailbox remained unread count `0`; #333 stays HOLD pending official
   worker_1 mailbox for the current head.
+- A later final poll found #333 head advanced again to
+  `947f34b0f7ff5515246914e093e248e9381ecb37`, still `OPEN/CLEAN`; drift from
+  `a346e21` is worker status/session metadata only and did not change the
+  report.
+- Worker_1 local status says mailbox was sent, but lead mailbox `include_read`
+  contained no task261 message. Sent delivered peer_send asking worker_1 to
+  resend a compressed official mailbox closeout for exact head `947f34b`.
+- Received and marked read worker_1 official task261/#333 mailbox messages
+  `d14abf6ef6c346f5b017789cc98be998`,
+  `a2f18a56dcb14ca6af8289310abe255a`,
+  `8f53dd458a734d0c81c6c3e2216df2fc`, and compressed resend
+  `f337467e2e6749c2a07d2427d574fa55`.
+- Worker_1 reported #333 `OPEN`, base `main`, `CLEAN`, exact head
+  `947f34b0f7ff5515246914e093e248e9381ecb37`, docs/status-only scope, and no
+  task261 training/export/endpoint/eval/code/artifact modifications.
+- Independently rechecked #333 at head `947f34b`: `OPEN`, base `main`,
+  non-draft, `mergeStateStatus=CLEAN`, no checks reported; diff scope was
+  worker_1 status plus task261 README/history/task_knowledge and
+  `task255_data_training_root_cause_report.md`; lead-side `git diff --check`
+  passed.
+- Read task261 report and accepted the root-cause disposition for docs/status
+  closeout: task255 should be treated as invalid evidence; highest-confidence
+  cause is missing/invalid real Qwen3-4B base initialization or raw-HF-dir
+  metadata leading to wrong-start/random-init-scale training, with secondary
+  zero-LR one-step schedule and packed split materialization collision risks.
+- Posted lead approval comment for exact head `947f34b`:
+  `https://github.com/songCNMS/Nemotron/pull/333#issuecomment-4596929787`.
+- Immediate PR recheck showed #333 had advanced after the approval comment to
+  `3f404b3043736c85ca89ff6aa799fc6c53120f62`, still `OPEN`, base `main`, and
+  `CLEAN`.
+- Fetched and inspected `947f34b..3f404b3`: drift is worker status plus task261
+  history/task_knowledge closeout metadata only; the root-cause report is
+  unchanged and lead-side `git diff --check origin/main...origin/intern_nemotron_worker_1/task261...`
+  still passed.
+- Posted hold clarification comment because the PR head changed after
+  approval:
+  `https://github.com/songCNMS/Nemotron/pull/333#issuecomment-4596938135`.
+- Sent delivered peer_send to worker_1: do not self-merge yet; send a fresh
+  official mailbox closeout for exact head `3f404b3` confirming PR state,
+  metadata-only drift, unchanged report, and unchanged `NO-GO/HOLD` global
+  gate.
+- Sent delivered coordinator update with #332 complete, #333 drift analysis,
+  and the exact-head mailbox requirement before any self-merge release.
+- Lead mailbox final poll had unread count `0`; #333 remains HOLD pending
+  worker_1 exact-head `3f404b3` mailbox.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion and no 30B/8-GPU.

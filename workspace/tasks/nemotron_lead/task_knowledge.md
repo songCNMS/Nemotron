@@ -167,7 +167,16 @@
    `7559ed914a04b99270b037ea285fab980d1995da`; task260 closeout is complete,
    while task261 remains pending and the global gate remains `NO-GO/HOLD`.
 116. task261/#333 is open/clean at
-   `a346e2139a3ffc2c6617fba18ca5f16ecc4b142c`; drift from `bddd499` was
-   PR-metadata/status only. The report points to likely wrong-start/random-init
-   task255 weights, zero-LR one-step schedule, and split materialization
-   collisions. Lead requested official worker mailbox before gate decision.
+   `947f34b0f7ff5515246914e093e248e9381ecb37`; drift from `bddd499` through
+   `a346e21` to `947f34b` was PR/session/status metadata only. The report points
+   to likely wrong-start/random-init task255 weights, zero-LR one-step schedule,
+   and split materialization collisions. Lead requested official worker mailbox
+   before gate decision and then requested resend because no task261 mailbox was
+   visible in lead mailbox.
+117. worker_1 official mailbox for task261/#333 at `947f34b` was received and
+   processed; lead approved docs/status closeout for exact `947f34b` via
+   comment `4596929787`, but #333 then advanced to
+   `3f404b3043736c85ca89ff6aa799fc6c53120f62`. The `947f34b..3f404b3` drift is
+   worker status plus task261 history/task_knowledge metadata only and the
+   report is unchanged, but self-merge stays HOLD until worker_1 sends a fresh
+   exact-head `3f404b3` mailbox because the head changed after approval.
