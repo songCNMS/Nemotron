@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,6 @@
    produces candidate FT artifacts or a precise blocker.
 4. If using `NemTron`, code must be synced to `/root` before debug/training.
 5. No 30B/8-GPU scale is allowed in this task.
+6. Worker_2 acceptance at `1dbe7665384765785048adef32fbf52fc1521dc3` is
+   branch/docs ownership evidence only; it is not a checkpoint/export artifact
+   or blocker report.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task253/task254 APPROVE local packed_qwen; task255 dispatched to worker_2 for Qwen3-4B pilot artifacts; gate HOLD |
+| PR | task255 accepted by worker_2 at 1dbe766; awaiting Qwen3-4B pilot artifact/blocker; gate HOLD |
 | Session | 61 |
