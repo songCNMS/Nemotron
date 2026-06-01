@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0 - Assigned
 
@@ -187,6 +187,31 @@
   #324 still needs to refresh against current `main` with #325 merged.
 - Combined gate remains NO-GO/HOLD because task248 has no FT artifacts and
   task243 base-vs-FT comparison output is missing.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.
+
+## Session 10 - Final static pass after task250 refresh
+
+- Fetched current `origin/main`, #323, and #324.
+- Verified #324 is OPEN/CLEAN at
+  `827c8cf6562d28cd0f5bafab97e19783961f1abc`.
+- Inspected #324 `live_runbook_artifact_report.md` Session 13; it is
+  refreshed against current `origin/main`
+  `2775dff05948acce3a35a2d941bbd2f96d074b4a`, with task246 #325 merged and
+  task247 #326 merged baseline.
+- Verified #323 was OPEN/CLEAN at
+  `39fe428b531fbbbfcef18a34b58cf56b8406d779` before this final pass.
+- Confirmed #324 citing #323 `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`
+  is non-blocking: diff from `b2ae6d5` to `39fe428` changes only
+  `status.md`, `history_log.md`, and `task_knowledge.md`, with no
+  `live_gate_review_matrix.md` change.
+- Updated `live_gate_review_matrix.md` to Session 10 final disposition:
+  task246 APPROVE/MERGED, task247 APPROVE/MERGED, task248 APPROVE
+  blocked-before-prep report/HOLD, task250 APPROVE current runbook/HOLD, and
+  combined first Qwen3-4B V10 go/no-go NO-GO/HOLD.
+- The remaining gate blockers are task248 missing FT artifacts, missing task243
+  same-harness base-vs-FT comparison output, and no 30B/8-GPU permission.
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.

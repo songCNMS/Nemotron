@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Knowledge Entries
 
@@ -72,4 +72,15 @@
 20. #323 must remain HOLD/no-merge until #324 refreshes against current `main`
     with #325 merged. The combined gate remains NO-GO/HOLD because task248 FT
     artifacts and task243 same-harness base-vs-FT comparison output are still
+    missing.
+21. At Session 10, #324 is OPEN/CLEAN at
+    `827c8cf6562d28cd0f5bafab97e19783961f1abc` and its runbook is refreshed
+    against current `origin/main` `2775dff05948acce3a35a2d941bbd2f96d074b4a`
+    with task246 #325 and task247 #326 merged.
+22. #324 citing #323 `b2ae6d5` is non-blocking because the diff from
+    `b2ae6d5` to `39fe428` changes only status/history/knowledge files, not
+    `live_gate_review_matrix.md` or the gate decision.
+23. Final static task249 disposition is APPROVE evidence alignment / HOLD
+    first go-no-go: task246 and task247 evidence are merged, task250 runbook is
+    current, but task248 FT artifacts and task243 comparison output are still
     missing.
