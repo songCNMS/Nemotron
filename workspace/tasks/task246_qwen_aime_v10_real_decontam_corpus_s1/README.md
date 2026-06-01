@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - Real heldout decontam corpus
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=4 -->
 
 ## Background
 
@@ -81,8 +81,8 @@ path needed by the Qwen3-4B V10 pilot.
   `20973e78f196d7e5d71993f60dc74a3500223f5f`, after PR #321.
 - Task docs source: `origin/intern_nemotron_lead/session1-recovery-task-docs`
   at `5d5e3fa`.
-- Status: PR #325 checksum fix applied after lead REQUEST_CHANGES; ready for
-  re-review.
+- Status: lead approved PR #325 for self-merge after checksum re-review; task
+  completed before merge per playbook.
 - Output root:
   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`.
 - Heldout corpus:

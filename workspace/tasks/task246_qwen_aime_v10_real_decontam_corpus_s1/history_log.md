@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -60,3 +60,16 @@
   hits in sidecar train JSONL.
 - Did not run training, eval, endpoint launch, main push, self-merge, or shared
   processing deletion.
+
+## Session 4 - 2026-06-01 UTC - Lead approval and merge closeout
+
+- Lead approved PR #325 at head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce` after independently verifying
+  the checksum fix and core artifact evidence.
+- Residual risks accepted for this task: sparse `8`-row V10 sidecar input and
+  the MATH-500 license note. No training/eval/FT judgment is accepted from this
+  task.
+- Marked task246 `Completed` and worker status `Idle` on the PR branch before
+  self-merge per worker playbook.
+- Boundaries remained unchanged: no training, eval, endpoint launch, main push,
+  shared processing deletion, or AIME25 trainable prompt/label output.
