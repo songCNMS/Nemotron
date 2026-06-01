@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
 
 ## Session 0 - Created with team lead
 
@@ -2141,6 +2141,30 @@
     boundaries.
 - No task253 PR, `packed_qwen` shard, packing artifact, or Xenna blocker report
   has arrived yet.
+- Received coordinator Session 28 ack:
+  - coordinator verified #328 merged evidence and task252 approve evidence;
+  - coordinator saw lead branch at `7f3bb86791f28e35f63067bf6da565a876586f5d`
+    before the later acceptance-mailbox tracking commits;
+  - coordinator verified task253 branch
+    `be3803fcf1aa7863255d939d34d03f633f95845d` as acceptance docs/status only;
+  - coordinator's read-only artifact check saw task253 output logs and an
+    active pip install process at that time, but no official task253 report,
+    packed shards, or blocker closeout.
+- Lead-side read-only follow-up after the coordinator ack found:
+  - task253 output logs now include `pip_install_cosmos_xenna.log`,
+    `xenna_import_probe_after_pip.log`, `env_probe_after_pydantic_settings.log`,
+    and `qwen_packing_after_xenna.log`;
+  - no active `pip` / `cosmos_xenna` task253 process was visible at this check;
+  - no `packed_qwen` paths were found under the task253 output root;
+  - `xenna_import_probe_after_pip.log` reports `cosmos_xenna_import OK` and
+    version `0.1.8`;
+  - `qwen_packing_after_xenna.log` still shows a local packing failure on
+    `ModuleNotFoundError: No module named 'pydantic_settings'`, while
+    `env_probe_after_pydantic_settings.log` later reports
+    `pydantic_settings_import OK` version `2.14.1`;
+  - this is read-only observation only and not gate evidence until worker_2
+    sends an official task253 report with commands, env, artifact paths, and
+    pass/block disposition.
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: #328 closes only the
   HotpotQA loader blocker. There are still no packed Qwen shards, no candidate
   FT checkpoint/export/live eval artifacts, no task243 same-harness FT-vs-base

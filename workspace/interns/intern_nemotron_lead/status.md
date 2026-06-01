@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #328 MERGED at 61fa65e from approved head 694197c; task253 branch be3803f accepted/no PR; gate HOLD |
+| PR | #328 MERGED at 61fa65e; task253 be3803f accepted/no PR/no packed_qwen; gate HOLD |
 | Session | 58 |

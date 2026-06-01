@@ -29,3 +29,10 @@
   branch `be3803f` from #328 main and the no-training/no-eval/no-30B scope.
 - No task253 PR, packing artifact, `packed_qwen` shard, or Xenna blocker report
   has arrived yet.
+- Read-only lead observation after coordinator Session 28 found task253 output
+  logs present, `cosmos_xenna_import OK` version `0.1.8`, no `packed_qwen`
+  paths, no active pip process, and a packing log still showing
+  `ModuleNotFoundError: No module named 'pydantic_settings'` before a later env
+  probe reported `pydantic_settings_import OK` version `2.14.1`.
+- This observation is not a task253 disposition; worker_2 still owes official
+  commands/env/artifact or blocker report.
