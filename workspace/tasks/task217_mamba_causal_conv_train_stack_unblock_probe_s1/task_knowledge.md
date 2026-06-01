@@ -1,6 +1,6 @@
 # task217_mamba_causal_conv_train_stack_unblock_probe_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -9,3 +9,4 @@
 3. Current-team owner is `intern_nemotron_worker_2`; independent follow-up coverage audit is assigned separately to `intern_nemotron_worker_5`.
 4. Recovery audit recommends approving/closing task217: task218 covers the causal-conv import/function unblock and task219 later proves the fixed path with a passing one-iteration smoke.
 5. After #313 merged into `main`, #316 was rebased/retargeted to `main`; no new evidence changed the task217 approve-close disposition.
+6. PR #316 merged into `main` at 2026-06-01T14:59:44Z with merge commit `3d4d3162ea25555208938f6d5635ca24b91b6d20`; task217 is completed with no post-merge issue observed.
