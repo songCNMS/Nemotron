@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task262_qwen_aime_v11_data_split_sidecar_s1 |
 | PR | #336 |
-| Session | 4 |
-| Progress | Added fresh full token 8-gram final-answer decontam scan evidence: 200 final-answer rows vs 560 heldout prompts, 0 blocker pairs/rows; #336 remains HOLD with no self-merge. |
+| Session | 5 |
+| Progress | Verified PR #336 current head includes the requested final-answer full n-gram decontam evidence; preparing exact-head mailbox response, no self-merge. |

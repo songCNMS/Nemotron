@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -104,3 +104,18 @@
 - Boundaries unchanged: no self-merge, training, export, endpoint,
   AIME/task243 eval, promotion, 30B/8-GPU, task255 checkpoint/export reuse,
   AIME2025 train prompt/label use, or shared deletion.
+
+## Session 5 - 2026-06-01 UTC - Crossed lead update reconciliation
+
+- Received lead update referencing PR #336 head
+  `69f32c60d60bd529397915aa5d1bff30de457068` and repeating the request for
+  fresh full final-answer n-gram contamination evidence.
+- Verified the request crossed with Session 4 work: local/origin PR head had
+  advanced to `5e431f4939799ae52c7d2002682352f2f2df6f3b`, which contains the
+  fresh final-answer n-gram scanner, task report updates, and evidence
+  artifacts.
+- Verified PR #336 was OPEN, base `main`, non-draft, CLEAN/MERGEABLE at head
+  `5e431f4939799ae52c7d2002682352f2f2df6f3b` before recording this metadata.
+- Session 5 repo changes are metadata-only; no code, tests, output artifacts,
+  training, eval, endpoints, promotion, 30B/8-GPU, task255 checkpoint/export
+  reuse, AIME2025 train prompt/label use, shared deletion, or self-merge.

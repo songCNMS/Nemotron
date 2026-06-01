@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -44,3 +44,6 @@
 15. The standard `decontaminate_math_rows` check over
     `math_competition_numeric` final-answer rows scanned 100 rows, found 0
     blocker findings, and dropped 0 rows.
+16. Lead's Session 5 update referenced prior head `69f32c6`; PR #336 had
+    already advanced to `5e431f4` with the requested final-answer n-gram
+    evidence before this reconciliation metadata was recorded.
