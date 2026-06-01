@@ -47,3 +47,6 @@
   no 30B/8-GPU, and global gate remains `NO-GO/HOLD`.
 - Follow-up: lead requested the official mailbox closeout for PR #333; worker
   updated Session 2 metadata/status docs before sending the mailbox report.
+- Stop-hook follow-up: corrected worker status metadata to legal `Idle` after
+  task closeout and recorded the compressed official mailbox resend accepted by
+  mailbox as message `f337467e2e6749c2a07d2427d574fa55`.

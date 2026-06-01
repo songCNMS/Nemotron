@@ -40,3 +40,7 @@
     explicit Qwen base-load proof before SFT/export, fix the one-step zero-LR
     schedule, fix split basename collisions, and keep AIME2025 held out with
     same-harness Qwen3-4B base-vs-FT comparison before any claim.
+13. Closeout process fact: the accepted compressed official mailbox resend for
+    task261/#333 is message `f337467e2e6749c2a07d2427d574fa55`; worker status
+    should be `Idle` after closeout while PR #333 remains lead-reviewed under
+    `NO-GO/HOLD`.
