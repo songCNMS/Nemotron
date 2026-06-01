@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0 - Assigned
 
@@ -93,3 +93,12 @@
 - Installed minimum user-site dependencies `datasets>=2.14.0` and `hydra-core>=1.3.2`; pip selected `pyarrow 24.0.0`, which conflicts with system `cudf`/`pylibcudf` `<19` constraints.
 - Retried local prep again without venv activation; stopped during M0 data prep on Hugging Face `datasets` `trust_remote_code` incompatibility for `hotpotqa/hotpot_qa`.
 - Partial M0 files exist only for environments reached before the blocker; no `m0_agentic/manifest.json`, M1 blend, packed shards, training manifest, checkpoint/export, NemTron sync, training, live/FT eval, task243 comparison, promotion claim, shared-file deletion, or 30B/8-GPU action exists.
+
+## Session 10 - 2026-06-01 UTC - Focused PARTIAL_PREP_BLOCKED report
+
+- Opened PR #327 to `main` for task248 report/status docs only; PR #327 was `OPEN`/`CLEAN` at head `f1efd1cf7bde528973158f2707d8e29ebdd1bc0b` before this Session 10 update.
+- Classified the current disposition as `PARTIAL_PREP_BLOCKED`: planner artifacts are complete, local prep is incomplete, and outputs are not ready for task243 comparison.
+- Recorded exact environment used: generated script expects `/work-agents/.venv/bin/activate`, but that path is absent; retry used system `/usr/bin/python` Python `3.12.3`; after minimum user-site install, `datasets==4.8.5`, `hydra-core==1.3.2`, and `pyarrow==24.0.0` were visible, with a noted `pyarrow` conflict against system `cudf`/`pylibcudf` `<19` constraints.
+- Recorded exact blocker: Hugging Face `datasets` reports `trust_remote_code` is not supported anymore for `hotpotqa/hotpot_qa`, so the task248 M0 data-source/config path needs a workaround before local prep can complete.
+- Proposed smallest worker-owned workaround: keep Qwen3-4B scope and task248-owned outputs, create or use a task-owned standard-format HotpotQA cache/registry override from the pinned HotpotQA revision, then rerun the same task248 local prep command without changing task246 AIME heldout usage or any shared files.
+- Did not run NemTron sync, training, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU.

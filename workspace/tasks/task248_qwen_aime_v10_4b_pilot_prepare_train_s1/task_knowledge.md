@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Knowledge Entries
 
@@ -66,3 +66,12 @@
     user-site dependency install, Hugging Face `datasets` `trust_remote_code`
     incompatibility for `hotpotqa/hotpot_qa`; output is not ready for task243
     comparison.
+21. Session 10 disposition is `PARTIAL_PREP_BLOCKED`: complete planner/script
+    artifacts exist, but local prep lacks M0 manifest, M1 blend, packed shards,
+    training manifest, checkpoint/export, FT eval, and task243 comparison
+    artifacts.
+22. The required workaround is data-source/config level, not training level:
+    preserve task248 Qwen3-4B-only scope and create or point to a task-owned
+    standard-format HotpotQA cache/registry override from the pinned revision
+    so `prepare_m0_assets.py` does not depend on unsupported
+    `trust_remote_code` execution for `hotpotqa/hotpot_qa`.

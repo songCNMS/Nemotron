@@ -1,15 +1,17 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Blocked,SESSION=9 -->
+<!-- METADATA:STATUS=PARTIAL_PREP_BLOCKED,SESSION=10 -->
 
 ## Summary
 
 - Branch `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` was created from current `origin/main` after PR #321 merge commit `20973e78f196d7e5d71993f60dc74a3500223f5f`.
+- PR #327 is open for report/status docs only.
 - Qwen3-4B pilot model path exists locally: `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
 - Local output root reserved for this task:
   `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+- Current disposition: `PARTIAL_PREP_BLOCKED`.
 - Session 9 lead clearance arrived after task246/#325, task247/#326,
   task250/#324, and task249/#323 merged on current `main`
   `ec467724c2876211cd2bf56b15071e31abd692a4`.
@@ -80,6 +82,8 @@
   `2026-06-01T18:12:43Z` with merge commit
   `ff28538c41620a6d8b75b33d70c0c5e69714f42e`.
 - Session 9 `origin/main` is `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Session 10 update: PR #327 is open/CLEAN for task248 report/status docs and
+  current task248 state is `PARTIAL_PREP_BLOCKED`.
 
 ## Prepared command shape
 
@@ -190,6 +194,69 @@ Current blocker:
   or an update to the M0 data prep path that avoids the installed `datasets`
   `trust_remote_code` incompatibility for `hotpotqa/hotpot_qa`.
 - The output is not ready for task243 comparison.
+
+## Session 10 focused disposition
+
+Disposition: `PARTIAL_PREP_BLOCKED`.
+
+Branch / PR:
+
+- Branch: `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
+- PR: `#327` (`https://github.com/songCNMS/Nemotron/pull/327`)
+- PR scope: report/status docs only.
+
+Commands and environment used:
+
+- Refreshed and aligned branch with current main:
+  `git fetch origin --prune`, `git merge --no-edit origin/main`.
+- Confirmed prerequisites with read-only PR checks:
+  `gh pr view 323`, `gh pr view 324`, `gh pr view 325`, `gh pr view 326`.
+- Generated planner artifacts with the command shown above.
+- Checked generated manifest/scripts with `jq`, `rg`, `find`, `sha256sum`,
+  and `git diff --check`.
+- Attempted local prep with:
+  `bash /work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/run_local_data_prep.sh`.
+- Retried without the missing venv activation using:
+  `awk 'NR!=5 {print}' .../run_local_data_prep.sh | bash`.
+- Installed minimum missing local packages using:
+  `python -m pip install --user 'datasets>=2.14.0' 'hydra-core>=1.3.2'`.
+- Retried the same `awk ... | bash` command after dependency install, then
+  killed the stuck prep process when it remained in the dataset loader blocker.
+- Environment facts: generated script expected `/work-agents/.venv/bin/activate`;
+  the path is missing. System Python was `/usr/bin/python` Python `3.12.3`.
+  After install, visible package versions were `datasets==4.8.5`,
+  `hydra-core==1.3.2`, and `pyarrow==24.0.0`. Pip reported `pyarrow 24.0.0`
+  conflicts with system `cudf`/`pylibcudf` `<19` constraints.
+
+Exact loader blocker:
+
+```text
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'hotpotqa/hotpot_qa' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+```
+
+Data-source/config workaround needed: yes.
+
+Smallest worker-owned workaround that preserves task248 scope:
+
+- Keep Qwen3-4B only and keep task248 outputs under
+  `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
+- Do not change task246 AIME/HMMT/MATH heldout usage and do not train on AIME25
+  prompts or labels.
+- Create or point to a task-owned standard-format HotpotQA cache/registry
+  override from the pinned HotpotQA revision
+  `1908d6afbbead072334abe2965f91bd2709910ab`, covering the same
+  `m0_search_hotpotqa` train/validation rows required by this smoke.
+- Rerun the generated task248 local prep command after that override exists,
+  then only proceed to NemTron sync/train/eval if M0 manifest, M1 blend, packed
+  shards, and training manifest are complete and paths validate.
+
+Readiness:
+
+- Not ready for task243 comparison.
+- No candidate FT checkpoint/export/log/live eval artifacts exist.
+- No promotion claim is made.
 
 ## Commands run
 
