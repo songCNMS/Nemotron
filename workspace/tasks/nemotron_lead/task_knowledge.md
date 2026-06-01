@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
 
 ## Knowledge Entries
 
@@ -201,3 +201,8 @@
    base `11/30` under the same corrected AIME25 protocol. No AIME2025 train
    data, promotion, new full-scale training/eval clearance, or 30B/8-GPU is
    authorized by assigning task262-task266.
+122. task262/task264/task266 acceptance branches can be treated as ownership
+   evidence when their diffs are status/task-doc copies only; task265 currently
+   has mailbox acceptance but a branch identical to main, so its future review
+   matrix still needs exact upstream heads. task263 needs worker_2 remote branch
+   or mailbox blocker before lead can count it as accepted remote evidence.

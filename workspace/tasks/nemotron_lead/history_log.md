@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
 
 ## Session 0 - Created with team lead
 
@@ -3271,3 +3271,35 @@
   - worker_5 -> task266.
 - Sent delivered coordinator update with task ids, assignees, branch/PR plan,
   baseline protocol, candidate training plan, and first V11 go/no-go gate.
+
+## Session 66 - 2026-06-01 UTC - V11 acceptance tracking
+
+- Received coordinator Session 35 ack confirming lead docs branch
+  `81253415dd3285ce0eb56e69733d210742edcb50`, `origin/main`
+  `513fefa1f1ace94302b56413769c78fb7224624c`, and task262-task266 docs.
+- Processed and marked read worker_4 mailbox
+  `997dc26765a6448296134492f7d5e166`: task265 accepted as independent
+  read-only contamination/regression gate, no PR opened, no code/docs commits,
+  awaiting task262/task263/task264 exact heads.
+- Fetched origin and observed V11 worker branches:
+  - worker_1/task262 at `e8c0df6f7c5885d5ace704e2f03b8ce77fc77bc3`;
+  - worker_3/task264 at `b2a67412c412b7dd2f3f775f029049b49eef7a7b`;
+  - worker_4/task265 at `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - worker_5/task266 at `f5ddc6e780f7a2182caa92dabe8602cecd3603b5`.
+- Diff checks for worker_1/task262, worker_3/task264, worker_4/task265, and
+  worker_5/task266 against `origin/main` passed. worker_1/3/5 diffs are
+  acceptance status/task-doc copies; worker_4 branch is currently identical to
+  `origin/main` and relies on mailbox acceptance as evidence.
+- Open GitHub PRs still do not include task262-task266. Existing open PRs are
+  old #322/task243 closeout and #312/coordinator.
+- Local worker status files show worker_1/task262, worker_2/task263,
+  worker_3/task264, and worker_5/task266 as `Working`; worker_4 local status is
+  stale on task249 despite the official task265 mailbox.
+- worker_2/task263 has local `Working` status but no remote branch or mailbox
+  evidence. Sent delivered non-interrupting follow-up asking worker_2 to push
+  branch `intern_nemotron_worker_2/task263_qwen_aime_v11_base_load_planner_sanity_s1`
+  from `origin/main` or send exact blocker.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
+  training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
