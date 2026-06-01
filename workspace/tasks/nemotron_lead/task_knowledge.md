@@ -265,3 +265,9 @@
    while task263 remains `BLOCK/HOLD` and the global Qwen AIME gate remains
    `NO-GO/HOLD`. Worker_5 post-merge closeout mailbox
    `fc94a2b9cde8495ab52e1927f386f665` confirmed no boundary violation.
+135. After #334/#335/#336 merged, task263 is the first remaining live-execution
+   blocker. Worker_2 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` only
+   records local missing `megatron.bridge`; there is no task263 PR or output
+   root. Lead refreshed task263 docs to current main
+   `5e839d4a911c8a0c1c55e6adc606d325b9d17717` and requested NemTron/NeMo
+   base-load/import proof, nonzero-LR bounded smoke plan, or exact blocker.

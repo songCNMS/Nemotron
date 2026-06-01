@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - V11 base-load planner sanity
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=0 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Background
 
@@ -18,8 +18,11 @@ signals, and uses a nonzero-LR bounded pilot schedule.
 
 ## Scope
 
-- Start from current `origin/main` after #333 merge commit
-  `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Refresh against current `origin/main` after #334/#335/#336 merge commit
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- Treat #336/task262 data split/sidecar repair, #335/task264 static canary gate,
+  and #334/task266 runbook gate as merged static evidence only. They do not
+  authorize training, live AIME/task243 eval, promotion, or 30B/8-GPU.
 - Use Qwen3-4B only:
   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
 - Identify the correct Bridge/Megatron import or checkpoint-root mechanism for
@@ -38,8 +41,8 @@ signals, and uses a nonzero-LR bounded pilot schedule.
 
 ## Boundaries
 
-- Do not launch full training until task262 data readiness and lead clearance
-  exist.
+- Do not launch full training until task263 has positive base-load/import proof
+  and a later lead clearance explicitly authorizes a bounded Qwen3-4B pilot.
 - Do not run task243/AIME eval, launch 30B/8-GPU, promote, or reuse task255
   checkpoint/export.
 - Do not train on AIME2025 prompts or labels.
@@ -61,6 +64,8 @@ signals, and uses a nonzero-LR bounded pilot schedule.
   - LR/iteration schedule and why first step is nonzero LR;
   - fail-closed abort conditions;
   - NemTron sync path and resource shape if remote smoke is prepared;
+  - if blocked: exact NemTron/NeMo environment blocker, logs, missing package or
+    permission, and the next smallest remediation path;
   - explicit no-AIME-train-data, no AIME/task243 eval, no promotion, no
     30B/8-GPU, and no shared deletion confirmation.
 
@@ -74,6 +79,18 @@ signals, and uses a nonzero-LR bounded pilot schedule.
 - This task does not authorize task243 comparison or promotion. Any later pilot
   checkpoint must still be judged against the accepted Qwen3-4B base `11/30`
   under the same corrected AIME harness.
+
+## Current Gate State
+
+- #336/task262 is merged as static V11 data split/sidecar repair evidence:
+  merge commit `2ca6541c275d1eb64068e665af24147a796c818a`.
+- #335/task264 is merged as static non-AIME canary/retention gate evidence:
+  merge commit `98e8aad39af9e705feed581e0ff9f8814073e2d8`.
+- #334/task266 is merged as static runbook/repro gate evidence:
+  merge commit `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- The first V11 execution gate remains `NO-GO/HOLD` until this task proves
+  Qwen3-4B base-load/import and a nonzero-LR bounded smoke plan, or reports an
+  exact blocker from the NemTron/NeMo environment.
 
 ## Assignment
 

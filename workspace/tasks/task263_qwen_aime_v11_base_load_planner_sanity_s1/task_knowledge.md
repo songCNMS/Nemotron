@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -13,3 +13,7 @@
    training step must have nonzero LR.
 4. This task cannot authorize AIME eval, promotion, task243 comparison, or
    30B/8-GPU.
+5. As of `origin/main` `5e839d4a911c8a0c1c55e6adc606d325b9d17717`, static V11
+   gates #336 data/sidecar, #335 canary/retention, and #334 runbook are merged.
+   They do not authorize training; task263 base-load/import proof remains the
+   live-execution blocker.
