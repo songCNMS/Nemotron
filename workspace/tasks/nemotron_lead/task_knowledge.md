@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -12,3 +12,4 @@
 6. Bookkeeping-only #313 head movement does not require immediate coordinator escalation when #313 remains open/clean with blank `reviewDecision`/no merge and #314/#315/#316 base, mergeability, and head are unchanged; record it locally and continue monitoring.
 7. A user-side "merge the pr" request should be treated as authorization intent, not as permission for `intern_nemotron_lead` to self-merge; route the request to the coordinator or another authorized non-author merge owner while preserving the #313 -> #314/#315 and #316 retarget/rebase sequencing.
 8. After a lead task-doc PR lands, downstream docs/status PRs can become `DIRTY` because they touch the same workspace closeout files; the owning workers must refresh their branches against `main`, preserve the gate disposition unless new evidence appears, and report new head/base/mergeability before any final merge direction.
+9. Lead approval for downstream closeout PRs requires worker mailbox evidence plus independent GitHub state and file-list checks; after approval, instruct the worker to self-merge if still mergeable, and do not run `gh pr merge` from the lead seat.

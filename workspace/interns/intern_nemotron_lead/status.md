@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #313 merged; #314/#315/#316 follow-up |
-| Session | 11 |
+| PR | #314/#315/#316 approved for worker self-merge |
+| Session | 12 |

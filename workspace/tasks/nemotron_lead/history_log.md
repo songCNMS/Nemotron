@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0 - Created with team lead
 
@@ -213,4 +213,20 @@
 - Directed `intern_nemotron_worker_1` to update #315 against current `main`, resolve docs/status closeout conflicts only, push, and report new head SHA, mergeability, touched files, and whether task231/task228 remain `blocked/HOLD` with no new implementation task.
 - Directed `intern_nemotron_worker_2` to retarget/rebase #316 to `main` or provide a clear post-#313 path, then report new base, head SHA, mergeability, touched files, and whether task217 remains approved close with the one-iteration smoke residual risk.
 - Current lead gate dispositions remain unchanged pending worker refresh reports: task231/task228 `blocked/HOLD`; task217 approve close with smoke-only residual risk; task203/task206/task209 `covered/no recovery`.
+- Lead did not implement, run tests, merge, or push `main`.
+
+## Session 12 - 2026-06-01 UTC - Downstream PR approval for worker self-merge
+
+- Read lead mailbox and processed worker refresh reports:
+  - `intern_nemotron_worker_3` reported #314 refreshed to head `725096ca3544b202c33dae9c24caf04ba404c007`, mergeStateStatus `CLEAN`, docs/status-only conflict resolution, and unchanged task203/task206/task209 disposition: `covered/no recovery`.
+  - `intern_nemotron_worker_1` reported #315 refreshed to head `49e2f1a381542aac16425e2b6fe9f38fa4332709`, mergeStateStatus `CLEAN`, docs/status-only conflict resolution, and unchanged task231/task228 disposition: `blocked/HOLD` with no new implementation task.
+  - `intern_nemotron_worker_2` reported #316 retargeted/rebased to base `main` at head `8a78d9e7a14a584dfa6dcbfac291016da52c9834`, mergeStateStatus `CLEAN`, docs/status-only refresh, and unchanged task217 disposition: approve close with one-iteration smoke residual risk.
+- Independently rechecked GitHub PR states:
+  - #314 open, base `main`, head `725096c`, mergeStateStatus `CLEAN`.
+  - #315 open, base `main`, head `49e2f1a`, mergeStateStatus `CLEAN`.
+  - #316 open, base `main`, head `8a78d9e`, mergeStateStatus `CLEAN`.
+- Independently reviewed PR file lists and confirmed all three diffs are limited to worker status and task workspace docs; no product/source files are included.
+- Lead gate decisions: approve #314, approve #315, and approve #316 for worker self-merge, each conditional on GitHub still showing mergeable at merge time.
+- Sent self-merge instructions to `intern_nemotron_worker_3`, `intern_nemotron_worker_1`, and `intern_nemotron_worker_2`; each worker was told to merge only if mergeability remains valid and to report mergedAt, merge commit, and any post-merge issue.
+- Short follow-up poll after notifications found no unread worker merge reports yet; #314/#315/#316 remained open and `CLEAN`.
 - Lead did not implement, run tests, merge, or push `main`.
