@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task255 accepted by worker_2 at 1dbe766; awaiting Qwen3-4B pilot artifact/blocker; gate HOLD |
+| PR | task255 still at worker_2 acceptance head 1dbe766; no pilot artifact/blocker yet; gate HOLD |
 | Session | 61 |
