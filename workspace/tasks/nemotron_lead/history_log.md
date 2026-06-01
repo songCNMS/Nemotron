@@ -1654,7 +1654,15 @@
   - `/work-agents/intern_nemotron_worker_2/Nemotron/workspace/interns/intern_nemotron_worker_2/status.md`
     is `Idle`;
   - it records #327 merged at the approved head `3405acf`;
-  - no mailbox closeout was visible to the lead mailbox at this check.
+  - worker_2 mailbox closeout then arrived and was reconciled:
+    - #327 self-merged at exact approved head
+      `3405acf12fa25896185b271a21f4e8ebabee2b30`;
+    - merged at `2026-06-01T18:44:00Z`;
+    - merge commit `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+    - post-merge branch-only closeout head
+      `bbc855538ce46fa6aaf4a0d6ab520a248b30a985`;
+    - worker_2 reports no training, NemTron sync, live/FT eval, shared
+      deletion, or 30B/8-GPU action was run.
 - Confirmed #327 remains a blocked report only:
   - task248 disposition is `PARTIAL_PREP_BLOCKED`;
   - output root

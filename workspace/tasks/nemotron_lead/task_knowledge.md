@@ -68,3 +68,4 @@
 62. #327 merged task248 at head `3405acf` with merge commit `419c8b9`, but that closes only the blocked prep report; task248 remains without checkpoint/export/live FT eval artifacts.
 63. The HotpotQA `trust_remote_code` failure should be handled as a worker-owned data-source/config unblock task before task243 resumes; task243 cannot compare base-vs-FT until a real candidate FT artifact exists.
 64. task251 is scoped to a Qwen3-4B local prep unblock and must stop before NemTron training or FT live eval unless lead explicitly clears continuation after reviewing the local prep artifacts.
+65. worker_2's #327 mailbox closeout recorded post-merge branch-only head `bbc8555`; this does not change the merged PR head `3405acf` or the gate disposition.
