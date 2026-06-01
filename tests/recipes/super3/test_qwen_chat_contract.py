@@ -242,3 +242,100 @@ def test_qwen_packed_contract_accepts_valid_tokenizer_uri_normalization_cases(
             )
             == splits_dir / "metadata.json"
         )
+
+
+def test_qwen_packed_contract_rejects_incomplete_split_materialization(
+    tmp_path: Path,
+) -> None:
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    train_dir = splits_dir / "train"
+    train_dir.mkdir(parents=True)
+    dataset_a = packed_root / "runs" / "abc" / "datasets" / "dataset-a" / "hash-a"
+    dataset_b = packed_root / "runs" / "abc" / "datasets" / "dataset-b" / "hash-b"
+    shard_a = dataset_a / "shard_000000.parquet"
+    shard_b = dataset_b / "shard_000000.parquet"
+    shard_a.parent.mkdir(parents=True)
+    shard_b.parent.mkdir(parents=True)
+    shard_a.write_bytes(b"a")
+    shard_b.write_bytes(b"b")
+
+    # Pre-task262 materialization exposed only one basename link for two
+    # dataset-qualified blend entries.
+    (train_dir / "shard_000000.parquet").symlink_to(
+        Path("../..") / "runs" / "abc" / "datasets" / "dataset-b" / "hash-b" / "shard_000000.parquet"
+    )
+    blend_path = packed_root / "blend.json"
+    blend_path.write_text(
+        json.dumps(
+            {
+                "train": [
+                    "1.0",
+                    str(dataset_a / "shard_000000"),
+                    "1.0",
+                    str(dataset_b / "shard_000000"),
+                ],
+                "valid": [],
+                "test": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "tokenizer_uri": "/models/Qwen/Qwen3-4B-Instruct-2507",
+                "chat_template": QWEN_SFT_CHAT_TEMPLATE,
+                "chat_template_kwargs": dict(QWEN_SFT_CHAT_TEMPLATE_KWARGS),
+                "blend_path": str(blend_path),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="split materialization mismatch.*train"):
+        validate_qwen_packed_sft_chat_contract(
+            splits_dir,
+            tokenizer_model="/models/Qwen/Qwen3-4B-Instruct-2507",
+        )
+
+
+def test_qwen_packed_contract_rejects_missing_expected_split_dir(
+    tmp_path: Path,
+) -> None:
+    packed_root = tmp_path / "packed"
+    splits_dir = packed_root / "splits"
+    splits_dir.mkdir(parents=True)
+    dataset = packed_root / "runs" / "abc" / "datasets" / "dataset-a" / "hash-a"
+    shard = dataset / "shard_000000.parquet"
+    shard.parent.mkdir(parents=True)
+    shard.write_bytes(b"a")
+
+    blend_path = packed_root / "blend.json"
+    blend_path.write_text(
+        json.dumps(
+            {
+                "train": ["1.0", str(dataset / "shard_000000")],
+                "valid": [],
+                "test": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (splits_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "tokenizer_uri": "/models/Qwen/Qwen3-4B-Instruct-2507",
+                "chat_template": QWEN_SFT_CHAT_TEMPLATE,
+                "chat_template_kwargs": dict(QWEN_SFT_CHAT_TEMPLATE_KWARGS),
+                "blend_path": str(blend_path),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="split materialization mismatch.*train"):
+        validate_qwen_packed_sft_chat_contract(
+            splits_dir,
+            tokenizer_model="/models/Qwen/Qwen3-4B-Instruct-2507",
+        )

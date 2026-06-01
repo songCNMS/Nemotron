@@ -91,5 +91,9 @@ and final-answer sidecar inputs for a future Qwen3-4B pilot.
 - Task docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at
   `81253415dd3285ce0eb56e69733d210742edcb50`.
-- Status: accepted; beginning read-only artifact/code inspection under V11
-  data/packing boundaries.
+- Status: implemented; report and task-owned artifacts generated under
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/`.
+- Report:
+  `workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/v11_data_split_sidecar_report.md`.
+- Checks passed: `py_compile`, focused split/Qwen contract pytest files, and
+  `git diff --check`.

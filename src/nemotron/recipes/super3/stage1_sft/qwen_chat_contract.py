@@ -10,6 +10,8 @@ Megatron recipe.
 from __future__ import annotations
 
 import json
+import os
+from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -304,6 +306,90 @@ def _metadata_declares_qwen(metadata: Mapping[str, Any]) -> bool:
     return False
 
 
+def _resolve_metadata_path_value(value: object, *, metadata_path: Path) -> Path | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    return (metadata_path.parent / path).resolve(strict=False)
+
+
+def _split_base_dir(packed_sft_dir: str | Path) -> Path:
+    path = Path(packed_sft_dir).expanduser()
+    if path.is_file():
+        path = path.parent
+    if (path / "train").is_dir() or path.name == "splits":
+        return path
+    if (path / "splits").is_dir():
+        return path / "splits"
+    return path
+
+
+def _parquet_targets_from_blend(path_list: object) -> Counter[str]:
+    targets: Counter[str] = Counter()
+    if not isinstance(path_list, list):
+        return targets
+    for index in range(1, len(path_list), 2):
+        value = path_list[index]
+        if isinstance(value, str):
+            targets[str(Path(f"{value}.parquet").resolve(strict=False))] += 1
+    return targets
+
+
+def _actual_split_targets(split_dir: Path) -> Counter[str]:
+    targets: Counter[str] = Counter()
+    for entry in split_dir.glob("*.parquet"):
+        if entry.is_symlink():
+            target = Path(os.readlink(entry))
+            if not target.is_absolute():
+                target = entry.parent / target
+            targets[str(target.resolve(strict=False))] += 1
+        else:
+            targets[str(entry.resolve(strict=False))] += 1
+    return targets
+
+
+def _validate_split_materialization(
+    packed_sft_dir: str | Path,
+    *,
+    metadata_path: Path,
+    metadata: Mapping[str, Any],
+) -> None:
+    """Ensure exposed split dirs contain exactly the shards advertised by blend.json."""
+
+    blend_path = _resolve_metadata_path_value(
+        _metadata_value(metadata, "blend_path"),
+        metadata_path=metadata_path,
+    )
+    if blend_path is None or not blend_path.is_file():
+        return
+
+    with blend_path.open(encoding="utf-8") as f:
+        blend = json.load(f)
+    if not isinstance(blend, Mapping):
+        raise ValueError(f"{blend_path} must contain a JSON object")
+
+    splits_base = _split_base_dir(packed_sft_dir)
+    for split_name in ("train", "valid", "test"):
+        expected = _parquet_targets_from_blend(blend.get(split_name))
+        split_dir = splits_base / split_name
+        actual = _actual_split_targets(split_dir) if split_dir.is_dir() else Counter()
+        if expected == actual:
+            continue
+        if not expected and not actual:
+            continue
+        missing = sorted((expected - actual).elements())
+        unexpected = sorted((actual - expected).elements())
+        raise ValueError(
+            f"Qwen packed split materialization mismatch for {split_name}: "
+            f"blend expects {expected.total()} parquet shard(s), exposed split has {actual.total()}. "
+            f"Missing: {missing[:3]}{'...' if len(missing) > 3 else ''}; "
+            f"unexpected: {unexpected[:3]}{'...' if len(unexpected) > 3 else ''}. "
+            "Regenerate data prep with collision-free dataset-qualified split links before training."
+        )
+
+
 def validate_qwen_packed_sft_chat_contract(
     packed_sft_dir: str | Path,
     *,
@@ -368,6 +454,12 @@ def validate_qwen_packed_sft_chat_contract(
                 f"{metadata_path} tokenizer_uri={tokenizer_uri!r}, "
                 f"training tokenizer_model={tokenizer_model!r}."
             )
+
+    _validate_split_materialization(
+        packed_sft_dir,
+        metadata_path=metadata_path,
+        metadata=metadata,
+    )
 
     return metadata_path
 

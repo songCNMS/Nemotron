@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
@@ -58,6 +59,34 @@ def test_realize_packed_shards_removes_stale_parquet_entries(tmp_path: Path) -> 
     assert os.readlink(current_link) == os.path.relpath(parquet_path, split_dir)
 
 
+def test_realize_packed_shards_qualifies_colliding_basenames(tmp_path: Path) -> None:
+    output_dir = tmp_path / "output"
+    shard_a = tmp_path / "runs" / "abc" / "datasets" / "dataset-a" / "hash-a" / "shard_000000"
+    shard_b = tmp_path / "runs" / "abc" / "datasets" / "dataset-b" / "hash-b" / "shard_000000"
+    parquet_a = _write_parquet_placeholder(shard_a)
+    parquet_b = _write_parquet_placeholder(shard_b)
+
+    realize_packed_shards_into_split_dirs(
+        output_dir=output_dir,
+        split_to_paths={"train": ["1.0", str(shard_a), "1.0", str(shard_b)]},
+    )
+
+    split_dir = output_dir / "splits" / "train"
+    link_a = split_dir / "dataset-a__hash-a__shard_000000.parquet"
+    link_b = split_dir / "dataset-b__hash-b__shard_000000.parquet"
+    assert link_a.is_symlink()
+    assert link_b.is_symlink()
+    assert os.readlink(link_a) == os.path.relpath(parquet_a, split_dir)
+    assert os.readlink(link_b) == os.path.relpath(parquet_b, split_dir)
+
+    manifest = json.loads((output_dir / "splits" / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["splits"]["train"]["intended_shards"] == 2
+    assert manifest["splits"]["train"]["created_shards"] == 2
+    assert {
+        entry["link_name"] for entry in manifest["splits"]["train"]["entries"]
+    } == {link_a.name, link_b.name}
+
+
 def test_realize_packed_shards_rejects_stale_parquet_directory(tmp_path: Path) -> None:
     output_dir = tmp_path / "output"
     shard_path = tmp_path / "packed" / "current" / "shard_000000"
@@ -89,7 +118,7 @@ def test_realize_packed_shards_rejects_current_parquet_directory(tmp_path: Path)
 
 
 def test_realize_packed_shards_missing_train_shard_still_fails(tmp_path: Path) -> None:
-    with pytest.raises(FileNotFoundError, match="No parquet files found for train split"):
+    with pytest.raises(FileNotFoundError, match="Missing parquet files for train split"):
         realize_packed_shards_into_split_dirs(
             output_dir=tmp_path / "output",
             split_to_paths={"train": ["1.0", str(tmp_path / "missing" / "shard_000000")]},
