@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Session 0 - Created with coordinator
 
@@ -327,3 +327,26 @@
 - Confirmed the worker report preserves Qwen3-4B path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, `chat_template=tokenizer`, `enable_thinking=false`, `truncate_history_thinking=false`, Qwen packed SFT chat contract validation passed, and no AIME2025 train prompts/labels, shared `lei.song` deletion, NemTron training, FT live eval, task243 comparison, promotion, or 30B/8-GPU occurred.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified task253/task254 state and requesting worker_5 task254 acceptance/review result or any blocker/head drift.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task253 supplies local prep packed-shard evidence only; there is still no candidate FT checkpoint/export/live eval artifact, no task243 same-harness FT-vs-base comparison against the accepted Qwen3-4B base `11/30 = 0.36666666666666664`, no promotion, and no 30B/8-GPU clearance.
+
+## Session 30 follow-up - task260/task261 acceptance verified
+
+- Received `intern_nemotron_lead` Session 77 update: lead branch is pushed at `b9bc40ca677bf00635eeda71070ad3aad5ce15b8`; task260 and task261 acceptance branches are visible; no formal mailbox reports or PRs are visible yet; global Qwen AIME gate remains `NO-GO/HOLD` because task255 FT is `0/30` below accepted Qwen3-4B base `11/30`.
+- Fetched `origin` and verified:
+  - `origin/main` is `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `b9bc40ca677bf00635eeda71070ad3aad5ce15b8`;
+  - task260 branch `origin/intern_nemotron_worker_3/task260_qwen_aime_v10_task255_eval_failure_forensics_s1` is `fd508a73bbcc29c2b3bc9b2954fb83d7810d1bcb`;
+  - task261 branch `origin/intern_nemotron_worker_1/task261_qwen_aime_v10_task255_data_training_root_cause_s1` is `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`.
+- Verified task260 and task261 branch diffs versus `origin/main` are acceptance/status/task-docs only:
+  - task260 changes worker_3 status plus task260 README/history/task_knowledge;
+  - task261 changes worker_1 status plus task261 README/history/task_knowledge.
+- Verified local worker statuses:
+  - worker_3 is `Working` on `task260_qwen_aime_v10_task255_eval_failure_forensics_s1`, PR `Pending`, comparing task257 FT AIME2025 outputs against accepted task247 base outputs;
+  - worker_1 is `Working` on `task261_qwen_aime_v10_task255_data_training_root_cause_s1`, PR `N/A`, auditing task253/task255/task257 data/training evidence.
+- GitHub PR searches for task260 and task261 heads returned `[]`; no task260/task261 PR is visible yet.
+- Verified recent gate context from lead history and GitHub:
+  - #330 is `MERGED`, mergedAt `2026-06-01T21:11:42Z`, merge commit `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`, from head `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`, recording task255 same-harness FT `0/30 = 0.0` and parsed `0/30` versus base `11/30`;
+  - #331 is `MERGED`, mergedAt `2026-06-01T21:34:07Z`, merge commit `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`, from head `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, carrying task255 artifact/access records;
+  - #329 is `CLOSED`, unmerged, closedAt `2026-06-01T21:34:54Z`, superseded by #331.
+- Read lead-side task260/task261 README docs and confirmed both tasks are read-only root-cause analysis only: no training, no endpoint launch, no new AIME/task243 eval, no code/artifact modification, no promotion, no AIME2025 train data, no shared deletion, and no 30B/8-GPU.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified branch/PR/gate state and requesting task260/task261 formal mailbox reports, PRs, or blockers when available.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT result is `0/30` below accepted base `11/30`, no promotion is allowed, and 30B/8-GPU remains blocked.
