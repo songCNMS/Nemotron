@@ -1,6 +1,6 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task247_qwen_aime2025_qwen4b_base_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task257_qwen_aime_v10_task255_same_harness_eval_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task247_qwen_aime2025_qwen4b_base_smoke_s1 |
-| PR | #326 |
+| Current Task | task257_qwen_aime_v10_task255_same_harness_eval_s1 |
+| PR | Pending |
 | Session | 1 |
-| Progress | Produced Qwen3-4B base AIME2025 30x1 artifact: 11/30 exact-normalized correct; PR #326 opened for report review |
+| Progress | Accepted task257; verifying task255 artifact, task256 review status, and task247 same-harness compatibility |
