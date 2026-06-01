@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Knowledge Entries
 
@@ -48,3 +48,7 @@
 42. GitHub reports no CI checks for #328, so review evidence must come from worker_4 task252 commands/results and lead gate review.
 43. As of Session 27, #328 still has no head drift, checks, or reviewDecision; worker_4 pane activity is not gate evidence without an explicit task252 mailbox report.
 44. Official task252 evidence remains absent in repo state: no worker_4 task252 branch/PR, worker_4 status still stale on task249, and no task252 output artifacts under worker_4 outputs.
+45. #328 merged at `2026-06-01T19:27:31Z` with merge commit `61fa65e9e9a535d531a65072c839760c3488207f` from reviewed/approved head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+46. task252 completed with worker_4 `APPROVE`: focused `PYTHONPATH=src` pytest passed `1 passed/34 deselected`, import guard passed, artifact/checksum/source review completed, and heldout-vs-trainable exact check found 0 matches over 560 prompts.
+47. task253 is assigned/accepted by worker_2 at branch head `be3803fcf1aa7863255d939d34d03f633f95845d` to unblock local Qwen packing via Xenna evidence only; no task253 PR or official packed-shard/blocker report exists yet.
+48. Current first task253 measurable gate is `packed_qwen` shard paths/counts/checksums or a precise reproducible Xenna environment blocker; this still does not authorize training, FT eval, task243 comparison, promotion, or 30B/8-GPU.

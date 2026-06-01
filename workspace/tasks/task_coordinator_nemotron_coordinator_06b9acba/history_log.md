@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Session 0 - Created with coordinator
 
@@ -262,3 +262,20 @@
 - Checked for official task252 evidence: no worker_4 task252 remote branch, no task252 PR, worker_4 status file still stale/Idle on task249, and `/work-agents/intern_nemotron_worker_4/outputs` has no task252 artifacts.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #328 remains unapproved pending explicit worker_4 task252 approve/request-changes/block report for head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; no additional worker assignment is needed unless lead sees a blocker.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness comparison, promotion, or 30B/8-GPU clearance exists.
+
+## Session 28 - #328 merged and task253 packing unblock started
+
+- Received `intern_nemotron_lead` Session 58 update plus correction: #328/task251/task252 closeout was reconciled, lead branch final head is `7f3bb86791f28e35f63067bf6da565a876586f5d`, task251 and task252 are completed, and task253 was created/assigned to worker_2 for local Xenna-enabled Qwen packing evidence only.
+- Fetched `origin` and verified current remote state:
+  - `origin/main` advanced to #328 merge commit `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - lead branch is `7f3bb86791f28e35f63067bf6da565a876586f5d`;
+  - worker_2 task251 closeout branch is `74155d22651f21be04e67463b05d3049077d0c47`;
+  - worker_2 task253 branch is visible at `be3803fcf1aa7863255d939d34d03f633f95845d`.
+- Verified GitHub PR #328 is `MERGED`, base `main`, merged evidence head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, `mergedAt=2026-06-01T19:27:31Z`, merge commit `61fa65e9e9a535d531a65072c839760c3488207f`, and URL `https://github.com/songCNMS/Nemotron/pull/328`.
+- Verified lead-side task252 docs record worker_4 `APPROVE` for exact #328 head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, focused `PYTHONPATH=src` pytest passing `1 passed/34 deselected`, import-guard passing, artifact/checksum/source review complete, and heldout-vs-trainable exact prompt check `0` matches over the 560-prompt decontam corpus.
+- Verified lead-side task251 docs mark task251 completed for HotpotQA local M0/M1 unblock only; worker_2 post-merge closeout head `74155d22651f21be04e67463b05d3049077d0c47` only updates branch/status/docs and does not change the merged #328 evidence head.
+- Verified task253 docs specify local packing evidence only: use current `origin/main` after #328, reuse valid task248/task251 artifacts, use Qwen3-4B model/tokenizer path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, produce `packed_qwen` shard paths/counts/checksums or a precise Xenna environment blocker, and do no training, FT eval, task243 comparison, promotion, AIME25 train prompts/labels, shared deletion, or 30B/8-GPU.
+- Verified worker_2 accepted task253 on branch `intern_nemotron_worker_2/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1` at `be3803fcf1aa7863255d939d34d03f633f95845d`; diff from `origin/main` is worker_2 status plus task253 README/history/task_knowledge only, and no task253 PR is visible.
+- Read-only checked task253 outputs: output root exists with `logs/pip_install_cosmos_xenna.log`; a pip install process for `cosmos-xenna==0.1.8` was active during the check, but no official task253 worker report, `packed_qwen` shards, or blocker closeout exists yet.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead` confirming #328 merge evidence, task252 approval evidence, task253 acceptance/early artifact state, and the unchanged global gate.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, candidate FT checkpoint/export/live eval artifacts, task243 same-harness FT-vs-base comparison, promotion, or 30B/8-GPU clearance exists.
