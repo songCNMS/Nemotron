@@ -16,6 +16,7 @@ from nemotron.recipes.super3.milestones.m0_data_env.prepare_m0_assets import (
     convert_hermes_conversations,
     desired_counts,
     extract_boxed_answer,
+    iter_hf_rows,
     load_yaml,
     normalize_numeric_answer,
     parse_tool_calls,
@@ -257,6 +258,33 @@ def test_hotpotqa_transform_keeps_context_documents() -> None:
     assert record["expected_answer"] == "London"
     assert record["extra_env_info"]["context_documents"][0]["title"] == "Ada"
     assert "Retrieved passages" in record["responses_create_params"]["input"][1]["content"]
+
+
+def test_iter_hf_rows_supports_local_jsonl_override(tmp_path: Path) -> None:
+    train_path = tmp_path / "hotpotqa-train.jsonl"
+    val_path = tmp_path / "hotpotqa-validation.jsonl"
+    train_row = {
+        "id": "hp-train",
+        "question": "Where was Ada born?",
+        "answer": "London",
+        "type": "bridge",
+        "level": "easy",
+        "supporting_facts": {"title": ["Ada"], "sent_id": [0]},
+        "context": {"title": ["Ada"], "sentences": [["Ada was born in London."]]},
+    }
+    val_row = {**train_row, "id": "hp-val", "question": "Where is London?"}
+    train_path.write_text(json.dumps(train_row) + "\n", encoding="utf-8")
+    val_path.write_text(json.dumps(val_row) + "\n", encoding="utf-8")
+    spec = _spec("m0_search_hotpotqa")
+    spec["trust_remote_code"] = False
+    spec["local_jsonl_files"] = {"train": str(train_path), "validation": str(val_path)}
+
+    rows = list(iter_hf_rows(spec, streaming=True, split="validation"))
+
+    assert rows == [val_row]
+    record = transform_hotpotqa_search(rows[0], spec)
+    assert record["metadata"]["source_dataset"] == "hotpotqa/hotpot_qa"
+    assert record["metadata"]["source_revision"] == "1908d6afbbead072334abe2965f91bd2709910ab"
 
 
 def test_mbpp_transform_keeps_tests_for_reward_environment() -> None:

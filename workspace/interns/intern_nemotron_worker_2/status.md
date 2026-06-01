@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 |
-| PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-01T18:53:49Z: Accepted task251 on branch intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 from origin/main 419c8b9; investigating HotpotQA standard-format workaround. |
+| PR | pending |
+| Session | 2 |
+| Last Update | 2026-06-01T19:14:00Z: task251 HotpotQA standard-format cache/registry override clears the loader blocker through M0 and M1 local prep; Qwen packing stops on missing local dependency cosmos_xenna; preparing PR/mailbox report. |
