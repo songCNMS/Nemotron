@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 - Task233 corrected-math AIME passed with `max_new_tokens: 8192`,
   `parallelism: 1`, and `limit_samples: 1`; the M1 subset AIME failure used
@@ -25,3 +25,5 @@
   estimate sequential completion at roughly 26-30 hours from observed progress.
 - `ns_wmt24pp` was pending at cleanup and never started, so its actual
   runtime/assets are unknown.
+- Session 3 added no new target triage findings; it only corrected closeout
+  metadata/checklist compliance after the evidence branch was pushed.

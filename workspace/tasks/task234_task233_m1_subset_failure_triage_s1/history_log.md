@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-06-01
 
@@ -19,3 +19,11 @@
 - Wrote artifact and repo validation reports with PM-ready next actions,
   acceptance criteria, risks, and estimates.
 - Ran diff checks and pushed the evidence/status branch.
+
+## Session 3 - 2026-06-01
+
+- Addressed stop-hook closeout requirements after the initial task234 push.
+- Updated dev_2 status metadata to allowed `Idle` state and Session `3`.
+- Preserved the pushed artifact-only triage outputs and added this Session 3
+  history entry; no runtime, Docker, package, process, model, image, endpoint,
+  or eval actions were run.
