@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -14,3 +14,4 @@
 8. Pure lead-bookkeeping head-only updates to #313 do not require immediate coordinator escalation when #313 remains open/clean/unapproved/unmerged and worker PR base/mergeability/head state is unchanged.
 9. If `codeup_pr merge` fails with token permission 403 but GitHub CLI is authenticated and the user authorized merge, `gh pr merge --squash` can merge the intended PR; retain a merged PR's branch when another PR is still stacked on it.
 10. After a lead PR lands, worker PR GitHub state can change before mailbox reports arrive; coordinator should recheck PR heads/mergeability and route follow-up through lead rather than contacting workers directly. Even if PRs become mergeable, lead gate approval and worker self-merge sequencing still apply.
+11. Recovery closeout completed with #313/#314/#315/#316 merged: no new implementation tasks were created; final dispositions are task203/task206/task209 covered/no recovery, task231/task228 blocked/HOLD, and task217 approve close with one-iteration smoke residual risk.

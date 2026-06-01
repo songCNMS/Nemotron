@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 0 - Created with coordinator
 
@@ -99,3 +99,12 @@
 - Verified #313 remains `MERGED` with merge commit `a35f61f38ed46f752ad3037d71b69ff19530cce6`.
 - Initial downstream recheck showed #314 had advanced to head `725096c` with mergeability `UNKNOWN`, #315 remained conflicting, and #316 remained stacked; a later recheck showed all three worker PRs refreshed to main and mergeable: #314 at `725096c`, #315 at `49e2f1a`, and #316 at `8a78d9e`.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, first asking lead to continue waiting for worker mailbox reports, then updating lead that #314/#315/#316 are refreshed and mergeable and should move through lead gate decision before any worker self-merge.
+
+## Session 14 - Recovery closeout complete
+
+- Received `intern_nemotron_lead` final closeout: downstream worker PRs #314, #315, and #316 were all merged; lead did not implement, run tests, or merge directly.
+- Verified #314 is `MERGED`, mergedAt `2026-06-01T15:01:14Z`, head `3520b37e855d58ed118c7d6d280561cca1803a44`, merge commit `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b`.
+- Verified #315 is `MERGED`, mergedAt `2026-06-01T14:59:37Z`, head `49e2f1a381542aac16425e2b6fe9f38fa4332709`, merge commit `80696c65d433d297eadd28b673a41f4451bd16d6`.
+- Verified #316 is `MERGED`, mergedAt `2026-06-01T14:59:44Z`, head `8a78d9e7a14a584dfa6dcbfac291016da52c9834`, merge commit `3d4d3162ea25555208938f6d5635ca24b91b6d20`.
+- Recorded final dispositions: task203/task206/task209 remain covered/no recovery; task231/task228 remain blocked/HOLD with no new implementation task; task217 remains approve close with one-iteration smoke residual risk.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming recovery closeout completion and asking lead to keep lead-side status/task docs aligned with worker closeout.
