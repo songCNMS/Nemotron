@@ -3371,6 +3371,55 @@
   `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
   Bridge/base-load proof or exact blocker.
 
+## Session 69 - 2026-06-01 UTC - task266 refresh approval
+
+- Received and marked read worker_5 task266/#334 refresh mailbox
+  `172032ba03da44eaa8d98beaaadfafd0`.
+- Fetched origin and verified #334 is `OPEN`/base `main`/`CLEAN` at exact head
+  `8cdab0661c81fe5694f934187e6cda1cac886add`.
+- Verified #334 diff scope is worker_5 status plus task266
+  README/history/task_knowledge/`v11_runbook_repro_gate_report.md` only.
+- Verified `git diff --check origin/main...origin/intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1`
+  passed and report sha256 is
+  `12f892f98ec57b696619be6615ad2454e6e7889529614af28c1f1f50b4dd933b`.
+- Verified refreshed runbook records #335 merged at
+  `98e8aad39af9e705feed581e0ff9f8814073e2d8`, #336 merged at
+  `2ca6541c275d1eb64068e665af24147a796c818a`, and task263
+  `BLOCK/HOLD` pending NemTron/NeMo Bridge/base-load proof or exact blocker.
+- Posted #334 lead approve comment:
+  `https://github.com/songCNMS/Nemotron/pull/334#issuecomment-4597291642`.
+- Sent delivered peer_send to worker_5 releasing #334 self-merge only if it
+  remains `OPEN`/base `main`/`CLEAN` at exact head
+  `8cdab0661c81fe5694f934187e6cda1cac886add` at merge time.
+- Rechecked #334 after release; it remained `OPEN`/base `main`/`CLEAN` at
+  exact head `8cdab0661c81fe5694f934187e6cda1cac886add` and had not yet merged.
+- Current lead disposition: #335/#336 are `MERGED`; #334 is `APPROVED` for
+  worker_5 exact-head self-merge if still clean; task263 remains `BLOCK/HOLD`
+  pending Bridge/base-load proof or exact blocker.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
+  training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 69 - 2026-06-01 UTC - task266 merged closeout
+
+- Rechecked #334 after worker_5 exact-head release and verified it is now
+  `MERGED` at `2026-06-01T23:25:48Z` with merge commit
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717` from approved head
+  `8cdab0661c81fe5694f934187e6cda1cac886add`.
+- Fetched origin after #334 merge; `origin/main` is now
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- Received and marked read worker_5 task266/#334 post-merge closeout mailbox
+  `fc94a2b9cde8495ab52e1927f386f665`. Worker_5 confirmed #334 `MERGED`,
+  `mergedAt` `2026-06-01T23:25:48Z`, merge commit
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`, merged head
+  `8cdab0661c81fe5694f934187e6cda1cac886add`, and no boundary violation.
+- Current lead disposition: #334/#335/#336 are `MERGED`; task263 remains
+  `BLOCK/HOLD` pending Bridge/base-load proof or exact blocker; global Qwen AIME
+  gate remains `NO-GO/HOLD`.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+
 ## Session 68 - 2026-06-01 UTC - task266 stale runbook gate and task264 review dispatch
 
 - Received coordinator update after Session 66 noting all five V11 branches were
@@ -3618,3 +3667,22 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: #335/#336 are merged, #334 remains
   `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
   Bridge/base-load proof or exact blocker.
+
+## Session 69 - 2026-06-01 UTC - task266 merged closeout
+
+- Rechecked #334 after worker_5 exact-head release and verified it is now
+  `MERGED` at `2026-06-01T23:25:48Z` with merge commit
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717` from approved head
+  `8cdab0661c81fe5694f934187e6cda1cac886add`.
+- Fetched origin after #334 merge; `origin/main` is now
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- Received and marked read worker_5 task266/#334 post-merge closeout mailbox
+  `fc94a2b9cde8495ab52e1927f386f665`. Worker_5 confirmed #334 `MERGED`,
+  `mergedAt` `2026-06-01T23:25:48Z`, merge commit
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`, merged head
+  `8cdab0661c81fe5694f934187e6cda1cac886add`, and no boundary violation.
+- Current lead disposition: #334/#335/#336 are `MERGED`; task263 remains
+  `BLOCK/HOLD` pending Bridge/base-load proof or exact blocker; global Qwen AIME
+  gate remains `NO-GO/HOLD`.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.

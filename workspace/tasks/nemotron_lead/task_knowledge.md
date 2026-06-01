@@ -254,3 +254,14 @@
 132. Stop-hook remediation: `history_log.md` now has an explicit tail Session 69
    confirmation entry in addition to `<!-- METADATA:SESSION=69 -->` and the
    existing Session 69 Qwen V11 gate record.
+133. #334 current head `8cdab0661c81fe5694f934187e6cda1cac886add` refreshes
+   task266 runbook to current truth: #335 merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`,
+   #336 merged at `2ca6541c275d1eb64068e665af24147a796c818a`, and task263
+   remains `BLOCK/HOLD`; lead approved #334 for worker_5 exact-head self-merge
+   if still `OPEN`/base `main`/`CLEAN`.
+134. #334 merged at `2026-06-01T23:25:48Z` with merge commit
+   `5e839d4a911c8a0c1c55e6adc606d325b9d17717` from approved head
+   `8cdab0661c81fe5694f934187e6cda1cac886add`; #334/#335/#336 are now merged,
+   while task263 remains `BLOCK/HOLD` and the global Qwen AIME gate remains
+   `NO-GO/HOLD`. Worker_5 post-merge closeout mailbox
+   `fc94a2b9cde8495ab52e1927f386f665` confirmed no boundary violation.
