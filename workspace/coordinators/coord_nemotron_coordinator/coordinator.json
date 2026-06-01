@@ -26,8 +26,27 @@
     "lifecycle": "exists_while_coordinator_exists",
     "completion_policy": "never_complete_while_coordinator_exists"
   },
-  "managed_workspaces": [],
-  "team_leads": [],
+  "managed_workspaces": [
+    {
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/Nemotron",
+      "team_id": "nemotron",
+      "team_metadata_path": "workspace/teams/nemotron/team.json",
+      "status": "active",
+      "bound_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    }
+  ],
+  "team_leads": [
+    {
+      "intern_name": "intern_nemotron_lead",
+      "project": "Nemotron",
+      "team_id": "nemotron",
+      "status": "active",
+      "bound_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    }
+  ],
   "created_at": "2026-06-01T12:33:08Z",
-  "updated_at": "2026-06-01T12:33:08Z"
+  "updated_at": "2026-06-01T12:34:19Z"
 }

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "team_name": "nemotron",
+  "team_id": "nemotron",
+  "project": "Nemotron",
+  "workspace_root": "/work-agents/Nemotron",
+  "team_lead": {
+    "intern_name": "intern_nemotron_lead",
+    "project": "Nemotron",
+    "workspace_root": "/work-agents/intern_nemotron_lead/Nemotron",
+    "status": "active",
+    "created_at": "2026-06-01T12:34:19Z",
+    "updated_at": "2026-06-01T12:34:19Z",
+    "management_task": {
+      "task_id": "nemotron_lead",
+      "status": "InProgress",
+      "lifecycle": "exists_while_team_exists",
+      "completion_policy": "never_complete_while_team_exists"
+    }
+  },
+  "workers": [
+    {
+      "intern_name": "intern_nemotron_worker_1",
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/intern_nemotron_worker_1/Nemotron",
+      "status": "active",
+      "created_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    },
+    {
+      "intern_name": "intern_nemotron_worker_2",
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/intern_nemotron_worker_2/Nemotron",
+      "status": "active",
+      "created_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    },
+    {
+      "intern_name": "intern_nemotron_worker_3",
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/intern_nemotron_worker_3/Nemotron",
+      "status": "active",
+      "created_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    },
+    {
+      "intern_name": "intern_nemotron_worker_4",
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/intern_nemotron_worker_4/Nemotron",
+      "status": "active",
+      "created_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    },
+    {
+      "intern_name": "intern_nemotron_worker_5",
+      "project": "Nemotron",
+      "workspace_root": "/work-agents/intern_nemotron_worker_5/Nemotron",
+      "status": "active",
+      "created_at": "2026-06-01T12:34:19Z",
+      "updated_at": "2026-06-01T12:34:19Z"
+    }
+  ],
+  "status": "active",
+  "created_at": "2026-06-01T12:34:19Z",
+  "updated_at": "2026-06-01T12:34:19Z",
+  "coordinator": {
+    "coordinator_id": "coord_nemotron_coordinator",
+    "intern_name": "intern_nemotron_coordinator",
+    "anchor_project": "Nemotron",
+    "anchor_workspace_root": "/work-agents/intern_nemotron_coordinator/Nemotron",
+    "bound_at": "2026-06-01T12:34:19Z"
+  }
+}
