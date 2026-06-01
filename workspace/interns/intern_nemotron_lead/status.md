@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #331 MERGED; #329 CLOSED superseded; #330 MERGED failure closeout |
-| Session | 74 |
+| PR | task260/task261 assigned for next failure-analysis wave; gate NO-GO/HOLD |
+| Session | 75 |

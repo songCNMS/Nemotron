@@ -2963,3 +2963,27 @@
 - #331 now carries the task255 artifact record plus task258 reviewer-access
   closeout on main. Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion,
   no 30B/8-GPU.
+
+## Session 75 - 2026-06-01 UTC - Next failure-analysis wave assigned
+
+- Read lead mailbox and processed worker_2's post-merge closeout for
+  task258/#331, message `49d1afb258cf4ae3bc4078fadf7fffa8`; marked it read.
+  The mailbox confirms #331 merged at the approved head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, merge commit
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`, and #329 closed unmerged as
+  superseded.
+- Worker status check showed all workers idle after the task255/task258/task259
+  closeout chain.
+- Created task260 for `intern_nemotron_worker_3`: read-only task255 AIME eval
+  failure forensics, comparing task257 FT outputs against task247 base outputs,
+  with per-problem parse/length/final-answer failure matrix and ranked
+  hypotheses.
+- Created task261 for `intern_nemotron_worker_1`: read-only task253/task255
+  packed-data and training-recipe root-cause audit, including chat-template,
+  loss-mask, answer-format, data blend, training config/log, and V11 pilot
+  recommendations.
+- Both tasks preserve boundaries: no training, no new AIME/task243 eval, no
+  endpoint launch, no code/artifact modification, no promotion, no 30B/8-GPU,
+  no AIME2025 train data, and no shared deletion.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; next go/no-go requires a later
+  Qwen3-4B candidate and same-harness comparison against base `11/30`.

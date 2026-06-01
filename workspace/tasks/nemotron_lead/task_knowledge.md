@@ -140,3 +140,9 @@
 107. #331 merged at `2026-06-01T21:34:07Z` with merge commit
    `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`; #329 closed unmerged as
    superseded at `2026-06-01T21:34:54Z`.
+108. After task255 FT failed `0/30`, the next useful lead wave is read-only
+   failure analysis before another pilot: task260 for eval-output forensics and
+   task261 for data/training root-cause audit.
+109. Worker_2 post-merge mailbox `49d1afb258cf4ae3bc4078fadf7fffa8` confirms
+   #331 merged at approved head `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` and
+   #329 closed unmerged; global Qwen AIME gate remains `NO-GO/HOLD`.
