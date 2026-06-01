@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #333 MERGED; task262-task266 V11 wave assigned; gate NO-GO/HOLD |
+| PR | #333 MERGED; task262-task266 V11 wave assigned and peer_sent; gate NO-GO/HOLD |
 | Session | 65 |
