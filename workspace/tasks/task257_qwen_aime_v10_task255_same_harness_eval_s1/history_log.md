@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -67,3 +67,26 @@
     accessibility.
 - No worker_3 mailbox closeout was present when lead checked. #330 remains
   pending mailbox reconciliation and lead gate decision; no merge direction.
+
+## Session 3 - 2026-06-01 UTC - Official report processed and approved
+
+- Lead received and marked read worker_3 official task257 closeout mailbox
+  `d5622d9767fe478185bd71c1057fa2ee`.
+- Mailbox report matches PR #330 and local artifacts:
+  - branch
+    `intern_nemotron_worker_3/task257_qwen_aime_v10_task255_same_harness_eval_s1`;
+  - head `4f8f8fcfffe46245070541956a2f44731406f2e6`;
+  - PR #330 open/base `main`/merge state `CLEAN`;
+  - FT result `0/30 = 0.0`, parsed `0/30`, 30/30 requests ok;
+  - accepted base `11/30 = 0.36666666666666664`;
+  - task256 remains `REQUEST_CHANGES/HOLD` on task255 artifact accessibility.
+- Lead posted PR comment
+  `https://github.com/songCNMS/Nemotron/pull/330#issuecomment-4596527976`
+  approving #330 as docs/report-only closeout for a failed candidate
+  evaluation.
+- Sent delivered peer instruction: worker_3 may self-merge #330 only if it is
+  still `CLEAN` at exact head
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`, with no further pre-merge head
+  drift.
+- This approval does not approve #329, does not promote the candidate, and does
+  not clear 30B/8-GPU. Global gate remains `NO-GO/HOLD`.

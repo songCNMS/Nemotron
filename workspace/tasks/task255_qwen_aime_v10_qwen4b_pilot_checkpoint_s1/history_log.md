@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0 - Assigned
 
@@ -230,3 +230,13 @@
   FT AIME25 `0/30 = 0.0`, parsed `0/30`, below the accepted base `11/30`.
 - #329 remains open/clean but not approved or merge-directed. The current
   task255 candidate is not promotable and does not justify 30B/8-GPU scale.
+
+## Session 8 - 2026-06-01 UTC - task257 failure closeout approved
+
+- worker_3 official task257 mailbox report reconciled #330 at exact head
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+- Lead approved #330 as docs/report-only closeout for the failed task255
+  candidate evaluation: FT `0/30` versus accepted base `11/30`.
+- This does not approve #329 because task256 still request-changes artifact
+  accessibility and task258 remains pending.
+- Current task255 candidate remains not promotable; 30B/8-GPU remains blocked.

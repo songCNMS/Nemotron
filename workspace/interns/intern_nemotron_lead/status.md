@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #330 OPEN/CLEAN task257 FT 0/30 FAIL/HOLD pending mailbox; #329 HOLD; task258 assigned |
-| Session | 65 |
+| PR | #330 approved failure closeout for worker self-merge; #329 HOLD; task258 assigned |
+| Session | 66 |

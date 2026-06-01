@@ -111,3 +111,6 @@
    records the same below-base FT result and should remain pending until
    worker_3 mailbox closeout is reconciled; even after merge it would be a
    failure/no-promotion record, not a go/no-go pass.
+99. worker_3 mailbox reconciled #330; lead approved it as docs/report-only
+   failure closeout at exact head `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+   This does not approve #329, promote task255, or clear 30B/8-GPU.

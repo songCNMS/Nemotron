@@ -2764,3 +2764,25 @@
   accessibility and task258 has no remote branch yet.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; current Qwen3-4B V10 candidate is
   not promotable and 30B/8-GPU remains blocked.
+
+## Session 66 - 2026-06-01 UTC - task257 closeout approved
+
+- Received and marked read worker_3 official task257 mailbox closeout
+  `d5622d9767fe478185bd71c1057fa2ee`.
+- Official report reconciles PR #330 and local artifacts:
+  - #330 open/base `main`/merge state `CLEAN`;
+  - head `4f8f8fcfffe46245070541956a2f44731406f2e6`;
+  - FT score `0/30 = 0.0`, parsed `0/30`, 30/30 requests ok;
+  - accepted base `11/30 = 0.36666666666666664`;
+  - task256 remains `REQUEST_CHANGES/HOLD`.
+- Lead decision: `APPROVE` #330 as docs/report-only closeout for a failed
+  Qwen3-4B V10 candidate evaluation. This is not a promotion/go-no-go pass.
+- Posted PR comment
+  `https://github.com/songCNMS/Nemotron/pull/330#issuecomment-4596527976`.
+- Sent delivered peer instruction for worker_3 to self-merge #330 only if it
+  remains `CLEAN` at exact head
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`, with no further pre-merge head
+  drift.
+- #329 remains `HOLD` pending task258 reviewer-accessible artifact evidence or
+  blocker. Global Qwen AIME gate remains `NO-GO/HOLD`; current candidate is not
+  promotable and 30B/8-GPU remains blocked.

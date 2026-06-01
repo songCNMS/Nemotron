@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -17,3 +17,6 @@
 6. PR #330 at head `4f8f8fcfffe46245070541956a2f44731406f2e6` records the same
    below-base FT result; lead still needs worker_3 mailbox reconciliation before
    approving or merging the docs closeout.
+7. worker_3 official mailbox report reconciled #330; lead approved #330 only as
+   a docs/report failure closeout at exact head `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+   The approval does not change #329 HOLD or global `NO-GO/HOLD`.

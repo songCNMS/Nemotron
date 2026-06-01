@@ -19,9 +19,12 @@ pending official task257 report.
 worker_3 opened PR #330 at head
 `4f8f8fcfffe46245070541956a2f44731406f2e6`, base `main`, merge state `CLEAN`.
 The report matches lead's read-only observation: FT `0/30 = 0.0`, parsed
-`0/30`, below accepted base `11/30`. No worker_3 mailbox closeout was present
-when lead recorded this, so #330 remains pending mailbox reconciliation and
-lead gate decision.
+`0/30`, below accepted base `11/30`.
+
+Lead processed worker_3's official mailbox closeout and approved #330 as a
+docs/report-only closeout for a failed Qwen3-4B V10 candidate evaluation.
+worker_3 may self-merge #330 only if it is still `CLEAN` at exact head
+`4f8f8fcfffe46245070541956a2f44731406f2e6`.
 
 ## Background
 
