@@ -9,5 +9,5 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task231_m1_missing_launcher_new_runtime_scan_s1 |
-| PR | N/A |
+| PR | https://github.com/songCNMS/Nemotron/pull/315 |
 | Session | 0 |

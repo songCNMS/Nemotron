@@ -22,6 +22,7 @@
   product code edits.
 - Imported the old task231 `validation_report.md` as evidence and added
   `recovery_disposition.md`.
+- Opened worker-owned PR https://github.com/songCNMS/Nemotron/pull/315.
 - Recommendation is to close as blocked/HOLD: no exact safe launcher mappings
   are available for `multichallenge`, `terminalbench`, `mcp_mark`,
   `tool_decathlon`, or `swe_bench_verified` in the inspected approved/local/VPN

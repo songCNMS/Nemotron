@@ -43,6 +43,7 @@ Recover the task231/task228 Working state into a current-team disposition: eithe
 - Disposition: `close as blocked/HOLD`.
 - Current worker branch:
   `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1`.
+- Current worker PR: https://github.com/songCNMS/Nemotron/pull/315.
 - New PR strategy: current worker-owned branch from `origin/main`; old source
   branch remains read-only evidence.
 - Product code changes: none.
