@@ -2887,3 +2887,25 @@
 - #331 and #329 remain `HOLD` pending worker_5 task259 mailbox report.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task255 candidate remains
   non-promotable because task257/#330 measured FT `0/30` below base `11/30`.
+
+## Session 72 - 2026-06-01 UTC - task259 follow-up queued
+
+- Read lead mailbox; no unread messages were present.
+- Rechecked PR state:
+  - #329 open/clean at
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - #331 open/clean at
+    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`;
+  - #330 remains merged from head
+    `da83f014f5e4b22c4410afdf8bda3ccb49a70af3` with merge commit
+    `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- Rechecked worker_5 task259 branch
+  `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf`; it remains acceptance/InProgress
+  only.
+- worker_5 local status still records `Working` on task259; no task259 output
+  report was present under worker_5 outputs.
+- Sent non-interrupting `next` peer_send follow-up asking worker_5 for
+  approve/request-changes/block mailbox or exact blocker. Daemon returned
+  `delivered`, `kind=queued`.
+- #331 and #329 remain `HOLD`; global Qwen AIME gate remains `NO-GO/HOLD`, no
+  promotion, no 30B/8-GPU.

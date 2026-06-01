@@ -36,3 +36,17 @@
 - No task259 final review output or mailbox report was present at this lead
   checkpoint.
 - #331 and #329 remain `HOLD`; global gate remains `NO-GO/HOLD`.
+
+## Session 2 - 2026-06-01 UTC - Follow-up queued
+
+- Lead rechecked mailbox, PRs, worker_5 branch, worker_5 local status, and
+  worker_5 output root.
+- No task259 final review mailbox/report or output artifact was present.
+- worker_5 status still records `Working` on task259 at Session 1.
+- #329 remains open/clean at
+  `d62036e405edc5daa322c09bb89da19b176bb7bf`.
+- #331 remains open/clean at
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- Sent non-interrupting peer_send follow-up to worker_5 in `next` mode; daemon
+  returned `delivered`, `kind=queued`.
+- #331 and #329 remain `HOLD`; global gate remains `NO-GO/HOLD`.

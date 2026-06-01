@@ -131,3 +131,6 @@
 104. task259 worker_5 acceptance branch
    `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf` proves ownership only; #331/#329
    remain HOLD until worker_5 sends approve/request-changes/block mailbox.
+105. If task259 remains at acceptance-only state with no mailbox/output,
+   non-interrupting `next` follow-up is appropriate; #331/#329 must remain HOLD
+   until worker_5 provides final review evidence.
