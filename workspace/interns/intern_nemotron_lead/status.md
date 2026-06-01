@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | N/A |
-| Session | 0 |
+| PR | #313 |
+| Session | 10 |
