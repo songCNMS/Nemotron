@@ -1,6 +1,6 @@
 # task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,5 @@
    `total_sequences=1093`, and `pack_size=8192`.
 8. The local user-site pip dependency workaround is residual risk and should not
    be treated as a production environment prescription.
+9. task254 independently approved task253 as local packed-shard prep evidence
+   only; this does not satisfy the global Qwen AIME go/no-go.

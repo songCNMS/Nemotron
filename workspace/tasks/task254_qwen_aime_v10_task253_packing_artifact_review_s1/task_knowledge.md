@@ -1,6 +1,6 @@
 # task254_qwen_aime_v10_task253_packing_artifact_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -13,3 +13,5 @@
 4. The global Qwen AIME gate stays `NO-GO/HOLD` until task248 produces
    candidate FT artifacts and task243 proves same-harness FT non-regression
    against the accepted Qwen3-4B base score `11/30`.
+5. task254 approved task253 local packed-shard prep evidence only; this is not
+   FT checkpoint/export/live eval evidence.
