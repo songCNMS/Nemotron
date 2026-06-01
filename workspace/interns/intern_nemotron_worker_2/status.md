@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task251_qwen_aime_v10_hotpotqa_loader_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task258_qwen_aime_v10_task255_reviewer_artifact_access_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 |
-| PR | #328 |
-| Session | 2 |
-| Last Update | 2026-06-01T19:18:00Z: task251 PR #328 opened with HotpotQA standard-format cache/registry evidence; local prep clears HotpotQA through M0/M1 and blocks at Qwen packing on missing cosmos_xenna. |
+| Current Task | task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-01T21:12:00Z: task258 copied full task255 checkpoint/HF export evidence to a reviewer-readable CephFS bundle with manifests/checksums; ready to report for task256 re-review. |
