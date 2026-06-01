@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - Assigned
 
@@ -49,9 +49,9 @@
   `qwen4b_v10_pilot_report.md`.
 - Recorded task248 status as visible but blocked before prep/train because
   task246 real corpus/input and task247 base artifacts are still missing.
-- Verified task249 PR #323 is open/CLEAN at
-  `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`; no
-  `live_gate_review_matrix.md` is published in that PR yet.
+- Verified the then-current task249 PR #323 head
+  `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`; this evidence was superseded by
+  the Session 7 task249 matrix refresh.
 - Refreshed `live_runbook_artifact_report.md` so task248/task249 are no longer
   marked invisible, while the overall gate remains NO-GO/HOLD on missing real
   corpus/base/FT/comparison artifacts and 30B permission.
@@ -74,5 +74,19 @@
 - Reconfirmed Qwen3-4B endpoints `127.0.0.1:13000` and `127.0.0.1:30001`
   are not reachable, so base score artifacts remain blocked and #324 stays
   NO-GO/HOLD.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 7 - Refreshed task249 live review matrix visibility
+
+- Verified task249 PR #323 is open/CLEAN at
+  `68a8ee77ee25f5dbbac170c935e8487b88198ce2`.
+- Inspected
+  `origin/pr/323:workspace/tasks/task249_qwen_aime_v10_live_contam_gate_review_s1/live_gate_review_matrix.md`.
+- Recorded the matrix as published in `live_runbook_artifact_report.md`.
+- Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because real
+  task246 corpus/input, task247 base score artifacts, task248 candidate
+  checkpoint/export/eval artifacts, task243 comparison output, and explicit
+  30B/8-GPU permission remain missing.
 - Did not run training, live eval, endpoint serving, NemTron sync,
   30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
