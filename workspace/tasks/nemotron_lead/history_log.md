@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0 - Created with team lead
 
@@ -312,6 +312,36 @@
   - Asked `intern_nemotron_worker_4` to keep task244 in review/hold and refresh the matrix after task241/task242 PRs appear and task243 updates #319.
 - Current lead gate decisions: #319 is `REQUEST_CHANGES/HOLD` pending Qwen3-4B path correction and base-score blocker clarification; #317 is `REQUEST_CHANGES/HOLD` pending runbook verification evidence; #318 remains review/hold until worker branches/PRs it reviews are refreshed. No worker PR is approved for merge.
 - Branch blockers requested by coordinator: worker_2, worker_4, and worker_5 branches are all present; worker_4 and worker_5 have PRs #318/#317, while worker_2 has no PR yet but no remote-branch blocker.
+- Baseline/eval gate remains unchanged: no FT checkpoint may be judged until the same Qwen base model has a same-harness corrected AIME2025 score; AIME25 remains held-out eval/decontamination only; no 30B/8-GPU scale until Qwen3-4B smoke is non-regressing or yields a concrete evaluator/data fix.
+- Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 19 - 2026-06-01 UTC - Qwen AIME25 task242 PR surfaced
+
+- Read lead mailbox and found no unread messages at session start.
+- Fetched `origin` and found task242 advanced from docs-only branch `b2d16a7` to PR #321:
+  - #321 / `task242_qwen_aime_v10_planner_smoke_s1`: open, base `main`, head `12ee98c`, mergeStateStatus `CLEAN`.
+  - Files include `plan_qwen_scaleup_run.py`, `test_m1_agentic_qwen_scaleup_plan.py`, and task242 `planner_report.md`.
+  - Lead inspected PR metadata, file list, and planner report; lead did not run implementation tests or training/eval.
+- Read task242 planner report and confirmed it publishes the expected Qwen3-4B V10 pilot contract:
+  - Qwen3-4B pilot model/checkpoint/tokenizer path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+  - V10 strategy is `hard_math_runlength_dp_v10`.
+  - V10 decontamination fails closed for missing/non-file/empty corpus and generated local data-prep script refuses the task242 placeholder marker.
+  - NemTron remote root is task-owned `/root/task242_qwen_aime_v10_planner_smoke_s1`.
+  - Sync script is constrained to task-owned `/root` paths and states it does not delete `/mnt/cephfs/data/processing/lei.song`.
+  - Manifest records same-harness AIME25 base-vs-FT non-regression and holds 30B/8-GPU scale unless explicitly allowed after the Qwen3-4B gate.
+- Sent peer follow-ups, all delivered:
+  - Asked `intern_nemotron_worker_2` to send a required mailbox report for exact #321 head `12ee98c`.
+  - Asked `intern_nemotron_worker_4` to include #321 in the independent contamination/regression review refresh with #319/#320.
+  - Asked `intern_nemotron_worker_5` to update #317/runbook for current #319/#320/#321 state.
+- Received and marked read two worker_2 mailbox reports for #321 head `12ee98c`; worker reported focused planner checks passed (`py_compile`, focused pytest `29 passed`, `ruff`, and `git diff --check`) and no training, live eval, sync, merge, direct main push, or 30B/8-GPU launch was performed. Lead treated these as worker-reported evidence and did not rerun them.
+- Fetched again and observed #317 advanced to head `b8d3c98`, mergeStateStatus `CLEAN`; the report removed resolved #319/#320 blockers but still says task242 has no published PR, so #317 remains stale now that #321 exists and is not approved.
+- Current lead gate decisions:
+  - #321: review pending worker_4 independent refresh; not approved.
+  - #320: review pending worker_4 contamination/regression refresh; not approved.
+  - #319: path issue fixed and protocol evidence present, but no base-score artifact; not approved.
+  - #318: review docs need refresh for #319/#320/#321; not approved.
+  - #317: `REQUEST_CHANGES/HOLD` until runbook reflects #321 and current blockers only; not approved.
+- Current first measurable go/no-go remains `NO-GO`: real held-out decontamination corpus/corrected AIME input-cache is missing, no reachable Qwen3-4B endpoint exists, no base score artifacts exist, no candidate FT checkpoint/export/eval exists, and 30B/8-GPU scale has no permission.
 - Baseline/eval gate remains unchanged: no FT checkpoint may be judged until the same Qwen base model has a same-harness corrected AIME2025 score; AIME25 remains held-out eval/decontamination only; no 30B/8-GPU scale until Qwen3-4B smoke is non-regressing or yields a concrete evaluator/data fix.
 - Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.
 

@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Knowledge Entries
 
@@ -24,3 +24,5 @@
 18. A worker-reported missing model path is not a true resource blocker if it used the wrong Qwen3-4B path; require path correction before escalating base-score resource availability.
 19. When task245/runbook verification cites upstream task or PR state, it must be refreshed after those upstream PRs move; a stale blocker such as the old task243 `/mnt/3fs` path or pre-#320 task241 no-PR state is request-changes even if the overall NO-GO conclusion remains true.
 20. For #320/task241, worker-reported tests are useful gate input but lead should not rerun them; require independent review of AIME25 heldout/decontam handling before approval because the hard rule forbids trainable AIME25 prompt/label leakage.
+21. For #321/task242, planner/smoke PR evidence removes the old "no task242 PR" blocker, but it does not satisfy first go/no-go by itself; real held-out decontam/AIME input, endpoint, base-score artifacts, FT checkpoint/export/eval, and worker_4/worker_5 refreshed reviews are still required.
+22. If #317/task245 runbook still lists "task242 has no published PR" after #321 exists, keep #317 in request-changes/HOLD even though the global NO-GO conclusion is still correct.
