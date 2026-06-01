@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
 
 ## Session 0 - Created with team lead
 
@@ -3187,3 +3187,34 @@
   and lead mailbox unread count `0`; no merge closeout has arrived yet.
 - Global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT was `0/30` versus the
   accepted Qwen3-4B base `11/30`; no promotion and no 30B/8-GPU.
+
+## Session 64 - 2026-06-01 UTC - task261/#333 merge closeout reconciled
+
+- Processed worker_1 task261/#333 merge closeout mailbox
+  `606182f676d44bd387a5b9dd8f60d428` and marked it read.
+- Worker_1 reported #333 was self-merged after rechecking merge-time
+  conditions: `OPEN`, base `main`, `CLEAN`, non-draft, exact head
+  `3f404b3043736c85ca89ff6aa799fc6c53120f62`.
+- Independent GitHub recheck confirmed PR #333 is `MERGED`:
+  - mergedAt `2026-06-01T22:19:54Z`;
+  - merge commit `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - merged head `3f404b3043736c85ca89ff6aa799fc6c53120f62`.
+- Fetched origin and confirmed `origin/main` advanced from
+  `7559ed914a04b99270b037ea285fab980d1995da` to
+  `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Merge diff from previous main is worker_1 status plus task261
+  README/history/task_knowledge/`task255_data_training_root_cause_report.md`
+  only; no product code, training, eval, endpoint, artifact mutation,
+  promotion, AIME2025 train data, 30B/8-GPU, or shared deletion.
+- Received coordinator Session 33 ack independently confirming #333 merged at
+  the same time/commit/head, report sha256
+  `2e8ab638f4e1c6c75a842e60a9fad28e0a756efb5fda4135f402eb006f39e257`, and
+  metadata-only `947f34b..3f404b3` drift.
+- task260/#332 and task261/#333 are now both merged closeout evidence for the
+  failed task255 pilot. Combined disposition remains: task255 FT failure is not
+  promotable evidence and the next Qwen pilot must restart from explicit
+  Qwen3-4B base-load/import proof, nonzero LR/enough iterations, and fixed
+  dataset-qualified split materialization.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT scored `0/30`, below
+  accepted same-harness Qwen3-4B base `11/30`; no promotion, no new training or
+  eval authorization, no AIME2025 train data, and no 30B/8-GPU.

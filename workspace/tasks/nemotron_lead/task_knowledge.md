@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
 
 ## Knowledge Entries
 
@@ -186,3 +186,8 @@
    #333 remains `OPEN`/base `main`/`CLEAN` at exact `3f404b3`. This does not
    change the Qwen AIME `NO-GO/HOLD` gate or authorize promotion, new
    training/eval, AIME2025 train data, or 30B/8-GPU.
+119. task261/#333 merged at `2026-06-01T22:19:54Z` with merge commit
+   `513fefa1f1ace94302b56413769c78fb7224624c` from exact refreshed-approved
+   head `3f404b3043736c85ca89ff6aa799fc6c53120f62`; it is root-cause evidence
+   only. Together with task260/#332, it keeps task255 invalidated and the global
+   Qwen AIME gate at `NO-GO/HOLD`.

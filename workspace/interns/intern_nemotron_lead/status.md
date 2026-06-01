@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #332 MERGED; #333 APPROVED/RELEASED at 3f404b3 awaiting worker self-merge closeout; gate NO-GO/HOLD |
-| Session | 63 |
+| PR | #332 MERGED; #333 MERGED at 513fefa from head 3f404b3; gate NO-GO/HOLD |
+| Session | 64 |
