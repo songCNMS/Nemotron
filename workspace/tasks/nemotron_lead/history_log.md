@@ -698,3 +698,81 @@
   - task250/#324 `4fd7978`: waiting refresh against #323@`68a8ee7`.
   - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 34 - 2026-06-01 UTC - task246/task247 live evidence reviewed
+
+- Read and marked read worker reports:
+  - worker_5 reported task250/#324 head
+    `cd4555199ff67eace4d40d4418eef38511786143`, open/CLEAN, refreshed
+    against task249 matrix `68a8ee7` and kept NO-GO/HOLD.
+  - worker_1 reported task246/#325 head
+    `afc276932897743f6b6b5b8aab4c390905cb55f1`, open/CLEAN, with real
+    heldout corpus and V10 M0 sidecar artifact paths.
+  - worker_3 reported task247/#326 head
+    `8fb34bd9116e32aa8d191750f2510d2a843e0da5`, open/CLEAN, with the first
+    same-harness Qwen3-4B base AIME2025 pilot artifact.
+- Independently verified task246 artifacts with read-only checks:
+  - Heldout corpus rows `560`, prompt hashes `560`, and no label-like keys in
+    the heldout JSONL.
+  - V10 sidecar train rows `8`, val rows `0`.
+  - Core hashes match the report for corpus
+    `614b2b347d33c1ec00cfd2c33222c26ad1d99b8b837bd7e48ea11fd4fedae6f9`,
+    prompt hashes `a2a348ee12f962d5dd7ed7cf0e5d034ebea4a76a2287804e97ade331b552a78d`,
+    M0 manifest `ea1b64cbe92f93359f3aa2bdad84072f56dea68b08ffaa2fbe67789bcc5aba45`,
+    train split `01ac5d1c8571dc956bbae12b7f1a00a4e759d59e503abbf2ddfba3b85aa324e3`,
+    empty val split `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`,
+    and replacement map `fb98b4196ab9efc99ed9765277546a6af14f6244cb4578fbecc056ca96cd45a1`.
+  - Blocking issue: task246 report/mailbox/top manifest field records
+    manifest sha `9e5bbc62507f893955374bd520dae81601a51bd1e0030c1508f819ad268f6eb5`,
+    but direct `sha256sum` of the current top manifest file is
+    `add38e0880a1442c3232cb0ddb5cd5544d7c8e8f3b3190e7d484e0c707205c5d`.
+  - Posted #325 lead request-changes/HOLD comment:
+    `https://github.com/songCNMS/Nemotron/pull/325#issuecomment-4594876541`.
+- Independently verified task247 artifacts with read-only checks:
+  - Artifact directory:
+    `/work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/qwen4b_base_aime2025_30x1_20260601T170700Z`.
+  - `summary.json` hash
+    `376f189c69a8b13fc7752f2f8c362a734154d43fe717209dedf6d0d1649d8639`,
+    `results.jsonl` hash
+    `c24ce2bd4b798b0f5913df1a86a34684315a6ac38e3b19764d0dd75889d43961`,
+    `command.txt` hash
+    `bd60cbb4b0ae65ba7cf549e5cde65142d55f9b2dc62181103e75657a937eff40`,
+    and `endpoint_model_manifest.json` hash
+    `4f17b1b5880e0cfc5697f99df942f31270e9ce5539212cc5494e9034c86ff354`.
+  - Summary proves Qwen3-4B base AIME2025 pilot `11/30`, exact-normalized
+    accuracy `0.36666666666666664`, `30/30` requests ok, parsed `23/30`,
+    finish reasons `stop=21,length=9`, using the corrected task243 runner,
+    `/v1/chat/completions`, original AIME prompts, `8192` max tokens,
+    temperature `0.0`, `top_p=1e-5`, and all-request denominator.
+  - Endpoint manifest proves served model/tokenizer path
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+  - Formal GitHub review approval failed because the available credential is
+    treated as the PR author (`Review Can not approve your own pull request`),
+    so the lead gate approval was recorded as a PR comment:
+    `https://github.com/songCNMS/Nemotron/pull/326#issuecomment-4594874145`.
+- Posted freshness request-changes/HOLD comments:
+  - #323 task249 matrix:
+    `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4594878750`.
+  - #324 task250 runbook:
+    `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4594881018`.
+- Sent peer_send instructions, all delivered:
+  - worker_1: fix #325 top manifest checksum/report mismatch and report back.
+  - worker_3: #326 is lead-approved via comment; self-merge only if CLEAN.
+  - worker_4: refresh #323 matrix against current #325/#326/#324 heads.
+  - worker_5: refresh #324 runbook against current #325/#326/#323 heads.
+  - worker_2: keep task248 HOLD for prep/train/eval until #325 correction is
+    accepted and #326 baseline is merged/available; prepare for sparse sidecar
+    knobs `8` train rows and `0` val shadow, but do not run without lead
+    clearance.
+- Current gate:
+  - task246 is materially useful but `REQUEST_CHANGES/HOLD` until the top
+    manifest checksum discrepancy is fixed.
+  - task247 base artifact is lead-approved as the same-harness Qwen3-4B
+    baseline, with residual risk that it is only `30x1`.
+  - task248 remains HOLD with no local prep, NemTron sync, training, FT eval,
+    or 30B/8-GPU authorization.
+  - task249/#323 and task250/#324 are request-changes/HOLD for freshness.
+  - No FT candidate artifact or task243 base-vs-FT comparison output exists.
+  - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.

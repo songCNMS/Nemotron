@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Knowledge Entries
 
@@ -43,3 +43,6 @@
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.
 38. A current runbook/HOLD table can be acknowledged after stale blockers are fixed, but it is still not merge/go-no-go approval while task246 corpus/input, task247 base artifacts, task248 candidate artifacts, task249 review, and task243 comparison are absent.
 39. For cross-dependent task249 review and task250 runbook, establish an order when both move: refresh the runbook to include the latest review matrix first, then ask the independent reviewer for a final pass against the refreshed runbook.
+40. For task246, a real heldout corpus and sidecar can be materially useful while still not merge-ready if checksums are inconsistent; a reported top manifest hash that differs from direct `sha256sum` is request-changes until the worker fixes or clearly separates final-file checksum from any pre-self-hash.
+41. The first accepted task247 Qwen3-4B base AIME2025 pilot baseline is `11/30` exact-normalized accuracy `0.36666666666666664` from `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` under the corrected 30x1 task243 harness; any FT judgment must use the same cache, runner, prompt variant, sampling, endpoint route, and all-request denominator.
+42. A task247 baseline artifact can unblock comparison planning but not the first go/no-go by itself; the gate still needs accepted task246 inputs, task248 FT artifacts, refreshed task249/task250 reviews, and task243 output proving `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
