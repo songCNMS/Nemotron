@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task249_qwen_aime_v10_live_contam_gate_review_s1 |
-| PR | Pending |
-| Session | 1 |
-| Progress | Accepted task249 on branch `intern_nemotron_worker_4/task249_qwen_aime_v10_live_contam_gate_review_s1` from `origin/main` at `20973e78f196d7e5d71993f60dc74a3500223f5f` after PR #321. Reading task246/task247/task248/task250 live evidence review inputs; scope is review-only with no product code, training, live eval, endpoint launch, merge, main push, or worker branch rewrites. |
+| PR | https://github.com/songCNMS/Nemotron/pull/323 |
+| Session | 2 |
+| Progress | Acceptance branch `intern_nemotron_worker_4/task249_qwen_aime_v10_live_contam_gate_review_s1` is pushed and PR #323 is OPEN/CLEAN at `d29501cac5e91f9ac5fb9b0a563dcd211447aa2a`. Fetched task246/task247/task248 worker branches for static review; task250 branch/PR not yet visible. Scope remains review-only with no product code, training, eval, endpoint launch, merge, main push, or worker branch rewrites. |
