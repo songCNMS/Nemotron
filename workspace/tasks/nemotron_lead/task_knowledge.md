@@ -84,3 +84,4 @@
 78. A local user-site dependency fix for packing (`cosmos-xenna==0.1.8`, `pydantic-settings==2.14.1`) is artifact evidence for this worker environment, not a production environment prescription; independent review should preserve that residual risk.
 79. A task254 assignment and delivered peer_send are not independent review evidence; require worker_5 mailbox report and/or pushed review branch before accepting task253 packed shards as reviewed local prep evidence.
 80. worker_5 local uncommitted task254 activity is also not review evidence; lead can record it as progress, but task254 remains pending until worker_5 sends mailbox evidence or pushes a review branch.
+81. worker_5 task254 acceptance branch `2343604ece67780aef427038285b6853813d398b` proves review ownership only; it is not approve/request-changes/block evidence until worker_5 sends the artifact review report.
