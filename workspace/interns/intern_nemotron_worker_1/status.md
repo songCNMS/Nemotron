@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task231_m1_missing_launcher_new_runtime_scan_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task241_qwen_aime_v10_sidecar_data_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task231_m1_missing_launcher_new_runtime_scan_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/315 |
-| Session | 3 |
-| Progress | PR #315 refreshed against origin/main; HOLD disposition unchanged; awaiting lead gate. |
+| Current Task | task241_qwen_aime_v10_sidecar_data_s1 |
+| PR | N/A |
+| Session | 1 |
+| Progress | Accepted task241; implementing V10 decontaminated AIME-style sidecar/data refactor. |
