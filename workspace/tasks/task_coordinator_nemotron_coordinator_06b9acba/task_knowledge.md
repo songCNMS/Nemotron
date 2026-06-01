@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,5 @@
 14. Current Qwen hard-math state to reuse: task071/task075/task076 contain the relevant pipeline history; PR #178 and PR #183 are merged; V7 passed corrected AIME25 at `0.21`, V8 failed AIME25 at `0.1966666667`, and corrected V9 still failed targeted `aime_06` despite parsed `10/10`.
 15. AIME 2025 Qwen promotion gate: establish a same-harness base Qwen score first, do not train on AIME 2025 labels/prompts except held-out eval/decontamination, use a Qwen3-4B pilot before any full 30B/8-GPU scale, and promote only if fine-tuning does not lower AIME 2025 versus base under the same corrected protocol.
 16. If `/api/intern/goal/set` returns `unconfirmed` for long multi-line content, write the detailed handoff into a task note and retry with a concise one-line goal pointing to that file.
+17. Lead split the AIME 2025 Qwen work into task241 data sidecar, task242 planner/smoke scripts, task243 base-vs-FT eval gate, task244 independent contamination/regression review, and task245 artifact/runbook verification; coordinator should track all five as one gated workstream.
+18. For the V10 Qwen AIME workstream, the first measurable go/no-go is task243's same-harness Qwen3-4B base score versus task241/task242's V10 FT smoke score, with exact-normalized accuracy plus parsed/finish diagnostics.

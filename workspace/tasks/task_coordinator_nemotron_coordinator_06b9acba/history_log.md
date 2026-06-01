@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0 - Created with coordinator
 
@@ -123,3 +123,12 @@
 - Created coordinator handoff file `workspace/tasks/task_coordinator_nemotron_coordinator_06b9acba/session16_aime2025_qwen_handoff.md` with the lead plan, resource constraints, worker split, and AIME 2025 non-regression gates.
 - First long `/api/intern/goal/set` attempt to `intern_nemotron_lead` returned HTTP 409 `unconfirmed`; retried with a concise one-line goal pointing to the handoff file.
 - Delivered pressing goal `coord-aime2025-qwen-pipeline-refactor-session16-short` to `intern_nemotron_lead` with HTTP 200, directing the lead to create/manage worker tasks for AIME 2025 Qwen fine-tuning improvement or non-regression and report task ids, assignees, baseline/eval protocol, pilot plan, and first go/no-go gate.
+
+## Session 17 - Lead AIME 2025 task split verified
+
+- Received `intern_nemotron_lead` Session 15 update: lead audited current main plus task071/task075/task076 and merged PR #178/#183, then assigned five Qwen AIME25 workstreams.
+- Fetched `origin` and verified `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `254593d`; the lead branch contains standard task docs for `task241_qwen_aime_v10_sidecar_data_s1`, `task242_qwen_aime_v10_planner_smoke_s1`, `task243_qwen_aime2025_base_vs_ft_eval_gate_s1`, `task244_qwen_aime_v10_contam_regression_review_s1`, and `task245_qwen_aime_v10_artifact_runbook_verify_s1`.
+- Recorded worker split: worker_1 owns V10 decontaminated run-length-DP/counting sidecar data; worker_2 owns V10 planner and Qwen3-4B pilot smoke scripts; worker_3 owns corrected AIME2025 base-vs-FT gate and score normalization; worker_4 owns independent contamination/regression review; worker_5 owns artifact/repro/runbook verification.
+- Verified gate semantics in the task docs: same-harness Qwen3-4B base score is required before judging FT; AIME25 prompts/labels remain held-out eval/decontamination only; no 30B/8-GPU scale until the 4B smoke is non-regressing or yields a concrete evaluator/data fix.
+- Remote branch check after fetch showed worker branches already present for `task241` and `task243`; coordinator asked lead to report worker branch/PR status for all five tasks and blockers if worker_2/4/5 branches do not appear.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the split and requesting the next report include worker PR status, first base-score artifact/protocol evidence from task243, and any resource blockers.

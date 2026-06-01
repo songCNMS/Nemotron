@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 16 |
-| Last Update | 2026-06-01T15:23:38Z - Set delivered pressing goal for intern_nemotron_lead to coordinate AIME 2025 Qwen fine-tuning non-regression/improvement, with detailed handoff recorded in the coordinator task. |
+| Session | 17 |
+| Last Update | 2026-06-01T15:36:52Z - Verified lead Qwen AIME25 task split at lead branch head 254593d, recorded task241-task245 assignments, and acknowledged next reporting gates to intern_nemotron_lead. |
