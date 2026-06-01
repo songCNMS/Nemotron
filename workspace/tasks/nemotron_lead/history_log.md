@@ -2598,3 +2598,20 @@
 - Current global gate remains `NO-GO/HOLD`: candidate artifacts now exist for
   review, but independent artifact review and same-harness FT-vs-base AIME
   comparison are still missing.
+
+## Follow-up - 2026-06-01 UTC - task255 PR #329 opened
+
+- Fetched origin after task256/task257 dispatch and observed worker_2 opened
+  task255 PR #329:
+  - state `OPEN`;
+  - base `main`;
+  - head
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - merge state `CLEAN`;
+  - title `task255: record Qwen3-4B pilot checkpoint artifacts`.
+- Diff from artifact closeout head `dfee98a` to PR head `d62036e` is
+  worker_2 status bookkeeping only: `PR | N/A` changed to `PR | #329`.
+- Updated task256 docs to review exact #329 head `d62036e`.
+- #329 is not approved or merge-directed yet; wait for task256 independent
+  artifact review and task257/task243 same-harness comparison evidence.
+- Global gate remains `NO-GO/HOLD`.

@@ -94,3 +94,4 @@
 88. A worker-owned task255 checkpoint observed by lead read-only monitoring can be recorded, but do not release task243 comparison or any promotion review until worker_2 sends official closeout/export status and the artifact path is accepted for independent review.
 89. Observed task255 HF export at `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001` is promising artifact evidence, but it remains unofficial until worker_2 closeout confirms boundaries and readiness; task243 comparison still stays held.
 90. After task255 report `PASS_ARTIFACT_READY_FOR_REVIEW`, split the next gate into task256 independent artifact review and task257 corrected AIME same-harness comparison; global gate remains HOLD until both produce acceptable evidence.
+91. task255 PR #329 head `d62036e405edc5daa322c09bb89da19b176bb7bf` is the review target; `dfee98a..d62036e` only records the PR number in worker_2 status.

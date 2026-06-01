@@ -5,9 +5,10 @@
 ## Background
 
 task255 produced a bounded Qwen3-4B V10 one-iteration pilot artifact from the
-reviewed task253 packed shards. worker_2's current artifact branch is
-`intern_nemotron_worker_2/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1` at
-`dfee98a028a55c00dc2579bef602ee914e88a325`.
+reviewed task253 packed shards. worker_2's current artifact PR is #329 at
+`d62036e405edc5daa322c09bb89da19b176bb7bf`. The previous artifact closeout
+head `dfee98a028a55c00dc2579bef602ee914e88a325` differs from `d62036e` only by
+worker status PR-number bookkeeping.
 
 The global Qwen AIME gate remains `NO-GO/HOLD`: task255 artifacts are not a
 quality result, promotion claim, or same-harness AIME comparison.
@@ -20,8 +21,8 @@ in the corrected AIME2025 same-harness comparison.
 
 ## Scope
 
-- Review task255 branch head:
-  `dfee98a028a55c00dc2579bef602ee914e88a325`.
+- Review task255 PR #329 head:
+  `d62036e405edc5daa322c09bb89da19b176bb7bf`.
 - Review task255 report:
   `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/task255_qwen4b_pilot_checkpoint_export_report.md`.
 - Review checkpoint artifact:
