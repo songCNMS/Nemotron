@@ -1,0 +1,13 @@
+# intern_nemotron_coordinator - status
+
+<!-- METADATA:STATUS=Working,TASK=task_coordinator_nemotron_coordinator_8cb97dc3,ROLE=coordinator,TEAM_ID= -->
+
+| Field | Value |
+|------|-----|
+| Name | intern_nemotron_coordinator |
+| Status | Working |
+| Role | coordinator |
+| Team | N/A |
+| Current Task | task_coordinator_nemotron_coordinator_8cb97dc3 |
+| PR | N/A |
+| Session | 0 |
