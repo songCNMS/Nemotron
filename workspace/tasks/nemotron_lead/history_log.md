@@ -2136,8 +2136,11 @@
   - diff from `origin/main` is worker_2 status plus task253 README/history/task
     knowledge only;
   - worker_2 status shows `Working`, PR `N/A`, and accepted scope boundaries;
-  - no mailbox acceptance, PR, `packed_qwen` shard, or packing artifact has
-    arrived yet.
+  - worker_2 official mailbox acceptance then arrived and was marked read,
+    confirming branch `be3803f` from #328 main and the no-training/no-eval/no-30B
+    boundaries.
+- No task253 PR, `packed_qwen` shard, packing artifact, or Xenna blocker report
+  has arrived yet.
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: #328 closes only the
   HotpotQA loader blocker. There are still no packed Qwen shards, no candidate
   FT checkpoint/export/live eval artifacts, no task243 same-harness FT-vs-base

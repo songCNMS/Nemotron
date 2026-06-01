@@ -25,5 +25,7 @@
 - Diff from `origin/main` is worker_2 status plus task253 task docs only.
 - worker_2 status on that branch shows `Working`, PR `N/A`, and acceptance of
   the no-training/no-eval/no-30B boundaries.
-- No official mailbox acceptance, PR, packing artifact, `packed_qwen` shard, or
-  Xenna blocker report has arrived yet.
+- worker_2 official mailbox acceptance arrived and was marked read, confirming
+  branch `be3803f` from #328 main and the no-training/no-eval/no-30B scope.
+- No task253 PR, packing artifact, `packed_qwen` shard, or Xenna blocker report
+  has arrived yet.
