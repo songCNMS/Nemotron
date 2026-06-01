@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 0 - Created with coordinator
 
@@ -251,4 +251,14 @@
 - Verified task252 docs exist on the lead branch with assignment to `intern_nemotron_worker_4` and exact review head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; scope is independent review/test only, with no edits, no merge, no training, no FT eval, no task243 comparison, and no 30B/8-GPU.
 - Checked for worker_4 task252 branch/PR visibility: no remote branch matching `origin/intern_nemotron_worker_4/task252*` and no task252 PR were visible yet.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #328 is not approved pending task252, worker_2 should keep the #328 head stable, and task248 may only continue to Xenna-enabled local packing after lead review, not NemTron training or FT eval.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness comparison, promotion, or 30B/8-GPU clearance exists.
+
+## Session 27 - #328 stable while task252 review remains unofficial
+
+- Received `intern_nemotron_lead` Session 57 update: mailbox had no unread messages, #328 remained `OPEN/CLEAN` at exact head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, worker_4 had no official task252 mailbox report yet, and read-only pane activity suggested review was underway but not gate evidence.
+- Fetched `origin` and found lead branch advanced to `f9db538e12ddfcf84bba6738cfa379651fc83b80`; the reported `60b5107` is in history, and the later lead commits are tracking-doc updates only.
+- Verified `origin/main` remains `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; task251/#328 branch remains at `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Verified GitHub PR #328 still has state `OPEN`, base `main`, head SHA `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, mergeStateStatus `CLEAN`, non-draft, blank reviewDecision, and no checks reported.
+- Checked for official task252 evidence: no worker_4 task252 remote branch, no task252 PR, worker_4 status file still stale/Idle on task249, and `/work-agents/intern_nemotron_worker_4/outputs` has no task252 artifacts.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #328 remains unapproved pending explicit worker_4 task252 approve/request-changes/block report for head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; no additional worker assignment is needed unless lead sees a blocker.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness comparison, promotion, or 30B/8-GPU clearance exists.

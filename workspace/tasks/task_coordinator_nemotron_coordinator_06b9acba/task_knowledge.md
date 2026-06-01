@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Knowledge Entries
 
@@ -46,3 +46,5 @@
 40. PR #328 is open and clean at head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; the `c46b916` to `694197c` delta is PR-number/status bookkeeping only.
 41. task252 assigns worker_4 to independently review/test #328 at exact head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; #328 is not approved until that report is reviewed.
 42. GitHub reports no CI checks for #328, so review evidence must come from worker_4 task252 commands/results and lead gate review.
+43. As of Session 27, #328 still has no head drift, checks, or reviewDecision; worker_4 pane activity is not gate evidence without an explicit task252 mailbox report.
+44. Official task252 evidence remains absent in repo state: no worker_4 task252 branch/PR, worker_4 status still stale on task249, and no task252 output artifacts under worker_4 outputs.
