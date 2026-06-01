@@ -87,3 +87,4 @@
 81. worker_5 task254 acceptance branch `2343604ece67780aef427038285b6853813d398b` proves review ownership only; it is not approve/request-changes/block evidence until worker_5 sends the artifact review report.
 82. task254 review approved task253 as local packed-shard prep evidence only; the first Qwen3-4B go/no-go still requires task255 candidate FT checkpoint/export artifacts and task243 same-harness FT-vs-base comparison against the accepted `11/30` base.
 83. After task253/task254 local prep approval, the next worker-owned step is a Qwen3-4B-only pilot checkpoint/export task using approved `packed_qwen`; it must not include AIME25 train data, FT live eval, task243 comparison, promotion, 30B/8-GPU, or shared deletion.
+84. task255 dispatch to worker_2 is permission for bounded Qwen3-4B pilot checkpoint/export artifact production only; it is not permission for task243 comparison, FT live eval, promotion, 30B/8-GPU, or use of AIME2025 as trainable data.

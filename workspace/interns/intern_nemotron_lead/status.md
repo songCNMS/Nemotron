@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task253/task254 APPROVE local packed_qwen; task255 assigned for Qwen3-4B pilot artifacts; gate HOLD |
-| Session | 60 |
+| PR | task253/task254 APPROVE local packed_qwen; task255 dispatched to worker_2 for Qwen3-4B pilot artifacts; gate HOLD |
+| Session | 61 |

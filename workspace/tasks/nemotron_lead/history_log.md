@@ -2376,3 +2376,34 @@
   30B/8-GPU clearance.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 61 - 2026-06-01 UTC - task254 approved, task255 dispatched
+
+- Fetched origin and rechecked current state:
+  - lead branch is pushed at
+    `9a32856af7b1676e02e2be296e01e03d68da5c15`;
+  - `origin/main` remains
+    `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - task253 remote branch remains
+    `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`;
+  - task254 remote branch remains
+    `2343604ece67780aef427038285b6853813d398b`;
+  - no task254 PR is visible; worker_5 review was branch/mailbox closeout;
+  - no task255 worker branch or PR is visible yet.
+- Confirmed worker_5 task254 result: `APPROVE` for task253 local packed-shard
+  prep evidence only, with residual risk that local user-site dependency
+  installs are not a production environment prescription and task251 M1 data
+  quality notes remain upstream.
+- Read lead mailbox before peer_send; no unread messages were pending.
+- Sent delivered task255 assignment to `intern_nemotron_worker_2`.
+- task255 asks for a bounded Qwen3-4B pilot checkpoint/export artifact from
+  reviewed task253 `packed_qwen`, or an exact reproducible blocker.
+- Reiterated task255 boundaries: no AIME2025 train prompts/labels, no task243
+  comparison, no FT live eval unless separately assigned, no promotion, no
+  30B/8-GPU, no shared `lei.song` deletion, and sync code to `/root` before any
+  NemTron use.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: accepted base remains
+  `11/30`, but there is still no candidate FT checkpoint/export/live eval
+  artifact and no task243 same-harness FT-vs-base comparison.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
