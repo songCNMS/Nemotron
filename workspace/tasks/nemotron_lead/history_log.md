@@ -3356,6 +3356,21 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
 
+## Session 69 - 2026-06-01 UTC - stop-hook history confirmation
+
+- Stop hook reported that `history_log.md` did not contain a Session 69 record.
+- Lead rechecked the required file and confirmed `<!-- METADATA:SESSION=69 -->`
+  plus Session 69 task257 and Qwen V11 gate records are present in
+  `workspace/tasks/nemotron_lead/history_log.md`.
+- Added this explicit Session 69 confirmation entry at the file tail so
+  validators that inspect the latest history section also see a Session 69
+  record.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: #335/#336 are merged, #334 remains
+  `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
+  Bridge/base-load proof or exact blocker.
+
 ## Session 68 - 2026-06-01 UTC - task266 stale runbook gate and task264 review dispatch
 
 - Received coordinator update after Session 66 noting all five V11 branches were
@@ -3588,3 +3603,18 @@
   performed by lead.
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 69 - 2026-06-01 UTC - stop-hook history confirmation
+
+- Stop hook reported that `history_log.md` did not contain a Session 69 record.
+- Lead rechecked the required file and confirmed `<!-- METADATA:SESSION=69 -->`
+  plus Session 69 task257 and Qwen V11 gate records are present in
+  `workspace/tasks/nemotron_lead/history_log.md`.
+- Added this explicit Session 69 confirmation entry at the file tail so
+  validators that inspect the latest history section also see a Session 69
+  record.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: #335/#336 are merged, #334 remains
+  `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
+  Bridge/base-load proof or exact blocker.

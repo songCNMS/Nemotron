@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #335/#336 MERGED; #334 REQUEST-CHANGES/HOLD; gate NO-GO/HOLD |
+| PR | #335/#336 MERGED; #334 REQUEST-CHANGES/HOLD; Session 69 history hook-confirmed; gate NO-GO/HOLD |
 | Session | 69 |

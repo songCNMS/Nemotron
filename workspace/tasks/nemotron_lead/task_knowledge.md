@@ -251,3 +251,6 @@
    remains blocked pending NemTron/NeMo Bridge/base-load proof or exact blocker.
    Current #334 head `b77641d30e698f94e59ffb94bac3c0d9bf92af50` is still stale
    because its report described #336 as open.
+132. Stop-hook remediation: `history_log.md` now has an explicit tail Session 69
+   confirmation entry in addition to `<!-- METADATA:SESSION=69 -->` and the
+   existing Session 69 Qwen V11 gate record.
