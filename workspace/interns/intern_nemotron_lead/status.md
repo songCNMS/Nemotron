@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #330 MERGED; task258 branch observed pending mailbox; #329 HOLD |
-| Session | 69 |
+| PR | #331/#329 HOLD pending task259 re-review; #330 MERGED failure closeout |
+| Session | 70 |

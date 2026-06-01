@@ -2849,3 +2849,19 @@
   re-review.
 - #329 remains `HOLD`; global Qwen AIME gate remains `NO-GO/HOLD`; current
   candidate remains not promotable and 30B/8-GPU remains blocked.
+
+## Session 70 - 2026-06-01 UTC - task258 official closeout and task259 assignment
+
+- Received and marked read worker_2 task258 official closeout mailbox
+  `c4da91e7d1b2405e850302898b032566`.
+- task258 disposition: `PASS_REVIEWER_ACCESS_READY`.
+- Recommendation for #329: `ready_for_task256_re_review`.
+- PR #331 is open/base `main`/merge state `CLEAN` at head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- Shared reviewer path:
+  `/mnt/cephfs/data/processing/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1/task255_run_20260601T202339Z_full_artifacts_20260601T2109Z`.
+- Lead verified local report/manifest hashes match the worker_2 mailbox.
+- Created task259 for worker_5 independent re-review of task258/#331 and
+  task255/#329 artifact accessibility/integrity.
+- #331 and #329 remain `HOLD` pending task259; global Qwen AIME gate remains
+  `NO-GO/HOLD`, no promotion, no 30B/8-GPU.

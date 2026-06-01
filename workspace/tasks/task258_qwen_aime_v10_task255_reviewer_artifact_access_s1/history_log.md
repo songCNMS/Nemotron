@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -37,3 +37,35 @@
   checkpoint, so lead sent a delivered follow-up asking for the official report
   before releasing worker_5 re-review.
 - #329 remains `HOLD`; global gate remains `NO-GO/HOLD`.
+
+## Session 2 - 2026-06-01 UTC - Official report processed
+
+- Lead received and marked read worker_2 task258 official closeout mailbox
+  `c4da91e7d1b2405e850302898b032566`.
+- Disposition: `PASS_REVIEWER_ACCESS_READY`.
+- Recommendation for #329: `ready_for_task256_re_review`.
+- Branch/PR:
+  - branch
+    `intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1`;
+  - head `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`;
+  - PR #331 open/base `main`/merge state `CLEAN`.
+- Shared reviewer path:
+  `/mnt/cephfs/data/processing/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1/task255_run_20260601T202339Z_full_artifacts_20260601T2109Z`.
+- Reported counts/sizes:
+  - checkpoint: `18` files, `53G`, `56326605013` bytes;
+  - HF export: `13` files, `7.6G`, `8060898808` bytes;
+  - source logs: `2` files;
+  - total copied evidence: `34` files, `60G`, `64387612638` bytes.
+- Key hashes:
+  - report `bbe89cef817ce0fe131905ab38af85db04ffecc504ceecd970e2ef42917a2256`;
+  - `review_access_manifest.json`
+    `53fb4822349106d3462fce7e284bca8a2efdc139c7981fcbe14a8edcb335f372`;
+  - `shared_file_inventory.tsv`
+    `50833c7ce5187578621f57a5ba091ff465fce5092d70f9fc752fa0776b750b84`;
+  - `shared_full_artifacts.sha256`
+    `415bf1d186591f14d1acd2e4fb115ac91065eb3f33ded61751033bebb9f33d83`.
+- Permission probe: no non-world-readable files, no non-world-executable
+  directories, and read probes passed for HF config and
+  `latest_checkpointed_iteration.txt=1`.
+- Lead created task259 for worker_5 independent re-review before approving
+  #331 or #329. Global gate remains `NO-GO/HOLD`.

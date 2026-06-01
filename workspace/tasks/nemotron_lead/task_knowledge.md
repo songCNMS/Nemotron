@@ -124,3 +124,7 @@
 102. task258 branch `67162453b67f17296e7105e7be06f6e2b953f9bf` reports a
    reviewer-readable full artifact bundle, but worker_2 official mailbox must
    be processed before assigning worker_5 re-review.
+103. task258 official closeout moved to PR #331 head
+   `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` with disposition
+   `PASS_REVIEWER_ACCESS_READY`; task259 is the worker_5 independent re-review
+   gate before #331/#329 can be approved.

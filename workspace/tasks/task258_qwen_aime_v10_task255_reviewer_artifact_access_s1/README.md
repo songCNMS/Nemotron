@@ -1,14 +1,16 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - task255 reviewer artifact access
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Lead Observation
 
 worker_2 branch
 `origin/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1`
-is visible at `67162453b67f17296e7105e7be06f6e2b953f9bf` with
-reviewer-readable artifact bundle evidence. Lead has not yet received the
-official worker_2 task258 mailbox closeout, so worker_5 re-review is still held.
+is visible at `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` with
+reviewer-readable artifact bundle evidence and PR #331 OPEN/CLEAN. worker_2
+official mailbox reports `PASS_REVIEWER_ACCESS_READY` and recommends
+`ready_for_task256_re_review`. Lead created task259 for worker_5 independent
+re-review; #331 remains HOLD pending that review.
 
 ## Background
 

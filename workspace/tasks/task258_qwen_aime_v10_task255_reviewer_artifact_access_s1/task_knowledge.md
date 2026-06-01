@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -18,3 +18,7 @@
    `/mnt/cephfs/data/processing/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1/`,
    but lead is waiting for official mailbox closeout before assigning
    worker_5 re-review.
+6. worker_2 official task258 closeout is at PR #331 head
+   `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, disposition
+   `PASS_REVIEWER_ACCESS_READY`; #331 remains pending worker_5 task259
+   re-review.
