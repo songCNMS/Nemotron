@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -79,3 +79,19 @@
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, or shared
   file deletion was performed.
+
+## Session 5 - Sequencing hold for refreshed task250 runbook
+
+- Verified PR #323 remains OPEN/CLEAN at
+  `68a8ee77ee25f5dbbac170c935e8487b88198ce2` on base `main`.
+- Verified PR #324 is now OPEN/CLEAN at
+  `4fd7978353deb9702e880d2734d8b99bfaf8544b`, newer than the Session 4 matrix
+  input `d1525aa617378e407ffa2e99fde44630f9ab43dc`.
+- Recorded lead sequencing: worker_5 is refreshing #324 against
+  #323@`68a8ee77ee25f5dbbac170c935e8487b88198ce2`, so #323 stays
+  in-progress/HOLD until that current #324 evidence is available for review.
+- Did not perform the final matrix refresh in this session because the
+  refreshed #324 current-head report is the required input.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.

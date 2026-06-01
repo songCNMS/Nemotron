@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -29,3 +29,8 @@
    `d1525aa617378e407ffa2e99fde44630f9ab43dc` and correctly keeps NO-GO/HOLD,
    but the live runbook still needs a content refresh for task247 cache
    visibility, task248 branch/report visibility, and task249 PR #323 visibility.
+10. At Session 5, PR #324 is OPEN/CLEAN at
+    `4fd7978353deb9702e880d2734d8b99bfaf8544b`, but lead sequencing says
+    worker_5 is refreshing #324 against #323@`68a8ee77ee25f5dbbac170c935e8487b88198ce2`.
+    Keep #323 in-progress/HOLD and only refresh the matrix when the refreshed
+    #324 current-head evidence is available.
