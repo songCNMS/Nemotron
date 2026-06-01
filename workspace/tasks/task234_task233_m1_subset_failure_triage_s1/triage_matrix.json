@@ -1,0 +1,189 @@
+{
+  "task": "task234_task233_m1_subset_failure_triage_s1",
+  "owner": "intern_nem_dev_2",
+  "base_commit": "1d037329f5a02cdc04f2a09a16e7342721be4c87",
+  "source_task": {
+    "task": "task233_qwen_official_eval_client_image_pull_and_subset_live_s1",
+    "verified_branch": "intern_nem_dev_2/task233_qwen_official_eval_client_image_pull_and_subset_live_s1",
+    "verified_head": "ba6636d1f365d5e94641d675ec3d743ed485d7f7",
+    "artifact_root": "/mnt/cephfs/data/processing/nemotron-live-validation/task233",
+    "outcome": "corrected-math PASS; M1 14-target subset 3 PASS, 9 FAIL, 1 stopped/partial, 1 held/not-run"
+  },
+  "artifact_root": "/mnt/cephfs/data/processing/nemotron-live-validation/task234",
+  "boundaries": [
+    "artifact-only triage",
+    "no endpoint/eval/benchmark run",
+    "no SGLang start",
+    "no Docker run/pull/build",
+    "no package install/build/download",
+    "no environment mutation",
+    "no model copy",
+    "no process kill",
+    "no image delete/prune",
+    "task233 pulled evaluator images left untouched"
+  ],
+  "non_pass_targets": [
+    {
+      "target": "simple_evals.AIME_2025.1",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/simple_evals.AIME_2025.1/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/simple_evals.AIME_2025.1/logs/stage.exit",
+      "observed_error_marker": "HTTP 400: Requested token count exceeds maximum context length 16384; total 16660 tokens = 276 input + 16384 completion. Subset used max_new_tokens 16384, parallelism 4, no limit_samples; corrected-math AIME PASS used max_new_tokens 8192, parallelism 1, limit_samples 1.",
+      "classification": "product config bug / endpoint capacity blocker",
+      "owner_proposal": "Evaluator config owner should cap AIME max_new_tokens below the endpoint residual context budget, preferably 8192 to match corrected-math smoke, and use a target-scoped smoke limit when validating the fix.",
+      "minimal_next_command_once_released": "Generate a task-scoped raw config for simple_evals.AIME_2025 with max_new_tokens: 8192 and limit_samples: 1 for smoke, then run: nemo-evaluator-launcher run --config <task_root>/eval_configs/aime_fixed_raw.yaml --config-mode raw.",
+      "acceptance_criteria": "AIME reaches endpoint requests without context-length HTTP 400 and produces nonzero completed responses/artifacts.",
+      "expected_risk": "Low for smoke, medium for full AIME if max_new_tokens is still too high for some prompts.",
+      "estimate": "Config fix minutes; target smoke minutes once endpoint/runtime is released."
+    },
+    {
+      "target": "simple_evals.gpqa_diamond.3",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/simple_evals.gpqa_diamond.3/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/simple_evals.gpqa_diamond.3/logs/stage.exit",
+      "observed_error_marker": "datasets.exceptions.DatasetNotFoundError: Dataset 'Idavidrein/gpqa' is a gated dataset on the Hub. You must be authenticated to access it.",
+      "classification": "credential-resource blocker",
+      "owner_proposal": "PM should provide an approved HF token with access to Idavidrein/gpqa, or pre-stage an approved GPQA cache visible inside the evaluator container.",
+      "minimal_next_command_once_released": "With approved HF_TOKEN/cache injection, run target-scoped GPQA through nemo-evaluator-launcher using deployment.type=none and the existing endpoint/tunnel shape.",
+      "acceptance_criteria": "Dataset load succeeds and the first GPQA requests reach the endpoint; no gated-dataset auth exception.",
+      "expected_risk": "Medium because container cache/mount visibility must be verified, but failure is before model inference.",
+      "estimate": "Credential/cache prep depends on PM; target smoke minutes after access is available."
+    },
+    {
+      "target": "hle.hle.4",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/hle.hle.4/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/hle.hle.4/logs/stage.exit",
+      "observed_error_marker": "datasets.exceptions.DatasetNotFoundError: Dataset 'cais/hle' is a gated dataset on the Hub. You must be authenticated to access it.",
+      "classification": "credential-resource blocker",
+      "owner_proposal": "PM should provide an approved HF token with cais/hle access, or pre-stage an approved HLE cache visible inside the evaluator container.",
+      "minimal_next_command_once_released": "With approved HF_TOKEN/cache injection, run target-scoped hle.hle through nemo-evaluator-launcher using deployment.type=none and the existing endpoint/tunnel shape.",
+      "acceptance_criteria": "HLE dataset load succeeds and endpoint requests begin; no gated-dataset auth exception.",
+      "expected_risk": "Medium because gated data and container mount visibility remain external to product code.",
+      "estimate": "Credential/cache prep depends on PM; target smoke minutes after access is available."
+    },
+    {
+      "target": "livecodebench.codegeneration_release_latest.5",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/livecodebench.codegeneration_release_latest.5/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/livecodebench.codegeneration_release_latest.5/logs/stage.exit",
+      "observed_error_marker": "livecodebench generated the release_latest test split to about 996 examples, then shell reported 'Killed livecodebench ...'; nemo-evaluator subprocess return code 137 and stage exit 1.",
+      "classification": "evaluator runtime gap / resource blocker",
+      "owner_proposal": "Release a resource-sized LiveCodeBench plan: either larger memory/container limits or a smaller smoke config such as constrained sample/release window before the full release_latest run.",
+      "minimal_next_command_once_released": "Run a target-scoped LiveCodeBench smoke config with reduced sample/release scope or larger approved memory limits through nemo-evaluator-launcher; do not rerun full release_latest until resource sizing is known.",
+      "acceptance_criteria": "LiveCodeBench data prep/eval command completes the limited smoke without SIGKILL/137 and records endpoint calls/results.",
+      "expected_risk": "High for full release_latest until memory profile is captured; medium for a reduced smoke.",
+      "estimate": "Limited smoke tens of minutes; full release_latest requires a separate memory/runtime sizing pass."
+    },
+    {
+      "target": "ifbench.ifbench.7",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/ifbench.ifbench.7/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/ifbench.ifbench.7/logs/stage.exit",
+      "observed_error_marker": "syllapy.data_loader imports pkg_resources; ModuleNotFoundError: No module named 'pkg_resources'.",
+      "classification": "evaluator runtime gap",
+      "owner_proposal": "Evaluator image/runtime owner should provide a PM-approved ifbench:26.03 image fix or offline overlay that includes setuptools/pkg_resources, then prove import before live eval.",
+      "minimal_next_command_once_released": "In an approved immutable or task-owned runtime only, validate 'python -c \"import pkg_resources, syllapy\"' for ifbench, then rerun target-scoped ifbench through nemo-evaluator-launcher.",
+      "acceptance_criteria": "Import chain succeeds and ifbench reaches endpoint calls; no pkg_resources ModuleNotFoundError.",
+      "expected_risk": "Low for runtime import fix; medium if the official image must be rebuilt or externally supplied.",
+      "estimate": "Runtime fix/probe minutes if image/overlay is available; otherwise blocked on image owner."
+    },
+    {
+      "target": "ruler.ruler-256k-chat.8",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/ruler.ruler-256k-chat.8/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/ruler.ruler-256k-chat.8/logs/stage.exit",
+      "observed_error_marker": "Generated command used --tokenizer_path \"None\"; ValueError: tokenizer_path (or config.params.extra.tokenizer) is required; data preparation failed for niah_single_1.",
+      "classification": "product config bug",
+      "owner_proposal": "Evaluator config owner should set config.params.extra.tokenizer to a container-visible Qwen tokenizer/model path and mount that path if needed. Candidate source path from task233 endpoint staging: /mnt/cephfs/data/processing/nemotron-live-validation/task210/session4/staged_model/Qwen3-30B-A3B-Instruct-2507.",
+      "minimal_next_command_once_released": "Create a target-scoped RULER config with config.params.extra.tokenizer=<container_visible_qwen_tokenizer_path> and tokenizer_backend=hf, then run nemo-evaluator-launcher with an explicit evaluation mount for the tokenizer path.",
+      "acceptance_criteria": "RULER data preparation passes tokenizer validation and begins endpoint requests; no tokenizer_path None error.",
+      "expected_risk": "Medium because VPN evaluator container visibility for the NemTron staged tokenizer path must be solved with a mount or tokenizer-only staging.",
+      "estimate": "Config/mount fix minutes to hours; target smoke may be long if the 256k variant remains full scope."
+    },
+    {
+      "target": "AA-LCR.aa_lcr.9",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/AA-LCR.aa_lcr.9/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/AA-LCR.aa_lcr.9/logs/stage.exit",
+      "observed_error_marker": "HTTP 400: input token counts 118196, 118195, 102300, and 102326 are longer than endpoint context length 16384.",
+      "classification": "endpoint capacity blocker",
+      "owner_proposal": "Hold AA-LCR for the current 16k endpoint unless PM approves an official shorter/truncated variant or a long-context endpoint with capacity for about 128k tokens.",
+      "minimal_next_command_once_released": "If PM approves a shorter variant, run that target-scoped config; if PM approves long-context serving, start an endpoint with verified >=128k context and rerun target-scoped AA-LCR only.",
+      "acceptance_criteria": "Initial AA-LCR samples no longer produce context-length HTTP 400 and complete at least a smoke subset.",
+      "expected_risk": "High with current 16k endpoint; medium to high for long-context endpoint due GPU memory/runtime limits.",
+      "estimate": "HOLD until endpoint capacity/variant decision; long-context release likely requires separate serving validation."
+    },
+    {
+      "target": "tau2_bench.tau2_bench_airline.10",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/tau2_bench.tau2_bench_airline.10/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/tau2_bench.tau2_bench_airline.10/logs/stage.exit",
+      "observed_error_marker": "User simulator openai/nvdev/qwen/qwen-235b via https://integrate.api.nvidia.com/v1/chat/completions failed with 401 Unauthorized: Authentication failed.",
+      "classification": "credential-resource blocker",
+      "owner_proposal": "PM should provide approved USER_API_KEY credentials for the NVIDIA Integrate user-simulator model, and any judge key if the target config requires judging.",
+      "minimal_next_command_once_released": "With approved secret injection, rerun target-scoped tau2_bench.tau2_bench_airline using deployment.type=none against the existing endpoint/tunnel shape.",
+      "acceptance_criteria": "User-simulator requests authenticate and target endpoint receives tau2 agent calls; no 401 from Integrate API.",
+      "expected_risk": "Medium because this depends on external service credentials and rate limits.",
+      "estimate": "Credential handoff external; target smoke minutes after valid credentials are installed."
+    },
+    {
+      "target": "bfcl.bfclv3.11",
+      "status": "FAIL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/bfcl.bfclv3.11/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/bfcl.bfclv3.11/logs/stage.exit",
+      "observed_error_marker": "NoAPIKeyError: Please fill in the API keys in the .env file; raised from apply_function_credential_config.py while loading executable-category credentials.",
+      "classification": "credential-resource blocker",
+      "owner_proposal": "PM should provide the BFCL executable-category API keys through a task-owned .env or launcher-supported secure secret injection, or approve a non-executable BFCL subset if official.",
+      "minimal_next_command_once_released": "With approved BFCL .env/secret injection, rerun target-scoped bfcl.bfclv3 through nemo-evaluator-launcher; otherwise run only a PM-approved no-executable subset.",
+      "acceptance_criteria": "BFCL credential application succeeds and generation reaches model calls; no NoAPIKeyError.",
+      "expected_risk": "Medium because required external credentials may have policy/rate-limit constraints.",
+      "estimate": "Credential handoff external; target smoke minutes after valid secrets are available."
+    },
+    {
+      "target": "lm-evaluation-harness.mmlu_prox_chat.12",
+      "status": "STOPPED_PARTIAL",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/lm-evaluation-harness.mmlu_prox_chat.12/logs/client_stdout.log",
+      "stage_exit_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/lm-evaluation-harness.mmlu_prox_chat.12/logs/stage.exit",
+      "observed_error_marker": "PM cleanup killed the running target at stage exit 137. Cleanup status showed about 10420/11759 progress; copied metrics recorded 57400 successful HTTP 200 responses, runtime_seconds 81639.4, and no endpoint error marker.",
+      "classification": "scheduling blocker",
+      "owner_proposal": "Run mmlu_prox_chat separately with a PM-approved timeout above 30 hours, or split/parallelize shards if the evaluator supports deterministic sharding/resume.",
+      "minimal_next_command_once_released": "Rerun target-scoped lm-evaluation-harness.mmlu_prox_chat alone with an output root reserved for resume/shard evidence; use a timeout >=30h or PM-approved parallel shard plan.",
+      "acceptance_criteria": "Target completes with stage exit 0, or each PM-approved shard completes with complete aggregate artifacts and no killed/interrupted marker.",
+      "expected_risk": "Medium scheduling risk; task233 evidence points to a long-running target rather than model/runtime failure.",
+      "estimate": "Observed 22.7h at cleanup with about 11 percent remaining; estimate 26-30h sequential total, roughly 3h remaining from the cleanup point."
+    },
+    {
+      "target": "nemo_skills.ns_wmt24pp.13",
+      "status": "HELD_NOT_RUN",
+      "evidence_log_path": "/mnt/cephfs/data/processing/nemotron-live-validation/task233/vpn_copied_artifacts/eval/m1_launcher_available_14/20260530_171752-5e3f10e5af8917d7/nemo_skills.ns_wmt24pp.13/logs/stdout.log",
+      "stage_exit_path": null,
+      "observed_error_marker": "2026-06-01T03:03:07Z Job 5e3f10e5af8917d7.13 (nemo_skills.ns_wmt24pp) was killed, skipping execution; client_stdout.log is empty and no run artifacts were produced.",
+      "classification": "scheduling blocker / unknown until run",
+      "owner_proposal": "Release ns_wmt24pp only after mmlu_prox_chat is separated or completed, and preflight the nemo-skills target assets/credentials before endpoint time is reserved.",
+      "minimal_next_command_once_released": "Run target-scoped nemo_skills.ns_wmt24pp alone through nemo-evaluator-launcher with deployment.type=none after asset/credential preflight and a PM-approved timeout.",
+      "acceptance_criteria": "Target starts, creates run artifacts, and either completes stage exit 0 or yields a concrete resource/config error instead of pending cleanup skip.",
+      "expected_risk": "Unknown because the target never started; likely scheduling and asset/resource risk.",
+      "estimate": "HOLD until separate release; runtime unknown, reserve day-scale window unless task-specific prior data is supplied."
+    }
+  ],
+  "prioritized_next_actions": {
+    "offline_config_or_runtime_fixes": [
+      "Fix AIME max_new_tokens/limit_samples config before rerun.",
+      "Fix RULER tokenizer path and container mount visibility.",
+      "Request evaluator image/runtime fix or approved overlay for IFBench pkg_resources.",
+      "Design LiveCodeBench limited smoke or resource-sized run plan before full release_latest."
+    ],
+    "resource_requests": [
+      "HF gated dataset access or cache for Idavidrein/gpqa and cais/hle.",
+      "NVIDIA Integrate USER_API_KEY and any judge key for tau2 user simulator.",
+      "BFCL executable-category API keys via task-owned secure injection."
+    ],
+    "hold_until_release_decision": [
+      "AA-LCR at 16k endpoint due 100k+ token inputs.",
+      "mmlu_prox_chat separate long-run or shard/timeout plan.",
+      "ns_wmt24pp after scheduling/resources are confirmed."
+    ]
+  },
+  "cleanup_state": "No task234 runtime resources were started. Task233 cleanup artifacts remain the cleanup source of truth; task233 pulled evaluator images were not touched."
+}
