@@ -2120,6 +2120,15 @@
   - no AIME2025 train prompts/labels;
   - no deletion under `/mnt/cephfs/data/processing/lei.song`;
   - no 30B/8-GPU scale.
+- Committed and pushed lead branch
+  `intern_nemotron_lead/session1-recovery-task-docs` at
+  `e0a1ebcbdb1976bb39196135f5bcbd8ef5958d0a`.
+- Sent delivered peer_send to worker_2 assigning task253 and requiring
+  branch/head/PR or artifact-only status plus exact commands/env, Xenna import
+  probe, input manifests, output checksums, or blocker logs.
+- Sent delivered peer_send to coordinator with #328 merge evidence, worker_4
+  task252 approval summary, worker_2 self-merge closeout, task253 assignment,
+  and unchanged `NO-GO/HOLD` gate.
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: #328 closes only the
   HotpotQA loader blocker. There are still no packed Qwen shards, no candidate
   FT checkpoint/export/live eval artifacts, no task243 same-harness FT-vs-base

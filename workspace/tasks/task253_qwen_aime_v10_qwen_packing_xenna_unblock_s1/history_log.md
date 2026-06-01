@@ -14,3 +14,5 @@
   paths/counts/checksums or a precise Xenna environment blocker report.
 - Gate remains `NO-GO/HOLD`: no candidate FT checkpoint/export/eval artifact
   exists and no same-harness FT-vs-base comparison exists.
+- Assignment was sent to worker_2 by delivered peer_send after lead branch
+  `e0a1ebcbdb1976bb39196135f5bcbd8ef5958d0a` was pushed.
