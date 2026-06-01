@@ -335,12 +335,20 @@
   - Asked `intern_nemotron_worker_5` to update #317/runbook for current #319/#320/#321 state.
 - Received and marked read two worker_2 mailbox reports for #321 head `12ee98c`; worker reported focused planner checks passed (`py_compile`, focused pytest `29 passed`, `ruff`, and `git diff --check`) and no training, live eval, sync, merge, direct main push, or 30B/8-GPU launch was performed. Lead treated these as worker-reported evidence and did not rerun them.
 - Fetched again and observed #317 advanced to head `b8d3c98`, mergeStateStatus `CLEAN`; the report removed resolved #319/#320 blockers but still says task242 has no published PR, so #317 remains stale now that #321 exists and is not approved.
+- Received and marked read worker_4's task244 Session 4 mailbox report after #321 appeared:
+  - #318 advanced to head `1810c0e`, mergeStateStatus `CLEAN`.
+  - Worker_4 static review disposition: #320 approve for V10 data-prep contamination handling; #321 approve for Qwen3-4B V10 planner smoke wiring; #319 approve for static same-harness AIME gate/protocol; #317 request-changes/hold at the then-current stale head because it still treated task242 as no-PR/old head.
+  - Worker_4 kept full first go/no-go on hold until real heldout corpus, #320/#321 integration, base/FT artifacts, explicit FT serve/export path, and refreshed #317 runbook are present.
+- Received and marked read worker_5's task245 refresh report after #317 advanced again:
+  - #317 advanced to head `2ad67ed`, mergeStateStatus `CLEAN`.
+  - Updated runbook now records current #319/#320/#321 state and removes the old task242 no-PR blocker.
+  - Remaining runbook blockers are real heldout AIME25/HMMT/MATH decontamination corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, base score artifacts, candidate FT checkpoint/export/eval, and explicit 30B/8-GPU permission.
+  - Lead inspected the updated runbook report and confirmed those blockers match the current first go/no-go gap; lead did not run training, live eval, endpoint serving, sync, or implementation tests.
+- Sent a final peer follow-up to `intern_nemotron_worker_4`, delivered, asking for a small #318 refresh against #317 head `2ad67ed` and final disposition for #317 plus the static PR set. No worker_4 response or #318 head update was received before this session closeout.
 - Current lead gate decisions:
-  - #321: review pending worker_4 independent refresh; not approved.
-  - #320: review pending worker_4 contamination/regression refresh; not approved.
-  - #319: path issue fixed and protocol evidence present, but no base-score artifact; not approved.
-  - #318: review docs need refresh for #319/#320/#321; not approved.
-  - #317: `REQUEST_CHANGES/HOLD` until runbook reflects #321 and current blockers only; not approved.
+  - #319/#320/#321: worker_4 has approved the static surfaces, but lead has not yet authorized merge/self-merge while #318 final matrix and #317 runbook reconciliation are still settling.
+  - #317: current head `2ad67ed` has refreshed runbook blockers correctly; awaiting worker_4 final matrix refresh before lead approval.
+  - #318: current head `1810c0e` needs a small refresh for #317 head `2ad67ed`; not approved.
 - Current first measurable go/no-go remains `NO-GO`: real held-out decontamination corpus/corrected AIME input-cache is missing, no reachable Qwen3-4B endpoint exists, no base score artifacts exist, no candidate FT checkpoint/export/eval exists, and 30B/8-GPU scale has no permission.
 - Baseline/eval gate remains unchanged: no FT checkpoint may be judged until the same Qwen base model has a same-harness corrected AIME2025 score; AIME25 remains held-out eval/decontamination only; no 30B/8-GPU scale until Qwen3-4B smoke is non-regressing or yields a concrete evaluator/data fix.
 - Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.

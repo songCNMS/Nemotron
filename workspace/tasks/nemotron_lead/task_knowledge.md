@@ -26,3 +26,4 @@
 20. For #320/task241, worker-reported tests are useful gate input but lead should not rerun them; require independent review of AIME25 heldout/decontam handling before approval because the hard rule forbids trainable AIME25 prompt/label leakage.
 21. For #321/task242, planner/smoke PR evidence removes the old "no task242 PR" blocker, but it does not satisfy first go/no-go by itself; real held-out decontam/AIME input, endpoint, base-score artifacts, FT checkpoint/export/eval, and worker_4/worker_5 refreshed reviews are still required.
 22. If #317/task245 runbook still lists "task242 has no published PR" after #321 exists, keep #317 in request-changes/HOLD even though the global NO-GO conclusion is still correct.
+23. Once #317 is refreshed to include #321, require #318/task244 to update its independent matrix from the stale #317 head before approving the docs/review set; avoid self-merge direction while review/runbook PRs disagree on current blockers.
