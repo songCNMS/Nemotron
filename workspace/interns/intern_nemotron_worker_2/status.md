@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 |
 | PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-01T20:04:00Z: Accepted task255 from origin/main 61fa65e to produce bounded Qwen3-4B pilot checkpoint/export artifact or exact blocker from task253 packed shards. |
+| Session | 2 |
+| Last Update | 2026-06-01T20:33:40Z: task255 bounded Qwen3-4B 1-iteration pilot completed on NemTron using 2 GPUs; checkpoint and HF export artifacts are present under /root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z, with closeout report/checksums under the task255 output root. |

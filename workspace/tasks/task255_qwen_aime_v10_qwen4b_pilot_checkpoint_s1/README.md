@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - Qwen3-4B pilot checkpoint
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPMReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
