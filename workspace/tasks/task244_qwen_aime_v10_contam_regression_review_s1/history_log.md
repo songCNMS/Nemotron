@@ -1,6 +1,6 @@
 # task244_qwen_aime_v10_contam_regression_review_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -47,3 +47,10 @@
 - Updated #317 disposition from request-changes/hold to approve-as-static-runbook with first go/no-go still no-go/hold.
 - Recorded overall static PR set disposition for #319/#320/#321/#317/#318 in `review_matrix.md`.
 - Maintained read-only scope: no product code changes, implementation tests, training, live evals, endpoint serving, sync, merge, or `main` push.
+
+## Session 6 - Lead-approved merge
+
+- Received lead gate approval to self-merge PR #318 if still OPEN/CLEAN, base `main`, and head `e1bb5413d5ffc050e209a371122e2923ea2f322b`.
+- Verified PR #318 satisfied the gate: OPEN, CLEAN, base `main`, non-draft, and exact head `e1bb5413d5ffc050e209a371122e2923ea2f322b`.
+- Merged PR #318 as the independent static contamination/regression review artifact. Merge commit: `86fd05fbb1bb0b1c918a72c6680c10ea170d2798`.
+- Final merged artifact documents static approval for #319/#320/#321/#317 and preserves NO-GO/HOLD for first Qwen3-4B AIME go/no-go until real heldout decontam corpus/input, corrected AIME input/cache, reachable endpoint, base artifacts, candidate FT checkpoint/export/eval, and 30B permission exist.
