@@ -2592,6 +2592,9 @@
   and the accepted base `11/30`.
 - task257 must not make a final PASS if task256 blocks or request-changes the
   task255 artifact.
+- Read lead mailbox before dispatch; no unread messages were pending.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_5` for task256.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_3` for task257.
 - Current global gate remains `NO-GO/HOLD`: candidate artifacts now exist for
   review, but independent artifact review and same-harness FT-vs-base AIME
   comparison are still missing.
