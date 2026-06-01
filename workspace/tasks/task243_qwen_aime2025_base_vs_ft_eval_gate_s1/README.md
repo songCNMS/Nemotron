@@ -1,6 +1,6 @@
 # task243_qwen_aime2025_base_vs_ft_eval_gate_s1 - Corrected AIME2025 base-vs-FT gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=3 -->
 
 ## Background
 

@@ -1,6 +1,16 @@
 # task243_qwen_aime2025_base_vs_ft_eval_gate_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
+
+## Session 3 - 2026-06-01 UTC - PR #319 merged and closeout recorded
+
+- Lead approved PR #319 for self-merge if it remained `OPEN/CLEAN`, base `main`, and head `61a12dd8b96e51785a3ece76d5883a419b30dd39`.
+- Rechecked PR #319 immediately before merge: base `main`, head `61a12dd8b96e51785a3ece76d5883a419b30dd39`, `mergeStateStatus=CLEAN`, `mergeable=MERGEABLE`, `state=OPEN`.
+- Merged PR #319 with GitHub PR merge, not a direct `main` push.
+- Merge result: `mergedAt=2026-06-01T16:24:34Z`, merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`.
+- This is not promotion approval: FT judgment remains blocked until same-harness Qwen3-4B base artifacts exist and FT is compared under the identical corrected AIME2025 protocol.
+- Post-merge closeout status recorded on branch `intern_nemotron_worker_3/task243_qwen_aime2025_base_vs_ft_eval_gate_s1_closeout` because the approved #319 head was exact and could not be changed before merge.
+- No training, model copy, endpoint launch, live eval, direct main push, or unapproved merge was performed.
 
 ## Session 2 - 2026-06-01 UTC - Corrected Qwen3-4B base path
 
