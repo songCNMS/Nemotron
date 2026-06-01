@@ -1,6 +1,6 @@
 # task244_qwen_aime_v10_contam_regression_review_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -38,3 +38,12 @@
 - Reconfirmed #319 and #320 decisions from Session 3 and updated the matrix to include #321.
 - Fetched updated #317 head `b8d3c98237a83008d08abb8e2a39bbe3aa5dc772`; it has refreshed the task243 path to `/mnt/cephfs` but still treats task242 as no-PR/old head, so it remains request-changes/hold until refreshed against #321.
 - Maintained read-only scope: no product code changes, implementation tests, training, live evals, sync, merge, or `main` push.
+
+## Session 5 - Refresh after task245 PR #317 update
+
+- Received lead update that worker_5 refreshed PR #317 to `2ad67ed2a102e22cdbc65826c431d22bd5728867`.
+- Fetched #317 and reviewed the updated runbook report/task knowledge statically.
+- Confirmed #317 now records #319 at `61a12dd`, #320 at `5753713`, and #321 at `12ee98c`, and removes the old task242 no-PR/old-head blocker.
+- Updated #317 disposition from request-changes/hold to approve-as-static-runbook with first go/no-go still no-go/hold.
+- Recorded overall static PR set disposition for #319/#320/#321/#317/#318 in `review_matrix.md`.
+- Maintained read-only scope: no product code changes, implementation tests, training, live evals, endpoint serving, sync, merge, or `main` push.

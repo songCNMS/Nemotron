@@ -1,6 +1,6 @@
 # task244_qwen_aime_v10_contam_regression_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -17,3 +17,4 @@
 11. PR #321 head `12ee98ccf7475c2ee77a92b3f1390df06d9edcd0` supersedes the earlier task242 no-PR hold. It statically wires the Qwen3-4B V10 pilot to `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, rejects missing/empty V10 decontam corpora and skip-flag use, guards placeholder corpus use in the generated local data-prep script, restricts V10 sync cleanup to task-owned `/root` paths, and keeps 30B/8-GPU planning held unless explicitly allowed after the 4B gate.
 12. The #321 diff does not add concrete AIME25 heldout prompt text, labels, answer keys, `aime_06`, or answer `907`; it adds only generic heldout corpus strings and placeholder markers for planner tests/report.
 13. PR #317 head `b8d3c98237a83008d08abb8e2a39bbe3aa5dc772` corrected the old task243 `/mnt/3fs` blocker to `/mnt/cephfs`, but is now stale on task242 because it still says no PR / old head. It remains hold until refreshed against #321.
+14. PR #317 head `2ad67ed2a102e22cdbc65826c431d22bd5728867` now records #319/#320/#321 current state and removes the old task242 no-PR blocker. It is approved as a current static runbook/artifact map, but first Qwen3-4B go/no-go remains no-go/hold until real heldout decontam corpus/input, corrected AIME input/cache, endpoint, base artifacts, candidate FT checkpoint/export/eval, and 30B permission are available.

@@ -1,6 +1,6 @@
 # task244 Independent Review Matrix
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Scope And Inputs
 
@@ -356,3 +356,60 @@ The first go/no-go remains blocked until a real heldout decontam corpus is
 available, #320 and #321 are integrated on a runnable branch, task243 produces
 same-harness Qwen3-4B base artifacts before FT judgment, the candidate FT
 serve/export path is explicit, and #317's runbook matches the current PR heads.
+
+## Session 5 Refresh
+
+Lead reported worker_5 refreshed PR #317 to head
+`2ad67ed2a102e22cdbc65826c431d22bd5728867`. This small refresh reviews only
+the updated runbook documentation and final static disposition. I did not run
+training, live evals, implementation tests, endpoint serving, sync, merge, or
+push `main`.
+
+| PR | Head inspected | Current static disposition | Gate disposition |
+| --- | --- | --- | --- |
+| #319 task243 eval gate | `61a12dd8b96e51785a3ece76d5883a419b30dd39` | APPROVE for static same-harness AIME25 gate/protocol and `/mnt/cephfs` Qwen3-4B base path | HOLD live promotion until corrected AIME input/cache, reachable Qwen3-4B endpoint, and base/FT artifacts exist |
+| #320 task241 data prep | `57537133bed6bdd5773e6678b48086a8fc6a87b4` | APPROVE for V10 data-prep contamination handling and AIME25 heldout/decontam treatment | HOLD first go/no-go until real heldout corpus/input and generated data/sidecar counts exist |
+| #321 task242 planner | `12ee98ccf7475c2ee77a92b3f1390df06d9edcd0` | APPROVE for Qwen3-4B V10 planner smoke wiring, fail-closed corpus checks, `/root` cleanup guard, and 30B hold | HOLD first go/no-go until real corpus/input, integration with #320, and runtime artifacts exist |
+| #317 task245 runbook | `2ad67ed2a102e22cdbc65826c431d22bd5728867` | APPROVE as current static runbook/artifact map; it now records #319/#320/#321 current state and removes the old task242 no-PR blocker | NO-GO / HOLD for first measurable Qwen3-4B AIME decision because required real inputs and runtime artifacts are still missing |
+| #318 task244 review | current worker_4 branch | READY as independent static review artifact after this Session 5 refresh | Not a product gate; it documents the current static decisions and residual blockers |
+
+### PR #317 task245 final disposition
+
+Decision: APPROVE as current static runbook/artifact map; HOLD/NO-GO for first
+measurable Qwen3-4B AIME go/no-go.
+
+Evidence:
+
+- #317 now records task241 PR #320 open/CLEAN at `5753713` with V10 data-prep
+  code/report.
+- #317 now records task242 PR #321 open/CLEAN at `12ee98c` with Qwen3-4B V10
+  planner/smoke report, generated bundle paths, fail-closed decontamination
+  checks, task-owned `/root` sync contract, and 30B hold.
+- #317 now records task243 PR #319 open/CLEAN at `61a12dd` with the Qwen3-4B
+  AIME gate configured to the verified `/mnt/cephfs` base path.
+- The old task242 no-PR/old-head blocker is removed.
+- The runbook lists expected local, NemTron, base AIME, FT AIME, and comparison
+  artifact paths, and it keeps shared `/mnt/cephfs/data/processing/lei.song`
+  as no-delete storage.
+- The runbook explicitly states no training, live eval, endpoint serving,
+  30B/8-GPU scale, shared-file deletion, merge, or `main` push was performed.
+
+Remaining blockers called out by #317 and accepted by this review:
+
+- Real heldout AIME25/HMMT/MATH decontamination corpus/input is missing.
+- Corrected AIME input/cache is missing.
+- No reachable Qwen3-4B endpoint exists.
+- No Qwen3-4B base score artifacts exist.
+- Candidate FT checkpoint/export/eval artifacts are missing.
+- No explicit 30B/8-GPU permission exists; scale remains held.
+
+## Session 5 Final Static Verdict
+
+The static PR set is internally consistent after #317 head `2ad67ed`:
+
+- #319, #320, #321, and #317 are APPROVE for their documented static surfaces.
+- #318 is READY as the independent review artifact.
+- The first Qwen3-4B V10 go/no-go remains NO-GO/HOLD until the real heldout
+  decontam corpus/input, corrected AIME input/cache, reachable endpoint,
+  same-harness base artifacts, candidate FT checkpoint/export/eval artifacts,
+  and explicit 30B permission are provided and independently verified.
