@@ -24,3 +24,23 @@
 - Boundaries acknowledged: read-only audit only; no training/export/endpoint,
   no AIME/task243 eval, no code or artifact modification, no AIME2025 train
   data, no promotion/go-no-go claim, no 30B/8-GPU, and no shared deletion.
+
+## Session 2 - 2026-06-01 UTC - Root-cause audit report
+
+- Inspected task253 packed Qwen metadata/blend/shard summaries, task251 M1
+  source counts and pattern prevalence, task255 training/export logs and
+  manifests, and task257 same-harness FT failure evidence.
+- Added root-cause report:
+  `task255_data_training_root_cause_report.md`.
+- Main finding: task255 likely produced a random-init or otherwise wrong-start
+  checkpoint because the log has no positive pretrained checkpoint-load line,
+  `SUPER3_M1_PRETRAINED_CHECKPOINT` pointed at the raw Qwen HF directory,
+  training/validation losses were random-init scale, and downstream outputs were
+  long unparseable text.
+- Secondary findings: the only training step logged `learning rate: 0`, the
+  packed split materialization exposed 8 train symlinks while the blend intended
+  15 dataset-qualified train entries, and the actual run consumed only two
+  packed rows from a sparse/skewed data surface.
+- Boundary confirmation: no task261 training/export/endpoint/eval was launched,
+  no AIME2025 train data was used, no artifact/code modifications outside docs,
+  no 30B/8-GPU, and global gate remains `NO-GO/HOLD`.
