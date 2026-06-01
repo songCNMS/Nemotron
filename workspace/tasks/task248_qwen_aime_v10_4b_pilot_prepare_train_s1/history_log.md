@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0 - Assigned
 
@@ -81,3 +81,15 @@
 - Read-only GitHub check reconfirmed PR #326 is `MERGED` at `2026-06-01T17:21:29Z` with merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`.
 - Read-only GitHub list check found task249/#323 still `OPEN`/`CLEAN` at head `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f` and task250/#324 still `OPEN`/`CLEAN` at head `cde927bf407667f198be6848aa0d6d3ff8745d10`.
 - Kept task248 HOLD for local prep, NemTron sync, training, live eval, FT judgment, and 30B/8-GPU until task249/task250 refresh against current `main` and lead explicitly clears.
+
+## Session 9 - 2026-06-01 UTC - Cleared for Qwen3-4B prep, stopped at local prep blocker
+
+- Lead cleared task248 Qwen3-4B V10 pilot prep/smoke after prerequisites #323/#324/#325/#326 merged; `origin/main` is `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Merged `origin/main` into the worker branch so planner/report evidence is based on current main while preserving task248 docs/status scope.
+- Generated task-owned planner artifacts under `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`: `scaleup_manifest.json`, `report.md`, `run_local_data_prep.sh`, `sync_to_nemtron.sh`, `run_nemtron_train.sh`, and `run_eval_basket_dry_run.sh`.
+- Verified the manifest uses Qwen3-4B model/tokenizer `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, V10 `hard_math_runlength_dp_v10`, task246 corpus/M0 sidecar paths, sparse sidecar knobs `8` train / `0` val shadow, Qwen chat-template kwargs `enable_thinking=false` and `truncate_history_thinking=false`, and `allow_v10_30b_scale=false`.
+- Attempted local prep with generated `run_local_data_prep.sh`; first attempt failed because `/work-agents/.venv/bin/activate` is missing.
+- Retried without the missing venv activation; it failed before useful prep because `datasets` was missing.
+- Installed minimum user-site dependencies `datasets>=2.14.0` and `hydra-core>=1.3.2`; pip selected `pyarrow 24.0.0`, which conflicts with system `cudf`/`pylibcudf` `<19` constraints.
+- Retried local prep again without venv activation; stopped during M0 data prep on Hugging Face `datasets` `trust_remote_code` incompatibility for `hotpotqa/hotpot_qa`.
+- Partial M0 files exist only for environments reached before the blocker; no `m0_agentic/manifest.json`, M1 blend, packed shards, training manifest, checkpoint/export, NemTron sync, training, live/FT eval, task243 comparison, promotion claim, shared-file deletion, or 30B/8-GPU action exists.

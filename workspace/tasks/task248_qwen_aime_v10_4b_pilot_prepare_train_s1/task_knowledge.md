@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Knowledge Entries
 
@@ -53,3 +53,16 @@
 17. After #325 merge, task248 remains HOLD until task249/task250 refresh against
     current `main` and lead explicitly clears; do not start local prep,
     NemTron sync, training, or eval before that clearance.
+18. Session 9 clearance: task246/#325, task247/#326, task250/#324, and
+    task249/#323 are merged on `main` at
+    `ec467724c2876211cd2bf56b15071e31abd692a4`, so task248 may resume only
+    Qwen3-4B V10 prep/smoke under the existing scope.
+19. Session 9 generated task-owned planner artifacts under
+    `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`,
+    but local prep is incomplete: no M0 manifest, M1 blend, packed shards,
+    training manifest, checkpoint/export, FT eval, or task243 comparison exists.
+20. Session 9 local prep blockers observed in order: missing
+    `/work-agents/.venv/bin/activate`, missing `datasets`, then after minimal
+    user-site dependency install, Hugging Face `datasets` `trust_remote_code`
+    incompatibility for `hotpotqa/hotpot_qa`; output is not ready for task243
+    comparison.
