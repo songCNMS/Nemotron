@@ -47,3 +47,4 @@
   hard-math, and final-answer sources; task251 heldout eval file has 0 rows.
 - Checks passed: `py_compile`, focused split/Qwen contract pytest files, and
   `git diff --check`.
+- Opened PR #336 to `main`.

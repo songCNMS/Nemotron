@@ -86,6 +86,7 @@ and final-answer sidecar inputs for a future Qwen3-4B pilot.
 
 - Branch:
   `intern_nemotron_worker_1/task262_qwen_aime_v11_data_split_sidecar_s1`.
+- PR: #336
 - Base: current `origin/main` at
   `513fefa1f1ace94302b56413769c78fb7224624c`.
 - Task docs source:
