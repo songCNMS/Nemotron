@@ -1,6 +1,6 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Blocked,SESSION=2 -->
+<!-- METADATA:STATUS=Blocked,SESSION=3 -->
 
 ## Summary
 
@@ -10,17 +10,18 @@
   `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
-- The task is blocked before local prep/train because task246 real corpus/input and task247 base artifacts are not available in this worker environment.
+- The task is blocked before local prep/train because task246 real corpus/input and task247 base artifacts are still not available in this worker environment.
 
 ## Dependency probes
 
 - `git ls-remote --heads origin intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` shows the task248 branch is pushed at `d0546d04ebe25ab3b9e768805c3e0a637984ca69`.
 - `test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` passed.
+- Session 3 refresh: task246 remote branch is visible at `a53c913ab80e37197ccfe7525ea04e0ac80c96fe`.
+- Session 3 refresh: task247 remote branch is visible at `94c21c9a8cb229f0357a049a698de898963810f1`.
+- `origin/intern_nemotron_worker_1/task246_qwen_aime_v10_real_decontam_corpus_s1` contains only README/history/task_knowledge under the task directory; it does not contain `real_decontam_corpus_report.md`.
+- `origin/intern_nemotron_worker_3/task247_qwen_aime2025_qwen4b_base_smoke_s1` contains only README/history/task_knowledge under the task directory; it does not contain `qwen4b_base_smoke_report.md`.
 - `/work-agents/intern_nemotron_worker_1/outputs/` has no task246 output files visible to this worker.
 - `/work-agents/intern_nemotron_worker_3/outputs/` has no task247 output files visible to this worker.
-- No remote `task246` or `task247` branch/PR was visible from this worker at probe time.
-- Worker_1 local task246 docs are `InProgress` and do not include `real_decontam_corpus_report.md`.
-- Worker_3 local task247 docs are `InProgress` and do not include `qwen4b_base_smoke_report.md`.
 
 ## Prepared command shape
 
@@ -74,6 +75,7 @@ Expected generated paths after the dependencies exist:
 - `git push -u origin intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
 - `test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`
 - Read-only dependency probes against worker_1/worker_3 task docs and output directories.
+- Session 3 refresh: `git fetch origin --prune`, `git rev-parse` on task246/task247 branches, read-only `git ls-tree`/`git show`, and read-only output directory probes.
 
 ## Commands not run
 

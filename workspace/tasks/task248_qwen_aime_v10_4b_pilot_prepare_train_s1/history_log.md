@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -23,3 +23,12 @@
 - Wrote `qwen4b_v10_pilot_report.md` with the reproducible command template, exact local/NemTron paths, candidate checkpoint path, and blockers.
 - Stopped before local prep/train because task246 real corpus/input and task247 base artifacts are not available.
 - Did not run local data prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.
+
+## Session 3 - 2026-06-01 UTC - Refreshed dependency branch evidence
+
+- Fetched origin and confirmed task246 branch is now visible at `a53c913ab80e37197ccfe7525ea04e0ac80c96fe`.
+- Confirmed task247 branch is now visible at `94c21c9a8cb229f0357a049a698de898963810f1`.
+- Read-only `git ls-tree` probes show task246 still lacks `real_decontam_corpus_report.md` and task247 still lacks `qwen4b_base_smoke_report.md`.
+- Worker_1/worker_3 output directory probes still show no visible task246/task247 artifact files.
+- Updated `qwen4b_v10_pilot_report.md`; prep/train remain blocked until task246 real corpus/input and task247 base artifact paths exist.
+- Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.

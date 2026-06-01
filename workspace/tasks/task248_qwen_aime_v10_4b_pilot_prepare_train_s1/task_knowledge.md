@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -15,3 +15,7 @@
 5. Session 2 dependency probes found no visible task246 real corpus/input files
    and no visible task247 base artifact files; task248 must remain blocked
    before local prep/train until those dependencies publish artifact paths.
+6. Session 3 refresh found task246 and task247 branches visible at
+   `a53c913ab80e37197ccfe7525ea04e0ac80c96fe` and
+   `94c21c9a8cb229f0357a049a698de898963810f1`, but the required reports and
+   output artifacts are still missing.
