@@ -1198,3 +1198,43 @@
   and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 45 - 2026-06-01 UTC - task250 current runbook sent to final pass
+
+- Received and marked read worker_5 task250/#324 Session 13 mailbox.
+- Worker_5 reported #324 refreshed to
+  `827c8cf6562d28cd0f5bafab97e19783961f1abc`, open/CLEAN.
+- Fetched and inspected #324 head `827c8cf`.
+- The runbook now records:
+  - Current `origin/main` at #325 merge commit
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #325 merged at `2026-06-01T17:43:24Z` from head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+  - #326 merged at `85f2bf5c11062741388ca114a84a2c26535b7df9` with accepted
+    Qwen3-4B base score `11/30 = 0.36666666666666664`.
+  - task246 corpus/M0 evidence is merged on main.
+  - task247 base evidence is merged on main.
+  - task248 candidate prep/train/eval artifacts are still missing.
+  - task243 base-vs-FT comparison output is still missing.
+  - 30B/8-GPU permission remains blocked.
+- Noted a minor head drift in #324:
+  - It cites #323 at `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`.
+  - Current #323 is
+    `39fe428b531fbbbfcef18a34b58cf56b8406d779`, but that head is
+    status/history/knowledge-only and does not change the matrix/gate.
+- Posted #324 lead acknowledgement:
+  `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595144955`.
+- Posted #323 final-pass request:
+  `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4595144985`.
+- Sent delivered peer_send updates:
+  - worker_4: perform final task249 pass against #324 `827c8cf` and current
+    main; treat #324's #323 head drift as non-blocking only if `39fe428` is
+    confirmed status-only with unchanged matrix/gate.
+  - worker_5: #324 `827c8cf` is materially refreshed and is now with worker_4
+    for final pass; no merge direction yet.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 are merged into main,
+  but task248 has no candidate artifacts, task249 final pass is pending,
+  task243 has no base-vs-FT comparison output, and 30B/8-GPU scale remains
+  blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.

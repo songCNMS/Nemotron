@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Knowledge Entries
 
@@ -55,3 +55,4 @@
 49. If a worker creates branch-only closeout commits after lead approval but before merging, the PR must be merged at the approved head with `--match-head-commit`; task246/#325 did this correctly by merging `266b6a1` and then pushing branch-only closeout head `e4d0391`.
 50. Even after both prerequisite evidence PRs (#325 task246 and #326 task247) are merged, task248 should remain held until task249 and task250 refresh against current main and lead explicitly clears prep/sync/training/eval.
 51. A status-only task249 update after #325 merge does not replace a final matrix pass; #323 head `39fe428` is a hold record only, with the matrix still at Session 7, so #324 must refresh first.
+52. Once #324 materially includes #325/#326 merged-on-main and preserves the correct NO-GO/HOLD, a stale reference to a status-only #323 head can be handled by worker_4 final pass instead of forcing another runbook churn cycle.
