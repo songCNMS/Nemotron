@@ -18,6 +18,7 @@
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at `5d5e3fa`.
 - Added `live_runbook_artifact_report.md` as the current read-only live
   artifact/runbook table.
+- Opened PR #324: https://github.com/songCNMS/Nemotron/pull/324.
 - Initial verification found task246 and task247 remote accept branches, no
   task248/task249 branches or PRs, task242 placeholder bundle still present,
   no corrected AIME cache, no reachable local Qwen3-4B endpoint, no base
