@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -83,3 +83,9 @@
     `efb243fac79fb52b520518ddf15ba1d65359a4b0`, but the PR had already
     advanced to `1c32c574b40bf641db6db3ce7071b472543c26a6`; continue not to
     self-merge until the currently visible head is explicitly approved.
+25. Session 13 closeout: lead approved exact #327 head
+    `3405acf12fa25896185b271a21f4e8ebabee2b30`; #327 was self-merged at
+    `2026-06-01T18:44:00Z` with merge commit
+    `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`. This is only a blocked prep
+    artifact report; task248 remains NO-GO/HOLD for FT comparison, promotion,
+    and 30B/8-GPU.

@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0 - Assigned
 
@@ -116,4 +116,14 @@
 - Lead refreshed approval for #327 head `efb243fac79fb52b520518ddf15ba1d65359a4b0` as a blocked prep artifact report, not as a go/no-go pass.
 - Read-only GitHub check showed #327 is `OPEN`/`CLEAN`, base `main`, but current head is `1c32c574b40bf641db6db3ce7071b472543c26a6`, with no merge commit.
 - Did not self-merge because the current PR head differs from the refreshed head lead approved.
+- No training, NemTron sync, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU action was run.
+
+## Session 13 - 2026-06-01 UTC - PR #327 merged, task closeout
+
+- Lead approved exact #327 head `3405acf12fa25896185b271a21f4e8ebabee2b30` as a blocked prep artifact report, not as a go/no-go pass, and instructed no pre-merge status-only push.
+- Rechecked #327 before merge: `OPEN`, base `main`, head `3405acf12fa25896185b271a21f4e8ebabee2b30`, merge state `CLEAN`.
+- Self-merged #327 with merge commit `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; GitHub reports `mergedAt` `2026-06-01T18:44:00Z`.
+- Post-merge `origin/main` advanced to `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`.
+- Recorded this branch-only closeout after the PR merge and marked the worker status back to `Idle`.
+- Gate remains NO-GO/HOLD: no candidate FT checkpoint/export/eval artifacts, no task243 same-harness base-vs-FT comparison, and no 30B/8-GPU authorization.
 - No training, NemTron sync, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU action was run.
