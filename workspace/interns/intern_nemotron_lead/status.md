@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #328 open clean at 694197c; task252 active but no mailbox report; gate HOLD |
+| PR | #328 open clean at 694197c; task252 active/no report; coordinator updated; gate HOLD |
 | Session | 57 |

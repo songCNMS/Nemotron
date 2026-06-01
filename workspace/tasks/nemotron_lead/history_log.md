@@ -2034,6 +2034,9 @@
     does not touch `datasets.load_dataset`.
 - Polled lead mailbox again after worker_4 had been active; no task252 mailbox
   report was present.
+- Sent delivered peer_send to coordinator with current #328 state, worker_4
+  active review observations, missing task252 mailbox report, no head drift,
+  and unchanged `NO-GO/HOLD` gate.
 - Current #328 gate remains unchanged:
   - not approved;
   - waiting for worker_4 task252 mailbox report with approve/request-changes or
