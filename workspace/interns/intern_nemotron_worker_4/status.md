@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task244_qwen_aime_v10_contam_regression_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task249_qwen_aime_v10_live_contam_gate_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task244_qwen_aime_v10_contam_regression_review_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/318 |
-| Session | 5 |
-| Progress | Small static refresh for #317 at `2ad67ed`: #317 now records #319/#320/#321 current state and removes the old task242 no-PR blocker, so #317 is approved as a static runbook/artifact map while first Qwen3-4B go/no-go remains no-go/hold on real heldout corpus/input, corrected AIME input/cache, endpoint, base artifacts, candidate FT checkpoint/export/eval, and 30B permission. #319/#320/#321 remain approved for their static surfaces; #318 is the refreshed review artifact. No product code, tests, training, evals, endpoint serving, sync, merge, or `main` push performed. |
+| Current Task | task249_qwen_aime_v10_live_contam_gate_review_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/323 |
+| Session | 11 |
+| Progress | Lead approved task249/#323 final static review, but self-merge is gated on task250/#324 being merged first. Verified #323 remains OPEN/CLEAN at `fbca7c9068b3d847ee24a2bff666f6a88fe380b4`; verified #324 is still OPEN/CLEAN but not merged at `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`. Kept #323 HOLD/no merge. Combined first Qwen3-4B V10 gate remains NO-GO/HOLD because task248 FT artifacts and task243 comparison output are missing. No implementation, training, live eval, endpoint launch, shared deletion, direct main push, or 30B scale action. |
