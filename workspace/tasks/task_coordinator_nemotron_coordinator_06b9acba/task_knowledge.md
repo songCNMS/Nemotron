@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Knowledge Entries
 
@@ -69,3 +69,11 @@
 63. task260 forensic finding: task255 FT failure is generation degeneration/corruption, not evaluator-only parser failure. FT had `0/30` parsed/correct/non-null prediction/boxed/final-answer marker, `23/30` length stops, and `30/30` mixed-script tails, while the accepted base same harness had `23/30` parsed and `11/30` correct.
 64. task260 recommendations to preserve for V11 planning: do not promote or scale task255; add non-AIME export-load canaries, artifact sanity checks for tokenizer/chat-template/special tokens/layer shapes/NaN-Inf/layer deltas, and retain fuller completions for future forensics.
 65. task261 remains the active pending root-cause audit at branch `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e` with no PR/formal report/blocker visible during Session 31; it should explain data/training/export root cause before any next V11 pilot is planned.
+66. Session 32 supersedes entry 65: task261/#333 is open/clean at head `3f404b3043736c85ca89ff6aa799fc6c53120f62`; lead approval applies only to previous exact head `947f34b0f7ff5515246914e093e248e9381ecb37`, so self-merge is held until fresh worker_1 mailbox for exact head `3f404b3` is processed.
+67. task261 report did not change across `947f34b..3f404b3`; the drift is worker_1 status plus task261 history/task_knowledge metadata only, and `git diff --check` still passes.
+68. task261 highest-confidence root cause: task255 likely did not initialize from real Qwen3-4B base weights, or raw HF directory was accepted as metadata while training from wrong-start/random-init-scale Megatron weights; evidence includes no positive checkpoint-load line, random-init-scale train/valid loss, and downstream random-looking outputs.
+69. task261 secondary findings: the only logged step had zero LR, split materialization/basename collision risks dropped intended rows including hard-math rows, and the pilot consumed too little/weakly weighted data; chat-template, loss-mask, and serving-side causes are lower confidence.
+70. V11 planning must require explicit base-load proof, non-AIME export-load canaries, abort on random-init-scale loss or missing checkpoint-load evidence, fixed LR schedule, fixed packed split materialization, intentional decontaminated math/final-answer weighting, and same-harness Qwen3-4B base-vs-FT non-regression before any promotion.
+71. Session 33 supersedes entry 66: task261/#333 merged at `2026-06-01T22:19:54Z` with merge commit `513fefa1f1ace94302b56413769c78fb7224624c` from exact refreshed-approved head `3f404b3043736c85ca89ff6aa799fc6c53120f62`.
+72. task261 merged report sha256 is `2e8ab638f4e1c6c75a842e60a9fad28e0a756efb5fda4135f402eb006f39e257`; `947f34b..3f404b3` left the report unchanged and only updated metadata/status/history/task_knowledge.
+73. With task260/#332 and task261/#333 merged, task255 is invalidated as failed evidence; any next V11 work must be a new 4B candidate plan with explicit base-load proof, fixed LR/split materialization, non-AIME canaries, and same-harness base-vs-FT non-regression before promotion. Global `NO-GO/HOLD` remains in force.
