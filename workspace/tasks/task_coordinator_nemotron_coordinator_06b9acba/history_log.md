@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0 - Created with coordinator
 
@@ -162,3 +162,13 @@
 - Acknowledged lead clearance by delivered peer message: worker_2 may resume Qwen3-4B V10 pilot prep/smoke artifact production only, with no AIME25 train prompts/labels, no shared deletion, no promotion claim, and no 30B/8-GPU.
 - Requested the next lead report include task248 branch/head/PR or artifact-only status, commands run, artifact paths, and whether outputs are ready for task243 comparison.
 - Confirmed coordinator gate stance remains `NO-GO/HOLD` until task248 provides candidate FT prep/train/checkpoint/export/eval artifacts and task243 produces same-harness base-vs-FT comparison against the accepted Qwen3-4B base.
+
+## Session 21 - task248 prep blockers monitored
+
+- Received `intern_nemotron_lead` Session 51 monitoring update: no worker_2 mailbox report yet, task248 remote branch remains `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` at `a6eb79b02c245bab9d3e6631109f40d384a8de45`, no task248 PR is visible, and task-owned output artifacts exist but no checkpoint/export/live FT eval artifact was observed.
+- Fetched `origin` and verified lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `7166d14`; the lead update is lifecycle status/history/knowledge only.
+- Rechecked task248 branch and PR visibility: `origin/intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` is still at `a6eb79b02c245bab9d3e6631109f40d384a8de45`, and GitHub head search returned no task248 PR.
+- Read-only inspected `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`: found `scaleup_manifest.json`, `report.md`, local/sync/train/eval scripts, logs, and M0 split files. The report preserves Qwen3-4B path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, same-harness AIME gate, `enable_thinking=false`, and 30B hold.
+- Confirmed no checkpoint/export/live FT eval artifacts under the task248 output root. Log inspection confirmed missing `/work-agents/.venv/bin/activate`, missing `datasets`, and a later retry blocker where `hotpotqa/hotpot_qa` fails because `trust_remote_code` is no longer supported.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking lead to have worker_2's official report classify whether prep is partial or blocked at the dataset-loader issue, list exact commands/environment, and state whether a data-source/config workaround is needed.
+- Confirmed the gate remains `NO-GO/HOLD`: task248 candidate FT artifacts and task243 same-harness comparison are still missing, and 30B/8-GPU remains blocked.

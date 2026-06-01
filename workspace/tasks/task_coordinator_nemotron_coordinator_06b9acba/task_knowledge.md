@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Knowledge Entries
 
@@ -30,3 +30,5 @@
 24. Lead Session 50 reconciled worker_4 #323 closeout and cleared task248 only for Qwen3-4B V10 pilot prep/smoke artifact production; this is not promotion approval and does not authorize 30B/8-GPU.
 25. As of Session 20, task248 remote branch `origin/intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` exists at `a6eb79b`, but no task248 PR was visible yet; next checkpoint should require branch/head/PR or artifact-only status plus commands and artifact paths.
 26. The Qwen AIME V10 gate remains `NO-GO/HOLD` until task248 supplies candidate FT artifacts and task243 produces the same-harness comparison proving FT exact-normalized accuracy is at least the accepted base score `11/30`.
+27. Session 21 task248 read-only artifact check found planner/scripts/M0 split outputs but no checkpoint/export/live FT eval artifacts; the output root is `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+28. task248 prep logs show concrete blockers: missing `/work-agents/.venv/bin/activate`, missing `datasets`, and after retry a `hotpotqa/hotpot_qa` loader failure because `trust_remote_code` is no longer supported. Worker_2 should classify the official blocker and environment/config need.
