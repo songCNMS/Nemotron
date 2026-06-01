@@ -1,13 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task231_m1_missing_launcher_new_runtime_scan_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task |  |
-| PR | N/A |
-| Session | 0 |
+| Current Task | task231_m1_missing_launcher_new_runtime_scan_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/315 |
+| Session | 3 |
+| Progress | PR #315 refreshed against origin/main; HOLD disposition unchanged; awaiting lead gate. |

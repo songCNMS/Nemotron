@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - M1 missing launcher scan recovery
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_1,SESSION=0 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
 
 ## Background
 
@@ -37,6 +37,23 @@ Recover the task231/task228 Working state into a current-team disposition: eithe
 - The report identifies whether task228's Working state is only bookkeeping for task231 or still needs separate recovery.
 - Any proposed PR contains only task docs/status/evidence reports, unless a new implementation task is explicitly assigned.
 - Worker reports through mailbox with branch, commit, PR if any, files changed, and residual risk.
+
+## Recovery Result
+
+- Disposition: `close as blocked/HOLD`.
+- Current worker branch:
+  `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1`.
+- Current worker PR: https://github.com/songCNMS/Nemotron/pull/315.
+- Current main refresh: #313 merged into `origin/main` at
+  `a35f61f`; PR branch was refreshed with docs/status closeout conflicts
+  resolved.
+- New PR strategy: current worker-owned branch from `origin/main`; old source
+  branch remains read-only evidence.
+- Product code changes: none.
+- Persistent reports:
+  `workspace/tasks/task231_m1_missing_launcher_new_runtime_scan_s1/recovery_disposition.md`
+  and
+  `workspace/tasks/task231_m1_missing_launcher_new_runtime_scan_s1/validation_report.md`.
 
 ## Assignment
 
