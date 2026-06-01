@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,4 @@
 5. #313 is the gate for worker closeout sequencing: until it receives non-author approval/merge, do not direct workers to finalize #314/#315; #316 remains stacked and must be retargeted/rebased to `main` or explicitly sequenced after #313 before final merge.
 6. Bookkeeping-only #313 head movement does not require immediate coordinator escalation when #313 remains open/clean with blank `reviewDecision`/no merge and #314/#315/#316 base, mergeability, and head are unchanged; record it locally and continue monitoring.
 7. A user-side "merge the pr" request should be treated as authorization intent, not as permission for `intern_nemotron_lead` to self-merge; route the request to the coordinator or another authorized non-author merge owner while preserving the #313 -> #314/#315 and #316 retarget/rebase sequencing.
+8. After a lead task-doc PR lands, downstream docs/status PRs can become `DIRTY` because they touch the same workspace closeout files; the owning workers must refresh their branches against `main`, preserve the gate disposition unless new evidence appears, and report new head/base/mergeability before any final merge direction.

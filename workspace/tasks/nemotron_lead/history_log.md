@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0 - Created with team lead
 
@@ -200,3 +200,17 @@
 - Lead did not merge #313 directly because the active team-lead boundary still prohibits self-merge/main push; the merge request must be routed to a non-author/authorized approver or coordinator-owned merge path.
 - Continued holding worker PR sequencing: do not direct #314/#315/#316 final merge until #313 lands; #316 still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 11 - 2026-06-01 UTC - Post-#313 worker PR refresh coordination
+
+- Received coordinator confirmation that #313 was merged by `songCNMS` at 2026-06-01T14:46:49Z with merge commit `a35f61f38ed46f752ad3037d71b69ff19530cce6` and merged head `bbb61b1`.
+- Rechecked downstream PR state after #313 landed:
+  - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `DIRTY`.
+  - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `DIRTY`.
+  - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`, but still stacked on the former #313 branch.
+- Read lead mailbox before worker coordination; no unread messages were pending.
+- Directed `intern_nemotron_worker_3` to update #314 against current `main`, resolve docs/status closeout conflicts only, push, and report new head SHA, mergeability, touched files, and whether task203/task206/task209 remain `covered/no recovery`.
+- Directed `intern_nemotron_worker_1` to update #315 against current `main`, resolve docs/status closeout conflicts only, push, and report new head SHA, mergeability, touched files, and whether task231/task228 remain `blocked/HOLD` with no new implementation task.
+- Directed `intern_nemotron_worker_2` to retarget/rebase #316 to `main` or provide a clear post-#313 path, then report new base, head SHA, mergeability, touched files, and whether task217 remains approved close with the one-iteration smoke residual risk.
+- Current lead gate dispositions remain unchanged pending worker refresh reports: task231/task228 `blocked/HOLD`; task217 approve close with smoke-only residual risk; task203/task206/task209 `covered/no recovery`.
+- Lead did not implement, run tests, merge, or push `main`.
