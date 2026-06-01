@@ -18,6 +18,7 @@
   corrected AIME score-cache path missing, and no local chat endpoint listening
   on `127.0.0.1:13000` or `127.0.0.1:30001`.
 - Validation run: `PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py` passed with `7 passed`; `PYTHONPATH=src python -m py_compile src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_aime2025_base_vs_ft_gate.py` passed.
+- Opened PR #319 to `main`: https://github.com/songCNMS/Nemotron/pull/319.
 - No training, model copy, endpoint launch, live eval, merge, or direct main push was performed.
 
 ## Session 0 - Assigned
