@@ -9,5 +9,5 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task245_qwen_aime_v10_artifact_runbook_verify_s1 |
-| PR | N/A |
+| PR | https://github.com/songCNMS/Nemotron/pull/317 |
 | Session | 0 |
