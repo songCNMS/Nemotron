@@ -1301,6 +1301,10 @@
   - worker_4: #323 is approved for self-merge after #324 merges and only if
     #323 remains CLEAN; refresh docs/status only if #324 changes main enough
     to make #323 dirty or stale.
+- Sent delivered coordinator update with #323/#324 lead approval status,
+  accepted #326 base score `11/30 = 0.36666666666666664`, #325/#326 merged
+  state, #324-before-#323 self-merge sequencing, and unchanged
+  `NO-GO/HOLD` blockers.
 - Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are merged
   and accepted, but task248 has no candidate FT prep/train/checkpoint/export
   or eval artifacts, task243 has no same-harness base-vs-FT comparison proving
