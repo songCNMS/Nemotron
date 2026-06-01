@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
 
 ## Knowledge Entries
 
@@ -191,3 +191,13 @@
    head `3f404b3043736c85ca89ff6aa799fc6c53120f62`; it is root-cause evidence
    only. Together with task260/#332, it keeps task255 invalidated and the global
    Qwen AIME gate at `NO-GO/HOLD`.
+120. After task255 invalidation, the V11 repair wave is task262-task266: repair
+   data/packing split identity, prove Qwen3-4B base load/import, add non-AIME
+   canary and completion retention, run independent contamination/regression
+   review, and produce a reproducible runbook before another candidate can be
+   judged.
+121. First measurable V11 go/no-go remains `NO-GO/HOLD` until the V11 evidence
+   stack exists and any new Qwen3-4B FT candidate scores at least the accepted
+   base `11/30` under the same corrected AIME25 protocol. No AIME2025 train
+   data, promotion, new full-scale training/eval clearance, or 30B/8-GPU is
+   authorized by assigning task262-task266.

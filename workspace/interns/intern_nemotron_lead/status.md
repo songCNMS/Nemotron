@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #332 MERGED; #333 MERGED at 513fefa from head 3f404b3; gate NO-GO/HOLD |
-| Session | 64 |
+| PR | #333 MERGED; task262-task266 V11 wave assigned; gate NO-GO/HOLD |
+| Session | 65 |

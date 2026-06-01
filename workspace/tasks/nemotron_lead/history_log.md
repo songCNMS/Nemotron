@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
 
 ## Session 0 - Created with team lead
 
@@ -3218,3 +3218,45 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT scored `0/30`, below
   accepted same-harness Qwen3-4B base `11/30`; no promotion, no new training or
   eval authorization, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 65 - 2026-06-01 UTC - V11 repair wave assigned
+
+- Received coordinator Session 34 ack confirming task260/#332 and task261/#333
+  are merged closeout evidence invalidating task255 while preserving global
+  `NO-GO/HOLD`.
+- Checked lead mailbox before assignment; unread count was `0`.
+- Fetched origin; `origin/main` remains #333 merge commit
+  `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Checked active worker status files: workers 1-5 are `Idle`, so the V11 repair
+  wave can use all five workers.
+- Read the coordinator AIME/Qwen handoff and the merged task260/task261 reports
+  from `origin/main`.
+- Current open GitHub PRs are old #322/task243 closeout and #312/coordinator;
+  they are not V11 repair artifacts and do not unblock task255.
+- Created standard task docs:
+  - task262 -> worker_1: V11 data split materialization and hard-math/final
+    answer sidecar repair.
+  - task263 -> worker_2: V11 Qwen3-4B base-load/import proof, fail-closed
+    planner checks, and nonzero-LR bounded smoke plan.
+  - task264 -> worker_3: V11 non-AIME canary, eval artifact retention, and
+    same-harness comparison readiness.
+  - task265 -> worker_4: independent contamination/regression review over
+    task262/task263/task264 exact heads.
+  - task266 -> worker_5: V11 artifact/runbook/reproducibility gate.
+- Branch/PR plan: each worker starts from current `origin/main` and opens a
+  worker-owned PR to `main` if repo code/config/docs change; artifact-only or
+  blocker closeout is acceptable when no repo change is needed.
+- Baseline protocol remains task247/task243 corrected same-harness Qwen3-4B
+  AIME25 `30x1` with accepted base `11/30 = 0.36666666666666664` for
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+- Candidate training plan is V11-only: discard task255 checkpoint/export; repair
+  data split/sidecar first, prove Qwen3-4B base load/import before SFT, use a
+  nonzero-LR bounded Qwen3-4B pilot schedule, run a non-AIME canary before any
+  AIME comparison, and require same-harness FT-vs-base comparison before any
+  claim.
+- First measurable V11 go/no-go remains `NO-GO/HOLD` until task262, task263,
+  task264, task265, and task266 provide acceptable evidence; any future FT
+  candidate must prove `ft_exact_normalized_accuracy >= 11/30` under the same
+  corrected AIME25 protocol before promotion can be considered.
+- No lead implementation, training, eval, merge, or product-code change was
+  performed.
