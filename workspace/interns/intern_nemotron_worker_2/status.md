@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task248_qwen_aime_v10_4b_pilot_prepare_train_s1 |
 | PR | N/A |
-| Session | 3 |
-| Last Update | 2026-06-01T16:55:06Z: Refreshed task246/task247 evidence; branches are now visible at a53c913/94c21c9 but required reports/artifacts remain missing, so prep/train remain blocked. |
+| Session | 4 |
+| Last Update | 2026-06-01T17:22:37Z: Recorded lead HOLD sequencing with task246 paths, sparse 8/0 sidecar knobs, and task247 11/30 baseline; no prep/sync/train/eval/30B run. |

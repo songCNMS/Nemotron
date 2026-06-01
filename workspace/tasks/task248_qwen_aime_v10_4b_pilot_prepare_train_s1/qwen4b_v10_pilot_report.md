@@ -1,6 +1,6 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Blocked,SESSION=3 -->
+<!-- METADATA:STATUS=Hold,SESSION=4 -->
 
 ## Summary
 
@@ -10,7 +10,8 @@
   `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
-- The task is blocked before local prep/train because task246 real corpus/input and task247 base artifacts are still not available in this worker environment.
+- The task remains on HOLD before local prep/train/eval until lead clears after
+  refreshed reviews of task246/#325 and task247/#326.
 
 ## Dependency probes
 
@@ -22,11 +23,25 @@
 - `origin/intern_nemotron_worker_3/task247_qwen_aime2025_qwen4b_base_smoke_s1` contains only README/history/task_knowledge under the task directory; it does not contain `qwen4b_base_smoke_report.md`.
 - `/work-agents/intern_nemotron_worker_1/outputs/` has no task246 output files visible to this worker.
 - `/work-agents/intern_nemotron_worker_3/outputs/` has no task247 output files visible to this worker.
+- Session 4 sequencing update: PR #325 is visible, `OPEN`, base `main`,
+  head `afc276932897743f6b6b5b8aab4c390905cb55f1`, merge state `CLEAN`.
+- Session 4 sequencing update: PR #326 is visible, `OPEN`, base `main`,
+  head `8fb34bd9116e32aa8d191750f2510d2a843e0da5`, merge state `CLEAN`.
+- Session 4 read-only path check: task246 corpus is present at
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`
+  with `560` JSONL rows.
+- Session 4 read-only path check: task246 M0 sidecar is present at
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar`.
+- Sidecar row counts are sparse by construction: train rows `8`, val rows `0`.
+- Session 4 read-only baseline check: task247 corrected 30x1 base artifact is
+  visible at
+  `/work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/qwen4b_base_aime2025_30x1_20260601T170700Z/`
+  with AIME25 `11/30 = 0.36666666666666664`.
 
 ## Prepared command shape
 
-Do not run this until task246 publishes a non-placeholder heldout corpus path
-and real V10 sidecar/M0 input path.
+Do not run this until lead explicitly clears task248 after refreshed reviews of
+task246/#325 and task247/#326.
 
 ```bash
 PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
@@ -34,15 +49,15 @@ PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan
   --output-dir /work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1 \
   --remote-root /root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1 \
   --run-name task248_qwen4b_v10_pilot \
-  --math-sidecar-m0-input-dir <task246_real_v10_m0_or_sidecar_input_dir> \
-  --math-decontaminate-against-corpus <task246_real_aime25_hmmt_math_prompt_only_corpus> \
+  --math-sidecar-m0-input-dir /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar \
+  --math-decontaminate-against-corpus /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl \
   --pack-size 8192 \
   --seq-length 8192 \
   --num-shards 8 \
   --max-train-per-dataset 100 \
   --max-val-per-dataset 25 \
-  --math-sidecar-max-records-per-env 500 \
-  --math-sidecar-max-val-shadow-per-env 25 \
+  --math-sidecar-max-records-per-env 8 \
+  --math-sidecar-max-val-shadow-per-env 0 \
   --epochs 0.05 \
   --eval-interval 20 \
   --save-interval 20 \
@@ -62,9 +77,10 @@ Expected generated paths after the dependencies exist:
 
 ## Gate status
 
-- Local prep is blocked until task246 publishes a real non-placeholder corpus and V10 input.
-- Training is blocked until local prep succeeds with task246 inputs.
-- FT judgment is blocked until task247 publishes same-harness Qwen3-4B base artifacts and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
+- Local prep is on HOLD until task246/#325 checksum correction is accepted and lead explicitly clears task248.
+- Training is on HOLD until local prep is explicitly cleared and succeeds with task246 inputs.
+- FT judgment is blocked until task247/#326 baseline is merged/available and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
+- Current baseline to preserve for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
 - 30B/8-GPU planning and launch remain out of scope.
 
 ## Commands run
@@ -76,6 +92,7 @@ Expected generated paths after the dependencies exist:
 - `test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`
 - Read-only dependency probes against worker_1/worker_3 task docs and output directories.
 - Session 3 refresh: `git fetch origin --prune`, `git rev-parse` on task246/task247 branches, read-only `git ls-tree`/`git show`, and read-only output directory probes.
+- Session 4 refresh: read-only `gh pr view 325`, `gh pr view 326`, `test`/`find`/`wc`/`sed` probes for task246/task247 artifacts and baseline summary.
 
 ## Commands not run
 

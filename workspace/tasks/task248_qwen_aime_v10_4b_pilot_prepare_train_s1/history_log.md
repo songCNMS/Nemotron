@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -31,4 +31,17 @@
 - Read-only `git ls-tree` probes show task246 still lacks `real_decontam_corpus_report.md` and task247 still lacks `qwen4b_base_smoke_report.md`.
 - Worker_1/worker_3 output directory probes still show no visible task246/task247 artifact files.
 - Updated `qwen4b_v10_pilot_report.md`; prep/train remain blocked until task246 real corpus/input and task247 base artifact paths exist.
+- Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.
+
+## Session 4 - 2026-06-01 UTC - Lead HOLD sequencing update
+
+- Lead instructed task248 to keep HOLD for local prep, NemTron sync, training, FT eval, and 30B/8-GPU until task246/#325 checksum correction is accepted and task247/#326 baseline is merged/available.
+- Read-only PR checks: #325 is `OPEN`/`CLEAN` at head `afc276932897743f6b6b5b8aab4c390905cb55f1`; #326 is `OPEN`/`CLEAN` at head `8fb34bd9116e32aa8d191750f2510d2a843e0da5`.
+- Recorded task246 planned corpus path:
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`.
+- Recorded task246 planned M0 sidecar path:
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar`.
+- Verified sidecar is sparse: `8` train rows and `0` val rows; planned pilot knobs are `--math-sidecar-max-records-per-env 8` and `--math-sidecar-max-val-shadow-per-env 0`.
+- Recorded task247 baseline for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
+- Updated `qwen4b_v10_pilot_report.md` prepared command with real paths and HOLD status.
 - Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.

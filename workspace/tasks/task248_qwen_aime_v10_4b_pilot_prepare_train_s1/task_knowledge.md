@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -19,3 +19,13 @@
    `a53c913ab80e37197ccfe7525ea04e0ac80c96fe` and
    `94c21c9a8cb229f0357a049a698de898963810f1`, but the required reports and
    output artifacts are still missing.
+7. Session 4 lead sequencing keeps task248 on HOLD until task246/#325 checksum
+   correction is accepted and task247/#326 baseline is merged/available.
+8. Planned task246 inputs are corpus
+   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`
+   and M0 sidecar
+   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar`.
+9. The task246 sidecar is sparse: `8` train rows and `0` val rows; planned
+   pilot knobs are math-sidecar train cap `8` and val shadow cap `0`.
+10. Task247 baseline for later comparison is Qwen3-4B base AIME25
+    `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
