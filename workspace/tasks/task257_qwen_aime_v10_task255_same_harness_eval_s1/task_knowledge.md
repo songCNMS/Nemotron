@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,6 @@
 9. #330 merged at `2026-06-01T21:11:42Z` with merge commit
    `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f` from head
    `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+10. worker_3 branch-only closeout head
+    `3797ebb39e5d2d00cd6697c81d5bcceda6f6d3b0` is post-merge bookkeeping only
+    and does not alter #330 merged evidence.

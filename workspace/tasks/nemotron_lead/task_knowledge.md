@@ -121,3 +121,6 @@
    `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f` from head
    `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`; it is a failure/no-promotion
    record.
+102. task258 branch `67162453b67f17296e7105e7be06f6e2b953f9bf` reports a
+   reviewer-readable full artifact bundle, but worker_2 official mailbox must
+   be processed before assigning worker_5 re-review.

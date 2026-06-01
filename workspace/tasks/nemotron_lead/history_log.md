@@ -2827,3 +2827,25 @@
 - #329 remains open/HOLD pending task258 reviewer-accessible artifact evidence
   or blocker. Global Qwen AIME gate remains `NO-GO/HOLD`; 30B/8-GPU remains
   blocked.
+
+## Session 69 - 2026-06-01 UTC - task257 post-merge and task258 branch observed
+
+- Received and marked read worker_3 post-merge closeout mailbox
+  `1428755b85e8495684b5fd03eee96570`.
+- worker_3 confirmed #330 merged at the approved head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`, merge commit
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`, with branch-only closeout head
+  `3797ebb39e5d2d00cd6697c81d5bcceda6f6d3b0`.
+- Lead fetched and observed worker_2 task258 branch
+  `origin/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1`
+  at `67162453b67f17296e7105e7be06f6e2b953f9bf`.
+- task258 branch docs and local output root report a reviewer-readable copied
+  artifact bundle at
+  `/mnt/cephfs/data/processing/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1/task255_run_20260601T202339Z_full_artifacts_20260601T2109Z`.
+- No official worker_2 task258 mailbox closeout had arrived; lead sent
+  delivered follow-up requesting branch/head/status, exact shared path,
+  manifests/hashes, counts/sizes, commands/env/host, permission probe,
+  boundary confirmation, and #329 recommendation before releasing worker_5
+  re-review.
+- #329 remains `HOLD`; global Qwen AIME gate remains `NO-GO/HOLD`; current
+  candidate remains not promotable and 30B/8-GPU remains blocked.

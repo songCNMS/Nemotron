@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -127,3 +127,22 @@
 - This closes task257 as a merged docs/report failure record. It does not
   approve #329, does not promote the task255 candidate, and does not clear
   30B/8-GPU. Global gate remains `NO-GO/HOLD`.
+
+## Session 6 - 2026-06-01 UTC - Worker post-merge closeout received
+
+- Lead received and marked read worker_3 post-merge closeout mailbox
+  `1428755b85e8495684b5fd03eee96570`.
+- Worker_3 confirmed pre-merge gate was satisfied at merge time: #330 was
+  open/clean at approved head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- Confirmed #330 merge details:
+  - mergedAt `2026-06-01T21:11:42Z`;
+  - merge commit/main head
+    `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`;
+  - merged PR head
+    `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- Worker branch-only closeout head:
+  `3797ebb39e5d2d00cd6697c81d5bcceda6f6d3b0`; it touches only worker_3
+  status and task257 README/history/task_knowledge to mark completed/idle.
+- No post-merge issue observed. Result remains FT `0/30` below base `11/30`;
+  global gate remains `NO-GO/HOLD`.
