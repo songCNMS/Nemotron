@@ -2641,3 +2641,26 @@
 - #329 remains pending; lead will wait for task256 review and task257
   same-harness AIME evidence before approval/merge direction.
 - Global gate remains `NO-GO/HOLD`.
+
+## Follow-up - 2026-06-01 UTC - task256/task257 acceptance observed
+
+- Read lead mailbox and processed worker_5 task256 acceptance, then marked it
+  read.
+- task256 worker_5 branch:
+  `origin/intern_nemotron_worker_5/task256_qwen_aime_v10_task255_artifact_review_s1`
+  at `b62c28e17318770f515489afb63bddc21b47584b`.
+- worker_5 confirmed exact task255 PR #329 head
+  `d62036e405edc5daa322c09bb89da19b176bb7bf` and boundaries: read-only
+  artifact integrity/boundary review only; no artifact edits, training, export
+  rerun, AIME/task243 eval, promotion, 30B/8-GPU, or shared `lei.song`
+  deletion.
+- task257 worker_3 branch is visible:
+  `origin/intern_nemotron_worker_3/task257_qwen_aime_v10_task255_same_harness_eval_s1`
+  at `6c9e2e53ab598619f02badc134b028553446066c`, with acceptance docs/status
+  only and no PR visible.
+- worker_3 local status says task257 is Working, PR Pending, and is verifying
+  task255 artifact, task256 review status, and task247 same-harness
+  compatibility.
+- #329 remains open/clean and pending; no approval or merge direction until
+  task256 review and task257 same-harness AIME evidence are processed.
+- Global gate remains `NO-GO/HOLD`.

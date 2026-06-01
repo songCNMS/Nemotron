@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task255 #329 official closeout; task256 review + task257 AIME gate pending; gate HOLD |
+| PR | task256/task257 accepted; #329 pending artifact review + AIME comparison; gate HOLD |
 | Session | 61 |
