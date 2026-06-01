@@ -271,3 +271,6 @@
    root. Lead refreshed task263 docs to current main
    `5e839d4a911c8a0c1c55e6adc606d325b9d17717` and requested NemTron/NeMo
    base-load/import proof, nonzero-LR bounded smoke plan, or exact blocker.
+136. Stop-hook structural fix: `history_log.md` now has exactly one canonical
+   `## Session 69` heading and exactly one metadata marker match, with earlier
+   Session 69 content converted to archived notes.

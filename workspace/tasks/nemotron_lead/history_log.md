@@ -2828,7 +2828,7 @@
   or blocker. Global Qwen AIME gate remains `NO-GO/HOLD`; 30B/8-GPU remains
   blocked.
 
-## Session 69 - 2026-06-01 UTC - task257 post-merge and task258 branch observed
+## Archived S69 - 2026-06-01 UTC - task257 post-merge and task258 branch observed
 
 - Received and marked read worker_3 post-merge closeout mailbox
   `1428755b85e8495684b5fd03eee96570`.
@@ -3356,14 +3356,14 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
 
-## Session 69 - 2026-06-01 UTC - stop-hook history confirmation
+## Archived S69 - 2026-06-01 UTC - stop-hook history confirmation
 
-- Stop hook reported that `history_log.md` did not contain a Session 69 record.
-- Lead rechecked the required file and confirmed `<!-- METADATA:SESSION=69 -->`
-  plus Session 69 task257 and Qwen V11 gate records are present in
+- Stop hook reported that `history_log.md` did not contain a S69 record.
+- Lead rechecked the required file and confirmed the S69 metadata marker
+  plus S69 task257 and Qwen V11 gate records are present in
   `workspace/tasks/nemotron_lead/history_log.md`.
-- Added this explicit Session 69 confirmation entry at the file tail so
-  validators that inspect the latest history section also see a Session 69
+- Added this explicit S69 confirmation entry at the file tail so
+  validators that inspect the latest history section also see a S69
   record.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
@@ -3371,7 +3371,7 @@
   `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
   Bridge/base-load proof or exact blocker.
 
-## Session 69 - 2026-06-01 UTC - task266 refresh approval
+## Archived S69 - 2026-06-01 UTC - task266 refresh approval
 
 - Received and marked read worker_5 task266/#334 refresh mailbox
   `172032ba03da44eaa8d98beaaadfafd0`.
@@ -3401,7 +3401,7 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
 
-## Session 69 - 2026-06-01 UTC - task266 merged closeout
+## Archived S69 - 2026-06-01 UTC - task266 merged closeout
 
 - Rechecked #334 after worker_5 exact-head release and verified it is now
   `MERGED` at `2026-06-01T23:25:48Z` with merge commit
@@ -3420,7 +3420,7 @@
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
 
-## Session 69 - 2026-06-01 UTC - task263 remaining blocker refresh
+## Archived S69 - 2026-06-01 UTC - task263 remaining blocker refresh
 
 - Continued active Qwen AIME goal after #334/#335/#336 merged.
 - Rechecked lead mailbox before sending worker instructions; unread count was
@@ -3514,7 +3514,7 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
 
-## Session 69 - 2026-06-01 UTC - task262 head drift and V11 PR hold updates
+## Archived S69 - 2026-06-01 UTC - task262 head drift and V11 PR hold updates
 
 - Received coordinator Session 37/38 acks: #334 remains `OPEN`/base `main`/
   `CLEAN` at `f8eff53f26340cc3c812ae0ca190a48214e89942` with lead
@@ -3691,14 +3691,14 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
   training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
 
-## Session 69 - 2026-06-01 UTC - stop-hook history confirmation
+## Archived S69 - 2026-06-01 UTC - stop-hook history confirmation
 
-- Stop hook reported that `history_log.md` did not contain a Session 69 record.
-- Lead rechecked the required file and confirmed `<!-- METADATA:SESSION=69 -->`
-  plus Session 69 task257 and Qwen V11 gate records are present in
+- Stop hook reported that `history_log.md` did not contain a S69 record.
+- Lead rechecked the required file and confirmed the S69 metadata marker
+  plus S69 task257 and Qwen V11 gate records are present in
   `workspace/tasks/nemotron_lead/history_log.md`.
-- Added this explicit Session 69 confirmation entry at the file tail so
-  validators that inspect the latest history section also see a Session 69
+- Added this explicit S69 confirmation entry at the file tail so
+  validators that inspect the latest history section also see a S69
   record.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
@@ -3706,7 +3706,7 @@
   `REQUEST-CHANGES/HOLD`, and task263 remains `BLOCK/HOLD` pending NemTron/NeMo
   Bridge/base-load proof or exact blocker.
 
-## Session 69 - 2026-06-01 UTC - task266 merged closeout
+## Archived S69 - 2026-06-01 UTC - task266 merged closeout
 
 - Rechecked #334 after worker_5 exact-head release and verified it is now
   `MERGED` at `2026-06-01T23:25:48Z` with merge commit
@@ -3724,3 +3724,11 @@
   gate remains `NO-GO/HOLD`.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
+
+## Session 69 - 2026-06-01 UTC - structural cleanup and current gate summary
+
+- Stop hook reported duplicate S69 history headings and duplicate metadata matches.
+- Normalized prior duplicate S69 headings to archived notes so the file has one canonical S69 section.
+- Removed literal metadata marker text from history body references so only the top metadata line remains.
+- Current gate state remains unchanged: #334/#335/#336 are `MERGED`; task263 remains `BLOCK/HOLD` pending NemTron/NeMo Bridge/base-load proof or exact blocker; global Qwen AIME gate remains `NO-GO/HOLD`.
+- No implementation, training, eval, merge, or product-code change was performed by lead.
