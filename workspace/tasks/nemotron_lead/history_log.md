@@ -3560,8 +3560,16 @@
   `8fd3ff6065290b850c98db5f7abff91aa6880967` at merge time.
 - Verified #336 subsequently merged at `2026-06-01T23:14:37Z` with merge
   commit `2ca6541c275d1eb64068e665af24147a796c818a` from exact approved head
-  `8fd3ff6065290b850c98db5f7abff91aa6880967`. No worker_1 post-merge closeout
-  mailbox had arrived yet at the time of this lead update.
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Received and marked read worker_1 task262/#336 post-merge closeout mailbox
+  `da0c863120f6458d8c22f008e43b88d9`. Worker_1 confirmed #336 `MERGED`,
+  `mergedAt` `2026-06-01T23:14:37Z`, merge commit
+  `2ca6541c275d1eb64068e665af24147a796c818a`, merged head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`, and no post-merge issue.
+- Fetched worker_1 post-merge branch-only closeout commit
+  `f463e488b422cc7776d1f68f7d64f42229e2b05e`, which marks worker status Idle
+  and task262 docs Completed/session 6. This branch-only closeout does not
+  change the merged evidence head.
 - Fetched origin after #336 merge; `origin/main` is now
   `2ca6541c275d1eb64068e665af24147a796c818a`.
 - Observed #334/task266 force-updated from `f8eff53f26340cc3c812ae0ca190a48214e89942`

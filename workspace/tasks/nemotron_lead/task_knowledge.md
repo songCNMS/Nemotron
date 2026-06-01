@@ -242,6 +242,9 @@
    and `5e431f4..8fd3ff6` is metadata-only. Worker_1 reports 112000
    final-answer-vs-heldout pair comparisons with 0 blocker pairs >= 0.5 and 0
    exact prompt-hash overlaps. Worker_4/task265 approved exact head `8fd3ff6`.
+   Worker_1 post-merge branch-only closeout is
+   `f463e488b422cc7776d1f68f7d64f42229e2b05e` and does not change merged
+   evidence.
 131. #334 remains `REQUEST-CHANGES/HOLD` because task266 runbook must refresh to
    current V11 truth: #335 merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`,
    #336 merged at `2ca6541c275d1eb64068e665af24147a796c818a`, and task263
