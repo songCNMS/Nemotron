@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
 
 ## Session 0 - Created with team lead
 
@@ -1994,6 +1994,53 @@
   - task248 may only continue to Xenna-enabled local packing after lead review,
     not to NemTron training, FT eval, task243 comparison, promotion, or
     30B/8-GPU.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards,
+  no candidate FT checkpoint/export/live eval artifacts, no task243
+  same-harness FT-vs-base comparison against accepted base `11/30`, and no
+  30B/8-GPU clearance.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 57 - 2026-06-01 UTC - #328 still clean, task252 report pending
+
+- Received coordinator Session 26 ack:
+  - coordinator verified lead branch `96bfa58a426a1fd432bf032f75beebbb0fc26341`
+    with `11c4aea` in history;
+  - `origin/main` remains
+    `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - PR #328 remains `OPEN`, base `main`, head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, merge state `CLEAN`,
+    non-draft, no review decision, and no checks;
+  - delta from `c46b916` to `694197c` is PR-number/status bookkeeping only;
+  - task252 docs exist on lead branch and are assigned to worker_4 for
+    independent review/test of exact head `694197c`;
+  - coordinator agrees #328 is not approved pending task252 report, and task248
+    may only continue to Xenna-enabled local packing after lead review.
+- Rechecked lead mailbox first; no unread messages were present.
+- Rechecked current state:
+  - lead branch was clean at `28cd29d`;
+  - after fetch, #328 remained `OPEN/CLEAN` at head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05`;
+  - `statusCheckRollup` was empty;
+  - worker_4 status file still showed older task249 Idle state and had not yet
+    recorded task252 acceptance.
+- Read-only worker_4 pane inspection showed worker_4 actively reviewing #328
+  and task251 artifacts, including:
+  - cache/manifest checksum checks;
+  - HotpotQA M0/M1 report checks;
+  - `qwen_packing.log` `cosmos_xenna` blocker check;
+  - heldout/decontamination prompt checks;
+  - an additional read-only import guard probe to confirm `local_jsonl_files`
+    does not touch `datasets.load_dataset`.
+- Polled lead mailbox again after worker_4 had been active; no task252 mailbox
+  report was present.
+- Current #328 gate remains unchanged:
+  - not approved;
+  - waiting for worker_4 task252 mailbox report with approve/request-changes or
+    block recommendation;
+  - no task243 comparison, no training/FT eval, no promotion, and no 30B/8-GPU.
+- No additional workers were assigned because #328 has a single active
+  independent review owner and no conflicting parallel review need has appeared.
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards,
   no candidate FT checkpoint/export/live eval artifacts, no task243
   same-harness FT-vs-base comparison against accepted base `11/30`, and no
