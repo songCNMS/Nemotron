@@ -64,3 +64,13 @@
 - Opened PR #330 to `main` for the task257 docs/status closeout.
 - No training, AIME train-data use, artifact modification, 30B/8-GPU run,
   promotion claim, main push, or merge was performed.
+
+## Session 2 - 2026-06-01 UTC - Metadata compliance correction
+
+- Corrected worker status metadata after closeout: `status.md` supports only
+  `Idle` or `Working`, so the prior `ReadyForPR` value was replaced with
+  `Idle` and the current-task field was cleared.
+- This is a docs/status compliance update only. PR #330 remains the task257
+  closeout PR, and the task257 result/disposition is unchanged: FT `0/30`
+  exact-normalized versus accepted base `11/30`, so FAIL versus base, with
+  global NO-GO/HOLD because task256 records REQUEST_CHANGES/HOLD.

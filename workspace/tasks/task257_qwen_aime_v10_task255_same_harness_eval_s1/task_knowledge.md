@@ -17,3 +17,7 @@
    directories were not independently readable by worker_5. Therefore task257
    should not claim promotion or final PASS; report the measured below-base
    result together with overall gate HOLD/no promotion.
+6. Worker `status.md` metadata accepts only `Idle` or `Working`; after
+   closeout, use `Idle` and clear `Current Task` rather than recording
+   `ReadyForPR`. This compliance correction does not change the task257
+   artifacts, score, PR, or gate disposition.
