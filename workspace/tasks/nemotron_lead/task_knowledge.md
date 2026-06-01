@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Knowledge Entries
 
@@ -33,3 +33,5 @@
 27. If worker_2 reports #321 blocked only because #320 is still open, and #320 merges immediately afterward, send a follow-up with the #320 merge commit and require worker_2 to recheck #321 head/mergeability before self-merge.
 28. A merged PR can be independently closed out from GitHub state even if the worker closeout mailbox is delayed, but the missing worker report should remain explicit in lead status until received.
 29. After #317/#318/#319/#320/#321 landed, all worker closeout reports confirmed the same residual gate: no Qwen FT promotion or 30B scale until a same-harness Qwen3-4B base score, matching FT artifacts, and the corrected comparison report exist.
+30. After static V10 foundation merge, the next lead wave should target runtime evidence rather than more static code: real heldout corpus/input, Qwen3-4B base AIME artifact, Qwen3-4B pilot artifacts, independent live review, and live runbook.
+31. The first measurable Qwen3-4B go/no-go can only move from HOLD when task246 provides real non-placeholder corpus/input, task247 provides same-harness base artifacts, task248 provides candidate FT artifacts, task249 approves the live evidence, and task250 records artifact paths and comparison status.

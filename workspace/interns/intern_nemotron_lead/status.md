@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 static set merged and worker closeouts received; first 4B AIME go/no-go remains HOLD |
-| Session | 23 |
+| PR | Qwen AIME25 live-gate task wave assigned: task246-task250 |
+| Session | 24 |

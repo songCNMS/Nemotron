@@ -494,3 +494,22 @@
   - Blocking evidence still required: real heldout AIME25/HMMT/MATH decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, same-harness base artifacts, candidate FT checkpoint/export/eval artifacts, and explicit 30B/8-GPU permission.
   - 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 24 - 2026-06-01 UTC - Next-wave live 4B gate tasks assigned
+
+- Re-read the coordinator handoff at
+  `/work-agents/intern_nemotron_coordinator/Nemotron/workspace/tasks/task_coordinator_nemotron_coordinator_06b9acba/session16_aime2025_qwen_handoff.md`.
+- Read lead mailbox and found no unread messages.
+- Fetched `origin/main` and confirmed it advanced to `20973e7` after the V10 static foundation PRs landed.
+- Rechecked GitHub state for #317/#318/#319/#320/#321 and confirmed all are merged.
+- Inspected task245's runbook report on `origin/main`; the current blockers remain real heldout decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, Qwen3-4B base score artifacts, candidate FT checkpoint/export/eval artifacts, and explicit 30B/8-GPU permission.
+- Checked worker status files and found worker_1 through worker_5 idle after task241 through task245 closeout.
+- Created next-wave standard task docs:
+  - `task246_qwen_aime_v10_real_decontam_corpus_s1` assigned to `intern_nemotron_worker_1` for real AIME25/HMMT/MATH heldout decontam corpus/input and task241-derived V10 M0/input path evidence.
+  - `task247_qwen_aime2025_qwen4b_base_smoke_s1` assigned to `intern_nemotron_worker_3` for same-harness Qwen3-4B base AIME2025 pilot artifact or an exact resource blocker.
+  - `task248_qwen_aime_v10_4b_pilot_prepare_train_s1` assigned to `intern_nemotron_worker_2` for real Qwen3-4B V10 pilot preparation/run only after task246 corpus/input and task247 base artifacts exist; no 30B/8-GPU scale.
+  - `task249_qwen_aime_v10_live_contam_gate_review_s1` assigned to `intern_nemotron_worker_4` for independent live contamination/regression and first go/no-go review.
+  - `task250_qwen_aime_v10_live_runbook_artifacts_s1` assigned to `intern_nemotron_worker_5` for live artifact/runbook tracking and canonical go/no-go blocker table.
+- All new tasks retain the hard gate: no FT judgment until same-harness Qwen3-4B base artifacts exist, and no promoted FT unless `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy` under the corrected AIME2025 protocol.
+- 30B/8-GPU scale remains explicitly held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
