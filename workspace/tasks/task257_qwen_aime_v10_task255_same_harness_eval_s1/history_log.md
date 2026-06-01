@@ -61,5 +61,6 @@
 - Disposition: current exact-path FT run is below base, so the Qwen3-4B
   non-regression result would be FAIL if the task255 artifact is accepted; due
   to task256 REQUEST_CHANGES/HOLD, the overall gate remains HOLD/no promotion.
+- Opened PR #330 to `main` for the task257 docs/status closeout.
 - No training, AIME train-data use, artifact modification, 30B/8-GPU run,
   promotion claim, main push, or merge was performed.

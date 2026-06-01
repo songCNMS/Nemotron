@@ -7,7 +7,7 @@
 - Task: `task257_qwen_aime_v10_task255_same_harness_eval_s1`
 - Worker branch:
   `intern_nemotron_worker_3/task257_qwen_aime_v10_task255_same_harness_eval_s1`
-- PR: pending at report-authoring time
+- PR: #330
 - Task255 PR: #329, OPEN/CLEAN at head
   `d62036e405edc5daa322c09bb89da19b176bb7bf`
 - Task255 FT artifact:
