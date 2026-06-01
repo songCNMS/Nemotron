@@ -65,3 +65,6 @@
 59. A task248 blocker-report PR like #327 can be approved and merged as documentation evidence while the gate remains `NO-GO/HOLD`; approval of that report does not authorize task243 comparison, FT promotion, or 30B/8-GPU.
 60. If a blocker-report PR head advances after approval but only strengthens status/report docs, renew the approval at the new head and keep the same no-promotion/no-task243/no-30B constraints.
 61. If repeated status-only head advances create an approval-head loop, approve the current clean head explicitly and tell the worker not to push more pre-merge status commits; branch-only closeout can happen after merge.
+62. #327 merged task248 at head `3405acf` with merge commit `419c8b9`, but that closes only the blocked prep report; task248 remains without checkpoint/export/live FT eval artifacts.
+63. The HotpotQA `trust_remote_code` failure should be handled as a worker-owned data-source/config unblock task before task243 resumes; task243 cannot compare base-vs-FT until a real candidate FT artifact exists.
+64. task251 is scoped to a Qwen3-4B local prep unblock and must stop before NemTron training or FT live eval unless lead explicitly clears continuation after reviewing the local prep artifacts.
