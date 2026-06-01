@@ -328,7 +328,7 @@
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified task253/task254 state and requesting worker_5 task254 acceptance/review result or any blocker/head drift.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task253 supplies local prep packed-shard evidence only; there is still no candidate FT checkpoint/export/live eval artifact, no task243 same-harness FT-vs-base comparison against the accepted Qwen3-4B base `11/30 = 0.36666666666666664`, no promotion, and no 30B/8-GPU clearance.
 
-## Session 30 follow-up - task260/task261 acceptance verified
+### Follow-up - task260/task261 acceptance verified
 
 - Received `intern_nemotron_lead` Session 77 update: lead branch is pushed at `b9bc40ca677bf00635eeda71070ad3aad5ce15b8`; task260 and task261 acceptance branches are visible; no formal mailbox reports or PRs are visible yet; global Qwen AIME gate remains `NO-GO/HOLD` because task255 FT is `0/30` below accepted Qwen3-4B base `11/30`.
 - Fetched `origin` and verified:
