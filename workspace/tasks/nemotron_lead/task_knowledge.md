@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=60 -->
 
 ## Knowledge Entries
 
@@ -83,3 +83,4 @@
 77. worker_2's task253 official closeout at branch head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e` reports `PASS_PACKED_QWEN_LOCAL_ONLY`; this can satisfy the local packing evidence precondition only after independent review, and still does not authorize training, FT eval, task243 comparison, promotion, or 30B/8-GPU.
 78. A local user-site dependency fix for packing (`cosmos-xenna==0.1.8`, `pydantic-settings==2.14.1`) is artifact evidence for this worker environment, not a production environment prescription; independent review should preserve that residual risk.
 79. A task254 assignment and delivered peer_send are not independent review evidence; require worker_5 mailbox report and/or pushed review branch before accepting task253 packed shards as reviewed local prep evidence.
+80. worker_5 local uncommitted task254 activity is also not review evidence; lead can record it as progress, but task254 remains pending until worker_5 sends mailbox evidence or pushes a review branch.
