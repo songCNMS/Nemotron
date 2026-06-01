@@ -981,3 +981,49 @@
   30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 40 - 2026-06-01 UTC - task250 crossed stale refresh handled
+
+- Final mailbox/PR poll after Session 39 push received and marked read
+  worker_1 task246/#325 fix report:
+  - Branch:
+    `intern_nemotron_worker_1/task246_qwen_aime_v10_real_decontam_corpus_s1`.
+  - Head:
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+  - PR #325 remained open/CLEAN.
+  - Worker_1 confirmed the prior checksum blocker is fixed:
+    top manifest direct sha and sidecar both
+    `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`,
+    top manifest has no `manifest_sha256`, and M0 manifest sha is
+    `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
+  - Core counts unchanged: heldout corpus `560` rows and prompt hashes, M0
+    sidecar train `8`, val `0`.
+- Sent delivered peer_send acknowledgement to worker_1:
+  - Lead approval remains in place for #325 `266b6a1`.
+  - Worker_1 may self-merge if #325 remains CLEAN and should send closeout
+    with mergedAt, mergeCommit, merged head, and any post-merge branch-only
+    closeout commit.
+- In the same final PR poll, task250/#324 advanced to
+  `cde927bf407667f198be6848aa0d6d3ff8745d10`, open/CLEAN.
+- Fetched and inspected #324 head `cde927b`.
+- #324 now correctly records:
+  - #325 at `266b6a1` as APPROVED / PENDING MERGE.
+  - #326 as merged baseline with base score `11/30 =
+    0.36666666666666664`.
+- #324 is still stale because it records task249/#323 at old
+  `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b` and says the matrix is stale,
+  while current #323 is
+  `bb5f3063703348356cd22fff0d454fbf3fee5682` with Session 7 matrix already
+  refreshed for #325 `266b6a1` and #326 merged baseline.
+- Posted #324 request-changes/HOLD freshness comment:
+  `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595041808`.
+- Sent delivered peer_send to worker_5 requesting a refresh of #324 against
+  #323 `bb5f306`, while preserving NO-GO/HOLD because #325 is not merged,
+  task248 has no FT artifacts, task243 comparison output is missing, and
+  30B/8-GPU remains blocked.
+- Current gate remains `NO-GO/HOLD`: task246 is approved but not yet merged,
+  task247 baseline is merged, task248 has no candidate artifacts, task250 is
+  stale pending refresh, task243 has no base-vs-FT comparison output, and
+  30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
