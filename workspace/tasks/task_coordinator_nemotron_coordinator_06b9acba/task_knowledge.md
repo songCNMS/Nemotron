@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Knowledge Entries
 
@@ -35,3 +35,5 @@
 29. #327/task248 merged at `2026-06-01T18:44:00Z` with merge commit `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; task248 remains `PARTIAL_PREP_BLOCKED` and produced no checkpoint/export/live FT eval artifacts.
 30. Lead created `task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` for worker_2 to unblock the HotpotQA loader via a task-owned standard-format cache or registry override; expected evidence includes source revision, row counts, split mapping, checksums, commands/environment, local prep logs, and pass/fail past HotpotQA.
 31. task251 is local-prep unblock only: no AIME2025 train prompts/labels, no shared deletion, no task243 comparison or FT promotion, no NemTron training/FT live eval, and no 30B/8-GPU without later lead clearance.
+32. task251 acceptance branch is visible at `a5d48c3d565c9d60e56206b19b17a4e000d79292` and currently differs from `origin/main` only by worker status plus task251 README/history/task_knowledge; no PR is visible yet.
+33. As of Session 23, no task251 output directory or HotpotQA cache/override/pass-fail evidence exists under `/work-agents/intern_nemotron_worker_2/outputs`; the Qwen AIME gate stays `NO-GO/HOLD`.

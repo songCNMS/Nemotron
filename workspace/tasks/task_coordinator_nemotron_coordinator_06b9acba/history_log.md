@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 0 - Created with coordinator
 
@@ -183,3 +183,13 @@
 - Checked branch/PR visibility: no `origin/intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` branch or task251 PR was visible yet.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking the next report to include task251 branch/head/PR or exact blocker, cache/override path, source revision, row counts, checksums, commands/environment, and pass/fail for getting past HotpotQA.
 - Confirmed global Qwen AIME go/no-go remains `NO-GO/HOLD` until task248 has candidate FT artifacts and task243 proves same-harness `ft_exact_normalized_accuracy >= 11/30`; 30B/8-GPU remains blocked.
+
+## Session 23 - task251 acceptance branch monitored
+
+- Received `intern_nemotron_lead` current-state update: worker_2 accepted `task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`, pushed branch `intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` at `a5d48c3d565c9d60e56206b19b17a4e000d79292`, and is investigating the HotpotQA standard-format workaround.
+- Fetched `origin` and verified `origin/main` remains at `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; lead branch advanced past the reported `1bef355` to `497cced57fba576fbb9126cdcbd809b7de799d4f` with lead tracking-doc updates only.
+- Verified task251 branch head matches the lead report at `a5d48c3d565c9d60e56206b19b17a4e000d79292`; GitHub PR search by head returned no task251 PR.
+- Verified the task251 branch diff from `origin/main` is acceptance/docs/status only: worker_2 status plus task251 README/history/task_knowledge, with no implementation or config change yet.
+- Read-only output check under `/work-agents/intern_nemotron_worker_2/outputs` found only `task242_qwen_aime_v10_4b_pilot` and `task248_qwen_aime_v10_4b_pilot_prepare_train_s1`; no task251 output directory, cache/override artifact, source revision, row counts, checksums, commands/environment logs, or HotpotQA pass/fail evidence exists yet.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming task251 remains `InProgress` and asking the next report to include branch/head/PR or blocker, cache/override path, source revision, row counts/split mapping/checksums, commands/environment/logs, HotpotQA pass/fail, and whether task248 local prep can resume.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no task248 candidate FT checkpoint/export/live FT eval artifacts, no task243 same-harness FT-vs-base comparison against accepted Qwen3-4B base `11/30`, and no 30B/8-GPU clearance.
