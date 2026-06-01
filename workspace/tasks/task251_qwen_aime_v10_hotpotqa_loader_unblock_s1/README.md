@@ -1,6 +1,6 @@
 # task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 - HotpotQA loader unblock
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=0 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 
@@ -12,6 +12,19 @@ planner artifacts exist, but local M0 prep stops on Hugging Face `datasets`
 The accepted base score remains Qwen3-4B AIME2025 corrected 30x1
 `11/30 = 0.36666666666666664`; no candidate FT checkpoint/export/eval artifact
 exists yet.
+
+## Closeout
+
+PR #328 landed at `2026-06-01T19:27:31Z` from approved head
+`694197c81720dcc157518d8a86b2b5d7a7a2dd05` with merge commit
+`61fa65e9e9a535d531a65072c839760c3488207f`. The HotpotQA
+`trust_remote_code` blocker is closed for local M0/M1 prep via the
+`local_jsonl_files` cache/registry override path.
+
+The global Qwen AIME gate is still `NO-GO/HOLD`: no packed Qwen shards,
+candidate FT checkpoint/export/live eval, task243 same-harness comparison,
+promotion, or 30B/8-GPU clearance exists. The next blocker is the Qwen packing
+environment dependency `ModuleNotFoundError: No module named 'cosmos_xenna'`.
 
 ## Goal
 

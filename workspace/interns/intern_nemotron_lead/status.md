@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #328 open clean at 694197c; task252 active/no report; coordinator updated; gate HOLD |
-| Session | 57 |
+| PR | #328 MERGED at 61fa65e from approved head 694197c; task253 assigned for cosmos_xenna packing unblock; gate HOLD |
+| Session | 58 |

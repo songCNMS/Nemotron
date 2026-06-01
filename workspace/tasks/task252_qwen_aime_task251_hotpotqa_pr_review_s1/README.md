@@ -1,6 +1,6 @@
 # task252_qwen_aime_task251_hotpotqa_pr_review_s1 - task251 PR review/test
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=0 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## Background
 
@@ -9,6 +9,19 @@ task251 produced PR #328 to unblock the HotpotQA M0 loader by adding
 builder/report. The lead must not run implementation tests directly, so an
 independent worker review is required before any approve/request-changes
 decision.
+
+## Closeout
+
+worker_4 reviewed exact PR head
+`694197c81720dcc157518d8a86b2b5d7a7a2dd05` and recommended `APPROVE` for
+local HotpotQA/M0-M1 prep unblock scope only. Lead posted the approval comment
+at `https://github.com/songCNMS/Nemotron/pull/328#issuecomment-4595784076`.
+#328 was then self-merged by worker_2 at `2026-06-01T19:27:31Z` with merge
+commit `61fa65e9e9a535d531a65072c839760c3488207f`.
+
+The task252 closeout does not move the global gate: packed Qwen shards,
+candidate FT checkpoint/export/live eval, task243 comparison, promotion, and
+30B/8-GPU scale remain blocked.
 
 Current PR state at assignment:
 

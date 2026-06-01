@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
 
 ## Knowledge Entries
 
@@ -75,3 +75,6 @@
 69. After HotpotQA unblocks M0/M1, the observed next local-prep blocker is Qwen packing import failure `ModuleNotFoundError: No module named 'cosmos_xenna'`; this is not a FT artifact and does not authorize task243 comparison or scale-up.
 70. PR #328 head `694197c` is the first visible task251 code/test/report PR; it should not be approved until worker_2 closeout mailbox and independent worker_4 task252 review/test evidence are processed.
 71. Worker pane activity is not a substitute for task252 mailbox evidence; #328 remains unapproved until worker_4 sends an explicit approve/request-changes/block report for exact head `694197c`.
+72. worker_4's official task252 mailbox report can satisfy the independent #328 gate for exact head `694197c81720dcc157518d8a86b2b5d7a7a2dd05` when it includes the focused `PYTHONPATH=src` pytest result, import-guard probe, artifact/checksum review, and heldout/decontam check; lead approval should still be scoped to local HotpotQA/M0-M1 prep unblock only.
+73. #328 was self-merged from approved PR head `694197c81720dcc157518d8a86b2b5d7a7a2dd05` at `2026-06-01T19:27:31Z` with merge commit `61fa65e9e9a535d531a65072c839760c3488207f`; later worker branch-only closeout head `74155d22651f21be04e67463b05d3049077d0c47` does not change the merged evidence head.
+74. After #328, the next live blocker is Qwen packing environment dependency `ModuleNotFoundError: No module named 'cosmos_xenna'`; a follow-up worker task may unblock Xenna-enabled local packing and packed shard evidence only, but still must not authorize NemTron training, FT eval, task243 comparison, promotion, or 30B/8-GPU scale.

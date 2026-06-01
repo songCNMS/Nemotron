@@ -2050,3 +2050,79 @@
   30B/8-GPU clearance.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 58 - 2026-06-01 UTC - #328 merged, task253 assigned for packing blocker
+
+- Received coordinator Session 27 ack:
+  - coordinator verified lead branch `f9db538e12ddfcf84bba6738cfa379651fc83b80`;
+  - #328 was still `OPEN` / `CLEAN` at exact head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05` in that ack;
+  - coordinator agreed #328 remained unapproved pending explicit worker_4
+    task252 approve/request-changes/block report;
+  - global Qwen AIME gate remained `NO-GO/HOLD`.
+- Rechecked lead mailbox first; no unread messages were present at the first
+  poll.
+- Rechecked PR #328 and found it had moved to `MERGED`:
+  - base `main`;
+  - merged PR head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`;
+  - `mergedAt=2026-06-01T19:27:31Z`;
+  - `mergeCommit=61fa65e9e9a535d531a65072c839760c3488207f`.
+- Reconciled the already-posted lead approval comment:
+  `https://github.com/songCNMS/Nemotron/pull/328#issuecomment-4595784076`.
+  The approval scope was task251 local HotpotQA/M0-M1 prep unblock code and
+  evidence only.
+- Recorded worker_4 task252 official review evidence:
+  - recommendation `APPROVE` for exact head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05`;
+  - `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m0_data_env.py -k local_jsonl_override`
+    passed with `1 passed/34 deselected`;
+  - bare pytest failed only because `PYTHONPATH` was unset;
+  - import-guard probe passed and `local_jsonl_files` did not invoke
+    `datasets.load_dataset`;
+  - worker_4 verified source revision, cache/override paths, row counts,
+    checksums, commands/env/logs, M0/M1 pass evidence, and the
+    `cosmos_xenna` packing blocker;
+  - exact-normalized heldout prompt check found `0` matches across the `560`
+    prompt decontam corpus.
+- Received and marked read worker_2's #328 self-merge closeout mailbox:
+  - worker_2 verified #328 was `OPEN` / `CLEAN` at the approved head before
+    self-merge;
+  - merge evidence matches GitHub:
+    `mergedAt=2026-06-01T19:27:31Z`,
+    `mergeCommit=61fa65e9e9a535d531a65072c839760c3488207f`, PR head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05`;
+  - worker branch-only closeout head
+    `74155d22651f21be04e67463b05d3049077d0c47` marks task251 completed and
+    worker_2 idle, without changing the merged PR evidence head.
+- Attempted to merge `origin/main` into the lead tracking branch for a full
+  artifact-doc sync, but it produced broad workspace task-doc add/add conflicts
+  unrelated to the current closeout. Aborted that local merge and kept the lead
+  branch clean, then recorded targeted lead/task closeout docs instead.
+- Updated lead-side task docs:
+  - task251 marked `Completed`, with #328 merge evidence and remaining
+    `cosmos_xenna` blocker;
+  - task252 marked `Completed`, with worker_4 independent review/test evidence
+    and the lead approval comment;
+  - task253 created and assigned to `intern_nemotron_worker_2` for the next
+    scoped blocker: Xenna-enabled local Qwen packing evidence only.
+- task253 expected output:
+  - worker branch
+    `intern_nemotron_worker_2/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1`;
+  - PR only if repo docs/config/scripts change, otherwise artifact-only
+    closeout is acceptable;
+  - exact commands/env, Xenna import probe, input manifests, and either
+    `packed_qwen` shard paths/counts/checksums or precise blocker logs.
+- task253 boundaries:
+  - no NemTron training;
+  - no FT live eval;
+  - no task243 comparison;
+  - no promotion claim;
+  - no AIME2025 train prompts/labels;
+  - no deletion under `/mnt/cephfs/data/processing/lei.song`;
+  - no 30B/8-GPU scale.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: #328 closes only the
+  HotpotQA loader blocker. There are still no packed Qwen shards, no candidate
+  FT checkpoint/export/live eval artifacts, no task243 same-harness FT-vs-base
+  comparison against accepted base `11/30`, and no 30B/8-GPU clearance.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
