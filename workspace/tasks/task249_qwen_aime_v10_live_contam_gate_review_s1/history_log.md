@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - Assigned
 
@@ -118,6 +118,32 @@
   APPROVE base artifact, task248 APPROVE blocked-before-prep report/HOLD,
   task250 REQUEST_CHANGES/HOLD, combined first Qwen3-4B V10 go/no-go
   NO-GO/HOLD.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.
+
+## Session 7 - task246 checksum fix approval refresh
+
+- Fetched current `origin/main` and PR refs for #324 and #325.
+- Verified task246 PR #325 is OPEN/CLEAN at
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+- Read updated `real_decontam_corpus_report.md`; it records top manifest
+  final-file sha256
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313` in
+  `manifest.json.sha256` and no longer embeds a self-referential
+  `manifest_sha256` field.
+- Verified local checksum sidecars: top manifest sidecar matches
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`, and
+  M0 manifest sidecar matches
+  `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
+- Recorded lead gate comment on #325 as APPROVE / OK to self-merge if CLEAN;
+  because #325 is still open, marked task246 APPROVE pending merge rather than
+  current-main evidence.
+- Kept task247 as approved baseline from merged #326 and task250 #324 as
+  REQUEST_CHANGES/HOLD because the runbook is stale against #325/#326.
+- Updated `live_gate_review_matrix.md` with Session 7 evidence. Combined first
+  Qwen3-4B V10 go/no-go remains NO-GO/HOLD because task248 has no FT artifacts
+  and task243 comparison output is missing.
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.

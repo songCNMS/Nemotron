@@ -1,6 +1,6 @@
 # task249 Live Contamination/Gate Review Matrix
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Scope
 
@@ -11,31 +11,38 @@ shared files, or rewrite worker branches.
 Current main reviewed: `origin/main` at
 `85f2bf5c11062741388ca114a84a2c26535b7df9`, which merged task247 PR #326
 at 2026-06-01T17:21:29Z. PR #323 pre-refresh head was open/CLEAN at
-`9488ad5c344f2b9dc69504d6980a2b7179c649e0` before this Session 6 update.
+`b8b2bbd929b20c340dce8e86f81c1252c8d0b02b` before this Session 7 update.
 
 ## Reviewed Inputs
 
 | Task | Owner | Branch / PR | Head inspected | Evidence available | Decision |
 | --- | --- | --- | --- | --- | --- |
-| task246 real heldout decontam corpus | worker_1 | PR #325 OPEN/CLEAN | `afc276932897743f6b6b5b8aab4c390905cb55f1` | `real_decontam_corpus_report.md` and local outputs publish 560 prompt-only heldout rows, 560 prompt hashes, real M0 sidecar input with 8 train / 0 val rows, and no AIME25 exact prompt hits in sidecar train; lead verified core evidence but requested manifest checksum correction | REQUEST_CHANGES / HOLD |
+| task246 real heldout decontam corpus | worker_1 | PR #325 OPEN/CLEAN | `266b6a14262278b4fe27f75a3273fc156a5538ce` | `real_decontam_corpus_report.md` and local outputs publish 560 prompt-only heldout rows, 560 prompt hashes, real M0 sidecar input with 8 train / 0 val rows, no AIME25 exact prompt hits in sidecar train, and corrected manifest checksum sidecars; lead gate comment approves if #325 remains CLEAN | APPROVE pending merge / HOLD for combined gate |
 | task247 Qwen3-4B base AIME smoke | worker_3 | PR #326 MERGED into `origin/main` | merged head `8fb34bd9116e32aa8d191750f2510d2a843e0da5`, merge `85f2bf5c11062741388ca114a84a2c26535b7df9` | `qwen4b_base_smoke_report.md` is on current main; lead approval comment verifies same-harness base score 11/30 exact-normalized accuracy `0.36666666666666664`, 30/30 requests ok, parsed 23/30, endpoint manifest served `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` | APPROVE base artifact |
 | task248 Qwen3-4B V10 pilot prepare/train | worker_2 | branch only, no PR found | `200741802a9ae9cb9f3e16af8f1b7e66fee69857` | `qwen4b_v10_pilot_report.md` exists and correctly blocks before prep/train while task246 acceptance and task247/base inputs were not both accepted; no task248 output dir or candidate artifacts found | APPROVE blocked-before-prep report / HOLD |
-| task250 live runbook artifacts | worker_5 | PR #324 OPEN/CLEAN | `cd4555199ff67eace4d40d4418eef38511786143` | Session 7 runbook refreshed task249 visibility, but lead requested a new freshness update after task246 PR #325 and task247 PR #326; table still records task246/task247 as missing or partial | REQUEST_CHANGES / HOLD |
+| task250 live runbook artifacts | worker_5 | PR #324 OPEN/CLEAN | `cd4555199ff67eace4d40d4418eef38511786143` | Session 7 runbook refreshed task249 visibility, but it is stale after task246 PR #325 advanced to approved-pending-merge and task247 PR #326 merged; table still records older task246/task247 state | REQUEST_CHANGES / HOLD |
 
 ## Task Findings
 
 ### task246 / PR #325
 
-Decision: REQUEST_CHANGES / HOLD for first go/no-go.
+Decision: APPROVE pending merge / HOLD for combined first go/no-go.
 
 Evidence:
 
 - PR #325 is OPEN/CLEAN at
-  `afc276932897743f6b6b5b8aab4c390905cb55f1`.
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`.
 - The branch publishes
   `workspace/tasks/task246_qwen_aime_v10_real_decontam_corpus_s1/real_decontam_corpus_report.md`.
 - Local output root exists at
   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`.
+- Top manifest final-file sha256 is now
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.
+- Top manifest sidecar
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256`
+  records the same final-file checksum.
+- The top manifest no longer embeds a self-referential `manifest_sha256`
+  field, per the updated report and lead gate comment.
 - Heldout corpus path:
   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`.
 - Heldout corpus row count is `560`; prompt hash count is `560`.
@@ -44,6 +51,8 @@ Evidence:
 - Prompt hashes sha256 matches the report:
   `a2a348ee12f962d5dd7ed7cf0e5d034ebea4a76a2287804e97ade331b552a78d`.
 - M0 sidecar train split has `8` rows; val split has `0` rows.
+- M0 manifest sha256 and sidecar now match:
+  `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
 - M0 train sha256 matches the report:
   `01ac5d1c8571dc956bbae12b7f1a00a4e759d59e503abbf2ddfba3b85aa324e3`.
 - M0 val sha256 matches the report:
@@ -52,24 +61,22 @@ Evidence:
   decontam blocker findings `0`, and AIME25 exact prompt hits in sidecar
   train JSONL `0`.
 
-Blocking issue:
+Approval state:
 
-- Lead comment on #325 keeps REQUEST_CHANGES/HOLD because the top manifest hash
-  is inconsistent.
-- Report/mailbox/manifest field say
-  `9e5bbc62507f893955374bd520dae81601a51bd1e0030c1508f819ad268f6eb5`.
-- Direct sha256 of
-  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json`
-  is `add38e0880a1442c3232cb0ddb5cd5544d7c8e8f3b3190e7d484e0c707205c5d`.
-- Until task246 corrects or clearly separates the top manifest checksum and is
-  re-reviewed, this corpus/M0 evidence is useful but not accepted for the first
-  go/no-go.
+- Lead comment after head `266b6a1` says APPROVE / OK to self-merge if #325
+  remains CLEAN.
+- #325 is still open at this review checkpoint, so I record task246 as
+  approved-pending-merge rather than current-main evidence.
+- Residual risks remain sparse sidecar `8` train rows and the MATH-500 license
+  note; no training/eval/FT judgment/30B authorization is implied.
 
 Gate impact:
 
-- The prior missing-corpus blocker is materially reduced, but not closed.
-- task248 must not consume task246 as an accepted dependency until the manifest
-  checksum correction is accepted.
+- The prior missing-corpus and manifest-checksum blockers are closed at the PR
+  gate level, pending merge of #325.
+- After #325 merges, the matrix should be refreshed against current `main`.
+- This approval does not create task248 FT artifacts or task243 comparison
+  output, so the combined first go/no-go remains HOLD.
 
 ### task247 / PR #326
 
@@ -131,8 +138,9 @@ Gate impact:
 - It is not runtime evidence for first go/no-go: no local data prep, packed
   shard, NemTron sync, train manifest, checkpoint, export, log, or FT eval
   evidence exists.
-- With task247 now accepted but task246 still on REQUEST_CHANGES/HOLD, task248
-  must remain held for candidate prep/train/eval.
+- With task247 accepted and task246 approved-pending-merge, task248 still must
+  remain held for candidate prep/train/eval until accepted inputs are on main
+  or explicitly authorized and task248 produces runtime artifacts.
 
 ### task250 / PR #324
 
@@ -144,17 +152,15 @@ Evidence:
   `cd4555199ff67eace4d40d4418eef38511786143`.
 - `live_runbook_artifact_report.md` Session 7 correctly captures task249 PR
   #323 visibility at `68a8ee77ee25f5dbbac170c935e8487b88198ce2`.
-- The table is now stale after task246 PR #325 and task247 PR #326:
-  it still says task246 real corpus/M0 evidence is not published and task247
-  base scoring remains blocked.
-- Lead comment on #324 requests a freshness update to record #325 as useful
-  real corpus/M0 evidence with HOLD pending manifest checksum correction, and
-  #326 as an approved same-harness Qwen3-4B base pilot.
+- The table is stale after task246 PR #325 advanced to approved-pending-merge
+  and task247 PR #326 merged into main.
+- The latest lead comment on #324 still requests a freshness update for #325
+  and #326 state; no newer #324 refresh was visible in this review.
 
 Requested changes before treating #324 as the current runbook:
 
-- Record task246 PR #325 at `afc276932897743f6b6b5b8aab4c390905cb55f1` with
-  real heldout corpus/M0 paths and the top-manifest checksum blocker.
+- Record task246 PR #325 at `266b6a14262278b4fe27f75a3273fc156a5538ce` with
+  real heldout corpus/M0 paths and approved-pending-merge state.
 - Record task247 PR #326 as merged into `origin/main` with accepted base score
   `11/30 = 0.36666666666666664`.
 - Preserve HOLD on task248 candidate artifacts, task243 comparison output, and
@@ -166,8 +172,8 @@ Decision: NO-GO / HOLD.
 
 The first Qwen3-4B V10 AIME go/no-go cannot pass. Current blockers:
 
-- task246 corpus/M0 evidence exists but #325 remains REQUEST_CHANGES/HOLD until
-  the top manifest checksum is corrected or explicitly explained and accepted.
+- task246 corpus/M0 evidence is approved at PR #325 head `266b6a1`, but #325
+  has not merged into `main` at this review checkpoint.
 - No task248 candidate local data prep, packed shards, checkpoint/export, FT
   eval output, or train/eval logs exist.
 - No task243 base-vs-FT comparison output proves
@@ -179,6 +185,8 @@ The first Qwen3-4B V10 AIME go/no-go cannot pass. Current blockers:
 
 Accepted current evidence:
 
+- task246 real corpus/M0 evidence is approved-pending-merge at #325 head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`.
 - task247 base artifact is accepted on current main with score
   `11/30 = 0.36666666666666664`.
 - task248 blocked-before-prep report is acceptable as a blocker record only.
@@ -199,6 +207,7 @@ git show origin/main:workspace/tasks/task247_qwen_aime2025_qwen4b_base_smoke_s1/
 git show origin/pr/324:workspace/tasks/task250_qwen_aime_v10_live_runbook_artifacts_s1/live_runbook_artifact_report.md
 find /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1 -maxdepth 4 -type f -print
 sha256sum /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/prompt_hashes.sha256 /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/manifest.json /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/math_competition_numeric/train-split.jsonl /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/math_competition_numeric/val-split.jsonl
+cat /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256 /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/manifest.json.sha256
 wc -l /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/prompt_hashes.sha256 /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/math_competition_numeric/train-split.jsonl /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/math_competition_numeric/val-split.jsonl
 find /work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1 -maxdepth 4 -type f -print
 jq '.' /work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/qwen4b_base_aime2025_30x1_20260601T170700Z/summary.json

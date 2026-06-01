@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -38,13 +38,22 @@
     `85f2bf5c11062741388ca114a84a2c26535b7df9`; accepted base score is
     `11/30 = 0.36666666666666664` under the same-harness Qwen3-4B AIME2025
     pilot.
-12. At Session 6, task246 PR #325 is OPEN/CLEAN at
-    `afc276932897743f6b6b5b8aab4c390905cb55f1` and publishes real corpus/M0
-    evidence, but remains REQUEST_CHANGES/HOLD until the top manifest checksum
-    mismatch is corrected or accepted.
+12. At Session 6, task246 PR #325 was OPEN/CLEAN at
+    `afc276932897743f6b6b5b8aab4c390905cb55f1` and published real corpus/M0
+    evidence, but remained REQUEST_CHANGES/HOLD until the top manifest checksum
+    mismatch was corrected or accepted.
 13. At Session 6, task250 PR #324 is OPEN/CLEAN at
     `cd4555199ff67eace4d40d4418eef38511786143`, but its runbook is stale
     against task246 #325 and merged task247 #326.
 14. The combined go/no-go remains NO-GO/HOLD until task246 correction is
     accepted, task248 candidate artifacts exist, and task243 same-harness
     base-vs-FT comparison proves non-regression.
+15. At Session 7, task246 PR #325 is OPEN/CLEAN at
+    `266b6a14262278b4fe27f75a3273fc156a5538ce` and lead-approved pending
+    merge after the manifest checksum fix. The top manifest final-file checksum
+    is `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`,
+    and the M0 manifest checksum is
+    `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
+16. Even with task246 approved-pending-merge and task247 merged as baseline,
+    the combined gate remains NO-GO/HOLD because task248 FT artifacts and
+    task243 same-harness base-vs-FT comparison output are still missing.
