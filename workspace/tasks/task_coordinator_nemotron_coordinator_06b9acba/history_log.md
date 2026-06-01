@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 0 - Created with coordinator
 
@@ -212,3 +212,27 @@
 - Checked worker_2 local repo read-only: branch remains at `a5d48c3d565c9d60e56206b19b17a4e000d79292` with uncommitted changes to `prepare_m0_assets.py`, `tests/recipes/super3/test_m0_data_env.py`, and untracked `workspace/tasks/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1/build_hotpotqa_standard_cache.py`; worker status docs still show Session 1 and `PR` `N/A`.
 - Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, flagging that the new local artifacts need worker_2 official report, branch push, PR or blocker, exact commands/environment/logs, and an explicit decision on whether task248 local prep may resume.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task251 local cache/probe artifacts are not candidate FT checkpoint/export/live eval artifacts, task243 same-harness FT-vs-base comparison against accepted base `11/30` is still missing, and 30B/8-GPU remains blocked.
+
+## Session 25 - task251 evidence branch pushed, PR still missing
+
+- Received `intern_nemotron_lead` Session 55 update: lead branch reported at `f174a43`, task251 remote branch still reported at `a5d48c3`, no PR visible, worker_2 local repo still had uncommitted task251 changes, HotpotQA cache/M0/M1 evidence existed locally, and Qwen packing stopped on `ModuleNotFoundError: No module named 'cosmos_xenna'`.
+- Fetched `origin` and found newer state after the lead snapshot:
+  - lead branch advanced to `e049059e8c0b4576f50a61dc204b8c07e53ba06a`, with `f174a43` in history;
+  - `origin/main` remains `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - task251 worker branch advanced from `a5d48c3d565c9d60e56206b19b17a4e000d79292` to `c46b9165a037e4d7f387ec7597a769ef5017088d`.
+- Verified no GitHub PR is visible for `intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`.
+- Verified task251 remote diff from main now includes real code/test/report changes: `prepare_m0_assets.py`, `tests/recipes/super3/test_m0_data_env.py`, worker_2 status, task251 `build_hotpotqa_standard_cache.py`, `hotpotqa_loader_unblock_report.md`, and task docs.
+- Read the pushed task251 report and verified disposition `HOTPOTQA_UNBLOCKED__PACKING_ENV_BLOCKED`: the task-owned HotpotQA standard cache and registry override avoid the unsupported `trust_remote_code` path, local task248 prep proceeds through HotpotQA M0 and M1 agentic SFT prep, and Qwen packing stops before packed artifacts because the local environment lacks `cosmos_xenna`.
+- Verified report/artifact evidence:
+  - HotpotQA source `hotpotqa/hotpot_qa`, config `distractor`, revision `1908d6afbbead072334abe2965f91bd2709910ab`;
+  - train cache 100 rows sha256 `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`;
+  - validation cache 25 rows sha256 `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`;
+  - registry override sha256 `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`, `trust_remote_code: false`.
+- Verified M0/M1 local prep evidence:
+  - HotpotQA-only M0 probe status `PASS`, rows `100/25`, no `trust_remote_code` blocker reproduced;
+  - task248 M0 selection status `PASS_WITH_EXISTING_M0_SHORTFALL`, with unrelated `m0_swe_patch_lite` 100/23 vs requested 100/25;
+  - M1 agentic SFT prep status `PASS`, manifest sha256 `3f367930cd9ddbb568f6ff75bebe3aa2b339332b1e56bd2533ce315cfbbf53ba`, blend sha256 `fdd56cef9f944566a9cd4332ec348ab503258f39a03f94cccd93c70b84b9b338`, 1100 train rows, 273 val shadow rows, 0 errors, task246 heldout corpus size 560, blocker findings 0, dropped rows 0, and `agentic_sft_v0_math_heldout_eval.jsonl` has 0 rows.
+- Verified `qwen_packing.log` contains the exact blocker `ModuleNotFoundError: No module named 'cosmos_xenna'`; no packed files were found under `packed_qwen`.
+- Checked worker_2 local repo read-only: it is at `c46b9165a037e4d7f387ec7597a769ef5017088d` with only uncommitted worker status/history updates remaining.
+- Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, noting the newer `c46b916` branch state, no PR, verified HotpotQA/M1 evidence, Xenna packing blocker, and requiring worker_2 PR/official closeout before treating code/test changes as reviewable.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness FT-vs-base comparison, promotion, or 30B/8-GPU clearance exists.

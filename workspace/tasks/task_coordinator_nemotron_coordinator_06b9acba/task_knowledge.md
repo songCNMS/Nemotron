@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Knowledge Entries
 
@@ -40,3 +40,6 @@
 34. Session 24 current-state supersedes entry 33 for local artifacts: task251 output files now exist locally, including a HotpotQA standard cache from `hotpotqa/hotpot_qa` distractor revision `1908d6afbbead072334abe2965f91bd2709910ab`, but the worker branch is still unpushed at `a5d48c3` with no PR or official worker report.
 35. Observed task251 local cache checksums: train 100 rows sha256 `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`, validation 25 rows sha256 `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`, registry override sha256 `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`.
 36. Local task251 probes show HotpotQA 100/25 generation succeeded, while the full M0 agentic probe records an unrelated `m0_swe_patch_lite` shortfall of 100/23 versus requested 100/25; this does not lift the Qwen AIME `NO-GO/HOLD`.
+37. task251 worker branch advanced to `c46b9165a037e4d7f387ec7597a769ef5017088d` with pushed code/test/report changes and disposition `HOTPOTQA_UNBLOCKED__PACKING_ENV_BLOCKED`, but no PR is visible yet.
+38. task251 M1 local prep evidence: 1100 train rows, 273 val shadow rows, 0 errors, task246 heldout decontam corpus size 560 with blocker findings 0 and dropped rows 0, and `agentic_sft_v0_math_heldout_eval.jsonl` remains 0 rows.
+39. Current task251 continuation blocker is Qwen packing environment dependency `ModuleNotFoundError: No module named 'cosmos_xenna'`; no `packed_qwen` shards, checkpoint/export/live FT eval artifacts, task243 comparison, promotion, or 30B/8-GPU clearance exists.

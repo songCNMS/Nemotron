@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 24 |
-| Last Update | 2026-06-01T19:07:19Z - Verified task251 remote branch still at a5d48c3/no PR while new local HotpotQA cache and M0 probe artifacts appeared unreported; Qwen AIME gate remains NO-GO/HOLD. |
+| Session | 25 |
+| Last Update | 2026-06-01T19:14:35Z - Verified task251 evidence branch advanced to c46b916 with HotpotQA unblock report but no PR; Qwen packing is blocked on missing cosmos_xenna and gate remains NO-GO/HOLD. |
