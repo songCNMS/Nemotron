@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0 - Assigned
 
@@ -202,3 +202,17 @@
   blocked.
 - Did not run training, live eval, endpoint serving, NemTron sync,
   30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 15 - Lead-approved closeout and self-merge
+
+- Verified lead gate APPROVE for #324 as the live artifact/runbook closeout.
+- Confirmed the combined first Qwen3-4B V10 gate remains NO-GO/HOLD because
+  task248 candidate prep/train/eval artifacts, task243 base-vs-FT comparison
+  output, and explicit 30B/8-GPU permission remain missing.
+- Prepared closeout metadata on the worker branch: task README marked
+  Completed, worker status set to Idle, and task knowledge advanced to
+  Session 15.
+- Preserved `live_runbook_artifact_report.md` unchanged from the approved
+  live runbook content.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, direct `main` push, or shared-storage deletion.

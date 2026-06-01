@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -63,3 +63,6 @@
     `39fe428b531fbbbfcef18a34b58cf56b8406d779`, described by lead as a
     status-only HOLD head. The live artifact table was not edited in this
     session because worker_4 owns the drift decision.
+18. Session 15 closeout: lead approved #324 as the live artifact/runbook
+    closeout; the task may be self-merged while CLEAN, but the combined first
+    Qwen3-4B V10 gate remains NO-GO/HOLD.
