@@ -65,4 +65,5 @@ Implement the data-prep side of a decontaminated V10 AIME-style hard-math sideca
 - Implemented separate `hard_math_runlength_dp_v10` data-prep strategy.
 - Added focused V10 sidecar, signal-count, and decontamination tests.
 - Added `v10_sidecar_data_report.md` with filter details, synthetic counts, checks, contamination status, and residual risk.
+- PR: https://github.com/songCNMS/Nemotron/pull/320
 - Status: ready for PR review; no 30B training run performed; AIME25 remains heldout/decontamination-only.

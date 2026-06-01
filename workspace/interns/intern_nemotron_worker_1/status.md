@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task241_qwen_aime_v10_sidecar_data_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/320 |
 | Session | 2 |
-| Progress | Implemented V10 run-length DP sidecar/data refactor with focused tests and task report; PR creation pending. |
+| Progress | Implemented V10 run-length DP sidecar/data refactor with focused tests and task report; PR #320 opened for lead/test audit. |

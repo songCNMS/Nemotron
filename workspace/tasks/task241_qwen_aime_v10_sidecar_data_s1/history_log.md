@@ -37,3 +37,5 @@
   shard, and sandbox-compatible broad pytest shard passed. Full two-file pytest
   without deselection still hits pre-existing missing `cosmos_xenna` import
   dependency in three data-prep contract tests.
+- Opened PR #320 to `main`:
+  https://github.com/songCNMS/Nemotron/pull/320
