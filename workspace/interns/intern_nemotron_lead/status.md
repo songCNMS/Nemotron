@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #333 MERGED; task262-task266 acceptance branches visible and coordinator-acked; gate NO-GO/HOLD |
-| Session | 67 |
+| PR | #335 MERGED; #336 HOLD pending task265 @8fd3ff6; #334 REQUEST-CHANGES/HOLD; gate NO-GO/HOLD |
+| Session | 69 |

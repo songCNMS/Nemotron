@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=69 -->
 
 ## Session 0 - Created with team lead
 
@@ -3351,6 +3351,204 @@
 - Lead rechecked local mailbox before this update; unread count was `0`.
 - Lead rechecked remote V11 branch list and confirmed all five task262-task266
   acceptance branches remain visible at the same heads.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
+  training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 68 - 2026-06-01 UTC - task266 stale runbook gate and task264 review dispatch
+
+- Received coordinator update after Session 66 noting all five V11 branches were
+  visible at the earlier heads, no task262-task266 PRs were coordinator-visible
+  at that time, and local worker_3/worker_5 status suggested report completion
+  but no lead-processed formal gate evidence yet.
+- During final mailbox polling, received and marked read worker_5 task266
+  closeout mailbox `bbea938f15ae409093aaaf488dc5c65b`.
+- Worker_5 reported task266 branch
+  `intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1` at
+  `f8eff53f26340cc3c812ae0ca190a48214e89942`, PR #334
+  `OPEN`/base `main`/`CLEAN`, and runbook report sha256
+  `67e3f70389759cb33b4cedd319144c52e4ad5130134bad67cb36ba9f188920f5`.
+- Lead verified #334 PR metadata: `OPEN`, base `main`, `CLEAN`, non-draft,
+  exact head `f8eff53f26340cc3c812ae0ca190a48214e89942`; #334 has no GitHub
+  checks reported.
+- Lead checked #334 diff scope: worker_5 status plus task266
+  README/history/task_knowledge/`v11_runbook_repro_gate_report.md` only;
+  `git diff --check origin/main...origin/intern_nemotron_worker_5/task266...`
+  passed.
+- Fetched origin and observed task264 advanced to
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`; PR #335 is now
+  `OPEN`/base `main`/`CLEAN` with substantive eval gate code/config/canary
+  prompts/tests/report changes.
+- Received and marked read worker_3 task264 official closeout mailbox
+  `6520d9a36a0b44e7b9c458afaf8ef8c5`.
+- Worker_3 reported #335 at exact head
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`, with canary prompt set sha256
+  `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`,
+  gate YAML sha256 `84eb36c62622aa8c6f83e65608f066492881f996c13eece4ba7b73b92733ae96`,
+  gate module sha256 `b84c8c87578b624675e19f6cb97eaf3f927c95ed51988c0372822f71606e67eb`,
+  and test file sha256 `3b1775434ec8acf9adc3f62d83dd22e2b57d30cd85f6fe4f9b732081b546fccd`.
+- Worker_3 reported checks: `git diff --check` passed, `python3 -m py_compile`
+  passed, and `PYTHONPATH=src pytest -q
+  tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py` passed 13 tests;
+  lead did not run these tests.
+- Lead verified #335 metadata and diff scope, and `git diff --check` passed;
+  #335 has no GitHub checks reported.
+- Lead decision for #334: `REQUEST-CHANGES/HOLD` because its runbook matrix is
+  stale against current visible state. It says task263 has no remote branch and
+  task264 has no PR/report, while current state has task263 branch
+  `4af57e0e61703a063c1ef42def44119a7eea5cf9` and task264 PR #335 at
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`.
+- Posted #334 request-changes comment:
+  `https://github.com/songCNMS/Nemotron/pull/334#issuecomment-4597112407`.
+- Sent delivered peer_send to worker_5 requesting a task266/#334 refresh against
+  current task263 and task264/#335 heads and preserving `NO-GO/HOLD`.
+- Sent delivered peer_send to worker_4 assigning task265 review of #335 exact
+  head `9d9285fd77820a5187440fbc2234dc36eb56942d`.
+- Sent delivered coordinator update with #334 `REQUEST-CHANGES/HOLD`, #335
+  pending task265 review, and unchanged global gate.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
+  training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 69 - 2026-06-01 UTC - task262 head drift and V11 PR hold updates
+
+- Received coordinator Session 37/38 acks: #334 remains `OPEN`/base `main`/
+  `CLEAN` at `f8eff53f26340cc3c812ae0ca190a48214e89942` with lead
+  `REQUEST-CHANGES/HOLD`; #335 remains `OPEN`/base `main`/`CLEAN` at
+  `9d9285fd77820a5187440fbc2234dc36eb56942d` pending task265 review; #336 is
+  `OPEN`/base `main`/`CLEAN` with no checks and no lead approval.
+- Read lead mailbox before sending any worker messages; unread count was `0`.
+- Fetched origin and observed task262/#336 had advanced beyond the coordinator
+  `824ffc3d3914537e24ad9b1a8ebf303beb881198` snapshot to current head
+  `1a440c155a3049ece488483c1ce99ff4c89a3eb8`.
+- Verified task262 head drift from the first visible PR head
+  `0f825b9357a2a8f7814f693ea4c27027c5fbdd31` to current `1a440c1` is limited
+  to worker_1 status plus task262 README/history/task_knowledge metadata; the
+  task262 `v11_data_split_sidecar_report.md` checksum remains
+  `92414210afde0f76ea7058de205a8c17887928c2114ec93c00cf3402d3dacf43`.
+- Read the task262 report evidence: task253 train split intended 15 shards /
+  113 rows but exposed 8 shards / 79 rows, missing 7 intended train shards
+  including hard-math sidecar shards; V11 must repack or rematerialize with the
+  collision-safe split logic before any training.
+- Verified current GitHub PR metadata:
+  - #334 `OPEN`, base `main`, `CLEAN`, head `f8eff53f26340cc3c812ae0ca190a48214e89942`, no checks reported;
+  - #335 `OPEN`, base `main`, `CLEAN`, head `9d9285fd77820a5187440fbc2234dc36eb56942d`, no checks reported;
+  - #336 `OPEN`, base `main`, `CLEAN`, head `1a440c155a3049ece488483c1ce99ff4c89a3eb8`, no checks reported.
+- Ran lead-side diff hygiene only: `git diff --check` passed for #334/#335/#336
+  PR-style diffs against `origin/main`; no implementation tests/evals/training
+  were run by lead.
+- Sent delivered peer_send to worker_1 requesting an official task262/#336
+  closeout mailbox for exact head `1a440c155a3049ece488483c1ce99ff4c89a3eb8`
+  and reiterating no self-merge.
+- Sent delivered peer_send to worker_4 updating task265 review to exact heads
+  #335 `9d9285fd77820a5187440fbc2234dc36eb56942d` and #336
+  `1a440c155a3049ece488483c1ce99ff4c89a3eb8`, with #336 closeout still a gate
+  caveat if not received.
+- Sent delivered peer_send to worker_5 requesting task266/#334 refresh against
+  current task263 `4af57e0e61703a063c1ef42def44119a7eea5cf9`, #335
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`, and #336
+  `1a440c155a3049ece488483c1ce99ff4c89a3eb8`.
+- Posted visible PR HOLD comments:
+  - #335 `https://github.com/songCNMS/Nemotron/pull/335#issuecomment-4597151423`
+  - #336 `https://github.com/songCNMS/Nemotron/pull/336#issuecomment-4597151377`
+- Received and marked read worker_4 task265 matrix mailbox
+  `14d090ee45e444d3a797b998d4b50219`. Worker_4 disposition:
+  #335 `APPROVE` static eval-gate/canary artifact for exact head
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`; #336
+  `REQUEST_CHANGES/HOLD` for exact current head because final-answer rows did
+  not receive a fresh full n-gram contamination scan; task263 remains
+  `BLOCK/HOLD` pending Bridge/base-load proof in NemTron/NeMo or exact blocker.
+- Received and marked read worker_1 task262/#336 closeout mailboxes
+  `7f91a4b5154042429ac84a8e3dbeb5fd` and
+  `adcbeda5b09d457b949aa51c89747d91`. Worker_1 confirmed #336 exact head
+  `1a440c155a3049ece488483c1ce99ff4c89a3eb8`, current PR
+  `OPEN`/base `main`/`CLEAN`, checks reported as py_compile pass, focused
+  pytest 26 passed, `git diff --check` pass, and no self-merge; residual risk
+  remains the missing fresh n-gram scanner for final-answer rows.
+- Attempted GitHub formal reviews for #335 approve and #336 request-changes, but
+  GitHub rejected both with `Review Can not approve/request changes on your own
+  pull request`. Lead therefore recorded the gate decisions through PR comments.
+- Posted #335 lead approve comment:
+  `https://github.com/songCNMS/Nemotron/pull/335#issuecomment-4597165238`.
+- Posted #336 lead request-changes/HOLD comment:
+  `https://github.com/songCNMS/Nemotron/pull/336#issuecomment-4597165259`.
+- Sent delivered peer_send to worker_3 releasing #335 self-merge only if it
+  remains `OPEN`/base `main`/`CLEAN` at exact head
+  `9d9285fd77820a5187440fbc2234dc36eb56942d` at merge time.
+- Sent delivered peer_send to worker_1 instructing #336 request-changes: add
+  fresh full n-gram contamination evidence for final-answer rows or report an
+  exact blocker, with commands/env, artifact paths/checksums, row counts, and
+  unchanged no-training/no-eval/no-AIME25-train boundaries.
+- Rechecked mailbox after the gate messages; unread count was `0`.
+- Rechecked #335 after the self-merge release; it was still `OPEN`/base `main`/
+  `CLEAN` at `9d9285fd77820a5187440fbc2234dc36eb56942d` and not yet merged.
+- Received and marked read worker_3 task264/#335 merge closeout mailbox
+  `b194d809376345f795084ae6fc975b1d`: worker_3 verified the pre-merge
+  condition and self-merged #335 at `2026-06-01T23:00:37Z` with merge commit
+  `98e8aad39af9e705feed581e0ff9f8814073e2d8` from approved head
+  `9d9285fd77820a5187440fbc2234dc36eb56942d`.
+- Fetched origin after #335 merge; `origin/main` is now
+  `98e8aad39af9e705feed581e0ff9f8814073e2d8`.
+- Received and marked read worker_4 refreshed task265 matrix mailbox
+  `7e718a2c0ea746ed81352db5b5b6fe57`. Worker_4 confirmed #335 merge approval
+  evidence and updated #336 review: the PR moved from `1a440c1` to
+  `69f32c60d60bd529397915aa5d1bff30de457068`, but that drift is metadata-only
+  and #336 remains `REQUEST_CHANGES/HOLD` for missing fresh full n-gram
+  contamination scan on final-answer rows.
+- Verified #336 current PR metadata after fetch: `OPEN`, base `main`, `CLEAN`,
+  exact head `69f32c60d60bd529397915aa5d1bff30de457068`; #334 remains
+  `OPEN`, base `main`, `CLEAN`, exact head
+  `f8eff53f26340cc3c812ae0ca190a48214e89942`.
+- Verified #336 drift from `1a440c155a3049ece488483c1ce99ff4c89a3eb8` to
+  `69f32c60d60bd529397915aa5d1bff30de457068` is limited to worker_1 status and
+  task262 history/task_knowledge metadata. Product code, tests, task report, and
+  artifacts remain unchanged after the reviewed head.
+- Posted #336 current-head request-changes/HOLD update:
+  `https://github.com/songCNMS/Nemotron/pull/336#issuecomment-4597196984`.
+- Posted #334 current runbook refresh/HOLD update:
+  `https://github.com/songCNMS/Nemotron/pull/334#issuecomment-4597196986`.
+- Sent delivered peer_send to worker_1 extending the #336
+  `REQUEST-CHANGES/HOLD` instruction to current head
+  `69f32c60d60bd529397915aa5d1bff30de457068`.
+- Sent delivered peer_send to worker_5 updating task266/#334 refresh context:
+  #335 is merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`, #336 is
+  `REQUEST-CHANGES/HOLD` at `69f32c60d60bd529397915aa5d1bff30de457068`, and
+  task263 remains `BLOCK/HOLD` pending NemTron/NeMo Bridge/base-load proof or
+  exact blocker.
+- Received and marked read worker_1 task262 request-changes response mailbox
+  `52ba00b8a4e04f42aa99f538dfd3142b`. Worker_1 pushed #336 to
+  `5e431f4939799ae52c7d2002682352f2f2df6f3b` with task-local final-answer
+  n-gram decontam scanner evidence, then sent a second current-head closeout
+  mailbox `cd7d14df599a4eedacb54cc7332f1437` after metadata-only reconciliation
+  to current head `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Worker_1 reported fresh scan evidence: 200 final-answer rows x 560 heldout
+  prompts = 112000 pair comparisons; overlap pairs 4; informational pairs
+  score >= 0.25: 1; blocker pairs score >= 0.5: 0; rows with blocker overlap
+  0; max score 0.257143; exact task246-style prompt-hash overlap final-answer
+  vs heldout = 0.
+- Fetched origin and verified #336 current PR metadata:
+  `OPEN`/base `main`/`CLEAN` at
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`. The drift from evidence head
+  `5e431f4939799ae52c7d2002682352f2f2df6f3b` to `8fd3ff6` is limited to
+  worker_1 status and task262 history/task_knowledge metadata.
+- Ran lead-side diff hygiene only for current #336 against `origin/main`;
+  `git diff --check` passed. Lead did not run implementation tests/evals/training.
+- Posted #336 current-head HOLD pending task265 review comment:
+  `https://github.com/songCNMS/Nemotron/pull/336#issuecomment-4597216926`.
+- Posted #334 runbook refresh update for current #336 head:
+  `https://github.com/songCNMS/Nemotron/pull/334#issuecomment-4597218536`.
+- Sent delivered peer_send to worker_4 requesting task265 independent review of
+  #336 exact current head `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Sent delivered peer_send to worker_5 updating task266/#334 runbook refresh
+  context to #336 exact current head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Current lead disposition: #335 is `MERGED`; #334 remains
+  `REQUEST-CHANGES/HOLD` pending runbook refresh; #336 is `HOLD` pending
+  task265 independent review of current head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`; task263 remains `BLOCK/HOLD`
+  pending Bridge/base-load proof or exact blocker.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full

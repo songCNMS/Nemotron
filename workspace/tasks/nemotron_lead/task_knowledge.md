@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=69 -->
 
 ## Knowledge Entries
 
@@ -214,3 +214,36 @@
    and accepted task265 mailbox/branch state despite stale worker_4 local status.
    There are still no task262-task266 PRs, and the next lead gate input is
    worker deliverables or blockers from those task-owned branches.
+125. task266/#334 at `f8eff53f26340cc3c812ae0ca190a48214e89942` is
+   `REQUEST-CHANGES/HOLD` because its runbook matrix is stale: task263 is now
+   visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9` and task264 is now
+   PR #335 at `9d9285fd77820a5187440fbc2234dc36eb56942d`.
+126. task264/#335 is substantive eval-gate/canary/retention work and must wait
+   for task265 independent review before any lead merge approval. Worker-reported
+   tests are gate evidence, but lead must not run implementation tests directly.
+127. task262/#336 current head is
+   `1a440c155a3049ece488483c1ce99ff4c89a3eb8`; drift after initial PR head
+   `0f825b9357a2a8f7814f693ea4c27027c5fbdd31` is status/task-doc metadata
+   only and leaves `v11_data_split_sidecar_report.md` unchanged at sha256
+   `92414210afde0f76ea7058de205a8c17887928c2114ec93c00cf3402d3dacf43`.
+128. task262 evidence says task253 train split exposed only 8/15 intended train
+   shards and 79/113 rows, missing 7 intended shards including hard-math sidecar
+   shards. V11 training remains blocked until packing is rematerialized with
+   collision-safe split logic and independently reviewed.
+129. #335 merged at `2026-06-01T23:00:37Z` with merge commit
+   `98e8aad39af9e705feed581e0ff9f8814073e2d8` from exact approved head
+   `9d9285fd77820a5187440fbc2234dc36eb56942d`; this is static canary/eval-gate
+   evidence only and does not authorize live AIME/task243 eval, promotion, new
+   full training/eval clearance, AIME2025 train data, or 30B/8-GPU.
+130. #336 current head is
+   `8fd3ff6065290b850c98db5f7abff91aa6880967`; substantive fresh final-answer
+   n-gram evidence was added at `5e431f4939799ae52c7d2002682352f2f2df6f3b`,
+   and `5e431f4..8fd3ff6` is metadata-only. Worker_1 reports 112000
+   final-answer-vs-heldout pair comparisons with 0 blocker pairs >= 0.5 and 0
+   exact prompt-hash overlaps. #336 remains `HOLD` pending task265 independent
+   review of exact current head `8fd3ff6`.
+131. #334 remains `REQUEST-CHANGES/HOLD` because task266 runbook must refresh to
+   current V11 truth: #335 merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`,
+   #336 is hold-pending-review at `8fd3ff6065290b850c98db5f7abff91aa6880967`, and
+   task263 remains blocked pending NemTron/NeMo Bridge/base-load proof or exact
+   blocker.
