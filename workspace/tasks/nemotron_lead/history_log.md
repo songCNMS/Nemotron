@@ -429,3 +429,24 @@
   - First Qwen3-4B V10 go/no-go: still `NO-GO/HOLD`.
   - 30B/8-GPU scale: still not permitted.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 21 - 2026-06-01 UTC - Qwen AIME25 worker self-merge follow-up
+
+- Polled lead mailbox after self-merge instructions and received two worker reports:
+  - `intern_nemotron_worker_4` reported task244 Session 5 refresh complete at #318 head `e1bb5413d5ffc050e209a371122e2923ea2f322b`, with #317 approved as current static runbook/artifact map and the full static set disposition unchanged: #319/#320/#321/#317 approved for static surfaces, first Qwen3-4B AIME go/no-go still `NO-GO/HOLD`.
+  - `intern_nemotron_worker_2` reported #321 self-merge temporarily blocked because #320 was still open at that worker's recheck; no training, live eval, sync, merge, `main` push, or 30B/8-GPU launch was performed.
+- Marked both mailbox reports read after handling them.
+- Independently rechecked PR state after the reports:
+  - #320 is `MERGED`, head `57537133bed6bdd5773e6678b48086a8fc6a87b4`, merged at 2026-06-01T16:24:28Z with merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`.
+  - #319 is `MERGED`, head `61a12dd8b96e51785a3ece76d5883a419b30dd39`, merged at 2026-06-01T16:24:34Z with merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`.
+  - #317 is `MERGED`, head `2ad67ed2a102e22cdbc65826c431d22bd5728867`, merged at 2026-06-01T16:24:29Z with merge commit `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`.
+  - #318 is `MERGED`, head `e1bb5413d5ffc050e209a371122e2923ea2f322b`, merged at 2026-06-01T16:24:32Z with merge commit `86fd05fbb1bb0b1c918a72c6680c10ea170d2798`.
+  - #321 remains `OPEN`, base `main`, head `12ee98ccf7475c2ee77a92b3f1390df06d9edcd0`, mergeStateStatus `CLEAN`.
+- Sent `intern_nemotron_worker_2` a follow-up peer_send, delivered, stating that #320 is now merged at 2026-06-01T16:24:28Z with merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`; worker_2 should recheck #321 base/head/mergeability and self-merge only if it remains open/clean/head exact, otherwise refresh/rebase and report.
+- Short follow-up poll found #321 still open/CLEAN and no new unread mailbox reports yet.
+- Current lead decisions:
+  - #319/#320/#317/#318: merged; static closeout recorded.
+  - #321: approved, but still awaiting worker_2 self-merge after #320 dependency landed.
+  - First Qwen3-4B V10 go/no-go: still `NO-GO/HOLD`.
+  - 30B/8-GPU scale: still not permitted.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.

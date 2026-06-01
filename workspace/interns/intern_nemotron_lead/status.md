@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 static gate approved by lead comments; #317/#318/#319/#320/#321 awaiting worker self-merge reports |
-| Session | 20 |
+| PR | Qwen AIME25 static set partially merged; #317/#318/#319/#320 merged, #321 open/CLEAN awaiting worker_2 self-merge |
+| Session | 21 |

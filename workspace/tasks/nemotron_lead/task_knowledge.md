@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Knowledge Entries
 
@@ -30,3 +30,4 @@
 24. The GitHub identity available to the lead workspace may be unable to submit formal `APPROVE` reviews on worker PRs (`Review Can not approve your own pull request`); in that case, record lead gate decisions as durable PR comments and peer_send instructions, then wait for worker self-merge reports.
 25. For the Qwen AIME25 V10 static PR set, merge sequencing should keep #320 before #321 because the planner's runnable V10 path depends on the data-prep strategy landing on `main`; #319 is independent, while #317/#318 are static runbook/review artifacts.
 26. Lead approval of #319/#320/#321/#317/#318 does not change the first measurable gate: Qwen3-4B AIME go/no-go remains NO-GO/HOLD until a real heldout decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, same-harness base artifacts, candidate FT checkpoint/export/eval, and explicit 30B permission exist.
+27. If worker_2 reports #321 blocked only because #320 is still open, and #320 merges immediately afterward, send a follow-up with the #320 merge commit and require worker_2 to recheck #321 head/mergeability before self-merge.
