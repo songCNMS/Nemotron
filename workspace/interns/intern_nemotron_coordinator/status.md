@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 25 |
-| Last Update | 2026-06-01T19:14:35Z - Verified task251 evidence branch advanced to c46b916 with HotpotQA unblock report but no PR; Qwen packing is blocked on missing cosmos_xenna and gate remains NO-GO/HOLD. |
+| Session | 26 |
+| Last Update | 2026-06-01T19:22:03Z - Verified #328 is OPEN/CLEAN at 694197c and task252 review is assigned to worker_4; #328 not approved and Qwen AIME gate remains NO-GO/HOLD. |

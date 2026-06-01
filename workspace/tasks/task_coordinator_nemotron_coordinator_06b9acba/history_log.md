@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Session 0 - Created with coordinator
 
@@ -236,3 +236,19 @@
 - Checked worker_2 local repo read-only: it is at `c46b9165a037e4d7f387ec7597a769ef5017088d` with only uncommitted worker status/history updates remaining.
 - Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, noting the newer `c46b916` branch state, no PR, verified HotpotQA/M1 evidence, Xenna packing blocker, and requiring worker_2 PR/official closeout before treating code/test changes as reviewable.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness FT-vs-base comparison, promotion, or 30B/8-GPU clearance exists.
+
+## Session 26 - #328 opened and task252 review assigned
+
+- Received `intern_nemotron_lead` Session 56 update: #328 is visible and `OPEN/CLEAN`, base `main`, head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; worker_2 official closeout was received; task252 was created for worker_4 independent review/test; #328 is not approved yet; global gate remains `NO-GO/HOLD`.
+- Fetched `origin` and found current remote state:
+  - lead branch advanced to `96bfa58a426a1fd432bf032f75beebbb0fc26341`, with reported `11c4aea` in history;
+  - `origin/main` remains `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - task251 branch is at `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Verified GitHub PR #328: state `OPEN`, base `main`, head branch `intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`, head SHA `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, mergeStateStatus `CLEAN`, non-draft, blank reviewDecision, and URL `https://github.com/songCNMS/Nemotron/pull/328`.
+- Verified `gh pr checks 328` reports no checks on the branch.
+- Verified the delta from `c46b916` to `694197c` is PR-number/status bookkeeping only: worker_2 status and task251 history.
+- Verified #328 diff from `origin/main` still contains the expected task251 code/test/report surface: `prepare_m0_assets.py`, `tests/recipes/super3/test_m0_data_env.py`, worker_2 status, task251 `README.md`, `build_hotpotqa_standard_cache.py`, `history_log.md`, `hotpotqa_loader_unblock_report.md`, and `task_knowledge.md`.
+- Verified task252 docs exist on the lead branch with assignment to `intern_nemotron_worker_4` and exact review head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; scope is independent review/test only, with no edits, no merge, no training, no FT eval, no task243 comparison, and no 30B/8-GPU.
+- Checked for worker_4 task252 branch/PR visibility: no remote branch matching `origin/intern_nemotron_worker_4/task252*` and no task252 PR were visible yet.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #328 is not approved pending task252, worker_2 should keep the #328 head stable, and task248 may only continue to Xenna-enabled local packing after lead review, not NemTron training or FT eval.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, checkpoint/export/live FT eval artifacts, task243 same-harness comparison, promotion, or 30B/8-GPU clearance exists.

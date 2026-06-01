@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Knowledge Entries
 
@@ -43,3 +43,6 @@
 37. task251 worker branch advanced to `c46b9165a037e4d7f387ec7597a769ef5017088d` with pushed code/test/report changes and disposition `HOTPOTQA_UNBLOCKED__PACKING_ENV_BLOCKED`, but no PR is visible yet.
 38. task251 M1 local prep evidence: 1100 train rows, 273 val shadow rows, 0 errors, task246 heldout decontam corpus size 560 with blocker findings 0 and dropped rows 0, and `agentic_sft_v0_math_heldout_eval.jsonl` remains 0 rows.
 39. Current task251 continuation blocker is Qwen packing environment dependency `ModuleNotFoundError: No module named 'cosmos_xenna'`; no `packed_qwen` shards, checkpoint/export/live FT eval artifacts, task243 comparison, promotion, or 30B/8-GPU clearance exists.
+40. PR #328 is open and clean at head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; the `c46b916` to `694197c` delta is PR-number/status bookkeeping only.
+41. task252 assigns worker_4 to independently review/test #328 at exact head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`; #328 is not approved until that report is reviewed.
+42. GitHub reports no CI checks for #328, so review evidence must come from worker_4 task252 commands/results and lead gate review.
