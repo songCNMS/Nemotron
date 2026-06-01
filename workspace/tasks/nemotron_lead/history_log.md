@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Created with team lead
 
@@ -36,4 +36,19 @@
   - #314 is worker-owned docs/status-only coverage matrix, open and clean.
   - #315 is worker-owned docs/status-only task231 HOLD closeout, open and clean.
   - #316 is worker-owned docs/status-only task217 PM-review recovery, open and clean, but its base is `intern_nemotron_lead/session1-recovery-task-docs`; after #313 lands it should be retargeted or rebased to `main` before final merge.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 3 - 2026-06-01 UTC - PR sequencing gate hold
+
+- Read lead mailbox before coordination; no unread worker or coordinator messages were pending.
+- Rechecked PR gate state after coordinator instruction not to self-merge #313:
+  - #313 remains open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs`, merge state `CLEAN`, no human approval/merge recorded; only Copilot review comments are present.
+  - #314 remains open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1`, merge state `CLEAN`.
+  - #315 remains open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1`, merge state `CLEAN`.
+  - #316 remains open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1`, merge state `CLEAN`; it still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
+- Maintained lead gate decisions:
+  - task231/task228 stays `blocked/HOLD`; #315 is pending and no new implementation task is created.
+  - task217 stays approved for close as a no-launch root-cause diagnosis; #316 is pending base correction before final merge.
+  - task203/task206/task209 stay `covered/no recovery`; #314 is pending after #313 approval/merge.
+- Did not instruct workers to merge #314/#315/#316 because #313 has not yet received the required non-author lead approval/merge.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
