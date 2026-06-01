@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Created with team lead
 
@@ -51,4 +51,17 @@
   - task217 stays approved for close as a no-launch root-cause diagnosis; #316 is pending base correction before final merge.
   - task203/task206/task209 stay `covered/no recovery`; #314 is pending after #313 approval/merge.
 - Did not instruct workers to merge #314/#315/#316 because #313 has not yet received the required non-author lead approval/merge.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 4 - 2026-06-01 UTC - Continued hold after coordinator confirmation
+
+- Read lead mailbox and found no unread messages before further gate monitoring.
+- Rechecked PR state after coordinator confirmed the same hold condition:
+  - #313 remains open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `43293a6`, merge state `CLEAN`, no `reviewDecision`, and no merge recorded.
+  - #314 remains open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
+  - #315 remains open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
+  - #316 remains open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
+- Kept the coordinator-directed hold: do not instruct workers to merge #314/#315/#316 before #313 receives non-author/authorized approval and is merged.
+- Maintained the #316 final-merge requirement: retarget/rebase to `main` or follow an explicit post-#313 path before final merge.
+- No worker task disposition changed: task231/task228 stays `blocked/HOLD`; task217 stays approved close with smoke-only residual risk; task203/task206/task209 stay `covered/no recovery`.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
