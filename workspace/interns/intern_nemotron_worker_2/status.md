@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task248_qwen_aime_v10_4b_pilot_prepare_train_s1 |
 | PR | #327 |
-| Session | 10 |
-| Last Update | 2026-06-01T18:36:30Z: Classified task248 as PARTIAL_PREP_BLOCKED after HotpotQA/datasets loader blocker; PR #327 carries report/status docs only and outputs are not ready for task243 comparison. |
+| Session | 11 |
+| Last Update | 2026-06-01T18:38:36Z: Recorded lead approval for stale #327 head f1efd1c and current clean head efb243f mismatch; did not self-merge and reported refreshed head for approval. |

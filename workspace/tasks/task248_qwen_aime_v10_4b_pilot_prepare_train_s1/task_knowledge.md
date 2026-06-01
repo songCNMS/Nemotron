@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -75,3 +75,7 @@
     standard-format HotpotQA cache/registry override from the pinned revision
     so `prepare_m0_assets.py` does not depend on unsupported
     `trust_remote_code` execution for `hotpotqa/hotpot_qa`.
+23. Session 11 merge-gate fact: lead approval referenced #327 head
+    `f1efd1cf7bde528973158f2707d8e29ebdd1bc0b`, but the PR had advanced to
+    `efb243fac79fb52b520518ddf15ba1d65359a4b0`; do not self-merge until lead
+    confirms the current head or the gate is otherwise refreshed.

@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0 - Assigned
 
@@ -102,3 +102,11 @@
 - Recorded exact blocker: Hugging Face `datasets` reports `trust_remote_code` is not supported anymore for `hotpotqa/hotpot_qa`, so the task248 M0 data-source/config path needs a workaround before local prep can complete.
 - Proposed smallest worker-owned workaround: keep Qwen3-4B scope and task248-owned outputs, create or use a task-owned standard-format HotpotQA cache/registry override from the pinned HotpotQA revision, then rerun the same task248 local prep command without changing task246 AIME heldout usage or any shared files.
 - Did not run NemTron sync, training, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU.
+
+## Session 11 - 2026-06-01 UTC - Approval head mismatch, no self-merge
+
+- Lead approved #327 as a Qwen3-4B V10 pilot prep artifact/blocker report, not as a go/no-go pass, and authorized self-merge if still clean at the approved head `f1efd1cf7bde528973158f2707d8e29ebdd1bc0b`.
+- Local/remote PR state had already advanced to head `efb243fac79fb52b520518ddf15ba1d65359a4b0` after the Session 10 focused `PARTIAL_PREP_BLOCKED` classification update.
+- Read-only GitHub check showed #327 is still `OPEN`/`CLEAN`, base `main`, head `efb243fac79fb52b520518ddf15ba1d65359a4b0`, with no merge commit.
+- Did not self-merge because the currently visible PR head differs from the exact head lead reported approving.
+- No training, NemTron sync, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU action was run.
