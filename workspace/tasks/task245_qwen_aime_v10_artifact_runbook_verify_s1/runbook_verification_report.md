@@ -1,6 +1,6 @@
 # task245 Runbook Verification Report
 
-<!-- METADATA:STATUS=BlockedForGate,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
+<!-- METADATA:STATUS=BlockedForGate,ASSIGNEE=intern_nemotron_worker_5,SESSION=3 -->
 
 ## Summary
 
@@ -9,24 +9,28 @@ is verification documentation only: no training, live eval, endpoint serving,
 30B/8-GPU scale, shared-file deletion, merge, or `main` push was performed.
 
 Current gate verdict: **BLOCKED for first Qwen3-4B AIME go/no-go readiness**.
-Resolved since the prior report: task241 PR #320 is open/CLEAN at `5753713`
-with V10 data-prep code/report present, and task243 PR #319 is open/CLEAN at
-`61a12dd` with the Qwen3-4B AIME gate configured to the verified cephfs base
-path. The gate remains blocked only on the current blockers listed below:
-task242 has no published PR, the corrected AIME input/cache is missing, no
-reachable Qwen3-4B endpoint exists, no base score artifacts exist, no candidate
-FT checkpoint/export/eval exists, and 30B scale has no permission.
+Resolved since the prior report:
+
+- task241 PR #320 is open/CLEAN at `5753713` with V10 data-prep code/report.
+- task242 PR #321 is open/CLEAN at `12ee98c` with the Qwen3-4B V10
+  planner/smoke report and task-owned bundle paths.
+- task243 PR #319 is open/CLEAN at `61a12dd` with the Qwen3-4B AIME gate
+  configured to the verified cephfs base path.
+
+The gate remains blocked on real evidence inputs and runtime artifacts: real
+heldout decontamination corpus/input, corrected AIME input/cache, reachable
+Qwen3-4B endpoint, base score artifacts, candidate FT checkpoint/export/eval,
+and explicit 30B/8-GPU permission.
 
 ## Inputs Inspected
 
 | Input | Status |
 | --- | --- |
-| PR #317 `intern_nemotron_worker_5/task245_qwen_aime_v10_artifact_runbook_verify_s1` | Open/CLEAN; this refresh is based on pre-edit head `ba3c2a1` |
+| PR #317 `intern_nemotron_worker_5/task245_qwen_aime_v10_artifact_runbook_verify_s1` | Open; this refresh is based on pre-edit head `b8d3c98` |
 | task241 PR #320 @ `5753713` | Open/CLEAN; V10 data-prep code/report present, including `hard_math_runlength_dp_v10`, `prepare_m1_agentic_sft.py`, and `v10_sidecar_data_report.md`; no training or live eval run |
-| task242 branch `origin/intern_nemotron_worker_2/task242_qwen_aime_v10_planner_smoke_s1` @ `b2d16a7` | Remote branch contains task/status docs only; no PR found |
-| task242 local worker_2 workspace | Uncommitted V10 planner diff previously observed; used only for non-launch planner-shape probes |
-| task243 PR #319 @ `61a12dd` | Open/CLEAN; gate module/config/report present and Qwen3-4B base path now matches the verified cephfs path |
-| task244 PR #318 @ `e5f4677` | Open/CLEAN; independent review exists but may predate the #319/#320 state refresh |
+| task242 PR #321 @ `12ee98c` | Open/CLEAN; planner support and smoke report present, including `plan_qwen_scaleup_run.py`, `test_m1_agentic_qwen_scaleup_plan.py`, and `planner_report.md`; no training or live eval run |
+| task243 PR #319 @ `61a12dd` | Open/CLEAN; gate module/config/report present and Qwen3-4B base path matches the verified cephfs path |
+| task244 PR #318 @ `e5f4677` | Open/CLEAN; independent review exists but may predate the #321 state refresh |
 | `origin/main` | `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b` |
 
 ## Verified Paths
@@ -38,6 +42,10 @@ FT checkpoint/export/eval exists, and 30B scale has no permission.
 | task243 Qwen3-4B AIME gate base path | `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` | PR #319 head `61a12dd` config points here; matches the verified accessible base path |
 | task241 V10 data-prep code | `origin/pr/320:src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py` | Present in PR #320 with `hard_math_runlength_dp_v10` |
 | task241 V10 data-prep report | `origin/pr/320:workspace/tasks/task241_qwen_aime_v10_sidecar_data_s1/v10_sidecar_data_report.md` | Present in PR #320 |
+| task242 Qwen3-4B V10 planner code | `origin/pr/321:src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py` | Present in PR #321; publishes Qwen3-4B V10 profile, decontamination fail-closed checks, and 30B hold |
+| task242 planner/smoke report | `origin/pr/321:workspace/tasks/task242_qwen_aime_v10_planner_smoke_s1/planner_report.md` | Present in PR #321 |
+| task242 local smoke bundle files | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot` | Files present: `scaleup_manifest.json`, `report.md`, `run_local_data_prep.sh`, `sync_to_nemtron.sh`, `run_nemtron_train.sh`, `run_eval_basket_dry_run.sh`, and placeholder decontam corpus |
+| task242 placeholder decontam corpus | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/aime25_hmmt_math_heldout_decontam_corpus.PLACEHOLDER.jsonl` | Present with one placeholder row; not accepted as real heldout corpus evidence |
 | task243 corrected AIME runner | `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_math_full_eval.py` | Exists in worker_5 and worker_3 worktrees |
 | task243 cited AIME score cache | `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db` | Missing in this workspace |
 | Shared no-delete root | `/mnt/cephfs/data/processing/lei.song` | Exists and was only listed; current listing was empty |
@@ -45,25 +53,27 @@ FT checkpoint/export/eval exists, and 30B scale has no permission.
 ## Expected Artifact Paths
 
 These are the paths task245 expects before the first measurable go/no-go can be
-declared. Task241 data-prep code/report are now published in PR #320. Paths
-under task242 are still derived from the observed local planner shape and remain
-conditional until worker_2 publishes and review-gates the planner PR.
+declared. Task241 data-prep code/report are published in PR #320, and task242
+planner/smoke paths are published in PR #321. The actual run evidence is still
+blocked until real heldout decontamination input replaces the placeholder and
+the Qwen3-4B base/FT AIME artifacts are produced.
 
 | Stage | Expected path | Current status |
 | --- | --- | --- |
-| Local pilot bundle root | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot` | Not present as a published artifact |
-| Local M0 prep | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/m0_agentic` | Missing |
-| Local M1 V10 data | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/m1_agentic_sft` | Missing |
-| Local packed shards | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/packed_qwen/splits` | Missing |
-| Local planner manifest | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/scaleup_manifest.json` | Missing |
-| Local generated scripts | `run_local_data_prep.sh`, `sync_to_nemtron.sh`, `run_nemtron_train.sh`, `run_eval_basket_dry_run.sh` under the pilot bundle root | Missing as published artifacts |
-| NemTron sync root | `/root/task242_qwen_aime_v10_planner_smoke_s1` | Expected task-owned remote root |
+| Local pilot bundle root | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot` | Present in worker_2 output and documented by #321 |
+| Local M0 prep input | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/task241_v10_math_sidecar_m0_PENDING` | Placeholder path only; real task241-derived input still required before prep |
+| Real heldout decontam corpus | A lead/PM-approved AIME25/HMMT/MATH heldout prompt corpus path | Missing; #321 placeholder intentionally fails closed |
+| Local M1 V10 data | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/m1_agentic_sft` | Missing until real data prep runs |
+| Local packed shards | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/packed_qwen/splits` | Missing until packing runs |
+| Local planner manifest | `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/scaleup_manifest.json` | Present in worker_2 output and documented by #321 |
+| Local generated scripts | `run_local_data_prep.sh`, `sync_to_nemtron.sh`, `run_nemtron_train.sh`, `run_eval_basket_dry_run.sh` under the pilot bundle root | Present in worker_2 output and documented by #321; not executed here |
+| NemTron sync root | `/root/task242_qwen_aime_v10_planner_smoke_s1` | Expected task-owned remote root from #321 |
 | NemTron synced repo | `/root/task242_qwen_aime_v10_planner_smoke_s1/Nemotron` | Not verified on NemTron in this task |
-| NemTron run root | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot` | Expected from default output-dir basename |
+| NemTron run root | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot` | Expected from #321 |
 | NemTron packed shards | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot/packed_qwen/splits` | Missing until local prep/sync runs |
 | NemTron train manifest | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot/training_plan/qwen_m1_agentic_sft_scaleup/training_manifest.json` | Missing |
-| Candidate FT checkpoint | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot/checkpoints` | Missing |
-| Candidate FT HF export | Not encoded in the currently observed planner output | BLOCKER: exact export path must be supplied before endpoint serving/eval |
+| Candidate FT checkpoint | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot/checkpoints` | Expected by #321; missing because training was not run |
+| Candidate FT HF export | A documented task-owned export path for the candidate FT checkpoint | Missing; must be supplied before endpoint serving/eval |
 | NemTron train log | `/root/task242_qwen_aime_v10_planner_smoke_s1/task242_qwen_aime_v10_4b_pilot/logs/train.log` | Missing |
 | Base AIME output dir | A lead/PM-approved task243 output directory containing `summary.json`, `results.jsonl`, `command.txt`, `endpoint_model_manifest.json` | Missing |
 | FT AIME output dir | Matching FT output directory containing the same four files | Missing |
@@ -73,13 +83,13 @@ conditional until worker_2 publishes and review-gates the planner PR.
 
 | Step | Required command/protocol condition | Verification result |
 | --- | --- | --- |
-| Local CPU prep | Run from local CPU first; include V10 strategy, Qwen3-4B model/tokenizer, held-out decontamination corpus, Qwen chat template kwargs `enable_thinking=false`, `truncate_history_thinking=false` | PARTIAL: task241 PR #320 publishes V10 data-prep code/report; BLOCKED until task242 publishes planner scripts/manifest and the corrected AIME input/cache is available |
-| Decontamination | V10 must fail closed without `--decontaminate-math-against-corpus`; AIME25/HMMT/MATH prompts are held-out only | REVIEWED: PR #320 implements the V10 decontamination contract; release evidence still requires the exact corrected AIME input/cache and review-gated task242 repro artifacts |
-| 30B hold | V10 30B planning must be held until the Qwen3-4B same-harness AIME gate passes and lead grants scale permission | HELD: no 30B/8-GPU launch was run and no 30B scale permission exists |
-| Sync to NemTron | Sync code and bundle to `/root/...` on NemTron; any cleanup must be restricted to the task-owned `/root/task242_qwen_aime_v10_planner_smoke_s1` tree | CONDITIONAL: task242 has no published PR; previously observed local planner shape restricted cleanup to task-owned `/root` paths and never to shared `/mnt/cephfs/data/processing/lei.song` |
-| Remote train | Qwen3-4B pilot only; no 30B/8-GPU scale; expected `CUDA_VISIBLE_DEVICES=0,1`, `nproc_per_node=2` in the local planner probe | NOT RUN by task boundary |
+| Local CPU prep | Run from local CPU first; include V10 strategy, Qwen3-4B model/tokenizer, real heldout decontamination corpus, Qwen chat template kwargs `enable_thinking=false`, `truncate_history_thinking=false` | PARTIAL: task241 PR #320 and task242 PR #321 publish the code/report surface; BLOCKED until real heldout decontam corpus/input and corrected AIME input/cache are available |
+| Decontamination | V10 must fail closed without `--decontaminate-math-against-corpus`; AIME25/HMMT/MATH prompts are held-out only | REVIEWED: PR #320 implements the V10 contract and PR #321 rejects missing/empty/placeholder corpora; release evidence still requires the real corpus/input |
+| 30B hold | V10 30B planning must be held until the Qwen3-4B same-harness AIME gate passes and lead grants scale permission | HELD: #321 encodes the hold; no 30B/8-GPU launch was run and no 30B permission exists |
+| Sync to NemTron | Sync code and bundle to `/root/...` on NemTron; cleanup must stay inside task-owned `/root/task242_qwen_aime_v10_planner_smoke_s1` paths | REVIEWED: #321 generated sync script refuses non-`/root/*` V10 remote roots and documents that it does not delete `/mnt/cephfs/data/processing/lei.song`; not executed here |
+| Remote train | Qwen3-4B pilot only; no 30B/8-GPU scale; #321 report records the expected task-owned remote run root and candidate checkpoint path | NOT RUN by task boundary |
 | Endpoint serving | Serve base and FT through `/v1/chat/completions` with identical route/settings | BLOCKED: no endpoint command or live endpoint artifact supplied; curls to `127.0.0.1:13000` and `127.0.0.1:30001` failed with connection refused |
-| Corrected AIME pilot smoke | 30 AIME 2025 problems x 1 repeat, max tokens `8192`, temperature `0.0`, top_p `1e-5`, exact-normalized scoring over all request rows | Defined by task243 PR #319; corrected AIME input/cache and live base score artifacts are still missing |
+| Corrected AIME pilot smoke | 30 AIME 2025 problems x 1 repeat, max tokens `8192`, temperature `0.0`, top_p `1e-5`, exact-normalized scoring over all request rows | Defined by task243 PR #319 and encoded by task242 PR #321; corrected AIME input/cache and live base score artifacts are still missing |
 | Full AIME protocol | 30 AIME 2025 problems x 10 repeats, same parser/scorer/settings as pilot except repeat count | Defined by task243 PR #319; not required before first pilot go/no-go |
 | Result collection | Persist numerator, denominator, exact-normalized accuracy, parsed count/rate, finish reasons, per-problem rows, status counts, command, endpoint model manifest | BLOCKED: no base or FT output artifacts exist |
 
@@ -121,9 +131,10 @@ Observed result: `7 passed in 0.09s`.
 
 ## Current Blockers
 
-1. **task242 has no published PR**: the remote branch currently contains
-   task/status docs only. The V10 pilot planner scripts, manifest, sync/runbook,
-   and cleanup contract are not reviewable PR artifacts yet.
+1. **Real heldout decontamination corpus/input is missing**: #321 publishes a
+   placeholder corpus only to materialize paths and explicitly fail closed; the
+   trusted AIME25/HMMT/MATH heldout corpus and real task241-derived local input
+   must be supplied before data prep.
 2. **Corrected AIME input/cache is missing**: the cited score-cache path
    `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db`
    is not visible in this workspace.
@@ -135,7 +146,7 @@ Observed result: `7 passed in 0.09s`.
 5. **No candidate FT checkpoint/export/eval**: expected checkpoint, HF export,
    eval output, and train/eval logs are not present, so same-harness
    base-vs-FT AIME25 cannot be reproduced yet.
-6. **No 30B scale permission**: 30B/8-GPU planning and launch remain held until
+6. **No 30B/8-GPU permission**: 30B/8-GPU planning and launch remain held until
    the Qwen3-4B same-harness AIME gate is independently satisfied and lead
    grants explicit scale permission.
 
@@ -158,12 +169,15 @@ Observed result: `7 passed in 0.09s`.
 gh pr view 317 --json number,state,headRefName,headRefOid,mergeStateStatus,url
 gh pr view 319 --json number,state,headRefName,headRefOid,mergeStateStatus,url
 gh pr view 320 --json number,state,headRefName,headRefOid,mergeStateStatus,url
+gh pr view 321 --json number,state,headRefName,headRefOid,mergeStateStatus,url
 gh pr view 318 --json number,state,headRefName,headRefOid,mergeStateStatus,url
-git fetch origin pull/319/head:refs/remotes/origin/pr/319 pull/320/head:refs/remotes/origin/pr/320
+git fetch origin pull/321/head:refs/remotes/origin/pr/321 pull/319/head:refs/remotes/origin/pr/319 pull/320/head:refs/remotes/origin/pr/320
 git show origin/pr/319:src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_aime2025_base_vs_ft_gate.yaml | sed -n '1,40p'
-git ls-tree -r --name-only origin/pr/320
 git show origin/pr/320:workspace/tasks/task241_qwen_aime_v10_sidecar_data_s1/v10_sidecar_data_report.md | sed -n '1,120p'
-git show origin/pr/320:src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py | rg -n "hard_math_runlength_dp_v10|decontaminate-math-against-corpus|AIME-25|HMMT"
+git show origin/pr/321:workspace/tasks/task242_qwen_aime_v10_planner_smoke_s1/planner_report.md | sed -n '1,180p'
+git grep -n "qwen4b-v10-pilot|hard_math_runlength_dp_v10|decontaminate|/root/task242|30B|allow-v10-30b" origin/pr/321 -- src tests workspace/tasks/task242_qwen_aime_v10_planner_smoke_s1
+find /work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot -maxdepth 1 -type f -printf '%f\n' | sort
+sed -n '1,5p' /work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot/aime25_hmmt_math_heldout_decontam_corpus.PLACEHOLDER.jsonl
 test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
 du -sh /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
 test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507
@@ -173,22 +187,8 @@ curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:13000/v1/models
 curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:30001/v1/models
 ```
 
-Session 1 local worker_2 planner-shape probes were also run without launching
-training:
-
-```bash
-PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
-  --qwen4b-v10-pilot \
-  --output-dir /tmp/task245_worker2_plan_verify.<tmp>/out \
-  --remote-root /root/task242_qwen_aime_v10_planner_smoke_s1 \
-  --math-decontaminate-against-corpus /tmp/task245_worker2_plan_verify.<tmp>/heldout.jsonl \
-  --allow-missing-checkpoint \
-  --overwrite
-```
-
-The probe emitted the expected Qwen3-4B base path, V10 strategy,
-decontamination corpus, candidate FT checkpoint path, and 30B hold rule. It is
-not accepted as release evidence because task242 still has no published PR.
+No training, live eval, endpoint serving, NemTron sync, shared-storage delete,
+merge, or `main` push was run.
 
 ## Go/No-Go Readiness
 
@@ -201,14 +201,16 @@ present and independently verified:
 1. task241 PR #320 remains reviewable for V10 data-prep code/report evidence,
    including decontamination scanned/dropped counts, sidecar row counts, and
    no AIME25/HMMT/MATH leakage evidence.
-2. task242 publishes the Qwen3-4B V10 pilot manifest/scripts and the scripts
-   fail closed on missing decontamination corpus while restricting cleanup to
-   task-owned `/root` paths.
-3. task243 produces same-harness base AIME25 pilot artifacts from the verified
+2. task242 PR #321 remains reviewable for the Qwen3-4B V10 pilot
+   manifest/scripts, fail-closed decontamination checks, task-owned `/root`
+   cleanup limits, and 30B hold.
+3. The placeholder decontamination corpus/input is replaced with trusted real
+   heldout AIME25/HMMT/MATH corpus/input before any data prep.
+4. task243 produces same-harness base AIME25 pilot artifacts from the verified
    cephfs Qwen3-4B base path before any FT judgment.
-4. A candidate FT checkpoint/export is produced under the documented task-owned
+5. A candidate FT checkpoint/export is produced under the documented task-owned
    path and served through the same route/protocol as the base.
-5. task243 comparison artifacts show
+6. task243 comparison artifacts show
    `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy` with
    parsed/finish/per-problem diagnostics included.
-6. Lead grants explicit permission before any 30B/8-GPU scale action.
+7. Lead grants explicit permission before any 30B/8-GPU scale action.
