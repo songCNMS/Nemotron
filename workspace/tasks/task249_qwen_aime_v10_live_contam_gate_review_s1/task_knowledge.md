@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,12 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. At Session 12, #324 was merged at
+    `ff28538c41620a6d8b75b33d70c0c5e69714f42e`, and #323 was verified
+    OPEN/CLEAN at `4125124dafb2a98514c18e24d63045e90f473fcb` before
+    self-merge. #323 is now MERGED at 2026-06-01T18:19:00Z with merge commit
+    `ec467724c2876211cd2bf56b15071e31abd692a4`.
+27. The merged static review does not approve the first Qwen3-4B V10 run. The
+    combined gate remains NO-GO/HOLD until task248 FT artifacts, task243
+    same-harness base-vs-FT comparison output, and 30B/8-GPU permission are
+    available and accepted.
