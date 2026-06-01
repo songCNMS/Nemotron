@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task251 local artifacts exist but no PR/push; worker_2 asked to formalize report; gate HOLD |
+| PR | task251 local artifacts exist but no PR/push; worker_2/coordinator updated; gate HOLD |
 | Session | 55 |

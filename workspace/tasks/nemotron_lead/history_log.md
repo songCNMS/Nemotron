@@ -1882,6 +1882,16 @@
   - preserve Qwen3-4B only, no AIME25 train prompts/labels, no shared deletion,
     no task243 comparison, no promotion, no 30B/8-GPU, and stop before NemTron
     training/FT live eval.
+- Rechecked mailbox before coordinator update; no unread messages were present.
+- Sent delivered peer_send to coordinator with:
+  - lead branch `f174a43`;
+  - task251 remote branch still at `a5d48c3` with no PR;
+  - local cache/override paths and checksums;
+  - HotpotQA M0/M1 local pass evidence and the unrelated
+    `m0_swe_patch_lite` row shortfall;
+  - current Qwen packing blocker `ModuleNotFoundError: No module named
+    'cosmos_xenna'`;
+  - unchanged `NO-GO/HOLD` gate.
 - Other workers were not assigned in this session because there is still no
   official task251 PR/head/report to test; a tester/reviewer should be assigned
   after worker_2 publishes PR evidence.
