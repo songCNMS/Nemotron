@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task244_qwen_aime_v10_contam_regression_review_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/318 |
-| Session | 2 |
-| Progress | Lead confirmed PR #318 is open/clean and task243 PR #319 now exists; task244 remains in review/hold pending task241/task242 PRs and task243 #319 path correction to the required `/mnt/cephfs` Qwen3-4B checkpoint. |
+| Session | 4 |
+| Progress | Refreshed independent static review for #319/#320/#321. #320 approved for V10 data-prep contamination handling, #321 approved for Qwen3-4B V10 planner smoke wiring, and #319 approved for static same-harness AIME gate/protocol; all remain hold for first go/no-go until real heldout corpus, #320/#321 integration, base/FT artifacts, explicit FT serve/export path, and refreshed #317 runbook are present. #317 is request-changes/hold because it still treats task242 as no-PR/old head. No product code, tests, training, evals, sync, merge, or `main` push performed. |
