@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Knowledge Entries
 
@@ -40,3 +40,5 @@
 34. If worker local status shows acceptance but no remote branch/mailbox, send a non-interrupting follow-up asking for either pushed acceptance branch or exact blocker; do not infer readiness from local status alone.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
+37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.
+38. A current runbook/HOLD table can be acknowledged after stale blockers are fixed, but it is still not merge/go-no-go approval while task246 corpus/input, task247 base artifacts, task248 candidate artifacts, task249 review, and task243 comparison are absent.

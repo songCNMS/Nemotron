@@ -603,3 +603,36 @@
   - task250 PR #324 open/CLEAN at `d1525aa`; request-changes/HOLD for stale task248/task249 visibility table.
 - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 30 - 2026-06-01 UTC - task250 refreshed and task247 cache evidence found
+
+- Received and marked read `intern_nemotron_worker_2` task248 refresh:
+  - task248 branch advanced to `86418286d1127be1d500064e9f35859304f01afe`.
+  - Report now correctly records task246 branch `a53c913` and task247 branch `94c21c9` as visible, but missing required artifacts.
+  - task248 remains blocked before local prep/train; worker_2 did not run local prep, NemTron sync, Qwen3-4B training, live eval, FT judgment, 30B/8-GPU planning/launch, main push/self-merge, or shared-file deletion.
+- Lead performed read-only resource probes:
+  - No task246 output files were visible under `/work-agents/intern_nemotron_worker_1/outputs`.
+  - task247 local output now contains corrected AIME input/cache files under `/work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/aime2025_input_cache`, including `aime_score_cache.opencompass_a6ad95f.db` and source manifest.
+  - Local endpoint probes to `127.0.0.1:13000/v1/models` and `127.0.0.1:30001/v1/models` still failed to connect.
+  - Qwen3-4B model path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` exists.
+- Sent peer_send follow-ups, all delivered:
+  - worker_3/task247: formalize the local AIME input/cache evidence in task247 branch/report and report endpoint/base-score blocker, or run only same-harness Qwen3-4B base smoke if the endpoint is available.
+  - worker_1/task246: report real heldout corpus/input path or exact blocker.
+  - worker_5/task250 and worker_4/task249: distinguish task247 local cache evidence from missing formal base artifacts in refreshed runbook/review.
+- Received and marked read worker_5 task250 refresh:
+  - #324 advanced to `6a82c8d4122a7f658c8cbebde1fb1c940592941d`, open/CLEAN.
+  - `live_runbook_artifact_report.md` now records task248 branch `2007418` and task249 PR #323 head `65c2bda`, fixing the stale task248/task249 visibility blocker.
+  - #324 remains NO-GO/HOLD because real task246 corpus/input, task247 base artifacts, task248 candidate artifacts, task249 review matrix, task243 comparison output, and explicit 30B permission are still missing.
+- Posted PR comments:
+  - #324: `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4594757975`, acknowledging the stale visibility issue is fixed at `6a82c8d` while keeping the runbook/go-no-go on HOLD.
+  - #323: `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4594757973`, noting #324 refresh and waiting for task247 formal evidence.
+- Follow-up poll after the refresh found no unread mailbox messages and branch heads unchanged:
+  - task246 `a53c913`, task247 `94c21c9`, task248 `8641828`, task249/#323 `65c2bda`, task250/#324 `6a82c8d`.
+- Current gate remains:
+  - task246 real heldout corpus/input missing.
+  - task247 has local corrected AIME input/cache but no pushed task247 report/base score artifact yet; Qwen3-4B endpoint is still not reachable in local probes.
+  - task248 blocked before prep/train.
+  - task249/#323 open/CLEAN but missing live review matrix.
+  - task250/#324 open/CLEAN and current as HOLD table.
+  - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
