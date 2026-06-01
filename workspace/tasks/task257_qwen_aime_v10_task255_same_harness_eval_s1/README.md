@@ -24,7 +24,9 @@ The report matches lead's read-only observation: FT `0/30 = 0.0`, parsed
 Lead processed worker_3's official mailbox closeout and approved #330 as a
 docs/report-only closeout for a failed Qwen3-4B V10 candidate evaluation.
 worker_3 may self-merge #330 only if it is still `CLEAN` at exact head
-`4f8f8fcfffe46245070541956a2f44731406f2e6`.
+`da83f014f5e4b22c4410afdf8bda3ccb49a70af3`. The delta from the previous
+approved head `4f8f8fcfffe46245070541956a2f44731406f2e6` is docs/status
+metadata only; the same-harness evaluation report did not change.
 
 ## Background
 

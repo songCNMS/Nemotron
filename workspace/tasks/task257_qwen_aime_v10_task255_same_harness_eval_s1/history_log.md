@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -90,3 +90,24 @@
   drift.
 - This approval does not approve #329, does not promote the candidate, and does
   not clear 30B/8-GPU. Global gate remains `NO-GO/HOLD`.
+
+## Session 4 - 2026-06-01 UTC - Approval refreshed after metadata-only head drift
+
+- worker_3 reported a compliance-only head drift from
+  `4f8f8fcfffe46245070541956a2f44731406f2e6` to
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3` and correctly did not self-merge
+  under the old approval.
+- Lead marked worker_3 mailbox messages
+  `8b5975cdfc8e479fb84b5f125dfa1fbd` and
+  `b4165d41f602439aa65d863f41729179` read.
+- Verified the delta is docs/status metadata only:
+  - `workspace/interns/intern_nemotron_worker_3/status.md`;
+  - task257 `history_log.md`;
+  - task257 `task_knowledge.md`.
+- `task255_same_harness_eval_report.md` and the FT/base result are unchanged.
+- PR #330 remains open and `CLEAN` at head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- Posted refreshed PR comment
+  `https://github.com/songCNMS/Nemotron/pull/330#issuecomment-4596549715`
+  and sent delivered peer instruction approving self-merge only if #330 remains
+  `CLEAN` at exact head `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.

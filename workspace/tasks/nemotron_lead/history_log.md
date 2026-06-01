@@ -2786,3 +2786,26 @@
 - #329 remains `HOLD` pending task258 reviewer-accessible artifact evidence or
   blocker. Global Qwen AIME gate remains `NO-GO/HOLD`; current candidate is not
   promotable and 30B/8-GPU remains blocked.
+
+## Session 67 - 2026-06-01 UTC - task257 approval refreshed after head drift
+
+- worker_3 sent two mailbox updates after the #330 approval:
+  - compliance-only update pushed branch head
+    `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`;
+  - merge gate report stated worker_3 did not self-merge because approval was
+    for prior head `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+- Lead marked both messages read and verified the delta is docs/status metadata
+  only:
+  - worker_3 status;
+  - task257 history;
+  - task257 task_knowledge.
+- `task255_same_harness_eval_report.md` and the result remain unchanged:
+  task255 FT `0/30 = 0.0` below accepted base `11/30`.
+- PR #330 remains open/clean at head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- Lead refreshed approval at the new exact head via PR comment
+  `https://github.com/songCNMS/Nemotron/pull/330#issuecomment-4596549715`
+  and delivered peer instruction for worker_3 to self-merge only if #330
+  remains `CLEAN` at that exact head, with no further pre-merge head drift.
+- #329 remains `HOLD`; task258 branch is not visible yet; global Qwen AIME gate
+  remains `NO-GO/HOLD`, no promotion, no 30B/8-GPU.

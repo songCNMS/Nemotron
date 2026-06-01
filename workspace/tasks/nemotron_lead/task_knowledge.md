@@ -114,3 +114,6 @@
 99. worker_3 mailbox reconciled #330; lead approved it as docs/report-only
    failure closeout at exact head `4f8f8fcfffe46245070541956a2f44731406f2e6`.
    This does not approve #329, promote task255, or clear 30B/8-GPU.
+100. #330 approval was refreshed to `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`
+   after a docs/status metadata-only compliance fix; require exact-head CLEAN
+   self-merge with no further pre-merge head drift.

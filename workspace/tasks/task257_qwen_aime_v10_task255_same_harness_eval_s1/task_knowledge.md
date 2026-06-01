@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,6 @@
 7. worker_3 official mailbox report reconciled #330; lead approved #330 only as
    a docs/report failure closeout at exact head `4f8f8fcfffe46245070541956a2f44731406f2e6`.
    The approval does not change #329 HOLD or global `NO-GO/HOLD`.
+8. Approval was refreshed to `da83f014f5e4b22c4410afdf8bda3ccb49a70af3` after a
+   docs/status metadata-only compliance fix; the task257 eval report did not
+   change.
