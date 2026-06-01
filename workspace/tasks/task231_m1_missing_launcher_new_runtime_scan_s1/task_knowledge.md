@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 - Bounded task231 artifact search found only the task225 launcher runtime and
   wheelhouse under `/mnt/cephfs/data/processing/nemotron-live-validation`:
@@ -15,3 +15,6 @@
   approved launcher package or benchmark-owner supplied task names/contracts.
 - Stop-hook validation for this workspace expects the active task history file
   to include an explicit heading for the current session number.
+- Session 5 did not change mapping evidence; it only refreshed status for the
+  PM ping. The decisive blocker remains absence of exact launcher tasks in the
+  inspected local/task225/VPN/task227 runtime surfaces.

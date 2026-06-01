@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 1 - 2026-05-30
 
@@ -26,3 +26,12 @@
   Session 4 and added this explicit Session 4 entry.
 - Re-ran final diff whitespace checks and pushed a replacement task231 branch
   head with no product code changes.
+
+## Session 5 - 2026-06-01
+
+- Responded to PM status ping for task231 from the already-pushed evidence
+  branch state.
+- Verified branch/head, artifact hashes, and clean diff checks; no new runtime
+  scan, endpoint, eval, Docker, install, or product-code operation was run.
+- Updated status metadata to Session 5 and kept task state `Working` pending PM
+  disposition of the HOLD result.
