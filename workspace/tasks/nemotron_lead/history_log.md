@@ -1806,6 +1806,10 @@
   boundaries, and report branch/head/PR or blocker plus cache/override path,
   source revision, row counts/split mapping/checksums, commands/environment,
   log paths, HotpotQA pass/fail, and whether task248 local prep can resume.
+- Rechecked mailbox before coordinator update; no unread messages were present.
+- Sent delivered peer_send to coordinator with the current task251 state, the
+  worker_2 nudge, lead branch `98380b4`, missing artifact evidence, and
+  unchanged `NO-GO/HOLD` gate.
 - Current gate remains `NO-GO/HOLD`: there are still no task248 candidate FT
   checkpoint/export/live FT eval artifacts, no task243 same-harness FT-vs-base
   comparison against accepted base `11/30`, and no 30B/8-GPU clearance.

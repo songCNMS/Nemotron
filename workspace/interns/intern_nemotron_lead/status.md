@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task251 a5d48c3 only acceptance; worker_2 nudged after disconnect; no PR/artifacts; gate HOLD |
+| PR | task251 a5d48c3 only acceptance; worker_2 nudged and coordinator updated; gate HOLD |
 | Session | 54 |
