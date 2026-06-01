@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0 - Created with coordinator
 
@@ -115,3 +115,11 @@
 - Verified remote branch `intern_nemotron_lead/session1-recovery-task-docs` points to `04582ca96059a3f9b7e19a67f8dfc2fee730f3aa`, matching the lead report.
 - Confirmed lead-side archive records #314/#315/#316 merged and preserves final dispositions: task203/task206/task209 covered/no recovery, task231/task228 blocked/HOLD with no new implementation task, and task217 approve close with one-iteration smoke residual risk.
 - Recorded that no residual cleanup requiring lead action was found and sent delivered peer acknowledgement to `intern_nemotron_lead`.
+
+## Session 16 - AIME 2025 Qwen priority assigned
+
+- Read `/work-agents/Nemotron/project_rule.txt` and recorded the resource constraints for the AIME 2025 Qwen effort: debug/training on `NemTron`, sync code to `/root`, use `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` for cheaper pilots, download locally before copying to `NemTron`, and never delete existing shared files under `/mnt/cephfs/data/processing/lei.song`.
+- Reviewed existing Qwen hard-math context from task071/task075/task076: V7 passed corrected gates with AIME25 `0.21`; V8 failed AIME25 by one correct repeat at `0.1966666667` with a real `aime_06` regression; corrected V9 fixed checkpoint-root lineage but still failed targeted `aime_06`.
+- Created coordinator handoff file `workspace/tasks/task_coordinator_nemotron_coordinator_06b9acba/session16_aime2025_qwen_handoff.md` with the lead plan, resource constraints, worker split, and AIME 2025 non-regression gates.
+- First long `/api/intern/goal/set` attempt to `intern_nemotron_lead` returned HTTP 409 `unconfirmed`; retried with a concise one-line goal pointing to the handoff file.
+- Delivered pressing goal `coord-aime2025-qwen-pipeline-refactor-session16-short` to `intern_nemotron_lead` with HTTP 200, directing the lead to create/manage worker tasks for AIME 2025 Qwen fine-tuning improvement or non-regression and report task ids, assignees, baseline/eval protocol, pilot plan, and first go/no-go gate.

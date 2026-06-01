@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -16,3 +16,7 @@
 10. After a lead PR lands, worker PR GitHub state can change before mailbox reports arrive; coordinator should recheck PR heads/mergeability and route follow-up through lead rather than contacting workers directly. Even if PRs become mergeable, lead gate approval and worker self-merge sequencing still apply.
 11. Recovery closeout completed with #313/#314/#315/#316 merged: no new implementation tasks were created; final dispositions are task203/task206/task209 covered/no recovery, task231/task228 blocked/HOLD, and task217 approve close with one-iteration smoke residual risk.
 12. Lead-side archive was confirmed at commit `04582ca`; permanent coordinator and lead lifecycle tasks remain Working/InProgress after recovery closeout.
+13. Project resource constraints for the AIME 2025 Qwen effort: debug/training on `NemTron`, sync code to `/root`, use `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` for cheaper pilots, download locally before copying to `NemTron`, and never delete existing files under `/mnt/cephfs/data/processing/lei.song`.
+14. Current Qwen hard-math state to reuse: task071/task075/task076 contain the relevant pipeline history; PR #178 and PR #183 are merged; V7 passed corrected AIME25 at `0.21`, V8 failed AIME25 at `0.1966666667`, and corrected V9 still failed targeted `aime_06` despite parsed `10/10`.
+15. AIME 2025 Qwen promotion gate: establish a same-harness base Qwen score first, do not train on AIME 2025 labels/prompts except held-out eval/decontamination, use a Qwen3-4B pilot before any full 30B/8-GPU scale, and promote only if fine-tuning does not lower AIME 2025 versus base under the same corrected protocol.
+16. If `/api/intern/goal/set` returns `unconfirmed` for long multi-line content, write the detailed handoff into a task note and retry with a concise one-line goal pointing to that file.
