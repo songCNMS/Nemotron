@@ -16,3 +16,13 @@
 5. Review target heads are task258/#331
    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` and task255/#329
    `d62036e405edc5daa322c09bb89da19b176bb7bf`.
+6. Session 1 result: APPROVE task258/#331 for artifact-access closeout and
+   #329 as an artifact record only. Full `sha256sum -c` verification passed for
+   all 34 copied files in the shared bundle.
+7. The previous task256 blocker is resolved for worker_5: the copied checkpoint
+   and HF export are readable from `/mnt/cephfs/data/processing/...`, have
+   world-readable files/world-executable directories, and match the manifest
+   hashes.
+8. This approval does not change the global gate. task257/#330 is merged and
+   records task255 FT `0/30` versus accepted base `11/30`, so the combined
+   Qwen3-4B V10 gate remains `NO-GO/HOLD`.

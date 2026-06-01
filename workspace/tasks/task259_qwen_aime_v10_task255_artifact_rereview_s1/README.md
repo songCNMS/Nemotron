@@ -1,6 +1,6 @@
 # task259_qwen_aime_v10_task255_artifact_rereview_s1 - task255 artifact re-review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
 
 ## Background
 
@@ -21,6 +21,55 @@ same-harness failure record for task255 FT `0/30` versus accepted base `11/30`.
 Independently re-review task255 artifact accessibility and integrity using the
 task258 reviewer-readable bundle, then recommend approve/request-changes/block
 for task258/#331 and task255/#329 as artifact records only.
+
+## Session 1 Review Closeout
+
+- Recommendation: APPROVE task258/#331 as artifact-access closeout and treat
+  task255/#329 as an artifact record only, not a promotion.
+- Global gate: still `NO-GO/HOLD` because task257/#330 is merged and records
+  task255 FT `0/30` exact-normalized accuracy below the accepted base `11/30`.
+- PR checks: #331 is OPEN/CLEAN at
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, base `main`; #329 is
+  OPEN/CLEAN at `d62036e405edc5daa322c09bb89da19b176bb7bf`, base `main`.
+- Shared bundle reviewed:
+  `/mnt/cephfs/data/processing/intern_nemotron_worker_2/task258_qwen_aime_v10_task255_reviewer_artifact_access_s1/task255_run_20260601T202339Z_full_artifacts_20260601T2109Z`.
+- Manifest/report hashes matched the task docs exactly, both in worker_2
+  outputs and in the shared `review_manifest/` copy:
+  - task258 report:
+    `bbe89cef817ce0fe131905ab38af85db04ffecc504ceecd970e2ef42917a2256`;
+  - `review_access_manifest.json`:
+    `53fb4822349106d3462fce7e284bca8a2efdc139c7981fcbe14a8edcb335f372`;
+  - `shared_file_inventory.tsv`:
+    `50833c7ce5187578621f57a5ba091ff465fce5092d70f9fc752fa0776b750b84`;
+  - `shared_full_artifacts.sha256`:
+    `415bf1d186591f14d1acd2e4fb115ac91065eb3f33ded61751033bebb9f33d83`.
+- Full checksum verification passed:
+  `grep -E '^[0-9a-f]{64}  ' review_manifest/shared_full_artifacts.sha256 |
+  sha256sum -c -` returned `OK` for all 34 copied files, including the four
+  checkpoint `.distcp` shards, three HF safetensors shards, config/tokenizer
+  files, source logs, and export helper.
+- Manifest counts: checkpoint 18 files / 56,326,605,013 bytes; HF export
+  13 files / 8,060,898,808 bytes; source logs 2 files / 107,838 bytes; export
+  helper 1 file / 979 bytes; total 34 copied evidence files /
+  64,387,612,638 bytes.
+- HF config read from the shared copy confirms `Qwen3ForCausalLM`,
+  `model_type=qwen3`, 36 layers, hidden size 2560, 32 attention heads, 8 KV
+  heads, intermediate size 9728, vocab size 151936. `model.safetensors.index.json`
+  is readable and has `metadata` and `weight_map` keys.
+- Checkpoint read probe confirmed `latest_checkpointed_iteration.txt` is `1`.
+  Checkpoint `metadata.json` and `run_config.yaml` are world-readable and
+  checksum-verified.
+- Permission checks found no non-world-readable files and no non-world-executable
+  directories under the shared bundle. Directories are `755 root:root`; key
+  artifact files are `644 root:root`.
+- Boundary checks: worker_5 performed read-only shell checks and docs/status
+  bookkeeping only. No code edit, artifact modification/deletion, training,
+  export, AIME/task243 eval, promotion claim, 30B/8-GPU launch, main push,
+  merge/self-merge, or `/mnt/cephfs/data/processing/lei.song` deletion was
+  performed.
+- Residual risk: approval is limited to reviewer accessibility and copied
+  artifact integrity. It does not override the task257/#330 below-base result
+  or authorize promotion/scale-up.
 
 ## Scope
 
