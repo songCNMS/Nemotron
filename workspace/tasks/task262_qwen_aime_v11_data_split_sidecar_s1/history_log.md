@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -48,3 +48,14 @@
 - Checks passed: `py_compile`, focused split/Qwen contract pytest files, and
   `git diff --check`.
 - Opened PR #336 to `main`.
+
+## Session 2 - 2026-06-01 UTC - Lead closeout request
+
+- Received lead request for official task262 closeout mailbox for PR #336 with
+  exact head, PR URL, touched files, checks, artifact paths/checksums,
+  data/packing evidence, contamination status, and boundary confirmation.
+- Lead explicitly instructed not to self-merge; task262 remains under lead gate
+  and task265 independent review.
+- Session 2 changes are status/history/task_knowledge metadata only; no code,
+  tests, output artifacts, training, eval, endpoints, promotion, 30B/8-GPU,
+  task255 checkpoint/export reuse, AIME2025 train data use, or shared deletion.

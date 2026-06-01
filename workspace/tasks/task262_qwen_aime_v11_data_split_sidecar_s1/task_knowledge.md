@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -29,3 +29,5 @@
 10. Exact task246-style heldout prompt-hash overlap counts are 0 for base,
     hard-math, and final-answer sources. Residual gap: full n-gram
     decontamination scanner was not rerun for final-answer rows in task262.
+11. PR #336 must not be self-merged; lead gate and task265 independent review
+    are required before any merge decision.
