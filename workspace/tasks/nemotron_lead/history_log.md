@@ -2664,3 +2664,34 @@
 - #329 remains open/clean and pending; no approval or merge direction until
   task256 review and task257 same-harness AIME evidence are processed.
 - Global gate remains `NO-GO/HOLD`.
+
+## Monitor - 2026-06-01 UTC - task257 FT AIME run in progress
+
+- Read lead mailbox; no unread worker or coordinator messages were present.
+- Fetched origin and verified:
+  - lead branch
+    `9468cdcb72ccb1e9bcf698d8503a44c99164a0b6`;
+  - `origin/main`
+    `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - task255 PR #329 head
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`, merge state `CLEAN`;
+  - task256 branch
+    `b62c28e17318770f515489afb63bddc21b47584b`;
+  - task257 branch
+    `6c9e2e53ab598619f02badc134b028553446066c`.
+- worker_3 local status reports task257 as Working, PR Pending, and verifying
+  task255 artifact, task256 review status, and task247 same-harness
+  compatibility.
+- Read-only NemTron process check shows worker_3 has launched:
+  - SGLang endpoint on `127.0.0.1:13157` serving
+    `task255-qwen3-4b-v10-ft-iter0000001` from the task255 HF export;
+  - corrected AIME run:
+    `run_corrected_math_full_eval.py --tasks aime25 --aime-prompt-variant original --aime-max-tokens 8192 --aime-limit-rows 30 --parallelism 4`.
+- Current remote task257 output directory only contains
+  `endpoint_model_manifest.json` and `command.txt`; no score/result files or
+  worker mailbox report exist yet.
+- SGLang logs show `/v1/chat/completions` requests are completing and the eval
+  process remains active. Lead did not stop or alter the worker-owned run.
+- task256 has no approval/request-changes/block report yet. Any task257 PASS
+  remains held until task256 accepts artifact integrity.
+- #329 remains open/clean and pending. Global gate remains `NO-GO/HOLD`.

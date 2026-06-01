@@ -97,3 +97,4 @@
 91. task255 PR #329 head `d62036e405edc5daa322c09bb89da19b176bb7bf` is the review target; `dfee98a..d62036e` only records the PR number in worker_2 status.
 92. worker_2 official task255 closeout confirms `PASS_ARTIFACT_READY_FOR_REVIEW`, but #329 is still not approved until task256 artifact review and task257/task243 same-harness AIME comparison complete.
 93. task256 acceptance branch `b62c28e17318770f515489afb63bddc21b47584b` and task257 acceptance branch `6c9e2e53ab598619f02badc134b028553446066c` prove current review/eval ownership only; neither is final gate evidence yet.
+94. A live task257 FT AIME run in progress is not gate evidence until result files and a worker report exist; even a passing score must stay HOLD if task256 has not approved the task255 artifact.

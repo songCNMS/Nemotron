@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task256/task257 accepted; #329 pending artifact review + AIME comparison; gate HOLD |
+| PR | task257 FT AIME run in progress; task256 review pending; #329 HOLD |
 | Session | 61 |
