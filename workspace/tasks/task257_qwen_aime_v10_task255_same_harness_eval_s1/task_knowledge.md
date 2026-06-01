@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -14,3 +14,6 @@
    report.
 5. task256 currently blocks artifact approval, so no task257 PASS is possible
    until artifact accessibility is resolved.
+6. PR #330 at head `4f8f8fcfffe46245070541956a2f44731406f2e6` records the same
+   below-base FT result; lead still needs worker_3 mailbox reconciliation before
+   approving or merging the docs closeout.

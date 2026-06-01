@@ -107,3 +107,7 @@
    official worker_3 closeout, not as promotion evidence.
 97. task258 is an artifact-access follow-up only. It must not train, export
    again, run AIME/task243, promote, or clear 30B/8-GPU.
+98. task257 PR #330 at head `4f8f8fcfffe46245070541956a2f44731406f2e6`
+   records the same below-base FT result and should remain pending until
+   worker_3 mailbox closeout is reconciled; even after merge it would be a
+   failure/no-promotion record, not a go/no-go pass.

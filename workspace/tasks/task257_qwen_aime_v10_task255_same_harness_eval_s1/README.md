@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - task255 AIME gate
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
 
 ## Lead Gate Update
 
@@ -13,6 +13,15 @@ This is not a final task257 closeout until worker_3 reports officially. It also
 cannot become PASS because task256 currently request-changes task255 artifact
 access. Current lead disposition: `NO-GO/HOLD`, with observed FT failure
 pending official task257 report.
+
+## PR Evidence
+
+worker_3 opened PR #330 at head
+`4f8f8fcfffe46245070541956a2f44731406f2e6`, base `main`, merge state `CLEAN`.
+The report matches lead's read-only observation: FT `0/30 = 0.0`, parsed
+`0/30`, below accepted base `11/30`. No worker_3 mailbox closeout was present
+when lead recorded this, so #330 remains pending mailbox reconciliation and
+lead gate decision.
 
 ## Background
 

@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -47,3 +47,23 @@
 - Because task256 currently request-changes task255 artifact accessibility,
   task257 cannot produce a final PASS regardless of score. Global Qwen AIME
   gate remains `NO-GO/HOLD`, no promotion, no 30B/8-GPU.
+
+## Session 2 - 2026-06-01 UTC - PR #330 observed
+
+- worker_3 remote branch advanced to
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+- PR #330 is open, base `main`, merge state `CLEAN`, non-draft, blank
+  `reviewDecision`, and includes:
+  - worker_3 status;
+  - task257 README/history/task_knowledge;
+  - `task255_same_harness_eval_report.md`.
+- The report records:
+  - reused accepted task247 base score `11/30 = 0.36666666666666664`;
+  - base cache sha256
+    `c8b287d9784d1d4ae5d3ea593a70850aea69b289e3d42e05951c5488330eaf74`;
+  - task255 FT exact-path score `0/30 = 0.0`, parsed `0/30`;
+  - disposition: FAIL versus base if task255 artifact is accepted, with
+    overall gate HOLD/no promotion because task256 request-changed artifact
+    accessibility.
+- No worker_3 mailbox closeout was present when lead checked. #330 remains
+  pending mailbox reconciliation and lead gate decision; no merge direction.

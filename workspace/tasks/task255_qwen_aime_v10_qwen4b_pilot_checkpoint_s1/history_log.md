@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - Assigned
 
@@ -217,3 +217,16 @@
 - Lead status: task255 artifact evidence is ready for task256 independent
   review and task257/task243 same-harness AIME planning. #329 remains pending
   review; no merge direction yet.
+
+## Session 7 - 2026-06-01 UTC - Downstream gate hold
+
+- task256 worker_5 reported `REQUEST_CHANGES/HOLD`: task255 report/logs are
+  internally consistent, but the checkpoint and HF export directories under
+  `/root/task255_...` were not accessible from worker_5's review environment.
+- Lead created task258 for worker_2 to provide reviewer-accessible artifact
+  evidence or a precise blocker.
+- task257 worker_3 opened PR #330 at head
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`; the report records same-harness
+  FT AIME25 `0/30 = 0.0`, parsed `0/30`, below the accepted base `11/30`.
+- #329 remains open/clean but not approved or merge-directed. The current
+  task255 candidate is not promotable and does not justify 30B/8-GPU scale.

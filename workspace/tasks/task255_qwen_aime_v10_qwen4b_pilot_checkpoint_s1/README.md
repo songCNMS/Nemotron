@@ -9,6 +9,14 @@ worker_2 reported `PASS_ARTIFACT_READY_FOR_REVIEW` at PR #329 head
 independent review and same-harness AIME planning, but task255 makes no quality,
 promotion, task243 comparison, or go/no-go claim.
 
+## Lead Gate Update
+
+#329 remains `HOLD`, not approved. task256 request-changed independent artifact
+review because the `/root/task255_...` checkpoint/export paths were not
+reviewer-accessible to worker_5. task257 PR #330 records a same-harness FT
+AIME25 result of `0/30 = 0.0`, below the accepted base `11/30`, so the current
+candidate is not promotable even if artifact access is later resolved.
+
 ## Background
 
 task253 produced Qwen3-4B V10 local `packed_qwen` shards, and task254

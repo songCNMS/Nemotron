@@ -2745,3 +2745,22 @@
 - Sent delivered task258 assignment to worker_2.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; current observed candidate FT is
   not promotable and cannot justify 30B/8-GPU scale.
+
+## Session 65 - 2026-06-01 UTC - task257 PR evidence received
+
+- After Session 64 dispatch, worker_3 branch advanced to
+  `4f8f8fcfffe46245070541956a2f44731406f2e6`.
+- PR #330 is open, base `main`, merge state `CLEAN`, non-draft, blank
+  `reviewDecision`, with task257 docs/status and
+  `task255_same_harness_eval_report.md`.
+- Lead reviewed the PR report and it matches read-only observed artifacts:
+  - accepted base reused from task247: `11/30 = 0.36666666666666664`;
+  - task255 FT AIME25: `0/30 = 0.0`, parsed `0/30`, 30/30 requests ok;
+  - conclusion: FAIL versus base if the task255 artifact is accepted, and
+    overall HOLD/no promotion because task256 request-changed artifact access.
+- Mailbox remained empty at this check; #330 is material PR evidence but still
+  pending worker_3 mailbox reconciliation and lead gate decision.
+- #329 remains open/clean and HOLD because task256 request-changed artifact
+  accessibility and task258 has no remote branch yet.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; current Qwen3-4B V10 candidate is
+  not promotable and 30B/8-GPU remains blocked.

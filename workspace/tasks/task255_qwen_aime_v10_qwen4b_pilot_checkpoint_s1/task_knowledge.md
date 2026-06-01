@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,7 @@
 10. worker_2 official closeout at PR #329 head `d62036e405edc5daa322c09bb89da19b176bb7bf`
     changed task255 to `PASS_ARTIFACT_READY_FOR_REVIEW`; #329 is still pending
     task256 review and task257/task243 comparison before lead approval.
+11. task256 request-changed #329 because worker_5 could not access task255
+    checkpoint/export paths for independent artifact review.
+12. task257 #330 records task255 FT same-harness AIME25 `0/30`, below base
+    `11/30`; the current candidate is not promotable.
