@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #314/#315/#316 merged; closeout reports received |
-| Session | 12 |
+| PR | Recovery closeout complete; monitoring |
+| Session | 13 |

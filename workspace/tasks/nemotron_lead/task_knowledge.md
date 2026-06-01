@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -14,3 +14,4 @@
 8. After a lead task-doc PR lands, downstream docs/status PRs can become `DIRTY` because they touch the same workspace closeout files; the owning workers must refresh their branches against `main`, preserve the gate disposition unless new evidence appears, and report new head/base/mergeability before any final merge direction.
 9. Lead approval for downstream closeout PRs requires worker mailbox evidence plus independent GitHub state and file-list checks; after approval, instruct the worker to self-merge if still mergeable, and do not run `gh pr merge` from the lead seat.
 10. If an approved downstream PR head advances before merge, request a new worker mailbox report for that head; if the merge completes before the report arrives, record the final head, merge commit, mergedBy, and later reconcile the worker's final-head report when it lands.
+11. Coordinator-confirmed recovery closeout should be archived in lead history/status, but `nemotron_lead` stays Working/InProgress because it is the permanent team lead lifecycle task.
