@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Knowledge Entries
 
@@ -32,3 +32,4 @@
 26. Lead approval of #319/#320/#321/#317/#318 does not change the first measurable gate: Qwen3-4B AIME go/no-go remains NO-GO/HOLD until a real heldout decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, same-harness base artifacts, candidate FT checkpoint/export/eval, and explicit 30B permission exist.
 27. If worker_2 reports #321 blocked only because #320 is still open, and #320 merges immediately afterward, send a follow-up with the #320 merge commit and require worker_2 to recheck #321 head/mergeability before self-merge.
 28. A merged PR can be independently closed out from GitHub state even if the worker closeout mailbox is delayed, but the missing worker report should remain explicit in lead status until received.
+29. After #317/#318/#319/#320/#321 landed, all worker closeout reports confirmed the same residual gate: no Qwen FT promotion or 30B scale until a same-harness Qwen3-4B base score, matching FT artifacts, and the corrected comparison report exist.

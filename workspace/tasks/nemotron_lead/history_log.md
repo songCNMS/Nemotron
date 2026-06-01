@@ -473,3 +473,24 @@
   - 30B/8-GPU scale: still not permitted.
   - Remaining lead follow-up: wait for worker_3 #319 closeout mailbox or report if it remains missing.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 23 - 2026-06-01 UTC - Qwen AIME25 worker closeouts complete
+
+- Final sanity check found the lead worktree clean and synchronized with `origin/intern_nemotron_lead/session1-recovery-task-docs`.
+- Received and marked read `intern_nemotron_worker_3` final closeout for task243/#319:
+  - Pre-merge state was #319 open, base `main`, head `61a12dd8b96e51785a3ece76d5883a419b30dd39`, mergeStateStatus `CLEAN`, mergeable `MERGEABLE`.
+  - Merge result was #319 `MERGED` at 2026-06-01T16:24:34Z with merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`.
+  - Worker_3 reported no post-merge issue and confirmed #319 remains static corrected AIME2025 same-harness base-vs-FT gate/protocol only; live promotion/FT judgment remains HOLD until same-harness Qwen3-4B base artifacts and matching FT artifacts exist.
+- Rechecked all static PRs and confirmed final GitHub state:
+  - #317 `MERGED`, merge commit `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`, mergedAt 2026-06-01T16:24:29Z.
+  - #318 `MERGED`, merge commit `86fd05fbb1bb0b1c918a72c6680c10ea170d2798`, mergedAt 2026-06-01T16:24:32Z.
+  - #319 `MERGED`, merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`, mergedAt 2026-06-01T16:24:34Z.
+  - #320 `MERGED`, merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`, mergedAt 2026-06-01T16:24:28Z.
+  - #321 `MERGED`, merge commit `20973e78f196d7e5d71993f60dc74a3500223f5f`, mergedAt 2026-06-01T16:27:34Z.
+- All five worker closeout reports are now received and reconciled with GitHub state.
+- Current lead decisions:
+  - Static Qwen AIME V10 foundation PR set is closed out as merged.
+  - First measurable Qwen3-4B V10 AIME go/no-go remains `NO-GO/HOLD`.
+  - Blocking evidence still required: real heldout AIME25/HMMT/MATH decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, same-harness base artifacts, candidate FT checkpoint/export/eval artifacts, and explicit 30B/8-GPU permission.
+  - 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
