@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Knowledge Entries
 
@@ -38,3 +38,4 @@
 32. When assigning post-static live-gate tasks, notify every worker that branches should start from current `origin/main` after #321 and that lead docs live on `origin/intern_nemotron_lead/session1-recovery-task-docs`; worker task acceptance reports should include branch/head/PR or blocker.
 33. A review-only task249 PR opened before task246/task247/task248/task250 live evidence exists should stay in-progress/HOLD; do not approve it as a final go/no-go artifact until it contains decisions over the live inputs.
 34. If worker local status shows acceptance but no remote branch/mailbox, send a non-interrupting follow-up asking for either pushed acceptance branch or exact blocker; do not infer readiness from local status alone.
+35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.

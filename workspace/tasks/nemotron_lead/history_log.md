@@ -556,3 +556,30 @@
   - No task has produced real heldout corpus/input, base AIME artifact, candidate FT artifact, or live comparison artifact yet.
   - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 28 - 2026-06-01 UTC - Live blocker evidence updated
+
+- Final sanity check received and marked read worker_4's task249 acceptance report:
+  - PR #323 is open/CLEAN, head advanced to `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`.
+  - Worker_4 fetched task246/task247/task248 branches and confirmed task250 branch/PR is still not visible.
+  - Scope remains review-only and missing runtime evidence keeps first go/no-go HOLD.
+- Rechecked remote branch heads:
+  - task246 / worker_1: `a53c913ab80e37197ccfe7525ea04e0ac80c96fe`.
+  - task247 / worker_3: `94c21c9a8cb229f0357a049a698de898963810f1`.
+  - task248 / worker_2: advanced to `200741802a9ae9cb9f3e16af8f1b7e66fee69857`.
+  - task249 / worker_4: advanced to `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`, PR #323 open/CLEAN.
+  - task250 / worker_5: still no branch/PR visible.
+- Inspected task248 report at head `2007418`; worker_2 confirms:
+  - Qwen3-4B model path exists locally.
+  - Task-owned local and NemTron roots are reserved.
+  - Prepared command shape and candidate checkpoint path are documented.
+  - Local prep/train are blocked because task246 real corpus/input and task247 base artifacts are not available.
+  - No local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion was run.
+- Current gate remains unchanged:
+  - task246 has not yet produced real non-placeholder corpus/input.
+  - task247 has not yet produced same-harness Qwen3-4B base artifacts.
+  - task248 is correctly blocked before prep/train.
+  - task249/#323 is in-progress/HOLD.
+  - task250 remains missing.
+  - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
