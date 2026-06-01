@@ -24,6 +24,9 @@ from __future__ import annotations
 import logging
 import os
 import random
+import json
+import re
+from collections import Counter
 from pathlib import Path
 
 from nemotron.data_prep.utils.filesystem import get_filesystem
@@ -44,6 +47,62 @@ def _remove_stale_parquet_entries(split_dir: Path, desired_names: set[str]) -> N
             "Cannot remove stale parquet split entry because it is not a file "
             f"or symlink: {entry}"
         )
+
+
+def _safe_link_component(value: str) -> str:
+    """Return a filesystem-friendly component for generated split symlinks."""
+
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._-")
+    return cleaned or "part"
+
+
+def _path_digest(path: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(path.encode("utf-8")).hexdigest()[:12]
+
+
+def _qualified_parquet_name(shard_path: str) -> str:
+    """Build a dataset-qualified parquet link name for colliding basenames."""
+
+    path = Path(shard_path)
+    parts = path.parts
+    if "datasets" in parts:
+        start = parts.index("datasets") + 1
+        components = parts[start:]
+    else:
+        components = parts[-3:]
+
+    stem = "__".join(_safe_link_component(component) for component in components)
+    if len(stem) > 180:
+        stem = f"{_safe_link_component(path.name)}__{_path_digest(shard_path)}"
+    return f"{stem}.parquet"
+
+
+def _link_names_for_shards(shard_paths: list[str]) -> list[str]:
+    """Return unique symlink names while preserving old names when possible."""
+
+    base_names = [f"{Path(shard_path).name}.parquet" for shard_path in shard_paths]
+    base_counts = Counter(base_names)
+    names = [
+        base_name if base_counts[base_name] == 1 else _qualified_parquet_name(shard_path)
+        for shard_path, base_name in zip(shard_paths, base_names, strict=True)
+    ]
+
+    seen: set[str] = set()
+    unique_names: list[str] = []
+    for index, (name, shard_path) in enumerate(zip(names, shard_paths, strict=True)):
+        if name not in seen:
+            unique_names.append(name)
+            seen.add(name)
+            continue
+        stem = Path(name).stem
+        unique_name = f"{stem}__{_path_digest(shard_path)}__{index:04d}.parquet"
+        while unique_name in seen:
+            unique_name = f"{stem}__{_path_digest(shard_path)}__{index:04d}_{len(seen)}.parquet"
+        unique_names.append(unique_name)
+        seen.add(unique_name)
+    return unique_names
 
 
 def distribute_shards_to_splits(
@@ -173,14 +232,17 @@ def realize_packed_shards_into_split_dirs(
 
         # path_list format: ["weight", "path", "weight", "path", ...]
         # Extract just the paths (odd indices)
+        weights = [path_list[i] for i in range(0, len(path_list), 2)]
         shard_paths = [path_list[i] for i in range(1, len(path_list), 2)]
-        desired_parquet_names = {f"{Path(shard_path).name}.parquet" for shard_path in shard_paths}
+        link_names = _link_names_for_shards(shard_paths)
+        desired_parquet_names = set(link_names)
         _remove_stale_parquet_entries(split_dir, desired_parquet_names)
 
         created_count = 0
         missing_paths = []
+        manifest_entries = []
 
-        for shard_path in shard_paths:
+        for weight, shard_path, link_name in zip(weights, shard_paths, link_names, strict=True):
             # Shard path is a prefix like /path/to/shard_000000
             # Actual file is shard_000000.parquet
             parquet_path_str = f"{shard_path}.parquet"
@@ -193,7 +255,7 @@ def realize_packed_shards_into_split_dirs(
                 continue
 
             # Create symlink in split dir
-            link_path = split_dir / parquet_path.name
+            link_path = split_dir / link_name
 
             if link_path.exists() or link_path.is_symlink():
                 if not (link_path.is_symlink() or link_path.is_file()):
@@ -214,13 +276,46 @@ def realize_packed_shards_into_split_dirs(
                 link_path.symlink_to(parquet_path.resolve())
                 created_count += 1
 
+            manifest_entries.append(
+                {
+                    "weight": weight,
+                    "source_path": shard_path,
+                    "target_path": parquet_path_str,
+                    "link_name": link_name,
+                    "link_path": str(link_path),
+                }
+            )
+
         logger.info(f"Created split dir '{split_name}' with {created_count}/{len(shard_paths)} shards: {split_dir}")
 
-        # Fail loudly if train split has no files - this is a critical error
-        if split_name == "train" and created_count == 0 and len(shard_paths) > 0:
+        # Fail loudly if any requested shard is missing. Silent partial split
+        # materialization can train on incomplete data while blend.json still
+        # advertises the full intended split.
+        if missing_paths:
             raise FileNotFoundError(
-                f"No parquet files found for train split. Expected {len(shard_paths)} shards. "
+                f"Missing parquet files for {split_name} split. Expected {len(shard_paths)} shards, "
+                f"created {created_count}. "
                 f"Missing files: {missing_paths[:5]}{'...' if len(missing_paths) > 5 else ''}"
             )
+
+        if created_count != len(shard_paths):
+            raise RuntimeError(
+                f"Split {split_name} materialization mismatch: intended {len(shard_paths)} shards, "
+                f"created {created_count} entries."
+            )
+
+        manifest_path = splits_base / "manifest.json"
+        if manifest_path.exists():
+            with manifest_path.open(encoding="utf-8") as f:
+                manifest = json.load(f)
+        else:
+            manifest = {"schema_version": 1, "splits": {}}
+        manifest["splits"][split_name] = {
+            "intended_shards": len(shard_paths),
+            "created_shards": created_count,
+            "entries": manifest_entries,
+        }
+        with manifest_path.open("w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, sort_keys=True)
 
     return result
