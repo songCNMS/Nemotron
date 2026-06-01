@@ -636,3 +636,27 @@
   - task250/#324 open/CLEAN and current as HOLD table.
   - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 31 - 2026-06-01 UTC - task249/task250 cross-refresh sequencing
+
+- Final status check after Session 30 found a new worker_4 report; lead marked it read.
+- `intern_nemotron_worker_4` reported task249/#323 Session 4 refresh:
+  - #323 advanced to `68a8ee77ee25f5dbbac170c935e8487b88198ce2`, open/CLEAN.
+  - `live_gate_review_matrix.md` now exists.
+  - Review decisions: task246 `BLOCK/HOLD`, task247 `BLOCK/HOLD` with local corrected AIME input/cache but no base score, task248 `APPROVE blocked-before-prep report/HOLD`, task250 #324 at old `d1525aa` `REQUEST_CHANGES/HOLD`, combined first go/no-go `NO-GO/HOLD`.
+- In the same final check, task250/#324 had already advanced to `4fd7978353deb9702e880d2734d8b99bfaf8544b`; lead inspected it and found #324 now records task247 local cache and task248 visibility, but still says task249 review matrix is missing because it predates #323 `68a8ee`.
+- Current cross-refresh issue:
+  - #323 matrix is useful, but reviewed old #324 `d1525aa`.
+  - #324 runbook is useful, but predates #323 `68a8ee` matrix.
+- Posted PR comments:
+  - #324: `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4594779989`, request refresh against #323 `68a8ee`.
+  - #323: `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4594779975`, ask worker_4 to hold final matrix refresh until #324 refreshes.
+- Sent peer_send sequencing messages to worker_5 and worker_4; both returned `delivered`.
+- Current branch/PR heads:
+  - task246 `a53c913`.
+  - task247 `94c21c9`.
+  - task248 `8641828`.
+  - task249/#323 `68a8ee7`.
+  - task250/#324 `4fd7978`.
+- First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.

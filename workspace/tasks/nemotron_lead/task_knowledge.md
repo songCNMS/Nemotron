@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Knowledge Entries
 
@@ -42,3 +42,4 @@
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.
 38. A current runbook/HOLD table can be acknowledged after stale blockers are fixed, but it is still not merge/go-no-go approval while task246 corpus/input, task247 base artifacts, task248 candidate artifacts, task249 review, and task243 comparison are absent.
+39. For cross-dependent task249 review and task250 runbook, establish an order when both move: refresh the runbook to include the latest review matrix first, then ask the independent reviewer for a final pass against the refreshed runbook.
