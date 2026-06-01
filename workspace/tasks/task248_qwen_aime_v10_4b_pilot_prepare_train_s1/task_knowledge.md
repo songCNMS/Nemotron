@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Knowledge Entries
 
@@ -47,3 +47,9 @@
     merge, not request-changes; task248 HOLD still blocks prep/sync/train/eval
     until #325 merges and task249/task250 refreshed reviews or explicit lead
     clearance arrive.
+16. Session 8 update: task246/#325 is now merged into `main` at
+    `2026-06-01T17:43:24Z` with merge commit
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+17. After #325 merge, task248 remains HOLD until task249/task250 refresh against
+    current `main` and lead explicitly clears; do not start local prep,
+    NemTron sync, training, or eval before that clearance.

@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0 - Assigned
 
@@ -72,3 +72,12 @@
 - Read-only GitHub list check confirmed task249/#323 and task250/#324 remain `OPEN`/`CLEAN`, so refreshed reviews or explicit lead clearance are still missing.
 - Preserved planned sparse sidecar knobs: `8` train rows and `0` validation shadow rows.
 - Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.
+
+## Session 8 - 2026-06-01 UTC - task246 merged, task249/task250 refresh still gating
+
+- Lead reported task246/#325 merged into `main` at `2026-06-01T17:43:24Z` with merge commit `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Read-only fetch confirmed `origin/main` advanced to `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Read-only GitHub check confirmed PR #325 is `MERGED` with merge commit `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Read-only GitHub check reconfirmed PR #326 is `MERGED` at `2026-06-01T17:21:29Z` with merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Read-only GitHub list check found task249/#323 still `OPEN`/`CLEAN` at head `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f` and task250/#324 still `OPEN`/`CLEAN` at head `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+- Kept task248 HOLD for local prep, NemTron sync, training, live eval, FT judgment, and 30B/8-GPU until task249/task250 refresh against current `main` and lead explicitly clears.

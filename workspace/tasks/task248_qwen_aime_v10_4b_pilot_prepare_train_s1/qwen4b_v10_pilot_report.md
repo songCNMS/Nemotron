@@ -1,6 +1,6 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Hold,SESSION=7 -->
+<!-- METADATA:STATUS=Hold,SESSION=8 -->
 
 ## Summary
 
@@ -10,9 +10,8 @@
   `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
-- The task remains on HOLD before local prep/train/eval until task246/#325 is
-  actually merged plus task249/task250 refreshed reviews arrive, or lead gives
-  explicit clearance.
+- The task remains on HOLD before local prep/train/eval until task249/task250
+  refresh against current `main` and lead explicitly clears.
 
 ## Dependency probes
 
@@ -62,11 +61,21 @@
   commit yet.
 - Session 7 read-only GitHub list check: task249/#323 and task250/#324 remain
   `OPEN`/`CLEAN`.
+- Session 8 update: PR #325 is now `MERGED` at `2026-06-01T17:43:24Z` with
+  merge commit `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Session 8 read-only fetch: `origin/main` is now
+  `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Session 8 read-only GitHub check: PR #326 remains `MERGED` at
+  `2026-06-01T17:21:29Z` with merge commit
+  `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Session 8 read-only GitHub list check: task249/#323 is `OPEN`/`CLEAN` at
+  head `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`; task250/#324 is
+  `OPEN`/`CLEAN` at head `cde927bf407667f198be6848aa0d6d3ff8745d10`.
 
 ## Prepared command shape
 
-Do not run this until task246/#325 actually merges plus task249/task250
-refreshed reviews arrive, or lead explicitly clears task248.
+Do not run this until task249/task250 refresh against current `main` and lead
+explicitly clears task248.
 
 ```bash
 PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
@@ -102,7 +111,7 @@ Expected generated paths after the dependencies exist:
 
 ## Gate status
 
-- Local prep is on HOLD until task246/#325 actually merges plus task249/task250 refreshed reviews arrive, or lead explicitly clears task248.
+- Local prep is on HOLD until task249/task250 refresh against current `main` and lead explicitly clears task248.
 - Training is on HOLD until local prep is explicitly cleared and succeeds with task246 inputs.
 - FT judgment remains blocked until a future FT artifact exists and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
 - Current baseline to preserve for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
@@ -123,6 +132,8 @@ Expected generated paths after the dependencies exist:
   read-only `gh pr view 326`, and read-only `gh pr list --search task249/task250`.
 - Session 7 refresh: `git fetch origin --prune`, read-only `gh pr view 325`,
   and read-only `gh pr list --search "task249 OR task250"`.
+- Session 8 refresh: `git fetch origin --prune`, read-only `gh pr view 325`,
+  read-only `gh pr view 326`, and read-only `gh pr list --search "task249 OR task250"`.
 
 ## Commands not run
 
