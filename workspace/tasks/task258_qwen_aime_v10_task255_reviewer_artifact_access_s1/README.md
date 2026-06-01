@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - task255 reviewer artifact access
 
-<!-- METADATA:STATUS=ReadyForPMReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 

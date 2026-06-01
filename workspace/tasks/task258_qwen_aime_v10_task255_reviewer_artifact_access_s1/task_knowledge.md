@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,9 @@
    per-file inventory/checksum detail should be referenced by path
    (`review_manifest/` and local task output root) instead of pasted into the
    mailbox body.
+9. #331 is the approved merge path for task255 artifact-record docs plus
+   task258 reviewer-access closeout; #329 must remain closed as superseded, not
+   merged, because the PRs overlap on task255 docs/status.
+10. Even after #331 merge, the global Qwen AIME gate remains `NO-GO/HOLD`
+    because task257/#330 measured the candidate FT artifact at `0/30`, below
+    accepted base `11/30`.

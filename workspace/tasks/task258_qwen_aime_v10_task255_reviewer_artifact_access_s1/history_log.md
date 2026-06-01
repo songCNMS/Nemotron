@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -94,3 +94,21 @@
   eval, no promotion claim, no 30B/8-GPU clearance, no main push/merge, no
   #329 merge, and no deletion or overwrite under
   `/mnt/cephfs/data/processing/lei.song`.
+
+## Session 4 - 2026-06-01 UTC - Approved merge and superseded PR closeout
+
+- Lead approved #331 at exact head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` as the artifact-access closeout
+  and task255 artifact-record carrier.
+- Rechecked #331 immediately before merge: base `main`, state `OPEN`,
+  `mergeStateStatus=CLEAN`, and head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- Self-merged #331 with merge commit
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90` at
+  `2026-06-01T21:34:07Z`.
+- Closed #329 as superseded by #331, not merged. #329 closed at
+  `2026-06-01T21:34:54Z` with no merge commit.
+- Global gate remains `NO-GO/HOLD` because task257/#330 measured the candidate
+  FT AIME result as `0/30`, below the accepted base `11/30`.
+- No promotion claim, 30B/8-GPU clearance, training, export rerun,
+  AIME/task243 eval, main push, or `lei.song` deletion/overwrite was performed.
