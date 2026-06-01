@@ -95,3 +95,4 @@
 89. Observed task255 HF export at `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001` is promising artifact evidence, but it remains unofficial until worker_2 closeout confirms boundaries and readiness; task243 comparison still stays held.
 90. After task255 report `PASS_ARTIFACT_READY_FOR_REVIEW`, split the next gate into task256 independent artifact review and task257 corrected AIME same-harness comparison; global gate remains HOLD until both produce acceptable evidence.
 91. task255 PR #329 head `d62036e405edc5daa322c09bb89da19b176bb7bf` is the review target; `dfee98a..d62036e` only records the PR number in worker_2 status.
+92. worker_2 official task255 closeout confirms `PASS_ARTIFACT_READY_FOR_REVIEW`, but #329 is still not approved until task256 artifact review and task257/task243 same-harness AIME comparison complete.

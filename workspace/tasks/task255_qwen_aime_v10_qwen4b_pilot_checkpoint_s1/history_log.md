@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -190,3 +190,30 @@
 - Global gate remains `NO-GO/HOLD`: the export is still unofficial until
   worker_2 closeout is processed, and no task243 same-harness FT-vs-base
   comparison exists against accepted base `11/30`.
+
+## Session 6 - 2026-06-01 UTC - Official closeout processed
+
+- Lead received and marked read worker_2 official task255 closeout mailbox.
+- Reported disposition: `PASS_ARTIFACT_READY_FOR_REVIEW`.
+- Branch/PR:
+  - branch
+    `intern_nemotron_worker_2/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1`;
+  - head `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - PR #329, base `main`, merge state `CLEAN`.
+- Authoritative report:
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/task255_qwen4b_pilot_checkpoint_export_report.md`
+  sha256 `3893af84bfdb4d78c4f31074a8454b2fa2bab2d69cfec71c42a36b75c49e7686`.
+- Full checkpoint and HF export inventories/checksums are under:
+  - `logs/checkpoint_inventory_20260601T202339Z.log`;
+  - `logs/hf_export_inventory_20260601T202339Z.log`.
+- worker_2 confirmed boundaries:
+  - Qwen3-4B only;
+  - no AIME2025 train prompts/labels in trainable rows;
+  - no task243 comparison;
+  - no FT live eval beyond training-script packed-valid validation;
+  - no promotion/go-no-go claim;
+  - no 30B/8-GPU;
+  - no deletion/overwrite under `/mnt/cephfs/data/processing/lei.song`.
+- Lead status: task255 artifact evidence is ready for task256 independent
+  review and task257/task243 same-harness AIME planning. #329 remains pending
+  review; no merge direction yet.

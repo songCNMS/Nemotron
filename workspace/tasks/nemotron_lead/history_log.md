@@ -2615,3 +2615,29 @@
 - #329 is not approved or merge-directed yet; wait for task256 independent
   artifact review and task257/task243 same-harness comparison evidence.
 - Global gate remains `NO-GO/HOLD`.
+
+## Follow-up - 2026-06-01 UTC - task255 official closeout processed
+
+- Received and marked read worker_2 official task255 closeout mailbox.
+- worker_2 reported disposition `PASS_ARTIFACT_READY_FOR_REVIEW`.
+- Current PR state:
+  - #329 open, base `main`, head
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`, merge state `CLEAN`;
+  - diff is workspace status/task docs only.
+- Authoritative task255 report:
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/task255_qwen4b_pilot_checkpoint_export_report.md`
+  sha256 `3893af84bfdb4d78c4f31074a8454b2fa2bab2d69cfec71c42a36b75c49e7686`.
+- worker_2 confirmed artifacts:
+  - checkpoint
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`;
+  - HF export
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001`.
+- worker_2 confirmed boundaries: Qwen3-4B only, no AIME2025 train
+  prompts/labels, no task243 comparison, no FT live eval beyond packed-valid
+  validation, no promotion/go-no-go claim, no 30B/8-GPU, and no shared
+  `lei.song` deletion.
+- Earlier task256/task257 head update messages were delivered to worker_5 and
+  worker_3. No further dispatch needed.
+- #329 remains pending; lead will wait for task256 review and task257
+  same-harness AIME evidence before approval/merge direction.
+- Global gate remains `NO-GO/HOLD`.
