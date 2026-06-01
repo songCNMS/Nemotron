@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
 
 ## Session 0 - Created with team lead
 
@@ -3302,6 +3302,55 @@
 - Sent delivered coordinator update with visible task262/task264/task265/task266
   branch heads, missing task263 remote evidence, and unchanged `NO-GO/HOLD`
   gate.
+- Received and marked read worker_2 mailbox
+  `e006081426ea4a0fa7d06f6f7bc0e837`: task263 acceptance/working branch pushed
+  at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, based on `origin/main`
+  `513fefa1f1ace94302b56413769c78fb7224624c`, no PR yet.
+- Fetched and verified worker_2/task263 diff is worker_2 status plus task263
+  README/history/task_knowledge only; `git diff --check` passed.
+- worker_2 reported local import probe has torch/transformers/safetensors/
+  pyarrow/omegaconf present, but `megatron` and `megatron.bridge` are missing
+  on the local worker host. This is recorded as local-environment evidence only;
+  task263 still needs fail-closed preflight and Bridge proof from NemTron/NeMo
+  environment or a precise environment blocker.
+- All five V11 acceptance branches are now visible:
+  - task262 worker_1 `e8c0df6f7c5885d5ace704e2f03b8ce77fc77bc3`;
+  - task263 worker_2 `4af57e0e61703a063c1ef42def44119a7eea5cf9`;
+  - task264 worker_3 `b2a67412c412b7dd2f3f775f029049b49eef7a7b`;
+  - task265 worker_4 `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - task266 worker_5 `f5ddc6e780f7a2182caa92dabe8602cecd3603b5`.
+- No implementation, training, eval, merge, or product-code change was
+  performed by lead.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full
+  training/eval clearance, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 67 - 2026-06-01 UTC - V11 acceptance ack reconciled
+
+- Received coordinator Session 36 ack/reconcile confirming:
+  - lead branch `09899c9e9a074c706cfd46ab090a8f71e7a9399c` at the time of
+    coordinator fetch;
+  - `origin/main` `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - task262 worker_1 branch
+    `e8c0df6f7c5885d5ace704e2f03b8ce77fc77bc3`;
+  - task263 worker_2 branch
+    `4af57e0e61703a063c1ef42def44119a7eea5cf9`;
+  - task264 worker_3 branch
+    `b2a67412c412b7dd2f3f775f029049b49eef7a7b`;
+  - task265 worker_4 branch
+    `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - task266 worker_5 branch
+    `f5ddc6e780f7a2182caa92dabe8602cecd3603b5`.
+- Coordinator independently confirmed no task262-task266 PRs yet, visible branch
+  diffs are acceptance/status/task-doc copies, and diff-check passes for all
+  five visible branches.
+- Coordinator accepted worker_4's official task265 mailbox/branch state as gate
+  evidence despite stale local worker_4 status.
+- Coordinator noted worker_2's local `megatron.bridge` absence and preserved the
+  requirement that real Bridge import/base-load proof must run in the
+  NemTron/NeMo environment or be reported as an exact environment blocker.
+- Lead rechecked local mailbox before this update; unread count was `0`.
+- Lead rechecked remote V11 branch list and confirmed all five task262-task266
+  acceptance branches remain visible at the same heads.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full

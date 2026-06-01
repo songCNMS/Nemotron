@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
 
 ## Knowledge Entries
 
@@ -206,3 +206,11 @@
    has mailbox acceptance but a branch identical to main, so its future review
    matrix still needs exact upstream heads. task263 needs worker_2 remote branch
    or mailbox blocker before lead can count it as accepted remote evidence.
+123. task263 worker_2 acceptance branch `4af57e0e61703a063c1ef42def44119a7eea5cf9`
+   is now visible and diff-check clean; local host lacks `megatron.bridge`, so
+   V11 base-load/import proof must either run in NemTron/NeMo or report that
+   environment as the exact blocker. This does not authorize training or eval.
+124. Coordinator independently verified all task262-task266 acceptance branches
+   and accepted task265 mailbox/branch state despite stale worker_4 local status.
+   There are still no task262-task266 PRs, and the next lead gate input is
+   worker deliverables or blockers from those task-owned branches.
