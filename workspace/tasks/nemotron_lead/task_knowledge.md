@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
 
 ## Knowledge Entries
 
@@ -73,3 +73,4 @@
 67. If a worker task session disconnects after forming a correct plan but before artifacts/PR, a non-interrupting peer_send can be used to resume the scoped task; this does not change gate evidence until branch or artifact state advances.
 68. task251 local artifacts can show HotpotQA is likely unblocked, but lead must not gate them as official evidence until worker_2 commits/pushes, opens PR if needed, and sends a mailbox report with commands, paths, counts, and blocker disposition.
 69. After HotpotQA unblocks M0/M1, the observed next local-prep blocker is Qwen packing import failure `ModuleNotFoundError: No module named 'cosmos_xenna'`; this is not a FT artifact and does not authorize task243 comparison or scale-up.
+70. PR #328 head `694197c` is the first visible task251 code/test/report PR; it should not be approved until worker_2 closeout mailbox and independent worker_4 task252 review/test evidence are processed.
