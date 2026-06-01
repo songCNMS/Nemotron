@@ -32,6 +32,7 @@
   manifests, and task257 same-harness FT failure evidence.
 - Added root-cause report:
   `task255_data_training_root_cause_report.md`.
+- Opened PR #333 for lead review.
 - Main finding: task255 likely produced a random-init or otherwise wrong-start
   checkpoint because the log has no positive pretrained checkpoint-load line,
   `SUPER3_M1_PRETRAINED_CHECKPOINT` pointed at the raw Qwen HF directory,

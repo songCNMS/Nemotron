@@ -6,8 +6,8 @@
 
 - Task: `task261_qwen_aime_v10_task255_data_training_root_cause_s1`.
 - Branch: `intern_nemotron_worker_1/task261_qwen_aime_v10_task255_data_training_root_cause_s1`.
-- Report head at write time: `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e` before the report commit.
-- PR: pending.
+- Report content commit: `bddd499ec43d0f5b299c8676723608f422455e87`.
+- PR: #333.
 - Scope executed: read-only audit of task253 packed Qwen data, task255 Qwen3-4B one-iteration training/export evidence, and task257 downstream same-harness AIME failure summary.
 - Boundaries kept: no training, no export, no endpoint launch, no AIME/task243 eval, no code changes, no artifact modification, no AIME2025 train data, no promotion/go-no-go claim, no 30B/8-GPU, no shared deletion.
 - Global disposition remains `NO-GO/HOLD`.

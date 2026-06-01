@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task261_qwen_aime_v10_task255_data_training_root_cause_s1 |
-| PR | N/A |
+| PR | #333 |
 | Session | 1 |
-| Progress | Completed read-only task253/task255/task257 root-cause audit report; preparing PR and mailbox closeout. Global gate remains NO-GO/HOLD. |
+| Progress | Completed read-only task253/task255/task257 root-cause audit report; PR #333 open for lead review. Global gate remains NO-GO/HOLD. |

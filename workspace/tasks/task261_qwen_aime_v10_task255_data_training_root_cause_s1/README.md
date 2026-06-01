@@ -90,7 +90,6 @@ pilot plan.
   `9c6cdb6974e4b2c27378d95e228d0536fb5ada41`.
 - Task docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at `c866509`.
-- Status: root-cause audit report drafted; ready for PR/mailbox closeout after
-  branch update and checks.
+- Status: root-cause audit report drafted and PR opened as #333.
 - Report:
   `workspace/tasks/task261_qwen_aime_v10_task255_data_training_root_cause_s1/task255_data_training_root_cause_report.md`.
