@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - 2026-06-01 UTC - Recovery task created by team lead
 
@@ -27,3 +27,16 @@
   are available for `multichallenge`, `terminalbench`, `mcp_mark`,
   `tool_decathlon`, or `swe_bench_verified` in the inspected approved/local/VPN
   runtime evidence.
+
+## Session 2 - 2026-06-01 UTC - Mailbox report and session bookkeeping
+
+- Confirmed PR #315 remains the worker-owned recovery PR for
+  `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1`.
+- Sent lead mailbox progress report through
+  `POST http://localhost:35227/api/intern/mail/to`; daemon returned
+  `status=stored`, `read_state=unread`, and message id
+  `intern_nemotron_worker_1-task231-recovery-pr315-20260601-1302`.
+- Lead sent a follow-up flow reminder with the same mailbox endpoint; no peer
+  reply was sent.
+- No new evidence scan, endpoint, eval, benchmark, Docker, install, download,
+  product-code edit, direct main push, or merge was performed.
