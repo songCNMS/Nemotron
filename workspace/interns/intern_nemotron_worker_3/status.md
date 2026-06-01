@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task260_qwen_aime_v10_task255_eval_failure_forensics_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task260_qwen_aime_v10_task255_eval_failure_forensics_s1 |
+| Current Task | |
 | PR | Pending |
 | Session | 1 |
-| Progress | Accepted task260; performing read-only forensic comparison of task257 FT AIME2025 outputs versus accepted task247 Qwen3-4B base outputs. |
+| Progress | Completed task260 read-only forensic report: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue. Awaiting PR number and lead gate. |

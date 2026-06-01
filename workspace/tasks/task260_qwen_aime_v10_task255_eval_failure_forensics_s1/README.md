@@ -1,6 +1,6 @@
 # task260_qwen_aime_v10_task255_eval_failure_forensics_s1 - task255 eval failure forensics
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 

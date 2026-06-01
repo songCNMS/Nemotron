@@ -13,3 +13,10 @@
 5. Forensics should classify observed text only from existing `results.jsonl`
    artifacts; manual inspection may identify likely final-answer strings, but
    must not become a new eval run or a promotion/go-no-go claim.
+6. The inspected task257 `results.jsonl` does not preserve full FT completion
+   bodies, only row metrics and `response_tail`. The forensic matrix should
+   cite this as a residual evidence limit rather than inventing full-output
+   claims.
+7. The task255 FT failure signature is generation degeneration/corruption:
+   every row has null prediction/no boxed/no final marker and mixed-script tail
+   noise, while the task247 base under the same protocol parsed 23/30.
