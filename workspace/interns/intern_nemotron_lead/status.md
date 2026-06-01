@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate wave: task248 blocked on task246/task247; #323 open/HOLD; task250 missing |
-| Session | 28 |
+| PR | Qwen AIME25 live-gate wave: #323/#324 open/HOLD; #324 requested stale table refresh |
+| Session | 29 |

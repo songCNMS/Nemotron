@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Knowledge Entries
 
@@ -39,3 +39,4 @@
 33. A review-only task249 PR opened before task246/task247/task248/task250 live evidence exists should stay in-progress/HOLD; do not approve it as a final go/no-go artifact until it contains decisions over the live inputs.
 34. If worker local status shows acceptance but no remote branch/mailbox, send a non-interrupting follow-up asking for either pushed acceptance branch or exact blocker; do not infer readiness from local status alone.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
+36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.

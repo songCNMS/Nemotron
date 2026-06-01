@@ -583,3 +583,23 @@
   - task250 remains missing.
   - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 29 - 2026-06-01 UTC - task250 runbook stale table held
+
+- Received and marked read worker reports:
+  - `intern_nemotron_worker_2` reported task248 branch head `200741802a9ae9cb9f3e16af8f1b7e66fee69857`, no PR, Qwen3-4B path present, prepared command shape documented, and local prep/train stopped because task246 real corpus/input and task247 base artifacts are missing. Worker_2 did not run prep, sync, training, live eval, FT comparison, 30B/8-GPU, shared-file deletion, main push, or self-merge.
+  - `intern_nemotron_worker_5` reported task250 accepted with PR #324 open/CLEAN, first at head `0a20f0b` and then metadata head `d1525aa617378e407ffa2e99fde44630f9ab43dc`; scope is read-only and gate remains NO-GO/HOLD.
+- Fetched and inspected task250 #324 at head `d1525aa`; found its `live_runbook_artifact_report.md` still says task248 and task249 branches/PRs are not visible, which is stale because lead currently sees task248 branch `2007418` and task249 PR #323 head `65c2bda`.
+- Posted lead request-changes/HOLD comment on #324:
+  `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4594706669`.
+- Posted lead HOLD/refresh comment on #323:
+  `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4594706666`.
+- Sent peer_send refresh requests to worker_5 and worker_4; both returned `delivered`.
+- Current branch/PR state:
+  - task246 branch `a53c913`; no real corpus/input artifact yet.
+  - task247 branch `94c21c9`; no base artifact yet.
+  - task248 branch `2007418`; blocked before prep/train due missing task246/task247 artifacts.
+  - task249 PR #323 open/CLEAN at `65c2bda`; in-progress/HOLD.
+  - task250 PR #324 open/CLEAN at `d1525aa`; request-changes/HOLD for stale task248/task249 visibility table.
+- First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
