@@ -1,6 +1,6 @@
 # task247_qwen_aime2025_qwen4b_base_smoke_s1 - Qwen3-4B base AIME smoke
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
 
 ## Background
 

@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task247_qwen_aime2025_qwen4b_base_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task247_qwen_aime2025_qwen4b_base_smoke_s1 |
+| Current Task |  |
 | PR | #326 |
-| Session | 1 |
-| Progress | Produced Qwen3-4B base AIME2025 30x1 artifact: 11/30 exact-normalized correct; PR #326 opened for report review |
+| Session | 2 |
+| Progress | PR #326 merged at 2026-06-01T17:21:29Z with merge commit 85f2bf5c11062741388ca114a84a2c26535b7df9; task247 completed |

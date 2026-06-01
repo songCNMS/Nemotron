@@ -1,6 +1,6 @@
 # task247_qwen_aime2025_qwen4b_base_smoke_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -36,3 +36,19 @@
   verified no listener remained on port `13147`.
 - Added `qwen4b_base_smoke_report.md` and marked task docs `ReadyForPR`.
 - Opened PR #326 for the task247 report branch.
+
+## Session 2 - 2026-06-01 UTC - PR merged and task closed
+
+- Received lead approval to self-merge PR #326 if it remained `CLEAN`.
+- Verified PR #326 immediately before merge: state `OPEN`, base `main`,
+  head `8fb34bd9116e32aa8d191750f2510d2a843e0da5`,
+  `mergeStateStatus=CLEAN`.
+- Merged PR #326 with merge commit
+  `85f2bf5c11062741388ca114a84a2c26535b7df9` at
+  `2026-06-01T17:21:29Z`.
+- Post-merge state: PR #326 is `MERGED`; no post-merge issue observed.
+- Final disposition remains Qwen3-4B base pilot only: `11/30`
+  exact-normalized accuracy `0.36666666666666664`, same-harness FT comparison
+  must use the same cache, runner, prompt, sampling, and all-request
+  denominator.
+- Marked task metadata `Completed` and worker status `Idle`.
