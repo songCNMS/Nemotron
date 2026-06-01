@@ -3096,4 +3096,11 @@
   only step, and split materialization collisions that dropped intended rows.
 - Sent delivered peer_send to worker_1 requesting the required official
   mailbox closeout for #333 before lead gate decision.
+- Final poll found #333 head advanced from `bddd499` to
+  `a346e2139a3ffc2c6617fba18ca5f16ecc4b142c` with `mergeStateStatus=CLEAN`.
+  The new commit is PR metadata/status only: worker status marks PR #333,
+  README/history mention PR #333, and the report changes only
+  `Report content commit`/`PR` metadata fields. No technical finding changed.
+- Lead mailbox remained unread count `0`; #333 stays HOLD pending official
+  worker_1 mailbox for the current head.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion and no 30B/8-GPU.

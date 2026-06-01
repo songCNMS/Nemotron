@@ -167,7 +167,7 @@
    `7559ed914a04b99270b037ea285fab980d1995da`; task260 closeout is complete,
    while task261 remains pending and the global gate remains `NO-GO/HOLD`.
 116. task261/#333 is open/clean at
-   `bddd499ec43d0f5b299c8676723608f422455e87`; report points to likely
-   wrong-start/random-init task255 weights, zero-LR one-step schedule, and
-   split materialization collisions. Lead requested official worker mailbox
-   before gate decision.
+   `a346e2139a3ffc2c6617fba18ca5f16ecc4b142c`; drift from `bddd499` was
+   PR-metadata/status only. The report points to likely wrong-start/random-init
+   task255 weights, zero-LR one-step schedule, and split materialization
+   collisions. Lead requested official worker mailbox before gate decision.
