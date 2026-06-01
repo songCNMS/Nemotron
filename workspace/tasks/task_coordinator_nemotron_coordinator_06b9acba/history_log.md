@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Session 0 - Created with coordinator
 
@@ -350,3 +350,23 @@
 - Read lead-side task260/task261 README docs and confirmed both tasks are read-only root-cause analysis only: no training, no endpoint launch, no new AIME/task243 eval, no code/artifact modification, no promotion, no AIME2025 train data, no shared deletion, and no 30B/8-GPU.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified branch/PR/gate state and requesting task260/task261 formal mailbox reports, PRs, or blockers when available.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT result is `0/30` below accepted base `11/30`, no promotion is allowed, and 30B/8-GPU remains blocked.
+
+## Session 31 - task260 forensic report merged, task261 pending
+
+- Received `intern_nemotron_lead` Session 61 update: worker_3 task260 formal report arrived; task260 branch head `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`; PR #332 was open/base main/clean at report time; lead processed mailbox `0fe0d2add7bf4fc283ca5785374e66b1`, approved #332 as read-only docs/status forensic closeout, and instructed worker_3 to self-merge only if still clean at exact head `0d9193c`.
+- Fetched `origin` and found state newer than the initial lead snapshot:
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `857bc616e046367b1050c607227c591e8d60ce2b` at first check, then to `155ce007615baf85b76258ff1ea0bd9a14ca0feb` after the merge closeout;
+  - `origin/main` advanced to #332 merge commit `7559ed914a04b99270b037ea285fab980d1995da`;
+  - task260 branch remained at `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`;
+  - task261 branch remained at `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`.
+- Verified GitHub #332 is `MERGED`, mergedAt `2026-06-01T22:00:12Z`, merge commit `7559ed914a04b99270b037ea285fab980d1995da`, merged head `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`, base `main`.
+- Verified merged #332 scope remained docs/status forensic closeout only: worker_3 status plus task260 `README.md`, `history_log.md`, `task_knowledge.md`, and `task260_failure_forensics_report.md`; `git diff --check 9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90..0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9` passed. `gh pr checks 332` reported no checks.
+- Read the merged task260 forensic report from `origin/main`. Key finding: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue.
+- Recorded task260 evidence summary:
+  - FT run: `0/30` exact-normalized accuracy, `0/30` parsed, `0/30` non-null predictions, `0/30` boxed values, `0/30` visible final-answer markers in preserved response tails;
+  - FT failure texture: `23/30` length stops, `30/30` mixed-script tail noise, `24/30` code/API-like tail tokens, `27/30` repeated patterns;
+  - accepted base under same harness: `23/30` parsed, `23/30` boxed, `11/30` correct, with the same evaluator protocol.
+- Received a second lead merge closeout message: GitHub and worker_3 mailbox `646c4140876f47c5bed0b6cdff7123fc` confirm #332 merged at the approved head with no post-merge issue; task260 disposition is completed forensic evidence.
+- Sent delivered peer acknowledgements to `intern_nemotron_lead` for both the current-state reconciliation and the final #332 merge closeout.
+- Verified task261 is still pending: branch `origin/intern_nemotron_worker_1/task261_qwen_aime_v10_task255_data_training_root_cause_s1` remains `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`, GitHub PR search returned `[]`, and worker_1 local status remains `Working` on the task with no formal report/PR/blocker visible.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT is `0/30` below accepted base `11/30`, no promotion is allowed, no 30B/8-GPU is allowed, and task261 root-cause evidence is still needed before lead can define the next V11 candidate plan.

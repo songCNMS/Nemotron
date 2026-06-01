@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Knowledge Entries
 
@@ -65,3 +65,7 @@
 59. task260 is assigned to worker_3 for read-only task255 eval failure forensics at branch `fd508a73bbcc29c2b3bc9b2954fb83d7810d1bcb`; acceptance diff is worker status plus task260 docs only, and no task260 PR is visible yet.
 60. task261 is assigned to worker_1 for read-only task253/task255 data/training root-cause audit at branch `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`; acceptance diff is worker status plus task261 docs only, and no task261 PR is visible yet.
 61. task260/task261 must not train, launch endpoints, run new AIME/task243 eval, modify code/artifacts, use AIME2025 as train data, claim promotion, launch 30B/8-GPU, or delete shared `lei.song` files; their output should be formal mailbox reports and, if needed, reviewable docs-only PRs.
+62. Session 31 supersedes entry 59: task260/#332 merged at `2026-06-01T22:00:12Z` with merge commit `7559ed914a04b99270b037ea285fab980d1995da` from exact head `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`; scope was worker_3 status plus task260 docs/report only.
+63. task260 forensic finding: task255 FT failure is generation degeneration/corruption, not evaluator-only parser failure. FT had `0/30` parsed/correct/non-null prediction/boxed/final-answer marker, `23/30` length stops, and `30/30` mixed-script tails, while the accepted base same harness had `23/30` parsed and `11/30` correct.
+64. task260 recommendations to preserve for V11 planning: do not promote or scale task255; add non-AIME export-load canaries, artifact sanity checks for tokenizer/chat-template/special tokens/layer shapes/NaN-Inf/layer deltas, and retain fuller completions for future forensics.
+65. task261 remains the active pending root-cause audit at branch `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e` with no PR/formal report/blocker visible during Session 31; it should explain data/training/export root cause before any next V11 pilot is planned.
