@@ -3016,3 +3016,15 @@
   tasks. No task260/task261 PR or formal mailbox report is visible yet.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task255 FT remains below base
   and non-promotable; no 30B/8-GPU.
+
+## Session 78 - 2026-06-01 UTC - Coordinator updated on acceptance state
+
+- Pushed lead branch at `b9bc40c` after recording task260/task261 acceptance.
+- Rechecked lead mailbox before coordinator contact; unread count was `0`.
+- Sent delivered peer_send to `intern_nemotron_coordinator` with:
+  - lead branch `b9bc40c`;
+  - task260 worker_3 acceptance branch/head `fd508a73bbcc29c2b3bc9b2954fb83d7810d1bcb`;
+  - task261 worker_1 acceptance branch/head `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`;
+  - both diffs are worker status/task-docs only;
+  - no PR/formal report yet;
+  - global gate remains `NO-GO/HOLD`, no promotion, no 30B/8-GPU.

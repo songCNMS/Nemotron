@@ -153,3 +153,6 @@
    `fd508a73bbcc29c2b3bc9b2954fb83d7810d1bcb`; task261 acceptance branch head is
    `77ef7c58fa3ff7b0d63eaba02748e5eb5280bb6e`. Both diffs are worker
    status/task-docs only; formal reports are still pending.
+112. Coordinator was updated after lead branch `b9bc40c`; no task260/task261 PR
+   or formal report existed at that point, and global gate stayed
+   `NO-GO/HOLD`.
