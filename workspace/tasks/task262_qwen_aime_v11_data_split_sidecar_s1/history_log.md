@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -59,3 +59,21 @@
 - Session 2 changes are status/history/task_knowledge metadata only; no code,
   tests, output artifacts, training, eval, endpoints, promotion, 30B/8-GPU,
   task255 checkpoint/export reuse, AIME2025 train data use, or shared deletion.
+
+## Session 3 - 2026-06-01 UTC - Exact-head closeout resent
+
+- Received lead request to resend official closeout mailbox for exact PR #336
+  head `1a440c155a3049ece488483c1ce99ff4c89a3eb8`.
+- Verified #336 was OPEN, base `main`, non-draft, CLEAN/MERGEABLE at exact
+  head `1a440c155a3049ece488483c1ce99ff4c89a3eb8` before mailbox resend.
+- Sent official closeout mailbox with PR URL, files changed, commands/checks,
+  environment, artifact paths/checksums, split/sidecar evidence,
+  contamination/no-AIME25-train status, residual risks, and boundary
+  confirmation. Mailbox message id:
+  `adcbeda5b09d457b949aa51c89747d91`.
+- Confirmed no self-merge; PR #336 remains HOLD pending lead gate and task265
+  independent review.
+- Session 3 repo changes are status/history/task_knowledge metadata only; no
+  code, tests, output artifacts, training, eval, endpoints, promotion,
+  30B/8-GPU, task255 checkpoint/export reuse, AIME2025 train data use, or
+  shared deletion.

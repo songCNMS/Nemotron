@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -31,3 +31,6 @@
     decontamination scanner was not rerun for final-answer rows in task262.
 11. PR #336 must not be self-merged; lead gate and task265 independent review
     are required before any merge decision.
+12. Official exact-head closeout for PR #336 head
+    `1a440c155a3049ece488483c1ce99ff4c89a3eb8` was resent by mailbox in
+    Session 3; message id `adcbeda5b09d457b949aa51c89747d91`.

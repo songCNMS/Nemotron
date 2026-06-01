@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task262_qwen_aime_v11_data_split_sidecar_s1 |
 | PR | #336 |
-| Session | 2 |
-| Progress | Preparing official closeout mailbox for PR #336 after lead requested exact-head report and no self-merge; no code/artifact changes in Session 2. |
+| Session | 3 |
+| Progress | Resent official exact-head task262 closeout mailbox for PR #336 head 1a440c1; #336 remains HOLD with no self-merge pending lead gate and task265 review. |
