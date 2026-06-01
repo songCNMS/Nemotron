@@ -13,3 +13,6 @@
   promotion, or launch 30B/8-GPU.
 - Gate remains `NO-GO/HOLD`: no candidate FT checkpoint/export/eval artifact
   exists and no same-harness FT-vs-base comparison exists.
+- Lead pushed the assignment docs at branch head
+  `7e07eac0a7dc2a45cb5dcd63c3f4bf39e1b78e4b` and sent delivered peer_send to
+  worker_5.

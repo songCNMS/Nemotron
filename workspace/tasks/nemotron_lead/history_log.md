@@ -2231,6 +2231,10 @@
   `intern_nemotron_worker_5`, for independent read-only review/test of exact
   task253 head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e` and the task253
   output artifacts.
+- Pushed lead branch with task254 docs at
+  `7e07eac0a7dc2a45cb5dcd63c3f4bf39e1b78e4b`.
+- Sent delivered peer_send to worker_5 to accept task254 from lead branch head
+  `7e07eac`, preserving review-only/no-training/no-eval/no-30B boundaries.
 - task254 scope:
   - verify report paths, commands/env, dependency probes, metadata/blend
     checksums, shard counts, Qwen chat-template settings, and boundaries;
