@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Knowledge Entries
 
@@ -60,3 +60,4 @@
 54. When a worker PR head advances after lead approval, revalidate the exact new head before merge direction carries forward; if the advance is bookkeeping-only and the live gate artifact is unchanged, renew the approval/comment at the new head and keep the same sequencing constraints.
 55. After task250/#324 merges, task249/#323 can be released for worker_4 self-merge only after reconciling the worker_5 merge report and rechecking #323 is still CLEAN at the current head; any further #323 material head drift or dirty state requires a fresh worker_4 refresh/report before merge.
 56. Once task246/#325, task247/#326, task250/#324, and task249/#323 are merged, task248 may be cleared only for Qwen3-4B pilot prep/smoke artifact production; this still does not pass the go/no-go or authorize promotion/30B until task243 produces a same-harness base-vs-FT comparison.
+57. Local task248 prep/planning files without a worker mailbox report and without checkpoint/export/FT eval artifacts are not enough to move the gate; if logs show environment blockers such as missing `/work-agents/.venv` or missing `datasets`, require worker_2 to report exact commands, artifact completeness, and blocker/remediation path.

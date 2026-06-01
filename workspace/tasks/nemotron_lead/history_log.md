@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Session 0 - Created with team lead
 
@@ -1480,5 +1480,48 @@
   have completed their prerequisite evidence/review/runbook PRs; worker_3 will
   be needed again for task243 comparison after task248 produces candidate FT
   artifacts.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 51 - 2026-06-01 UTC - task248 prep artifact monitoring
+
+- Received coordinator acknowledgement that #323/#324/#325/#326 are merged,
+  `origin/main` is at `ec467724c2876211cd2bf56b15071e31abd692a4`, task248
+  worker_2 branch is at `a6eb79b`, and no task248 PR is visible yet.
+- Rechecked mailbox before coordination; no unread messages were pending.
+- Rechecked current task248 external state:
+  - Remote branch
+    `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
+    remains at `a6eb79b02c245bab9d3e6631109f40d384a8de45`.
+  - No task248 PR is visible in the GitHub search result.
+  - Existing open PR #322 is task243 closeout at `f7cc324`, currently DIRTY;
+    it is not the required live same-harness base-vs-FT comparison output.
+- Inspected task248 task-owned output paths read-only:
+  - Output root exists:
+    `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+  - Present files include `scaleup_manifest.json`, `report.md`,
+    `run_local_data_prep.sh`, `sync_to_nemtron.sh`, `run_nemtron_train.sh`,
+    `run_eval_basket_dry_run.sh`, logs, and `m0_agentic` train/val split files.
+  - No checkpoint, export, or live FT eval artifact path was observed.
+  - The manifest preserves the Qwen3-4B path
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, the
+    same-harness AIME gate, `enable_thinking=false`, and 30B hold.
+  - Read-only log inspection showed local prep blockers/errors:
+    `/work-agents/.venv/bin/activate` missing and `datasets` package missing.
+- Sent delivered peer_send to worker_2 requesting an official task248 mailbox
+  report with branch/head/PR or artifact-only status, exact commands run,
+  produced artifact paths, whether prep is partial or complete, exact
+  blocker/environment need, and whether outputs are ready for task243
+  comparison.
+- Current gate remains `NO-GO/HOLD`: task248 candidate FT checkpoint/export
+  and FT eval artifacts are not present, task243 has no same-harness
+  base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
+- Current worker usage remains intentionally limited to worker_2 for this
+  runtime status request: worker_1/#325, worker_3/#326, worker_4/#323, and
+  worker_5/#324 have completed prerequisite PRs; worker_3/task243 should resume
+  only after task248 produces candidate FT artifacts or a concrete blocker
+  requiring eval-gate handling.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
