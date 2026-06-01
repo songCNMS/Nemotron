@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - V11 data split and sidecar repair
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=6 -->
 
 ## Background
 
@@ -94,6 +94,9 @@ and final-answer sidecar inputs for a future Qwen3-4B pilot.
   `81253415dd3285ce0eb56e69733d210742edcb50`.
 - Status: implemented; report and task-owned artifacts generated under
   `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/`.
+- Merge: PR #336 merged at `2026-06-01T23:14:37Z` with merge commit
+  `2ca6541c275d1eb64068e665af24147a796c818a`; merged head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`.
 - Report:
   `workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/v11_data_split_sidecar_report.md`.
 - Fresh final-answer n-gram decontam artifacts:

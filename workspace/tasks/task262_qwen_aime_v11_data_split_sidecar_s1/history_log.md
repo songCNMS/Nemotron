@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -119,3 +119,18 @@
 - Session 5 repo changes are metadata-only; no code, tests, output artifacts,
   training, eval, endpoints, promotion, 30B/8-GPU, task255 checkpoint/export
   reuse, AIME2025 train prompt/label use, shared deletion, or self-merge.
+
+## Session 6 - 2026-06-01 UTC - Approved and merged
+
+- Received lead approval for exact PR #336 head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Verified at merge time that #336 was OPEN, base `main`, non-draft, CLEAN, and
+  at exact head `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Self-merged #336 via GitHub PR merge.
+- Merge result: mergedAt `2026-06-01T23:14:37Z`, merge commit
+  `2ca6541c275d1eb64068e665af24147a796c818a`, merged head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Approval scope remains V11 data split/sidecar repair evidence only; no
+  training, live AIME/task243 eval, promotion, new full training/eval
+  clearance, AIME2025 train data, or 30B/8-GPU was authorized or performed.
+- Session 6 status/doc closeout is branch-only after merge.

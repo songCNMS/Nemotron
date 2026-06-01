@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -27,10 +27,11 @@
    and 200 final-answer rows with explicit weight 1.0; no packing/training was
    run.
 10. Exact task246-style heldout prompt-hash overlap counts are 0 for base,
-    hard-math, and final-answer sources. Residual gap: full n-gram
-    decontamination scanner was not rerun for final-answer rows in task262.
-11. PR #336 must not be self-merged; lead gate and task265 independent review
-    are required before any merge decision.
+    hard-math, and final-answer sources. Fresh full final-answer n-gram
+    decontamination evidence was added in Session 4.
+11. PR #336 received lead approval for exact head
+    `8fd3ff6065290b850c98db5f7abff91aa6880967` and was self-merged in Session
+    6 after confirming it was OPEN/base main/CLEAN at that head.
 12. Official exact-head closeout for PR #336 head
     `1a440c155a3049ece488483c1ce99ff4c89a3eb8` was resent by mailbox in
     Session 3; message id `adcbeda5b09d457b949aa51c89747d91`.
@@ -47,3 +48,6 @@
 16. Lead's Session 5 update referenced prior head `69f32c6`; PR #336 had
     already advanced to `5e431f4` with the requested final-answer n-gram
     evidence before this reconciliation metadata was recorded.
+17. PR #336 merge details: mergedAt `2026-06-01T23:14:37Z`, merge commit
+    `2ca6541c275d1eb64068e665af24147a796c818a`, merged head
+    `8fd3ff6065290b850c98db5f7abff91aa6880967`.

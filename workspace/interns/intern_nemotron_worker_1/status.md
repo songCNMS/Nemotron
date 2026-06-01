@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task262_qwen_aime_v11_data_split_sidecar_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task262_qwen_aime_v11_data_split_sidecar_s1 |
-| PR | #336 |
-| Session | 5 |
-| Progress | Verified PR #336 current head includes the requested final-answer full n-gram decontam evidence; preparing exact-head mailbox response, no self-merge. |
+| Current Task | N/A |
+| PR | #336 merged |
+| Session | 6 |
+| Progress | Completed task262 after self-merging approved PR #336 at head 8fd3ff6065290b850c98db5f7abff91aa6880967; merge commit 2ca6541c275d1eb64068e665af24147a796c818a. |
