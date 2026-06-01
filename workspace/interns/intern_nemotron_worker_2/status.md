@@ -1,13 +1,13 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task217_mamba_causal_conv_train_stack_unblock_probe_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task |  |
-| PR | N/A |
-| Session | 0 |
+| Current Task | task217_mamba_causal_conv_train_stack_unblock_probe_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/316 |
+| Session | 2 |
