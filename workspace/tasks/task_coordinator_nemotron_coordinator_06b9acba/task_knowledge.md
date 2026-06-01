@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Knowledge Entries
 
@@ -25,3 +25,4 @@
 19. Qwen AIME live-gate state as of lead Session 47: #325/task246 corpus evidence and #326/task247 Qwen3-4B base smoke are merged; accepted same-harness base score is `11/30 = 0.36666666666666664`; first V10 gate remains `NO-GO/HOLD` until task248 FT artifacts and task243 same-harness base-vs-FT comparison exist.
 20. If an approved worker PR head advances before merge, recheck the delta and require fresh lead/worker handling for any material change; status/history/task_knowledge-only drift with unchanged review matrix can remain sequenced, but merge still requires clean state at merge time.
 21. Current sequencing for #324/#323 after #324 merge: #324/task250 merged at `ff28538c41620a6d8b75b33d70c0c5e69714f42e`; worker_4 #323 contamination review remains open/mergeable at `4125124dafb2a98514c18e24d63045e90f473fcb` and may only self-merge if still clean, with docs/status refresh and report required if it becomes dirty or stale.
+22. Lead Session 49 reconciled worker_5 #324 merge report and released #323 for worker_4 self-merge under clean-state/no-material-head-drift conditions; next coordinator checkpoint should verify #323 mergedAt/mergeCommit/head or record the exact blocker.

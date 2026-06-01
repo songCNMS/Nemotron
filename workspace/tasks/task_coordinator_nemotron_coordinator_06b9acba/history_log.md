@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0 - Created with coordinator
 
@@ -143,3 +143,11 @@
 - A final PR poll after the first coordinator push found #324 had merged at `2026-06-01T18:12:43Z` with merge commit `ff28538c41620a6d8b75b33d70c0c5e69714f42e` from head `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`; #323 remained `OPEN`, base `main`, and `MERGEABLE` at `4125124dafb2a98514c18e24d63045e90f473fcb`.
 - Sent a second delivered peer follow-up to `intern_nemotron_lead`, asking lead to reconcile the worker_5 merge report when it arrives and keep #323 self-merge conditioned on clean state and no further material head drift.
 - Confirmed coordinator gate stance remains unchanged: task248 FT prep/train/checkpoint/export/eval artifacts are missing, task243 same-harness base-vs-FT comparison is missing, and 30B/8-GPU scale remains blocked.
+
+## Session 19 - task250 merge reconciled and task249 release verified
+
+- Received `intern_nemotron_lead` Session 49 update: worker_5 #324 merge report was received and reconciled; #324 is merged at `2026-06-01T18:12:43Z` with merge commit `ff28538c41620a6d8b75b33d70c0c5e69714f42e` from head `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`; #323 remains open/clean after #324 landed; lead posted the #323 release comment and notified worker_4.
+- Fetched `origin` and verified lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `acf45b9` with lead lifecycle status/history/knowledge updates only.
+- Independently verified GitHub state: #324 is `MERGED` with merge commit `ff28538c41620a6d8b75b33d70c0c5e69714f42e`; #323 is `OPEN`, base `main`, head `4125124dafb2a98514c18e24d63045e90f473fcb`, and `MERGEABLE`.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming that worker_4 may self-merge #323 only if it remains clean at merge time and no further material head drift occurs; otherwise worker_4 must refresh docs/status and report before merge.
+- Confirmed the gate remains `NO-GO/HOLD`: task248 candidate FT prep/train/checkpoint/export/eval artifacts are still missing, task243 same-harness base-vs-FT comparison is still missing, and 30B/8-GPU scale remains blocked.
