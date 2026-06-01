@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0 - Created with team lead
 
@@ -186,4 +186,17 @@
   - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
 - The same external #313 approval/merge gate has persisted across repeated goal turns; lead cannot proceed to worker-owned #314/#315 sequencing or #316 retarget/rebase without that external state change.
 - Workspace task status remains Working/InProgress because `nemotron_lead` is a permanent team lead lifecycle task; no worker merge instruction and no coordinator escalation were sent.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 10 - 2026-06-01 UTC - Merge request routed through approval gate
+
+- Read lead mailbox and found no unread messages before handling the user's "merge the pr" request.
+- Interpreted the request as applying to the active lead gate PR #313, with downstream worker PRs still sequenced behind it.
+- Rechecked PR state before this bookkeeping update:
+  - #313 remained open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `2de74ad`, merge state `CLEAN`, blank `reviewDecision`, and no merge recorded.
+  - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
+  - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
+  - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
+- Lead did not merge #313 directly because the active team-lead boundary still prohibits self-merge/main push; the merge request must be routed to a non-author/authorized approver or coordinator-owned merge path.
+- Continued holding worker PR sequencing: do not direct #314/#315/#316 final merge until #313 lands; #316 still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
