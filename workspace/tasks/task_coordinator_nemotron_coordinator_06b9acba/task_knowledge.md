@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Knowledge Entries
 
@@ -52,3 +52,6 @@
 46. task252 completed with worker_4 `APPROVE`: focused `PYTHONPATH=src` pytest passed `1 passed/34 deselected`, import guard passed, artifact/checksum/source review completed, and heldout-vs-trainable exact check found 0 matches over 560 prompts.
 47. task253 is assigned/accepted by worker_2 at branch head `be3803fcf1aa7863255d939d34d03f633f95845d` to unblock local Qwen packing via Xenna evidence only; no task253 PR or official packed-shard/blocker report exists yet.
 48. Current first task253 measurable gate is `packed_qwen` shard paths/counts/checksums or a precise reproducible Xenna environment blocker; this still does not authorize training, FT eval, task243 comparison, promotion, or 30B/8-GPU.
+49. Session 29 read-only local observation found task253 `packed_qwen` artifacts and `qwen_packing_xenna_unblock_report.md` with disposition `PASS_PACKED_QWEN_LOCAL_ONLY`, but worker_2 has not yet pushed a report or sent official task253 closeout.
+50. Observed task253 local packing summary: metadata sha256 `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`, blend sha256 `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`, train `8` shards/`79` rows and valid `1` shard/`15` rows.
+51. task253 local import probes show `cosmos_xenna` OK `0.1.8` and `pydantic_settings` OK `2.14.1`; this is still local prep evidence only and keeps the global Qwen AIME gate `NO-GO/HOLD`.

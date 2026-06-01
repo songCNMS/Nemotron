@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Session 0 - Created with coordinator
 
@@ -279,3 +279,27 @@
 - Read-only checked task253 outputs: output root exists with `logs/pip_install_cosmos_xenna.log`; a pip install process for `cosmos-xenna==0.1.8` was active during the check, but no official task253 worker report, `packed_qwen` shards, or blocker closeout exists yet.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead` confirming #328 merge evidence, task252 approval evidence, task253 acceptance/early artifact state, and the unchanged global gate.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards, candidate FT checkpoint/export/live eval artifacts, task243 same-harness FT-vs-base comparison, promotion, or 30B/8-GPU clearance exists.
+
+## Session 29 - task253 acceptance recorded, local packed artifacts unofficial
+
+- Received `intern_nemotron_lead` Session 58 follow-up: lead branch advanced to `076751b39a6611a0ef63ccc57c37e6201b91a67a` after recording worker_2 task253 official acceptance and read-only artifact observation; #328 evidence unchanged; task253 branch remained `be3803fcf1aa7863255d939d34d03f633f95845d`; no PR visible; global gate remained `NO-GO/HOLD`.
+- Fetched `origin` and verified:
+  - lead branch `076751b39a6611a0ef63ccc57c37e6201b91a67a`;
+  - `origin/main` `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - task253 remote branch `be3803fcf1aa7863255d939d34d03f633f95845d`;
+  - #328 still `MERGED` from head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, `mergedAt=2026-06-01T19:27:31Z`, merge commit `61fa65e9e9a535d531a65072c839760c3488207f`.
+- Verified task253 remote branch diff from `origin/main` is still acceptance/docs/status only and no task253 PR is visible.
+- Read lead-side task253 docs and confirmed they record official worker_2 acceptance plus earlier read-only observation: `cosmos_xenna` import OK `0.1.8`, no `packed_qwen` at that time, `qwen_packing_after_xenna.log` blocked on missing `pydantic_settings`, and later environment probe had `pydantic_settings` OK `2.14.1`; lead correctly classified that as observation only, not a task253 disposition.
+- Performed a newer read-only artifact check and found local task253 outputs had advanced beyond the lead snapshot:
+  - `qwen_packing_xenna_unblock_report.md` reports disposition `PASS_PACKED_QWEN_LOCAL_ONLY`;
+  - `packed_qwen/`, `packed_qwen_shard_summary.json`, and `qwen_packing_after_pydantic_settings.log` now exist;
+  - import probes show `cosmos_xenna` OK version `0.1.8` and `pydantic_settings` OK version `2.14.1`;
+  - no task253-related process was active during the coordinator check.
+- Observed task253 local packing summary:
+  - metadata sha256 `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`;
+  - blend sha256 `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`;
+  - reported `total_tokens=951216`, `total_sequences=1093`, `num_shards=8`, `pack_size=8192`;
+  - shard summary: train `8` symlink shards, `8` unique resolved files, `79` rows, `596944` input tokens, `110945` supervised tokens; valid `1` shard, `1` unique resolved file, `15` rows, `115993` input tokens, `18998` supervised tokens.
+- Checked worker_2 local repo read-only: it remains at task253 branch head `be3803fcf1aa7863255d939d34d03f633f95845d` with only worker status modified; no official task253 mailbox report was observed by coordinator.
+- Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, explicitly treating the packed artifacts as read-only unofficial until worker_2 sends commands/environment/artifact or blocker report and lead reviews it.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: even official packed shards would be local prep evidence only; no candidate FT checkpoint/export/live eval artifact, no task243 same-harness comparison, no promotion, and no 30B/8-GPU clearance exists.
