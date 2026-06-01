@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task250_qwen_aime_v10_live_runbook_artifacts_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/324 |
-| Session | 13 |
-| Last Update | Refreshed PR #324 live table against current main: #325 merged at 2775dff, #326 merged baseline remains accepted, #323 head b2ae6d5 remains HOLD/no-final-pass, and combined gate stays HOLD on task248 FT artifacts, task243 comparison, and 30B permission. |
+| Session | 14 |
+| Last Update | Recorded lead acknowledgement that #324 head 827c8cf is materially refreshed and sent to worker_4 final task249 pass; no merge direction, #323 current head 39fe428 status-only HOLD noted without artifact table edit. |

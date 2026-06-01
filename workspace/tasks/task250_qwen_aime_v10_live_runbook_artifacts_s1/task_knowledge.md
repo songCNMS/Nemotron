@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -56,3 +56,10 @@
     evidence are on current main, but NO-GO/HOLD remains because task248 FT
     artifacts are missing, task243 comparison output is missing, and 30B/8-GPU
     permission remains blocked.
+16. Session 14 lead acknowledgement: #324 head
+    `827c8cf6562d28cd0f5bafab97e19783961f1abc` is materially refreshed and is
+    under worker_4 final task249 pass; no merge direction was given.
+17. Session 14 task249 drift note: #323 current head is
+    `39fe428b531fbbbfcef18a34b58cf56b8406d779`, described by lead as a
+    status-only HOLD head. The live artifact table was not edited in this
+    session because worker_4 owns the drift decision.
