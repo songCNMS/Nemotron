@@ -1,6 +1,6 @@
 # task256_qwen_aime_v10_task255_artifact_review_s1 - task255 artifact review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Background
 
@@ -18,6 +18,60 @@ quality result, promotion claim, or same-harness AIME comparison.
 Independently review the task255 checkpoint/export artifacts and report
 approve/request-changes/block for using the HF export as the candidate FT model
 in the corrected AIME2025 same-harness comparison.
+
+## Session 2 Review Closeout
+
+- Recommendation: REQUEST_CHANGES / HOLD before task243 or task257 uses the
+  task255 HF export as the candidate FT artifact.
+- Reason: the task255 report and worker_2 logs are internally consistent, but
+  the exact requested checkpoint and HF export directories under
+  `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z`
+  are not present/readable from worker_5's review environment. Direct
+  `test -d` / `find` checks returned `MISSING_OR_UNREADABLE`, and
+  `find /root -maxdepth 5 -path '*task255*' -print` found no local task255
+  artifact copy.
+- PR freshness: `gh pr view 329` reported PR #329 OPEN/CLEAN, base `main`, head
+  `d62036e405edc5daa322c09bb89da19b176bb7bf`. Diff from
+  `dfee98a028a55c00dc2579bef602ee914e88a325` to PR #329 changed only
+  `workspace/interns/intern_nemotron_worker_2/status.md`.
+- Report integrity: report sha256 matched the expected
+  `3893af84bfdb4d78c4f31074a8454b2fa2bab2d69cfec71c42a36b75c49e7686`.
+- Log-backed checkpoint evidence: `checkpoint_inventory_20260601T202339Z.log`
+  reports `latest_checkpointed_iteration.txt` at `1`, 18 files, 53G, and large
+  distcp shard hashes
+  `383f015cc80591e8309409a9e1416c6bfe93bb7ddcc7f124dcdccb3c3429bbf6`,
+  `d14a43bb54a056c3a8ddadf7b5766e0aea09adbcef3c49dbbe1333107c86e6b2`,
+  `e64e4f1dfe66e1ad08777ef8239ea598b7c4a3ce27c3e0c745a87a7e5e50bb11`,
+  and `8c4c7ebaf1a52b146400cccfe283c4a5d592a803ed3c549af47a6ec08fa9d5c9`.
+- Log-backed HF export evidence: `hf_export_inventory_20260601T202339Z.log`
+  reports 13 files, 7.6G, three safetensor shards, and `config.json` hash
+  `74e923dd507a5ecec8d596353290ca705ef8e4b7191d5823bbd4b77040515012`.
+  Safetensor hashes are
+  `83117ed49e8e3b56e07f0f328bcf9c021ee517d30e58dcb57dbfb1f8480b4474`,
+  `2194bbacbcfff92ef6da346a0f58f3d5a5c0bac63356ae7604cb0240290032f2`,
+  and `b4828ee7fab6b139df83bf7da36af828d08957deb97a8851e8c02155892980ec`.
+- Export/train logs: `train_retry_no_training_contract_cli_20260601T202339Z.log`
+  ends with one iteration, checkpoint save, packed-valid validation, and
+  `COMMAND_RC=0`; `export_hf_20260601T202339Z.log` reports
+  `Success: All tensors from the original checkpoint were written.` and
+  `EXPORT_COMMAND_RC=0`.
+- Input checksums: `remote_input_checksums_20260601T202339Z.log` matches the
+  task253 metadata, blend, and shard-summary hashes listed in Suggested Checks;
+  `remote_qwen_contract_20260601T202339Z.log` reports `QWEN_CONTRACT_OK`.
+- Config evidence: the base model path is readable and has Qwen3 4B-class
+  metadata (`Qwen3ForCausalLM`, `model_type=qwen3`, 36 layers, hidden size 2560,
+  32 attention heads, 8 KV heads, intermediate size 9728, vocab size 151936).
+  The exported `config.json` contents could not be independently read from the
+  inaccessible HF export directory.
+- Boundary assessment: no training rerun, export rerun, AIME/task243 eval,
+  promotion claim, 30B/8-GPU launch, shared artifact deletion, or code edit was
+  performed by worker_5. The task255 logs/report indicate task255 used
+  `CUDA_VISIBLE_DEVICES=0,1`, `--nproc_per_node=2`, packed-valid validation
+  only, and no `/mnt/cephfs/data/processing/lei.song` deletion.
+- Required change: expose the exact checkpoint/HF export artifacts to reviewers,
+  or provide a lead-accepted copied artifact bundle/manifest whose file hashes
+  can be independently verified, before any task243 same-harness comparison
+  consumes this FT export.
 
 ## Scope
 
