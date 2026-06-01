@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,4 @@
 5. 本轮恢复采用 primary+independent audit 配对：task231 由 worker_1 主审、worker_4 独立核验；task217 由 worker_2 主审、worker_5 独立核验；task203/206/209 由 worker_3 形成 coverage matrix 后再决定是否需要恢复。
 6. Lead-authored coordination PRs such as #313 require non-author or otherwise authorized approval/merge; worker closeout PRs depending on a lead PR should land only after the lead PR lands, and stacked PRs like #316 must be retargeted/rebased before final merge.
 7. When a gate update reports no approval/merge change, the coordinator should keep the existing hold state and only ask for immediate updates on approval, merge, base, or mergeability changes.
+8. Pure lead-bookkeeping head-only updates to #313 do not require immediate coordinator escalation when #313 remains open/clean/unapproved/unmerged and worker PR base/mergeability/head state is unchanged.
