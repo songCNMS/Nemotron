@@ -20,3 +20,6 @@
   30B/8-GPU.
 - Global gate remains `NO-GO/HOLD` because task257/#330 measured task255 FT
   `0/30` below base `11/30`.
+- Lead pushed task docs at
+  `f7253be8e422b4e64799c2afe38d4b27d1b4f031` and sent delivered peer_send
+  assignment to worker_5.
