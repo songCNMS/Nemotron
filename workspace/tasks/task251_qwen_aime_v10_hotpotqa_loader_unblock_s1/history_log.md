@@ -1,6 +1,6 @@
 # task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -56,3 +56,33 @@
 - Boundary maintained: no NemTron sync, no training, no FT live eval, no
   task243 comparison, no promotion claim, no 30B/8-GPU work, and no shared
   `/mnt/cephfs/data/processing/lei.song` deletion.
+
+## Session 3 - 2026-06-01 UTC - Head freeze after official report
+
+- Received lead instruction to keep PR #328 head stable at
+  `694197c81720dcc157518d8a86b2b5d7a7a2dd05` while task252 independent
+  review/test report is processed.
+- Verified PR #328 remains `OPEN` / `CLEAN` against `main` with head
+  `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Did not commit or push another PR-head update, preserving the reported
+  evidence head and avoiding status-only approval drift.
+- Gate remains not approved: no Xenna-enabled packing continuation, no NemTron
+  training, no FT live eval, no task243 comparison, no promotion claim, and no
+  30B/8-GPU work.
+
+## Session 4 - 2026-06-01 UTC - Lead-approved self-merge closeout
+
+- Received lead approval to self-merge PR #328 as task251 local HotpotQA/M0-M1
+  prep unblock code and evidence only, conditional on exact head
+  `694197c81720dcc157518d8a86b2b5d7a7a2dd05` remaining `CLEAN`.
+- Verified PR #328 was `OPEN` / `CLEAN` against `main` at exact head
+  `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Self-merged PR #328 with `gh pr merge --merge --match-head-commit`.
+- Merge result: `mergedAt=2026-06-01T19:27:31Z`,
+  `mergeCommit=61fa65e9e9a535d531a65072c839760c3488207f`, PR head
+  `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Marked task251 `Completed` and worker status `Idle` in a branch-only closeout
+  commit after the PR merge.
+- Gate boundaries remain: no packed Qwen shards yet; next blocker is missing
+  `cosmos_xenna` for Qwen packing; no NemTron training, no FT live eval, no
+  task243 comparison, no promotion claim, and no 30B/8-GPU work.

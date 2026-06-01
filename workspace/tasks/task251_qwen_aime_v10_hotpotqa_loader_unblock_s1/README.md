@@ -1,6 +1,6 @@
 # task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 - HotpotQA loader unblock
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 

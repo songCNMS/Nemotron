@@ -1,6 +1,6 @@
 # task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,10 @@
     `8` train / `0` val shadow produced `1100` train rows, `273` val shadow
     rows, and `0` errors; `agentic_sft_v0_math_heldout_eval.jsonl` has `0`
     rows.
+12. After the official task251 mailbox report, lead explicitly froze PR #328
+    at head `694197c81720dcc157518d8a86b2b5d7a7a2dd05` pending task252 review;
+    status-only PR-head churn should be avoided unless a material blocker or
+    required correction is reported first.
+13. PR #328 was lead-approved and self-merged at `2026-06-01T19:27:31Z` with
+    merge commit `61fa65e9e9a535d531a65072c839760c3488207f`; the approved PR
+    head was `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.

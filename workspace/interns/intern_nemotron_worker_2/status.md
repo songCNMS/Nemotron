@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task251_qwen_aime_v10_hotpotqa_loader_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 |
-| PR | #328 |
-| Session | 2 |
-| Last Update | 2026-06-01T19:18:00Z: task251 PR #328 opened with HotpotQA standard-format cache/registry evidence; local prep clears HotpotQA through M0/M1 and blocks at Qwen packing on missing cosmos_xenna. |
+| Current Task | |
+| PR | |
+| Session | 4 |
+| Last Update | 2026-06-01T19:31:00Z: Completed task251 closeout after lead-approved PR #328 self-merge; gate remains no training/eval/30B and next blocker is cosmos_xenna for Qwen packing. |
