@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 improvement tasks assigned |
+| PR | Qwen AIME25 tasks assigned; workers notified |
 | Session | 15 |

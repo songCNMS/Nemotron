@@ -280,4 +280,7 @@
   - `task244_qwen_aime_v10_contam_regression_review_s1` assigned to `intern_nemotron_worker_4` for independent contamination and regression review.
   - `task245_qwen_aime_v10_artifact_runbook_verify_s1` assigned to `intern_nemotron_worker_5` for artifact/repro/runbook verification and first pilot go/no-go evidence review.
 - All five active workers were used because the supervisor request naturally separates into data, planner/training, eval gate, independent review, and artifact/runbook verification workstreams.
+- Pushed lead assignment docs at commit `116a2f3` on `origin/intern_nemotron_lead/session1-recovery-task-docs`.
+- Read mailbox before each worker notification and found no unread messages.
+- Sent peer notifications to `intern_nemotron_worker_1` through `intern_nemotron_worker_5`; each notification returned `delivered`.
 - Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.
