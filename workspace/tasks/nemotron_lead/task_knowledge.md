@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Knowledge Entries
 
@@ -163,3 +163,11 @@
 114. task260 formal closeout is PR #332 at
    `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`; lead approved it as read-only
    forensic docs/status closeout, not as a promotion or go/no-go pass.
+115. #332 merged at `2026-06-01T22:00:12Z` with merge commit
+   `7559ed914a04b99270b037ea285fab980d1995da`; task260 closeout is complete,
+   while task261 remains pending and the global gate remains `NO-GO/HOLD`.
+116. task261/#333 is open/clean at
+   `bddd499ec43d0f5b299c8676723608f422455e87`; report points to likely
+   wrong-start/random-init task255 weights, zero-LR one-step schedule, and
+   split materialization collisions. Lead requested official worker mailbox
+   before gate decision.

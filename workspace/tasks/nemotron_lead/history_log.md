@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Session 0 - Created with team lead
 
@@ -3065,3 +3065,35 @@
   closeout.
 - Sent delivered coordinator update with #332 formal report, approval state,
   key task260 finding, and task261 pending status.
+- GitHub and worker_3 mailbox confirmed #332 merged:
+  - mergedAt `2026-06-01T22:00:12Z`;
+  - merge commit/main head `7559ed914a04b99270b037ea285fab980d1995da`;
+  - merged head `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`.
+- Processed and marked read worker_3 merge closeout mailbox
+  `646c4140876f47c5bed0b6cdff7123fc`; no post-merge issue reported.
+- origin/main fetched to `7559ed914a04b99270b037ea285fab980d1995da`.
+- Sent delivered coordinator update with #332 merge evidence and task261
+  pending status.
+
+## Session 62 - 2026-06-01 UTC - task261 PR observed, mailbox requested
+
+- Received coordinator closeout ack confirming #332 merged at
+  `2026-06-01T22:00:12Z`, merge commit/main head
+  `7559ed914a04b99270b037ea285fab980d1995da`, and merged head
+  `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`.
+- Rechecked lead mailbox; unread count was `0`.
+- Fetched origin and observed task261 worker_1 branch advanced to
+  `bddd499ec43d0f5b299c8676723608f422455e87`.
+- Verified PR #333 exists: `OPEN`, base `main`, head `bddd499`, and
+  `mergeStateStatus=CLEAN`.
+- #333 diff is worker_1 status plus task261 README/history/task_knowledge and
+  `task255_data_training_root_cause_report.md`; lead-side
+  `git diff --check origin/main...origin/intern_nemotron_worker_1/task261...`
+  passed.
+- Read task261 report summary. It recommends invalidating task255 as failed
+  evidence: likely wrong-start/random-init checkpoint due missing positive base
+  checkpoint-load proof, random-init-scale train/valid losses, zero LR at the
+  only step, and split materialization collisions that dropped intended rows.
+- Sent delivered peer_send to worker_1 requesting the required official
+  mailbox closeout for #333 before lead gate decision.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion and no 30B/8-GPU.
