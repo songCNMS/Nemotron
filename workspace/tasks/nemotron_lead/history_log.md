@@ -3544,11 +3544,38 @@
 - Sent delivered peer_send to worker_5 updating task266/#334 runbook refresh
   context to #336 exact current head
   `8fd3ff6065290b850c98db5f7abff91aa6880967`.
+- Received and marked read worker_4 task265 approval mailbox
+  `92903f316e554227902177de054b6257`: worker_4 reviewed #336 exact current
+  head `8fd3ff6065290b850c98db5f7abff91aa6880967` and recommended `APPROVE`
+  for data/contamination repair evidence. Worker_4 reported diff-check pass,
+  py_compile pass, focused pytest 26/26 pass, artifact checksum verification
+  pass, 112000 final-answer-vs-heldout pair comparisons with 0 blocker pairs
+  >= 0.5, 0 exact prompt-hash overlaps, and no AIME25 train leakage found.
+- Verified #336 remained `OPEN`/base `main`/`CLEAN` at exact head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967` after the worker_4 report.
+- Posted #336 lead approve comment:
+  `https://github.com/songCNMS/Nemotron/pull/336#issuecomment-4597235708`.
+- Sent delivered peer_send to worker_1 releasing #336 self-merge only if it
+  remains `OPEN`/base `main`/`CLEAN` at exact head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967` at merge time.
+- Verified #336 subsequently merged at `2026-06-01T23:14:37Z` with merge
+  commit `2ca6541c275d1eb64068e665af24147a796c818a` from exact approved head
+  `8fd3ff6065290b850c98db5f7abff91aa6880967`. No worker_1 post-merge closeout
+  mailbox had arrived yet at the time of this lead update.
+- Fetched origin after #336 merge; `origin/main` is now
+  `2ca6541c275d1eb64068e665af24147a796c818a`.
+- Observed #334/task266 force-updated from `f8eff53f26340cc3c812ae0ca190a48214e89942`
+  to `b77641d30e698f94e59ffb94bac3c0d9bf92af50` and remains
+  `OPEN`/base `main`/`CLEAN`, but its report still described #336 as open and
+  therefore remains stale after #336 merged.
+- Posted #334 runbook stale-after-#336-merge update:
+  `https://github.com/songCNMS/Nemotron/pull/334#issuecomment-4597249907`.
+- Sent delivered peer_send to worker_5 requesting #334 refresh against #336
+  `MERGED` at `2ca6541c275d1eb64068e665af24147a796c818a` and reiterating no
+  self-merge.
 - Current lead disposition: #335 is `MERGED`; #334 remains
-  `REQUEST-CHANGES/HOLD` pending runbook refresh; #336 is `HOLD` pending
-  task265 independent review of current head
-  `8fd3ff6065290b850c98db5f7abff91aa6880967`; task263 remains `BLOCK/HOLD`
-  pending Bridge/base-load proof or exact blocker.
+  `REQUEST-CHANGES/HOLD` pending runbook refresh; #336 is `MERGED`; task263
+  remains `BLOCK/HOLD` pending Bridge/base-load proof or exact blocker.
 - No implementation, training, eval, merge, or product-code change was
   performed by lead.
 - Global Qwen AIME gate remains `NO-GO/HOLD`: no promotion, no new full

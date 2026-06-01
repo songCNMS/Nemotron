@@ -235,15 +235,16 @@
    `9d9285fd77820a5187440fbc2234dc36eb56942d`; this is static canary/eval-gate
    evidence only and does not authorize live AIME/task243 eval, promotion, new
    full training/eval clearance, AIME2025 train data, or 30B/8-GPU.
-130. #336 current head is
+130. #336 merged at `2026-06-01T23:14:37Z` with merge commit
+   `2ca6541c275d1eb64068e665af24147a796c818a` from exact approved head
    `8fd3ff6065290b850c98db5f7abff91aa6880967`; substantive fresh final-answer
    n-gram evidence was added at `5e431f4939799ae52c7d2002682352f2f2df6f3b`,
    and `5e431f4..8fd3ff6` is metadata-only. Worker_1 reports 112000
    final-answer-vs-heldout pair comparisons with 0 blocker pairs >= 0.5 and 0
-   exact prompt-hash overlaps. #336 remains `HOLD` pending task265 independent
-   review of exact current head `8fd3ff6`.
+   exact prompt-hash overlaps. Worker_4/task265 approved exact head `8fd3ff6`.
 131. #334 remains `REQUEST-CHANGES/HOLD` because task266 runbook must refresh to
    current V11 truth: #335 merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`,
-   #336 is hold-pending-review at `8fd3ff6065290b850c98db5f7abff91aa6880967`, and
-   task263 remains blocked pending NemTron/NeMo Bridge/base-load proof or exact
-   blocker.
+   #336 merged at `2ca6541c275d1eb64068e665af24147a796c818a`, and task263
+   remains blocked pending NemTron/NeMo Bridge/base-load proof or exact blocker.
+   Current #334 head `b77641d30e698f94e59ffb94bac3c0d9bf92af50` is still stale
+   because its report described #336 as open.
