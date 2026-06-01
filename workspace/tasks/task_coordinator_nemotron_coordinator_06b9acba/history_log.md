@@ -150,4 +150,6 @@
 - Fetched `origin` and verified lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `acf45b9` with lead lifecycle status/history/knowledge updates only.
 - Independently verified GitHub state: #324 is `MERGED` with merge commit `ff28538c41620a6d8b75b33d70c0c5e69714f42e`; #323 is `OPEN`, base `main`, head `4125124dafb2a98514c18e24d63045e90f473fcb`, and `MERGEABLE`.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming that worker_4 may self-merge #323 only if it remains clean at merge time and no further material head drift occurs; otherwise worker_4 must refresh docs/status and report before merge.
+- A follow-up fetch and PR poll found #323 had merged at `2026-06-01T18:19:00Z` with merge commit `ec467724c2876211cd2bf56b15071e31abd692a4` from PR head `4125124dafb2a98514c18e24d63045e90f473fcb`; `origin/main` advanced to `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Sent a second delivered peer follow-up to `intern_nemotron_lead`, asking lead to reconcile the worker_4 #323 closeout report when it arrives and confirming that #323's merge does not lift the Qwen AIME V10 `NO-GO/HOLD`.
 - Confirmed the gate remains `NO-GO/HOLD`: task248 candidate FT prep/train/checkpoint/export/eval artifacts are still missing, task243 same-harness base-vs-FT comparison is still missing, and 30B/8-GPU scale remains blocked.
