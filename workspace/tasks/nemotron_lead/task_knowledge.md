@@ -274,3 +274,10 @@
 136. Stop-hook structural fix: `history_log.md` now has exactly one canonical
    `## Session 69` heading and exactly one metadata marker match, with earlier
    Session 69 content converted to archived notes.
+137. Unofficial task263 local artifacts exist under worker_2 outputs with
+   disposition `NEMTRON_NEMO_RUNTIME_BLOCKED`: latest report head
+   `ae6bfd3981666adc97bc771b30b0ce9bfa38b6dd`, Bridge import rc `1`,
+   fail-closed preflight rc `2`, CPU host `lg-cmc-b7r201-n09u29-cpu-000191`,
+   and missing `megatron`/`nemo`. Treat as read-only lead observation until
+   worker_2 sends official mailbox and pushes branch/PR or declares artifact-only
+   blocker status.
