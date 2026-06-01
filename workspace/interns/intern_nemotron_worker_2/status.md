@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task242_qwen_aime_v10_planner_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task248_qwen_aime_v10_4b_pilot_prepare_train_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task242_qwen_aime_v10_planner_smoke_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/321 |
-| Session | 2 |
-| Last Update | 2026-06-01T16:03:24Z: Opened PR #321 for V10 planner/Qwen3-4B smoke bundle; waiting for review/gate, no training or 30B scale launched. |
+| Current Task | task248_qwen_aime_v10_4b_pilot_prepare_train_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-01T16:44:15Z: Accepted task248 on branch intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1 from current origin/main after PR #321. |
