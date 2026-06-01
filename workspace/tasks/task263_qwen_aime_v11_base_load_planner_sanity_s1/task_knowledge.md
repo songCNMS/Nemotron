@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -31,3 +31,7 @@
    `scheduler.lr_warmup_iters=0`, `scheduler.lr_decay_iters=20`, first logged
    step expected LR `5e-6`; a launch must recompute train iterations from
    actual V11 packed train rows before any training.
+10. PR #337 is the official task263 repo-visible closeout for the current
+    blocker bundle. It carries the task helper and report references; output
+    artifacts remain under
+    `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/`.

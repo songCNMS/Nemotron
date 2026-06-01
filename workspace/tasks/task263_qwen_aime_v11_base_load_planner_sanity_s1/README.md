@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - V11 base-load planner sanity
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 
@@ -88,6 +88,7 @@ signals, and uses a nonzero-LR bounded pilot schedule.
 
 - Branch refreshed onto `origin/main`
   `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- PR: #337
 - Output root:
   `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/`.
 - Task-owned NemTron sync/run root:

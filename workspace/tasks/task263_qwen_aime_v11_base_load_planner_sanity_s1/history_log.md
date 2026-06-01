@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -91,6 +91,29 @@
   packing.
 - Checks passed: `python3 -m py_compile` for the task263 bundle generator and
   `git diff --check`.
+- No SFT training, export, endpoint serving, live AIME/task243 eval,
+  promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
+  prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
+
+## Session 4 - 2026-06-01 UTC - Official PR closeout
+
+- Received lead follow-up that local artifacts were visible but no official
+  mailbox report, updated remote branch, or PR was visible.
+- Ran closeout checks:
+  `python3 -m py_compile workspace/tasks/task263_qwen_aime_v11_base_load_planner_sanity_s1/build_task263_v11_base_load_gate_bundle.py`,
+  `git diff --check`, and
+  `PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_chat_contract.py tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py`.
+- Focused pytest result: `34 passed in 2.69s`.
+- Committed task263 helper/report/status evidence in
+  `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3` and force-with-lease pushed the
+  rebased worker branch from old acceptance head `4af57e0` to `7eac25b`.
+- Opened PR #337 to `main`; initial PR state was OPEN, non-draft, base `main`,
+  head `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3`, and
+  `mergeStateStatus=CLEAN`.
+- Session 4 metadata records PR #337 and leaves the gate disposition unchanged:
+  `NEMTRON_NEMO_RUNTIME_BLOCKED`, with smallest remediation to rerun the
+  generated Bridge import and fail-closed preflight inside a task-owned
+  NemTron/NeMo runtime that has `megatron.bridge` installed.
 - No SFT training, export, endpoint serving, live AIME/task243 eval,
   promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
   prompt/label use, 30B/8-GPU launch, or shared deletion was performed.

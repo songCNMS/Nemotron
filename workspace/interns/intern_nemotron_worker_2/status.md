@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task263_qwen_aime_v11_base_load_planner_sanity_s1 |
-| PR | N/A |
-| Session | 3 |
-| Last Update | 2026-06-01T23:44:21Z: Refreshed task263 onto origin/main 5e839d4 and generated the V11 base-load gate bundle. Disposition is `NEMTRON_NEMO_RUNTIME_BLOCKED`: task-owned `/root` sync and Bridge import probe fail with `ModuleNotFoundError: No module named 'megatron'`; fail-closed preflight blocks before training, with nonzero-LR plan recorded under the task output root. |
+| PR | #337 |
+| Session | 4 |
+| Last Update | 2026-06-01T23:52:00Z: Opened PR #337 for task263 V11 base-load/import gate blocker evidence. Official disposition remains `NEMTRON_NEMO_RUNTIME_BLOCKED`; artifacts and checksums are under the task output root, and no training/eval/promotion/30B/shared deletion was performed. |
