@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Recovery closeout complete; monitoring |
-| Session | 13 |
+| PR | Recovery closeout archived; monitoring |
+| Session | 14 |

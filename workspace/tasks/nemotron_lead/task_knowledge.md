@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -15,3 +15,4 @@
 9. Lead approval for downstream closeout PRs requires worker mailbox evidence plus independent GitHub state and file-list checks; after approval, instruct the worker to self-merge if still mergeable, and do not run `gh pr merge` from the lead seat.
 10. If an approved downstream PR head advances before merge, request a new worker mailbox report for that head; if the merge completes before the report arrives, record the final head, merge commit, mergedBy, and later reconcile the worker's final-head report when it lands.
 11. Coordinator-confirmed recovery closeout should be archived in lead history/status, but `nemotron_lead` stays Working/InProgress because it is the permanent team lead lifecycle task.
+12. In monitoring state with no mailbox items, residual cleanup, new user request, or abnormal regression, do not create worker tasks or send extra coordinator updates beyond required session bookkeeping.
