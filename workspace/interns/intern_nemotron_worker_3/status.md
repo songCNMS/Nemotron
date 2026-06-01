@@ -1,6 +1,6 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task243_qwen_aime2025_base_vs_ft_eval_gate_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task247_qwen_aime2025_qwen4b_base_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task243_qwen_aime2025_base_vs_ft_eval_gate_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/319 |
-| Session | 2 |
-| Progress | Session 2: Qwen3-4B base path corrected to cephfs; base score blocked by corrected AIME input and endpoint |
+| Current Task | task247_qwen_aime2025_qwen4b_base_smoke_s1 |
+| PR | Pending |
+| Session | 1 |
+| Progress | Accepted task247; probing Qwen3-4B base AIME2025 pilot resources |
