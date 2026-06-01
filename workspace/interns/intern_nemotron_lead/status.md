@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task255 plan output observed unofficially; awaiting worker report/checkpoint/export or blocker; gate HOLD |
+| PR | task255 remote checkpoint observed unofficially; awaiting worker closeout/export status; gate HOLD |
 | Session | 61 |

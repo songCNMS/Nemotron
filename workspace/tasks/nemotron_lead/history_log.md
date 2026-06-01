@@ -2493,3 +2493,44 @@
 - Gate remains `NO-GO/HOLD`: no candidate FT checkpoint/export artifact exists
   and task243 has no same-harness FT-vs-base comparison against the accepted
   Qwen3-4B base `11/30`.
+
+## Monitor - 2026-06-01 UTC - task255 checkpoint observed unofficially
+
+- Read lead mailbox; no official worker_2 closeout/report was present.
+- New worker-owned task255 logs appeared for a NemTron run:
+  - sync/preflight/input-checksum/Qwen-contract logs;
+  - first train attempt log;
+  - retry train log
+    `train_retry_no_training_contract_cli_20260601T202339Z.log`.
+- Preflight evidence:
+  - host `lg-cmc-b7r201-f08u26-h200-000126`;
+  - code synced to
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/Nemotron`;
+  - packed input synced to
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/packed_qwen/splits`;
+  - Qwen contract check `QWEN_CONTRACT_OK`.
+- Initial train attempt failed on Hydra structured-config override
+  `training_contract.model_profile`; the retry removed those CLI overrides.
+- Retry run used `CUDA_VISIBLE_DEVICES=0,1`, completed one iteration, saved
+  checkpoint at iteration `1`, completed validation, and ended with
+  `COMMAND_RC=0`.
+- Read-only remote checkpoint check on `NemTron` found checkpoint dir
+  `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`
+  with `iter_0000001`, four large `.distcp` shards, tokenizer/config files,
+  and `latest_checkpointed_iteration.txt=1`.
+- Small-file checksums observed:
+  - `latest_checkpointed_iteration.txt` sha256
+    `6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b`;
+  - `iter_0000001/metadata.json` sha256
+    `9817072de14c715c70e8435a7fee90bac30abaf6885fc53ade6fe88babeef851`;
+  - `iter_0000001/run_config.yaml` sha256
+    `42e73f867b58a7f66586aa9172d5644ab510b46568055105d316b02787fe7af8`.
+- No export/HF artifact was observed, and no official worker_2 report had
+  arrived.
+- Lead sent delivered follow-up asking worker_2 for official closeout,
+  checkpoint/export status, checksums or checksum plan for large `.distcp`
+  shards, boundary confirmation, and readiness for independent review/task243
+  planning.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: the checkpoint evidence is
+  still unofficial, export status is missing, and task243 has not performed a
+  same-harness FT-vs-base comparison against accepted base `11/30`.

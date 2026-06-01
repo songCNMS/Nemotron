@@ -17,3 +17,7 @@
 7. The observed `qwen4b_v10_pilot_1iter_2gpu` training plan is planning
    evidence only until worker_2 sends an official report and either provides
    checkpoint/export artifacts or an exact blocker.
+8. Lead read-only monitoring observed a worker-owned NemTron retry checkpoint
+   at `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`,
+   but it remains unofficial until worker_2 reports closeout/export status and
+   boundary confirmation.

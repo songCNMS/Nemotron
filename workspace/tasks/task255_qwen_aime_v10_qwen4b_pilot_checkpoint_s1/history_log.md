@@ -92,3 +92,52 @@
 - Global gate remains `NO-GO/HOLD`: planning artifacts are not candidate FT
   checkpoint/export artifacts and do not authorize task243 comparison,
   promotion, or 30B/8-GPU.
+
+## Session 4 - 2026-06-01 UTC - Unofficial NemTron checkpoint observed
+
+- worker_2 has not yet sent an official mailbox closeout/report. The evidence
+  below is lead read-only monitoring of worker-owned artifacts only.
+- New task255 logs appeared under
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/logs/`:
+  - `sync_to_nemtron_20260601T202339Z.log`;
+  - `nemtron_preflight_20260601T202339Z.log`;
+  - `remote_input_checksums_20260601T202339Z.log`;
+  - `remote_qwen_contract_20260601T202339Z.log`;
+  - `train_20260601T202339Z.log`;
+  - `train_retry_no_training_contract_cli_20260601T202339Z.log`.
+- Preflight observed:
+  - host `lg-cmc-b7r201-f08u26-h200-000126`;
+  - `TORCH 2.9.1+cu129`, CUDA available, `GPU_COUNT 8`;
+  - code sync path
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/Nemotron`;
+  - packed input sync path
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/packed_qwen/splits`;
+  - remote Qwen contract check `QWEN_CONTRACT_OK`.
+- Initial train log failed before training on Hydra override
+  `training_contract.model_profile` not being in the structured config.
+- Retry log `train_retry_no_training_contract_cli_20260601T202339Z.log`
+  completed with `COMMAND_RC=0` on `CUDA_VISIBLE_DEVICES=0,1`:
+  - one training iteration completed;
+  - checkpoint saved at iteration `1`;
+  - validation completed with lm loss `1.165397E+01`;
+  - no running task255/qwen training process remained when lead checked.
+- Read-only remote checkpoint existence check on `NemTron` found:
+  - checkpoint dir
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`;
+  - `latest_checkpointed_iteration.txt` size `1`, sha256
+    `6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b`;
+  - `iter_0000001/metadata.json` size `119`, sha256
+    `9817072de14c715c70e8435a7fee90bac30abaf6885fc53ade6fe88babeef851`;
+  - `iter_0000001/run_config.yaml` size `21057`, sha256
+    `42e73f867b58a7f66586aa9172d5644ab510b46568055105d316b02787fe7af8`;
+  - four large `.distcp` shards under `iter_0000001/`, each about `14GB`;
+  - tokenizer/config files and `latest_train_state.pt` present.
+- No export/HF artifact was observed in the read-only remote file check.
+- Lead sent delivered follow-up asking worker_2 for official task255 closeout,
+  commands/env/host/resources, sync path, train log path, checkpoint dir,
+  file counts/sizes/checksums or checksum plan for large shards, export status,
+  boundary confirmation, and whether the artifact is ready for independent
+  review/task243 planning.
+- Global gate remains `NO-GO/HOLD`: this is not yet official worker closeout,
+  no export status has been reported, and task243 has not compared FT against
+  the accepted Qwen3-4B base `11/30`.
