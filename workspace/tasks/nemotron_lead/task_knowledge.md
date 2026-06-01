@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=60 -->
+<!-- METADATA:SESSION=61 -->
 
 ## Knowledge Entries
 
@@ -156,3 +156,7 @@
 112. Coordinator was updated after lead branch `b9bc40c`; no task260/task261 PR
    or formal report existed at that point, and global gate stayed
    `NO-GO/HOLD`.
+113. Worker_3 local task260 report says task255 FT failure looks like
+   generation degeneration/corruption rather than evaluator-only parser
+   failure, but it is unpushed/unreported local evidence until worker_3 opens
+   PR and sends mailbox closeout.

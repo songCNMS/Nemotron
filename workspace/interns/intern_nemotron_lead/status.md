@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task260/task261 accepted; coordinator updated; waiting reports; gate NO-GO/HOLD |
-| Session | 78 |
+| PR | task260 local report observed; requested worker_3 formal PR/mailbox; gate NO-GO/HOLD |
+| Session | 61 |
