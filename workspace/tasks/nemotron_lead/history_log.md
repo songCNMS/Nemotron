@@ -450,3 +450,26 @@
   - First Qwen3-4B V10 go/no-go: still `NO-GO/HOLD`.
   - 30B/8-GPU scale: still not permitted.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 22 - 2026-06-01 UTC - Qwen AIME25 static PR set merged
+
+- Short follow-up polling found #321 merged after worker_2 received the #320-landed notification.
+- Received and marked read worker merge reports:
+  - `intern_nemotron_worker_1` reported #320 merged at 2026-06-01T16:24:28Z, merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`; post-merge worker branch bookkeeping pushed at `8b35cfc`, no post-merge issue, first Qwen3-4B AIME go/no-go still HOLD.
+  - `intern_nemotron_worker_4` reported #318 merged at 2026-06-01T16:24:32Z, merge commit `86fd05fbb1bb0b1c918a72c6680c10ea170d2798`; post-merge worker branch bookkeeping pushed at `6259d55`, no direct main push, first go/no-go still NO-GO/HOLD.
+  - `intern_nemotron_worker_5` reported #317 merged at 2026-06-01T16:24:29Z, merge commit `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`; post-merge worker branch bookkeeping pushed at `02c5b2b`, first go/no-go still NO-GO/HOLD.
+  - `intern_nemotron_worker_2` reported #321 merged at 2026-06-01T16:27:34Z, merge commit `20973e78f196d7e5d71993f60dc74a3500223f5f`; no post-merge issue, no training/live eval/sync/direct main push/30B launch.
+- Independently rechecked GitHub final PR states:
+  - #317: `MERGED`, head `2ad67ed2a102e22cdbc65826c431d22bd5728867`, merge commit `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`, mergedAt 2026-06-01T16:24:29Z.
+  - #318: `MERGED`, head `e1bb5413d5ffc050e209a371122e2923ea2f322b`, merge commit `86fd05fbb1bb0b1c918a72c6680c10ea170d2798`, mergedAt 2026-06-01T16:24:32Z.
+  - #319: `MERGED`, head `61a12dd8b96e51785a3ece76d5883a419b30dd39`, merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`, mergedAt 2026-06-01T16:24:34Z.
+  - #320: `MERGED`, head `57537133bed6bdd5773e6678b48086a8fc6a87b4`, merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`, mergedAt 2026-06-01T16:24:28Z.
+  - #321: `MERGED`, head `12ee98ccf7475c2ee77a92b3f1390df06d9edcd0`, merge commit `20973e78f196d7e5d71993f60dc74a3500223f5f`, mergedAt 2026-06-01T16:27:34Z.
+- Worker_3 #319 final mailbox closeout has not arrived yet; lead sent a follow-up peer_send requesting pre-merge/head verification, merge commit/mergedAt, post-merge issue status, and confirmation that scope/disposition remains static corrected AIME25 gate/protocol only with live promotion held until same-harness base and FT artifacts exist.
+- A short post-follow-up mailbox poll found no unread messages, so #319 is independently verified as merged by GitHub but the worker_3 closeout report remains pending.
+- Current lead decisions:
+  - #317/#318/#319/#320/#321: all merged on GitHub.
+  - First Qwen3-4B V10 go/no-go: still `NO-GO/HOLD`.
+  - 30B/8-GPU scale: still not permitted.
+  - Remaining lead follow-up: wait for worker_3 #319 closeout mailbox or report if it remains missing.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
