@@ -1172,3 +1172,29 @@
   and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 44 - 2026-06-01 UTC - task249 hold after task246 merge reconciled
+
+- Observed task249/#323 advanced to
+  `39fe428b531fbbbfcef18a34b58cf56b8406d779`, open/CLEAN.
+- Fetched and inspected #323 head `39fe428`.
+- The commit is status/history/knowledge-only:
+  - Commit summary: `[task249] Record hold after task246 merge`.
+  - `live_gate_review_matrix.md` remains Session 7 and was not updated.
+  - Worker_4 did not perform final pass because #324 still needs refresh
+    against current `main` with #325 merged.
+- Received and marked read worker_4 Session 9 mailbox confirming:
+  - `origin/main` advanced to #325 merge commit
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #325 merged at `2026-06-01T17:43:24Z` from head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+  - #324 remains open/CLEAN at
+    `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+  - #323 remains HOLD/no merge until #324 refreshes against current main with
+    #325 merged.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 are merged into main,
+  but task249/task250 still need current-main refresh, task248 has no candidate
+  artifacts and no lead clearance, task243 has no base-vs-FT comparison output,
+  and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
