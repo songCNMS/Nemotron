@@ -1,6 +1,6 @@
 # task245_qwen_aime_v10_artifact_runbook_verify_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -55,3 +55,17 @@
 - Verified the worker_2 smoke bundle listing and placeholder corpus content
   read-only; did not run training, live eval, endpoint serving, NemTron sync,
   deletion, merge, or `main` push.
+
+## Session 4 - Lead-approved self-merge
+
+- Lead approved #317 self-merge only if the PR was still OPEN/CLEAN, base
+  `main`, and head `2ad67ed2a102e22cdbc65826c431d22bd5728867`.
+- Verified #317 matched those gate conditions, then squash-merged #317.
+- Merge result: PR #317 is MERGED at `2026-06-01T16:24:29Z` with merge commit
+  `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`.
+- Confirmed `origin/main` contains `8197c7c [task245] Refresh Qwen AIME V10
+  runbook map`.
+- Task245 static runbook/artifact map is completed, but the first Qwen3-4B AIME
+  decision remains NO-GO/HOLD until real heldout corpus/input, corrected AIME
+  input/cache, reachable endpoint, base artifacts, FT checkpoint/export/eval,
+  and explicit 30B permission exist.

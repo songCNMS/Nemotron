@@ -1,6 +1,6 @@
 # task245_qwen_aime_v10_artifact_runbook_verify_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -12,3 +12,4 @@
 6. task241 PR #320 head `5753713` is open/CLEAN and contains the V10 data-prep code/report; it is no longer a missing-publication blocker for task245.
 7. task242 PR #321 head `12ee98c` is open/CLEAN and contains the Qwen3-4B V10 planner/smoke report, generated bundle paths, fail-closed decontamination checks, NemTron `/root` sync contract, and 30B hold.
 8. Current task245 blockers are limited to: real heldout decontamination corpus/input, missing corrected AIME input/cache, no reachable Qwen3-4B endpoint, no base score artifacts, no candidate FT checkpoint/export/eval, and no 30B/8-GPU permission.
+9. PR #317 was lead-approved and self-merged as the static runbook/artifact map at merge commit `8197c7cc0ee0cb34b0391eeab938fd2c1ee31a13`; this completes task245 documentation but does not lift the Qwen3-4B AIME NO-GO/HOLD gate.
