@@ -1,6 +1,6 @@
 # task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Knowledge Entries
 
@@ -12,3 +12,5 @@
 3. If using remote node `NemTron` for debug-only packing checks, code must be
    synced to `/root` first per project rule.
 4. AIME2025 prompts and labels remain held-out eval/decontam material only.
+5. Remote branch head `be3803fcf1aa7863255d939d34d03f633f95845d` is an
+   acceptance/docs/status commit only; it is not packing evidence.
