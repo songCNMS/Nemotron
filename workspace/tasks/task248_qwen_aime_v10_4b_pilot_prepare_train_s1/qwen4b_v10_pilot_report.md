@@ -1,6 +1,6 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Hold,SESSION=4 -->
+<!-- METADATA:STATUS=Hold,SESSION=5 -->
 
 ## Summary
 
@@ -11,7 +11,7 @@
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
 - The task remains on HOLD before local prep/train/eval until lead clears after
-  refreshed reviews of task246/#325 and task247/#326.
+  task246/#325 checksum correction and refreshed reviews.
 
 ## Dependency probes
 
@@ -37,11 +37,18 @@
   visible at
   `/work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/qwen4b_base_aime2025_30x1_20260601T170700Z/`
   with AIME25 `11/30 = 0.36666666666666664`.
+- Session 5 update: PR #326 is now `MERGED` at `2026-06-01T17:21:29Z`
+  with merge commit
+  `85f2bf5c11062741388ca114a84a2c26535b7df9`; baseline remains Qwen3-4B
+  base AIME25 `11/30 = 0.36666666666666664`.
+- Session 5 update: PR #325 is still `OPEN` at head
+  `afc276932897743f6b6b5b8aab4c390905cb55f1`; lead reports
+  `REQUEST_CHANGES`/HOLD on manifest checksum, so task248 remains on HOLD.
 
 ## Prepared command shape
 
-Do not run this until lead explicitly clears task248 after refreshed reviews of
-task246/#325 and task247/#326.
+Do not run this until lead explicitly clears task248 after task246/#325
+checksum correction and refreshed reviews.
 
 ```bash
 PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
@@ -79,7 +86,7 @@ Expected generated paths after the dependencies exist:
 
 - Local prep is on HOLD until task246/#325 checksum correction is accepted and lead explicitly clears task248.
 - Training is on HOLD until local prep is explicitly cleared and succeeds with task246 inputs.
-- FT judgment is blocked until task247/#326 baseline is merged/available and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
+- FT judgment remains blocked until a future FT artifact exists and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
 - Current baseline to preserve for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
 - 30B/8-GPU planning and launch remain out of scope.
 
@@ -93,6 +100,7 @@ Expected generated paths after the dependencies exist:
 - Read-only dependency probes against worker_1/worker_3 task docs and output directories.
 - Session 3 refresh: `git fetch origin --prune`, `git rev-parse` on task246/task247 branches, read-only `git ls-tree`/`git show`, and read-only output directory probes.
 - Session 4 refresh: read-only `gh pr view 325`, `gh pr view 326`, `test`/`find`/`wc`/`sed` probes for task246/task247 artifacts and baseline summary.
+- Session 5 refresh: read-only `gh pr view 325` and `gh pr view 326` to record #326 merged and #325 still open.
 
 ## Commands not run
 

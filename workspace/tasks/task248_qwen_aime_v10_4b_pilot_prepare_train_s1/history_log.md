@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -44,4 +44,13 @@
 - Verified sidecar is sparse: `8` train rows and `0` val rows; planned pilot knobs are `--math-sidecar-max-records-per-env 8` and `--math-sidecar-max-val-shadow-per-env 0`.
 - Recorded task247 baseline for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
 - Updated `qwen4b_v10_pilot_report.md` prepared command with real paths and HOLD status.
+- Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.
+
+## Session 5 - 2026-06-01 UTC - Baseline merged, task246 HOLD remains
+
+- Lead reported task247/#326 baseline merged into `main` at merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Read-only GitHub check confirmed PR #326 is `MERGED` at `2026-06-01T17:21:29Z` with merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Baseline remains Qwen3-4B base AIME2025 corrected 30x1 score `11/30 = 0.36666666666666664`.
+- Read-only GitHub check confirmed PR #325 is still `OPEN` at head `afc276932897743f6b6b5b8aab4c390905cb55f1`; lead reports `REQUEST_CHANGES`/HOLD on manifest checksum.
+- Updated `qwen4b_v10_pilot_report.md` to keep task248 HOLD on task246/#325 while recording the merged baseline.
 - Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.

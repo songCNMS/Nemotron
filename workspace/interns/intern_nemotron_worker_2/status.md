@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task248_qwen_aime_v10_4b_pilot_prepare_train_s1 |
 | PR | N/A |
-| Session | 4 |
-| Last Update | 2026-06-01T17:22:37Z: Recorded lead HOLD sequencing with task246 paths, sparse 8/0 sidecar knobs, and task247 11/30 baseline; no prep/sync/train/eval/30B run. |
+| Session | 5 |
+| Last Update | 2026-06-01T17:27:30Z: Recorded #326 baseline merge at 2026-06-01T17:21:29Z and continued HOLD because #325 remains open with lead-reported manifest checksum request-changes; no prep/sync/train/eval/30B run. |

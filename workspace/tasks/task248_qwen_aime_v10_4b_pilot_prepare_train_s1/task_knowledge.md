@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -29,3 +29,8 @@
    pilot knobs are math-sidecar train cap `8` and val shadow cap `0`.
 10. Task247 baseline for later comparison is Qwen3-4B base AIME25
     `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
+11. Task247/#326 baseline merged into `main` with merge commit
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`; the baseline score remains
+    `11/30 = 0.36666666666666664`.
+12. Task248 remains on HOLD because task246/#325 is still open with
+    lead-reported `REQUEST_CHANGES`/HOLD on manifest checksum.
