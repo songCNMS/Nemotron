@@ -892,3 +892,37 @@
   output, and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 38 - 2026-06-01 UTC - crossed task248/task249 stale reports handled
+
+- Final mailbox poll after #325 approval received and marked read:
+  - worker_2 task248 Session 5 report:
+    `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
+    pushed to `affafe8064c8529ae0f16ffdec0d4ec61b6ed1a5`.
+  - worker_4 task249/#323 Session 6 report:
+    #323 pushed to `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`, open/CLEAN.
+- Fetched and verified worker heads:
+  - task248 branch `affafe8064c8529ae0f16ffdec0d4ec61b6ed1a5`.
+  - task249/#323 branch `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`.
+- Both reports crossed with the newer #325 checksum-fix approval:
+  - worker_2 reported #325 old head `afc2769` as request-changes/HOLD.
+  - worker_4 matrix at `b8b2bbd` also reviewed #325 old head `afc2769` as
+    request-changes/HOLD.
+  - Current #325 head is
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`, open/CLEAN, lead-approved
+    pending merge after checksum fix.
+- Posted #323 freshness request:
+  `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4594978248`.
+- Sent delivered peer_send updates:
+  - worker_4: #323 remains request-changes/HOLD for freshness; refresh matrix
+    against #325 `266b6a1` and #326 merged baseline.
+  - worker_2: task248 HOLD behavior remains correct, but #325 is now
+    approved-pending-merge rather than request-changes; continue no
+    prep/sync/training/eval until #325 actually merges and refreshed reviews or
+    explicit lead clearance are present.
+- Current gate remains `NO-GO/HOLD`: task246 is approved but not yet merged,
+  task247 baseline is merged, task248 has no candidate artifacts,
+  task249/task250 need refreshed reviews, task243 has no base-vs-FT comparison
+  output, and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.

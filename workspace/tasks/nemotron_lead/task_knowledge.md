@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Knowledge Entries
 
@@ -48,3 +48,4 @@
 42. A task247 baseline artifact can unblock comparison planning but not the first go/no-go by itself; the gate still needs accepted task246 inputs, task248 FT artifacts, refreshed task249/task250 reviews, and task243 output proving `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
 43. When an approved worker PR self-merges after a lead status push, immediately record mergedAt/head/mergeCommit, fetch `origin/main`, recheck downstream PR mergeability, and notify dependent workers to refresh against the new main state.
 44. The accepted task246 checksum pattern is to keep final-file checksums in external `.sha256` sidecars and avoid embedding a self-referential `manifest_sha256` field in the top manifest; #325 head `266b6a1` fixed the prior mismatch with top manifest sha `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.
+45. When worker reports cross in flight, compare their reviewed upstream heads against current PR heads before accepting a matrix; task249 head `b8b2bbd` remained stale because it reviewed #325 `afc2769` after #325 had advanced to approved head `266b6a1`.
