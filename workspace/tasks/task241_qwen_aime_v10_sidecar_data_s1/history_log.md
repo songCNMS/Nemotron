@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -39,3 +39,17 @@
   dependency in three data-prep contract tests.
 - Opened PR #320 to `main`:
   https://github.com/songCNMS/Nemotron/pull/320
+
+## Session 3 - 2026-06-01 UTC - Lead-approved merge closeout
+
+- Received lead approval to self-merge PR #320 only if it was still open,
+  clean, based on `main`, and at head
+  `57537133bed6bdd5773e6678b48086a8fc6a87b4`.
+- Verified PR #320 was OPEN/CLEAN, base `main`, not draft, with the approved
+  head SHA.
+- Merged PR #320 first among the data/planner pair via GitHub PR merge.
+- Merge result: `mergedAt=2026-06-01T16:24:28Z`, merge commit
+  `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`.
+- Post-merge disposition: task241 completed for the V10 data-prep and
+  decontamination surface only; first Qwen3-4B AIME go/no-go remains HOLD until
+  real heldout corpus/input and generated data/count artifacts exist.

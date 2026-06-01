@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task241_qwen_aime_v10_sidecar_data_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task241_qwen_aime_v10_sidecar_data_s1 |
+| Current Task |  |
 | PR | https://github.com/songCNMS/Nemotron/pull/320 |
-| Session | 2 |
-| Progress | Implemented V10 run-length DP sidecar/data refactor with focused tests and task report; PR #320 opened and awaiting lead/test audit. |
+| Session | 3 |
+| Progress | Completed task241; PR #320 merged at 2026-06-01T16:24:28Z with merge commit 0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0. |

@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - Qwen AIME V10 sidecar data
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
 
 ## Background
 
@@ -67,3 +67,12 @@ Implement the data-prep side of a decontaminated V10 AIME-style hard-math sideca
 - Added `v10_sidecar_data_report.md` with filter details, synthetic counts, checks, contamination status, and residual risk.
 - PR: https://github.com/songCNMS/Nemotron/pull/320
 - Status: ready for PR review; no 30B training run performed; AIME25 remains heldout/decontamination-only.
+
+## Session 3 Merge Closeout
+
+- Lead approved self-merge for PR #320 at head
+  `57537133bed6bdd5773e6678b48086a8fc6a87b4`.
+- Merged PR #320 to `main` at `2026-06-01T16:24:28Z`.
+- Merge commit: `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`.
+- Task status: Completed. First Qwen3-4B AIME go/no-go remains HOLD until real
+  heldout corpus/input and generated data/count artifacts exist.

@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -18,3 +18,5 @@
 7. V10 is part of `STRATEGIES_REQUIRING_MATH_DECONTAMINATION`; the task
    tests assert contaminated AIME25-like prompts are removed before base train
    and hard sidecar writing.
+8. Merge fact: PR #320 merged to `main` on 2026-06-01 at 16:24:28 UTC with
+   merge commit `0a56e4d7545cfcc4769ee0407e03ba7e1e1746d0`.
