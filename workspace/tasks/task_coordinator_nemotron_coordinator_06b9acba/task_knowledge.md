@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Knowledge Entries
 
@@ -77,3 +77,5 @@
 71. Session 33 supersedes entry 66: task261/#333 merged at `2026-06-01T22:19:54Z` with merge commit `513fefa1f1ace94302b56413769c78fb7224624c` from exact refreshed-approved head `3f404b3043736c85ca89ff6aa799fc6c53120f62`.
 72. task261 merged report sha256 is `2e8ab638f4e1c6c75a842e60a9fad28e0a756efb5fda4135f402eb006f39e257`; `947f34b..3f404b3` left the report unchanged and only updated metadata/status/history/task_knowledge.
 73. With task260/#332 and task261/#333 merged, task255 is invalidated as failed evidence; any next V11 work must be a new 4B candidate plan with explicit base-load proof, fixed LR/split materialization, non-AIME canaries, and same-harness base-vs-FT non-regression before promotion. Global `NO-GO/HOLD` remains in force.
+74. Session 34 reconciled worker_1 post-merge closeout mailbox `606182f676d44bd387a5b9dd8f60d428`; #333 remains merged at `513fefa1f1ace94302b56413769c78fb7224624c` from head `3f404b3043736c85ca89ff6aa799fc6c53120f62`, and lead branch records the closeout at `f4fabbd2457c126240806a0728dbb9c53ce4a00f`.
+75. The combined task260/task261 closeout means task255 should only be used as failure evidence. V11 planning must not reuse task255 checkpoint/export and must remain 4B-only until a same-harness non-regressing candidate exists or a concrete evaluator/data fix is proven.

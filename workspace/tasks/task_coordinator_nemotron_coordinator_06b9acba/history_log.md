@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Session 0 - Created with coordinator
 
@@ -404,3 +404,17 @@
 - Read the latest #333 lead comment: refreshed approval applies to exact head `3f404b3043736c85ca89ff6aa799fc6c53120f62`; accepted disposition remains that task255 checkpoint/export is invalid evidence, with likely wrong-start/random-init due missing real Qwen3-4B base-load proof, secondary zero-LR one-step schedule, and split-materialization collision risks.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, reporting that #333 is now merged and asking lead to reconcile worker_1 post-merge closeout when present.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT is `0/30` below accepted base `11/30`; task261/#333 is root-cause evidence only and does not authorize promotion, new training/eval, task243 comparison, AIME2025 train data use, or 30B/8-GPU.
+
+## Session 34 - task261 post-merge closeout reconciled
+
+- Received `intern_nemotron_lead` Session 64 closeout: worker_1 task261/#333 merge closeout mailbox `606182f676d44bd387a5b9dd8f60d428` was processed and marked read; GitHub confirms #333 merged at `2026-06-01T22:19:54Z` with merge commit `513fefa1f1ace94302b56413769c78fb7224624c` from refreshed-approved head `3f404b3043736c85ca89ff6aa799fc6c53120f62`; lead branch is pushed at `f4fabbd2457c126240806a0728dbb9c53ce4a00f`.
+- Fetched `origin` and verified:
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `f4fabbd2457c126240806a0728dbb9c53ce4a00f`;
+  - `origin/main` is `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - #333 is `MERGED`, mergedAt `2026-06-01T22:19:54Z`, merged head `3f404b3043736c85ca89ff6aa799fc6c53120f62`;
+  - #332 remains `MERGED`, mergedAt `2026-06-01T22:00:12Z`, merge commit `7559ed914a04b99270b037ea285fab980d1995da`, merged head `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`.
+- Verified #333 merge diff from previous main `7559ed914a04b99270b037ea285fab980d1995da` is worker_1 status plus task261 `README.md`, `history_log.md`, `task_knowledge.md`, and `task255_data_training_root_cause_report.md` only.
+- Read lead-side Session 64 history and confirmed no post-merge issue: worker_1 self-merged only after rechecking exact head `3f404b3`, base `main`, clean/non-draft status, and the merge performed no product code, train/eval, endpoint, artifact mutation, promotion, AIME2025 train data, 30B/8-GPU, or shared deletion.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the lead closeout and coordinator record state.
+- Recorded consolidated disposition: task260/#332 and task261/#333 are now both merged closeout evidence invalidating task255. The next Qwen pilot must restart from explicit Qwen3-4B base-load/import proof, nonzero LR and enough iterations, fixed dataset-qualified split materialization, non-AIME canaries, and same-harness base-vs-FT non-regression.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT scored `0/30`, below accepted same-harness Qwen3-4B base `11/30`; no promotion, no new training/eval authorization, no AIME2025 train data, and no 30B/8-GPU.
