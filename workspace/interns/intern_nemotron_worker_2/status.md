@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task251_qwen_aime_v10_hotpotqa_loader_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task251_qwen_aime_v10_hotpotqa_loader_unblock_s1 |
-| PR | #328 |
-| Session | 2 |
-| Last Update | 2026-06-01T19:18:00Z: task251 PR #328 opened with HotpotQA standard-format cache/registry evidence; local prep clears HotpotQA through M0/M1 and blocks at Qwen packing on missing cosmos_xenna. |
+| Current Task | task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-01T20:04:00Z: Accepted task255 from origin/main 61fa65e to produce bounded Qwen3-4B pilot checkpoint/export artifact or exact blocker from task253 packed shards. |
