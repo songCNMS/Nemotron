@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=41 -->
+<!-- METADATA:SESSION=42 -->
 
 ## Knowledge Entries
 
@@ -52,3 +52,4 @@
 46. A current task249 matrix can still be an interim HOLD artifact when task250 is stale; keep #323 unmerged until #324 refreshes against the matrix, then require worker_4 to do a final pass over the refreshed runbook.
 47. A runbook refresh can still be stale even after incorporating the latest task246/task247 state if it references an older task249 matrix head; #324 head `cde927b` captured #325/#326 but still referenced #323 `b8b2bbd` after #323 had advanced to `bb5f306`.
 48. Once #325 merged into main at `2775dff`, both #323 and #324 became stale again even if mergeability stayed CLEAN; downstream review/runbook artifacts must refresh from approved-pending-merge to merged-on-main task246 evidence before task248 can be cleared.
+49. If a worker creates branch-only closeout commits after lead approval but before merging, the PR must be merged at the approved head with `--match-head-commit`; task246/#325 did this correctly by merging `266b6a1` and then pushing branch-only closeout head `e4d0391`.

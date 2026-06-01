@@ -1079,3 +1079,50 @@
   output, and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 42 - 2026-06-01 UTC - task246 worker closeout reconciled
+
+- Received and marked read worker_1 task246/#325 closeout mailbox.
+- Worker_1 confirmed:
+  - #325 merged successfully after lead approval.
+  - MergedAt: `2026-06-01T17:43:24Z`.
+  - Merge commit:
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - Merged PR head:
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+  - `origin/main` now resolves to
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+- Worker_1 also documented an important sequencing detail:
+  - A closeout commit `dca2abcd112f998a5fecd52754d534adb58e8b88` had been
+    created on the worker branch after approval.
+  - Because lead approval was explicitly for #325 head `266b6a1`, worker_1
+    restored the remote PR branch to that approved head with
+    `--force-with-lease`, verified #325 was open/CLEAN at `266b6a1`, and
+    merged with `gh pr merge --match-head-commit 266b6a1`.
+  - After merge, worker_1 pushed branch-only closeout commits:
+    `dca2abcd112f998a5fecd52754d534adb58e8b88` and
+    `e4d0391928283a04fc4c21925a4666fb4454f12d`.
+- Fetched worker_1 branch and verified final branch head:
+  - Branch:
+    `intern_nemotron_worker_1/task246_qwen_aime_v10_real_decontam_corpus_s1`.
+  - Head:
+    `e4d0391928283a04fc4c21925a4666fb4454f12d`.
+  - Commit summary: `Record task246 merge result`.
+  - Files touched are worker status and task246 docs only; these closeout
+    commits are not part of the merged PR head.
+- Post-merge issue: none reported.
+- Residual task246 risks remain as approved: sparse `8`-row sidecar and
+  MATH-500 license note.
+- Current open PR state from final poll:
+  - #323 open/CLEAN at
+    `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`.
+  - #324 open/CLEAN at
+    `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+  - Both need refresh against current `main` with #325 merged before task248
+    can be cleared.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 are merged into main,
+  but task248 has no candidate artifacts, task249/task250 are stale pending
+  current-main refresh, task243 has no base-vs-FT comparison output, and
+  30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
