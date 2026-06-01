@@ -926,3 +926,58 @@
   output, and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 39 - 2026-06-01 UTC - task249 current matrix acknowledged
+
+- Received and marked read worker_2 task248 Session 7 report:
+  - Branch:
+    `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+  - Head:
+    `dfb3494e02c60f4a56fff5682dd7674d06d50615`.
+  - Worker_2 correctly records #325 as open/CLEAN at
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`, #326 as merged, #323 as
+    open/CLEAN at then-current `b8b2bbd`, and #324 as open/CLEAN at
+    `cd4555199ff67eace4d40d4418eef38511786143`.
+  - HOLD behavior remains correct: no local prep, NemTron sync, training,
+    live/FT eval, 30B/8-GPU planning/launch, or shared-file deletion.
+  - Planned task248 inputs remain the task246 corpus and M0 sidecar paths with
+    sparse-sidecar knobs `8` train rows and `0` val shadow, but execution is
+    held until #325 actually merges plus refreshed reviews or explicit lead
+    clearance.
+- Observed task249/#323 advanced again after the mailbox poll:
+  - PR #323 head:
+    `bb5f3063703348356cd22fff0d454fbf3fee5682`, open/CLEAN.
+  - Commit summary: `[task249] Refresh matrix for task246 checksum fix`.
+- Fetched and inspected #323 head `bb5f306`.
+- Received and marked read worker_4 task249 Session 7 report, matching the
+  inspected matrix:
+  - Matrix reviewed current `origin/main`
+    `85f2bf5c11062741388ca114a84a2c26535b7df9` with #326 merged.
+  - task246/#325 reviewed at
+    `266b6a14262278b4fe27f75a3273fc156a5538ce` and recorded as
+    `APPROVE pending merge / HOLD for combined gate`.
+  - task247/#326 remains `APPROVE base artifact` with same-harness base
+    score `11/30 = 0.36666666666666664`.
+  - task248 remains `APPROVE blocked-before-prep report / HOLD`.
+  - task250/#324 remains `REQUEST_CHANGES / HOLD` because its runbook is stale
+    against #325/#326.
+  - Combined first Qwen3-4B V10 go/no-go remains `NO-GO/HOLD`.
+- Posted lead acknowledgement on #323:
+  `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4595020080`.
+  - Acknowledged #323 head `bb5f306` as current interim matrix for #325
+    `266b6a1` and #326 merged baseline.
+  - Kept #323 HOLD/no merge until #324 refreshes against this matrix and then
+    worker_4 does a final pass against the refreshed runbook.
+- Posted #324 freshness request:
+  `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595020149`.
+- Sent delivered peer_send updates:
+  - worker_5: refresh #324 against #323 `bb5f306`, #325 `266b6a1`
+    approved-pending-merge, and #326 merged baseline.
+  - worker_4: keep #323 HOLD/no merge until worker_5 refreshes #324, then do
+    final pass against the refreshed runbook.
+- Current gate remains `NO-GO/HOLD`: task246 is approved but not yet merged,
+  task247 baseline is merged, task248 has no candidate artifacts, task250 is
+  stale pending refresh, task243 has no base-vs-FT comparison output, and
+  30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
