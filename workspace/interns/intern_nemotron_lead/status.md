@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #328 open clean at 694197c; worker_2 closeout processed; task252 review assigned; gate HOLD |
+| PR | #328 open clean at 694197c; task252 review assigned/reported; gate HOLD |
 | Session | 56 |
