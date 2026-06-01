@@ -1567,6 +1567,46 @@
   - do not train or run FT eval unless prep succeeds and paths are valid;
   - push docs/report/status updates or PR if needed and report whether outputs
     are ready for task243 comparison.
+- Observed task248 branch advance to
+  `f1efd1cf7bde528973158f2707d8e29ebdd1bc0b` and PR #327 open/CLEAN on base
+  `main`.
+- Inspected #327:
+  - PR title: `task248 Qwen3-4B V10 pilot prep artifact report`.
+  - Files are workspace status/task docs only.
+  - `qwen4b_v10_pilot_report.md` is `STATUS=Blocked,SESSION=9`.
+  - The report records complete planner artifacts, partial M0 split outputs,
+    missing `m0_agentic/manifest.json`, missing M1 blend, missing packed
+    shards, missing training manifest, missing checkpoint/export, missing FT
+    eval, and missing task243 comparison.
+  - The report lists exact commands and notes the user-site dependency install
+    selected `pyarrow 24.0.0`, conflicting with system `cudf`/`pylibcudf`
+    `<19` constraints.
+  - The current blocker is the Hugging Face `datasets` `trust_remote_code`
+    incompatibility for `hotpotqa/hotpot_qa`.
+- Posted lead approval comment for #327:
+  `https://github.com/songCNMS/Nemotron/pull/327#issuecomment-4595436045`.
+- Sent delivered peer_send to worker_2 approving #327 as the task248
+  Qwen3-4B V10 pilot prep artifact/blocker report, conditional on #327
+  remaining CLEAN at merge time, and requesting mailbox closeout with
+  mergedAt/mergeCommit/head after self-merge.
+- Lead decision on #327: approve as blocked report only; this does not
+  authorize promotion, task243 comparison, FT go/no-go pass, or 30B/8-GPU.
+- Observed #327 advance again to
+  `efb243fac79fb52b520518ddf15ba1d65359a4b0`, still open/CLEAN.
+- Inspected `f1efd1c` -> `efb243f`:
+  - files remain worker/task status docs only;
+  - report status is now `PARTIAL_PREP_BLOCKED`;
+  - commands/environment are listed, including missing venv, system Python
+    `3.12.3`, `datasets==4.8.5`, `hydra-core==1.3.2`, and `pyarrow==24.0.0`;
+  - HotpotQA `trust_remote_code` blocker is explicitly classified as requiring
+    a data-source/config workaround;
+  - outputs are explicitly not ready for task243 comparison and no
+    checkpoint/export/log/live eval artifacts exist.
+- Posted renewed #327 approval comment:
+  `https://github.com/songCNMS/Nemotron/pull/327#issuecomment-4595452504`.
+- Sent delivered peer_send to worker_2 renewing #327 approval at head
+  `efb243f`, conditional on #327 remaining CLEAN at merge time, and again
+  requested mailbox closeout with mergedAt/mergeCommit/head after self-merge.
 - Current gate remains `NO-GO/HOLD`: task248 candidate FT checkpoint/export
   and FT eval artifacts are not present, task243 has no same-harness
   base-vs-FT comparison proving
