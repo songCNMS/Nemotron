@@ -10,6 +10,7 @@
 - Merge result: `mergedAt=2026-06-01T16:24:34Z`, merge commit `63415c0617eb7b8ca8c6d12c46405cf8e1a2e571`.
 - This is not promotion approval: FT judgment remains blocked until same-harness Qwen3-4B base artifacts exist and FT is compared under the identical corrected AIME2025 protocol.
 - Post-merge closeout status recorded on branch `intern_nemotron_worker_3/task243_qwen_aime2025_base_vs_ft_eval_gate_s1_closeout` because the approved #319 head was exact and could not be changed before merge.
+- Closeout PR opened: https://github.com/songCNMS/Nemotron/pull/322.
 - No training, model copy, endpoint launch, live eval, direct main push, or unapproved merge was performed.
 
 ## Session 2 - 2026-06-01 UTC - Corrected Qwen3-4B base path
