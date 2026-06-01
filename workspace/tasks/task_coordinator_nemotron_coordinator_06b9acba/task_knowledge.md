@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Knowledge Entries
 
@@ -87,3 +87,7 @@
 81. No task262-task266 PR is visible as of Session 36. If worker_3/task264 or worker_5/task266 local status claims completion before a PR/mailbox reaches lead, treat it as observation only and wait for lead-processed formal evidence.
 82. task263 local status reports `megatron.bridge` missing on the coordinator/local host; the real Qwen3-4B Bridge import/base-load proof must run in the intended NemTron/NeMo environment and should fail closed if base-load evidence is absent.
 83. Session 36 gate remains `NO-GO/HOLD`: accepted Qwen3-4B base remains `11/30 = 0.36666666666666664`; V11 has no promotion, no full training/eval clearance, no AIME2025 train data allowance, and no 30B/8-GPU clearance.
+84. Session 37 supersedes entry 81 for task264/task266 PR visibility: #334/task266 is open/clean at `f8eff53f26340cc3c812ae0ca190a48214e89942`, and #335/task264 is open/clean at `9d9285fd77820a5187440fbc2234dc36eb56942d`; both have no GitHub checks reported.
+85. #334/task266 is not approvable in Session 37 despite clean mergeability: lead marked `REQUEST-CHANGES/HOLD` because the runbook matrix is stale against current task263 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` and task264 PR #335/worker_3 closeout evidence.
+86. #335/task264 current gate input is worker_4/task265 independent review of exact head `9d9285fd77820a5187440fbc2234dc36eb56942d`. Worker_3's report claims static V11 canary/retention implementation, `py_compile` pass, and `PYTHONPATH=src` focused pytest `13 passed`, but coordinator should wait for lead-processed task265 review before treating #335 as approved.
+87. Session 37 global gate remains `NO-GO/HOLD`: #334/#335 are gate infrastructure/repro work only; they do not authorize promotion, full training/eval, AIME2025 train data use, or 30B/8-GPU.

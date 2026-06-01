@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 36 |
-| Last Update | 2026-06-01T22:47:00Z - Tracked V11 acceptance branches for task262-task266; task263 remote branch is now visible, no task262-task266 PRs are visible, diff-checks pass, and Qwen AIME gate remains NO-GO/HOLD. |
+| Session | 37 |
+| Last Update | 2026-06-01T22:56:00Z - Reconciled V11 gate update: #334 task266 is OPEN/CLEAN but REQUEST-CHANGES/HOLD for stale runbook matrix; #335 task264 is OPEN/CLEAN at 9d9285f pending worker_4/task265 review; Qwen AIME gate remains NO-GO/HOLD. |

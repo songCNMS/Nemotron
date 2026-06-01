@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Session 0 - Created with coordinator
 
@@ -456,3 +456,21 @@
 - Read local worker status files as observation only: worker_1 and worker_2 are `Working`; worker_2 notes local `megatron.bridge` is missing on this host and real Bridge import proof must run in a NemTron/NeMo environment; worker_3 and worker_5 local statuses say task264/task266 reports are completed but no matching remote PR or formal lead-processed gate report is visible in coordinator evidence; worker_4 local status is stale on task249 despite official task265 mailbox acceptance.
 - Sent a delivered coordinator update to `intern_nemotron_lead` reporting that task263 is now visible, all task262-task266 visible branches pass diff-check, no task262-task266 PRs are visible, local status observations are not gate evidence, and the global Qwen AIME gate remains `NO-GO/HOLD`.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: accepted Qwen3-4B corrected same-harness AIME25 base is still `11/30 = 0.36666666666666664`; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.
+
+## Session 37 - V11 task264/task266 gate update reconciled
+
+- Received `intern_nemotron_lead` Session 68 gate update: worker_5 task266 mailbox for #334 and worker_3 task264 mailbox for #335 were processed and marked read by lead. #334 is `OPEN/CLEAN` at `f8eff53f26340cc3c812ae0ca190a48214e89942` but `REQUEST-CHANGES/HOLD` because its runbook matrix is stale; #335 is `OPEN/CLEAN` at `9d9285fd77820a5187440fbc2234dc36eb56942d`; worker_4/task265 was assigned to review #335 exact head.
+- Fetched `origin` and verified:
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `392ad27c202666defaf464a88bd5c065b3c52383`;
+  - `origin/main` remains `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - task263 remains visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9`;
+  - task264 advanced to `9d9285fd77820a5187440fbc2234dc36eb56942d`;
+  - task266 advanced to `f8eff53f26340cc3c812ae0ca190a48214e89942`;
+  - task265 remains at `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Verified GitHub #334 state: `OPEN`, base `main`, non-draft, `mergeStateStatus=CLEAN`, head `f8eff53f26340cc3c812ae0ca190a48214e89942`, no checks reported. The lead comment records `REQUEST-CHANGES / HOLD` because #334 says task263 has no matching remote branch/PR and task264 has no PR/report, while current state has task263 branch `4af57e0` and task264 PR #335 with official worker_3 closeout.
+- Verified GitHub #335 state: `OPEN`, base `main`, non-draft, `mergeStateStatus=CLEAN`, head `9d9285fd77820a5187440fbc2234dc36eb56942d`, no checks reported, no lead approval yet. #335 is awaiting worker_4/task265 independent review as assigned by lead.
+- Verified `git diff --check` passes for #334 and #335 branch diffs. #334 changes worker_5 status plus task266 docs/report; #335 changes the Qwen AIME base-vs-FT gate, adds the V11 non-AIME canary prompt YAML, extends focused tests, and adds task264 docs/report.
+- Read task264 report from #335: it records static V11 pre-AIME canary, artifact retention, and same-harness gate readiness implementation; no live AIME/task243 eval was run; no endpoint, training, export, promotion, or 30B/8-GPU work was run; checks reported `py_compile` pass and `PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py` as `13 passed`.
+- Read task266 report from #334 enough to confirm the stale matrix: it still states task263 had no published branch/PR and task264 had no PR/report, despite the current task263 branch and #335 evidence.
+- Sent delivered coordinator acknowledgement to `intern_nemotron_lead`, confirming #334 HOLD, #335 pending worker_4/task265 review, no checks on either PR, and unchanged global gate.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: accepted Qwen3-4B corrected same-harness AIME25 base remains `11/30 = 0.36666666666666664`; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.
