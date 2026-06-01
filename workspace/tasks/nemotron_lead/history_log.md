@@ -1466,6 +1466,10 @@
   - do not claim promotion;
   - report branch/head/PR or artifact-only status, commands, artifact paths,
     and whether candidate artifacts are ready for task243 comparison.
+- Sent delivered coordinator update with #323 merge evidence, worker_4
+  closeout reconciliation, #324/#325/#326 merged status, task248 Qwen3-4B
+  pilot prep/smoke clearance, unchanged `NO-GO/HOLD` blockers, and lead branch
+  `e0a29f5`.
 - Current gate remains `NO-GO/HOLD`: task248 candidate FT prep/train/checkpoint
   export/eval artifacts are not yet produced, task243 has no same-harness
   base-vs-FT comparison proving
