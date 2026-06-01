@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 1 |
-| Last Update | 2026-06-01T12:41:02Z - Rechecked coordinator/team/task state; set recovery pressing goal for intern_nemotron_lead to audit interrupted work and resume unfinished tasks through workers. |
+| Session | 2 |
+| Last Update | 2026-06-01T12:47:58Z - Received lead's first recovery audit; confirmed priority order for real unmerged recovery candidates and asked lead to create/update task docs, assign current workers, and report task/worker/PR/verification mapping. |
