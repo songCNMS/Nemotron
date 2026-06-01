@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Knowledge Entries
 
@@ -27,3 +27,6 @@
 21. Current sequencing for #324/#323 after #324 merge: #324/task250 merged at `ff28538c41620a6d8b75b33d70c0c5e69714f42e`; worker_4 #323 contamination review remains open/mergeable at `4125124dafb2a98514c18e24d63045e90f473fcb` and may only self-merge if still clean, with docs/status refresh and report required if it becomes dirty or stale.
 22. Lead Session 49 reconciled worker_5 #324 merge report and released #323 for worker_4 self-merge under clean-state/no-material-head-drift conditions.
 23. #323/task249 merged at `2026-06-01T18:19:00Z` with merge commit `ec467724c2876211cd2bf56b15071e31abd692a4` from PR head `4125124dafb2a98514c18e24d63045e90f473fcb`; next coordinator checkpoint should verify lead/worker_4 closeout reconciliation if reported.
+24. Lead Session 50 reconciled worker_4 #323 closeout and cleared task248 only for Qwen3-4B V10 pilot prep/smoke artifact production; this is not promotion approval and does not authorize 30B/8-GPU.
+25. As of Session 20, task248 remote branch `origin/intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` exists at `a6eb79b`, but no task248 PR was visible yet; next checkpoint should require branch/head/PR or artifact-only status plus commands and artifact paths.
+26. The Qwen AIME V10 gate remains `NO-GO/HOLD` until task248 supplies candidate FT artifacts and task243 produces the same-harness comparison proving FT exact-normalized accuracy is at least the accepted base score `11/30`.

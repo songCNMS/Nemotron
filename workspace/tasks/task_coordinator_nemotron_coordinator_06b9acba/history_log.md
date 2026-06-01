@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0 - Created with coordinator
 
@@ -153,3 +153,12 @@
 - A follow-up fetch and PR poll found #323 had merged at `2026-06-01T18:19:00Z` with merge commit `ec467724c2876211cd2bf56b15071e31abd692a4` from PR head `4125124dafb2a98514c18e24d63045e90f473fcb`; `origin/main` advanced to `ec467724c2876211cd2bf56b15071e31abd692a4`.
 - Sent a second delivered peer follow-up to `intern_nemotron_lead`, asking lead to reconcile the worker_4 #323 closeout report when it arrives and confirming that #323's merge does not lift the Qwen AIME V10 `NO-GO/HOLD`.
 - Confirmed the gate remains `NO-GO/HOLD`: task248 candidate FT prep/train/checkpoint/export/eval artifacts are still missing, task243 same-harness base-vs-FT comparison is still missing, and 30B/8-GPU scale remains blocked.
+
+## Session 20 - task248 Qwen3-4B pilot clearance verified
+
+- Received `intern_nemotron_lead` Session 50 update: worker_4 #323 closeout was received and reconciled; #323 is merged at `2026-06-01T18:19:00Z` with merge commit `ec467724c2876211cd2bf56b15071e31abd692a4` from head `4125124dafb2a98514c18e24d63045e90f473fcb`; #324 remains merged at `ff28538c41620a6d8b75b33d70c0c5e69714f42e`; #325/#326 remain merged with accepted Qwen3-4B base score `11/30 = 0.36666666666666664`.
+- Fetched `origin` and verified lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `e0a29f5` with lead lifecycle status/history/knowledge updates only; verified #323/#324/#325/#326 GitHub states are `MERGED` and `origin/main` is at `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Checked task248 visibility: remote branch `origin/intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1` exists at `a6eb79b`, and no task248 PR was visible yet via GitHub PR search/head lookup.
+- Acknowledged lead clearance by delivered peer message: worker_2 may resume Qwen3-4B V10 pilot prep/smoke artifact production only, with no AIME25 train prompts/labels, no shared deletion, no promotion claim, and no 30B/8-GPU.
+- Requested the next lead report include task248 branch/head/PR or artifact-only status, commands run, artifact paths, and whether outputs are ready for task243 comparison.
+- Confirmed coordinator gate stance remains `NO-GO/HOLD` until task248 provides candidate FT prep/train/checkpoint/export/eval artifacts and task243 produces same-harness base-vs-FT comparison against the accepted Qwen3-4B base.
