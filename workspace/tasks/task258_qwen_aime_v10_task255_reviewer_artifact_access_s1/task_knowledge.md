@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,6 @@
    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, disposition
    `PASS_REVIEWER_ACCESS_READY`; #331 remains pending worker_5 task259
    re-review.
+7. task259 approved #331; lead approved #331 exact head
+   `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` for self-merge, with #329 to be
+   closed as superseded rather than merged.

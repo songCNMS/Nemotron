@@ -134,3 +134,6 @@
 105. If task259 remains at acceptance-only state with no mailbox/output,
    non-interrupting `next` follow-up is appropriate; #331/#329 must remain HOLD
    until worker_5 provides final review evidence.
+106. task259 approved artifact access; merge #331 rather than #329 because #331
+   supersedes #329 and the two PRs conflict if merged independently. After #331
+   lands, #329 should close as superseded.

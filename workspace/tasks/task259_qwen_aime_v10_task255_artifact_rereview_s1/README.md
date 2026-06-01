@@ -6,9 +6,12 @@
 
 worker_5 accepted task259 on branch
 `origin/intern_nemotron_worker_5/task259_qwen_aime_v10_task255_artifact_rereview_s1`
-at `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf`. This is acceptance and
-ownership evidence only. No final artifact re-review mailbox/report has arrived
-yet, so #331 and #329 remain `HOLD`.
+and completed review at `e90175172c2b1de627ec36cc4444460812d87122`.
+Recommendation: approve #331 as artifact-access closeout and treat #329 as an
+artifact record only. Lead approved #331 as the merge path and marked #329
+superseded/not-to-merge because #331 contains the updated task255 artifact
+record plus task258 access closeout and conflicts with #329 if merged
+independently.
 
 ## Background
 

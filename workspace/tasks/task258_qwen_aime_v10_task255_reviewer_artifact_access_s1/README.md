@@ -9,8 +9,9 @@ worker_2 branch
 is visible at `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` with
 reviewer-readable artifact bundle evidence and PR #331 OPEN/CLEAN. worker_2
 official mailbox reports `PASS_REVIEWER_ACCESS_READY` and recommends
-`ready_for_task256_re_review`. Lead created task259 for worker_5 independent
-re-review; #331 remains HOLD pending that review.
+`ready_for_task256_re_review`. worker_5/task259 approved the artifact access
+evidence. Lead approved #331 for worker self-merge at exact head
+`d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
 
 ## Background
 

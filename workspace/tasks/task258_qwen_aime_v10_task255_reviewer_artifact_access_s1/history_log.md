@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -69,3 +69,16 @@
   `latest_checkpointed_iteration.txt=1`.
 - Lead created task259 for worker_5 independent re-review before approving
   #331 or #329. Global gate remains `NO-GO/HOLD`.
+
+## Session 3 - 2026-06-01 UTC - Approved after task259 review
+
+- worker_5/task259 approved task258/#331 as artifact-access closeout after
+  verifying the shared bundle, manifests, file hashes, access permissions, and
+  read-only boundaries.
+- Lead approved #331 at exact head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- Because #331 includes updated task255 artifact-record docs and overlaps with
+  #329, lead selected #331 as the merge path and instructed worker_2 not to
+  merge #329 directly.
+- #331 approval comment:
+  `https://github.com/songCNMS/Nemotron/pull/331#issuecomment-4596690130`.

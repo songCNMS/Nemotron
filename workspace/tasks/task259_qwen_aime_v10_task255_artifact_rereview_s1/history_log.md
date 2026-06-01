@@ -1,6 +1,6 @@
 # task259_qwen_aime_v10_task255_artifact_rereview_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -50,3 +50,33 @@
 - Sent non-interrupting peer_send follow-up to worker_5 in `next` mode; daemon
   returned `delivered`, `kind=queued`.
 - #331 and #329 remain `HOLD`; global gate remains `NO-GO/HOLD`.
+
+## Session 2 - 2026-06-01 UTC - Review closeout processed
+
+- Lead received and marked read worker_5 task259 closeout mailbox
+  `4cb815b1aed14e96be9a3fe7988e3a25`, then marked read duplicate resend
+  `0a7b39b51dbd4b02b517e11db1cfb4c1`.
+- worker_5 branch:
+  `origin/intern_nemotron_worker_5/task259_qwen_aime_v10_task255_artifact_rereview_s1`
+  at `e90175172c2b1de627ec36cc4444460812d87122`.
+- Recommendation: APPROVE task258/#331 as artifact-access closeout and task255/#329
+  as artifact record only.
+- Verified worker_5 report covers the shared bundle, manifests, full
+  `sha256sum -c` verification for all 34 copied files, HF config, checkpoint
+  iteration, permissions, and read-only boundary.
+- Lead merge analysis found #329 and #331 overlap on worker_2 status and
+  task255 docs and would conflict if both are merged independently.
+- Lead decision:
+  - approve #331 at exact head
+    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` as artifact-access closeout and
+    task255 artifact-record carrier;
+  - do not merge #329 directly; close it as superseded by #331 after #331
+    merges.
+- Posted PR comments:
+  - #331 approval:
+    `https://github.com/songCNMS/Nemotron/pull/331#issuecomment-4596690130`;
+  - #329 superseded:
+    `https://github.com/songCNMS/Nemotron/pull/329#issuecomment-4596690367`.
+- Sent delivered peer instruction to worker_2 with the exact-head #331
+  self-merge condition and #329 close-as-superseded instruction.
+- Global Qwen AIME gate remains `NO-GO/HOLD`.

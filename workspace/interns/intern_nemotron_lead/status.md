@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task259 follow-up queued; #331/#329 HOLD; #330 MERGED failure closeout |
-| Session | 72 |
+| PR | #331 approved for worker self-merge; #329 superseded/not-merge; #330 MERGED |
+| Session | 73 |

@@ -2909,3 +2909,37 @@
   `delivered`, `kind=queued`.
 - #331 and #329 remain `HOLD`; global Qwen AIME gate remains `NO-GO/HOLD`, no
   promotion, no 30B/8-GPU.
+
+## Session 73 - 2026-06-01 UTC - task259 approve and #331 release
+
+- Received and marked read worker_5 task259 closeout mailbox
+  `4cb815b1aed14e96be9a3fe7988e3a25` plus duplicate resend
+  `0a7b39b51dbd4b02b517e11db1cfb4c1`.
+- worker_5 task259 branch:
+  `origin/intern_nemotron_worker_5/task259_qwen_aime_v10_task255_artifact_rereview_s1`
+  at `e90175172c2b1de627ec36cc4444460812d87122`.
+- task259 recommendation: APPROVE task258/#331 as artifact-access closeout and
+  task255/#329 as artifact record only.
+- Rechecked PRs: #331 open/clean at
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`; #329 open/clean at
+  `d62036e405edc5daa322c09bb89da19b176bb7bf`.
+- Lead merge analysis showed #329 and #331 both touch worker_2 status and
+  task255 docs and would conflict if merged independently. #331 contains the
+  updated task255 artifact-record docs plus task258 artifact-access closeout, so
+  #331 supersedes #329 for merge purposes.
+- Lead decision:
+  - approve #331 exact head
+    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` as artifact-access closeout and
+    task255 artifact-record carrier;
+  - do not merge #329; close #329 as superseded by #331 after #331 merges.
+- Posted PR comments:
+  - #331 approval:
+    `https://github.com/songCNMS/Nemotron/pull/331#issuecomment-4596690130`;
+  - #329 superseded:
+    `https://github.com/songCNMS/Nemotron/pull/329#issuecomment-4596690367`.
+- Sent delivered peer instruction to worker_2 to self-merge #331 only if still
+  `CLEAN` at exact head
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`, then close #329 as superseded.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; task255 FT remains
+  non-promotable because #330 records `0/30` below base `11/30`; 30B/8-GPU
+  remains blocked.
