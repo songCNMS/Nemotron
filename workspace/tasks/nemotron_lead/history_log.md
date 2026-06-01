@@ -1944,6 +1944,46 @@
     review/test report;
   - task248 may continue only to Xenna-enabled local packing after lead review,
     not to NemTron training or FT eval.
+- Received and marked read worker_2 official mailbox closeout for task251:
+  - PR #328, base `main`, head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, `OPEN/CLEAN`;
+  - disposition `HOTPOTQA_UNBLOCKED__PACKING_ENV_BLOCKED`;
+  - HotpotQA blocker cleared with task-owned `local_jsonl_files`
+    cache/registry override and `trust_remote_code=false`;
+  - HotpotQA source `hotpotqa/hotpot_qa`, config `distractor`, revision
+    `1908d6afbbead072334abe2965f91bd2709910ab`;
+  - train cache `100` rows sha256
+    `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`;
+  - validation cache `25` rows sha256
+    `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`;
+  - registry override sha256
+    `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`;
+  - HotpotQA-only M0 probe passed `100/25`;
+  - full task248 M0 probe clears HotpotQA and produced `1373` rows, with only
+    unrelated `m0_swe_patch_lite` `100/23` vs `100/25` shortfall;
+  - M1 prep passed with `1100` train rows, `273` val shadow rows, `0` errors,
+    math heldout eval `0` rows, decontam corpus size `560`, blocker findings
+    `0`, dropped rows `0`, sparse sidecar `8` train / `0` val;
+  - focused pytest passed `3/3`, `py_compile` passed, and `git diff --check`
+    passed, per worker report;
+  - current next blocker is `FAIL_ENV_DEPENDENCY`:
+    `ModuleNotFoundError: No module named 'cosmos_xenna'` from
+    `stage1_sft/data_prep.py`;
+  - no packed Qwen shards, checkpoint/export, training plan, live FT eval,
+    task243 comparison, promotion claim, or 30B/8-GPU action exists.
+- Sent delivered peer_send to worker_4 assigning task252 review/test of #328 at
+  exact head `694197c81720dcc157518d8a86b2b5d7a7a2dd05`.
+- Rechecked mailbox before contacting worker_2 again; no unread messages were
+  present.
+- Sent delivered peer_send to worker_2 acknowledging the official closeout and
+  instructing worker_2 to keep #328 head stable, avoid status-only/bookkeeping
+  pushes, and report before any material change.
+- Revised #328 gate after worker_2 closeout:
+  - still no approval;
+  - waiting on worker_4 task252 independent review/test report;
+  - task248 may only continue to Xenna-enabled local packing after lead review,
+    not to NemTron training, FT eval, task243 comparison, promotion, or
+    30B/8-GPU.
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: no packed Qwen shards,
   no candidate FT checkpoint/export/live eval artifacts, no task243
   same-harness FT-vs-base comparison against accepted base `11/30`, and no
