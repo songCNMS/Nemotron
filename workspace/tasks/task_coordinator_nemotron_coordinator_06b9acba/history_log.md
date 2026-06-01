@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Created with coordinator
 
@@ -41,3 +41,10 @@
 - Recorded gate outcomes: task231/task228 close as blocked/HOLD with no new implementation task until an approved launcher package or benchmark-owner equivalence contract exists; task217 approve close with residual risk limited to not-full-training/eval; task203/task206/task209 covered/no recovery.
 - Verified PR state: #313 open for lead task docs/gate records; #314 and #315 open against main and mergeable; #316 open against `intern_nemotron_lead/session1-recovery-task-docs` and must be retargeted/rebased to main or otherwise adjusted after #313 lands.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming gate conclusions and instructing the lead to avoid self-merging #313, wait for non-author/authorized approval or merge, then sequence #314/#315/#316 worker closeout PRs.
+
+## Session 6 - Gate hold state confirmed
+
+- Received `intern_nemotron_lead` Session 3 gate update: mailbox unread remained 0, no implementation, test, launch, or merge action was performed, and #313 had been updated to head `43293a6`.
+- Verified current PR state: #313 open/mergeable against main with blank reviewDecision; #314 open/mergeable against main at `5987d1d`; #315 open/mergeable against main at `63201eb`; #316 open/mergeable at `c3a1c91` with base still `intern_nemotron_lead/session1-recovery-task-docs`.
+- Confirmed dispositions remain unchanged: task231/task228 blocked/HOLD, task217 approve close with smoke-only residual risk, and task203/task206/task209 covered/no recovery.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, instructing the lead to keep holding #314/#315/#316 until #313 receives non-author/authorized approval and merges, and to report immediately if #313 approval/merge state or any worker PR base/mergeability changes.
