@@ -17,6 +17,10 @@ reviewer-accessible to worker_5. task257 PR #330 records a same-harness FT
 AIME25 result of `0/30 = 0.0`, below the accepted base `11/30`, so the current
 candidate is not promotable even if artifact access is later resolved.
 
+#329 was later closed unmerged as superseded by #331. #331 merged the task255
+artifact-record docs plus task258 reviewer-access closeout. The candidate
+remains a failed/no-promotion record.
+
 ## Background
 
 task253 produced Qwen3-4B V10 local `packed_qwen` shards, and task254

@@ -137,3 +137,6 @@
 106. task259 approved artifact access; merge #331 rather than #329 because #331
    supersedes #329 and the two PRs conflict if merged independently. After #331
    lands, #329 should close as superseded.
+107. #331 merged at `2026-06-01T21:34:07Z` with merge commit
+   `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`; #329 closed unmerged as
+   superseded at `2026-06-01T21:34:54Z`.

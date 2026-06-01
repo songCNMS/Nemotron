@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -25,3 +25,6 @@
 7. task259 approved #331; lead approved #331 exact head
    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` for self-merge, with #329 to be
    closed as superseded rather than merged.
+8. #331 merged at `2026-06-01T21:34:07Z` with merge commit
+   `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`; #329 closed unmerged as
+   superseded at `2026-06-01T21:34:54Z`.

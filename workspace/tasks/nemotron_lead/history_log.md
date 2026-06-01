@@ -2943,3 +2943,23 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task255 FT remains
   non-promotable because #330 records `0/30` below base `11/30`; 30B/8-GPU
   remains blocked.
+
+## Session 74 - 2026-06-01 UTC - #331 merged and #329 closed superseded
+
+- Fetched origin and verified `origin/main` advanced to
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`.
+- #331 is `MERGED`:
+  - mergedAt `2026-06-01T21:34:07Z`;
+  - merge commit
+    `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`;
+  - merged head
+    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- #329 is `CLOSED`, unmerged:
+  - closedAt `2026-06-01T21:34:54Z`;
+  - head `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - no merge commit.
+- No worker_2 post-merge mailbox closeout was present at the first lead check
+  after #331/#329 changed state.
+- #331 now carries the task255 artifact record plus task258 reviewer-access
+  closeout on main. Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion,
+  no 30B/8-GPU.

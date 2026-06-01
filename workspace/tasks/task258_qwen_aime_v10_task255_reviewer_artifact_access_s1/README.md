@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - task255 reviewer artifact access
 
-<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Lead Observation
 
@@ -12,6 +12,10 @@ official mailbox reports `PASS_REVIEWER_ACCESS_READY` and recommends
 `ready_for_task256_re_review`. worker_5/task259 approved the artifact access
 evidence. Lead approved #331 for worker self-merge at exact head
 `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+
+#331 merged at `2026-06-01T21:34:07Z` with merge commit
+`9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`. #329 was closed unmerged as
+superseded at `2026-06-01T21:34:54Z`.
 
 ## Background
 

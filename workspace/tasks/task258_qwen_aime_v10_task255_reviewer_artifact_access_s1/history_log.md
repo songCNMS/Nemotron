@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -82,3 +82,21 @@
   merge #329 directly.
 - #331 approval comment:
   `https://github.com/songCNMS/Nemotron/pull/331#issuecomment-4596690130`.
+
+## Session 4 - 2026-06-01 UTC - PR #331 merged and #329 closed
+
+- Lead fetched origin and verified #331 is `MERGED`.
+- #331 mergedAt: `2026-06-01T21:34:07Z`.
+- #331 merge commit:
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`.
+- #331 merged head:
+  `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`.
+- `origin/main` now points to
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`.
+- Verified #329 is `CLOSED`, unmerged, closedAt `2026-06-01T21:34:54Z`,
+  superseded by #331 as instructed.
+- No worker_2 post-merge mailbox closeout was present at the first lead check
+  after #331/#329 changed state.
+- This closes task258 artifact-access evidence on main. Global Qwen AIME gate
+  remains `NO-GO/HOLD` because task257/#330 measured task255 FT `0/30` below
+  base `11/30`.

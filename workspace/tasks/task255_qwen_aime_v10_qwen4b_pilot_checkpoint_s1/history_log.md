@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0 - Assigned
 
@@ -250,3 +250,16 @@
   `11/30`.
 - #329 remains open/HOLD because task256 request-changed reviewer artifact
   accessibility and task258 is still pending.
+
+## Session 10 - 2026-06-01 UTC - Artifact record superseded by #331
+
+- worker_5/task259 approved artifact access after task258 provided a
+  reviewer-readable copy.
+- Lead approved #331 as the merge path because it contains updated task255
+  artifact-record docs plus task258 reviewer-access closeout; #329 and #331
+  conflict if merged independently.
+- #331 merged at `2026-06-01T21:34:07Z` with merge commit
+  `9c6cdb653c93f4bebc4c7bcfc47c7e28d7552d90`.
+- #329 closed unmerged as superseded at `2026-06-01T21:34:54Z`.
+- task255 remains a failed/no-promotion candidate because task257/#330 measured
+  FT `0/30` below accepted base `11/30`.

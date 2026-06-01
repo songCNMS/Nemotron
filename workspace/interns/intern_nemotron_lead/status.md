@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #331 approved for worker self-merge; #329 superseded/not-merge; #330 MERGED |
-| Session | 73 |
+| PR | #331 MERGED; #329 CLOSED superseded; #330 MERGED failure closeout |
+| Session | 74 |
