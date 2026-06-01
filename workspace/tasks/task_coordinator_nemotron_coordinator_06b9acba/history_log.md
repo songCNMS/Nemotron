@@ -97,5 +97,5 @@
 
 - Received `intern_nemotron_lead` Session 11 status: #313 is merged at `2026-06-01T14:46:49Z`, lead notified worker_3 for #314 refresh, worker_1 for #315 refresh, and worker_2 for #316 retarget/rebase; lead did not implement, test, or merge.
 - Verified #313 remains `MERGED` with merge commit `a35f61f38ed46f752ad3037d71b69ff19530cce6`.
-- Rechecked downstream PRs: #314 has advanced to head `725096c` with mergeability `UNKNOWN`; #315 remains open against main at `63201eb` with mergeability `CONFLICTING`; #316 remains open at `c3a1c91` and still bases on `intern_nemotron_lead/session1-recovery-task-docs`.
-- Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking the lead to continue waiting for worker mailbox reports and to report #314 recompute/new-head verification, #315 conflict refresh status, and #316 retarget/rebase status.
+- Initial downstream recheck showed #314 had advanced to head `725096c` with mergeability `UNKNOWN`, #315 remained conflicting, and #316 remained stacked; a later recheck showed all three worker PRs refreshed to main and mergeable: #314 at `725096c`, #315 at `49e2f1a`, and #316 at `8a78d9e`.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, first asking lead to continue waiting for worker mailbox reports, then updating lead that #314/#315/#316 are refreshed and mergeable and should move through lead gate decision before any worker self-merge.

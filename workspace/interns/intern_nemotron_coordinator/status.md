@@ -11,4 +11,4 @@
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
 | Session | 13 |
-| Last Update | 2026-06-01T14:54:37Z - Received lead post-merge status; verified #313 is merged, #314 has advanced to head 725096c with mergeability pending recompute, #315 remains conflicting, and #316 remains stacked on the old #313 branch. |
+| Last Update | 2026-06-01T14:54:37Z - Received lead post-merge status; verified #313 is merged and downstream worker PRs #314/#315/#316 are now refreshed to main and mergeable for lead gate decision. |
