@@ -1983,6 +1983,11 @@
   `694197c81720dcc157518d8a86b2b5d7a7a2dd05`, worker_2 closeout summary,
   task252 assignment status, current `cosmos_xenna` packing blocker, and the
   unchanged `NO-GO/HOLD` gate.
+- Read-only worker_4 pane check showed worker_4 has begun reviewing #328 diff
+  and task251 report at the assigned head; worker_4 status file had not yet
+  refreshed at this check.
+- A short mailbox poll after worker_4 started found no task252 review report
+  yet, so #328 remains unapproved.
 - Revised #328 gate after worker_2 closeout:
   - still no approval;
   - waiting on worker_4 task252 independent review/test report;
