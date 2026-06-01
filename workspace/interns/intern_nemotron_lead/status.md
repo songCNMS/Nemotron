@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #328 MERGED; task253 749ade2 PASS local packed_qwen; task254 review assigned; gate HOLD |
+| PR | #328 MERGED; task253 749ade2 PASS local packed_qwen; task254 assigned/no branch yet; gate HOLD |
 | Session | 59 |
