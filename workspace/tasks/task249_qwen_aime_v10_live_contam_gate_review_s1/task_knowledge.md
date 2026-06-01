@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -84,3 +84,9 @@
     first go-no-go: task246 and task247 evidence are merged, task250 runbook is
     current, but task248 FT artifacts and task243 comparison output are still
     missing.
+24. At Session 11, lead approved task249/#323 final static review but gated
+    self-merge on #324 merging first and #323 remaining CLEAN against main.
+    #324 is still open at `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`, so #323
+    must stay HOLD/no-merge.
+25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
+    #324 makes #323 dirty or stale, refresh docs/status only and report back.

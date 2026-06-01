@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0 - Assigned
 
@@ -215,3 +215,20 @@
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.
+
+## Session 11 - Lead approval gated on task250 merge
+
+- Received lead APPROVE for task249/#323 final static review, with combined
+  first Qwen3-4B V10 gate still NO-GO/HOLD.
+- Verified #323 remains OPEN/CLEAN at
+  `fbca7c9068b3d847ee24a2bff666f6a88fe380b4`.
+- Verified #324 is still OPEN/CLEAN but not merged at
+  `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`.
+- Did not self-merge #323 because lead's merge condition requires #324 to be
+  merged first and #323 to remain CLEAN against main afterward.
+- Kept #323 in HOLD/no-merge state. If #324 merges and #323 remains CLEAN, the
+  next action is self-merge #323; if #324 makes #323 dirty or stale, refresh
+  docs/status only and report back.
+- Scope remained review-only: no implementation, training, live eval, endpoint
+  launch, shared deletion, direct `main` push, branch rewrite, first go/no-go
+  approval, or 30B scale action was performed.
