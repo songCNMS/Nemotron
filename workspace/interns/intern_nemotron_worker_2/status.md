@@ -10,4 +10,4 @@
 | Team | nemotron |
 | Current Task | task217_mamba_causal_conv_train_stack_unblock_probe_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/316 |
-| Session | 1 |
+| Session | 2 |
