@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task251 a5d48c3 only acceptance; worker_2 nudged and coordinator updated; gate HOLD |
-| Session | 54 |
+| PR | task251 local artifacts exist but no PR/push; worker_2 asked to formalize report; gate HOLD |
+| Session | 55 |

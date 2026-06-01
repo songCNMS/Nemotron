@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
 
 ## Session 0 - Created with team lead
 
@@ -1813,5 +1813,81 @@
 - Current gate remains `NO-GO/HOLD`: there are still no task248 candidate FT
   checkpoint/export/live FT eval artifacts, no task243 same-harness FT-vs-base
   comparison against accepted base `11/30`, and no 30B/8-GPU clearance.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 55 - 2026-06-01 UTC - task251 local artifacts found, official PR/report pending
+
+- Received coordinator Session 24 update:
+  - lead branch observed at `47b75112424a293d6e380955f94fb6682f8b6212`;
+  - `origin/main` remains
+    `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - task251 remote branch remains
+    `a5d48c3d565c9d60e56206b19b17a4e000d79292`;
+  - no task251 PR is visible;
+  - remote diff from main is still worker status plus task251 docs only;
+  - coordinator's read-only artifact check now sees task251 local HotpotQA
+    cache and M0 probe outputs, but no official branch push/PR/mailbox report.
+- Rechecked lead mailbox first; no unread messages were present.
+- Rechecked current task251 remote state:
+  - no task251 PR is visible via `gh`;
+  - remote branch is still `a5d48c3`;
+  - worker_2 local branch remains at `a5d48c3` with uncommitted changes to
+    `src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py`,
+    `tests/recipes/super3/test_m0_data_env.py`, and untracked
+    `workspace/tasks/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1/build_hotpotqa_standard_cache.py`.
+- Read-only artifact inspection found task251 local evidence:
+  - output root
+    `/work-agents/intern_nemotron_worker_2/outputs/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1/`;
+  - HotpotQA source `hotpotqa/hotpot_qa`, config `distractor`, revision
+    `1908d6afbbead072334abe2965f91bd2709910ab`;
+  - train cache `100` rows sha256
+    `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`;
+  - validation cache `25` rows sha256
+    `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`;
+  - registry override
+    `hotpotqa_standard_cache/data_registry.hotpotqa_standard_cache.yaml`
+    sha256
+    `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`,
+    with `local_jsonl_files` and `trust_remote_code=false`.
+- M0/M1 local evidence observed:
+  - `m0_hotpotqa_probe` generated `100` train and `25` val rows for
+    `m0_search_hotpotqa`;
+  - `m0_agentic` full probe generated all listed M0 split files and cleared the
+    HotpotQA loader path, but recorded an unrelated
+    `m0_swe_patch_lite` shortfall: requested `100/25`, prepared `100/23`;
+  - `m1_agentic_sft` artifacts now exist; worker pane reported M1 local prep
+    passed with `1100` train rows, `273` val shadow rows, and `0` errors.
+- Current next blocker observed from `qwen_packing.log`/worker pane:
+  `ModuleNotFoundError: No module named 'cosmos_xenna'` during Qwen
+  `stage1_sft/data_prep.py`; no `packed_qwen`, checkpoint, export, or FT eval
+  artifact was found.
+- Lead gate decision for the current state:
+  - treat HotpotQA as likely locally unblocked for M0/M1, but not yet official
+    gate evidence because worker_2 has not committed, pushed, opened PR, or
+    sent a mailbox report for the artifact set;
+  - do not clear task243 comparison, training, promotion, or 30B/8-GPU;
+  - require worker_2 to formalize the task251 report/PR and classify the
+    current next blocker.
+- Rechecked mailbox before worker coordination; no unread messages were
+  present.
+- Sent delivered peer_send to worker_2 requesting:
+  - commit/push the task251 branch and open a PR to `main` if code/config/test
+    or report changes are needed;
+  - send mailbox report with branch/head/PR or blocker;
+  - include cache/override paths, source revision, row counts/split mapping,
+    checksums, exact commands/environment/log paths, HotpotQA pass/fail,
+    M0/M1 row counts, and `qwen_packing.log` `cosmos_xenna` blocker;
+  - state whether task248 local prep may resume and to which step;
+  - preserve Qwen3-4B only, no AIME25 train prompts/labels, no shared deletion,
+    no task243 comparison, no promotion, no 30B/8-GPU, and stop before NemTron
+    training/FT live eval.
+- Other workers were not assigned in this session because there is still no
+  official task251 PR/head/report to test; a tester/reviewer should be assigned
+  after worker_2 publishes PR evidence.
+- Current gate remains `NO-GO/HOLD`: local task251 artifacts are not FT
+  checkpoint/export/live FT eval artifacts, task243 same-harness FT-vs-base
+  comparison against accepted base `11/30` is missing, and 30B/8-GPU remains
+  blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.

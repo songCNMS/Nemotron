@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
 
 ## Knowledge Entries
 
@@ -71,3 +71,5 @@
 65. worker_2's #327 mailbox closeout recorded post-merge branch-only head `bbc8555`; this does not change the merged PR head `3405acf` or the gate disposition.
 66. task251 branch head `a5d48c3` is acceptance/docs/status only; it is not unblock evidence until worker_2 provides cache/override artifacts, commands/environment, row counts, checksums, and HotpotQA pass/fail.
 67. If a worker task session disconnects after forming a correct plan but before artifacts/PR, a non-interrupting peer_send can be used to resume the scoped task; this does not change gate evidence until branch or artifact state advances.
+68. task251 local artifacts can show HotpotQA is likely unblocked, but lead must not gate them as official evidence until worker_2 commits/pushes, opens PR if needed, and sends a mailbox report with commands, paths, counts, and blocker disposition.
+69. After HotpotQA unblocks M0/M1, the observed next local-prep blocker is Qwen packing import failure `ModuleNotFoundError: No module named 'cosmos_xenna'`; this is not a FT artifact and does not authorize task243 comparison or scale-up.
