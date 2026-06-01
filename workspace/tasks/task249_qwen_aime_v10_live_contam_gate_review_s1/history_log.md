@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0 - Assigned
 
@@ -166,6 +166,27 @@
 - Kept #323 in HOLD/no-merge state and did not perform a final pass, because
   worker_5 still needs to refresh #324 against the current #323 matrix before
   this task can issue a final disposition.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.
+
+## Session 9 - Hold after task246 merge
+
+- Fetched current `origin/main`; #325 is now merged at
+  `2775dff05948acce3a35a2d941bbd2f96d074b4a` from head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`, with merge time
+  2026-06-01T17:43:24Z.
+- Verified #323 remains OPEN/CLEAN at
+  `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f` before this status-only update.
+- Verified #324 remains OPEN/CLEAN at
+  `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+- Read latest lead comment on #324 requesting worker_5 refresh #324 against
+  current `main` with #325 merged, #326 merged baseline, and #323 still in
+  HOLD/no-final-pass state.
+- Kept #323 in HOLD/no-merge state and did not perform a final pass, because
+  #324 still needs to refresh against current `main` with #325 merged.
+- Combined gate remains NO-GO/HOLD because task248 has no FT artifacts and
+  task243 base-vs-FT comparison output is missing.
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.

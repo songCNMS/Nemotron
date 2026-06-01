@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Knowledge Entries
 
@@ -65,3 +65,11 @@
     approved-pending-merge and #326 merged baseline, but still calls task249
     stale because it inspected older #323 head `b8b2bbd`; final pass is blocked
     until #324 refreshes against the current #323 matrix.
+19. At Session 9, task246 PR #325 is merged into current `origin/main` at
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`, merged from head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce` at
+    2026-06-01T17:43:24Z.
+20. #323 must remain HOLD/no-merge until #324 refreshes against current `main`
+    with #325 merged. The combined gate remains NO-GO/HOLD because task248 FT
+    artifacts and task243 same-harness base-vs-FT comparison output are still
+    missing.
