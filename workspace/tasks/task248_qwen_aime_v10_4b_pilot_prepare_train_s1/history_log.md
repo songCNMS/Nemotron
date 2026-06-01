@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0 - Assigned
 
@@ -109,4 +109,11 @@
 - Local/remote PR state had already advanced to head `efb243fac79fb52b520518ddf15ba1d65359a4b0` after the Session 10 focused `PARTIAL_PREP_BLOCKED` classification update.
 - Read-only GitHub check showed #327 is still `OPEN`/`CLEAN`, base `main`, head `efb243fac79fb52b520518ddf15ba1d65359a4b0`, with no merge commit.
 - Did not self-merge because the currently visible PR head differs from the exact head lead reported approving.
+- No training, NemTron sync, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU action was run.
+
+## Session 12 - 2026-06-01 UTC - Refreshed approval crossed again, no self-merge
+
+- Lead refreshed approval for #327 head `efb243fac79fb52b520518ddf15ba1d65359a4b0` as a blocked prep artifact report, not as a go/no-go pass.
+- Read-only GitHub check showed #327 is `OPEN`/`CLEAN`, base `main`, but current head is `1c32c574b40bf641db6db3ce7071b472543c26a6`, with no merge commit.
+- Did not self-merge because the current PR head differs from the refreshed head lead approved.
 - No training, NemTron sync, live/FT eval, task243 comparison, promotion, shared-file deletion, or 30B/8-GPU action was run.

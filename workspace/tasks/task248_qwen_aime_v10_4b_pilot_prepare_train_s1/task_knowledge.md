@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -79,3 +79,7 @@
     `f1efd1cf7bde528973158f2707d8e29ebdd1bc0b`, but the PR had advanced to
     `efb243fac79fb52b520518ddf15ba1d65359a4b0`; do not self-merge until lead
     confirms the current head or the gate is otherwise refreshed.
+24. Session 12 merge-gate fact: lead approval refreshed to #327 head
+    `efb243fac79fb52b520518ddf15ba1d65359a4b0`, but the PR had already
+    advanced to `1c32c574b40bf641db6db3ce7071b472543c26a6`; continue not to
+    self-merge until the currently visible head is explicitly approved.
