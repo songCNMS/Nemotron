@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -19,3 +19,6 @@
 13. Qwen AIME25 improvement work has a hard non-regression rule: no fine-tuned Qwen checkpoint can be promoted unless it is scored against the same base Qwen checkpoint under the same corrected AIME 2025 evaluator/protocol and the FT score is not lower.
 14. For this Qwen AIME25 priority, run Qwen3-4B pilot/debug first using `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; do not spend 30B/8-GPU scale until the 4B pilot is non-regressing or produces a concrete evaluator/data fix.
 15. AIME 2025 prompts and labels are held-out eval/decontamination material only; worker tasks must not add them to training data, sidecars, distillation prompts, or answer-supervision rows.
+16. For the Qwen AIME25 split, remote branch presence alone is not gate evidence: worker mailbox reports and PR artifacts are still required before lead can approve data/planner/eval/review/runbook work or authorize pilot execution.
+17. For task243, a baseline protocol that points at `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507` does not satisfy the supervisor's Qwen3-4B pilot requirement; the accepted debug checkpoint path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+18. A worker-reported missing model path is not a true resource blocker if it used the wrong Qwen3-4B path; require path correction before escalating base-score resource availability.

@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0 - Created with team lead
 
@@ -283,4 +283,34 @@
 - Pushed lead assignment docs at commit `116a2f3` on `origin/intern_nemotron_lead/session1-recovery-task-docs`.
 - Read mailbox before each worker notification and found no unread messages.
 - Sent peer notifications to `intern_nemotron_worker_1` through `intern_nemotron_worker_5`; each notification returned `delivered`.
+- Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 16 - 2026-06-01 UTC - Qwen AIME25 worker branch status monitoring
+
+- Read coordinator handoff at `/work-agents/intern_nemotron_coordinator/Nemotron/workspace/tasks/task_coordinator_nemotron_coordinator_06b9acba/session16_aime2025_qwen_handoff.md` and confirmed Session 15 task split matches the required data/planner/eval/review/runbook plan.
+- Read lead mailbox and found no unread worker reports.
+- Fetched `origin` and checked worker branch/PR status:
+  - `task241_qwen_aime_v10_sidecar_data_s1` / `intern_nemotron_worker_1`: remote branch present at `233a0e0`, no PR yet; branch currently contains accept-task docs/status only.
+  - `task242_qwen_aime_v10_planner_smoke_s1` / `intern_nemotron_worker_2`: remote branch present at `b2d16a7`, no PR yet; branch currently contains accept-task docs/status only. No remote-branch blocker observed.
+  - `task243_qwen_aime2025_base_vs_ft_eval_gate_s1` / `intern_nemotron_worker_3`: remote branch present at `c02b09a`, no PR yet; branch currently contains accept-task docs/status only, so first base-score artifact/protocol evidence is not available yet.
+  - `task244_qwen_aime_v10_contam_regression_review_s1` / `intern_nemotron_worker_4`: no remote branch and no PR observed; blocker unknown because no mailbox report has arrived.
+  - `task245_qwen_aime_v10_artifact_runbook_verify_s1` / `intern_nemotron_worker_5`: PR #317 open to `main`, head `aa071c4`, mergeStateStatus `CLEAN`; diff is worker status plus task245 docs only. No remote-branch blocker observed.
+- Sent follow-up peer messages after mailbox checks:
+  - Asked `intern_nemotron_worker_4` to push the task244 branch or report the blocker by mailbox.
+  - Asked `intern_nemotron_worker_3` to prioritize same-harness Qwen3-4B base protocol/artifact evidence or report blockers.
+- Continued Session 16 monitoring after worker updates:
+  - `task241_qwen_aime_v10_sidecar_data_s1` / `intern_nemotron_worker_1`: remote branch still at `233a0e0` with no PR; worker local tree has uncommitted data-prep/test edits, but no pushed PR artifact yet, so there is no gateable data-sidecar evidence.
+  - `task242_qwen_aime_v10_planner_smoke_s1` / `intern_nemotron_worker_2`: remote branch still at `b2d16a7` with no PR; worker local tree has uncommitted planner/test edits that include the required `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` pilot path and 30B hold logic, but no pushed PR artifact yet. No branch blocker observed.
+  - `task243_qwen_aime2025_base_vs_ft_eval_gate_s1` / `intern_nemotron_worker_3`: PR #319 opened to `main`, head `bfb49a8`, mergeStateStatus `CLEAN`; files include `qwen_aime2025_base_vs_ft_gate.py`, a YAML config, focused tests, and `baseline_protocol_report.md`. Worker reported `7 passed` for the focused pytest file and a passing `py_compile`; lead did not run those tests. First base-score protocol evidence exists as a draft report, but no base score artifact exists yet.
+  - `task244_qwen_aime_v10_contam_regression_review_s1` / `intern_nemotron_worker_4`: PR #318 opened to `main`, head `069424b`, mergeStateStatus `CLEAN`; files are worker status plus task244 docs/review matrix. Worker_4's mailbox report recommends `BLOCK/not reviewable` for task241/task242/task243 until implementation/PR evidence exists and `REQUEST_CHANGES/HOLD` for #317 until runbook verification evidence is added.
+  - `task245_qwen_aime_v10_artifact_runbook_verify_s1` / `intern_nemotron_worker_5`: PR #317 remains open to `main`, head `aa071c4`, mergeStateStatus `CLEAN`; diff is worker status plus task245 docs only, so artifact/runbook verification evidence is still missing.
+- Read and marked read two new mailbox reports: worker_4 task244 branch/PR/blocker matrix and worker_3 task243 base-protocol/PR report.
+- Independently read `task243` baseline protocol report and found a gate issue: it uses `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`, while the supervisor/project rule requires the Qwen3-4B pilot checkpoint at `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`. A lead read-only path probe found the `/mnt/cephfs` path exists and the `/mnt/3fs` path is missing.
+- Sent peer follow-ups, all delivered:
+  - Asked `intern_nemotron_worker_3` to update task243 protocol/config/docs to the `/mnt/cephfs` Qwen3-4B path and report whether the base score is still blocked only by corrected AIME input and endpoint availability.
+  - Asked `intern_nemotron_worker_5` to add the task245 artifact/runbook verification report to #317, including exact paths, commands/blockers, no-delete guarantee, 4B-first readiness, and base-score artifact verification.
+  - Asked `intern_nemotron_worker_4` to keep task244 in review/hold and refresh the matrix after task241/task242 PRs appear and task243 updates #319.
+- Current lead gate decisions: #319 is `REQUEST_CHANGES/HOLD` pending Qwen3-4B path correction and base-score blocker clarification; #317 is `REQUEST_CHANGES/HOLD` pending runbook verification evidence; #318 remains review/hold until worker branches/PRs it reviews are refreshed. No worker PR is approved for merge.
+- Branch blockers requested by coordinator: worker_2, worker_4, and worker_5 branches are all present; worker_4 and worker_5 have PRs #318/#317, while worker_2 has no PR yet but no remote-branch blocker.
+- Baseline/eval gate remains unchanged: no FT checkpoint may be judged until the same Qwen base model has a same-harness corrected AIME2025 score; AIME25 remains held-out eval/decontamination only; no 30B/8-GPU scale until Qwen3-4B smoke is non-regressing or yields a concrete evaluator/data fix.
 - Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.

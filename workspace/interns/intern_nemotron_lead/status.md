@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 tasks assigned; workers notified |
-| Session | 15 |
+| PR | Qwen AIME25 gate monitoring; #317/#318/#319 open |
+| Session | 16 |
