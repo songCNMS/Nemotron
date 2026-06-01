@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
 
 ## Session 0 - Created with team lead
 
@@ -1767,5 +1767,47 @@
   - no task251 output directory, cache/override path, source revision, row
     counts, checksums, commands/environment, or HotpotQA pass/fail yet;
   - task251 remains `InProgress` and global gate remains `NO-GO/HOLD`.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 54 - 2026-06-01 UTC - task251 still awaiting artifact evidence
+
+- Received coordinator Session 23 ack:
+  - coordinator verified lead branch `497cced57fba576fbb9126cdcbd809b7de799d4f`;
+  - `origin/main` remains
+    `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - task251 worker_2 branch remains
+    `a5d48c3d565c9d60e56206b19b17a4e000d79292`;
+  - no task251 PR is visible;
+  - diff from main is worker status plus task251 README/history/task_knowledge
+    only;
+  - no task251 output directory exists under
+    `/work-agents/intern_nemotron_worker_2/outputs`;
+  - missing evidence remains cache/override path, source revision, row counts
+    and split mapping, checksums, commands/environment/logs, HotpotQA
+    pass/fail, and whether task248 local prep can resume.
+- Rechecked mailbox before coordinating; no unread lead mailbox messages were
+  present.
+- Rechecked current state:
+  - local lead branch was clean and matched origin at `497cced`;
+  - task251 still has no GitHub PR;
+  - remote branch head is still `a5d48c3`;
+  - worker_2 local status is `Working` on task251 with `PR=N/A`;
+  - worker_2 output root for task251 still has no files.
+- Read-only tmux observation of worker_2 showed the worker had confirmed the
+  pinned HotpotQA Parquet source is readable and had identified the intended
+  smallest path as a task-owned standard-format cache or registry override, but
+  the session had reconnected into an unrelated prompt before any branch
+  advance or artifact report.
+- Rechecked mailbox again before sending peer_send; no unread messages were
+  present.
+- Sent delivered peer_send to worker_2 to continue task251, ignore the
+  unrelated prompt, preserve the Qwen3-4B/AIME25/no-shared-delete/no-training
+  boundaries, and report branch/head/PR or blocker plus cache/override path,
+  source revision, row counts/split mapping/checksums, commands/environment,
+  log paths, HotpotQA pass/fail, and whether task248 local prep can resume.
+- Current gate remains `NO-GO/HOLD`: there are still no task248 candidate FT
+  checkpoint/export/live FT eval artifacts, no task243 same-harness FT-vs-base
+  comparison against accepted base `11/30`, and no 30B/8-GPU clearance.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
