@@ -22,11 +22,29 @@
    `workspace/tasks/task266_qwen_aime_v11_runbook_repro_gate_s1/v11_runbook_repro_gate_report.md`;
    output copy:
    `/work-agents/intern_nemotron_worker_5/outputs/task266_qwen_aime_v11_runbook_repro_gate_s1/v11_runbook_repro_gate_report.md`;
-   sha256 `67e3f70389759cb33b4cedd319144c52e4ad5130134bad67cb36ba9f188920f5`.
-8. Current upstream V11 evidence is incomplete: task262 and task264 remote
-   branches are acceptance/docs only, task263 has no visible remote branch/PR,
-   and task265 has no diff from main. Therefore V11 execution remains
-   HOLD/NO-GO even though task266 runbook docs are complete.
-9. First measurable V11 go/no-go requires base-load/import proof, nonzero-LR
+   refreshed sha256
+   `12f892f98ec57b696619be6615ad2454e6e7889529614af28c1f1f50b4dd933b`.
+8. Current upstream V11 evidence remains incomplete: task262 is now #336
+   MERGED at head `8fd3ff6065290b850c98db5f7abff91aa6880967`, merge commit
+   `2ca6541c275d1eb64068e665af24147a796c818a`; `5e431f4` supplies static
+   data/packing repair evidence plus fresh final-answer n-gram decontam PASS
+   artifacts and output hashes, while `8fd3ff6` is metadata-only reconciliation;
+   task263 is visible at
+   `4af57e0e61703a063c1ef42def44119a7eea5cf9` but has no PR or base-load
+   proof; task264 is #335 MERGED at
+   `9d9285fd77820a5187440fbc2234dc36eb56942d` as
+   `98e8aad39af9e705feed581e0ff9f8814073e2d8` with static canary/retention
+   evidence, and task265 is visible only as branch
+   `ca5ea1c405ef142ee51a43fcbab477a2958e48dc` plus worker_4 mailbox-only
+   matrix refresh id `7e718a2c0ea746ed81352db5b5b6fe57`.
+9. task262 final-answer n-gram scan evidence at #336 `5e431f4`, carried by
+   exact head `8fd3ff6`: 200
+   final-answer rows versus 560 heldout prompts, 112000 pair comparisons, 4
+   overlap pairs, 1 informational pair, 0 blocker pairs, 0 rows with blocker
+   overlap, max score 0.257143, and `decontaminate_math_rows` dropped 0 rows.
+10. First measurable V11 go/no-go requires base-load/import proof, nonzero-LR
    training evidence, non-AIME canary pass, reviewer-readable artifacts, and
    same-harness AIME25 FT exact-normalized accuracy `>= 11/30`.
+11. Task264 static readiness does not authorize live AIME comparison; same-harness
+    AIME remains blocked until task262 data, task263 base-load proof, task265
+    review, a V11 candidate artifact, and actual canary pass evidence exist.
