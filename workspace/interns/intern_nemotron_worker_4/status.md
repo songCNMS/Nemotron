@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task244_qwen_aime_v10_contam_regression_review_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/318 |
 | Session | 1 |
-| Progress | Initial independent V10 contamination/regression review matrix drafted; branch/PR being published. |
+| Progress | Initial independent V10 contamination/regression review matrix pushed in PR #318. Current upstream V10 inputs are blocked or held because reviewable implementation/runbook evidence is absent. |
