@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Knowledge Entries
 
@@ -57,3 +57,11 @@
 16. Even with task246 approved-pending-merge and task247 merged as baseline,
     the combined gate remains NO-GO/HOLD because task248 FT artifacts and
     task243 same-harness base-vs-FT comparison output are still missing.
+17. At Session 8, lead acknowledged #323 head
+    `bb5f3063703348356cd22fff0d454fbf3fee5682` as current for #325
+    `266b6a1` and merged #326, but directed #323 to stay HOLD/no-merge until
+    worker_5 refreshes #324 against this matrix.
+18. #324 head `cde927bf407667f198be6848aa0d6d3ff8745d10` records task246
+    approved-pending-merge and #326 merged baseline, but still calls task249
+    stale because it inspected older #323 head `b8b2bbd`; final pass is blocked
+    until #324 refreshes against the current #323 matrix.

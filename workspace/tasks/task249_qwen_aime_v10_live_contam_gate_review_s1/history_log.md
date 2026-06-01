@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0 - Assigned
 
@@ -144,6 +144,28 @@
 - Updated `live_gate_review_matrix.md` with Session 7 evidence. Combined first
   Qwen3-4B V10 go/no-go remains NO-GO/HOLD because task248 has no FT artifacts
   and task243 comparison output is missing.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.
+
+## Session 8 - Hold pending refreshed task250 runbook
+
+- Received lead acknowledgment that #323 head
+  `bb5f3063703348356cd22fff0d454fbf3fee5682` has a current matrix for #325
+  `266b6a14262278b4fe27f75a3273fc156a5538ce` and the merged #326 baseline,
+  with correct NO-GO/HOLD.
+- Verified #323 remains OPEN/CLEAN at
+  `bb5f3063703348356cd22fff0d454fbf3fee5682` before this status-only update.
+- Verified #325 remains OPEN/CLEAN at
+  `266b6a14262278b4fe27f75a3273fc156a5538ce` and not merged.
+- Fetched and inspected #324 at
+  `cde927bf407667f198be6848aa0d6d3ff8745d10`; it is OPEN/CLEAN and records
+  task246 approved-pending-merge plus #326 merged baseline, but still marks
+  task249 #323 stale because it inspected the older #323 head
+  `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`.
+- Kept #323 in HOLD/no-merge state and did not perform a final pass, because
+  worker_5 still needs to refresh #324 against the current #323 matrix before
+  this task can issue a final disposition.
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.
