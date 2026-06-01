@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate wave: #323/#324 cross-refresh requested; go/no-go HOLD |
-| Session | 31 |
+| PR | Qwen AIME25 live-gate wave: waiting #324 refresh against #323@68a8ee; go/no-go HOLD |
+| Session | 32 |

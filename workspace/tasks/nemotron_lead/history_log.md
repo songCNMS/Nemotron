@@ -660,3 +660,21 @@
   - task250/#324 `4fd7978`.
 - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 32 - 2026-06-01 UTC - task250 cache report reconciled
+
+- A final mailbox check received and marked read worker_5's task250/#324 report for head `4fd7978353deb9702e880d2734d8b99bfaf8544b`.
+- This report confirmed the same #324 state already inspected in Session 31:
+  - task247 local AIME2025 input/cache path is recorded as partial evidence.
+  - Qwen3-4B endpoint probes still fail on `127.0.0.1:13000` and `127.0.0.1:30001`.
+  - Base score artifacts, task246 corpus/input, task248 FT artifacts, task249 review matrix as current runbook input, task243 comparison, and 30B permission remain missing.
+  - No training, live eval, endpoint serving, 30B/8-GPU launch, main push, self-merge, or shared-storage deletion was performed.
+- No new branch head was produced by that mailbox report; #324 remains at `4fd7978` and still needs the already-sent refresh against #323 `68a8ee7`.
+- Current state remains:
+  - task246 `a53c913`.
+  - task247 `94c21c9`.
+  - task248 `8641828`.
+  - task249/#323 `68a8ee7`, open/CLEAN.
+  - task250/#324 `4fd7978`, open/CLEAN, waiting refresh against #323 `68a8ee7`.
+  - First Qwen3-4B go/no-go `NO-GO/HOLD`; 30B/8-GPU scale held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
