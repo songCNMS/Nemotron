@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Session 0 - Created with coordinator
 
@@ -193,3 +193,22 @@
 - Read-only output check under `/work-agents/intern_nemotron_worker_2/outputs` found only `task242_qwen_aime_v10_4b_pilot` and `task248_qwen_aime_v10_4b_pilot_prepare_train_s1`; no task251 output directory, cache/override artifact, source revision, row counts, checksums, commands/environment logs, or HotpotQA pass/fail evidence exists yet.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming task251 remains `InProgress` and asking the next report to include branch/head/PR or blocker, cache/override path, source revision, row counts/split mapping/checksums, commands/environment/logs, HotpotQA pass/fail, and whether task248 local prep can resume.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no task248 candidate FT checkpoint/export/live FT eval artifacts, no task243 same-harness FT-vs-base comparison against accepted Qwen3-4B base `11/30`, and no 30B/8-GPU clearance.
+
+## Session 24 - task251 local artifacts appeared but remain unreported
+
+- Received `intern_nemotron_lead` Session 54 update: mailbox had no unread messages, lead branch was reported at `98380b4`, task251 remote branch remained `a5d48c3d565c9d60e56206b19b17a4e000d79292`, no PR was visible, remote diff was acceptance docs/status only, and lead had nudged worker_2 after observing a disconnected worker pane.
+- Fetched `origin` and found the lead branch had already advanced past the reported `98380b4` to `47b75112424a293d6e380955f94fb6682f8b6212`; `98380b4` is in branch history, and the later `47b7511` commit only updates lead tracking docs.
+- Verified `origin/main` remains `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; task251 remote branch still matches `a5d48c3d565c9d60e56206b19b17a4e000d79292`; GitHub PR search still returns no task251 PR; remote diff from main remains worker status plus task251 README/history/task_knowledge only.
+- Read-only current artifact check found task251 local outputs now exist under `/work-agents/intern_nemotron_worker_2/outputs/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`, despite the earlier lead snapshot reporting an empty output root.
+- Observed HotpotQA standard cache evidence:
+  - registry override `hotpotqa_standard_cache/data_registry.hotpotqa_standard_cache.yaml` with `trust_remote_code: false`;
+  - manifest source `hotpotqa/hotpot_qa`, config `distractor`, revision `1908d6afbbead072334abe2965f91bd2709910ab`;
+  - train smoke cache 100 rows, sha256 `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`;
+  - validation smoke cache 25 rows, sha256 `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`;
+  - registry override sha256 `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`.
+- Observed local M0 probe evidence:
+  - `m0_hotpotqa_probe/report.md` and manifest generated `search_grounded_qa` splits with 100 train and 25 validation rows and no errors observed;
+  - `m0_agentic/report.md` generated full listed M0 splits, including HotpotQA, but records an unrelated `m0_swe_patch_lite` row shortfall: requested 100/25 and prepared 100/23.
+- Checked worker_2 local repo read-only: branch remains at `a5d48c3d565c9d60e56206b19b17a4e000d79292` with uncommitted changes to `prepare_m0_assets.py`, `tests/recipes/super3/test_m0_data_env.py`, and untracked `workspace/tasks/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1/build_hotpotqa_standard_cache.py`; worker status docs still show Session 1 and `PR` `N/A`.
+- Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, flagging that the new local artifacts need worker_2 official report, branch push, PR or blocker, exact commands/environment/logs, and an explicit decision on whether task248 local prep may resume.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task251 local cache/probe artifacts are not candidate FT checkpoint/export/live eval artifacts, task243 same-harness FT-vs-base comparison against accepted base `11/30` is still missing, and 30B/8-GPU remains blocked.

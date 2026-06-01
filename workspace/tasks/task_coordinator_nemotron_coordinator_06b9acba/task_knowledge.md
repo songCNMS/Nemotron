@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,6 @@
 31. task251 is local-prep unblock only: no AIME2025 train prompts/labels, no shared deletion, no task243 comparison or FT promotion, no NemTron training/FT live eval, and no 30B/8-GPU without later lead clearance.
 32. task251 acceptance branch is visible at `a5d48c3d565c9d60e56206b19b17a4e000d79292` and currently differs from `origin/main` only by worker status plus task251 README/history/task_knowledge; no PR is visible yet.
 33. As of Session 23, no task251 output directory or HotpotQA cache/override/pass-fail evidence exists under `/work-agents/intern_nemotron_worker_2/outputs`; the Qwen AIME gate stays `NO-GO/HOLD`.
+34. Session 24 current-state supersedes entry 33 for local artifacts: task251 output files now exist locally, including a HotpotQA standard cache from `hotpotqa/hotpot_qa` distractor revision `1908d6afbbead072334abe2965f91bd2709910ab`, but the worker branch is still unpushed at `a5d48c3` with no PR or official worker report.
+35. Observed task251 local cache checksums: train 100 rows sha256 `c5052dadf2984324627a943b72d3b0016c3bebcbea2fb2ee90d9acf2a85f98a4`, validation 25 rows sha256 `4440c6820fab423b265abf06dcbf4981146a1c90a8f95bf8105f2517f865ecb5`, registry override sha256 `6f1ab374091f0f55e5a39e1facdb2bc078a021a3524fff3570863353a997e2dc`.
+36. Local task251 probes show HotpotQA 100/25 generation succeeded, while the full M0 agentic probe records an unrelated `m0_swe_patch_lite` shortfall of 100/23 versus requested 100/25; this does not lift the Qwen AIME `NO-GO/HOLD`.
