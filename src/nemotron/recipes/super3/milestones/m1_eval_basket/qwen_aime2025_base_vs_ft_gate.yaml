@@ -1,0 +1,100 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0.
+
+schema_version: 1
+gate_id: task243_qwen_aime2025_base_vs_ft_eval_gate_s1
+recorded_at_utc: "2026-06-01T00:00:00Z"
+description: |
+  Corrected AIME2025 non-regression gate for Qwen base-vs-fine-tuned
+  checkpoints. The gate blocks any FT judgment until the matching base model
+  has a same-harness corrected AIME2025 score, then fails promotion if the FT
+  exact-normalized accuracy is lower than base.
+
+base_score_required: true
+ft_must_be_at_least_base: true
+parsed_rate_is_diagnostic_only: true
+
+base_model:
+  model_id: Qwen/Qwen3-4B-Instruct-2507
+  checkpoint_path: /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_path: /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
+  chat_template_source: Qwen checkpoint tokenizer
+
+protocols:
+  pilot_smoke:
+    model_family: qwen3_4b_instruct_2507
+    benchmark_id: aime25
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    tokenizer_chat_template: Qwen checkpoint tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+    prompt_set_id: corrected_aime2025_original_smoke_30x1
+    prompt_source: corrected AIME2025 original prompts; one repeat per problem
+    repeats_per_problem: 1
+    max_tokens: 8192
+    temperature: 0.0
+    top_p: 1.0e-5
+    parser: boxed_answer_or_symbolic_final_answer_parser
+    scorer: exact_normalized_boxed_or_symbolic_answer
+    denominator_policy: all_requests
+    sample_scope: 30 AIME 2025 problems x 1 repeat
+  final_full:
+    model_family: qwen3_4b_instruct_2507
+    benchmark_id: aime25
+    endpoint_type: openai_chat_completions
+    route: /v1/chat/completions
+    tokenizer_chat_template: Qwen checkpoint tokenizer
+    chat_template_kwargs:
+      enable_thinking: false
+      truncate_history_thinking: false
+    prompt_set_id: corrected_aime2025_original_full_30x10
+    prompt_source: corrected AIME2025 original prompts; ten repeats per problem
+    repeats_per_problem: 10
+    max_tokens: 8192
+    temperature: 0.0
+    top_p: 1.0e-5
+    parser: boxed_answer_or_symbolic_final_answer_parser
+    scorer: exact_normalized_boxed_or_symbolic_answer
+    denominator_policy: all_requests
+    sample_scope: 30 AIME 2025 problems x 10 repeats
+
+score_normalization_schema:
+  metric: exact_normalized_accuracy
+  numerator: exact-normalized correct request rows
+  denominator: all request rows, including unparsed, length-capped, and error rows
+  value: numerator / denominator
+  required_fields:
+    - numerator
+    - denominator
+    - exact_normalized_accuracy
+    - parsed_count
+    - parsed_rate
+    - finish_reason_counts
+    - status_counts
+    - per_problem_rows
+  per_problem_rows:
+    key: AIME problem id, for example aime_06
+    fields:
+      - rows
+      - correct_rows
+      - parsed_rows
+      - finish_reason_counts
+      - sample_ids
+
+artifact_requirements:
+  base:
+    - summary.json
+    - results.jsonl
+    - command.txt
+    - endpoint_model_manifest.json
+  fine_tuned:
+    - summary.json
+    - results.jsonl
+    - command.txt
+    - endpoint_model_manifest.json
+  comparison:
+    - base_vs_ft_gate_decision.json
+    - base_vs_ft_gate_report.md
