@@ -26,6 +26,10 @@ For Qwen3-30B-A3B hard-math SFT, use tokenizer-native Qwen chat packing with vis
 
 For task076 and follow-up Qwen3-30B-A3B hard-math runs, use Qwen HF metadata/tokenizer under `/mnt/cephfs/data/stable/models/Qwen`, specifically `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`. Do not fall back to old `/mnt/3fs` Qwen paths. Keep the SFT continuation checkpoint separate: it should point to the Megatron checkpoint root for the chosen starting model, such as V8 `.../checkpoints`, not to the HF metadata/tokenizer directory.
 
+### Task076 V9 recurrence result
+
+V9 recovered from an initial checkpoint-root launch bug after normalizing `iter_XXXXXXX` inputs to the checkpoint root and retraining from the V8 Megatron checkpoint. The corrected V9 HF export validated and generated coherent `aime_06` traces, but targeted smoke stayed `0/10` with wrong modes `640` and `830`; do not spend the full corrected gate on this lineage. The follow-up data fix should target no-111/run-length DP examples explicitly because the mined V9 sidecar had almost no rows combining binary/chair constraints with DP signals.
+
 ### Live HF checks in PR tests
 
 Keep live Hugging Face `dataset_info()` checks behind an explicit env gate such as `NEMOTRON_RUN_LIVE_HF_TESTS=1`; default PR tests should assert static slugs/subsets and avoid network-dependent skip/fail behavior.

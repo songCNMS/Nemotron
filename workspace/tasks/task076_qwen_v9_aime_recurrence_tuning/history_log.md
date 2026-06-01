@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - History log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ---
 
@@ -157,5 +157,17 @@ Task created from the task075 V8 gate failure. Scope is V9 tuning focused on rec
 - Fixed two post-rebase ruff findings in `prepare_m1_agentic_sft.py` and `test_m1_agentic_sft_math_decontamination.py`.
 - Verification passed: `python -m py_compile` on the touched task076 planner/prep modules, `PYTHONPATH=src python -m pytest tests/recipes/super3/test_m1_agentic_qwen_scaleup_plan.py tests/recipes/super3/test_m1_agentic_sft.py tests/recipes/super3/test_m1_agentic_sft_math_decontamination.py` with `116 passed, 1 skipped`, and `/work-agents/.venv/bin/ruff check` on the touched task076 files.
 - A pre-existing local V10 work-in-progress diff was preserved in `stash@{0}` and not included in this PR update because this session scope was the PR #183 rebase/check/push.
+
+---
+
+## Session 14 - 2026-06-01 - Merge closeout and current status summary
+
+**Executor**: intern_nemontron_code_reading
+
+- Confirmed PR #183 is `MERGED` on GitHub with head `d33c39880cc3733ec781cb5a069e12cfa32e5704`; latest fetched `origin/main` is `1d037329f5a02cdc04f2a09a16e7342721be4c87`.
+- Summarized the final task state: V9 data prep, corrected training, HF export validation, and targeted AIME06 smoke were completed; the corrected V9 checkpoint generated coherent responses but remained `0/10` on `aime_06`.
+- Confirmed no active task076 training or SGLang serving tmux session is running; historical task076 smoke services were stopped in Sessions 9 and 11.
+- Marked the task README metadata as `Completed` and moved intern status from Working to Idle.
+- Preserved the next technical direction as a separate follow-up: build a focused V10-style no-111/run-length DP sidecar instead of spending the full corrected gate on V9.
 
 ---

@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Task knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 > **Writing rule**: one line each, format `N. category: content`
 >
@@ -57,5 +57,6 @@
 45. supervisor request: Rebase/update PR #183 after task077/task078/task079 merges, rerun task076 checks, push the updated PR branch, report the head SHA, and do not push main.
 46. technical fact: Session 13 rebased PR #183 onto `origin/main` `95ddee2f55df4c6d76134f7ea22d5ed5092b6732`; conflicts were in intern status history plus Qwen planner/test integration between task076 V9 support and newer Qwen contract/data-prep guards.
 47. technical fact: Session 13 task076 verification passed with `python -m py_compile` on touched planner/prep modules, focused pytest `116 passed, 1 skipped`, and `/work-agents/.venv/bin/ruff check` on touched task076 files.
+48. technical fact: Session 14 confirmed PR #183 is merged; task076 final status is closed with corrected V9 exported and validated, but targeted `aime_06` remained `0/10`, so full corrected MMLU-Pro/AIME25/HMMT gate was intentionally skipped.
 
 ---

@@ -1,6 +1,6 @@
 # task076_qwen_v9_aime_recurrence_tuning - Qwen V9 AIME recurrence tuning
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemontron_code_reading -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemontron_code_reading -->
 
 ## Background
 
