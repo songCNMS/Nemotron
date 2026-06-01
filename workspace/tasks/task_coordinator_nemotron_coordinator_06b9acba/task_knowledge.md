@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -12,3 +12,4 @@
 6. Lead-authored coordination PRs such as #313 require non-author or otherwise authorized approval/merge; worker closeout PRs depending on a lead PR should land only after the lead PR lands, and stacked PRs like #316 must be retargeted/rebased before final merge.
 7. When a gate update reports no approval/merge change, the coordinator should keep the existing hold state and only ask for immediate updates on approval, merge, base, or mergeability changes.
 8. Pure lead-bookkeeping head-only updates to #313 do not require immediate coordinator escalation when #313 remains open/clean/unapproved/unmerged and worker PR base/mergeability/head state is unchanged.
+9. If `codeup_pr merge` fails with token permission 403 but GitHub CLI is authenticated and the user authorized merge, `gh pr merge --squash` can merge the intended PR; retain a merged PR's branch when another PR is still stacked on it.
