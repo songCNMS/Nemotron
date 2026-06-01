@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate wave: #326 merged baseline; #325 approved pending merge; #323 current interim HOLD; #324 stale at cde927b awaiting refresh; go/no-go HOLD |
-| Session | 40 |
+| PR | Qwen AIME25 live-gate wave: #325/#326 merged; #323/#324 refresh against new main pending; task248 still HOLD; go/no-go HOLD |
+| Session | 41 |

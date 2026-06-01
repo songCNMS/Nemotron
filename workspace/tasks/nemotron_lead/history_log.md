@@ -1027,3 +1027,55 @@
   30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 41 - 2026-06-01 UTC - task246 merged and downstream refresh requested
+
+- PR #325 task246 merged after the Session 40 archive:
+  - State: `MERGED`.
+  - Merged at: `2026-06-01T17:43:24Z`.
+  - Merged head:
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+  - Merge commit:
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - Merged by: `songCNMS`.
+- Fetched `origin/main`; it advanced from #326 merge commit `85f2bf5` to
+  #325 merge commit `2775dff`.
+- Fetched worker_1 branch and observed post-merge branch-only closeout commit:
+  - Branch:
+    `intern_nemotron_worker_1/task246_qwen_aime_v10_real_decontam_corpus_s1`.
+  - Head:
+    `dca2abcd112f998a5fecd52754d534adb58e8b88`.
+  - Commit summary: `Complete task246 closeout`.
+  - Files touched are worker status/knowledge and task246 docs only.
+- Received and marked read worker_4 Session 8 hold mailbox:
+  - #323 advanced to `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`, open/CLEAN.
+  - This is a status/history/knowledge-only hold update; matrix content remains
+    Session 7 from `bb5f306`.
+  - Worker_4 correctly held final pass because #324 `cde927b` still referenced
+    old #323 `b8b2bbd`.
+  - The worker_4 report was overtaken by #325 merging a moment later.
+- Rechecked #323 and #324 after #325 merge:
+  - #323 remains open/CLEAN at `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`,
+    but must refresh against current `main` with #325 merged.
+  - #324 remains open/CLEAN at `cde927bf407667f198be6848aa0d6d3ff8745d10`,
+    but must refresh against current `main` with #325 merged and then feed
+    worker_4's final pass.
+- Posted PR freshness comments:
+  - #324:
+    `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595073276`.
+  - #323:
+    `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4595073297`.
+- Sent delivered peer_send updates:
+  - worker_5: refresh #324 against current main with #325 merged, #326 merged
+    baseline, and #323 still held/no-final-pass.
+  - worker_4: keep #323 HOLD/no merge until #324 refreshes against current
+    main with #325 merged, then do final pass.
+  - worker_2: #325 and #326 are merged, but task248 remains held for
+    prep/sync/training/eval until task249/task250 refresh and explicit lead
+    clearance.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are now
+  merged into main, but task248 has no candidate artifacts, task249/task250 are
+  stale pending current-main refresh, task243 has no base-vs-FT comparison
+  output, and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
