@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -9,3 +9,4 @@
 3. 当前 Nemotron workspace 可能包含大量旧 assignee 名称的历史 InProgress/Working task；恢复时需要 lead 先确认真实未完成工作，再映射到当前 `intern_nemotron_worker_*`。
 4. 恢复中断任务时，优先级应以“未合入 origin/main 的旧分支/PR 证据”为准，而不是单纯依赖 workspace/tasks 中的旧状态标签。
 5. 本轮恢复采用 primary+independent audit 配对：task231 由 worker_1 主审、worker_4 独立核验；task217 由 worker_2 主审、worker_5 独立核验；task203/206/209 由 worker_3 形成 coverage matrix 后再决定是否需要恢复。
+6. Lead-authored coordination PRs such as #313 require non-author or otherwise authorized approval/merge; worker closeout PRs depending on a lead PR should land only after the lead PR lands, and stacked PRs like #316 must be retargeted/rebased before final merge.
