@@ -1,6 +1,14 @@
 # task259_qwen_aime_v10_task255_artifact_rereview_s1 - task255 artifact re-review
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_5,SESSION=0 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+
+## Lead Observation
+
+worker_5 accepted task259 on branch
+`origin/intern_nemotron_worker_5/task259_qwen_aime_v10_task255_artifact_rereview_s1`
+at `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf`. This is acceptance and
+ownership evidence only. No final artifact re-review mailbox/report has arrived
+yet, so #331 and #329 remain `HOLD`.
 
 ## Background
 

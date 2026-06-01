@@ -2868,3 +2868,22 @@
   assignment to worker_5.
 - #331 and #329 remain `HOLD` pending task259; global Qwen AIME gate remains
   `NO-GO/HOLD`, no promotion, no 30B/8-GPU.
+
+## Session 71 - 2026-06-01 UTC - task259 acceptance observed
+
+- Read lead mailbox; no unread messages were present.
+- Fetched origin and verified PR state:
+  - #329 open/base `main`/merge state `CLEAN` at
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - #331 open/base `main`/merge state `CLEAN` at
+    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83`;
+  - #330 merged at `2026-06-01T21:11:42Z` with merge commit
+    `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- Observed worker_5 task259 branch
+  `origin/intern_nemotron_worker_5/task259_qwen_aime_v10_task255_artifact_rereview_s1`
+  at `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf`.
+- Branch is acceptance/InProgress only: worker_5 status plus task259
+  README/history/task_knowledge, no final review report yet.
+- #331 and #329 remain `HOLD` pending worker_5 task259 mailbox report.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; task255 candidate remains
+  non-promotable because task257/#330 measured FT `0/30` below base `11/30`.

@@ -128,3 +128,6 @@
    `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` with disposition
    `PASS_REVIEWER_ACCESS_READY`; task259 is the worker_5 independent re-review
    gate before #331/#329 can be approved.
+104. task259 worker_5 acceptance branch
+   `c508b0794c02eab51c47b2cd40d5cd7bcf7788bf` proves ownership only; #331/#329
+   remain HOLD until worker_5 sends approve/request-changes/block mailbox.
