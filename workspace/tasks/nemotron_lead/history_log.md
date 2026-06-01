@@ -2572,3 +2572,26 @@
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: export evidence is still
   unofficial until worker_2 closeout is processed, and no task243 same-harness
   FT-vs-base comparison against accepted base `11/30` exists.
+
+## Session 63 - 2026-06-01 UTC - task255 artifacts handed to review/eval gate
+
+- worker_2 task255 branch advanced to
+  `dfee98a028a55c00dc2579bef602ee914e88a325` with status/history/knowledge
+  closeout docs. No task255 PR is visible.
+- task255 output report appeared at
+  `/work-agents/intern_nemotron_worker_2/outputs/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/task255_qwen4b_pilot_checkpoint_export_report.md`
+  with sha256
+  `3893af84bfdb4d78c4f31074a8454b2fa2bab2d69cfec71c42a36b75c49e7686`.
+- Report disposition: `PASS_ARTIFACT_READY_FOR_REVIEW`. It records a bounded
+  Qwen3-4B one-iteration checkpoint and HF export, but makes no quality,
+  promotion, task243 comparison, or go/no-go claim.
+- Created task256 for `intern_nemotron_worker_5`: independent read-only
+  artifact integrity and boundary review of the task255 checkpoint/export.
+- Created task257 for `intern_nemotron_worker_3`: corrected AIME2025
+  same-harness task255 FT-vs-base comparison, reusing task243/task247 protocol
+  and the accepted base `11/30`.
+- task257 must not make a final PASS if task256 blocks or request-changes the
+  task255 artifact.
+- Current global gate remains `NO-GO/HOLD`: candidate artifacts now exist for
+  review, but independent artifact review and same-harness FT-vs-base AIME
+  comparison are still missing.
