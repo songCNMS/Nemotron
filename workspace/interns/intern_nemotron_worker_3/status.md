@@ -9,5 +9,5 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task238_task203_206_209_coverage_audit_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/314 |
 | Session | 0 |
