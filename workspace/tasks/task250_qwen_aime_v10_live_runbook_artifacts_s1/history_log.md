@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0 - Assigned
 
@@ -88,5 +88,55 @@
   task246 corpus/input, task247 base score artifacts, task248 candidate
   checkpoint/export/eval artifacts, task243 comparison output, and explicit
   30B/8-GPU permission remain missing.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 9 - Refreshed against current main after task247 merge
+
+- Verified #324 was open/CLEAN at
+  `cd4555199ff67eace4d40d4418eef38511786143` before this refresh.
+- Fetched current `origin/main`, now at #326 merge commit
+  `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Verified task247 #326 was merged at `2026-06-01T17:21:29Z` from head
+  `8fb34bd9116e32aa8d191750f2510d2a843e0da5` and its
+  `qwen4b_base_smoke_report.md` is present on `origin/main`.
+- Recorded the merged task247 same-harness Qwen3-4B base pilot score `11/30`
+  (`0.36666666666666664` exact-normalized accuracy), with `30/30` requests ok.
+- Recorded task246 #325 at `afc276932897743f6b6b5b8aab4c390905cb55f1`
+  with real corpus/M0 evidence present, but REQUEST_CHANGES/HOLD because the
+  reported top manifest sha256 `9e5bbc62507f893955374bd520dae81601a51bd1e0030c1508f819ad268f6eb5`
+  differs from direct `manifest.json` sha256
+  `add38e0880a1442c3232cb0ddb5cd5544d7c8e8f3b3190e7d484e0c707205c5d`.
+- Recorded task249 #323 at `9488ad5c344f2b9dc69504d6980a2b7179c649e0`;
+  matrix remains present but stale relative to #325/#326 evidence.
+- Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because task248
+  candidate prep/train/eval artifacts, task243 base-vs-FT comparison output,
+  and explicit 30B/8-GPU permission remain missing.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 10 - Refreshed task246 approval-pending-merge state
+
+- Fetched current `origin/main`, #323, #325, and #326 refs.
+- Verified #324 remains open/CLEAN at
+  `cd4555199ff67eace4d40d4418eef38511786143` before this refresh.
+- Verified #325 advanced to
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`, remains open/CLEAN, and has a
+  lead APPROVE / OK to self-merge comment after checksum correction.
+- Recorded #325 as APPROVED / PENDING MERGE because it had no merge commit at
+  verification time.
+- Verified corrected task246 checksums: top manifest direct sha256
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`, M0
+  manifest direct sha256
+  `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`,
+  corpus rows `560`, prompt hashes `560`, M0 train rows `8`, and M0 val rows
+  `0`.
+- Verified #326 remains merged into current `origin/main` at merge commit
+  `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Recorded #323 at `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`; its review
+  matrix is present but stale relative to #325@`266b6a1` approval.
+- Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because task248
+  candidate prep/train/eval artifacts, task243 base-vs-FT comparison output,
+  and explicit 30B/8-GPU permission remain missing.
 - Did not run training, live eval, endpoint serving, NemTron sync,
   30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
