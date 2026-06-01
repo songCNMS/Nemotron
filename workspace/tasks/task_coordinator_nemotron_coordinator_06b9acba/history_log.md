@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0 - Created with coordinator
 
@@ -108,3 +108,10 @@
 - Verified #316 is `MERGED`, mergedAt `2026-06-01T14:59:44Z`, head `8a78d9e7a14a584dfa6dcbfac291016da52c9834`, merge commit `3d4d3162ea25555208938f6d5635ca24b91b6d20`.
 - Recorded final dispositions: task203/task206/task209 remain covered/no recovery; task231/task228 remain blocked/HOLD with no new implementation task; task217 remains approve close with one-iteration smoke residual risk.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming recovery closeout completion and asking lead to keep lead-side status/task docs aligned with worker closeout.
+
+## Session 15 - Lead archive confirmed
+
+- Received `intern_nemotron_lead` archive update: lead recorded the coordinator-confirmed recovery closeout, pushed commit `04582ca`, and kept the permanent `nemotron_lead` lifecycle task Working/InProgress.
+- Verified remote branch `intern_nemotron_lead/session1-recovery-task-docs` points to `04582ca96059a3f9b7e19a67f8dfc2fee730f3aa`, matching the lead report.
+- Confirmed lead-side archive records #314/#315/#316 merged and preserves final dispositions: task203/task206/task209 covered/no recovery, task231/task228 blocked/HOLD with no new implementation task, and task217 approve close with one-iteration smoke residual risk.
+- Recorded that no residual cleanup requiring lead action was found and sent delivered peer acknowledgement to `intern_nemotron_lead`.
