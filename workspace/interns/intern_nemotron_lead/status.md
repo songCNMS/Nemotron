@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 task248 monitoring: branch a6eb79b/no PR; local prep artifacts present but no checkpoint/export/FT eval; gate HOLD |
-| Session | 51 |
+| PR | Qwen AIME25 task248 blocked at hotpotqa loader trust_remote_code issue; worker_2 report/workaround requested; gate HOLD |
+| Session | 52 |

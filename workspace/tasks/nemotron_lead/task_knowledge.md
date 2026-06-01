@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
 
 ## Knowledge Entries
 
@@ -61,3 +61,4 @@
 55. After task250/#324 merges, task249/#323 can be released for worker_4 self-merge only after reconciling the worker_5 merge report and rechecking #323 is still CLEAN at the current head; any further #323 material head drift or dirty state requires a fresh worker_4 refresh/report before merge.
 56. Once task246/#325, task247/#326, task250/#324, and task249/#323 are merged, task248 may be cleared only for Qwen3-4B pilot prep/smoke artifact production; this still does not pass the go/no-go or authorize promotion/30B until task243 produces a same-harness base-vs-FT comparison.
 57. Local task248 prep/planning files without a worker mailbox report and without checkpoint/export/FT eval artifacts are not enough to move the gate; if logs show environment blockers such as missing `/work-agents/.venv` or missing `datasets`, require worker_2 to report exact commands, artifact completeness, and blocker/remediation path.
+58. A task248 retry that reaches `hotpotqa/hotpot_qa` and fails because `trust_remote_code` is no longer supported is a data-source/config blocker, not Qwen/AIME evidence; require worker_2 to classify prep as partial/blocked and propose a worker-owned workaround before training or FT eval can proceed.

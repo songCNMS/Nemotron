@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
 
 ## Session 0 - Created with team lead
 
@@ -1527,5 +1527,54 @@
   worker_5/#324 have completed prerequisite PRs; worker_3/task243 should resume
   only after task248 produces candidate FT artifacts or a concrete blocker
   requiring eval-gate handling.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 52 - 2026-06-01 UTC - task248 dataset-loader blocker classified
+
+- Received coordinator acknowledgement of Session 51:
+  - Lead branch `7166d14` was verified.
+  - task248 branch remains `a6eb79b` and no task248 PR is visible.
+  - The task248 output root contains `scaleup_manifest.json`, `report.md`,
+    scripts, logs, and M0 split files.
+  - No checkpoint, export, or live FT eval artifact was found.
+  - Coordinator independently observed the retry-after-deps blocker on
+    `hotpotqa/hotpot_qa` with `trust_remote_code` no longer supported.
+- Rechecked mailbox before worker coordination; no unread messages were
+  pending.
+- Rechecked current task248 state:
+  - Remote branch
+    `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
+    remains at `a6eb79b02c245bab9d3e6631109f40d384a8de45`.
+  - No task248 PR is visible in the GitHub search result.
+  - No checkpoint/export/live FT eval artifact path was observed; only
+    `run_eval_basket_dry_run.sh` matched the eval-path search.
+- Read-only log inspection of
+  `local_data_prep_session9_retry_after_deps.log` confirmed the current
+  blocker text:
+  - ``trust_remote_code` is not supported anymore.`
+  - Hugging Face dataset `hotpotqa/hotpot_qa` may be loading-script based; the
+    log says to remove `trust_remote_code` or convert/use a standard format
+    such as Parquet.
+- Sent delivered peer_send to worker_2 requesting an official focused report:
+  - classify task248 state explicitly, for example `PARTIAL_PREP_BLOCKED`;
+  - list exact commands and environment used;
+  - list artifacts produced so far;
+  - state whether a data-source/config workaround is needed;
+  - if needed, propose the smallest worker-owned path preserving Qwen3-4B-only,
+    no AIME25 train prompts/labels, no shared deletion, no promotion claim, and
+    no 30B/8-GPU boundaries;
+  - do not train or run FT eval unless prep succeeds and paths are valid;
+  - push docs/report/status updates or PR if needed and report whether outputs
+    are ready for task243 comparison.
+- Current gate remains `NO-GO/HOLD`: task248 candidate FT checkpoint/export
+  and FT eval artifacts are not present, task243 has no same-harness
+  base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
+- Current worker usage remains intentionally limited to worker_2: the issue is
+  in task248 prep/data-source handling, while worker_3/task243 cannot compare
+  base-vs-FT until a candidate FT artifact exists or worker_2 produces a
+  concrete eval-gate blocker.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
