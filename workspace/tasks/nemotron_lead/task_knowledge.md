@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Knowledge Entries
 
@@ -35,3 +35,4 @@
 29. After #317/#318/#319/#320/#321 landed, all worker closeout reports confirmed the same residual gate: no Qwen FT promotion or 30B scale until a same-harness Qwen3-4B base score, matching FT artifacts, and the corrected comparison report exist.
 30. After static V10 foundation merge, the next lead wave should target runtime evidence rather than more static code: real heldout corpus/input, Qwen3-4B base AIME artifact, Qwen3-4B pilot artifacts, independent live review, and live runbook.
 31. The first measurable Qwen3-4B go/no-go can only move from HOLD when task246 provides real non-placeholder corpus/input, task247 provides same-harness base artifacts, task248 provides candidate FT artifacts, task249 approves the live evidence, and task250 records artifact paths and comparison status.
+32. When assigning post-static live-gate tasks, notify every worker that branches should start from current `origin/main` after #321 and that lead docs live on `origin/intern_nemotron_lead/session1-recovery-task-docs`; worker task acceptance reports should include branch/head/PR or blocker.

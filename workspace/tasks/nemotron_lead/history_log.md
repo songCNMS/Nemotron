@@ -513,3 +513,18 @@
 - All new tasks retain the hard gate: no FT judgment until same-harness Qwen3-4B base artifacts exist, and no promoted FT unless `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy` under the corrected AIME2025 protocol.
 - 30B/8-GPU scale remains explicitly held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 25 - 2026-06-01 UTC - Live 4B gate workers notified
+
+- Committed and pushed the next-wave live gate task docs on lead branch
+  `origin/intern_nemotron_lead/session1-recovery-task-docs` at `5d5e3fa`.
+- Re-read lead mailbox before worker notification and found no unread messages.
+- Sent peer_send task assignments and received `delivered` for all five:
+  - `intern_nemotron_worker_1`: task246 real non-placeholder heldout decontam corpus/input and V10 M0/input evidence.
+  - `intern_nemotron_worker_3`: task247 same-harness Qwen3-4B base AIME2025 pilot artifact or exact resource blocker.
+  - `intern_nemotron_worker_2`: task248 real Qwen3-4B V10 pilot preparation/run only after task246 and task247 prerequisites; no 30B/8-GPU and no FT judgment before base artifacts.
+  - `intern_nemotron_worker_4`: task249 independent live contamination/regression go/no-go review.
+  - `intern_nemotron_worker_5`: task250 live artifact/runbook table and blocker tracking.
+- Follow-up mailbox check after notifications found no unread messages yet.
+- Current lead state: waiting for worker branch/acceptance reports for task246 through task250; first Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.

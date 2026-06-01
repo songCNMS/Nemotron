@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate task wave assigned: task246-task250 |
-| Session | 24 |
+| PR | Qwen AIME25 live-gate task wave notified: task246-task250; awaiting worker branches/reports |
+| Session | 25 |
