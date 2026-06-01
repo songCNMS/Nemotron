@@ -1,6 +1,22 @@
 # task243_qwen_aime2025_base_vs_ft_eval_gate_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
+
+## Session 2 - 2026-06-01 UTC - Corrected Qwen3-4B base path
+
+- Lead gate required replacing the old pilot/debug path
+  `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507` with the
+  coordinator/project-rule path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+- Read-only probe confirmed `cephfs_base_path=present` and
+  `old_3fs_base_path=missing`.
+- Updated `qwen_aime2025_base_vs_ft_gate.yaml`,
+  `baseline_protocol_report.md`, status, history, and task knowledge to use
+  the `/mnt/cephfs` checkpoint/tokenizer path.
+- First same-harness base-score artifact remains blocked only by missing
+  corrected AIME input/score-cache visibility and missing reachable Qwen3-4B
+  chat endpoint; the base model path itself is no longer a blocker.
+- No training, model copy, endpoint launch, live eval, merge, or direct main push was performed.
 
 ## Session 1 - 2026-06-01 UTC - Base protocol and gate implementation draft
 

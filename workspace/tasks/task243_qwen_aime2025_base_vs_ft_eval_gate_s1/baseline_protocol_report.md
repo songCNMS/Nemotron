@@ -8,22 +8,23 @@ The corrected AIME2025 base-vs-FT gate requires a same-harness base score
 before any fine-tuned Qwen checkpoint can be judged. The gate must compare
 exact-normalized AIME2025 accuracy, not parsed rate or finish-rate proxies.
 
-No live base score was produced in Session 1. The implementation is ready to
-score and compare artifacts once a Qwen3-4B base endpoint and matching FT
-endpoint are available under the same corrected protocol.
+No live base score was produced in Session 1 or Session 2. The implementation
+is ready to score and compare artifacts once a Qwen3-4B base endpoint and
+matching FT endpoint are available under the same corrected protocol.
 
-Session 1 read-only probe result: base score is currently blocked in this
-worktree because the configured Qwen3-4B base checkpoint path is missing, the
-corrected AIME score-cache input is missing, and no local Qwen chat endpoint is
-listening on the checked ports.
+Session 2 read-only probe result: the coordinator-approved Qwen3-4B base
+checkpoint path exists under `/mnt/cephfs`; the old `/mnt/3fs` pilot/debug path
+does not exist in this worker environment. The first base score is still
+blocked by the missing corrected AIME score-cache/input artifact and by no local
+Qwen chat endpoint listening on the checked ports.
 
 ## Base Checkpoint
 
 - Model id: `Qwen/Qwen3-4B-Instruct-2507`
 - Base checkpoint path:
-  `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`
 - Tokenizer/chat template path:
-  `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`
 - Chat template kwargs:
   `enable_thinking=false`, `truncate_history_thinking=false`
 
@@ -126,25 +127,30 @@ for both base and FT.
 Commands run from this worker branch:
 
 ```bash
+test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
 test -d /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
 test -f /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db
 curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:13000/v1/models
 curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:30001/v1/models
 ```
 
-Observed:
+Session 1 observed:
 
 - `base_path=missing`
 - `aime_score_cache=missing`
 - `127.0.0.1:13000`: connection refused
 - `127.0.0.1:30001`: connection refused
 
+Session 2 path correction observed:
+
+- `cephfs_base_path=present`
+- `old_3fs_base_path=missing`
+
 Current blocker to first base score:
 
-- Need a reachable Qwen3-4B base endpoint using the checkpoint/tokenizer above
-  or an approved corrected replacement path.
 - Need the corrected AIME2025 score-cache/input artifact visible to this worker
   or a PM-provided equivalent path.
+- Need a reachable Qwen3-4B base endpoint using the checkpoint/tokenizer above.
 - Once those are available, run the pilot smoke command above for the base
   model first, persist the required base artifacts, then run the identical
   command shape for FT. Do not judge FT until the base artifacts exist.

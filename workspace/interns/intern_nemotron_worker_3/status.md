@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task243_qwen_aime2025_base_vs_ft_eval_gate_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/319 |
-| Session | 1 |
-| Progress | Session 1: base protocol drafted, gate implementation started, base score blocked by missing local model/input/endpoint |
+| Session | 2 |
+| Progress | Session 2: Qwen3-4B base path corrected to cephfs; base score blocked by corrected AIME input and endpoint |

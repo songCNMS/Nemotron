@@ -17,8 +17,8 @@ parsed_rate_is_diagnostic_only: true
 
 base_model:
   model_id: Qwen/Qwen3-4B-Instruct-2507
-  checkpoint_path: /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
-  tokenizer_path: /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
+  checkpoint_path: /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_path: /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
   chat_template_source: Qwen checkpoint tokenizer
 
 protocols:
