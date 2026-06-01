@@ -1,6 +1,6 @@
 # task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1 - Qwen packing Xenna unblock
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
