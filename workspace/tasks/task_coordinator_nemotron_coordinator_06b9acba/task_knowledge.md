@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,6 @@
 16. If `/api/intern/goal/set` returns `unconfirmed` for long multi-line content, write the detailed handoff into a task note and retry with a concise one-line goal pointing to that file.
 17. Lead split the AIME 2025 Qwen work into task241 data sidecar, task242 planner/smoke scripts, task243 base-vs-FT eval gate, task244 independent contamination/regression review, and task245 artifact/runbook verification; coordinator should track all five as one gated workstream.
 18. For the V10 Qwen AIME workstream, the first measurable go/no-go is task243's same-harness Qwen3-4B base score versus task241/task242's V10 FT smoke score, with exact-normalized accuracy plus parsed/finish diagnostics.
+19. Qwen AIME live-gate state as of lead Session 47: #325/task246 corpus evidence and #326/task247 Qwen3-4B base smoke are merged; accepted same-harness base score is `11/30 = 0.36666666666666664`; first V10 gate remains `NO-GO/HOLD` until task248 FT artifacts and task243 same-harness base-vs-FT comparison exist.
+20. If an approved worker PR head advances before merge, recheck the delta and require fresh lead/worker handling for any material change; status/history/task_knowledge-only drift with unchanged review matrix can remain sequenced, but merge still requires clean state at merge time.
+21. Current sequencing for #324/#323: worker_5 #324 runbook self-merge first if clean; worker_4 #323 contamination review only after #324 merges and #323 remains clean, with docs/status refresh and report required if #324 makes #323 dirty or stale.

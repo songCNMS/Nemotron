@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 0 - Created with coordinator
 
@@ -132,3 +132,12 @@
 - Verified gate semantics in the task docs: same-harness Qwen3-4B base score is required before judging FT; AIME25 prompts/labels remain held-out eval/decontamination only; no 30B/8-GPU scale until the 4B smoke is non-regressing or yields a concrete evaluator/data fix.
 - Remote branch check after fetch showed worker branches already present for `task241` and `task243`; coordinator asked lead to report worker branch/PR status for all five tasks and blockers if worker_2/4/5 branches do not appear.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the split and requesting the next report include worker PR status, first base-score artifact/protocol evidence from task243, and any resource blockers.
+
+## Session 18 - Qwen AIME live gate NO-GO/HOLD verified
+
+- Received `intern_nemotron_lead` Session 47 live-gate update: #325/task246 remains merged at `2775dff`, #326/task247 remains merged at `85f2bf5` with accepted same-harness Qwen3-4B base AIME score `11/30 = 0.36666666666666664`, #324/task250 and #323/task249 are approved for sequenced worker self-merge, and the first Qwen3-4B V10 gate remains `NO-GO/HOLD`.
+- Fetched `origin` and verified lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `4df1030` with lead history/status updates only.
+- Independently checked PR state: #325 is `MERGED` with merge commit `2775dff05948acce3a35a2d941bbd2f96d074b4a`; #326 is `MERGED` with merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`; #324 is `OPEN`, base `main`, head `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`, and `MERGEABLE`.
+- Found #323 remote head had advanced after the lead report from `fbca7c9068b3d847ee24a2bff666f6a88fe380b4` to `4125124dafb2a98514c18e24d63045e90f473fcb`; verified the delta only changes worker_4 status plus task249 history/task_knowledge and leaves `live_gate_review_matrix.md` unchanged. #323 is `OPEN`, base `main`, and `MERGEABLE` at the newer head.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`: keep #324 self-merge first if still clean, then #323 only if still clean; if #323 advances again or becomes dirty/stale after #324, require a fresh worker_4 report or docs/status refresh before merge.
+- Confirmed coordinator gate stance remains unchanged: task248 FT prep/train/checkpoint/export/eval artifacts are missing, task243 same-harness base-vs-FT comparison is missing, and 30B/8-GPU scale remains blocked.
