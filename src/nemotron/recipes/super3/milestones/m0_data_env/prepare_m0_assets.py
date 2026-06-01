@@ -3329,12 +3329,16 @@ def iter_hf_rows(
     split: str | None = None,
     config: str | None = MISSING_CONFIG,
 ) -> Iterator[Mapping[str, Any]]:
+    use_split = split if split is not None else spec["hf_split"]
+    if spec.get("local_jsonl_files"):
+        yield from iter_local_jsonl_rows(spec, split=use_split)
+        return
+
     try:
         from datasets import load_dataset
     except ImportError as exc:
         raise RuntimeError("Install the `datasets` package or run inside /work-agents/.venv") from exc
 
-    use_split = split if split is not None else spec["hf_split"]
     use_config = spec.get("hf_config") if config is MISSING_CONFIG else config
     kwargs: JsonDict = {
         "split": use_split,
@@ -3350,6 +3354,52 @@ def iter_hf_rows(
     else:
         dataset = load_dataset(spec["hf_dataset"], **kwargs)
     yield from dataset
+
+
+def coerce_file_list(value: Any, *, spec_id: str, split: str) -> list[Path]:
+    if isinstance(value, (str, Path)):
+        raw_files = [value]
+    elif isinstance(value, Sequence):
+        raw_files = list(value)
+    else:
+        raise ValueError(f"{spec_id} local_jsonl_files[{split!r}] must be a string path or list of paths")
+    paths = [Path(str(path)).expanduser() for path in raw_files if str(path).strip()]
+    if not paths:
+        raise ValueError(f"{spec_id} local_jsonl_files[{split!r}] did not resolve to any paths")
+    return paths
+
+
+def local_jsonl_paths_for_split(spec: Mapping[str, Any], split: str) -> list[Path]:
+    local_files = spec.get("local_jsonl_files")
+    spec_id = str(spec.get("id", spec.get("hf_dataset", "unknown")))
+    if isinstance(local_files, Mapping):
+        selected = local_files.get(split)
+        if selected is None and split == "validation":
+            selected = local_files.get("val")
+        if selected is None and split == "val":
+            selected = local_files.get("validation")
+        if selected is None:
+            raise ValueError(f"{spec_id} local_jsonl_files has no entry for split {split!r}")
+        return coerce_file_list(selected, spec_id=spec_id, split=split)
+    return coerce_file_list(local_files, spec_id=spec_id, split=split)
+
+
+def iter_local_jsonl_rows(spec: Mapping[str, Any], *, split: str) -> Iterator[Mapping[str, Any]]:
+    for path in local_jsonl_paths_for_split(spec, split):
+        if not path.is_file():
+            raise FileNotFoundError(f"{spec.get('id', spec.get('hf_dataset'))} local JSONL source does not exist: {path}")
+        with path.open("r", encoding="utf-8") as f:
+            for line_number, line in enumerate(f, start=1):
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                try:
+                    row = json.loads(stripped)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"invalid JSON in {path}:{line_number}: {exc}") from exc
+                if not isinstance(row, Mapping):
+                    raise ValueError(f"expected JSON object in {path}:{line_number}, got {type(row).__name__}")
+                yield row
 
 
 def desired_counts(spec: Mapping[str, Any], args: argparse.Namespace) -> tuple[int | None, int | None]:
