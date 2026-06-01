@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Session 0 - Created with coordinator
 
@@ -418,3 +418,25 @@
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the lead closeout and coordinator record state.
 - Recorded consolidated disposition: task260/#332 and task261/#333 are now both merged closeout evidence invalidating task255. The next Qwen pilot must restart from explicit Qwen3-4B base-load/import proof, nonzero LR and enough iterations, fixed dataset-qualified split materialization, non-AIME canaries, and same-harness base-vs-FT non-regression.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT scored `0/30`, below accepted same-harness Qwen3-4B base `11/30`; no promotion, no new training/eval authorization, no AIME2025 train data, and no 30B/8-GPU.
+
+## Session 35 - V11 repair wave assigned
+
+- Received `intern_nemotron_lead` Session 65 V11 assignment update: lead branch pushed at `81253415dd3285ce0eb56e69733d210742edcb50`; all five workers were idle before assignment; task262-task266 were assigned for a V11 Qwen3-4B repair wave after task255 invalidation.
+- Fetched `origin` and verified:
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `81253415dd3285ce0eb56e69733d210742edcb50`;
+  - `origin/main` remains `513fefa1f1ace94302b56413769c78fb7224624c`, the #333 merge commit.
+- Verified lead-created task docs exist with these exact task ids and assignments:
+  - `task262_qwen_aime_v11_data_split_sidecar_s1` -> worker_1 for collision-free data split materialization and hard-math/final-answer sidecar repair;
+  - `task263_qwen_aime_v11_base_load_planner_sanity_s1` -> worker_2 for Qwen3-4B base-load/import proof, fail-closed planner checks, and nonzero-LR bounded smoke plan;
+  - `task264_qwen_aime_v11_eval_gate_canary_retention_s1` -> worker_3 for non-AIME canary, completion retention, and same-harness gate readiness;
+  - `task265_qwen_aime_v11_contam_regression_review_s1` -> worker_4 for independent contamination/regression review over V11 heads;
+  - `task266_qwen_aime_v11_runbook_repro_gate_s1` -> worker_5 for V11 runbook/reproducibility gate.
+- Verified no task262-task266 worker remote branches were visible via `git branch -r --list 'origin/intern_nemotron_worker_*/task26[2-6]*'`, and GitHub PR search for task262-task266 returned `[]`.
+- Read local worker status files as observation only: worker_1/task262, worker_2/task263, and worker_3/task264 show accepted/Working; worker_4 and worker_5 local status files still lag, so coordinator will wait for official branch/mailbox acceptance evidence rather than treating local status as gate evidence.
+- Confirmed V11 baseline and candidate protocol:
+  - accepted Qwen3-4B corrected AIME25 `30x1` base remains `11/30 = 0.36666666666666664`;
+  - Qwen3-4B debug/base path remains `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - task255 checkpoint/export is discarded and must not seed V11;
+  - V11 must repair data, prove base-load/import, use nonzero LR, pass non-AIME canary before AIME, and use same-harness FT-vs-base comparison before any claim.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified docs, lack of visible worker branches/PRs, partial local acceptance observation, and unchanged global gate.
+- Confirmed first measurable V11 gate remains `NO-GO/HOLD`: no task262-task266 evidence exists yet, no new training/eval clearance exists, AIME2025 train data remains prohibited, no promotion is allowed, and 30B/8-GPU remains blocked.

@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Knowledge Entries
 
@@ -79,3 +79,6 @@
 73. With task260/#332 and task261/#333 merged, task255 is invalidated as failed evidence; any next V11 work must be a new 4B candidate plan with explicit base-load proof, fixed LR/split materialization, non-AIME canaries, and same-harness base-vs-FT non-regression before promotion. Global `NO-GO/HOLD` remains in force.
 74. Session 34 reconciled worker_1 post-merge closeout mailbox `606182f676d44bd387a5b9dd8f60d428`; #333 remains merged at `513fefa1f1ace94302b56413769c78fb7224624c` from head `3f404b3043736c85ca89ff6aa799fc6c53120f62`, and lead branch records the closeout at `f4fabbd2457c126240806a0728dbb9c53ce4a00f`.
 75. The combined task260/task261 closeout means task255 should only be used as failure evidence. V11 planning must not reuse task255 checkpoint/export and must remain 4B-only until a same-harness non-regressing candidate exists or a concrete evaluator/data fix is proven.
+76. Session 35 V11 task split: task262 worker_1 data split/sidecar repair, task263 worker_2 base-load/import and nonzero-LR planner sanity, task264 worker_3 non-AIME canary/completion retention/eval gate, task265 worker_4 independent contamination/regression review, and task266 worker_5 runbook/repro gate.
+77. V11 first gate remains `NO-GO/HOLD` until task262-task266 provide acceptable evidence. The accepted base remains Qwen3-4B AIME25 `30x1` `11/30`, task255 is discarded, and any future FT must prove `ft_exact_normalized_accuracy >= 11/30` under the same corrected protocol before promotion can be considered.
+78. As of Session 35, no task262-task266 worker remote branches or PRs were visible; local status only showed worker_1/task262, worker_2/task263, and worker_3/task264 acceptance, while worker_4/5 local status files lagged. Use worker mailbox/branch/PR evidence for gates.
