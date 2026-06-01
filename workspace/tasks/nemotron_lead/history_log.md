@@ -540,3 +540,19 @@
 - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 27 - 2026-06-01 UTC - Live task branch and PR status refresh
+
+- Read lead mailbox and found no unread messages.
+- Checked remote branches and PRs for task246 through task250:
+  - `task246_qwen_aime_v10_real_decontam_corpus_s1` / `intern_nemotron_worker_1`: remote branch present at `a53c913`; no PR. Static branch inspection shows acceptance docs/status only, with worker status `Working` and progress "locating or producing real heldout decontam corpus and V10 M0/input path without training/eval."
+  - `task247_qwen_aime2025_qwen4b_base_smoke_s1` / `intern_nemotron_worker_3`: remote branch present at `94c21c9`; no PR. Static branch inspection shows acceptance docs/status only, with worker status `Working` and progress "probing Qwen3-4B base AIME2025 pilot resources."
+  - `task248_qwen_aime_v10_4b_pilot_prepare_train_s1` / `intern_nemotron_worker_2`: initially no remote branch, but local worker status showed task accepted; after lead follow-up, remote branch appeared at `d0546d0`. No PR yet. Branch diff is acceptance docs/status only.
+  - `task249_qwen_aime_v10_live_contam_gate_review_s1` / `intern_nemotron_worker_4`: initially no remote branch, but local worker status showed task accepted; after lead follow-up, remote branch appeared at `d29501c` and PR #323 opened to `main`, mergeStateStatus `CLEAN`. PR body says review is in progress and only initial task docs were imported; not a final go/no-go artifact.
+  - `task250_qwen_aime_v10_live_runbook_artifacts_s1` / `intern_nemotron_worker_5`: no remote branch, no PR, and local status still shows stale task245. Lead sent a follow-up asking worker_5 to accept task250, push branch, or report blocker.
+- Sent non-interrupting follow-ups to `intern_nemotron_worker_2`, `intern_nemotron_worker_4`, and `intern_nemotron_worker_5`; all peer_send calls returned `delivered`.
+- Current gate:
+  - #323/task249 remains in-progress/HOLD pending real task246/task247/task248/task250 evidence.
+  - No task has produced real heldout corpus/input, base AIME artifact, candidate FT artifact, or live comparison artifact yet.
+  - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.

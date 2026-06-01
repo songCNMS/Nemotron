@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Knowledge Entries
 
@@ -36,3 +36,5 @@
 30. After static V10 foundation merge, the next lead wave should target runtime evidence rather than more static code: real heldout corpus/input, Qwen3-4B base AIME artifact, Qwen3-4B pilot artifacts, independent live review, and live runbook.
 31. The first measurable Qwen3-4B go/no-go can only move from HOLD when task246 provides real non-placeholder corpus/input, task247 provides same-harness base artifacts, task248 provides candidate FT artifacts, task249 approves the live evidence, and task250 records artifact paths and comparison status.
 32. When assigning post-static live-gate tasks, notify every worker that branches should start from current `origin/main` after #321 and that lead docs live on `origin/intern_nemotron_lead/session1-recovery-task-docs`; worker task acceptance reports should include branch/head/PR or blocker.
+33. A review-only task249 PR opened before task246/task247/task248/task250 live evidence exists should stay in-progress/HOLD; do not approve it as a final go/no-go artifact until it contains decisions over the live inputs.
+34. If worker local status shows acceptance but no remote branch/mailbox, send a non-interrupting follow-up asking for either pushed acceptance branch or exact blocker; do not infer readiness from local status alone.
