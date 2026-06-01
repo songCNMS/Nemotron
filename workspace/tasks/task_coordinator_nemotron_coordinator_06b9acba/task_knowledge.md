@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Knowledge Entries
 
@@ -91,3 +91,7 @@
 85. #334/task266 is not approvable in Session 37 despite clean mergeability: lead marked `REQUEST-CHANGES/HOLD` because the runbook matrix is stale against current task263 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` and task264 PR #335/worker_3 closeout evidence.
 86. #335/task264 current gate input is worker_4/task265 independent review of exact head `9d9285fd77820a5187440fbc2234dc36eb56942d`. Worker_3's report claims static V11 canary/retention implementation, `py_compile` pass, and `PYTHONPATH=src` focused pytest `13 passed`, but coordinator should wait for lead-processed task265 review before treating #335 as approved.
 87. Session 37 global gate remains `NO-GO/HOLD`: #334/#335 are gate infrastructure/repro work only; they do not authorize promotion, full training/eval, AIME2025 train data use, or 30B/8-GPU.
+88. Session 38 adds #336/task262 PR visibility: #336 is open/base main/clean at current head `824ffc3d3914537e24ad9b1a8ebf303beb881198`, with no GitHub checks, comments, reviews, or lead gate decision visible to coordinator. Lead's initial snapshot head was `0f825b9357a2a8f7814f693ea4c27027c5fbdd31`; the drift to `824ffc3` is worker_1 status plus task262 README/history metadata only.
+89. task262 report key blocker: task253 train split exposed only 8 of 15 intended shards, 79 of 113 intended rows, 596944 of 835223 intended input tokens, and 110945 of 156569 intended supervised tokens. Missing 7 intended shards means V11 must repack or rematerialize with collision-safe split logic before any training clearance.
+90. task262 V11 plan evidence: blend plan has base M0 agentic train 1100 rows, hard-math verified full solution 8 rows, and math final-answer 200 rows; exact task246-style heldout prompt-hash overlaps are 0 for all three trainable groups. Residual risk: full n-gram contamination scanning for final-answer rows still needs acceptance or rerun before training.
+91. Session 38 sequencing: worker_4/task265 review scope now includes #336 along with #335, and worker_5 must refresh #334 runbook to include #336. #334 remains `REQUEST-CHANGES/HOLD`; #335 remains pending task265 review; global gate remains `NO-GO/HOLD`.

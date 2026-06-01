@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Session 0 - Created with coordinator
 
@@ -474,3 +474,16 @@
 - Read task266 report from #334 enough to confirm the stale matrix: it still states task263 had no published branch/PR and task264 had no PR/report, despite the current task263 branch and #335 evidence.
 - Sent delivered coordinator acknowledgement to `intern_nemotron_lead`, confirming #334 HOLD, #335 pending worker_4/task265 review, no checks on either PR, and unchanged global gate.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: accepted Qwen3-4B corrected same-harness AIME25 base remains `11/30 = 0.36666666666666664`; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.
+
+## Session 38 - V11 task262 PR surfaced
+
+- Received `intern_nemotron_lead` Session 69 incremental update: task262 advanced to PR #336, reported as `OPEN`, base `main`, `CLEAN` at head `0f825b9357a2a8f7814f693ea4c27027c5fbdd31` with substantive code/test/report changes. Lead had no worker_1 official closeout mailbox yet, so no lead gate decision was made; lead requested worker_1 closeout, updated worker_4/task265 to include #336 along with #335, and told worker_5 to include #336 in #334 runbook refresh.
+- Fetched `origin` and observed task262 branch has advanced beyond the lead snapshot to `824ffc3d3914537e24ad9b1a8ebf303beb881198`; `origin/main` remains `513fefa1f1ace94302b56413769c78fb7224624c`, lead branch remains `392ad27c202666defaf464a88bd5c065b3c52383`, #335 remains at `9d9285fd77820a5187440fbc2234dc36eb56942d`, #334 remains at `f8eff53f26340cc3c812ae0ca190a48214e89942`, and task265 branch remains at `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Verified GitHub #336 current state: `OPEN`, base `main`, non-draft, `mergeStateStatus=CLEAN`, head `824ffc3d3914537e24ad9b1a8ebf303beb881198`, no checks reported, no comments or reviews, and no coordinator-visible lead gate decision.
+- Verified `0f825b9357a2a8f7814f693ea4c27027c5fbdd31..824ffc3d3914537e24ad9b1a8ebf303beb881198` is worker_1 status plus task262 README/history metadata only; `v11_data_split_sidecar_report.md` is unchanged across that drift.
+- Verified `git diff --check origin/main...origin/intern_nemotron_worker_1/task262_qwen_aime_v11_data_split_sidecar_s1` passes. #336 changes `src/nemotron/data_prep/utils/splits.py`, `src/nemotron/recipes/super3/stage1_sft/qwen_chat_contract.py`, focused split/contract tests, worker_1 status, and task262 docs/report.
+- Read task262 report: it records no training, export, endpoint launch, AIME/task243 eval, promotion, 30B/8-GPU, task255 checkpoint/export reuse, AIME2025 train data use, or shared deletion. It reports task253 train split mismatch: intended 15 shards / 113 rows / 835223 input tokens / 156569 supervised tokens versus exposed 8 shards / 79 rows / 596944 input tokens / 110945 supervised tokens, missing 7 intended shards; valid split matches 1 shard / 15 rows.
+- Recorded task262 V11 plan evidence: task-owned blend plan includes base M0 agentic train 1100 rows, hard-math verified full solution 8 rows, and math final-answer 200 rows; exact task246-style heldout prompt-hash overlaps are 0 for base train, hard-math, and final-answer. Residual gap remains that task262 did not rerun full n-gram contamination scanning for final-answer rows.
+- Verified #334 remains `OPEN/CLEAN` at `f8eff53f26340cc3c812ae0ca190a48214e89942` with lead `REQUEST-CHANGES/HOLD`; #335 remains `OPEN/CLEAN` at `9d9285fd77820a5187440fbc2234dc36eb56942d` pending worker_4/task265 review.
+- Sent delivered coordinator acknowledgement to `intern_nemotron_lead` with the current #336 head, metadata-only post-snapshot drift, task262 report highlights, and unchanged #334/#335/global gate state.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: #336 is data split/sidecar evidence under review, not training clearance; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.
