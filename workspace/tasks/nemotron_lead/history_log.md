@@ -2739,8 +2739,9 @@
   reviewer-accessible, or report an exact blocker. Scope is artifact
   access/inventory only: no training, export rerun, AIME/task243 eval,
   promotion, 30B/8-GPU, main push, merge, or shared deletion.
-- Sent follow-up instructions to worker_3 requesting official task257 closeout
-  with paths, hashes, protocol, base comparison, and boundary confirmation.
-- Sent task258 assignment to worker_2.
+- Sent delivered follow-up instructions to worker_3 requesting official task257
+  closeout with paths, hashes, protocol, base comparison, and boundary
+  confirmation.
+- Sent delivered task258 assignment to worker_2.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; current observed candidate FT is
   not promotable and cannot justify 30B/8-GPU scale.
