@@ -35,3 +35,4 @@
 - Stopped the task-owned Qwen3-4B endpoint after artifact collection and
   verified no listener remained on port `13147`.
 - Added `qwen4b_base_smoke_report.md` and marked task docs `ReadyForPR`.
+- Opened PR #326 for the task247 report branch.
