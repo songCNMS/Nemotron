@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Session 0 - Created with team lead
 
@@ -1262,5 +1262,49 @@
   but task248 has no candidate artifacts, task249 final pass is pending,
   task243 has no base-vs-FT comparison output, and 30B/8-GPU scale remains
   blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 47 - 2026-06-01 UTC - task249/task250 final static approvals
+
+- Received and marked read worker_4 task249/#323 Session 10 final static pass
+  mailbox.
+- Worker_4 reported #323 at
+  `fbca7c9068b3d847ee24a2bff666f6a88fe380b4`, open/CLEAN, with final static
+  disposition `APPROVE evidence alignment / HOLD first Qwen3-4B V10
+  go/no-go`.
+- Independently rechecked GitHub:
+  - #323 open, base `main`, head
+    `fbca7c9068b3d847ee24a2bff666f6a88fe380b4`, mergeStateStatus `CLEAN`.
+  - #324 open, base `main`, head
+    `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`, mergeStateStatus `CLEAN`.
+  - #325 remains merged at
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #326 remains merged at
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Fetched and inspected #323/#324 refs:
+  - #323 `live_gate_review_matrix.md` records task246/#325 and task247/#326
+    as approved/merged, task248 as blocked-before-prep, task250 as current
+    runbook/HOLD, and combined gate as `NO-GO/HOLD`.
+  - #324 `827c8cf` -> `920d5a3` changes only worker_5 status plus task250
+    README/history/task_knowledge; `live_runbook_artifact_report.md` is
+    unchanged and still records current-main #325/#326 merged evidence and
+    `NO-GO/HOLD`.
+- Posted lead approval comments:
+  - #324:
+    `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595224579`.
+  - #323:
+    `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4595224656`.
+- Sent delivered peer_send decisions:
+  - worker_5: #324 is approved for self-merge if still CLEAN at merge time;
+    report mergedAt/mergeCommit/head.
+  - worker_4: #323 is approved for self-merge after #324 merges and only if
+    #323 remains CLEAN; refresh docs/status only if #324 changes main enough
+    to make #323 dirty or stale.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are merged
+  and accepted, but task248 has no candidate FT prep/train/checkpoint/export
+  or eval artifacts, task243 has no same-harness base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate wave: #325/#326 merged; #324 current runbook at 827c8cf; waiting #323 final pass; task248 HOLD |
-| Session | 46 |
+| PR | Qwen AIME25 live-gate wave: #325/#326 merged; #324 approved at 920d5a3 for worker_5 self-merge; #323 approved at fbca7c9 after #324; task248 HOLD |
+| Session | 47 |

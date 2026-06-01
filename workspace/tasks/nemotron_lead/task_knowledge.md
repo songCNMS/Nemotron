@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Knowledge Entries
 
@@ -56,3 +56,4 @@
 50. Even after both prerequisite evidence PRs (#325 task246 and #326 task247) are merged, task248 should remain held until task249 and task250 refresh against current main and lead explicitly clears prep/sync/training/eval.
 51. A status-only task249 update after #325 merge does not replace a final matrix pass; #323 head `39fe428` is a hold record only, with the matrix still at Session 7, so #324 must refresh first.
 52. Once #324 materially includes #325/#326 merged-on-main and preserves the correct NO-GO/HOLD, a stale reference to a status-only #323 head can be handled by worker_4 final pass instead of forcing another runbook churn cycle.
+53. After worker_4's final task249 pass at #323 head `fbca7c9`, a status-only #324 head advance from `827c8cf` to `920d5a3` that does not touch `live_runbook_artifact_report.md` is acceptable for #324 self-merge first, followed by #323 self-merge only if #323 remains CLEAN against main.
