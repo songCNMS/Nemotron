@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Knowledge Entries
 
@@ -57,3 +57,5 @@
 51. A status-only task249 update after #325 merge does not replace a final matrix pass; #323 head `39fe428` is a hold record only, with the matrix still at Session 7, so #324 must refresh first.
 52. Once #324 materially includes #325/#326 merged-on-main and preserves the correct NO-GO/HOLD, a stale reference to a status-only #323 head can be handled by worker_4 final pass instead of forcing another runbook churn cycle.
 53. After worker_4's final task249 pass at #323 head `fbca7c9`, a status-only #324 head advance from `827c8cf` to `920d5a3` that does not touch `live_runbook_artifact_report.md` is acceptable for #324 self-merge first, followed by #323 self-merge only if #323 remains CLEAN against main.
+54. When a worker PR head advances after lead approval, revalidate the exact new head before merge direction carries forward; if the advance is bookkeeping-only and the live gate artifact is unchanged, renew the approval/comment at the new head and keep the same sequencing constraints.
+55. After task250/#324 merges, task249/#323 can be released for worker_4 self-merge only after reconciling the worker_5 merge report and rechecking #323 is still CLEAN at the current head; any further #323 material head drift or dirty state requires a fresh worker_4 refresh/report before merge.

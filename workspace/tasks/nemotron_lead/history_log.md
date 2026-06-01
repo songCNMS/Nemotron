@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Session 0 - Created with team lead
 
@@ -1310,5 +1310,102 @@
   or eval artifacts, task243 has no same-harness base-vs-FT comparison proving
   `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
   30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 48 - 2026-06-01 UTC - post-approval head drift sequenced
+
+- Received coordinator acknowledgement of Session 47 and the strict sequence:
+  #324 must self-merge first if still clean, then #323 only if it remains
+  clean; if #323 advances again or becomes dirty/stale after #324, require a
+  fresh worker_4 report or refresh before merge.
+- Rechecked mailbox and marked read worker_4 task249/#323 Session 11 merge-gate
+  update.
+- Worker_4 reported:
+  - #323 advanced to
+    `4125124dafb2a98514c18e24d63045e90f473fcb`, remains open/CLEAN on base
+    `main`, and the advance is status/history/task_knowledge only.
+  - #324 was still open/CLEAN and not merged, so worker_4 correctly did not
+    self-merge #323.
+  - First Qwen3-4B V10 gate remains `NO-GO/HOLD`.
+- Independently rechecked and fetched current PR heads:
+  - #323 open, base `main`, head
+    `4125124dafb2a98514c18e24d63045e90f473fcb`, mergeStateStatus `CLEAN`.
+  - #324 open, base `main`, head
+    `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`, mergeStateStatus `CLEAN`.
+  - #325 remains merged at
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #326 remains merged at
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Inspected #323 head drift:
+  - `fbca7c9` -> `4125124` changes only worker_4 status plus task249
+    history/task_knowledge.
+  - `live_gate_review_matrix.md` is unchanged and still records final static
+    `APPROVE evidence alignment / HOLD first go/no-go`.
+- Inspected #324 head drift:
+  - `920d5a3` -> `ab2cdeb` changes only worker_5 status/knowledge plus task250
+    README/history/task_knowledge.
+  - `live_runbook_artifact_report.md` is unchanged and still records
+    current-main #325/#326 merged evidence plus `NO-GO/HOLD`.
+- Posted renewed lead approval comment for #324 head `ab2cdeb`:
+  `https://github.com/songCNMS/Nemotron/pull/324#issuecomment-4595272341`.
+- Sent delivered peer_send to worker_5 renewing #324 self-merge approval at
+  head `ab2cdeb`, conditional on #324 remaining CLEAN at merge time, and
+  requested mergedAt/mergeCommit/head report.
+- Did not send a new worker_4 merge instruction because worker_4 already
+  reported the correct hold: wait for #324 to merge, then recheck #323 against
+  main and self-merge only if clean; otherwise refresh docs/status and report.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are merged
+  and accepted, but task248 has no candidate FT prep/train/checkpoint/export
+  or eval artifacts, task243 has no same-harness base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
+- Current worker usage is intentionally limited to worker_5 and worker_4:
+  worker_1/#325 and worker_3/#326 prerequisite evidence is already merged, and
+  worker_2/task248 remains held until #324/#323 closeout lands and lead
+  explicitly clears 4B pilot prep/smoke.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 49 - 2026-06-01 UTC - task250 merged and task249 released
+
+- Received coordinator follow-up that #324 had merged at
+  `2026-06-01T18:12:43Z` with merge commit
+  `ff28538c41620a6d8b75b33d70c0c5e69714f42e` from head
+  `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`, while #323 remained
+  open/mergeable at `4125124dafb2a98514c18e24d63045e90f473fcb`.
+- Rechecked mailbox and marked read worker_5 task250/#324 merge report.
+- Worker_5 reported:
+  - #324 state `MERGED`.
+  - mergedAt `2026-06-01T18:12:43Z`.
+  - mergeCommit `ff28538c41620a6d8b75b33d70c0c5e69714f42e`.
+  - merged head `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`.
+  - `origin/main` at `ff28538c41620a6d8b75b33d70c0c5e69714f42e`.
+  - no training, live eval, endpoint launch, shared deletion, direct main
+    push, or 30B scale action.
+- Independently verified GitHub state:
+  - #324 `MERGED`, merge commit
+    `ff28538c41620a6d8b75b33d70c0c5e69714f42e`, merged head `ab2cdeb`.
+  - #323 still `OPEN`, base `main`, head
+    `4125124dafb2a98514c18e24d63045e90f473fcb`, mergeStateStatus `CLEAN`.
+- Fetched `origin/main`, observing it advance from `2775dff` to
+  `ff28538`.
+- Posted #323 lead release comment:
+  `https://github.com/songCNMS/Nemotron/pull/323#issuecomment-4595288224`.
+- Sent delivered peer_send to worker_4: because #324 is merged and worker_5
+  closeout is reconciled, worker_4 may self-merge #323 if it remains CLEAN at
+  merge time and the head has not materially changed; if #323 changes again or
+  becomes dirty/stale, worker_4 must refresh docs/status only and report back
+  before merge.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are merged
+  and accepted, task250/#324 is merged, but task249/#323 is still pending
+  worker self-merge, task248 has no candidate FT prep/train/checkpoint/export
+  or eval artifacts, task243 has no same-harness base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
+- Current worker usage remains intentionally limited to worker_5 and worker_4
+  for this sequencing step: worker_1/#325 and worker_3/#326 are already merged,
+  and worker_2/task248 remains held until #323 closeout lands and lead
+  explicitly clears 4B pilot prep/smoke.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
