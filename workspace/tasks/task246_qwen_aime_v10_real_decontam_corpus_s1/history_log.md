@@ -71,5 +71,8 @@
   task.
 - Marked task246 `Completed` and worker status `Idle` on the PR branch before
   self-merge per worker playbook.
+- Merged approved head `266b6a14262278b4fe27f75a3273fc156a5538ce` via PR #325
+  at `2026-06-01T17:43:24Z`; merge commit:
+  `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
 - Boundaries remained unchanged: no training, eval, endpoint launch, main push,
   shared processing deletion, or AIME25 trainable prompt/label output.

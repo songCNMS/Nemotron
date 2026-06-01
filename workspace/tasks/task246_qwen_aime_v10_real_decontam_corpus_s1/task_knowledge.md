@@ -32,3 +32,7 @@
 9. Lead approved PR #325 for self-merge on 2026-06-01 after checksum re-review;
    the task remains data/corpus evidence only, with no accepted training/eval/FT
    judgment.
+10. PR #325 merged approved head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce` at
+    `2026-06-01T17:43:24Z` with merge commit
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.

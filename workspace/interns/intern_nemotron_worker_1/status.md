@@ -11,4 +11,4 @@
 | Current Task |  |
 | PR | #325 |
 | Session | 4 |
-| Progress | Lead approved PR #325 for self-merge; task246 marked complete/Idle before merge per playbook, no training/eval run. |
+| Progress | PR #325 merged at 2026-06-01T17:43:24Z; branch-only closeout records merge commit 2775dff05948acce3a35a2d941bbd2f96d074b4a. |
