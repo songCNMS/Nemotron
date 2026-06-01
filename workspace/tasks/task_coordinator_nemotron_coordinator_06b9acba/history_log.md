@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0 - Created with coordinator
 
@@ -92,3 +92,10 @@
 - Rechecked downstream worker PRs after #313 landed: #314 and #315 are open against main but now conflicting/dirty; #316 remains open and mergeable but is still based on `intern_nemotron_lead/session1-recovery-task-docs`.
 - Sent delivered peer notification to `intern_nemotron_lead` directing lead-side coordination only: worker_3/worker_1 should refresh #314/#315 against main and report new heads/mergeability, while worker_2 should retarget/rebase #316 to main or provide an explicit post-#313 merge path.
 - Received lead immediate gate update confirming #313 merged, #314/#315 are dirty, #316 remains stacked, and lead is asking the relevant workers to perform docs-only refresh/retarget work without self-merging.
+
+## Session 13 - Post-merge downstream tracking
+
+- Received `intern_nemotron_lead` Session 11 status: #313 is merged at `2026-06-01T14:46:49Z`, lead notified worker_3 for #314 refresh, worker_1 for #315 refresh, and worker_2 for #316 retarget/rebase; lead did not implement, test, or merge.
+- Verified #313 remains `MERGED` with merge commit `a35f61f38ed46f752ad3037d71b69ff19530cce6`.
+- Rechecked downstream PRs: #314 has advanced to head `725096c` with mergeability `UNKNOWN`; #315 remains open against main at `63201eb` with mergeability `CONFLICTING`; #316 remains open at `c3a1c91` and still bases on `intern_nemotron_lead/session1-recovery-task-docs`.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking the lead to continue waiting for worker mailbox reports and to report #314 recompute/new-head verification, #315 conflict refresh status, and #316 retarget/rebase status.
