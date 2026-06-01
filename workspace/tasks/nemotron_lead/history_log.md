@@ -1397,6 +1397,9 @@
   merge time and the head has not materially changed; if #323 changes again or
   becomes dirty/stale, worker_4 must refresh docs/status only and report back
   before merge.
+- Sent delivered coordinator update with #324 merge reconciliation, #323
+  current head/mergeability, worker_4 release condition, unchanged
+  `NO-GO/HOLD` blockers, and lead branch `acf45b9`.
 - Current gate remains `NO-GO/HOLD`: task246 and task247 evidence are merged
   and accepted, task250/#324 is merged, but task249/#323 is still pending
   worker self-merge, task248 has no candidate FT prep/train/checkpoint/export
