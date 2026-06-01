@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 task248 #327 approved as blocked prep report at efb243f; no checkpoint/export/FT eval; gate HOLD |
+| PR | Qwen AIME25 task248 #327 approved as blocked prep report at 3405acf; no more pre-merge status pushes requested; gate HOLD |
 | Session | 52 |

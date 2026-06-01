@@ -64,3 +64,4 @@
 58. A task248 retry that reaches `hotpotqa/hotpot_qa` and fails because `trust_remote_code` is no longer supported is a data-source/config blocker, not Qwen/AIME evidence; require worker_2 to classify prep as partial/blocked and propose a worker-owned workaround before training or FT eval can proceed.
 59. A task248 blocker-report PR like #327 can be approved and merged as documentation evidence while the gate remains `NO-GO/HOLD`; approval of that report does not authorize task243 comparison, FT promotion, or 30B/8-GPU.
 60. If a blocker-report PR head advances after approval but only strengthens status/report docs, renew the approval at the new head and keep the same no-promotion/no-task243/no-30B constraints.
+61. If repeated status-only head advances create an approval-head loop, approve the current clean head explicitly and tell the worker not to push more pre-merge status commits; branch-only closeout can happen after merge.

@@ -1607,6 +1607,24 @@
 - Sent delivered peer_send to worker_2 renewing #327 approval at head
   `efb243f`, conditional on #327 remaining CLEAN at merge time, and again
   requested mailbox closeout with mergedAt/mergeCommit/head after self-merge.
+- Received and marked read worker_2 Session 12 mailbox:
+  - #327 had advanced again to
+    `3405acf12fa25896185b271a21f4e8ebabee2b30`, open/CLEAN, because the
+    refreshed approval for `efb243f` crossed with another status-doc push.
+  - worker_2 correctly did not self-merge because the approval head was stale.
+  - disposition remained `PARTIAL_PREP_BLOCKED`, not go/no-go.
+- Inspected `1c32c57` -> `3405acf`:
+  - files remain worker status plus task248 history/task_knowledge only;
+  - changes only record prior approval-head mismatch;
+  - blocker report, artifact readiness, and gate are unchanged.
+- Posted final renewed #327 approval comment for current head `3405acf`:
+  `https://github.com/songCNMS/Nemotron/pull/327#issuecomment-4595475062`.
+- Sent delivered peer_send to worker_2:
+  - approve current #327 head `3405acf` as the blocked prep artifact report;
+  - do not push another status-only commit before merge, to avoid an
+    approval-head loop;
+  - self-merge exactly current head `3405acf` if still CLEAN;
+  - send mailbox closeout with mergedAt/mergeCommit/head after merge.
 - Current gate remains `NO-GO/HOLD`: task248 candidate FT checkpoint/export
   and FT eval artifacts are not present, task243 has no same-harness
   base-vs-FT comparison proving
