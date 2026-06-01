@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0 - Created with team lead
 
@@ -99,6 +99,19 @@
 - Received coordinator acknowledgement of the Session 6 hold update and instruction to keep holding worker PR merges until #313 has non-author/authorized approval and is merged; #316 still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
 - Rechecked PR state before committing this Session 7 bookkeeping update:
   - #313 remained open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `8b6664a`, merge state `CLEAN`, blank `reviewDecision`, and no merge recorded.
+  - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
+  - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
+  - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
+- No external PR base, mergeability, or worker head change was found; lead continued the hold and did not instruct worker merges.
+- No worker task disposition changed: task231/task228 stays `blocked/HOLD`; task217 stays approved close with smoke-only residual risk; task203/task206/task209 stay `covered/no recovery`.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 8 - 2026-06-01 UTC - Hold maintained after Session 7 acknowledgement
+
+- Read lead mailbox and found no unread messages.
+- Received coordinator acknowledgement of the Session 7 hold update and instruction to keep holding worker PR merges until #313 has non-author/authorized approval and is merged; #316 still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
+- Rechecked PR state before committing this Session 8 bookkeeping update:
+  - #313 remained open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `9efa80f`, merge state `CLEAN`, blank `reviewDecision`, and no merge recorded.
   - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
   - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
   - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
