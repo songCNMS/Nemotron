@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,5 @@
 16. For the Qwen AIME25 split, remote branch presence alone is not gate evidence: worker mailbox reports and PR artifacts are still required before lead can approve data/planner/eval/review/runbook work or authorize pilot execution.
 17. For task243, a baseline protocol that points at `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507` does not satisfy the supervisor's Qwen3-4B pilot requirement; the accepted debug checkpoint path is `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
 18. A worker-reported missing model path is not a true resource blocker if it used the wrong Qwen3-4B path; require path correction before escalating base-score resource availability.
+19. When task245/runbook verification cites upstream task or PR state, it must be refreshed after those upstream PRs move; a stale blocker such as the old task243 `/mnt/3fs` path or pre-#320 task241 no-PR state is request-changes even if the overall NO-GO conclusion remains true.
+20. For #320/task241, worker-reported tests are useful gate input but lead should not rerun them; require independent review of AIME25 heldout/decontam handling before approval because the hard rule forbids trainable AIME25 prompt/label leakage.
