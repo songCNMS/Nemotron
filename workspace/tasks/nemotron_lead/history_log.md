@@ -678,3 +678,23 @@
   - task250/#324 `4fd7978`, open/CLEAN, waiting refresh against #323 `68a8ee7`.
   - First Qwen3-4B go/no-go `NO-GO/HOLD`; 30B/8-GPU scale held.
 - Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 33 - 2026-06-01 UTC - task249 sequencing update observed
+
+- A final PR check showed #323 advanced to
+  `9488ad5c344f2b9dc69504d6980a2b7179c649e0`, open/CLEAN.
+- Fetched and inspected #323 head `9488ad5`; the change is status/history/task
+  knowledge only, recording that worker_4 is holding the final matrix refresh
+  until worker_5 refreshes #324 against #323@`68a8ee7`.
+- The #323 live matrix content remains the Session 4 matrix; no new go/no-go
+  approval was added.
+- #324 remains open/CLEAN at
+  `4fd7978353deb9702e880d2734d8b99bfaf8544b`.
+- Current state:
+  - task246 `a53c913`: no real heldout corpus/input.
+  - task247 `94c21c9`: local AIME input/cache exists, but no pushed base report or base score; endpoint still blocked.
+  - task248 `8641828`: blocked before prep/train.
+  - task249/#323 `9488ad5`: sequencing hold, waiting current #324.
+  - task250/#324 `4fd7978`: waiting refresh against #323@`68a8ee7`.
+  - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.
