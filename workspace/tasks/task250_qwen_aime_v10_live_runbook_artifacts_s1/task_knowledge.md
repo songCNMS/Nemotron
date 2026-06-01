@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -18,3 +18,9 @@
    comparison artifacts are not yet published as accepted evidence.
 6. Session 4 is a metadata/status correction for acceptance visibility; it does
    not change the live artifact gate or authorize runtime work.
+7. Session 5 visibility update: task248 branch `2007418` is published with
+   `qwen4b_v10_pilot_report.md` and is blocked before prep/train on missing
+   task246/task247 dependencies.
+8. Session 5 visibility update: task249 PR #323 is open/CLEAN at `65c2bda`,
+   but `live_gate_review_matrix.md` is not published, so independent review
+   remains HOLD.

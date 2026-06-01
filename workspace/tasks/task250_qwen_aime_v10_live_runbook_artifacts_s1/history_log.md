@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -19,10 +19,11 @@
 - Added `live_runbook_artifact_report.md` as the current read-only live
   artifact/runbook table.
 - Opened PR #324: https://github.com/songCNMS/Nemotron/pull/324.
-- Initial verification found task246 and task247 remote accept branches, no
-  task248/task249 branches or PRs, task242 placeholder bundle still present,
-  no corrected AIME cache, no reachable local Qwen3-4B endpoint, no base
-  artifacts, no candidate FT artifacts, and no 30B/8-GPU permission.
+- Initial verification found task246 and task247 remote accept branches, while
+  task248/task249 visibility was superseded by later Session 5 evidence;
+  task242 placeholder bundle was still present, with no corrected AIME cache,
+  no reachable local Qwen3-4B endpoint, no base artifacts, no candidate FT
+  artifacts, and no 30B/8-GPU permission.
 - Did not run training, live eval, endpoint serving, NemTron sync, deletion,
   merge, or `main` push.
 
@@ -37,3 +38,22 @@
 - No new runtime actions were taken: no training, live eval, endpoint serving,
   NemTron sync, 30B/8-GPU launch, shared-storage deletion, self-merge, or
   `main` push.
+
+## Session 5 - Refreshed task248/task249 visibility
+
+- Rechecked PR #324: open/CLEAN on branch
+  `intern_nemotron_worker_5/task250_qwen_aime_v10_live_runbook_artifacts_s1`.
+- Verified task248 branch
+  `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`
+  exists at `200741802a9ae9cb9f3e16af8f1b7e66fee69857` and contains
+  `qwen4b_v10_pilot_report.md`.
+- Recorded task248 status as visible but blocked before prep/train because
+  task246 real corpus/input and task247 base artifacts are still missing.
+- Verified task249 PR #323 is open/CLEAN at
+  `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`; no
+  `live_gate_review_matrix.md` is published in that PR yet.
+- Refreshed `live_runbook_artifact_report.md` so task248/task249 are no longer
+  marked invisible, while the overall gate remains NO-GO/HOLD on missing real
+  corpus/base/FT/comparison artifacts and 30B permission.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
