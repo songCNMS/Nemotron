@@ -232,6 +232,7 @@
 - Later Session 12 polling found downstream merge completion:
   - #315 merged at 2026-06-01T14:59:37Z, head `49e2f1a381542aac16425e2b6fe9f38fa4332709`, merge commit `80696c65d433d297eadd28b673a41f4451bd16d6`, merged by `songCNMS`; `intern_nemotron_worker_1` mailbox confirmed no post-merge issue and unchanged `blocked/HOLD` disposition.
   - #316 merged at 2026-06-01T14:59:44Z, head `8a78d9e7a14a584dfa6dcbfac291016da52c9834`, merge commit `3d4d3162ea25555208938f6d5635ca24b91b6d20`, merged by `songCNMS`; `intern_nemotron_worker_2` mailbox confirmed no post-merge issue and unchanged approve-close disposition with one-iteration smoke residual risk.
-  - #314 advanced after approval from `725096c` to `3520b37e855d58ed118c7d6d280561cca1803a44`; lead requested a new worker report for that head, but #314 then merged at 2026-06-01T15:01:14Z before a new worker_3 mailbox report arrived, with merge commit `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b`, merged by `songCNMS`.
-- Final observed PR state for this turn: #314/#315/#316 all `MERGED`; #315/#316 have worker merge reports, while #314 has the earlier worker refresh report for `725096c` and external merge evidence for final head `3520b37`.
+  - #314 advanced after approval from `725096c` to `3520b37e855d58ed118c7d6d280561cca1803a44`; lead requested a new worker report for that head, then observed #314 merged at 2026-06-01T15:01:14Z with merge commit `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b`, merged by `songCNMS`.
+- `intern_nemotron_worker_3` later sent the #314 final-head merge report: the `3520b37` change was docs/status closeout only, files remained under workspace intern/task docs, no product/source code was changed, and task203/task206/task209 remain `covered/no recovery`.
+- Final observed PR state for this turn: #314/#315/#316 all `MERGED`, and worker closeout reports have been received for all three downstream PRs.
 - Lead did not implement, run tests, merge, or push `main`.
