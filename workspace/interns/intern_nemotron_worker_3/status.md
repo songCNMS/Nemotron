@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | |
-| PR | #330 |
-| Session | 2 |
-| Progress | Task257 closeout sent to lead; PR #330 is open for docs/status report. Result remains FT 0/30 exact-normalized vs accepted base 11/30, with global HOLD/no promotion because task256 records REQUEST_CHANGES/HOLD. |
+| PR | #332 |
+| Session | 1 |
+| Progress | Completed task260 read-only forensic report in PR #332: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue. Awaiting lead gate. |
