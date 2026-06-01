@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | |
-| PR | Pending |
+| PR | #332 |
 | Session | 1 |
-| Progress | Completed task260 read-only forensic report: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue. Awaiting PR number and lead gate. |
+| Progress | Completed task260 read-only forensic report in PR #332: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue. Awaiting lead gate. |

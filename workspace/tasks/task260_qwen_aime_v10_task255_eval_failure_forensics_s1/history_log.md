@@ -48,5 +48,6 @@
   `11/30` correct, `23/30` boxed, and `21/30` natural stops.
 - Wrote `task260_failure_forensics_report.md` with artifact hashes, matrix,
   aggregate clusters, ranked root-cause hypotheses, and V11 recommendations.
+- Opened PR #332 to `main` for the task260 docs/status forensic closeout.
 - Disposition preserved: global `NO-GO/HOLD`; no promotion, no 30B/8-GPU, no
   AIME train-data use, no training/export, no code or artifact modification.

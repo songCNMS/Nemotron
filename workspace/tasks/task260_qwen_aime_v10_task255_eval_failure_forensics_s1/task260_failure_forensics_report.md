@@ -7,7 +7,7 @@
 - Task: `task260_qwen_aime_v10_task255_eval_failure_forensics_s1`
 - Worker branch:
   `intern_nemotron_worker_3/task260_qwen_aime_v10_task255_eval_failure_forensics_s1`
-- PR: pending at report-authoring time
+- PR: #332
 - Scope: read-only forensic comparison of existing task257 FT AIME2025 outputs
   against accepted task247 Qwen3-4B base outputs.
 - Main finding: task255 FT failure is generation degeneration/corruption across

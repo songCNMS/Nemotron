@@ -20,3 +20,4 @@
 7. The task255 FT failure signature is generation degeneration/corruption:
    every row has null prediction/no boxed/no final marker and mixed-script tail
    noise, while the task247 base under the same protocol parsed 23/30.
+8. PR #332 is the task260 docs/status forensic closeout PR to `main`.
