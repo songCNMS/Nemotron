@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -28,7 +28,7 @@
   no AIME2025 train prompts or labels, no 30B/8-GPU, no task255 reuse, and no
   shared deletion.
 
-## Session 1 - 2026-06-01 UTC - Implemented V11 data/packing repair
+### Implementation Record - 2026-06-01 UTC - V11 data/packing repair
 
 - Patched split materialization so colliding shard basenames are exposed with
   dataset-qualified parquet link names instead of overwriting each other.
@@ -77,3 +77,30 @@
   code, tests, output artifacts, training, eval, endpoints, promotion,
   30B/8-GPU, task255 checkpoint/export reuse, AIME2025 train data use, or
   shared deletion.
+- Fixed stop-hook formatting issue by converting the duplicate `Session 1`
+  implementation heading into a non-session implementation record under the
+  existing Session 1 entry.
+
+## Session 4 - 2026-06-01 UTC - Final-answer n-gram decontam scan
+
+- Received lead REQUEST-CHANGES/HOLD for PR #336 because task265 review kept
+  the data gate on HOLD until final-answer rows had fresh full n-gram
+  contamination evidence.
+- Added task-local reproducible scanner:
+  `workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/build_task262_final_answer_decontam.py`.
+- Ran `PYTHONPATH=src python workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/build_task262_final_answer_decontam.py`.
+- Generated task-owned artifacts:
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_scan.json`
+  and
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_report.md`.
+- Full scan result: 200 final-answer rows against 560 heldout prompts,
+  112000 pair comparisons, 4 overlap pairs, 1 informational pair, 0 blocker
+  pairs, 0 rows with blocker overlap, max score 0.257143.
+- Standard `decontaminate_math_rows` result: scanned 100
+  `math_competition_numeric` final-answer rows, 0 blocker findings, 0 dropped
+  rows.
+- Exact task246-style final-answer user-prompt hash overlap with heldout prompt
+  hashes remains 0, and top-level label-like key counts remain empty.
+- Boundaries unchanged: no self-merge, training, export, endpoint,
+  AIME/task243 eval, promotion, 30B/8-GPU, task255 checkpoint/export reuse,
+  AIME2025 train prompt/label use, or shared deletion.

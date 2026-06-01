@@ -73,16 +73,23 @@ packing/training.
 - Exact task246-style heldout prompt-hash overlaps:
   base train 0, hard-math 0, final-answer 0.
 - No top-level label-like keys were found in reviewed trainable JSONL rows.
-- Residual evidence gap: task262 did not rerun a full n-gram contamination
-  scanner for final-answer rows; the next data-prep gate should either accept
-  task251 row metadata plus exact-overlap evidence or rerun that scanner before
-  training.
+- Fresh final-answer full n-gram scan artifact:
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_scan.json`.
+- Final-answer full scan: 200 final-answer rows versus 560 heldout prompts,
+  112000 pair comparisons, 4 overlap pairs, 1 informational pair at score
+  >= 0.25, 0 blocker pairs at score >= 0.5, 0 rows with blocker overlap, max
+  score 0.257143.
+- Standard `decontaminate_math_rows` check over the configured
+  `math_competition_numeric` environment scanned 100 rows, found 0 blocker
+  findings, and dropped 0 rows.
 
 ## Output Artifacts
 
 - `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/split_materialization_audit.json`
 - `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/v11_qwen_agentic_sft_blend_plan.json`
 - `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/task251_source_summaries.json`
+- `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_scan.json`
+- `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_report.md`
 - `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/task262_v11_data_split_sidecar_report.md`
 - `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/manifest.json`
 
@@ -90,6 +97,7 @@ packing/training.
 
 - `python -m py_compile src/nemotron/data_prep/utils/splits.py src/nemotron/recipes/super3/stage1_sft/qwen_chat_contract.py`
 - `PYTHONPATH=src pytest -q tests/data_prep/test_split_utils.py tests/recipes/super3/test_qwen_chat_contract.py`
+- `PYTHONPATH=src python workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/build_task262_final_answer_decontam.py`
 - `git diff --check`
 
 Global Qwen AIME gate remains NO-GO/HOLD.

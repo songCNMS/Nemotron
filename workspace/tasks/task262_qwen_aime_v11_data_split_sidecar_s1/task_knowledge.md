@@ -1,6 +1,6 @@
 # task262_qwen_aime_v11_data_split_sidecar_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,13 @@
 12. Official exact-head closeout for PR #336 head
     `1a440c155a3049ece488483c1ce99ff4c89a3eb8` was resent by mailbox in
     Session 3; message id `adcbeda5b09d457b949aa51c89747d91`.
+13. `history_log.md` must keep unique `## Session N` headings; the V11
+    implementation block is recorded as a non-session subheading under
+    Session 1 to avoid duplicate Session 1 headings.
+14. Fresh task262 full final-answer token 8-gram scan covers 200 final-answer
+    rows against 560 heldout prompts: 112000 pair comparisons, 4 overlap pairs,
+    1 informational pair, 0 blocker pairs, 0 rows with blocker overlap, max
+    score 0.257143.
+15. The standard `decontaminate_math_rows` check over
+    `math_competition_numeric` final-answer rows scanned 100 rows, found 0
+    blocker findings, and dropped 0 rows.

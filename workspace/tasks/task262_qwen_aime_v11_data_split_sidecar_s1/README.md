@@ -96,5 +96,10 @@ and final-answer sidecar inputs for a future Qwen3-4B pilot.
   `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/`.
 - Report:
   `workspace/tasks/task262_qwen_aime_v11_data_split_sidecar_s1/v11_data_split_sidecar_report.md`.
+- Fresh final-answer n-gram decontam artifacts:
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_scan.json`
+  and
+  `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/final_answer_ngram_decontam_report.md`.
 - Checks passed: `py_compile`, focused split/Qwen contract pytest files, and
-  `git diff --check`.
+  `git diff --check`; final-answer decontam scanner command completed with 0
+  blocker rows.
