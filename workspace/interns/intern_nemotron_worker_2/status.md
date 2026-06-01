@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task217_mamba_causal_conv_train_stack_unblock_probe_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task242_qwen_aime_v10_planner_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,6 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task217_mamba_causal_conv_train_stack_unblock_probe_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/316 |
+| Current Task | task242_qwen_aime_v10_planner_smoke_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/321 |
 | Session | 2 |
+| Last Update | 2026-06-01T16:03:24Z: Opened PR #321 for V10 planner/Qwen3-4B smoke bundle; waiting for review/gate, no training or 30B scale launched. |

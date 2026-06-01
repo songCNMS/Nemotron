@@ -609,6 +609,188 @@ def test_scaleup_planner_can_emit_hard_math_recurrence_v9_data_prep(tmp_path) ->
     assert "pack_size=8192" in local_script
 
 
+def test_scaleup_planner_can_emit_qwen4b_v10_pilot_bundle(tmp_path) -> None:
+    corpus_path = tmp_path / "aime25_hmmt_math_corpus.jsonl"
+    corpus_path.write_text(
+        '{"id":"heldout-smoke","prompt":"Held-out AIME/HMMT/MATH prompt text."}\n',
+        encoding="utf-8",
+    )
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "task242_qwen4b_v10"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--run-name",
+            "task242_qwen4b_v10_pilot",
+            "--qwen4b-v10-pilot",
+            "--math-sidecar-m0-input-dir",
+            "/data/full_m0",
+            "--math-decontaminate-against-corpus",
+            str(corpus_path),
+            "--pack-size",
+            "8192",
+            "--seq-length",
+            "8192",
+        ]
+    )
+    manifest = build_manifest(args)
+    local_script = render_local_data_prep_script(manifest)
+    sync_script = render_sync_script(manifest)
+    remote_script = render_remote_train_script(manifest)
+    eval_script = render_eval_script(manifest)
+    report = render_report(manifest)
+
+    assert manifest["pilot_profile"] == "qwen3_4b_v10_aime"
+    assert manifest["task"] == "task242_qwen_aime_v10_planner_smoke_s1"
+    assert (
+        manifest["training"]["qwen_hf_model"]
+        == "/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507"
+    )
+    assert manifest["training"]["pretrained_checkpoint"] == manifest["training"]["qwen_hf_model"]
+    assert manifest["training"]["train_entrypoint"].endswith("qwen_local_train.py")
+    assert manifest["paths"]["remote_root"] == "/root/task242_qwen_aime_v10_planner_smoke_s1"
+    assert manifest["data"]["math_supervision_strategy"] == "hard_math_runlength_dp_v10"
+    assert manifest["data"]["math_decontaminate_against_corpus"] == str(corpus_path)
+    assert manifest["aime_gate"]["enabled"] is True
+    assert manifest["aime_gate"]["base_model_path"] == manifest["training"]["qwen_hf_model"]
+    assert (
+        manifest["aime_gate"]["candidate_ft_output_path"]
+        == f"{manifest['paths']['remote_run_root']}/checkpoints"
+    )
+    assert (
+        manifest["aime_gate"]["non_regression_rule"]["pass_condition"]
+        == "ft_exact_normalized_accuracy >= base_exact_normalized_accuracy"
+    )
+    assert "held until Qwen3-4B V10 FT AIME25 smoke" in manifest["aime_gate"]["scale_hold"][
+        "qwen30b_8gpu"
+    ]
+
+    assert "--math-supervision-strategy hard_math_runlength_dp_v10" in local_script
+    assert "--math-v10-hard-verified-full-solution-weight 1.0" in local_script
+    assert "requires a non-empty decontamination corpus" in local_script
+    assert "TASK242_DECONTAM_CORPUS_PLACEHOLDER" in local_script
+    assert f"--decontaminate-math-against-corpus {corpus_path}" in local_script
+    assert "--math-sidecar-m0-input-dir /data/full_m0" in local_script
+    assert "V10 pilot sync must target /root" in sync_script
+    assert "does not delete /mnt/cephfs/data/processing/lei.song" in sync_script
+    assert "Qwen3-4B-Instruct-2507" in remote_script
+    assert "task242_task242_qwen4b_v10_pilot" in remote_script
+    assert "/root/task242_qwen_aime_v10_planner_smoke_s1" in remote_script
+    assert "V10 AIME gate contract" in eval_script
+    assert "ft_exact_normalized_accuracy >= base_exact_normalized_accuracy" in eval_script
+    assert "Qwen3-4B V10 AIME Gate" in report
+    assert "30B/8-GPU hold" in report
+
+
+def test_scaleup_planner_v10_fails_closed_without_decontamination_corpus(tmp_path) -> None:
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen4b-v10-pilot",
+        ]
+    )
+
+    with pytest.raises(ValueError, match="hard_math_runlength_dp_v10 requires"):
+        build_manifest(args)
+
+
+def test_scaleup_planner_v10_rejects_missing_decontamination_corpus_path(tmp_path) -> None:
+    missing_corpus = tmp_path / "missing_corpus.jsonl"
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen4b-v10-pilot",
+            "--math-decontaminate-against-corpus",
+            str(missing_corpus),
+        ]
+    )
+
+    with pytest.raises(ValueError, match="decontamination corpus is missing"):
+        build_manifest(args)
+
+
+def test_scaleup_planner_v10_rejects_empty_decontamination_corpus_path(tmp_path) -> None:
+    empty_corpus = tmp_path / "empty_corpus.jsonl"
+    empty_corpus.write_text("", encoding="utf-8")
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen4b-v10-pilot",
+            "--math-decontaminate-against-corpus",
+            str(empty_corpus),
+        ]
+    )
+
+    with pytest.raises(ValueError, match="decontamination corpus is empty"):
+        build_manifest(args)
+
+
+def test_scaleup_planner_v10_holds_30b_until_pilot_gate(tmp_path) -> None:
+    corpus_path = tmp_path / "aime25_hmmt_math_corpus.jsonl"
+    corpus_path.write_text(
+        '{"id":"heldout-smoke","prompt":"Held-out AIME/HMMT/MATH prompt text."}\n',
+        encoding="utf-8",
+    )
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_runlength_dp_v10",
+            "--math-decontaminate-against-corpus",
+            str(corpus_path),
+        ]
+    )
+
+    with pytest.raises(ValueError, match="30B planning is held"):
+        build_manifest(args)
+
+
+def test_scaleup_planner_v10_preserves_30b_entrypoint_after_gate_override(tmp_path) -> None:
+    corpus_path = tmp_path / "aime25_hmmt_math_corpus.jsonl"
+    corpus_path.write_text(
+        '{"id":"heldout-smoke","prompt":"Held-out AIME/HMMT/MATH prompt text."}\n',
+        encoding="utf-8",
+    )
+    args = build_parser().parse_args(
+        [
+            "--output-dir",
+            str(tmp_path / "scaleup"),
+            "--repo-dir",
+            str(tmp_path / "repo"),
+            "--qwen-hf-model",
+            "/models/Qwen3-30B-A3B-Instruct-2507",
+            "--pretrained-checkpoint",
+            "/checkpoints/qwen3-30b-a3b-bridge",
+            "--math-supervision-strategy",
+            "hard_math_runlength_dp_v10",
+            "--math-decontaminate-against-corpus",
+            str(corpus_path),
+            "--allow-v10-30b-scale",
+        ]
+    )
+    manifest = build_manifest(args)
+
+    assert manifest["training"]["train_entrypoint"] == QWEN30B_A3B_TRAIN_ENTRYPOINT
+    assert manifest["aime_gate"]["scale_hold"]["allow_v10_30b_scale"] is True
+
+
 def test_scaleup_planner_plumbs_math_decontamination_flags_through_local_script(tmp_path) -> None:
     """Regression: prepare_m1_agentic_sft.py requires
     --decontaminate-math-against-corpus for V7+ strategies (or

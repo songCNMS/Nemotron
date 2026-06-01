@@ -48,6 +48,12 @@ DEFAULT_RUN_NAME = "qwen_m1_agentic_sft_scaleup"
 DEFAULT_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py"
 QWEN30B_A3B_TRAIN_ENTRYPOINT = "src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py"
 QWEN_DATA_PREP_CONFIG = "src/nemotron/recipes/super3/stage1_sft/config/data_prep/qwen_agentic_v0.yaml"
+QWEN3_4B_V10_PILOT_MODEL = "/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507"
+QWEN3_4B_V10_PILOT_OUTPUT_DIR = REPO_ROOT.parent / "outputs" / "task242_qwen_aime_v10_4b_pilot"
+QWEN3_4B_V10_PILOT_REMOTE_ROOT = Path("/root/task242_qwen_aime_v10_planner_smoke_s1")
+DEFAULT_AIME_GATE_EVAL_CONFIG = (
+    "src/nemotron/recipes/super3/stage3_eval/config/m1_corrected_math_comparison.yaml"
+)
 
 QWEN_MODEL_ENV_VAR = "SUPER3_M1_QWEN_HF_MODEL"
 QWEN_CHECKPOINT_ENV_VAR = "SUPER3_M1_PRETRAINED_CHECKPOINT"
@@ -61,6 +67,7 @@ MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
 MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
 MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
 MATH_SUPERVISION_STRATEGY_V9 = "hard_math_recurrence_v9"
+MATH_SUPERVISION_STRATEGY_V10 = "hard_math_runlength_dp_v10"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
@@ -70,6 +77,7 @@ MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
 )
 MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V3_FINAL_ANSWER_AUX_WEIGHT = 0.2
@@ -98,6 +106,11 @@ MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V9_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V9_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V10_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V10_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_DECONTAMINATION_PLACEHOLDER_MARKER = "TASK242_DECONTAM_CORPUS_PLACEHOLDER"
 
 AGENTIC_M0_DATASET_IDS: tuple[str, ...] = (
     "m0_search_hotpotqa",
@@ -123,6 +136,19 @@ def _q(value: str | Path) -> str:
 
 def _env_or_arg(value: str | None, env_var: str, flag: str) -> str:
     resolved = value or os.environ.get(env_var)
+    if not resolved:
+        raise ValueError(f"{flag} is required, or set {env_var}")
+    return resolved
+
+
+def _env_or_arg_or_default(
+    value: str | None,
+    env_var: str,
+    flag: str,
+    *,
+    default: str | None = None,
+) -> str:
+    resolved = value or os.environ.get(env_var) or default
     if not resolved:
         raise ValueError(f"{flag} is required, or set {env_var}")
     return resolved
@@ -227,29 +253,80 @@ def build_paths(output_dir: Path, remote_root: Path) -> ScaleupPaths:
 
 
 def build_manifest(args: argparse.Namespace) -> JsonDict:
-    qwen_hf_model = _env_or_arg(args.qwen_hf_model, QWEN_MODEL_ENV_VAR, "--qwen-hf-model")
+    pilot_profile = bool(getattr(args, "qwen4b_v10_pilot", False))
+    math_supervision_strategy = args.math_supervision_strategy
+    if pilot_profile and math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V1:
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V10
+    qwen_hf_model = _env_or_arg_or_default(
+        args.qwen_hf_model,
+        QWEN_MODEL_ENV_VAR,
+        "--qwen-hf-model",
+        default=QWEN3_4B_V10_PILOT_MODEL if pilot_profile else None,
+    )
     qwen_tokenizer_model = args.qwen_tokenizer_model or qwen_hf_model
     qwen_data_prep_contract = qwen_data_prep_config_contract(qwen_tokenizer_model)
     validate_qwen_data_prep_config(
         qwen_data_prep_contract,
         config_path=QWEN_DATA_PREP_CONFIG,
     )
+    if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V10:
+        corpus_path = getattr(args, "math_decontaminate_against_corpus", None)
+        if corpus_path is None:
+            raise ValueError(
+                "hard_math_runlength_dp_v10 requires --math-decontaminate-against-corpus "
+                "pointing at the held-out AIME25/HMMT/MATH prompt corpus"
+            )
+        corpus_file = Path(corpus_path)
+        if not corpus_file.is_file():
+            raise ValueError(
+                "hard_math_runlength_dp_v10 decontamination corpus is missing: "
+                f"{corpus_path}"
+            )
+        if corpus_file.stat().st_size == 0:
+            raise ValueError(
+                "hard_math_runlength_dp_v10 decontamination corpus is empty: "
+                f"{corpus_path}"
+            )
+        if bool(getattr(args, "math_skip_decontamination_check", False)):
+            raise ValueError(
+                "hard_math_runlength_dp_v10 does not allow "
+                "--math-skip-decontamination-check; use a held-out prompt corpus"
+            )
+        if "30b" in qwen_hf_model.lower() and not bool(getattr(args, "allow_v10_30b_scale", False)):
+            raise ValueError(
+                "hard_math_runlength_dp_v10 30B planning is held until the Qwen3-4B "
+                "same-harness AIME gate passes; pass --allow-v10-30b-scale only "
+                "after that gate is documented"
+            )
     train_entrypoint = resolve_train_entrypoint(args.train_entrypoint, qwen_hf_model)
     pretrained_checkpoint = normalize_megatron_pretrained_checkpoint(
-        _env_or_arg(
+        _env_or_arg_or_default(
             args.pretrained_checkpoint,
             QWEN_CHECKPOINT_ENV_VAR,
             "--pretrained-checkpoint",
+            default=qwen_hf_model if pilot_profile else None,
         )
     )
-    paths = build_paths(args.output_dir, args.remote_root)
+    output_dir = args.output_dir or (
+        QWEN3_4B_V10_PILOT_OUTPUT_DIR if pilot_profile else DEFAULT_OUTPUT_DIR
+    )
+    remote_root = args.remote_root or (
+        QWEN3_4B_V10_PILOT_REMOTE_ROOT if pilot_profile else DEFAULT_REMOTE_ROOT
+    )
+    paths = build_paths(output_dir, remote_root)
+    candidate_ft_checkpoint_path = str(paths.remote_run_root / "checkpoints")
     return {
         "schema_version": 1,
         "generated_at_utc": datetime.now(UTC).replace(microsecond=0).isoformat(),
-        "task": "task067_m1_agentic_qwen_scaleup",
+        "task": (
+            "task242_qwen_aime_v10_planner_smoke_s1"
+            if pilot_profile
+            else "task067_m1_agentic_qwen_scaleup"
+        ),
         "stage": "M1 Agentic SFT scale-up",
         "run_name": args.run_name,
         "repo_dir": str(args.repo_dir.resolve()),
+        "pilot_profile": "qwen3_4b_v10_aime" if pilot_profile else None,
         "paths": {
             "output_dir": str(paths.output_dir),
             "m0_dir": str(paths.m0_dir),
@@ -257,7 +334,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "packed_dir": str(paths.packed_dir),
             "plan_dir": str(paths.plan_dir),
             "checkpoint_dir": str(paths.checkpoint_dir),
-            "remote_root": str(args.remote_root),
+            "remote_root": str(remote_root),
             "remote_run_root": str(paths.remote_run_root),
         },
         "data": {
@@ -266,7 +343,7 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "max_train_per_dataset": None if args.uncapped_data else args.max_train_per_dataset,
             "max_val_per_dataset": None if args.uncapped_data else args.max_val_per_dataset,
             "expected_agentic_environments": 11,
-            "math_supervision_strategy": args.math_supervision_strategy,
+            "math_supervision_strategy": math_supervision_strategy,
             "math_v3_weights": {
                 "verified_full_solution": args.math_v3_verified_full_solution_weight,
                 "final_answer_aux": args.math_v3_final_answer_aux_weight,
@@ -307,6 +384,12 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
                 "verified_full_solution": args.math_v9_verified_full_solution_weight,
                 "final_answer_aux": args.math_v9_final_answer_aux_weight,
                 "format_repair": args.math_v9_format_repair_weight,
+            },
+            "math_v10_weights": {
+                "hard_verified_full_solution": args.math_v10_hard_verified_full_solution_weight,
+                "verified_full_solution": args.math_v10_verified_full_solution_weight,
+                "final_answer_aux": args.math_v10_final_answer_aux_weight,
+                "format_repair": args.math_v10_format_repair_weight,
             },
             "math_sidecar_m0_input_dir": (
                 str(args.math_sidecar_m0_input_dir)
@@ -373,6 +456,44 @@ def build_manifest(args: argparse.Namespace) -> JsonDict:
             "tasks": "configured by stage3_eval config",
             "chat_template_kwargs": dict(QWEN_CHAT_TEMPLATE_KWARGS),
             "dry_run_only": True,
+        },
+        "aime_gate": {
+            "enabled": math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V10,
+            "gate_id": "qwen3_4b_v10_aime25_same_harness_non_regression",
+            "base_model_path": args.aime_gate_base_model_path or qwen_hf_model,
+            "candidate_ft_output_path": args.candidate_ft_output_path
+            or candidate_ft_checkpoint_path,
+            "corrected_evaluator_config": args.aime_gate_eval_config,
+            "benchmark_id": "aime25",
+            "protocol": {
+                "prompt_set": "AIME 2025 held-out prompts only",
+                "repeats_per_problem": args.aime_smoke_repeats_per_problem,
+                "max_generation_tokens": args.aime_smoke_max_tokens,
+                "endpoint_route": "/v1/chat/completions",
+                "temperature": 0.0,
+                "top_p": 1e-5,
+                "scorer": "exact_normalized_final_answer",
+                "requires_identical_base_and_ft_harness": True,
+            },
+            "non_regression_rule": {
+                "requires_same_harness_base_score": True,
+                "metric": "exact_normalized_accuracy",
+                "pass_condition": "ft_exact_normalized_accuracy >= base_exact_normalized_accuracy",
+                "diagnostics": [
+                    "numerator",
+                    "denominator",
+                    "parsed_count",
+                    "finish_reasons",
+                    "per_problem_rows",
+                ],
+            },
+            "scale_hold": {
+                "qwen30b_8gpu": (
+                    "held until Qwen3-4B V10 FT AIME25 smoke is non-regressing "
+                    "against Qwen3-4B base under the same corrected harness"
+                ),
+                "allow_v10_30b_scale": bool(getattr(args, "allow_v10_30b_scale", False)),
+            },
         },
         "qwen_chat_contract": {
             "sft_model": qwen_hf_model,
@@ -498,6 +619,18 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
             f" \\\n  --math-v9-format-repair-weight "
             f"{float(math_v9_weights['format_repair'])}"
         )
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V10:
+        math_v10_weights = data["math_v10_weights"]
+        math_supervision_flag_lines += (
+            f" \\\n  --math-v10-hard-verified-full-solution-weight "
+            f"{float(math_v10_weights['hard_verified_full_solution'])}"
+            f" \\\n  --math-v10-verified-full-solution-weight "
+            f"{float(math_v10_weights['verified_full_solution'])}"
+            f" \\\n  --math-v10-final-answer-aux-weight "
+            f"{float(math_v10_weights['final_answer_aux'])}"
+            f" \\\n  --math-v10-format-repair-weight "
+            f"{float(math_v10_weights['format_repair'])}"
+        )
     if data.get("math_sidecar_m0_input_dir"):
         math_supervision_flag_lines += (
             f" \\\n  --math-sidecar-m0-input-dir "
@@ -513,9 +646,10 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
                 f" \\\n  --math-sidecar-max-val-shadow-per-env "
                 f"{int(data['math_sidecar_max_val_shadow_per_env'])}"
             )
-    # AIME-25 / HMMT decontamination flags. prepare_m1_agentic_sft.py refuses
+    # AIME-25 / HMMT / MATH decontamination flags. prepare_m1_agentic_sft.py refuses
     # to run hard_math_long_reasoning_v7 / hard_math_clean_final_v8 /
-    # hard_math_recurrence_v9 without
+    # hard_math_recurrence_v9 without a corpus or explicit skip; the planner
+    # refuses hard_math_runlength_dp_v10 without a real local corpus path.
     # either --decontaminate-math-against-corpus or
     # --skip-math-decontamination-check; both are plumbed through the planner
     # so V7+ scaleup bundles fail fast or get the operator-confirmed flag.
@@ -552,6 +686,21 @@ def render_local_data_prep_script(manifest: JsonDict) -> str:
         if training.get("allow_missing_checkpoint")
         else ""
     )
+    v10_decontam_guard = ""
+    if data.get("math_supervision_strategy") == MATH_SUPERVISION_STRATEGY_V10:
+        decontam_corpus = data["math_decontaminate_against_corpus"]
+        v10_decontam_guard = f"""
+DECONTAM_CORPUS={_q(decontam_corpus)}
+if [[ ! -s "$DECONTAM_CORPUS" ]]; then
+  echo "hard_math_runlength_dp_v10 requires a non-empty decontamination corpus at $DECONTAM_CORPUS" >&2
+  exit 2
+fi
+if grep -q {_q(MATH_DECONTAMINATION_PLACEHOLDER_MARKER)} "$DECONTAM_CORPUS"; then
+  echo "hard_math_runlength_dp_v10 refuses the task242 placeholder decontamination corpus." >&2
+  echo "Replace it with the trusted AIME25/HMMT/MATH held-out prompt corpus." >&2
+  exit 2
+fi
+"""
     m0_manifest_path = Path(paths["m0_dir"]) / "manifest.json"
     return f"""#!/usr/bin/env bash
 set -euo pipefail
@@ -561,6 +710,7 @@ source {_q(DEFAULT_LOCAL_VENV / "bin" / "activate")}
 export PYTHONPATH="${{PWD}}/src${{PYTHONPATH:+:${{PYTHONPATH}}}}"
 export WANDB_MODE="${{WANDB_MODE:-disabled}}"
 export WANDB_DISABLED="${{WANDB_DISABLED:-true}}"
+{v10_decontam_guard}
 
 set +e
 python src/nemotron/recipes/super3/milestones/m0_data_env/prepare_m0_assets.py \\
@@ -641,6 +791,20 @@ def render_sync_script(manifest: JsonDict) -> str:
     output_dir = Path(manifest["paths"]["output_dir"])
     remote_host = manifest["training"]["nemtron_host"]
     remote_root = manifest["paths"]["remote_root"]
+    root_guard = ""
+    if manifest.get("pilot_profile") == "qwen3_4b_v10_aime":
+        root_guard = f"""
+REMOTE_ROOT={_q(remote_root)}
+case "$REMOTE_ROOT" in
+  /root/*) ;;
+  *)
+    echo "V10 pilot sync must target /root on NemTron, got $REMOTE_ROOT" >&2
+    exit 2
+    ;;
+esac
+echo "Task242 safety: syncing code and generated scripts to $REMOTE_ROOT on NemTron."
+echo "Task242 safety: this script does not delete /mnt/cephfs/data/processing/lei.song."
+"""
     cleanup_cmd = (
         f"rm -rf {_q(Path(remote_root) / 'Nemotron')} {_q(manifest['paths']['remote_run_root'])} "
         f"&& mkdir -p {_q(remote_root)}"
@@ -648,6 +812,7 @@ def render_sync_script(manifest: JsonDict) -> str:
     extract_cmd = f"tar -xzf - -C {_q(remote_root)}"
     return f"""#!/usr/bin/env bash
 set -euo pipefail
+{root_guard}
 
 ssh {_q(remote_host)} {_q(cleanup_cmd)}
 tar --exclude='.git' \\
@@ -670,7 +835,8 @@ def render_remote_train_script(manifest: JsonDict) -> str:
     remote_plan = remote_run_root / "training_plan" / manifest["run_name"] / "training_manifest.json"
     remote_ckpt = remote_run_root / "checkpoints"
     log_dir = remote_run_root / "logs"
-    session = f"task067_{manifest['run_name']}"
+    session_prefix = "task242" if manifest.get("pilot_profile") == "qwen3_4b_v10_aime" else "task067"
+    session = f"{session_prefix}_{manifest['run_name']}"
     lr_decay_override = training.get("lr_decay_iters")
     model_ref = training.get("qwen_hf_model") or packing["tokenizer_model"]
     torchrun_args = [
@@ -750,12 +916,26 @@ def render_eval_script(manifest: JsonDict) -> str:
     eval_config = manifest["eval"]["config"]
     model_ref = f"sft:{manifest['run_name']}"
     remote_ckpt = Path(manifest["paths"]["remote_run_root"]) / "checkpoints"
+    aime_gate = manifest.get("aime_gate", {})
+    gate_comment = ""
+    if aime_gate.get("enabled"):
+        gate_comment = f"""
+
+# V10 AIME gate contract:
+# - Base model path: {_q(aime_gate['base_model_path'])}
+# - Candidate FT checkpoint path: {_q(aime_gate['candidate_ft_output_path'])}
+# - Corrected evaluator config: {_q(aime_gate['corrected_evaluator_config'])}
+# - Promotion rule: {aime_gate['non_regression_rule']['pass_condition']}
+# Keep any 30B/8-GPU scale held until the base and FT scores are produced
+# under this same corrected AIME25 harness.
+"""
     return f"""#!/usr/bin/env bash
 set -euo pipefail
 
 cd {_q(repo_dir)}
 source {_q(DEFAULT_LOCAL_VENV / "bin" / "activate")}
 export PYTHONPATH="${{PWD}}/src${{PYTHONPATH:+:${{PYTHONPATH}}}}"
+{gate_comment}
 
 # Dry-run first: this validates the selected M1 eval basket config without
 # launching NeMo Evaluator. Replace deployment/checkpoint overrides as needed
@@ -791,7 +971,9 @@ def render_report(manifest: JsonDict) -> str:
             f"- Math v7 weights: `{data['math_v7_weights']}`",
             f"- Math v8 weights: `{data['math_v8_weights']}`",
             f"- Math v9 weights: `{data['math_v9_weights']}`",
+            f"- Math v10 weights: `{data['math_v10_weights']}`",
             f"- Math sidecar M0 source: `{data['math_sidecar_m0_input_dir']}`",
+            f"- Math decontamination corpus: `{data['math_decontaminate_against_corpus']}`",
             f"- Data-prep config: `{manifest['packing']['data_prep_config']}`",
             f"- Pack size / seq length: {manifest['packing']['pack_size']} / {training['seq_length']}",
             (
@@ -813,6 +995,18 @@ def render_report(manifest: JsonDict) -> str:
                 f"GPUs `{training['cuda_visible_devices']}`, nproc={training['nproc_per_node']}"
             ),
             f"- Eval basket: `{manifest['eval']['config']}` dry-run script emitted",
+            "",
+            "## Qwen3-4B V10 AIME Gate",
+            "",
+            f"- Gate enabled: `{manifest['aime_gate']['enabled']}`",
+            f"- Base model path: `{manifest['aime_gate']['base_model_path']}`",
+            f"- Candidate FT output path: `{manifest['aime_gate']['candidate_ft_output_path']}`",
+            f"- Corrected evaluator config: `{manifest['aime_gate']['corrected_evaluator_config']}`",
+            (
+                "- Non-regression rule: "
+                f"`{manifest['aime_gate']['non_regression_rule']['pass_condition']}`"
+            ),
+            f"- 30B/8-GPU hold: `{manifest['aime_gate']['scale_hold']['qwen30b_8gpu']}`",
             "",
             "## Scripts",
             "",
@@ -847,9 +1041,18 @@ def write_plan(manifest: JsonDict, *, overwrite: bool) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--repo-dir", type=Path, default=REPO_ROOT)
     parser.add_argument("--run-name", default=DEFAULT_RUN_NAME)
+    parser.add_argument(
+        "--qwen4b-v10-pilot",
+        action="store_true",
+        help=(
+            "Apply task242 Qwen3-4B V10 pilot defaults: 4B model path, "
+            "hard_math_runlength_dp_v10 strategy, /root NemTron remote root, "
+            "and no 30B scale proposal."
+        ),
+    )
     parser.add_argument("--qwen-hf-model", default=None)
     parser.add_argument(
         "--qwen-tokenizer-model",
@@ -1054,6 +1257,30 @@ def build_parser() -> argparse.ArgumentParser:
         help="Sample fraction for v9 math format-repair rows.",
     )
     parser.add_argument(
+        "--math-v10-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v10 run-length/DP/counting hard-math full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v10-verified-full-solution-weight",
+        type=float,
+        default=MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help="Sample fraction for v10 broad verified full-solution rows.",
+    )
+    parser.add_argument(
+        "--math-v10-final-answer-aux-weight",
+        type=float,
+        default=MATH_V10_FINAL_ANSWER_AUX_WEIGHT,
+        help="Sample fraction for v10 final-answer-only auxiliary math rows.",
+    )
+    parser.add_argument(
+        "--math-v10-format-repair-weight",
+        type=float,
+        default=MATH_V10_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for v10 format-repair math rows.",
+    )
+    parser.add_argument(
         "--math-sidecar-m0-input-dir",
         type=Path,
         default=None,
@@ -1079,12 +1306,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help=(
-            "Path to the AIME-25 / HMMT eval prompt corpus used to drop "
+            "Path to the AIME-25 / HMMT / MATH eval prompt corpus used to drop "
             "contaminated NuminaMath rows at SFT prep time. Required for "
             "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 / "
             "hard_math_recurrence_v9 unless --math-skip-decontamination-check "
-            "is also set (NOT "
-            "recommended for production). See prepare_m1_agentic_sft.py "
+            "is also set (NOT recommended for production). Required without "
+            "skip for hard_math_runlength_dp_v10. See prepare_m1_agentic_sft.py "
             "--decontaminate-math-against-corpus."
         ),
     )
@@ -1106,7 +1333,17 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Acknowledge AIME-25 / HMMT contamination risk and bundle V7+ "
             "without a decontamination corpus. NOT recommended for production "
-            "training; intended only for smoke/dry-run paths."
+            "training; intended only for smoke/dry-run paths. Not permitted "
+            "for hard_math_runlength_dp_v10."
+        ),
+    )
+    parser.add_argument(
+        "--allow-v10-30b-scale",
+        action="store_true",
+        help=(
+            "Allow hard_math_runlength_dp_v10 planning with a 30B model path. "
+            "Use only after the Qwen3-4B same-harness AIME non-regression gate "
+            "has passed and been documented."
         ),
     )
     parser.add_argument("--num-shards", type=int, default=32)
@@ -1125,7 +1362,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lr-warmup-iters", type=int, default=0)
     parser.add_argument("--lr-decay-iters", type=int, default=None)
     parser.add_argument("--allow-missing-checkpoint", action="store_true")
-    parser.add_argument("--remote-root", type=Path, default=DEFAULT_REMOTE_ROOT)
+    parser.add_argument("--remote-root", type=Path, default=None)
     parser.add_argument("--nemtron-host", default="NemTron")
     parser.add_argument("--nemtron-venv", type=Path, default=DEFAULT_NEMTRON_VENV)
     parser.add_argument("--cuda-visible-devices", default="0,1")
@@ -1140,6 +1377,11 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         default="m1_basket",
     )
+    parser.add_argument("--aime-gate-base-model-path", default=None)
+    parser.add_argument("--candidate-ft-output-path", default=None)
+    parser.add_argument("--aime-gate-eval-config", default=DEFAULT_AIME_GATE_EVAL_CONFIG)
+    parser.add_argument("--aime-smoke-repeats-per-problem", type=int, default=1)
+    parser.add_argument("--aime-smoke-max-tokens", type=int, default=8192)
     parser.add_argument("--overwrite", action="store_true")
     return parser
 
@@ -1153,13 +1395,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"plan_qwen_scaleup_run.py: error: {exc}", file=sys.stderr)
         return 1
     print(
-        json.dumps(
-            {
-                "manifest": manifest["outputs"]["manifest"],
-                "local_data_prep_script": manifest["outputs"]["local_data_prep_script"],
-                "remote_train_script": manifest["outputs"]["remote_train_script"],
-                "eval_dry_run_script": manifest["outputs"]["eval_dry_run_script"],
-            },
+            json.dumps(
+                {
+                    "manifest": manifest["outputs"]["manifest"],
+                    "local_data_prep_script": manifest["outputs"]["local_data_prep_script"],
+                    "sync_script": manifest["outputs"]["sync_script"],
+                    "remote_train_script": manifest["outputs"]["remote_train_script"],
+                    "eval_dry_run_script": manifest["outputs"]["eval_dry_run_script"],
+                },
             indent=2,
         )
     )
