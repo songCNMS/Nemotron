@@ -18,3 +18,15 @@
 6. Lead docs source for assignment is
    `origin/intern_nemotron_lead/session1-recovery-task-docs` at
    `81253415dd3285ce0eb56e69733d210742edcb50`.
+7. Session 1 report path:
+   `workspace/tasks/task266_qwen_aime_v11_runbook_repro_gate_s1/v11_runbook_repro_gate_report.md`;
+   output copy:
+   `/work-agents/intern_nemotron_worker_5/outputs/task266_qwen_aime_v11_runbook_repro_gate_s1/v11_runbook_repro_gate_report.md`;
+   sha256 `67e3f70389759cb33b4cedd319144c52e4ad5130134bad67cb36ba9f188920f5`.
+8. Current upstream V11 evidence is incomplete: task262 and task264 remote
+   branches are acceptance/docs only, task263 has no visible remote branch/PR,
+   and task265 has no diff from main. Therefore V11 execution remains
+   HOLD/NO-GO even though task266 runbook docs are complete.
+9. First measurable V11 go/no-go requires base-load/import proof, nonzero-LR
+   training evidence, non-AIME canary pass, reviewer-readable artifacts, and
+   same-harness AIME25 FT exact-normalized accuracy `>= 11/30`.
