@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -15,7 +15,7 @@
    #321's Qwen3-4B V10 planner/smoke merge.
 5. Current live gate status is HOLD because task248 candidate artifacts,
    task243 comparison artifacts, and explicit 30B permission are not yet
-   published/approved; task246 is approved but still pending merge.
+   published/approved; task246 and task247 are now merged on main.
 6. Session 4 is a metadata/status correction for acceptance visibility; it does
    not change the live artifact gate or authorize runtime work.
 7. Session 5 visibility update: task248 branch `2007418` is published with
@@ -36,10 +36,10 @@
     BLOCK/HOLD, task248 is approved only as a blocked-before-prep report while
     still HOLD for runtime evidence. Session 9 supersedes the task246/task247
     inputs with #325/#326 evidence below.
-12. Session 10 task246 update: #325 is open/CLEAN at
-    `266b6a14262278b4fe27f75a3273fc156a5538ce`; lead gate is APPROVE / OK to
-    self-merge after checksum correction, but #325 is not merged yet. Direct
-    top manifest sha256 is
+12. Session 13 task246 update: #325 is merged into current `origin/main` at
+    merge commit `2775dff05948acce3a35a2d941bbd2f96d074b4a`, merged at
+    `2026-06-01T17:43:24Z` from head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`. Direct top manifest sha256 is
     `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`, and
     direct M0 manifest sha256 is
     `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
@@ -50,7 +50,9 @@
     pilot score is `11/30` = `0.36666666666666664`. Any FT comparison must use
     the same cache, runner, prompt variant, sampling, and all-request
     denominator.
-14. Session 10 task249 update: #323 is open/CLEAN at
-    `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`; its matrix is present but
-    stale relative to #325@`266b6a1` approval and remains HOLD pending
-    refreshed evidence.
+14. Session 13 task249 update: #323 is open/CLEAN at
+    `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f` and remains HOLD/no-final-pass.
+15. Session 13 combined gate: task246 corpus/M0 evidence and task247 base
+    evidence are on current main, but NO-GO/HOLD remains because task248 FT
+    artifacts are missing, task243 comparison output is missing, and 30B/8-GPU
+    permission remains blocked.

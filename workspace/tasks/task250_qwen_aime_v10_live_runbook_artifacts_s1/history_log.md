@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0 - Assigned
 
@@ -138,5 +138,48 @@
 - Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because task248
   candidate prep/train/eval artifacts, task243 base-vs-FT comparison output,
   and explicit 30B/8-GPU permission remain missing.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 12 - Refreshed task249 current NO-GO matrix
+
+- Fetched current #323 and verified PR #323 is open/CLEAN at
+  `bb5f3063703348356cd22fff0d454fbf3fee5682`.
+- Inspected
+  `origin/pr/323:workspace/tasks/task249_qwen_aime_v10_live_contam_gate_review_s1/live_gate_review_matrix.md`.
+- Recorded task249 as a current review matrix rather than stale: #323 then
+  reviewed #325 at `266b6a14262278b4fe27f75a3273fc156a5538ce` and #326 merged
+  into main at `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Observed #325 latest PR head at
+  `dca2abcd112f998a5fecd52754d534adb58e8b88`, still open/CLEAN and unmerged;
+  the accepted artifact evidence remained the lead-approved checksum-fixed
+  #325 state from `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+- Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because #325 was
+  not merged yet, task248 candidate prep/train/eval artifacts were missing,
+  task243 base-vs-FT comparison output was missing, and explicit 30B/8-GPU
+  permission remained blocked.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 13 - Refreshed after task246 merge and task249 hold head
+
+- Fetched current `origin/main`, #323, #325, and #326 refs.
+- Verified current `origin/main` is
+  `2775dff05948acce3a35a2d941bbd2f96d074b4a`, the #325 merge commit.
+- Verified task246 PR #325 is MERGED at `2026-06-01T17:43:24Z` from head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`; `real_decontam_corpus_report.md`
+  is present on current `origin/main`.
+- Verified task247 PR #326 remains MERGED at
+  `85f2bf5c11062741388ca114a84a2c26535b7df9` with accepted base score
+  `11/30 = 0.36666666666666664`.
+- Verified task249 PR #323 is open/CLEAN at
+  `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f` and remains HOLD/no-final-pass.
+- Refreshed `live_runbook_artifact_report.md` so task246 corpus/M0 evidence is
+  recorded as merged on main, task247 base evidence remains merged on main, and
+  task249 points at #323 head `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`.
+- Preserved first Qwen3-4B V10 AIME decision as NO-GO/HOLD because task248
+  candidate prep/train/eval artifacts are missing, task243 base-vs-FT
+  comparison output is missing, and explicit 30B/8-GPU permission remains
+  blocked.
 - Did not run training, live eval, endpoint serving, NemTron sync,
   30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
