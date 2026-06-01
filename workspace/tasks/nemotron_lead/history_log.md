@@ -811,3 +811,39 @@
   output, and 30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 36 - 2026-06-01 UTC - task247 worker closeout reconciled
+
+- Received and marked read worker_3 task247/#326 merge closeout mailbox.
+- Worker_3 confirmed:
+  - #326 was open/CLEAN before self-merge.
+  - Merged head was `8fb34bd9116e32aa8d191750f2510d2a843e0da5`.
+  - Merge commit was `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+  - `origin/main` is now `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+  - Scope remains base artifact only: Qwen3-4B AIME2025 pilot score `11/30`
+    exact-normalized accuracy `0.36666666666666664`, `30/30` requests ok,
+    parsed `23/30`, residual risk `30x1`.
+  - No FT judgment, training, 30B/8-GPU, or direct main push was performed.
+- Fetched worker_3 branch and verified the post-merge branch-only closeout
+  commit:
+  - Branch:
+    `intern_nemotron_worker_3/task247_qwen_aime2025_qwen4b_base_smoke_s1`.
+  - Head:
+    `3943124494719283278579d9e594f556cc077c58`.
+  - Commit summary: `[task247_qwen_aime2025_qwen4b_base_smoke_s1] close merged task`.
+  - Files touched are worker status/knowledge and task247 docs only; this is
+    not a direct `main` push.
+- Open PR state after #326 merge remains:
+  - #325 task246 open/CLEAN at
+    `afc276932897743f6b6b5b8aab4c390905cb55f1`, request-changes/HOLD for the
+    top manifest checksum mismatch.
+  - #324 task250 open/CLEAN at
+    `cd4555199ff67eace4d40d4418eef38511786143`, refresh requested.
+  - #323 task249 open/CLEAN at
+    `9488ad5c344f2b9dc69504d6980a2b7179c649e0`, refresh requested.
+- Current gate remains `NO-GO/HOLD`: baseline evidence is merged, but task246
+  is not accepted, task248 has no candidate artifacts, task249/task250 need
+  refreshed reviews, task243 has no base-vs-FT comparison output, and 30B/8-GPU
+  scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
