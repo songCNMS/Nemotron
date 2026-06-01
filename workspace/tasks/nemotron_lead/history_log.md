@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0 - Created with team lead
 
@@ -260,3 +260,24 @@
 - Kept `nemotron_lead` in Working/InProgress monitoring state as the permanent team lead lifecycle task.
 - No worker assignment was needed because there is no active residual cleanup, new user request, abnormal regression, or testable implementation change.
 - Lead did not implement, run tests, merge, or push `main`.
+
+## Session 15 - 2026-06-01 UTC - Qwen AIME25 improvement goal split
+
+- Created an active lead goal for improving Qwen fine-tuning performance on AIME 2025 with the hard acceptance rule that a promoted fine-tuned Qwen model must not score below the same base model under the same corrected AIME 2025 evaluator and protocol.
+- Read the team-role contract and project rules; confirmed lead boundaries remain: no product/source edits by lead, no implementation tests by lead, no lead-side merge, and no direct `main` push.
+- Read lead mailbox and found no unread messages.
+- Audited current `origin/main` Qwen/AIME context:
+  - PR #178 is merged and contains the Qwen hard-math SFT data-prep/planner/test history through V8.
+  - PR #183 is merged and contains V9 recurrence tuning, checkpoint-root normalization, and V9 trace audit records.
+  - Core code surfaces are `prepare_m1_agentic_sft.py`, `plan_qwen_scaleup_run.py`, `plan_m1_agentic_sft_training.py`, `qwen_eval_repro_gate.py`, `promotion_gate.py`, and tests under `tests/recipes/super3/`.
+  - Existing task evidence says V7 30B-A3B passed corrected gates with AIME25 `0.21`, V8 failed at `0.19666666666666666` due the `aime_06` regression, and corrected V9 still failed `aime_06` with wrong modes `640` and `830`.
+  - Current V9 conclusion is to move to a focused V10-style run-length DP/counting-recursion sidecar or weighting patch, preserving Qwen tokenizer-native chat-template packing and heldout decontamination.
+- Attempted to merge current `origin/main` into the lead branch to reduce future task-doc conflicts, but the merge produced only legacy workspace-doc conflicts from the recovered closeout branches; aborted the merge attempt and left the lead branch clean before creating new task docs.
+- Created five standard worker task docs:
+  - `task241_qwen_aime_v10_sidecar_data_s1` assigned to `intern_nemotron_worker_1` for the decontaminated V10 AIME-style hard-math sidecar/data refactor.
+  - `task242_qwen_aime_v10_planner_smoke_s1` assigned to `intern_nemotron_worker_2` for V10 planner, 4B pilot, and smoke launch scripts.
+  - `task243_qwen_aime2025_base_vs_ft_eval_gate_s1` assigned to `intern_nemotron_worker_3` for corrected AIME2025 base-vs-FT evaluation and score normalization.
+  - `task244_qwen_aime_v10_contam_regression_review_s1` assigned to `intern_nemotron_worker_4` for independent contamination and regression review.
+  - `task245_qwen_aime_v10_artifact_runbook_verify_s1` assigned to `intern_nemotron_worker_5` for artifact/repro/runbook verification and first pilot go/no-go evidence review.
+- All five active workers were used because the supervisor request naturally separates into data, planner/training, eval gate, independent review, and artifact/runbook verification workstreams.
+- Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.

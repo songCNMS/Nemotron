@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Recovery closeout archived; monitoring |
-| Session | 14 |
+| PR | Qwen AIME25 improvement tasks assigned |
+| Session | 15 |

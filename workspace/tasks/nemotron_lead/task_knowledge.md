@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -16,3 +16,6 @@
 10. If an approved downstream PR head advances before merge, request a new worker mailbox report for that head; if the merge completes before the report arrives, record the final head, merge commit, mergedBy, and later reconcile the worker's final-head report when it lands.
 11. Coordinator-confirmed recovery closeout should be archived in lead history/status, but `nemotron_lead` stays Working/InProgress because it is the permanent team lead lifecycle task.
 12. In monitoring state with no mailbox items, residual cleanup, new user request, or abnormal regression, do not create worker tasks or send extra coordinator updates beyond required session bookkeeping.
+13. Qwen AIME25 improvement work has a hard non-regression rule: no fine-tuned Qwen checkpoint can be promoted unless it is scored against the same base Qwen checkpoint under the same corrected AIME 2025 evaluator/protocol and the FT score is not lower.
+14. For this Qwen AIME25 priority, run Qwen3-4B pilot/debug first using `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; do not spend 30B/8-GPU scale until the 4B pilot is non-regressing or produces a concrete evaluator/data fix.
+15. AIME 2025 prompts and labels are held-out eval/decontamination material only; worker tasks must not add them to training data, sidecars, distillation prompts, or answer-supervision rows.
