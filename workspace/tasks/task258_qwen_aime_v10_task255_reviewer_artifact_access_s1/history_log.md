@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -79,3 +79,18 @@
 - Boundaries maintained: no training, no export rerun, no AIME/task243 eval, no
   promotion claim, no 30B/8-GPU clearance, no main push/merge, and no deletion
   or overwrite under `/mnt/cephfs/data/processing/lei.song`.
+
+## Session 3 - 2026-06-01 UTC - Mailbox closeout retry
+
+- Lead requested the official mailbox closeout before releasing task256/#329
+  re-review.
+- The first detailed mailbox body was rejected by the mailbox service as
+  `content_too_long`; no task evidence changed.
+- Prepared a compressed official report that references the local report and
+  shared `review_manifest/` files for the full inventory/checksum detail.
+- Current PR state before retry: #331 open/clean at head
+  `8190e30d19939033574f7bf8e2fca8c8b7ad4260`.
+- Boundaries remain unchanged: no training, no export rerun, no AIME/task243
+  eval, no promotion claim, no 30B/8-GPU clearance, no main push/merge, no
+  #329 merge, and no deletion or overwrite under
+  `/mnt/cephfs/data/processing/lei.song`.

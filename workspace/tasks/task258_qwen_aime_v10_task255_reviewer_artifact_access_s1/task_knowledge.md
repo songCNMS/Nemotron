@@ -1,6 +1,6 @@
 # task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -24,3 +24,7 @@
    non-world-executable directories in the final reviewer path; worker_5 should
    be able to review directly if their environment can read normal CephFS
    `/mnt/cephfs/data/processing` paths.
+8. Mailbox reports for artifact-heavy tasks must stay concise; the full
+   per-file inventory/checksum detail should be referenced by path
+   (`review_manifest/` and local task output root) instead of pasted into the
+   mailbox body.
