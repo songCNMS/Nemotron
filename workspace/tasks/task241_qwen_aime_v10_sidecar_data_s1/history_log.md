@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -19,3 +19,21 @@
 - Imported task241 README/history/task_knowledge into the worker branch.
 - Boundaries acknowledged: no 30B training, no AIME25 as training data, no
   direct main push, no merge.
+
+## Session 2 - 2026-06-01 UTC - V10 data-prep implementation
+
+- Added `hard_math_runlength_dp_v10` as a separate M1 math supervision
+  strategy with V10 weights, CLI flags, blend comment, manifest/report
+  sections, and hard-filter metadata.
+- Implemented V10 signal classification and count helpers for
+  counting-prompt, binary/chair sequence object, run-length constraint,
+  DP/recurrence solution, and case-split combinatorics signals.
+- Extended decontamination-required strategy coverage to V10 and updated CLI
+  help text for the corpus/skip flags.
+- Added tests for V10 positive/negative row selection, hard sidecar counts,
+  signal bucket counts, report output, decontamination enforcement, and
+  AIME25-like prompt removal from train and hard sidecar artifacts.
+- Validation: py_compile, ruff, git diff check, focused V10/V9/decontam pytest
+  shard, and sandbox-compatible broad pytest shard passed. Full two-file pytest
+  without deselection still hits pre-existing missing `cosmos_xenna` import
+  dependency in three data-prep contract tests.

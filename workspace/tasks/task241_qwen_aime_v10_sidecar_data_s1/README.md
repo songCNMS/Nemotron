@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - Qwen AIME V10 sidecar data
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
 
 ## Background
 
@@ -59,3 +59,10 @@ Implement the data-prep side of a decontaminated V10 AIME-style hard-math sideca
 - Task docs source: `origin/intern_nemotron_lead/session1-recovery-task-docs`
   at `116a2f3791d95a71dc5d4bbbf51bd707be7f8cc3`.
 - Status: accepted; implementation in progress.
+
+## Session 2 Worker Closeout
+
+- Implemented separate `hard_math_runlength_dp_v10` data-prep strategy.
+- Added focused V10 sidecar, signal-count, and decontamination tests.
+- Added `v10_sidecar_data_report.md` with filter details, synthetic counts, checks, contamination status, and residual risk.
+- Status: ready for PR review; no 30B training run performed; AIME25 remains heldout/decontamination-only.

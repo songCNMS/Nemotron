@@ -1,6 +1,6 @@
 # task241_qwen_aime_v10_sidecar_data_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -10,3 +10,11 @@
 4. Acceptance branch base is current `origin/main` at
    `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b`; task docs were imported from
    lead branch head `116a2f3791d95a71dc5d4bbbf51bd707be7f8cc3`.
+5. V10 is implemented as a new strategy name,
+   `hard_math_runlength_dp_v10`, not as a planner/training change.
+6. V10 hard rows require V8 clean-final rows plus counting-prompt,
+   binary/chair/sequence-object, run-length constraint, and either
+   DP/recurrence or case-split combinatorics solution signals.
+7. V10 is part of `STRATEGIES_REQUIRING_MATH_DECONTAMINATION`; the task
+   tests assert contaminated AIME25-like prompts are removed before base train
+   and hard sidecar writing.

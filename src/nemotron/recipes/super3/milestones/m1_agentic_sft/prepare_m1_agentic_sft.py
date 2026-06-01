@@ -76,6 +76,7 @@ MATH_SUPERVISION_STRATEGY_V6 = "hard_math_balanced_v6"
 MATH_SUPERVISION_STRATEGY_V7 = "hard_math_long_reasoning_v7"
 MATH_SUPERVISION_STRATEGY_V8 = "hard_math_clean_final_v8"
 MATH_SUPERVISION_STRATEGY_V9 = "hard_math_recurrence_v9"
+MATH_SUPERVISION_STRATEGY_V10 = "hard_math_runlength_dp_v10"
 MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V1,
     MATH_SUPERVISION_STRATEGY_V3,
@@ -85,6 +86,7 @@ MATH_SUPERVISION_STRATEGIES = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
     MATH_SUPERVISION_STRATEGY_V3,
@@ -94,6 +96,7 @@ MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
 )
 MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
     MATH_SUPERVISION_STRATEGY_V4,
@@ -102,6 +105,7 @@ MATH_SUPERVISION_STRATEGIES_WITH_HARD_BUCKET = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
 )
 MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION = "hard_verified_full_solution"
 MATH_BUCKET_VERIFIED_FULL_SOLUTION = "verified_full_solution"
@@ -175,6 +179,10 @@ MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
 MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
 MATH_V9_FINAL_ANSWER_AUX_WEIGHT = 0.0
 MATH_V9_FORMAT_REPAIR_WEIGHT = 0.0
+MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT = 1.0
+MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT = 0.0
+MATH_V10_FINAL_ANSWER_AUX_WEIGHT = 0.0
+MATH_V10_FORMAT_REPAIR_WEIGHT = 0.0
 
 # AIME-25 / HMMT decontamination contract for math_competition_numeric
 # (NuminaMath) rows. NuminaMath is built from MATH / AIME / AMC / HMMT
@@ -195,6 +203,7 @@ STRATEGIES_REQUIRING_MATH_DECONTAMINATION = (
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
 )
 MATH_V4_ANSWER_SEEKING_PATTERNS = (
     "compute",
@@ -279,6 +288,80 @@ MATH_V9_RUN_LENGTH_KEYWORDS = (
     "consecutive",
     "run length",
     "trailing",
+)
+MATH_V10_SIGNAL_COUNTING_PROMPT = "counting_prompt"
+MATH_V10_SIGNAL_SEQUENCE_OBJECT = "binary_or_sequence_object"
+MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT = "run_length_constraint"
+MATH_V10_SIGNAL_DP_OR_RECURRENCE = "dp_or_recurrence_solution"
+MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS = "case_split_combinatorics"
+MATH_V10_SIGNAL_BUCKETS = (
+    MATH_V10_SIGNAL_COUNTING_PROMPT,
+    MATH_V10_SIGNAL_SEQUENCE_OBJECT,
+    MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT,
+    MATH_V10_SIGNAL_DP_OR_RECURRENCE,
+    MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS,
+)
+MATH_V10_COUNTING_PROMPT_KEYWORDS = (
+    "count",
+    "determine the number",
+    "find the number",
+    "how many",
+    "number of",
+    "ways",
+)
+MATH_V10_SEQUENCE_OBJECT_KEYWORDS = (
+    "0s and 1s",
+    "binary sequence",
+    "binary sequences",
+    "binary string",
+    "binary strings",
+    "bit string",
+    "bit strings",
+    "chairs",
+    "occupied chairs",
+    "seats",
+    "string of length",
+    "strings of length",
+    "zeros and ones",
+    "zeroes and ones",
+)
+MATH_V10_RUN_LENGTH_CONSTRAINT_KEYWORDS = (
+    "adjacent",
+    "consecutive",
+    "consecutive ones",
+    "in a row",
+    "no adjacent",
+    "no consecutive",
+    "no three",
+    "no two adjacent",
+    "no 111",
+    "not contain",
+    "run length",
+    "substring",
+    "without consecutive",
+    "without three",
+)
+MATH_V10_DP_SOLUTION_KEYWORDS = (
+    "dp[",
+    "dynamic programming",
+    "recurrence",
+    "state",
+    "states",
+    "table",
+    "transition",
+    "trailing run",
+)
+MATH_V10_COMBINATORICS_SOLUTION_KEYWORDS = (
+    "\\binom",
+    "binomial",
+    "block",
+    "blocks",
+    "coefficient",
+    "gap",
+    "gaps",
+    "generating function",
+    "merged pair",
+    "summation",
 )
 MATH_SIDECAR_SOURCE_ENVIRONMENTS = frozenset(MATH_FINAL_ANSWER_ENVIRONMENTS)
 SOURCE_METADATA_REQUIRED_FIELDS = (
@@ -927,7 +1010,72 @@ def is_hard_math_recurrence_row(row: Mapping[str, Any]) -> bool:
     return has_counting_prompt and has_recurrence_solution and has_run_length_signal
 
 
+def _math_v10_signal_flags(row: Mapping[str, Any]) -> dict[str, bool]:
+    prompt = _message_content(row, "user")
+    solution = _message_content(row, "assistant")
+    lower_prompt = prompt.lower()
+    lower_solution = solution.lower()
+    lower_text = f"{lower_prompt}\n{lower_solution}"
+    has_counting_prompt = any(
+        keyword in lower_prompt for keyword in MATH_V10_COUNTING_PROMPT_KEYWORDS
+    )
+    has_sequence_object = any(
+        keyword in lower_text for keyword in MATH_V10_SEQUENCE_OBJECT_KEYWORDS
+    )
+    has_run_length_constraint = any(
+        keyword in lower_text for keyword in MATH_V10_RUN_LENGTH_CONSTRAINT_KEYWORDS
+    )
+    has_dp_or_recurrence = any(
+        keyword in lower_solution for keyword in MATH_V10_DP_SOLUTION_KEYWORDS
+    )
+    has_case_split_combinatorics = any(
+        keyword in lower_solution
+        for keyword in MATH_V10_COMBINATORICS_SOLUTION_KEYWORDS
+    )
+    return {
+        MATH_V10_SIGNAL_COUNTING_PROMPT: has_counting_prompt,
+        MATH_V10_SIGNAL_SEQUENCE_OBJECT: has_sequence_object,
+        MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT: has_run_length_constraint,
+        MATH_V10_SIGNAL_DP_OR_RECURRENCE: has_dp_or_recurrence,
+        MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS: has_case_split_combinatorics,
+    }
+
+
+def classify_hard_math_runlength_dp_signals(row: Mapping[str, Any]) -> tuple[str, ...]:
+    """Return V10 run-length/counting signal buckets present in a row."""
+    flags = _math_v10_signal_flags(row)
+    return tuple(signal for signal in MATH_V10_SIGNAL_BUCKETS if flags.get(signal))
+
+
+def count_hard_math_runlength_dp_signal_buckets(
+    rows: Sequence[Mapping[str, Any]],
+) -> dict[str, int]:
+    counts = {signal: 0 for signal in MATH_V10_SIGNAL_BUCKETS}
+    for row in rows:
+        for signal in classify_hard_math_runlength_dp_signals(row):
+            counts[signal] += 1
+    return {signal: count for signal, count in counts.items() if count}
+
+
+def is_hard_math_runlength_dp_row(row: Mapping[str, Any]) -> bool:
+    """V10 subset for no-111/run-length binary/chair counting failures."""
+    if not is_hard_math_clean_final_row(row):
+        return False
+    flags = _math_v10_signal_flags(row)
+    return (
+        flags[MATH_V10_SIGNAL_COUNTING_PROMPT]
+        and flags[MATH_V10_SIGNAL_SEQUENCE_OBJECT]
+        and flags[MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT]
+        and (
+            flags[MATH_V10_SIGNAL_DP_OR_RECURRENCE]
+            or flags[MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS]
+        )
+    )
+
+
 def is_hard_math_row_for_strategy(row: Mapping[str, Any], strategy: str) -> bool:
+    if strategy == MATH_SUPERVISION_STRATEGY_V10:
+        return is_hard_math_runlength_dp_row(row)
     if strategy == MATH_SUPERVISION_STRATEGY_V9:
         return is_hard_math_recurrence_row(row)
     if strategy == MATH_SUPERVISION_STRATEGY_V8:
@@ -1752,7 +1900,34 @@ def _math_v9_weights(args: argparse.Namespace) -> dict[str, float]:
     }
 
 
+def _math_v10_weights(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v10_hard_verified_full_solution_weight",
+                MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_VERIFIED_FULL_SOLUTION: float(
+            getattr(
+                args,
+                "math_v10_verified_full_solution_weight",
+                MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT,
+            )
+        ),
+        MATH_BUCKET_FINAL_ANSWER_AUX: float(
+            getattr(args, "math_v10_final_answer_aux_weight", MATH_V10_FINAL_ANSWER_AUX_WEIGHT)
+        ),
+        MATH_BUCKET_FORMAT_REPAIR: float(
+            getattr(args, "math_v10_format_repair_weight", MATH_V10_FORMAT_REPAIR_WEIGHT)
+        ),
+    }
+
+
 def _math_weights_for_strategy(args: argparse.Namespace, strategy: str) -> dict[str, float]:
+    if strategy == MATH_SUPERVISION_STRATEGY_V10:
+        return _math_v10_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V9:
         return _math_v9_weights(args)
     if strategy == MATH_SUPERVISION_STRATEGY_V8:
@@ -1795,7 +1970,14 @@ def build_math_strategy_blend(
                 "weight": 1.0,
             }
         )
-    if strategy == MATH_SUPERVISION_STRATEGY_V9:
+    if strategy == MATH_SUPERVISION_STRATEGY_V10:
+        comment = (
+            "M1 Agentic SFT v0 hard_math_runlength_dp_v10 blend. The base train "
+            "JSONL keeps agentic coverage; only V8 clean-final hard-math traces "
+            "with constrained binary/chair sequence counting plus DP, recurrence, "
+            "or case-split combinatorics signals are duplicated as the hard sidecar."
+        )
+    elif strategy == MATH_SUPERVISION_STRATEGY_V9:
         comment = (
             "M1 Agentic SFT v0 hard_math_recurrence_v9 blend. The base train "
             "JSONL keeps agentic coverage; only V8 clean-final hard-math traces "
@@ -2367,6 +2549,7 @@ def write_report(path: Path, manifest: Mapping[str, Any]) -> None:
         ("math_hard_long_reasoning_v7", "Math hard long reasoning v7 buckets"),
         ("math_hard_clean_final_v8", "Math hard clean final v8 buckets"),
         ("math_hard_recurrence_v9", "Math hard recurrence v9 buckets"),
+        ("math_hard_runlength_dp_v10", "Math hard run-length DP v10 buckets"),
     ):
         math_hard = manifest.get(hard_manifest_key)
         if not isinstance(math_hard, Mapping):
@@ -2923,7 +3106,16 @@ def prepare(args: argparse.Namespace) -> JsonDict:
             "errors": [*math_sidecar_train_errors, *math_sidecar_val_errors],
         }
     if math_supervision_strategy in MATH_SUPERVISION_STRATEGIES_WITH_BUCKETS:
-        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V9:
+        if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V10:
+            math_strategy_manifest_key = "math_hard_runlength_dp_v10"
+            math_strategy_description = (
+                "Separates V8 clean-final hard-math rows with constrained "
+                "binary/chair sequence counting plus DP, recurrence, or "
+                "case-split combinatorics signals; broad replay, final-answer "
+                "auxiliary rows, format-repair rows, and held-out eval rows "
+                "stay separate."
+            )
+        elif math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V9:
             math_strategy_manifest_key = "math_hard_recurrence_v9"
             math_strategy_description = (
                 "Separates V8 clean-final hard-math rows with recurrence, "
@@ -3023,6 +3215,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_MIN_PROMPT_CHARS
@@ -3037,6 +3230,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_MAX_PROMPT_CHARS
@@ -3051,6 +3245,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_MIN_SOLUTION_CHARS
@@ -3065,6 +3260,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_MAX_SOLUTION_CHARS
@@ -3079,6 +3275,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_MIN_SOLUTION_LINES
@@ -3093,6 +3290,7 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                         MATH_SUPERVISION_STRATEGY_V7,
                         MATH_SUPERVISION_STRATEGY_V8,
                         MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
                     )
                     else
                     MATH_V5_BOXED_TAIL_CHARS
@@ -3103,7 +3301,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "final_answer_filter": (
                     "single_clean_last_boxed_scalar_numeric_matches_expected"
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V8, MATH_SUPERVISION_STRATEGY_V9)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
+                    )
                     else
                     "last_boxed_scalar_numeric"
                     if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V7
@@ -3112,7 +3314,11 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                 "max_trailing_chars_after_boxed": (
                     MATH_V8_MAX_TRAILING_CHARS_AFTER_BOXED
                     if math_supervision_strategy
-                    in (MATH_SUPERVISION_STRATEGY_V8, MATH_SUPERVISION_STRATEGY_V9)
+                    in (
+                        MATH_SUPERVISION_STRATEGY_V8,
+                        MATH_SUPERVISION_STRATEGY_V9,
+                        MATH_SUPERVISION_STRATEGY_V10,
+                    )
                     else None
                 ),
                 "topic_keywords": list(MATH_V4_TOPIC_KEYWORDS),
@@ -3122,6 +3328,33 @@ def prepare(args: argparse.Namespace) -> JsonDict:
                     "prompt_keywords": list(MATH_V9_PROMPT_RECURRENCE_KEYWORDS),
                     "solution_keywords": list(MATH_V9_SOLUTION_RECURRENCE_KEYWORDS),
                     "run_length_keywords": list(MATH_V9_RUN_LENGTH_KEYWORDS),
+                }
+            if math_supervision_strategy == MATH_SUPERVISION_STRATEGY_V10:
+                manifest[math_strategy_manifest_key]["hard_filter"]["run_length_dp_filter"] = {
+                    "required_signal_groups": [
+                        MATH_V10_SIGNAL_COUNTING_PROMPT,
+                        MATH_V10_SIGNAL_SEQUENCE_OBJECT,
+                        MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT,
+                        (
+                            f"{MATH_V10_SIGNAL_DP_OR_RECURRENCE} OR "
+                            f"{MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS}"
+                        ),
+                    ],
+                    "counting_prompt_keywords": list(MATH_V10_COUNTING_PROMPT_KEYWORDS),
+                    "sequence_object_keywords": list(MATH_V10_SEQUENCE_OBJECT_KEYWORDS),
+                    "run_length_constraint_keywords": list(
+                        MATH_V10_RUN_LENGTH_CONSTRAINT_KEYWORDS
+                    ),
+                    "dp_solution_keywords": list(MATH_V10_DP_SOLUTION_KEYWORDS),
+                    "combinatorics_solution_keywords": list(
+                        MATH_V10_COMBINATORICS_SOLUTION_KEYWORDS
+                    ),
+                    "source_signal_bucket_counts": count_hard_math_runlength_dp_signal_buckets(
+                        math_bucket_source_rows[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]
+                    ),
+                    "sampled_signal_bucket_counts": count_hard_math_runlength_dp_signal_buckets(
+                        math_bucket_rows[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]
+                    ),
                 }
 
     # task021 Session 2: cross-stage lineage block. M1 declares the M0
@@ -3263,7 +3496,8 @@ def build_parser() -> argparse.ArgumentParser:
             "Reuses task035 contamination_scanner.scan_prompt_corpus for "
             "deterministic token-n-gram overlap. Required for "
             "--math-supervision-strategy hard_math_long_reasoning_v7 / "
-            "hard_math_clean_final_v8 / hard_math_recurrence_v9 (or pass "
+            "hard_math_clean_final_v8 / hard_math_recurrence_v9 / "
+            "hard_math_runlength_dp_v10 (or pass "
             "--skip-math-decontamination-check explicitly). Corpus accepts "
             "JSONL / JSON / YAML / plain-text shapes; minimal record is "
             "{\"id\": str, \"prompt\": str}."
@@ -3294,7 +3528,7 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Acknowledge AIME-25 / HMMT contamination risk and run "
             "hard_math_long_reasoning_v7 / hard_math_clean_final_v8 / "
-            "hard_math_recurrence_v9 "
+            "hard_math_recurrence_v9 / hard_math_runlength_dp_v10 "
             "without a decontamination corpus. NOT recommended for "
             "production training; intended only for smoke/dry-run paths "
             "where the operator has already validated their slice."
@@ -3320,7 +3554,9 @@ def build_parser() -> argparse.ArgumentParser:
             "full solutions for pilot runs. `hard_math_clean_final_v8` further "
             "requires a single clean final boxed answer matching the source label. "
             "`hard_math_recurrence_v9` keeps the V8 clean-final contract and "
-            "narrows the hard sidecar to recurrence/counting/run-length rows."
+            "narrows the hard sidecar to recurrence/counting/run-length rows. "
+            "`hard_math_runlength_dp_v10` further targets constrained binary/chair "
+            "sequence counting with DP, recurrence, or case-split combinatorics."
         ),
     )
     parser.add_argument(
@@ -3484,6 +3720,39 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=MATH_V9_FORMAT_REPAIR_WEIGHT,
         help="Sample fraction for hard_math_recurrence_v9 format-repair math rows.",
+    )
+    parser.add_argument(
+        "--math-v10-hard-verified-full-solution-weight",
+        type=float,
+        default=MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help=(
+            "Sample fraction for hard_math_runlength_dp_v10 run-length DP "
+            "full-solution rows."
+        ),
+    )
+    parser.add_argument(
+        "--math-v10-verified-full-solution-weight",
+        type=float,
+        default=MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT,
+        help=(
+            "Sample fraction for hard_math_runlength_dp_v10 broad verified "
+            "full-solution rows."
+        ),
+    )
+    parser.add_argument(
+        "--math-v10-final-answer-aux-weight",
+        type=float,
+        default=MATH_V10_FINAL_ANSWER_AUX_WEIGHT,
+        help=(
+            "Sample fraction for hard_math_runlength_dp_v10 final-answer-only "
+            "auxiliary math rows."
+        ),
+    )
+    parser.add_argument(
+        "--math-v10-format-repair-weight",
+        type=float,
+        default=MATH_V10_FORMAT_REPAIR_WEIGHT,
+        help="Sample fraction for hard_math_runlength_dp_v10 format-repair math rows.",
     )
     # task040 Session 2: W1 curriculum sampler wiring. Off by default
     # (as_is = passthrough). Operators opt in via --curriculum-policy.

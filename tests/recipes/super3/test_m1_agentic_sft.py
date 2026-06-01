@@ -30,6 +30,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_SUPERVISION_STRATEGY_V7,
     MATH_SUPERVISION_STRATEGY_V8,
     MATH_SUPERVISION_STRATEGY_V9,
+    MATH_SUPERVISION_STRATEGY_V10,
     MATH_V3_FINAL_ANSWER_AUX_WEIGHT,
     MATH_V3_FORMAT_REPAIR_WEIGHT,
     MATH_V3_VERIFIED_FULL_SOLUTION_WEIGHT,
@@ -57,6 +58,15 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     MATH_V9_FORMAT_REPAIR_WEIGHT,
     MATH_V9_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
     MATH_V9_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V10_FINAL_ANSWER_AUX_WEIGHT,
+    MATH_V10_FORMAT_REPAIR_WEIGHT,
+    MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT,
+    MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS,
+    MATH_V10_SIGNAL_COUNTING_PROMPT,
+    MATH_V10_SIGNAL_DP_OR_RECURRENCE,
+    MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT,
+    MATH_V10_SIGNAL_SEQUENCE_OBJECT,
+    MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT,
     TOOL_CALLING_SYSTEM_PROMPT,
     USED_IN_TAG,
     build_blend,
@@ -67,6 +77,7 @@ from nemotron.recipes.super3.milestones.m1_agentic_sft.prepare_m1_agentic_sft im
     is_hard_math_precision_row,
     is_hard_math_recovery_row,
     is_hard_math_recurrence_row,
+    is_hard_math_runlength_dp_row,
     load_difficulty_signal,
     prepare,
     sample_rows_by_fraction,
@@ -1821,6 +1832,170 @@ def test_prepare_hard_math_recurrence_v9_keeps_clean_dp_counting_rows(tmp_path) 
     report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
     assert "## Math hard recurrence v9 buckets" in report_md
     assert "| hard_verified_full_solution | 1 | 1 | 1.0 | 1.0 |" in report_md
+
+
+def test_prepare_hard_math_runlength_dp_v10_targets_binary_chair_rows(tmp_path) -> None:
+    m0_root = tmp_path / "m0"
+
+    def write_split(environment: str, split: str, records: list[dict]) -> None:
+        env_dir = m0_root / environment
+        env_dir.mkdir(parents=True, exist_ok=True)
+        with (env_dir / f"{split}-split.jsonl").open("w", encoding="utf-8") as f:
+            for record in records:
+                json.dump(record, f)
+                f.write("\n")
+
+    dp_counting = _base_record("math_competition_numeric")
+    dp_counting["expected_answer"] = "907"
+    dp_counting["responses_create_params"]["input"][-1]["content"] = (
+        "How many ways are there to choose 8 occupied chairs from 16 chairs "
+        "arranged in a row if no occupied chair has two occupied neighbors? "
+        "Equivalently, count binary strings of length 16 with exactly 8 ones "
+        "and no three consecutive ones, then give the remainder modulo 1000."
+    )
+    dp_counting["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Encode occupied chairs by ones and empty chairs by zeroes.",
+            "Let dp[i][j][r] be the number of prefixes of length i with j ones.",
+            "The state variable r is the trailing run length of consecutive ones.",
+            "Placing zero resets the trailing run length to zero.",
+            "Placing one is allowed only when r is less than two.",
+            "This transition gives a dynamic programming recurrence over small states.",
+            ("The dynamic programming table records each prefix length, selected "
+             "chair count, and trailing run length before moving to the next "
+             "position. " * 36).strip(),
+            "Summing the final states gives 2907, so the remainder is 907.",
+            r"Therefore the final answer is \boxed{907}.",
+        ]
+    )
+
+    gap_counting = _base_record("math_competition_numeric")
+    gap_counting["expected_answer"] = "171"
+    gap_counting["responses_create_params"]["input"][-1]["content"] = (
+        "How many ways can we form binary sequences of length 18 with exactly "
+        "7 ones that do not contain adjacent ones? Interpret the combinatorial "
+        "answer as arranging selected seats in a row with no two adjacent "
+        "selected seats."
+    )
+    gap_counting["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "First place the seven selected seats as one blocks.",
+            "There are six internal gaps that must each contain at least one zero.",
+            "After reserving these internal gaps, distribute the remaining zeros.",
+            r"This gap argument gives the binomial count \binom{12}{7}.",
+            "The same case split can be read as choosing gaps around the blocks.",
+            ("The blocks-and-gaps decomposition preserves the adjacency "
+             "constraint while counting every binary sequence exactly once. " * 38).strip(),
+            r"The value is 171, so the final answer is \boxed{171}.",
+        ]
+    )
+
+    v9_only = _base_record("math_competition_numeric")
+    v9_only["expected_answer"] = "293"
+    v9_only["responses_create_params"]["input"][-1]["content"] = (
+        "How many ways can a recursive procedure choose labeled algebraic "
+        "operations from several integer operation families, when the procedure "
+        "tracks the run length of repeated operation types and reports a final "
+        "scalar value?"
+    )
+    v9_only["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Let a recurrence track the current operation family.",
+            "The run length is updated after each recursive choice.",
+            "A state records the previous operation type and current run length.",
+            "The transition either starts a new operation type or extends the run.",
+            ("This recurrence counts labeled algebraic operation histories and "
+             "keeps integer coefficients separate from the final scalar. " * 42).strip(),
+            r"Evaluating the recurrence gives the final answer \boxed{293}.",
+        ]
+    )
+
+    broad_clean = _base_record("math_competition_numeric")
+    broad_clean["expected_answer"] = "812"
+    broad_clean["responses_create_params"]["input"][-1]["content"] = (
+        "Determine the value of a polynomial expression with integer "
+        "coefficients after substituting several divisor and remainder "
+        "conditions, and report the final scalar value."
+    )
+    broad_clean["extra_env_info"]["reference_solution"] = "\n".join(
+        [
+            "Expand the polynomial expression.",
+            "Collect like terms.",
+            "Use the divisor condition to simplify the integer coefficients.",
+            "Apply the remainder condition to reduce the expression.",
+            "Evaluate the resulting scalar.",
+            ("The algebraic simplification preserves the polynomial identity "
+             "across every term and coefficient. " * 42).strip(),
+            r"Therefore the final answer is \boxed{812}.",
+        ]
+    )
+
+    converted_dp = convert_m0_record(dp_counting, split="train")
+    converted_gap = convert_m0_record(gap_counting, split="train")
+    converted_v9_only = convert_m0_record(v9_only, split="train")
+    converted_broad = convert_m0_record(broad_clean, split="train")
+    assert is_hard_math_runlength_dp_row(converted_dp) is True
+    assert is_hard_math_runlength_dp_row(converted_gap) is True
+    assert is_hard_math_recurrence_row(converted_v9_only) is True
+    assert is_hard_math_runlength_dp_row(converted_v9_only) is False
+    assert is_hard_math_clean_final_row(converted_broad) is True
+    assert is_hard_math_runlength_dp_row(converted_broad) is False
+
+    write_split(
+        "math_competition_numeric",
+        "train",
+        [dp_counting, gap_counting, v9_only, broad_clean],
+    )
+    write_split("math_competition_numeric", "val", [])
+
+    class Args:
+        m0_input_dir = m0_root
+        output_dir = tmp_path / "out"
+        m0_health_baseline = None
+        max_records_per_env = None
+        max_val_shadow_per_env = None
+        overwrite = False
+        math_supervision_strategy = MATH_SUPERVISION_STRATEGY_V10
+        math_v10_hard_verified_full_solution_weight = MATH_V10_HARD_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v10_verified_full_solution_weight = MATH_V10_VERIFIED_FULL_SOLUTION_WEIGHT
+        math_v10_final_answer_aux_weight = MATH_V10_FINAL_ANSWER_AUX_WEIGHT
+        math_v10_format_repair_weight = MATH_V10_FORMAT_REPAIR_WEIGHT
+        decontaminate_math_against_corpus = None
+        skip_math_decontamination_check = True
+
+    manifest = prepare(Args())
+
+    assert manifest["math_supervision_strategy"] == MATH_SUPERVISION_STRATEGY_V10
+    assert manifest["math_decontamination"]["strategy_requires_corpus"] is True
+    assert manifest["math_decontamination"]["skip_check"] is True
+    bucket_info = manifest["math_hard_runlength_dp_v10"]["buckets"]
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["source_rows"] == 2
+    assert bucket_info[MATH_BUCKET_HARD_VERIFIED_FULL_SOLUTION]["rows"] == 2
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["source_rows"] == 2
+    assert bucket_info[MATH_BUCKET_VERIFIED_FULL_SOLUTION]["rows"] == 0
+
+    hard_filter = manifest["math_hard_runlength_dp_v10"]["hard_filter"]
+    signal_counts = hard_filter["run_length_dp_filter"]["source_signal_bucket_counts"]
+    assert signal_counts[MATH_V10_SIGNAL_COUNTING_PROMPT] == 2
+    assert signal_counts[MATH_V10_SIGNAL_SEQUENCE_OBJECT] == 2
+    assert signal_counts[MATH_V10_SIGNAL_RUN_LENGTH_CONSTRAINT] == 2
+    assert signal_counts[MATH_V10_SIGNAL_DP_OR_RECURRENCE] == 1
+    assert signal_counts[MATH_V10_SIGNAL_CASE_SPLIT_COMBINATORICS] == 1
+
+    hard_rows = [
+        json.loads(line)
+        for line in (Args.output_dir / "agentic_sft_v0_math_hard_verified_full_solution_train.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert {row["metadata"]["m0_expected_answer"] for row in hard_rows} == {"907", "171"}
+    assert {
+        row["metadata"]["final_answer_supervision"]["strategy"] for row in hard_rows
+    } == {MATH_SUPERVISION_STRATEGY_V10}
+
+    report_md = (Args.output_dir / "report.md").read_text(encoding="utf-8")
+    assert "## Math hard run-length DP v10 buckets" in report_md
+    assert "| hard_verified_full_solution | 2 | 2 | 1.0 | 1.0 |" in report_md
 
 
 def test_convert_tool_record_attaches_tool_call_ids() -> None:
