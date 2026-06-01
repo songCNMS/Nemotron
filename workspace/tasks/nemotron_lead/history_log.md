@@ -1696,5 +1696,18 @@
   base-vs-FT comparison proving
   `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
   30B/8-GPU scale remains blocked.
+- Marked worker_2's #327 closeout mailbox message read after processing.
+- Sent delivered peer_send to worker_2 assigning
+  `task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` and requiring mailbox
+  acceptance with branch/head/PR or blocker, exact commands/environment,
+  artifact paths, local prep pass/fail, and readiness for lead review before
+  any training continuation.
+- Sent delivered peer_send to coordinator with:
+  - #327 mergedAt/mergeCommit/head and worker_2 closeout head;
+  - task248 artifact status, commands/environment, blocker, and not-ready
+    disposition for task243;
+  - lead branch state and task251 assignment/branch/PR plan;
+  - unchanged accepted Qwen3-4B base protocol `11/30`;
+  - first task251 measurable gate and global `NO-GO/HOLD`.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
