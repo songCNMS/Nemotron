@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task244_qwen_aime_v10_contam_regression_review_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/318 |
-| Session | 1 |
-| Progress | Initial independent V10 contamination/regression review matrix pushed in PR #318. Current upstream V10 inputs are blocked or held because reviewable implementation/runbook evidence is absent. |
+| Session | 2 |
+| Progress | Lead confirmed PR #318 is open/clean and task243 PR #319 now exists; task244 remains in review/hold pending task241/task242 PRs and task243 #319 path correction to the required `/mnt/cephfs` Qwen3-4B checkpoint. |

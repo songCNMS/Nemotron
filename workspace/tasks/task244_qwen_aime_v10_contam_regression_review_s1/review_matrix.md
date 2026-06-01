@@ -111,3 +111,12 @@ evidence needed to approve a pilot result.
 
 No upstream V10 PR should be approved for merge or trusted pilot scoring until
 the missing evidence above is present and independently re-reviewed.
+
+## Session 2 Hold Note
+
+After this initial matrix, task243 PR #319 appeared with base-vs-FT gate
+code/protocol at head `bfb49a86e7e0976da681aff4fedad02a22e0a848`. Lead
+reported that #319 still needs a path correction from `/mnt/3fs` to the
+required `/mnt/cephfs` Qwen3-4B checkpoint before approval. This note updates
+availability only; the matrix remains on hold and should be refreshed after
+task241/task242 PRs appear and task243 updates #319.
