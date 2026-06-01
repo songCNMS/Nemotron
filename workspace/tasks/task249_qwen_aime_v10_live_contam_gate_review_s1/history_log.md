@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -92,6 +92,32 @@
   in-progress/HOLD until that current #324 evidence is available for review.
 - Did not perform the final matrix refresh in this session because the
   refreshed #324 current-head report is the required input.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, first
+  go/no-go approval, or shared file deletion was performed.
+
+## Session 6 - Current main refresh after task247 merge
+
+- Fetched current `origin/main` and PR refs for #324, #325, and #326.
+- Verified task247 PR #326 is MERGED into `origin/main` at
+  `85f2bf5c11062741388ca114a84a2c26535b7df9`, with merged head
+  `8fb34bd9116e32aa8d191750f2510d2a843e0da5` and merged time
+  2026-06-01T17:21:29Z.
+- Recorded task247 as APPROVE base artifact: lead approval comment verifies
+  Qwen3-4B base AIME2025 score `11/30 = 0.36666666666666664`, 30/30 requests
+  ok, parsed 23/30, and endpoint manifest serving
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+- Verified task246 PR #325 is OPEN/CLEAN at
+  `afc276932897743f6b6b5b8aab4c390905cb55f1`; real corpus/M0 evidence exists,
+  but lead keeps REQUEST_CHANGES/HOLD because top manifest sha256 is
+  inconsistent (`9e5bbc...` reported versus direct `add38e...`).
+- Verified task250 PR #324 is OPEN/CLEAN at
+  `cd4555199ff67eace4d40d4418eef38511786143`, but lead comment keeps it
+  REQUEST_CHANGES/HOLD because the runbook is stale after #325/#326.
+- Updated `live_gate_review_matrix.md`: task246 REQUEST_CHANGES/HOLD, task247
+  APPROVE base artifact, task248 APPROVE blocked-before-prep report/HOLD,
+  task250 REQUEST_CHANGES/HOLD, combined first Qwen3-4B V10 go/no-go
+  NO-GO/HOLD.
 - Scope remained review-only: no product code edits, training, live eval,
   endpoint launch, NemTron sync, merge, main push, branch rewrite, first
   go/no-go approval, or shared file deletion was performed.

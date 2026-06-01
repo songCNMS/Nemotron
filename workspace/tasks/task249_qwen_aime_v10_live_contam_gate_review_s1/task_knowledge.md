@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,17 @@
     worker_5 is refreshing #324 against #323@`68a8ee77ee25f5dbbac170c935e8487b88198ce2`.
     Keep #323 in-progress/HOLD and only refresh the matrix when the refreshed
     #324 current-head evidence is available.
+11. At Session 6, task247 PR #326 is merged into current `origin/main` at
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`; accepted base score is
+    `11/30 = 0.36666666666666664` under the same-harness Qwen3-4B AIME2025
+    pilot.
+12. At Session 6, task246 PR #325 is OPEN/CLEAN at
+    `afc276932897743f6b6b5b8aab4c390905cb55f1` and publishes real corpus/M0
+    evidence, but remains REQUEST_CHANGES/HOLD until the top manifest checksum
+    mismatch is corrected or accepted.
+13. At Session 6, task250 PR #324 is OPEN/CLEAN at
+    `cd4555199ff67eace4d40d4418eef38511786143`, but its runbook is stale
+    against task246 #325 and merged task247 #326.
+14. The combined go/no-go remains NO-GO/HOLD until task246 correction is
+    accepted, task248 candidate artifacts exist, and task243 same-harness
+    base-vs-FT comparison proves non-regression.
