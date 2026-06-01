@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task249_qwen_aime_v10_live_contam_gate_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=task249_qwen_aime_v10_live_contam_gate_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
 | Current Task | task249_qwen_aime_v10_live_contam_gate_review_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/323 |
-| Session | 11 |
-| Progress | Lead approved task249/#323 final static review, but self-merge is gated on task250/#324 being merged first. Verified #323 remains OPEN/CLEAN at `fbca7c9068b3d847ee24a2bff666f6a88fe380b4`; verified #324 is still OPEN/CLEAN but not merged at `920d5a3e6f38ec7b059cb0f46c3fbc59a53b7d7e`. Kept #323 HOLD/no merge. Combined first Qwen3-4B V10 gate remains NO-GO/HOLD because task248 FT artifacts and task243 comparison output are missing. No implementation, training, live eval, endpoint launch, shared deletion, direct main push, or 30B scale action. |
+| Session | 12 |
+| Progress | Completed task249/#323 final static review PR merge after lead gate and task250/#324 merge. Verified #323 was OPEN/CLEAN at `4125124dafb2a98514c18e24d63045e90f473fcb`, #324 was MERGED at `ff28538c41620a6d8b75b33d70c0c5e69714f42e`, then merged #323 via PR at 2026-06-01T18:19:00Z with merge commit `ec467724c2876211cd2bf56b15071e31abd692a4`. Later task265 read-only matrix refresh for #335/#336 was reported by mailbox `7e718a2c0ea746ed81352db5b5b6fe57`; no code edits, implementation PR, merge, training/eval, AIME25 train data, promotion, or 30B/8-GPU action were performed. |

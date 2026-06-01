@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0 - Assigned
 
@@ -232,3 +232,27 @@
 - Scope remained review-only: no implementation, training, live eval, endpoint
   launch, shared deletion, direct `main` push, branch rewrite, first go/no-go
   approval, or 30B scale action was performed.
+
+## Session 12 - Final merge and later review bookkeeping
+
+- Received lead update that task250 PR #324 is MERGED at
+  `ff28538c41620a6d8b75b33d70c0c5e69714f42e` from head
+  `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`, with merge time
+  2026-06-01T18:12:43Z.
+- Verified task249 PR #323 remained OPEN/CLEAN on base `main` at
+  `4125124dafb2a98514c18e24d63045e90f473fcb` before merge.
+- Confirmed the head movement from `fbca7c9` to `4125124` was
+  status/history/task-knowledge only and did not change
+  `live_gate_review_matrix.md` or the final gate decision.
+- Merged #323 via PR, not by direct `main` push. PR #323 is MERGED at
+  2026-06-01T18:19:00Z with merge commit
+  `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Final task249 disposition: static review artifact merged; combined first
+  Qwen3-4B V10 go/no-go remained NO-GO/HOLD because task248 FT artifacts,
+  task243 same-harness base-vs-FT comparison output, and 30B/8-GPU permission
+  were still missing.
+- Later in this worker branch, completed a read-only task265 V11 matrix refresh
+  for task264/#335 and task262/#336 and reported it by mailbox
+  `7e718a2c0ea746ed81352db5b5b6fe57`. That review performed no code edits,
+  implementation PR, merge, training/eval, endpoint/export, AIME25 train data
+  use, promotion, or 30B/8-GPU work.
