@@ -1758,5 +1758,14 @@
   `/mnt/cephfs/data/processing/lei.song` deletes, no task243 comparison, no
   promotion, no 30B/8-GPU, and stop before NemTron training/FT live eval unless
   lead explicitly clears.
+- Sent delivered peer_send to coordinator with current task251 state:
+  - remote branch/head
+    `intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`
+    at `a5d48c3d565c9d60e56206b19b17a4e000d79292`;
+  - no task251 PR yet;
+  - branch diff is acceptance/docs/status only;
+  - no task251 output directory, cache/override path, source revision, row
+    counts, checksums, commands/environment, or HotpotQA pass/fail yet;
+  - task251 remains `InProgress` and global gate remains `NO-GO/HOLD`.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
