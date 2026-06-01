@@ -19,4 +19,5 @@
 - Added fail-closed V10 decontamination validation: missing, non-file, empty, skip-check, and unapproved 30B paths are rejected at planning time; generated local data-prep scripts also reject the task242 placeholder corpus marker before running.
 - Generated task-owned pilot bundle under `/work-agents/intern_nemotron_worker_2/outputs/task242_qwen_aime_v10_4b_pilot` with local data-prep, `/root` NemTron sync, remote train, eval dry-run scripts, and manifest/report artifacts.
 - Local checks passed: py_compile, focused planner pytest (`29 passed`), ruff, and `git diff --check`.
+- Opened PR #321 to `main`: https://github.com/songCNMS/Nemotron/pull/321.
 - Did not run training, live eval, or 30B/8-GPU scale; blockers are the real held-out decontamination corpus, task241 V10 data-prep merge, and task243 same-harness base/FT AIME evidence.

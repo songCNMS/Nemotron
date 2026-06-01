@@ -1,6 +1,6 @@
 # task242_qwen_aime_v10_planner_smoke_s1 - Qwen AIME V10 planner and smoke scripts
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 

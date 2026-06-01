@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task242_qwen_aime_v10_planner_smoke_s1 |
-| PR | N/A |
+| PR | https://github.com/songCNMS/Nemotron/pull/321 |
 | Session | 2 |
-| Last Update | 2026-06-01T16:00:42Z: Implemented V10 planner/Qwen3-4B smoke bundle locally; checks passed; PR creation pending after commit/push. |
+| Last Update | 2026-06-01T16:03:24Z: Opened PR #321 for V10 planner/Qwen3-4B smoke bundle; waiting for review/gate, no training or 30B scale launched. |
