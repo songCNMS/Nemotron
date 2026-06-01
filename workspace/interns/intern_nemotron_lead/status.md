@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task251 branch a5d48c3 visible, no PR/artifacts yet; #327 merged; gate HOLD |
+| PR | task251 acceptance mailbox processed at a5d48c3, no PR/artifacts yet; gate HOLD |
 | Session | 53 |

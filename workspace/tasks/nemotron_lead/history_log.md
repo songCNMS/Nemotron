@@ -1739,5 +1739,24 @@
   remains branch/head/PR or blocker plus cache/override path, source revision,
   row counts, checksums, commands/environment, and pass/fail for getting past
   HotpotQA.
+- Received worker_2 mailbox acceptance for task251:
+  - branch
+    `intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`;
+  - base `origin/main`
+    `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`;
+  - lead docs imported from
+    `origin/intern_nemotron_lead/session1-recovery-task-docs`
+    `3c9ce4433479b73d98c517e8fecb2ced26124fb8`;
+  - acceptance commit pushed at
+    `a5d48c3d565c9d60e56206b19b17a4e000d79292`;
+  - current worker plan is to inspect the HotpotQA loader/registry path,
+    implement the smallest task-owned standard-format cache or registry
+    override, and rerun task248 local prep only to the local
+    artifact/pass-fail boundary.
+- worker_2 explicitly acknowledged the task251 boundaries: Qwen3-4B only, no
+  AIME25 train prompts/labels, no shared
+  `/mnt/cephfs/data/processing/lei.song` deletes, no task243 comparison, no
+  promotion, no 30B/8-GPU, and stop before NemTron training/FT live eval unless
+  lead explicitly clears.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
