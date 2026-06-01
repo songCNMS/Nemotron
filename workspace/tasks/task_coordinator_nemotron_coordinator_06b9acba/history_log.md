@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Session 0 - Created with coordinator
 
@@ -440,3 +440,19 @@
   - V11 must repair data, prove base-load/import, use nonzero LR, pass non-AIME canary before AIME, and use same-harness FT-vs-base comparison before any claim.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified docs, lack of visible worker branches/PRs, partial local acceptance observation, and unchanged global gate.
 - Confirmed first measurable V11 gate remains `NO-GO/HOLD`: no task262-task266 evidence exists yet, no new training/eval clearance exists, AIME2025 train data remains prohibited, no promotion is allowed, and 30B/8-GPU remains blocked.
+
+## Session 36 - V11 acceptance branches tracked
+
+- Received `intern_nemotron_lead` Session 66 V11 acceptance tracking update: lead branch was reported at `09899c9e9a074c706cfd46ab090a8f71e7a9399c`; worker_4 task265 mailbox `997dc26765a6448296134492f7d5e166` was processed as read-only review gate acceptance; task262/task264/task265/task266 branches were visible; worker_2 task263 still needed remote branch or exact blocker in the lead snapshot; global gate remained `NO-GO/HOLD`.
+- Fetched `origin` and found the lead branch had advanced to `ec7f1e3f2557084801053bcf47da784bc868f108` with a lead-history-only update recording the earlier coordinator acceptance update. `origin/main` remains `513fefa1f1ace94302b56413769c78fb7224624c`.
+- Verified all five V11 worker branches are now visible:
+  - task262 worker_1 `origin/intern_nemotron_worker_1/task262_qwen_aime_v11_data_split_sidecar_s1` at `e8c0df6f7c5885d5ace704e2f03b8ce77fc77bc3`;
+  - task263 worker_2 `origin/intern_nemotron_worker_2/task263_qwen_aime_v11_base_load_planner_sanity_s1` at `4af57e0e61703a063c1ef42def44119a7eea5cf9`;
+  - task264 worker_3 `origin/intern_nemotron_worker_3/task264_qwen_aime_v11_eval_gate_canary_retention_s1` at `b2a67412c412b7dd2f3f775f029049b49eef7a7b`;
+  - task265 worker_4 `origin/intern_nemotron_worker_4/task265_qwen_aime_v11_contam_regression_review_s1` at `513fefa1f1ace94302b56413769c78fb7224624c`;
+  - task266 worker_5 `origin/intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1` at `f5ddc6e780f7a2182caa92dabe8602cecd3603b5`.
+- Verified `git diff --check origin/main...<branch>` passes for all five visible branches. Diff scope is acceptance status plus task docs for task262, task263, task264, and task266; task265 is identical to `origin/main` and relies on the lead-processed mailbox acceptance.
+- Verified GitHub PR search for `task262 OR task263 OR task264 OR task265 OR task266` returns `[]`; no task262-task266 PR is visible yet.
+- Read local worker status files as observation only: worker_1 and worker_2 are `Working`; worker_2 notes local `megatron.bridge` is missing on this host and real Bridge import proof must run in a NemTron/NeMo environment; worker_3 and worker_5 local statuses say task264/task266 reports are completed but no matching remote PR or formal lead-processed gate report is visible in coordinator evidence; worker_4 local status is stale on task249 despite official task265 mailbox acceptance.
+- Sent a delivered coordinator update to `intern_nemotron_lead` reporting that task263 is now visible, all task262-task266 visible branches pass diff-check, no task262-task266 PRs are visible, local status observations are not gate evidence, and the global Qwen AIME gate remains `NO-GO/HOLD`.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: accepted Qwen3-4B corrected same-harness AIME25 base is still `11/30 = 0.36666666666666664`; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.

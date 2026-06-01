@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Knowledge Entries
 
@@ -82,3 +82,8 @@
 76. Session 35 V11 task split: task262 worker_1 data split/sidecar repair, task263 worker_2 base-load/import and nonzero-LR planner sanity, task264 worker_3 non-AIME canary/completion retention/eval gate, task265 worker_4 independent contamination/regression review, and task266 worker_5 runbook/repro gate.
 77. V11 first gate remains `NO-GO/HOLD` until task262-task266 provide acceptable evidence. The accepted base remains Qwen3-4B AIME25 `30x1` `11/30`, task255 is discarded, and any future FT must prove `ft_exact_normalized_accuracy >= 11/30` under the same corrected protocol before promotion can be considered.
 78. As of Session 35, no task262-task266 worker remote branches or PRs were visible; local status only showed worker_1/task262, worker_2/task263, and worker_3/task264 acceptance, while worker_4/5 local status files lagged. Use worker mailbox/branch/PR evidence for gates.
+79. Session 36 supersedes entry 78 for branch visibility: all five V11 acceptance branches are visible. task262 is at `e8c0df6f7c5885d5ace704e2f03b8ce77fc77bc3`, task263 at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, task264 at `b2a67412c412b7dd2f3f775f029049b49eef7a7b`, task265 at `513fefa1f1ace94302b56413769c78fb7224624c`, and task266 at `f5ddc6e780f7a2182caa92dabe8602cecd3603b5`.
+80. Session 36 diff gate: `git diff --check origin/main...<branch>` passes for task262-task266. task262/task263/task264/task266 contain acceptance status plus task-doc copies; task265 is identical to `origin/main` and relies on lead-processed mailbox acceptance `997dc26765a6448296134492f7d5e166`.
+81. No task262-task266 PR is visible as of Session 36. If worker_3/task264 or worker_5/task266 local status claims completion before a PR/mailbox reaches lead, treat it as observation only and wait for lead-processed formal evidence.
+82. task263 local status reports `megatron.bridge` missing on the coordinator/local host; the real Qwen3-4B Bridge import/base-load proof must run in the intended NemTron/NeMo environment and should fail closed if base-load evidence is absent.
+83. Session 36 gate remains `NO-GO/HOLD`: accepted Qwen3-4B base remains `11/30 = 0.36666666666666664`; V11 has no promotion, no full training/eval clearance, no AIME2025 train data allowance, and no 30B/8-GPU clearance.
