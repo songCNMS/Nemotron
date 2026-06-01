@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -21,3 +21,5 @@
 7. A future implementation task is actionable only after a newer approved
    launcher package or benchmark-owner written equivalence contract supplies
    exact task names for one or more missing M1 targets.
+8. The #313 main refresh added task239 as an independent audit assignment, but
+   did not add completed audit findings or new launcher mapping evidence.

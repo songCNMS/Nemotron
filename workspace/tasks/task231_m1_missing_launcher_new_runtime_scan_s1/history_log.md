@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - 2026-06-01 UTC - Recovery task created by team lead
 
@@ -40,3 +40,20 @@
   reply was sent.
 - No new evidence scan, endpoint, eval, benchmark, Docker, install, download,
   product-code edit, direct main push, or merge was performed.
+
+## Session 3 - 2026-06-01 UTC - Refresh after #313 main merge
+
+- Lead reported #313 merged into `main` and PR #315 became
+  conflicting/dirty at old head `63201eb`.
+- Fetched current `origin/main` at `a35f61f` and merged it into the PR branch
+  without merging PR #315.
+- Resolved only task231 docs/status closeout conflicts:
+  `README.md`, `history_log.md`, and `task_knowledge.md`.
+- Preserved the original task231/task228 disposition:
+  `close as blocked/HOLD`; no new implementation task was created.
+- Main refresh added independent audit task `task239_task231_independent_evidence_audit_s1`
+  assigned to `intern_nemotron_worker_4`, but it is only an audit assignment
+  and does not add new launcher mapping evidence.
+- No endpoint, eval, benchmark, Docker, install, download, model copy,
+  artifact upload, product-code edit, direct main push, or PR merge was
+  performed.
