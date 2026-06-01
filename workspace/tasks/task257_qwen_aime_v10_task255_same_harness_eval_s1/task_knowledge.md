@@ -21,3 +21,7 @@
    closeout, use `Idle` and clear `Current Task` rather than recording
    `ReadyForPR`. This compliance correction does not change the task257
    artifacts, score, PR, or gate disposition.
+7. PR #330 merged at `2026-06-01T21:11:42Z` with merge commit
+   `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f` from approved head
+   `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`. Any later worker-branch
+   closeout commit is bookkeeping only and does not alter the merged result.

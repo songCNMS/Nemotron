@@ -74,3 +74,16 @@
   closeout PR, and the task257 result/disposition is unchanged: FT `0/30`
   exact-normalized versus accepted base `11/30`, so FAIL versus base, with
   global NO-GO/HOLD because task256 records REQUEST_CHANGES/HOLD.
+
+## Session 2 - 2026-06-01 UTC - Post-merge closeout
+
+- After refreshed lead approval for exact head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`, verified PR #330 was still
+  OPEN/CLEAN with that head and merged it.
+- PR #330 merged at `2026-06-01T21:11:42Z` with merge commit
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- Marked task257 Completed on the worker branch for branch-only closeout
+  bookkeeping. This post-merge branch record does not change the merged PR
+  result: FT `0/30` remains below the accepted base `11/30`, so no promotion
+  and global NO-GO/HOLD remain in force because task256 records
+  REQUEST_CHANGES/HOLD.
