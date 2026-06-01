@@ -1,6 +1,19 @@
 # task256_qwen_aime_v10_task255_artifact_review_s1 - task255 artifact review
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_5,SESSION=0 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+
+## Closeout
+
+worker_5 reported `REQUEST_CHANGES/HOLD` for using the task255 artifact in
+task243/task257. The task255 report and logs are internally consistent, but the
+checkpoint and HF export directories under `/root/task255_...` were not
+present/readable from worker_5's review environment. Independent artifact
+integrity/loading therefore cannot be approved until worker_2 provides a
+reviewer-accessible artifact bundle, manifest, or explicit blocker.
+
+Lead disposition: #329 remains `HOLD` and is not approved for merge. task257
+results, if any, must be treated as blocked/observed-only until the artifact
+access issue is resolved.
 
 ## Background
 

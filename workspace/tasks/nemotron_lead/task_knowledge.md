@@ -98,3 +98,12 @@
 92. worker_2 official task255 closeout confirms `PASS_ARTIFACT_READY_FOR_REVIEW`, but #329 is still not approved until task256 artifact review and task257/task243 same-harness AIME comparison complete.
 93. task256 acceptance branch `b62c28e17318770f515489afb63bddc21b47584b` and task257 acceptance branch `6c9e2e53ab598619f02badc134b028553446066c` prove current review/eval ownership only; neither is final gate evidence yet.
 94. A live task257 FT AIME run in progress is not gate evidence until result files and a worker report exist; even a passing score must stay HOLD if task256 has not approved the task255 artifact.
+95. task256 request-changed #329 because task255 checkpoint/export paths under
+   `/root/task255_...` were not reviewer-accessible to worker_5; #329 stays
+   HOLD until worker_2 provides reviewer-readable artifact evidence or an
+   accepted blocker.
+96. Lead read-only monitoring observed task257 FT AIME25 `0/30 = 0.0`, parsed
+   `0/30`, below accepted base `11/30`; treat this as observed failure pending
+   official worker_3 closeout, not as promotion evidence.
+97. task258 is an artifact-access follow-up only. It must not train, export
+   again, run AIME/task243, promote, or clear 30B/8-GPU.

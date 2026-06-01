@@ -1,6 +1,18 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - task255 AIME gate
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_3,SESSION=0 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+
+## Lead Gate Update
+
+Lead read-only monitoring observed a task257 FT AIME2025 output directory for
+task255, but no official worker_3 mailbox closeout/report has arrived yet.
+Observed summary is `0/30 = 0.0` exact-normalized, parsed `0/30`, finish
+reasons `stop=7` and `length=23`, which is below the accepted base `11/30`.
+
+This is not a final task257 closeout until worker_3 reports officially. It also
+cannot become PASS because task256 currently request-changes task255 artifact
+access. Current lead disposition: `NO-GO/HOLD`, with observed FT failure
+pending official task257 report.
 
 ## Background
 

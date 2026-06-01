@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Session 0 - Assigned
 
@@ -13,3 +13,37 @@
   `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001`.
 - Boundaries: no training, no AIME train data, no promotion, no 30B/8-GPU, and
   no final PASS if task256 blocks or requests changes on artifact integrity.
+
+## Session 1 - 2026-06-01 UTC - Read-only FT failure observed
+
+- No official worker_3 task257 mailbox closeout/report has arrived yet.
+- Remote branch remains
+  `origin/intern_nemotron_worker_3/task257_qwen_aime_v10_task255_same_harness_eval_s1`
+  at acceptance head `6c9e2e53ab598619f02badc134b028553446066c`; diff from
+  `origin/main` is worker status plus task257 docs only.
+- Lead read-only output check found:
+  `/work-agents/intern_nemotron_worker_3/outputs/task257_qwen_aime_v10_task255_same_harness_eval_s1/ft_eval/task255_ft_aime2025_30x1_20260601T204900Z/`.
+- File hashes:
+  - `summary.json` sha256
+    `ba3dd7b10af3fbafd678df434602b3bee0e829a357025e38e5109cbed7367e6e`;
+  - `results.jsonl` sha256
+    `e4d4ba6ece47e0dff6693066488ebba7461fd12fb8ad6dc26741bb931030f5e6`;
+  - `endpoint_model_manifest.json` sha256
+    `710bb2db20296762ebb6951db566abfcab90bb406e10ef7b2b548fead06f35d9`;
+  - `command.txt` sha256
+    `e82f9f50e2aaad46d7aa54334ab422022c2d45444aa13ec13114ad4968bb902d`.
+- Observed protocol/result:
+  - model `task255-qwen3-4b-v10-ft-iter0000001`;
+  - AIME25 original prompt, max tokens `8192`, temperature `0.0`,
+    top_p `1e-05`, 30 rows;
+  - status `ok` for 30/30 requests;
+  - finish reasons: `stop=7`, `length=23`;
+  - parsed rows `0/30`;
+  - correct rows `0/30`;
+  - exact-normalized accuracy `0.0`.
+- This is below the accepted Qwen3-4B base score `11/30 =
+  0.36666666666666664`; lead records the read-only observed result as
+  `FAIL observed, official worker_3 report pending`.
+- Because task256 currently request-changes task255 artifact accessibility,
+  task257 cannot produce a final PASS regardless of score. Global Qwen AIME
+  gate remains `NO-GO/HOLD`, no promotion, no 30B/8-GPU.

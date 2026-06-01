@@ -2695,3 +2695,52 @@
 - task256 has no approval/request-changes/block report yet. Any task257 PASS
   remains held until task256 accepts artifact integrity.
 - #329 remains open/clean and pending. Global gate remains `NO-GO/HOLD`.
+
+## Session 64 - 2026-06-01 UTC - task256 request-changes and task257 observed failure
+
+- Read lead mailbox before coordination; unread list was empty. Full mailbox
+  history confirmed worker_5 task256 closeout
+  `8b66dd0ff9d7430ab4f01d537760e0e4`; lead marked it read.
+- task256 worker_5 report:
+  - branch
+    `origin/intern_nemotron_worker_5/task256_qwen_aime_v10_task255_artifact_review_s1`
+    at `9b77d7ee57293697860095791ad7e6661241abca`;
+  - recommendation `REQUEST_CHANGES/HOLD`;
+  - reviewed #329 exact head
+    `d62036e405edc5daa322c09bb89da19b176bb7bf`;
+  - task255 report sha256 matched
+    `3893af84bfdb4d78c4f31074a8454b2fa2bab2d69cfec71c42a36b75c49e7686`;
+  - logs/inventories were internally consistent, but checkpoint and HF export
+    directories under `/root/task255_...` were missing or unreadable from
+    worker_5.
+- Lead disposition: #329 remains open/clean but `HOLD`; no approval, merge
+  direction, promotion, or 30B/8-GPU clearance.
+- task257 worker_3 branch remains acceptance-only at
+  `6c9e2e53ab598619f02badc134b028553446066c`; no official worker_3 mailbox
+  closeout has arrived.
+- Lead read-only observed task257 output:
+  `/work-agents/intern_nemotron_worker_3/outputs/task257_qwen_aime_v10_task255_same_harness_eval_s1/ft_eval/task255_ft_aime2025_30x1_20260601T204900Z/`.
+- Observed hashes:
+  - `summary.json`
+    `ba3dd7b10af3fbafd678df434602b3bee0e829a357025e38e5109cbed7367e6e`;
+  - `results.jsonl`
+    `e4d4ba6ece47e0dff6693066488ebba7461fd12fb8ad6dc26741bb931030f5e6`;
+  - `endpoint_model_manifest.json`
+    `710bb2db20296762ebb6951db566abfcab90bb406e10ef7b2b548fead06f35d9`;
+  - `command.txt`
+    `e82f9f50e2aaad46d7aa54334ab422022c2d45444aa13ec13114ad4968bb902d`.
+- Observed task257 AIME25 score: 30 requests, `ok=30`, finish reasons
+  `stop=7` and `length=23`, parsed `0/30`, correct `0/30`,
+  exact-normalized accuracy `0.0`.
+- This is below the accepted same-harness Qwen3-4B base score `11/30 =
+  0.36666666666666664`; lead records it as read-only `FAIL observed, official
+  report pending`.
+- Created task258 for worker_2 to make task255 artifact evidence
+  reviewer-accessible, or report an exact blocker. Scope is artifact
+  access/inventory only: no training, export rerun, AIME/task243 eval,
+  promotion, 30B/8-GPU, main push, merge, or shared deletion.
+- Sent follow-up instructions to worker_3 requesting official task257 closeout
+  with paths, hashes, protocol, base comparison, and boundary confirmation.
+- Sent task258 assignment to worker_2.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; current observed candidate FT is
+  not promotable and cannot justify 30B/8-GPU scale.
