@@ -160,3 +160,6 @@
    generation degeneration/corruption rather than evaluator-only parser
    failure, but it is unpushed/unreported local evidence until worker_3 opens
    PR and sends mailbox closeout.
+114. task260 formal closeout is PR #332 at
+   `0d9193cfe5a19bb1ca1d57b9702bc0362da1b0d9`; lead approved it as read-only
+   forensic docs/status closeout, not as a promotion or go/no-go pass.
