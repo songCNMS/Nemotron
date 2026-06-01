@@ -12,3 +12,5 @@
 
 - Worker `intern_nemotron_worker_2` accepted the recovery task.
 - Fetched lead task-doc branch `origin/intern_nemotron_lead/session1-recovery-task-docs` and old read-only source branch `origin/intern_nem_dev_3/task217_mamba_causal_conv_train_stack_unblock_probe_s1`.
+- Reviewed old task217 docs, validation report, branch diff, and referenced task216/task209/task218/task219 evidence.
+- Wrote `pm_review_recovery.md` with recommendation `APPROVE_CLOSE_TASK217`.

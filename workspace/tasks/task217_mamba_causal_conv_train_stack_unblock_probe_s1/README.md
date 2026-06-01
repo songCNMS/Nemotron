@@ -1,6 +1,6 @@
 # task217_mamba_causal_conv_train_stack_unblock_probe_s1 - Mamba causal-conv PM review recovery
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPMReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Background
 
