@@ -2987,3 +2987,17 @@
   no AIME2025 train data, and no shared deletion.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; next go/no-go requires a later
   Qwen3-4B candidate and same-harness comparison against base `11/30`.
+
+## Session 76 - 2026-06-01 UTC - task260/task261 dispatched
+
+- Pushed lead branch `intern_nemotron_lead/session1-recovery-task-docs` at
+  `c866509` with task260/task261 standard docs.
+- Rechecked lead mailbox before worker contact; unread count was `0`.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_3` for
+  `task260_qwen_aime_v10_task255_eval_failure_forensics_s1`.
+- Rechecked lead mailbox before the second worker contact; unread count was
+  `0`.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_1` for
+  `task261_qwen_aime_v10_task255_data_training_root_cause_s1`.
+- Awaiting worker mailbox acceptance and read-only reports. Global Qwen AIME
+  gate remains `NO-GO/HOLD`; no promotion, no 30B/8-GPU.

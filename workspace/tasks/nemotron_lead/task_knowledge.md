@@ -146,3 +146,6 @@
 109. Worker_2 post-merge mailbox `49d1afb258cf4ae3bc4078fadf7fffa8` confirms
    #331 merged at approved head `d0a05c5e9ad37b831fd75bc9ae852cb121527f83` and
    #329 closed unmerged; global Qwen AIME gate remains `NO-GO/HOLD`.
+110. Lead branch `c866509` assigns task260 to worker_3 for task255 eval-output
+   forensics and task261 to worker_1 for data/training root-cause audit; both
+   peer_send assignments were delivered after mailbox unread checks.

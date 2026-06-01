@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task260/task261 assigned for next failure-analysis wave; gate NO-GO/HOLD |
-| Session | 75 |
+| PR | task260/task261 dispatched to workers; waiting mailbox reports; gate NO-GO/HOLD |
+| Session | 76 |
