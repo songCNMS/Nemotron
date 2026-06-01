@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
 
 ## Session 0 - Created with team lead
 
@@ -1410,5 +1410,71 @@
   for this sequencing step: worker_1/#325 and worker_3/#326 are already merged,
   and worker_2/task248 remains held until #323 closeout lands and lead
   explicitly clears 4B pilot prep/smoke.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 50 - 2026-06-01 UTC - task249 merged and task248 pilot released
+
+- Received coordinator acknowledgement that #323 remained open/mergeable after
+  #324 and that the next report should include #323 mergedAt/mergeCommit/head
+  or an exact blocker.
+- Rechecked mailbox initially: no unread messages.
+- Independently verified GitHub state:
+  - #323 `MERGED` at `2026-06-01T18:19:00Z`.
+  - #323 merge commit
+    `ec467724c2876211cd2bf56b15071e31abd692a4`.
+  - #323 merged head
+    `4125124dafb2a98514c18e24d63045e90f473fcb`.
+  - #324 remains `MERGED` at `2026-06-01T18:12:43Z`, merge commit
+    `ff28538c41620a6d8b75b33d70c0c5e69714f42e`, merged head
+    `ab2cdeb1f1426bbe05de8ab9595fcc7b42bcfa68`.
+  - #325 remains `MERGED` at
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #326 remains `MERGED` at
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Fetched `origin/main`, observing it advance from `ff28538` to
+  `ec467724c2876211cd2bf56b15071e31abd692a4`.
+- Rechecked mailbox and marked read worker_4 task249/#323 closeout report.
+- Worker_4 report matched GitHub:
+  - #323 self-merge completed at `2026-06-01T18:19:00Z`.
+  - merge commit `ec467724c2876211cd2bf56b15071e31abd692a4`.
+  - merged head `4125124dafb2a98514c18e24d63045e90f473fcb`.
+  - branch-only completion/status commit
+    `4b75aad763e3840b098192ffdc6afc1f5ea3e535` was pushed after merge.
+  - #324 prerequisite was merged first, and #323 was clean before merge.
+  - no implementation, training, live eval, endpoint launch, shared deletion,
+    direct main push, or 30B action.
+- Confirmed merged task249 matrix still holds the first Qwen3-4B V10 gate:
+  `NO-GO/HOLD` because task248 FT artifacts and task243 same-harness
+  comparison output are absent.
+- Confirmed merged task250 runbook still records #325/#326 evidence, accepted
+  Qwen3-4B base score `11/30 = 0.36666666666666664`, missing task248
+  candidate artifacts, missing task243 comparison, and blocked 30B scale.
+- Observed #322 remains open/DIRTY and is an older task243 closeout PR, not
+  the required live base-vs-FT comparison output.
+- Read task248 current report and confirmed its only remaining hold condition
+  was task249/task250 refresh/merge plus explicit lead clearance; those
+  prerequisites are now satisfied.
+- Sent delivered peer_send to worker_2 clearing task248 to resume Qwen3-4B V10
+  pilot prep/smoke only:
+  - use `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - use task246 real heldout/M0 sidecar paths;
+  - preserve Qwen tokenizer-native chat-template packing;
+  - do not train on AIME2025 prompts or labels;
+  - do not delete shared files;
+  - do not run or plan 30B/8-GPU;
+  - do not claim promotion;
+  - report branch/head/PR or artifact-only status, commands, artifact paths,
+    and whether candidate artifacts are ready for task243 comparison.
+- Current gate remains `NO-GO/HOLD`: task248 candidate FT prep/train/checkpoint
+  export/eval artifacts are not yet produced, task243 has no same-harness
+  base-vs-FT comparison proving
+  `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`, and
+  30B/8-GPU scale remains blocked.
+- Current worker usage is intentionally limited to worker_2 for the next
+  runtime step: worker_1/#325, worker_3/#326, worker_4/#323, and worker_5/#324
+  have completed their prerequisite evidence/review/runbook PRs; worker_3 will
+  be needed again for task243 comparison after task248 produces candidate FT
+  artifacts.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.

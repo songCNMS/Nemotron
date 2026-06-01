@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 live-gate wave: #324 merged at ff28538; #323 approved at 4125124 for worker_4 self-merge if still CLEAN; task248 HOLD |
-| Session | 49 |
+| PR | Qwen AIME25 live-gate wave: #323/#324 merged; task248 cleared for Qwen3-4B pilot prep/smoke only; gate HOLD |
+| Session | 50 |
