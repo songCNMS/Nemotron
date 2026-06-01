@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 2 |
-| Last Update | 2026-06-01T12:47:58Z - Received lead's first recovery audit; confirmed priority order for real unmerged recovery candidates and asked lead to create/update task docs, assign current workers, and report task/worker/PR/verification mapping. |
+| Session | 3 |
+| Last Update | 2026-06-01T12:56:57Z - Received lead recovery assignment report: PR #313 opened task docs for task231, task217, task238, task239, and task240; acknowledged delivered and asked lead to gate worker mailbox reports into disposition/review/coverage decisions. |
