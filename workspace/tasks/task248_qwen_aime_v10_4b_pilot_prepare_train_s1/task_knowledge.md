@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -12,3 +12,6 @@
 4. Local output root required by task248 is
    `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`;
    NemTron remote root is `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+5. Session 2 dependency probes found no visible task246 real corpus/input files
+   and no visible task247 base artifact files; task248 must remain blocked
+   before local prep/train until those dependencies publish artifact paths.
