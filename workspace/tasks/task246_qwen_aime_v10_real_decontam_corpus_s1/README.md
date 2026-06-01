@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - Real heldout decontam corpus
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
 
 ## Background
 
@@ -81,4 +81,16 @@ path needed by the Qwen3-4B V10 pilot.
   `20973e78f196d7e5d71993f60dc74a3500223f5f`, after PR #321.
 - Task docs source: `origin/intern_nemotron_lead/session1-recovery-task-docs`
   at `5d5e3fa`.
-- Status: accepted; corpus/input discovery in progress.
+- Status: real heldout corpus and V10 M0 sidecar input produced; PR preparation
+  in progress.
+- Output root:
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`.
+- Heldout corpus:
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`
+  (`560` rows, sha256
+  `614b2b347d33c1ec00cfd2c33222c26ad1d99b8b837bd7e48ea11fd4fedae6f9`).
+- V10 M0 input:
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar`
+  (`8` train rows, `0` val rows).
+- Leakage status: no AIME25 labels/prompts in M0 sidecar input; heldout corpus
+  is prompt-only.
