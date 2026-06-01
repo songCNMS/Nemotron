@@ -175,3 +175,15 @@
   - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
 - This was a no-transition gate check: no worker merge instruction and no coordinator escalation were sent.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+### Gate Check - 2026-06-01 UTC - External approval gate persists
+
+- Read lead mailbox and found no unread messages.
+- Rechecked PR state:
+  - #313 remained open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `c4cfe0e`, merge state `CLEAN`, blank `reviewDecision`, and no merge recorded.
+  - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
+  - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
+  - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
+- The same external #313 approval/merge gate has persisted across repeated goal turns; lead cannot proceed to worker-owned #314/#315 sequencing or #316 retarget/rebase without that external state change.
+- Workspace task status remains Working/InProgress because `nemotron_lead` is a permanent team lead lifecycle task; no worker merge instruction and no coordinator escalation were sent.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
