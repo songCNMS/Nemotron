@@ -16,4 +16,5 @@
   - old `intern_nem_dev_3` task217 -> `intern_nemotron_worker_2`, with independent follow-up audit by `intern_nemotron_worker_5`.
   - old `intern_nem_dev_2` task203/task206/task209 coverage question -> `intern_nemotron_worker_3`.
 - Created standard current-team task docs for task231 recovery, task217 PM-review recovery, task203/task206/task209 coverage audit, and independent audit tasks.
+- Opened coordination PR #313 for the lead-created recovery task docs.
 - Kept `nemotron_lead` InProgress and avoided product code changes, implementation tests, merge, and direct main push.
