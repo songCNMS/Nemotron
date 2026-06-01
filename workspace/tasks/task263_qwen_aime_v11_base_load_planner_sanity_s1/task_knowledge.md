@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -19,3 +19,15 @@
 6. Local worker host has `torch`, `transformers`, `safetensors`, `pyarrow`, and
    `omegaconf`, but no `megatron`/`megatron.bridge`; Bridge import/load proof
    must be run in a NemTron/NeMo environment or reported as that exact blocker.
+7. After refreshing onto `origin/main` `5e839d4`, the task-owned `/root` sync
+   and generated Bridge import probe still block at
+   `ModuleNotFoundError: No module named 'megatron'`; no Bridge-approved import
+   proof or positive checkpoint-load line exists yet.
+8. The fail-closed preflight must block before training unless the Bridge import
+   command returns rc `0` and logs `IMPORT_DONE` or an equivalent positive
+   checkpoint-load proof.
+9. The current bounded smoke schedule is plan-only and nonzero-LR:
+   `train_iters=2`, `global_batch_size=2`, `optimizer.lr=5e-6`,
+   `scheduler.lr_warmup_iters=0`, `scheduler.lr_decay_iters=20`, first logged
+   step expected LR `5e-6`; a launch must recompute train iterations from
+   actual V11 packed train rows before any training.

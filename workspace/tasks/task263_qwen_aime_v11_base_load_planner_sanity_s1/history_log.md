@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -51,3 +51,46 @@
 - No training, AIME/task243 eval, promotion/go-no-go claim, 30B/8-GPU action,
   AIME2025 train data use, task255 artifact reuse, or shared deletion was
   performed.
+
+## Session 3 - 2026-06-01 UTC - V11 live gate blocker bundle
+
+- Received lead refresh after #334/#335/#336 merged into `origin/main` at
+  `5e839d4a911c8a0c1c55e6adc606d325b9d17717`.
+- Rebased the task263 worker branch onto current `origin/main`; rebase was
+  clean.
+- Added task-owned bundle generator:
+  `workspace/tasks/task263_qwen_aime_v11_base_load_planner_sanity_s1/build_task263_v11_base_load_gate_bundle.py`.
+- Synced the refreshed repo to task-owned NemTron path:
+  `/root/task263_qwen_aime_v11_base_load_planner_sanity_s1/run_20260601T234056Z/Nemotron`.
+- Ran:
+  `python3 workspace/tasks/task263_qwen_aime_v11_base_load_planner_sanity_s1/build_task263_v11_base_load_gate_bundle.py --nemtron-run-root /root/task263_qwen_aime_v11_base_load_planner_sanity_s1/run_20260601T234056Z --synced-repo /root/task263_qwen_aime_v11_base_load_planner_sanity_s1/run_20260601T234056Z/Nemotron --run-bridge-probe --run-fail-closed-preflight`.
+- Generated final task-owned evidence bundle:
+  `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/`.
+- Latest manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/manifests/v11_base_load_gate_manifest_20260601T234421Z.json`.
+- Latest report:
+  `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/reports/task263_v11_base_load_gate_report_20260601T234421Z.md`.
+- Latest artifact inventory:
+  `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/manifests/artifact_inventory_20260601T234421Z.sha256`.
+- Bridge import probe command used the existing
+  `scripts/import_qwen3_4b_local_to_megatron.py` against
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` and failed with
+  `ModuleNotFoundError: No module named 'megatron'`; rc `1`.
+- Fail-closed preflight blocked with rc `2` because `megatron` is missing,
+  `megatron.bridge` errors, no Bridge-approved import proof or positive
+  checkpoint-load line exists, and the Bridge import command did not complete
+  with rc `0`.
+- Qwen3-4B base core file hashes were recorded for `config.json`,
+  `tokenizer_config.json`, `tokenizer.json`, and
+  `model.safetensors.index.json`; 3 safetensor shards are present by size.
+- Nonzero-LR bounded smoke plan was recorded as plan-only: 1 node / 2 GPUs,
+  `train_iters=2`, `global_batch_size=2`, `optimizer.lr=5e-6`,
+  `scheduler.lr_warmup_iters=0`, `scheduler.lr_decay_iters=20`, first logged
+  step expected LR `5e-6`, and a later launch must recompute
+  `train_iters=max(2, ceil(packed_train_rows / global_batch_size))` after V11
+  packing.
+- Checks passed: `python3 -m py_compile` for the task263 bundle generator and
+  `git diff --check`.
+- No SFT training, export, endpoint serving, live AIME/task243 eval,
+  promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
+  prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
