@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - M1 missing launcher scan recovery
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=4 -->
 
 ## Background
 
@@ -44,6 +44,8 @@ Recover the task231/task228 Working state into a current-team disposition: eithe
 - Current worker branch:
   `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1`.
 - Current worker PR: https://github.com/songCNMS/Nemotron/pull/315.
+- Merge result: merged at `2026-06-01T14:59:37Z` with merge commit
+  `80696c65d433d297eadd28b673a41f4451bd16d6`.
 - Current main refresh: #313 merged into `origin/main` at
   `a35f61f`; PR branch was refreshed with docs/status closeout conflicts
   resolved.

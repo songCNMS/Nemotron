@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,6 @@
    exact task names for one or more missing M1 targets.
 8. The #313 main refresh added task239 as an independent audit assignment, but
    did not add completed audit findings or new launcher mapping evidence.
+9. PR #315 merged on 2026-06-01T14:59:37Z with merge commit
+   `80696c65d433d297eadd28b673a41f4451bd16d6`; the merged disposition remains
+   task231/task228 blocked/HOLD.

@@ -1,6 +1,6 @@
 # task231_m1_missing_launcher_new_runtime_scan_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - 2026-06-01 UTC - Recovery task created by team lead
 
@@ -57,3 +57,21 @@
 - No endpoint, eval, benchmark, Docker, install, download, model copy,
   artifact upload, product-code edit, direct main push, or PR merge was
   performed.
+
+## Session 4 - 2026-06-01 UTC - Approved self-merge and closeout
+
+- Lead approved PR #315 for self-merge after independently confirming head
+  `49e2f1a381542aac16425e2b6fe9f38fa4332709` was clean and limited to
+  workspace docs/status files.
+- Rechecked GitHub PR state before merge: `mergeable=MERGEABLE` and
+  `mergeStateStatus=CLEAN`.
+- Merged PR #315 through GitHub with merge strategy; merged at
+  `2026-06-01T14:59:37Z`.
+- Merge commit:
+  `80696c65d433d297eadd28b673a41f4451bd16d6`.
+- Post-merge check found `origin/main` advanced and includes merge commit
+  `80696c65d433d297eadd28b673a41f4451bd16d6`; another PR (#316) merged after
+  #315 at `3d4d316`.
+- Task closeout remains `close as blocked/HOLD`; no new implementation task
+  was created.
+- No post-merge issue was found for task231/task228 closeout.
