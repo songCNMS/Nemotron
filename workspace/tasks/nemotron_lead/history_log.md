@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Created with team lead
 
@@ -65,4 +65,17 @@
 - Maintained the #316 final-merge requirement: retarget/rebase to `main` or follow an explicit post-#313 path before final merge.
 - No worker task disposition changed: task231/task228 stays `blocked/HOLD`; task217 stays approved close with smoke-only residual risk; task203/task206/task209 stay `covered/no recovery`.
 - Pushed the Session 4 lead bookkeeping update to the #313 branch; this changes only workspace lead status/log/knowledge files.
+- No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
+
+## Session 5 - 2026-06-01 UTC - Hold maintained with no external gate change
+
+- Read lead mailbox and found no unread messages.
+- Received coordinator confirmation to keep the current hold: do not instruct worker merges for #314/#315/#316 until #313 has non-author/authorized approval and is merged; #316 still requires retarget/rebase to `main` or an explicit post-#313 path before final merge.
+- Rechecked PR state before committing this Session 5 bookkeeping update:
+  - #313 remained open, base `main`, head `intern_nemotron_lead/session1-recovery-task-docs` at `6709f3a`, merge state `CLEAN`, blank `reviewDecision`, and no merge recorded.
+  - #314 remained open, base `main`, head `intern_nemotron_worker_3/task238_task203_206_209_coverage_audit_s1` at `5987d1d`, merge state `CLEAN`.
+  - #315 remained open, base `main`, head `intern_nemotron_worker_1/task231_m1_missing_launcher_new_runtime_scan_s1` at `63201eb`, merge state `CLEAN`.
+  - #316 remained open, base `intern_nemotron_lead/session1-recovery-task-docs`, head `intern_nemotron_worker_2/task217_mamba_causal_conv_train_stack_unblock_probe_s1` at `c3a1c91`, merge state `CLEAN`.
+- No external PR base, mergeability, or worker head change was found; lead continued the hold and did not instruct worker merges.
+- No worker task disposition changed: task231/task228 stays `blocked/HOLD`; task217 stays approved close with smoke-only residual risk; task203/task206/task209 stay `covered/no recovery`.
 - No product code was changed by lead; no implementation tests, evals, launches, or merges were run by lead.
