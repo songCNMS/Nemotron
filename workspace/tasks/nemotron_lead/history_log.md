@@ -776,3 +776,38 @@
   - First Qwen3-4B go/no-go remains `NO-GO/HOLD`; 30B/8-GPU scale remains held.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 35 - 2026-06-01 UTC - task247 baseline PR merged by worker
+
+- Final PR poll after Session 34 push showed task247/#326 was self-merged by
+  `songCNMS`:
+  - State: `MERGED`.
+  - Merged at: `2026-06-01T17:21:29Z`.
+  - Merged head:
+    `8fb34bd9116e32aa8d191750f2510d2a843e0da5`.
+  - Merge commit:
+    `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Fetched `origin/main`; it advanced from `20973e7` to `85f2bf5`.
+- Rechecked downstream PR states after the merge:
+  - #323 task249 remains open/CLEAN at
+    `9488ad5c344f2b9dc69504d6980a2b7179c649e0`.
+  - #324 task250 remains open/CLEAN at
+    `cd4555199ff67eace4d40d4418eef38511786143`.
+  - #325 task246 remains open/CLEAN at
+    `afc276932897743f6b6b5b8aab4c390905cb55f1`, still
+    `REQUEST_CHANGES/HOLD` for the top manifest checksum mismatch.
+- Sent delivered peer_send updates:
+  - worker_4: refresh #323 against current `main` with #326 merged, #325 still
+    HOLD, and #324 stale.
+  - worker_5: refresh #324 against current `main` with #326 merged, #325 still
+    HOLD, and #323 stale.
+  - worker_2: task247 baseline is now merged/available, but task248 must remain
+    HOLD for prep/train/eval until task246 correction is accepted and refreshed
+    reviews complete.
+- No unread mailbox messages remained after the poll.
+- Current gate remains `NO-GO/HOLD`: baseline evidence is now merged, but
+  task246 is not accepted, task248 has no candidate prep/train/eval artifacts,
+  task249/task250 need refreshed reviews, task243 has no base-vs-FT comparison
+  output, and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
