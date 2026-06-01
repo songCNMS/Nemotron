@@ -15,8 +15,15 @@ Output root:
 Top manifest:
 `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json`
 
-Top manifest sha256:
-`9e5bbc62507f893955374bd520dae81601a51bd1e0030c1508f819ad268f6eb5`
+Top manifest final-file sha256:
+`0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`
+
+Top manifest sha256 sidecar:
+`/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256`
+
+Checksum note: the top manifest intentionally does not embed a self-referential
+`manifest_sha256` field. The final-file checksum is recorded in the external
+`.sha256` sidecar and was verified with `sha256sum`.
 
 ## Heldout Corpus
 
@@ -62,7 +69,10 @@ M0 manifest:
 `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/manifest.json`
 
 M0 manifest sha256:
-`ea1b64cbe92f93359f3aa2bdad84072f56dea68b08ffaa2fbe67789bcc5aba45`
+`ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`
+
+M0 manifest sha256 sidecar:
+`/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar/manifest.json.sha256`
 
 Source dataset:
 `AI-MO/NuminaMath-CoT`
@@ -114,6 +124,8 @@ Commands run:
 
 ```bash
 PYTHONPATH=src python workspace/tasks/task246_qwen_aime_v10_real_decontam_corpus_s1/build_task246_artifacts.py
+sha256sum /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json
+cat /work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256
 PYTHONPATH=src python - <<'PY'
 # Independent validation loaded the heldout JSONL, checked label-like keys,
 # discovered and converted M0 sidecar files through prepare_m1_agentic_sft.py,
@@ -124,6 +136,9 @@ PY
 
 Independent validation results:
 
+- Top manifest final-file sha256: `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`
+- Top manifest `.sha256` sidecar matches direct `sha256sum`: `true`
+- Top manifest embeds self-referential `manifest_sha256`: `false`
 - Heldout rows: `560`
 - Unique prompt hashes: `560`
 - Heldout label-key leaks: `0`

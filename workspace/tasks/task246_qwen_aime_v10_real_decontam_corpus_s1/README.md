@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - Real heldout decontam corpus
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
 
 ## Background
 
@@ -81,8 +81,8 @@ path needed by the Qwen3-4B V10 pilot.
   `20973e78f196d7e5d71993f60dc74a3500223f5f`, after PR #321.
 - Task docs source: `origin/intern_nemotron_lead/session1-recovery-task-docs`
   at `5d5e3fa`.
-- Status: real heldout corpus and V10 M0 sidecar input produced; PR #325 is
-  open for review.
+- Status: PR #325 checksum fix applied after lead REQUEST_CHANGES; ready for
+  re-review.
 - Output root:
   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`.
 - Heldout corpus:
@@ -94,3 +94,7 @@ path needed by the Qwen3-4B V10 pilot.
   (`8` train rows, `0` val rows).
 - Leakage status: no AIME25 labels/prompts in M0 sidecar input; heldout corpus
   is prompt-only.
+- Top manifest final-file sha256:
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`;
+  recorded in `manifest.json.sha256` instead of as a self-referential manifest
+  field.

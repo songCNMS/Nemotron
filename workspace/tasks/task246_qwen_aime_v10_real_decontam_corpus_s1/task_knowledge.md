@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -24,3 +24,8 @@
    scanned rows, so task248 should treat the sidecar as real but sparse.
 7. Independent validation found `0` AIME25 prompt exact hits in sidecar train
    JSONL and `0` decontam blocker findings against the heldout corpus.
+8. The top task246 manifest must not embed a self-referential
+   `manifest_sha256`; its final-file checksum is recorded in
+   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256`.
+   The Session 3 final top manifest sha256 is
+   `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.

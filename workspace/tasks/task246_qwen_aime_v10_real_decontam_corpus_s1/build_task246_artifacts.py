@@ -140,6 +140,13 @@ def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
             f.write("\n")
 
 
+def write_sha256_sidecar(path: Path) -> tuple[Path, str]:
+    digest = sha256_file(path)
+    sidecar_path = path.with_name(f"{path.name}.sha256")
+    sidecar_path.write_text(f"{digest}  {path.name}\n", encoding="utf-8")
+    return sidecar_path, digest
+
+
 def assert_prompt_only(rows: list[dict[str, Any]]) -> None:
     for index, row in enumerate(rows):
         leaked = sorted(LABELLIKE_KEYS & set(row))
@@ -439,7 +446,9 @@ def build_v10_m0_sidecar(
     ]
     (m0_dir / "report.md").write_text("\n".join(report_lines), encoding="utf-8")
     manifest["manifest_path"] = str(m0_dir / "manifest.json")
-    manifest["manifest_sha256"] = sha256_file(m0_dir / "manifest.json")
+    manifest_sha256_path, manifest_sha256 = write_sha256_sidecar(m0_dir / "manifest.json")
+    manifest["manifest_sha256"] = manifest_sha256
+    manifest["manifest_sha256_path"] = str(manifest_sha256_path)
     return manifest
 
 
@@ -504,11 +513,13 @@ def build_all(args: argparse.Namespace) -> dict[str, Any]:
         },
     }
     manifest_path = output_dir / "manifest.json"
-    write_json(manifest_path, manifest)
     manifest["manifest_path"] = str(manifest_path)
-    manifest["manifest_sha256"] = sha256_file(manifest_path)
     write_json(manifest_path, manifest)
-    return manifest
+    manifest_sha256_path, manifest_sha256 = write_sha256_sidecar(manifest_path)
+    result = dict(manifest)
+    result["manifest_final_file_sha256"] = manifest_sha256
+    result["manifest_sha256_path"] = str(manifest_sha256_path)
+    return result
 
 
 def parse_args() -> argparse.Namespace:

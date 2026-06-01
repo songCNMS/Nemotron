@@ -1,6 +1,6 @@
 # task246_qwen_aime_v10_real_decontam_corpus_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -40,5 +40,23 @@
 - Independent validation confirmed no heldout label-key leaks, M1 sidecar
   conversion succeeds for the `8` train rows, decontam drops `0` sidecar train
   rows, and exact AIME25 prompt hits in sidecar train JSONL are `0`.
+- Did not run training, eval, endpoint launch, main push, self-merge, or shared
+  processing deletion.
+
+## Session 3 - 2026-06-01 UTC - Fixed manifest checksum evidence
+
+- Addressed lead REQUEST_CHANGES/HOLD for PR #325: the top manifest previously
+  reported the checksum computed before embedding the checksum field, while the
+  final file hash was different.
+- Updated `build_task246_artifacts.py` so the top manifest does not embed a
+  self-referential `manifest_sha256` field and writes the final-file checksum to
+  `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/manifest.json.sha256`.
+- Regenerated task246 artifacts. Direct `sha256sum` of top `manifest.json` and
+  the `.sha256` sidecar now both report
+  `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.
+- Revalidated heldout rows/hash count, sidecar conversion, decontam drops, and
+  exact AIME25 prompt hits. Counts remain `560` heldout rows, `8` sidecar train
+  rows, `0` sidecar val rows, `0` decontam drops, and `0` exact AIME25 prompt
+  hits in sidecar train JSONL.
 - Did not run training, eval, endpoint launch, main push, self-merge, or shared
   processing deletion.

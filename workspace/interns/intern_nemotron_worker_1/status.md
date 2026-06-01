@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task246_qwen_aime_v10_real_decontam_corpus_s1 |
 | PR | #325 |
-| Session | 2 |
-| Progress | Opened PR #325 with task246 real prompt-only heldout corpus and sparse real V10 M0 sidecar input; ready for lead review, no training/eval run. |
+| Session | 3 |
+| Progress | Fixed PR #325 top manifest checksum evidence with final-file .sha256 sidecar; ready for lead re-review, no training/eval run. |
