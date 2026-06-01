@@ -393,3 +393,39 @@
   - task242: `BLOCKED/HOLD` for missing PR evidence.
 - Baseline/eval gate remains unchanged: no FT checkpoint may be judged until the same Qwen base model has a same-harness corrected AIME2025 score; AIME25 remains held-out eval/decontamination only; no 30B/8-GPU scale until Qwen3-4B smoke is non-regressing or yields a concrete evaluator/data fix.
 - Lead did not implement product code, run tests, train models, launch evals, merge PRs, or push `main`.
+
+## Session 20 - 2026-06-01 UTC - Qwen AIME25 static PR set approved for worker self-merge
+
+- Read lead mailbox and found no unread messages at session start.
+- Rechecked current PR state:
+  - #321 / `task242_qwen_aime_v10_planner_smoke_s1`: open, base `main`, head `12ee98ccf7475c2ee77a92b3f1390df06d9edcd0`, mergeStateStatus `CLEAN`.
+  - #320 / `task241_qwen_aime_v10_sidecar_data_s1`: open, base `main`, head `57537133bed6bdd5773e6678b48086a8fc6a87b4`, mergeStateStatus `CLEAN`.
+  - #319 / `task243_qwen_aime2025_base_vs_ft_eval_gate_s1`: open, base `main`, head `61a12dd8b96e51785a3ece76d5883a419b30dd39`, mergeStateStatus `CLEAN`.
+  - #318 / `task244_qwen_aime_v10_contam_regression_review_s1`: open, base `main`, head `e1bb5413d5ffc050e209a371122e2923ea2f322b`, mergeStateStatus `CLEAN`.
+  - #317 / `task245_qwen_aime_v10_artifact_runbook_verify_s1`: open, base `main`, head `2ad67ed2a102e22cdbc65826c431d22bd5728867`, mergeStateStatus `CLEAN`.
+- Fetched PR heads into temporary refs for static inspection; lead did not check out worker branches or edit product code.
+- Reviewed worker_4's refreshed #318 `review_matrix.md` at head `e1bb541`:
+  - #320 approved for V10 data-prep contamination handling, with full go/no-go still held until real corpus/data artifacts exist.
+  - #321 approved for Qwen3-4B V10 planner smoke wiring, fail-closed decontam checks, task-owned `/root` sync guard, and 30B hold.
+  - #319 approved for static same-harness AIME25 gate/protocol and corrected `/mnt/cephfs` Qwen3-4B path.
+  - #317 approved as current static runbook/artifact map after refreshing to head `2ad67ed`.
+  - First measurable Qwen3-4B AIME go/no-go remains `NO-GO/HOLD`.
+- Reviewed worker_5's #317 `runbook_verification_report.md` at head `2ad67ed`; it now records current #319/#320/#321 state and keeps the remaining blockers as real heldout corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, base score artifacts, candidate FT checkpoint/export/eval, and explicit 30B/8-GPU permission.
+- Attempted to submit a formal GitHub approve review on #320, but GitHub returned `Review Can not approve your own pull request`; lead therefore recorded gate dispositions through durable PR comments and peer_send notifications instead of formal review state.
+- Posted lead gate comments:
+  - #320 comment: `https://github.com/songCNMS/Nemotron/pull/320#issuecomment-4594470344`.
+  - #319 comment: `https://github.com/songCNMS/Nemotron/pull/319#issuecomment-4594470287`.
+  - #321 comment: `https://github.com/songCNMS/Nemotron/pull/321#issuecomment-4594470312`.
+  - #317 comment: `https://github.com/songCNMS/Nemotron/pull/317#issuecomment-4594470285`.
+  - #318 comment: `https://github.com/songCNMS/Nemotron/pull/318#issuecomment-4594470345`.
+- Sent peer_send instructions to workers and received `delivered` for all five:
+  - `intern_nemotron_worker_1`: self-merge #320 first if still open/clean/base main/head `5753713`; report merge commit or blocker.
+  - `intern_nemotron_worker_3`: self-merge #319 if still open/clean/base main/head `61a12dd`; report merge commit or blocker.
+  - `intern_nemotron_worker_2`: self-merge #321 only after #320 lands, and only if still open/clean/base main/head `12ee98c`; refresh/rebase if #320 changes mergeability; no 30B/8-GPU launch.
+  - `intern_nemotron_worker_5`: self-merge #317 if still open/clean/base main/head `2ad67ed`; preserve NO-GO/HOLD gate blockers.
+  - `intern_nemotron_worker_4`: self-merge #318 if still open/clean/base main/head `e1bb541`; preserve NO-GO/HOLD gate blockers.
+- Current lead decisions:
+  - #319/#320/#321/#317/#318: approved for worker self-merge under the stated head/mergeability conditions.
+  - First Qwen3-4B V10 go/no-go: still `NO-GO/HOLD`.
+  - 30B/8-GPU scale: still not permitted.
+- Lead did not implement product code, run implementation tests, train models, launch evals, merge PRs, or push `main`.

@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Knowledge Entries
 
@@ -27,3 +27,6 @@
 21. For #321/task242, planner/smoke PR evidence removes the old "no task242 PR" blocker, but it does not satisfy first go/no-go by itself; real held-out decontam/AIME input, endpoint, base-score artifacts, FT checkpoint/export/eval, and worker_4/worker_5 refreshed reviews are still required.
 22. If #317/task245 runbook still lists "task242 has no published PR" after #321 exists, keep #317 in request-changes/HOLD even though the global NO-GO conclusion is still correct.
 23. Once #317 is refreshed to include #321, require #318/task244 to update its independent matrix from the stale #317 head before approving the docs/review set; avoid self-merge direction while review/runbook PRs disagree on current blockers.
+24. The GitHub identity available to the lead workspace may be unable to submit formal `APPROVE` reviews on worker PRs (`Review Can not approve your own pull request`); in that case, record lead gate decisions as durable PR comments and peer_send instructions, then wait for worker self-merge reports.
+25. For the Qwen AIME25 V10 static PR set, merge sequencing should keep #320 before #321 because the planner's runnable V10 path depends on the data-prep strategy landing on `main`; #319 is independent, while #317/#318 are static runbook/review artifacts.
+26. Lead approval of #319/#320/#321/#317/#318 does not change the first measurable gate: Qwen3-4B AIME go/no-go remains NO-GO/HOLD until a real heldout decontam corpus/input, corrected AIME input/cache, reachable Qwen3-4B endpoint, same-harness base artifacts, candidate FT checkpoint/export/eval, and explicit 30B permission exist.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Qwen AIME25 gate monitoring; #317/#318/#319/#320/#321 open |
-| Session | 19 |
+| PR | Qwen AIME25 static gate approved by lead comments; #317/#318/#319/#320/#321 awaiting worker self-merge reports |
+| Session | 20 |
