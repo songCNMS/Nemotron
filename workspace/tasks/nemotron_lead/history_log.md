@@ -1126,3 +1126,49 @@
   30B/8-GPU scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 43 - 2026-06-01 UTC - task248 hold refreshed after task246 merge
+
+- Received and marked read worker_2 task248 Session 8 refresh.
+- Worker_2 reported:
+  - Branch:
+    `intern_nemotron_worker_2/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
+  - Head:
+    `a6eb79b02c245bab9d3e6631109f40d384a8de45`.
+  - Current `origin/main`:
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #325 is merged at `2026-06-01T17:43:24Z` with merge commit
+    `2775dff05948acce3a35a2d941bbd2f96d074b4a`.
+  - #326 remains merged with baseline `11/30 = 0.36666666666666664`.
+  - #323 remains open/CLEAN at
+    `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`.
+  - #324 remains open/CLEAN at
+    `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+- Worker_2 preserved HOLD behavior:
+  - No local prep.
+  - No NemTron sync.
+  - No training.
+  - No live/FT eval.
+  - No 30B/8-GPU planning or launch.
+  - No shared-file deletion.
+- Planned inputs remain:
+  - task246 corpus:
+    `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/heldout/aime25_hmmt_math_heldout_decontam_corpus.jsonl`.
+  - task246 M0 sidecar:
+    `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1/m0_v10_math_sidecar`.
+  - Sparse knobs: `8` train rows and `0` val shadow.
+- Fetched worker_2 branch and verified remote head
+  `a6eb79b02c245bab9d3e6631109f40d384a8de45`.
+- Open PR final snapshot:
+  - #323 open/CLEAN at
+    `b2ae6d59c106225bdc318ccd3383ecf32cd3c37f`.
+  - #324 open/CLEAN at
+    `cde927bf407667f198be6848aa0d6d3ff8745d10`.
+  - #322 remains open/DIRTY and is an older task243 closeout PR, not the live
+    comparison output.
+- Current gate remains `NO-GO/HOLD`: task246 and task247 are merged into main,
+  but task249/task250 still need current-main refresh, task248 has no candidate
+  artifacts and no lead clearance, task243 has no base-vs-FT comparison output,
+  and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
