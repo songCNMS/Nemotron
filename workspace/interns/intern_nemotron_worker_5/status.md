@@ -1,13 +1,13 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task245_qwen_aime_v10_artifact_runbook_verify_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_5 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task |  |
+| Current Task | task245_qwen_aime_v10_artifact_runbook_verify_s1 |
 | PR | N/A |
 | Session | 0 |
