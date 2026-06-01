@@ -52,6 +52,7 @@
   `ModuleNotFoundError: No module named 'cosmos_xenna'`.
 - Wrote official task report
   `workspace/tasks/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1/hotpotqa_loader_unblock_report.md`.
+- Opened PR #328 to `main` for the code/test/report/status changes.
 - Boundary maintained: no NemTron sync, no training, no FT live eval, no
   task243 comparison, no promotion claim, no 30B/8-GPU work, and no shared
   `/mnt/cephfs/data/processing/lei.song` deletion.
