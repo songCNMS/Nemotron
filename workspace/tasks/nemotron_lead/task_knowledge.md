@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Knowledge Entries
 
@@ -47,3 +47,4 @@
 41. The first accepted task247 Qwen3-4B base AIME2025 pilot baseline is `11/30` exact-normalized accuracy `0.36666666666666664` from `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` under the corrected 30x1 task243 harness; any FT judgment must use the same cache, runner, prompt variant, sampling, endpoint route, and all-request denominator.
 42. A task247 baseline artifact can unblock comparison planning but not the first go/no-go by itself; the gate still needs accepted task246 inputs, task248 FT artifacts, refreshed task249/task250 reviews, and task243 output proving `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
 43. When an approved worker PR self-merges after a lead status push, immediately record mergedAt/head/mergeCommit, fetch `origin/main`, recheck downstream PR mergeability, and notify dependent workers to refresh against the new main state.
+44. The accepted task246 checksum pattern is to keep final-file checksums in external `.sha256` sidecars and avoid embedding a self-referential `manifest_sha256` field in the top manifest; #325 head `266b6a1` fixed the prior mismatch with top manifest sha `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.

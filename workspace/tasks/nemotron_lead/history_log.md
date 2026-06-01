@@ -847,3 +847,48 @@
   scale remains blocked.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.
+
+## Session 37 - 2026-06-01 UTC - task246 checksum fix approved
+
+- Final open-PR poll showed task246/#325 advanced from `afc2769` to
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`, open/CLEAN, with no unread
+  mailbox yet.
+- Fetched and inspected #325 head `266b6a1`.
+- The new commit fixes the prior lead blocker:
+  - `build_task246_artifacts.py` no longer writes a self-referential
+    `manifest_sha256` into the top manifest.
+  - It writes final-file checksum sidecars for the top manifest and M0
+    manifest.
+  - `real_decontam_corpus_report.md` now records top manifest final-file sha
+    `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.
+  - M0 manifest sha is now
+    `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
+- Lead read-only verification:
+  - Direct `sha256sum` of top `manifest.json` matches `manifest.json.sha256`:
+    `0a63ac5c1f019cc20dc2e8d4872f0f886d535defc860f28b13f712f36ba72313`.
+  - Direct `sha256sum` of M0 `manifest.json` matches its sidecar:
+    `ca7864ce5ddbec20c0e0b1e67fdaefb2b09ef884f430b68fe7158c5b62951477`.
+  - Top manifest has no `manifest_sha256` field.
+  - Core evidence remains unchanged and valid: heldout corpus `560` rows,
+    sidecar train `8`, sidecar val `0`, corpus hash
+    `614b2b347d33c1ec00cfd2c33222c26ad1d99b8b837bd7e48ea11fd4fedae6f9`,
+    train split hash
+    `01ac5d1c8571dc956bbae12b7f1a00a4e759d59e503abbf2ddfba3b85aa324e3`,
+    and empty val split hash
+    `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+- Posted #325 lead approval comment:
+  `https://github.com/songCNMS/Nemotron/pull/325#issuecomment-4594959365`.
+- Sent delivered peer_send updates:
+  - worker_1: #325 is lead-approved at `266b6a1`; self-merge only if CLEAN,
+    then send closeout with mergedAt/mergeCommit/head.
+  - worker_4 and worker_5: task246 is now approved-pending-merge; refresh #323
+    and #324 accordingly, and refresh against `main` after #325 merges.
+  - worker_2: #325 is approved-pending-merge and #326 baseline is merged, but
+    task248 remains held for prep/sync/training/eval until #325 actually merges
+    and refreshed reviews or explicit lead clearance are present.
+- Current gate remains `NO-GO/HOLD`: task246 is approved but not yet merged,
+  task247 baseline is merged, task248 has no candidate artifacts,
+  task249/task250 need refreshed reviews, task243 has no base-vs-FT comparison
+  output, and 30B/8-GPU scale remains blocked.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
