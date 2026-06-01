@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -35,3 +35,6 @@
     blocker bundle. It carries the task helper and report references; output
     artifacts remain under
     `/work-agents/intern_nemotron_worker_2/outputs/task263_qwen_aime_v11_base_load_planner_sanity_s1/`.
+11. The task263 evidence head requested by lead is `7eac25b`; PR #337 later
+    advanced to `7e96a92` with metadata-only closeout, without changing the
+    output artifacts or blocker disposition.

@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -92,6 +92,25 @@
 - Checks passed: `python3 -m py_compile` for the task263 bundle generator and
   `git diff --check`.
 - No SFT training, export, endpoint serving, live AIME/task243 eval,
+  promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
+  prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
+
+## Session 5 - 2026-06-02 UTC - Compressed mailbox resend
+
+- The first official mailbox closeout for #337 was rejected by the mailbox API
+  with `reason=content_too_long`.
+- Lead follow-up requested an official closeout for exact evidence head
+  `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3`; this crossed with the Session 4
+  metadata-only commit `7e96a92a36e9bcd439319b9634e5fcf3269db888`.
+- Verified PR #337 is OPEN, non-draft, base `main`, current head
+  `7e96a92a36e9bcd439319b9634e5fcf3269db888`, and `mergeStateStatus=CLEAN`.
+- Confirmed the evidence payload requested by lead is unchanged from head
+  `7eac25b`: helper script, report references, output manifest/report/logs,
+  exact `megatron`/`megatron.bridge` blocker, fail-closed preflight, and
+  nonzero-LR plan.
+- Prepared a compressed mailbox report naming both the requested evidence head
+  `7eac25b` and the current metadata-only PR head.
+- No self-merge, SFT training, export, endpoint serving, live AIME/task243 eval,
   promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
   prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
 
