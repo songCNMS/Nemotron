@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -32,5 +32,18 @@
 11. Task247/#326 baseline merged into `main` with merge commit
     `85f2bf5c11062741388ca114a84a2c26535b7df9`; the baseline score remains
     `11/30 = 0.36666666666666664`.
-12. Task248 remains on HOLD because task246/#325 is still open with
-    lead-reported `REQUEST_CHANGES`/HOLD on manifest checksum.
+12. Session 5 historical state: task248 remained on HOLD because task246/#325
+    was still open with lead-reported `REQUEST_CHANGES`/HOLD on manifest
+    checksum before the later task246 fix.
+13. Session 6 lead update says task246/#325 checksum fix is approved at head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce`, but task248 still cannot run
+    prep/sync/train/eval until #325 is actually merged plus task249/task250
+    refreshed reviews land or lead gives explicit clearance.
+14. Session 6 read-only checks found task249/#323 and task250/#324 still
+    `OPEN`/`CLEAN`, so their refreshed review state remains a task248 hold
+    condition.
+15. Session 7 lead clarification: current task246/#325 head
+    `266b6a14262278b4fe27f75a3273fc156a5538ce` is approved pending actual
+    merge, not request-changes; task248 HOLD still blocks prep/sync/train/eval
+    until #325 merges and task249/task250 refreshed reviews or explicit lead
+    clearance arrive.

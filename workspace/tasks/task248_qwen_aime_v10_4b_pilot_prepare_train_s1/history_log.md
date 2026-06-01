@@ -1,6 +1,6 @@
 # task248_qwen_aime_v10_4b_pilot_prepare_train_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - Assigned
 
@@ -53,4 +53,22 @@
 - Baseline remains Qwen3-4B base AIME2025 corrected 30x1 score `11/30 = 0.36666666666666664`.
 - Read-only GitHub check confirmed PR #325 is still `OPEN` at head `afc276932897743f6b6b5b8aab4c390905cb55f1`; lead reports `REQUEST_CHANGES`/HOLD on manifest checksum.
 - Updated `qwen4b_v10_pilot_report.md` to keep task248 HOLD on task246/#325 while recording the merged baseline.
+- Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.
+
+## Session 6 - 2026-06-01 UTC - task246 checksum fix approved, actual merge pending
+
+- Lead reported task246/#325 at head `266b6a14262278b4fe27f75a3273fc156a5538ce` is approved after checksum fix and may self-merge if still `CLEAN`.
+- Read-only fetch confirmed task246 branch advanced to `266b6a14262278b4fe27f75a3273fc156a5538ce`.
+- Read-only GitHub check confirmed PR #325 is still `OPEN`/`CLEAN`, has no merge commit yet, and is not actually merged.
+- Read-only GitHub check reconfirmed PR #326 is `MERGED` at `2026-06-01T17:21:29Z` with merge commit `85f2bf5c11062741388ca114a84a2c26535b7df9`.
+- Read-only GitHub list checks found task249/#323 and task250/#324 still `OPEN`/`CLEAN`; refreshed reviews or explicit lead clearance are still pending for task248 sequencing.
+- Kept task248 HOLD for local prep, NemTron sync, training, live eval, FT judgment, and 30B/8-GPU until #325 actually merges plus task249/task250 refreshed reviews or explicit lead clearance.
+
+## Session 7 - 2026-06-01 UTC - Lead clarification, HOLD unchanged
+
+- Lead acknowledged the previous head `affafe8064c8529ae0f16ffdec0d4ec61b6ed1a5` report crossed with the task246 fix.
+- Lead clarified current task246/#325 at head `266b6a14262278b4fe27f75a3273fc156a5538ce` is lead-approved pending actual merge, not request-changes.
+- Read-only GitHub check confirmed PR #325 remains `OPEN`/`CLEAN` at head `266b6a14262278b4fe27f75a3273fc156a5538ce` with no merge commit yet.
+- Read-only GitHub list check confirmed task249/#323 and task250/#324 remain `OPEN`/`CLEAN`, so refreshed reviews or explicit lead clearance are still missing.
+- Preserved planned sparse sidecar knobs: `8` train rows and `0` validation shadow rows.
 - Did not run local prep, sync, training, live eval, FT judgment, 30B/8-GPU planning, or shared-file deletion.

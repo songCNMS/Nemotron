@@ -1,6 +1,6 @@
 # task248 Qwen3-4B V10 pilot report
 
-<!-- METADATA:STATUS=Hold,SESSION=5 -->
+<!-- METADATA:STATUS=Hold,SESSION=7 -->
 
 ## Summary
 
@@ -10,8 +10,9 @@
   `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1/`.
 - NemTron remote root reserved for this task:
   `/root/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
-- The task remains on HOLD before local prep/train/eval until lead clears after
-  task246/#325 checksum correction and refreshed reviews.
+- The task remains on HOLD before local prep/train/eval until task246/#325 is
+  actually merged plus task249/task250 refreshed reviews arrive, or lead gives
+  explicit clearance.
 
 ## Dependency probes
 
@@ -44,11 +45,28 @@
 - Session 5 update: PR #325 is still `OPEN` at head
   `afc276932897743f6b6b5b8aab4c390905cb55f1`; lead reports
   `REQUEST_CHANGES`/HOLD on manifest checksum, so task248 remains on HOLD.
+- Session 6 update: lead reports task246/#325 is approved after checksum fix
+  at head `266b6a14262278b4fe27f75a3273fc156a5538ce` and may self-merge if
+  still `CLEAN`.
+- Session 6 read-only GitHub check: PR #325 is still `OPEN`/`CLEAN`, head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`, with no `mergedAt` or merge
+  commit yet.
+- Session 6 read-only GitHub check: task249/#323 is `OPEN`/`CLEAN` at head
+  `b8b2bbd929b20c340dce8e86f81c1252c8d0b02b`; task250/#324 is
+  `OPEN`/`CLEAN` at head `cd4555199ff67eace4d40d4418eef38511786143`.
+- Session 7 update: lead clarified the previous `affafe8064c8529ae0f16ffdec0d4ec61b6ed1a5`
+  report crossed with the task246 fix; current #325 is approved pending actual
+  merge, not request-changes.
+- Session 7 read-only GitHub check: PR #325 remains `OPEN`/`CLEAN` at head
+  `266b6a14262278b4fe27f75a3273fc156a5538ce`, with no `mergedAt` or merge
+  commit yet.
+- Session 7 read-only GitHub list check: task249/#323 and task250/#324 remain
+  `OPEN`/`CLEAN`.
 
 ## Prepared command shape
 
-Do not run this until lead explicitly clears task248 after task246/#325
-checksum correction and refreshed reviews.
+Do not run this until task246/#325 actually merges plus task249/task250
+refreshed reviews arrive, or lead explicitly clears task248.
 
 ```bash
 PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
@@ -84,7 +102,7 @@ Expected generated paths after the dependencies exist:
 
 ## Gate status
 
-- Local prep is on HOLD until task246/#325 checksum correction is accepted and lead explicitly clears task248.
+- Local prep is on HOLD until task246/#325 actually merges plus task249/task250 refreshed reviews arrive, or lead explicitly clears task248.
 - Training is on HOLD until local prep is explicitly cleared and succeeds with task246 inputs.
 - FT judgment remains blocked until a future FT artifact exists and task243 comparison can enforce `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy`.
 - Current baseline to preserve for later comparison: Qwen3-4B base AIME25 `11/30 = 0.36666666666666664` under the corrected 30x1 same harness.
@@ -101,6 +119,10 @@ Expected generated paths after the dependencies exist:
 - Session 3 refresh: `git fetch origin --prune`, `git rev-parse` on task246/task247 branches, read-only `git ls-tree`/`git show`, and read-only output directory probes.
 - Session 4 refresh: read-only `gh pr view 325`, `gh pr view 326`, `test`/`find`/`wc`/`sed` probes for task246/task247 artifacts and baseline summary.
 - Session 5 refresh: read-only `gh pr view 325` and `gh pr view 326` to record #326 merged and #325 still open.
+- Session 6 refresh: `git fetch origin --prune`, read-only `gh pr view 325`,
+  read-only `gh pr view 326`, and read-only `gh pr list --search task249/task250`.
+- Session 7 refresh: `git fetch origin --prune`, read-only `gh pr view 325`,
+  and read-only `gh pr list --search "task249 OR task250"`.
 
 ## Commands not run
 
