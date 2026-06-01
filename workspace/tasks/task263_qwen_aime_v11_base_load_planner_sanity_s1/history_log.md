@@ -136,3 +136,32 @@
 - No SFT training, export, endpoint serving, live AIME/task243 eval,
   promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
   prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
+
+## Session 6 - 2026-06-01 UTC - Exact-head mailbox closeout and hook record
+
+- Lead follow-up requested the official #337 closeout mailbox for exact head
+  `7e96a92a36e9bcd439319b9634e5fcf3269db888`, with PR URL, files changed,
+  commands/env, report/manifest/log paths and checksums, CPU-host versus
+  NemTron/NeMo distinction, exact blocker, smallest remediation, and boundary
+  confirmation.
+- Rechecked local and remote worker branch state before mailing; both were at
+  `0979c22990eda95e732bde5543569e77eeebfa6c` after a metadata-only compressed
+  mailbox resend record.
+- Rechecked GitHub PR #337 before mailing; it was OPEN, non-draft, base `main`,
+  `mergeStateStatus=CLEAN`, and current head
+  `0979c22990eda95e732bde5543569e77eeebfa6c`.
+- Sent mailbox closeout `cf1a9028c8044e8ca9b2185525845eba` that explicitly
+  answered the lead-requested `7e96a92` head and disclosed the current
+  metadata-only PR head drift to `0979c22`.
+- Verified the unchanged artifact hashes used in the closeout:
+  report `d298331298d9fea55c39d410fd400e4ecaea3c85fbdb3f87d2eee6d1d02041f7`,
+  manifest `59d7d8c8ac7e057ec87aa9d8beec9c1ee1c17677832cf75ae49897bfd5737f61`,
+  Bridge import log `c766c461085ec79bc61c26da68c188e719d1508e40c808816a830ab88a1bf408`,
+  and fail-closed preflight log
+  `f1acd2ae4b669928b9448c3d0a31a07bd96de712a0f05e6becdc141ab89088ed`.
+- The gate disposition remains `NEMTRON_NEMO_RUNTIME_BLOCKED`: the CPU worker
+  host lacks `megatron`, `megatron.bridge`, and `nemo`; the Bridge import probe
+  exits rc `1`, and the fail-closed preflight exits rc `2`.
+- No self-merge, SFT training, export, endpoint serving, live AIME/task243 eval,
+  promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
+  prompt/label use, 30B/8-GPU launch, or shared deletion was performed.

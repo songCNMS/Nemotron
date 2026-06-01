@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -38,3 +38,7 @@
 11. The task263 evidence head requested by lead is `7eac25b`; PR #337 later
     advanced to `7e96a92` with metadata-only closeout, without changing the
     output artifacts or blocker disposition.
+12. Session 6 official closeout mailbox `cf1a9028c8044e8ca9b2185525845eba`
+    answered lead's exact-head `7e96a92` request and disclosed that PR #337 had
+    already advanced to metadata-only head `0979c22`; the report hash and
+    blocker evidence remained unchanged.

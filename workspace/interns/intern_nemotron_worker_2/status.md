@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task263_qwen_aime_v11_base_load_planner_sanity_s1 |
 | PR | #337 |
-| Session | 5 |
-| Last Update | 2026-06-02T00:03:00Z: Resending compressed official mailbox after the first closeout was rejected as too long. Lead requested evidence head `7eac25b`; PR #337 current head is `7e96a92` with metadata-only closeout on top of the unchanged blocker evidence. |
+| Session | 6 |
+| Last Update | 2026-06-01T23:58:05Z: Sent official task263/#337 closeout mailbox for lead-requested head `7e96a92`, noting current PR head `0979c22` is metadata-only drift and gate evidence/report hashes remain unchanged. |
