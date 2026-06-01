@@ -1,6 +1,6 @@
 # task245_qwen_aime_v10_artifact_runbook_verify_s1 - Artifact, repro, and runbook verification
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_5,SESSION=0 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
 
 ## Background
 
@@ -31,6 +31,14 @@ Verify that the V10 pilot can be reproduced safely from documented artifacts and
 - PR is expected for persistent runbook docs if new docs are added; otherwise report through mailbox with artifact paths and verification notes.
 - A runbook verification report in this task directory with pass/block status for each artifact and command.
 - Mailbox report with verified paths, missing artifacts, resource blockers, and first go/no-go evidence readiness.
+
+## Session 1 Report
+
+- Runbook verification report:
+  `workspace/tasks/task245_qwen_aime_v10_artifact_runbook_verify_s1/runbook_verification_report.md`.
+- Gate state: blocked for first Qwen3-4B AIME go/no-go until V10 data/planner
+  artifacts, corrected base-score artifacts, candidate FT checkpoint/export,
+  and same-harness comparison outputs exist.
 
 ## Acceptance Criteria
 
