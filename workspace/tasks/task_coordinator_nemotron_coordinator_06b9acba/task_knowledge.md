@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Knowledge Entries
 
@@ -55,3 +55,8 @@
 49. Session 29 read-only local observation found task253 `packed_qwen` artifacts and `qwen_packing_xenna_unblock_report.md` with disposition `PASS_PACKED_QWEN_LOCAL_ONLY`, but worker_2 has not yet pushed a report or sent official task253 closeout.
 50. Observed task253 local packing summary: metadata sha256 `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`, blend sha256 `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`, train `8` shards/`79` rows and valid `1` shard/`15` rows.
 51. task253 local import probes show `cosmos_xenna` OK `0.1.8` and `pydantic_settings` OK `2.14.1`; this is still local prep evidence only and keeps the global Qwen AIME gate `NO-GO/HOLD`.
+52. Session 30 supersedes entry 49: worker_2 official task253 closeout has now been processed by lead; task253 branch head is `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`, no PR exists because no repo code/config/script changes were needed, and disposition is `PASS_PACKED_QWEN_LOCAL_ONLY`.
+53. Official task253 artifact paths are report `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/qwen_packing_xenna_unblock_report.md`, packed root `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen`, and shard summary `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen_shard_summary.json`.
+54. Official task253 packed evidence: metadata sha256 `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`, blend sha256 `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`, data-prep metadata `total_tokens=951216`, `total_sequences=1093`, `num_shards=8`, `pack_size=8192`, train `8` symlink shards/`79` rows/`596944` input tokens/`110945` supervised tokens, and valid `1` symlink shard/`15` rows/`115993` input tokens/`18998` supervised tokens.
+55. task254 `task254_qwen_aime_v10_task253_packing_artifact_review_s1` is assigned to `intern_nemotron_worker_5` for independent read-only artifact/repro review of exact task253 head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`; no task254 worker branch or PR was visible during Session 30.
+56. Even if task254 approves task253, the Qwen AIME global gate remains `NO-GO/HOLD` until candidate FT checkpoint/export/live eval artifacts exist and task243 proves same-harness FT-vs-base non-regression against the accepted Qwen3-4B base `11/30 = 0.36666666666666664`.

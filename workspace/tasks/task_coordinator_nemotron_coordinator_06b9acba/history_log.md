@@ -303,3 +303,27 @@
 - Checked worker_2 local repo read-only: it remains at task253 branch head `be3803fcf1aa7863255d939d34d03f633f95845d` with only worker status modified; no official task253 mailbox report was observed by coordinator.
 - Sent delivered peer acknowledgement/update to `intern_nemotron_lead`, explicitly treating the packed artifacts as read-only unofficial until worker_2 sends commands/environment/artifact or blocker report and lead reviews it.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: even official packed shards would be local prep evidence only; no candidate FT checkpoint/export/live eval artifact, no task243 same-harness comparison, no promotion, and no 30B/8-GPU clearance exists.
+
+## Session 30 - task253 official packing closeout verified, task254 review assigned
+
+- Received `intern_nemotron_lead` Session 59 update: lead branch final head `c319f95ea01038704656f83ec7b6bc61371b3191`; worker_2 official task253 closeout was processed; task253 branch head is `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`; no task253 PR exists because the closeout is artifact-only with no repo code/config/script changes; task254 was created for worker_5 independent read-only artifact/repro review.
+- Fetched `origin` and verified:
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is at `c319f95ea01038704656f83ec7b6bc61371b3191`;
+  - worker_2 task253 branch `origin/intern_nemotron_worker_2/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1` is at `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`;
+  - no worker_5 task254 remote branch is visible;
+  - GitHub PR search for `intern_nemotron_worker_5/task254_qwen_aime_v10_task253_packing_artifact_review_s1` returned `[]`.
+- Verified lead-side task254 docs exist as `README.md`, `history_log.md`, and `task_knowledge.md` under `workspace/tasks/task254_qwen_aime_v10_task253_packing_artifact_review_s1`; no separate `status.md` or `task.md` exists. The docs assign `intern_nemotron_worker_5` to review exact task253 head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e` and preserve read-only/no-training/no-eval/no-30B boundaries.
+- Read-only verified official task253 artifact paths:
+  - report `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/qwen_packing_xenna_unblock_report.md`;
+  - packed root `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen`;
+  - shard summary `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen_shard_summary.json`.
+- Verified task253 disposition and key values from the report/summary:
+  - disposition `PASS_PACKED_QWEN_LOCAL_ONLY`;
+  - metadata sha256 `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`;
+  - blend sha256 `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`;
+  - data-prep metadata `total_tokens=951216`, `total_sequences=1093`, `num_shards=8`, `pack_size=8192`;
+  - train split summary: `8` symlink shards, `8` unique resolved files, `79` rows, `596944` input tokens, `110945` supervised tokens;
+  - valid split summary: `1` symlink shard, `1` unique resolved file, `15` rows, `115993` input tokens, `18998` supervised tokens.
+- Confirmed the worker report preserves Qwen3-4B path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, `chat_template=tokenizer`, `enable_thinking=false`, `truncate_history_thinking=false`, Qwen packed SFT chat contract validation passed, and no AIME2025 train prompts/labels, shared `lei.song` deletion, NemTron training, FT live eval, task243 comparison, promotion, or 30B/8-GPU occurred.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the verified task253/task254 state and requesting worker_5 task254 acceptance/review result or any blocker/head drift.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: task253 supplies local prep packed-shard evidence only; there is still no candidate FT checkpoint/export/live eval artifact, no task243 same-harness FT-vs-base comparison against the accepted Qwen3-4B base `11/30 = 0.36666666666666664`, no promotion, and no 30B/8-GPU clearance.
