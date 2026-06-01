@@ -18,6 +18,7 @@ exact-normalized accuracy over the full denominator.
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -32,6 +33,9 @@ JsonDict = dict[str, Any]
 
 QWEN_AIME2025_BASE_VS_FT_GATE_PATH = Path(__file__).with_name(
     "qwen_aime2025_base_vs_ft_gate.yaml"
+)
+QWEN_V11_EXPORT_LOAD_CANARY_PROMPTS_PATH = Path(__file__).with_name(
+    "qwen_v11_export_load_canary_prompts.yaml"
 )
 
 REQUIRED_PROTOCOL_FIELDS = (
@@ -70,6 +74,27 @@ PROTOCOL_MATCH_FIELDS = (
 )
 VALID_DENOMINATOR_POLICY = "all_requests"
 VALID_SCORER = "exact_normalized_boxed_or_symbolic_answer"
+VALID_V11_CANARY_PROMPT_SET_ID = "qwen_v11_non_aime_export_load_canary_v1"
+VALID_CANARY_DENOMINATOR_POLICY = "all_canary_prompts"
+FINAL_ANSWER_RE = re.compile(
+    r"\\boxed\{([^{}]+)\}|Final\s+Answer\s*:\s*\\boxed\{([^{}]+)\}|"
+    r"Final\s+Answer\s*:\s*([A-Za-z0-9.+\\-_/ ]+)",
+    re.IGNORECASE,
+)
+CODE_NOISE_RE = re.compile(
+    r"(HaveBeenCalledWith|HTMLElement|SharedPreferences|ReactDOM|"
+    r"Exception|QObject|addWidget|InputBorder|LayoutInflater|"
+    r"BaseEntity|SelectList|onResponse|get[A-Za-z]+|set[A-Za-z]+)"
+)
+SCRIPT_NOISE_PATTERNS = (
+    ("cjk", re.compile(r"[\u4e00-\u9fff]")),
+    ("kana", re.compile(r"[\u3040-\u30ff]")),
+    ("hangul", re.compile(r"[\uac00-\ud7af]")),
+    ("arabic", re.compile(r"[\u0600-\u06ff]")),
+    ("hebrew", re.compile(r"[\u0590-\u05ff]")),
+    ("thai", re.compile(r"[\u0e00-\u0e7f]")),
+    ("cyrillic", re.compile(r"[\u0400-\u04ff]")),
+)
 
 
 @dataclass(frozen=True)
@@ -132,6 +157,30 @@ class BaseVsFtDecision:
         }
 
 
+@dataclass(frozen=True)
+class ExportLoadCanaryDecision:
+    """Pre-AIME export-load canary decision for future V11 artifacts."""
+
+    status: str
+    passed: bool
+    checked_prompt_ids: tuple[str, ...]
+    failed_prompt_ids: tuple[str, ...] = ()
+    missing_prompt_ids: tuple[str, ...] = ()
+    reasons: tuple[str, ...] = field(default_factory=tuple)
+    diagnostics: JsonDict = field(default_factory=dict)
+
+    def to_jsonable(self) -> JsonDict:
+        return {
+            "status": self.status,
+            "passed": self.passed,
+            "checked_prompt_ids": list(self.checked_prompt_ids),
+            "failed_prompt_ids": list(self.failed_prompt_ids),
+            "missing_prompt_ids": list(self.missing_prompt_ids),
+            "reasons": list(self.reasons),
+            "diagnostics": dict(self.diagnostics),
+        }
+
+
 def _load_yaml(path: Path) -> JsonDict:
     import yaml
 
@@ -156,6 +205,38 @@ def _is_positive_int(value: Any) -> bool:
 
 def _is_number(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _as_non_empty_string_list(value: Any) -> list[str] | None:
+    if not isinstance(value, list) or not value:
+        return None
+    if not all(_is_non_empty_string(item) for item in value):
+        return None
+    return [str(item) for item in value]
+
+
+def _normalize_final_answer(value: Any) -> str:
+    text = str(value).strip().lower()
+    text = text.replace("\\boxed", "")
+    text = text.replace("{", "").replace("}", "")
+    text = re.sub(r"[^a-z0-9.+\\-_/]+", "", text)
+    return text
+
+
+def _extract_final_answer(text: str) -> str | None:
+    for match in FINAL_ANSWER_RE.finditer(text):
+        for group in match.groups():
+            if group and group.strip():
+                return group.strip()
+    return None
+
+
+def _script_hits(text: str) -> tuple[str, ...]:
+    return tuple(name for name, pattern in SCRIPT_NOISE_PATTERNS if pattern.search(text))
+
+
+def _has_mixed_script_or_code_noise(text: str) -> bool:
+    return len(_script_hits(text)) >= 3 or len(CODE_NOISE_RE.findall(text)) >= 2
 
 
 def _protocol_for_compare(protocol: Mapping[str, Any]) -> JsonDict:
@@ -207,6 +288,146 @@ def validate_aime2025_protocol(protocol: Mapping[str, Any], *, context: str) -> 
             if actual is not expected:
                 issues.append(
                     f"{context}.chat_template_kwargs.{key} must be {expected!s}"
+                )
+    return issues
+
+
+def validate_v11_canary_prompt_set(data: Mapping[str, Any]) -> list[str]:
+    """Validate the synthetic non-AIME V11 canary prompt set."""
+    issues: list[str] = []
+    if data.get("schema_version") != 1:
+        issues.append("canary prompt set schema_version must be 1")
+    if data.get("prompt_set_id") != VALID_V11_CANARY_PROMPT_SET_ID:
+        issues.append(
+            f"canary prompt_set_id must be {VALID_V11_CANARY_PROMPT_SET_ID!r}"
+        )
+
+    confirmation = data.get("non_aime_non_train_confirmation")
+    if not isinstance(confirmation, Mapping):
+        issues.append("non_aime_non_train_confirmation must be a mapping")
+    else:
+        for key in (
+            "synthetic_prompts_only",
+            "excludes_aime2025",
+            "excludes_training_rows",
+            "review_only_not_trainable",
+            "no_aime2025_prompt_or_label_text",
+        ):
+            if confirmation.get(key) is not True:
+                issues.append(f"non_aime_non_train_confirmation.{key} must be true")
+
+    contract = data.get("generation_contract")
+    if not isinstance(contract, Mapping):
+        issues.append("generation_contract must be a mapping")
+    else:
+        if contract.get("endpoint_type") != "openai_chat_completions":
+            issues.append("generation_contract.endpoint_type must be openai_chat_completions")
+        if contract.get("route") != "/v1/chat/completions":
+            issues.append("generation_contract.route must be /v1/chat/completions")
+        if not _is_positive_int(contract.get("max_tokens")):
+            issues.append("generation_contract.max_tokens must be a positive int")
+        for field_name in ("temperature", "top_p"):
+            if not _is_number(contract.get(field_name)):
+                issues.append(f"generation_contract.{field_name} must be numeric")
+        kwargs = contract.get("chat_template_kwargs")
+        if not isinstance(kwargs, Mapping):
+            issues.append("generation_contract.chat_template_kwargs must be a mapping")
+        else:
+            for key, expected in QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS.items():
+                if kwargs.get(key) is not expected:
+                    issues.append(
+                        "generation_contract.chat_template_kwargs."
+                        f"{key} must be {expected!s}"
+                    )
+
+    prompts = data.get("prompts")
+    if not isinstance(prompts, list) or not prompts:
+        issues.append("prompts must be a non-empty list")
+        return issues
+
+    seen_prompt_ids: set[str] = set()
+    for index, prompt in enumerate(prompts, 1):
+        context = f"prompts[{index}]"
+        if not isinstance(prompt, Mapping):
+            issues.append(f"{context} must be a mapping")
+            continue
+        prompt_id = prompt.get("id")
+        if not _is_non_empty_string(prompt_id):
+            issues.append(f"{context}.id must be a non-empty string")
+        elif prompt_id in seen_prompt_ids:
+            issues.append(f"{context}.id {prompt_id!r} is duplicated")
+        else:
+            seen_prompt_ids.add(str(prompt_id))
+        for field_name in ("category", "prompt", "expected_answer"):
+            if not _is_non_empty_string(prompt.get(field_name)):
+                issues.append(f"{context}.{field_name} must be a non-empty string")
+        prompt_text = str(prompt.get("prompt") or "").lower()
+        if "aime" in prompt_text:
+            issues.append(f"{context}.prompt must not contain AIME text")
+    return issues
+
+
+def validate_v11_artifact_retention_schema(
+    schema: Mapping[str, Any],
+    *,
+    context: str = "v11_artifact_retention_schema",
+) -> list[str]:
+    """Validate required full-completion/debug-transcript retention fields."""
+    issues: list[str] = []
+    if schema.get("required_for_aime_comparison") is not True:
+        issues.append(f"{context}.required_for_aime_comparison must be true")
+    if schema.get("usage") != "review_only_not_trainable":
+        issues.append(f"{context}.usage must be review_only_not_trainable")
+
+    required_files = _as_non_empty_string_list(schema.get("required_files"))
+    if required_files is None:
+        issues.append(f"{context}.required_files must be non-empty strings")
+    else:
+        for file_name in ("full_completions.jsonl", "completion_retention_manifest.json"):
+            if file_name not in required_files:
+                issues.append(f"{context}.required_files must include {file_name!r}")
+
+    result_fields = _as_non_empty_string_list(
+        schema.get("results_jsonl_required_fields")
+    )
+    if result_fields is None:
+        issues.append(
+            f"{context}.results_jsonl_required_fields must be non-empty strings"
+        )
+    else:
+        for field_name in ("response_text_sha256", "response_text_ref", "response_tail"):
+            if field_name not in result_fields:
+                issues.append(
+                    f"{context}.results_jsonl_required_fields must include {field_name!r}"
+                )
+
+    completion_fields = _as_non_empty_string_list(
+        schema.get("full_completions_jsonl_required_fields")
+    )
+    if completion_fields is None:
+        issues.append(
+            f"{context}.full_completions_jsonl_required_fields must be non-empty strings"
+        )
+    else:
+        for field_name in ("response_text", "response_text_sha256", "prompt_sha256"):
+            if field_name not in completion_fields:
+                issues.append(
+                    f"{context}.full_completions_jsonl_required_fields must include "
+                    f"{field_name!r}"
+                )
+
+    manifest_fields = _as_non_empty_string_list(schema.get("manifest_required_fields"))
+    if manifest_fields is None:
+        issues.append(f"{context}.manifest_required_fields must be non-empty strings")
+    else:
+        for field_name in (
+            "review_only_not_trainable",
+            "artifact_sha256",
+            "generation_config",
+        ):
+            if field_name not in manifest_fields:
+                issues.append(
+                    f"{context}.manifest_required_fields must include {field_name!r}"
                 )
     return issues
 
@@ -271,6 +492,67 @@ def validate_base_vs_ft_gate_config(data: Mapping[str, Any]) -> list[str]:
                     "score_normalization_schema.required_fields must include "
                     f"{required!r}"
                 )
+
+    canary = data.get("v11_pre_aime_export_load_canary")
+    if not isinstance(canary, Mapping):
+        issues.append("v11_pre_aime_export_load_canary must be a mapping")
+    else:
+        if canary.get("required_before_aime_comparison") is not True:
+            issues.append(
+                "v11_pre_aime_export_load_canary.required_before_aime_comparison "
+                "must be true"
+            )
+        if canary.get("prompt_set_id") != VALID_V11_CANARY_PROMPT_SET_ID:
+            issues.append(
+                "v11_pre_aime_export_load_canary.prompt_set_id must be "
+                f"{VALID_V11_CANARY_PROMPT_SET_ID!r}"
+            )
+        for field_name in ("prompt_set_path", "prompt_source"):
+            if not _is_non_empty_string(canary.get(field_name)):
+                issues.append(
+                    f"v11_pre_aime_export_load_canary.{field_name} must be "
+                    "a non-empty string"
+                )
+        if canary.get("endpoint_type") != "openai_chat_completions":
+            issues.append(
+                "v11_pre_aime_export_load_canary.endpoint_type must be "
+                "openai_chat_completions"
+            )
+        if canary.get("route") != "/v1/chat/completions":
+            issues.append("v11_pre_aime_export_load_canary.route must be /v1/chat/completions")
+        if canary.get("denominator_policy") != VALID_CANARY_DENOMINATOR_POLICY:
+            issues.append(
+                "v11_pre_aime_export_load_canary.denominator_policy must be "
+                f"{VALID_CANARY_DENOMINATOR_POLICY!r}"
+            )
+        if not _is_positive_int(canary.get("max_tokens")):
+            issues.append("v11_pre_aime_export_load_canary.max_tokens must be a positive int")
+        for field_name in ("temperature", "top_p"):
+            if not _is_number(canary.get(field_name)):
+                issues.append(f"v11_pre_aime_export_load_canary.{field_name} must be numeric")
+        kwargs = canary.get("chat_template_kwargs")
+        if not isinstance(kwargs, Mapping):
+            issues.append(
+                "v11_pre_aime_export_load_canary.chat_template_kwargs must be a mapping"
+            )
+        else:
+            for key, expected in QWEN_CHAT_TEMPLATE_REQUIRED_KWARGS.items():
+                if kwargs.get(key) is not expected:
+                    issues.append(
+                        "v11_pre_aime_export_load_canary.chat_template_kwargs."
+                        f"{key} must be {expected!s}"
+                    )
+        if _as_non_empty_string_list(canary.get("pass_conditions")) is None:
+            issues.append(
+                "v11_pre_aime_export_load_canary.pass_conditions must be "
+                "non-empty strings"
+            )
+
+    retention_schema = data.get("v11_artifact_retention_schema")
+    if not isinstance(retention_schema, Mapping):
+        issues.append("v11_artifact_retention_schema must be a mapping")
+    else:
+        issues.extend(validate_v11_artifact_retention_schema(retention_schema))
     return issues
 
 
@@ -282,6 +564,19 @@ def load_base_vs_ft_gate_config(path: Path | None = None) -> JsonDict:
     if issues:
         raise ValueError(
             f"{target}: invalid Qwen AIME2025 base-vs-FT gate:\n- "
+            + "\n- ".join(issues)
+        )
+    return data
+
+
+def load_v11_canary_prompt_set(path: Path | None = None) -> JsonDict:
+    """Load and validate the synthetic non-AIME V11 canary prompt set."""
+    target = path or QWEN_V11_EXPORT_LOAD_CANARY_PROMPTS_PATH
+    data = _load_yaml(target)
+    issues = validate_v11_canary_prompt_set(data)
+    if issues:
+        raise ValueError(
+            f"{target}: invalid Qwen V11 export-load canary prompt set:\n- "
             + "\n- ".join(issues)
         )
     return data
@@ -465,6 +760,177 @@ def evaluate_base_vs_ft_gate(
     )
 
 
+def evaluate_v11_export_load_canary(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    prompt_set: Mapping[str, Any] | None = None,
+) -> ExportLoadCanaryDecision:
+    """Evaluate future V11 non-AIME export-load canary rows.
+
+    This is an offline artifact decision helper. It does not launch endpoints or
+    run generation. All rows are expected to come from a task-owned canary run.
+    """
+    canary = prompt_set or load_v11_canary_prompt_set()
+    prompt_issues = validate_v11_canary_prompt_set(canary)
+    if prompt_issues:
+        raise ValueError("invalid canary prompt set:\n- " + "\n- ".join(prompt_issues))
+
+    contract = canary["generation_contract"]
+    max_tokens = int(contract["max_tokens"])
+    expected_prompts = {prompt["id"]: prompt for prompt in canary["prompts"]}
+    row_by_prompt_id: dict[str, Mapping[str, Any]] = {}
+    duplicate_prompt_ids: list[str] = []
+    for row in rows:
+        prompt_id = str(row.get("prompt_id") or row.get("sample_id") or row.get("id") or "")
+        if not prompt_id:
+            continue
+        if prompt_id in row_by_prompt_id:
+            duplicate_prompt_ids.append(prompt_id)
+            continue
+        row_by_prompt_id[prompt_id] = row
+
+    missing_prompt_ids: list[str] = []
+    failed_prompt_ids: list[str] = []
+    reasons: list[str] = []
+    diagnostics_by_prompt: dict[str, JsonDict] = {}
+
+    for prompt_id, prompt in expected_prompts.items():
+        row = row_by_prompt_id.get(prompt_id)
+        if row is None:
+            missing_prompt_ids.append(prompt_id)
+            reasons.append(f"{prompt_id}: missing canary row")
+            continue
+
+        row_reasons: list[str] = []
+        status = str(row.get("status") or "missing")
+        content = str(
+            row.get("response_text")
+            or row.get("content")
+            or row.get("message_content")
+            or ""
+        )
+        usage = row.get("usage")
+        completion_tokens = None
+        if isinstance(usage, Mapping):
+            completion_tokens = usage.get("completion_tokens")
+        if completion_tokens is None and "completion_tokens" in row:
+            completion_tokens = row.get("completion_tokens")
+
+        if status != "ok":
+            row_reasons.append(f"status is {status!r}, expected 'ok'")
+        if not content.strip():
+            row_reasons.append("response content is empty")
+        if row.get("reasoning_content") and not content.strip():
+            row_reasons.append("response is reasoning-content-only")
+        if not _is_positive_int(completion_tokens):
+            row_reasons.append("completion token count is missing or invalid")
+        elif int(completion_tokens) > max_tokens:
+            row_reasons.append(
+                f"completion token count {completion_tokens} exceeds {max_tokens}"
+            )
+
+        extracted = _extract_final_answer(content)
+        expected_answer = prompt["expected_answer"]
+        if extracted is None:
+            row_reasons.append("missing final-answer marker")
+        elif _normalize_final_answer(extracted) != _normalize_final_answer(expected_answer):
+            row_reasons.append(
+                f"final answer {extracted!r} does not match {expected_answer!r}"
+            )
+        if _has_mixed_script_or_code_noise(content):
+            row_reasons.append("mixed-script/code-token degeneration signature")
+
+        diagnostics_by_prompt[prompt_id] = {
+            "status": status,
+            "completion_tokens": completion_tokens,
+            "extracted_final_answer": extracted,
+            "expected_answer": expected_answer,
+            "script_hits": list(_script_hits(content)),
+            "content_chars": len(content),
+        }
+        if row_reasons:
+            failed_prompt_ids.append(prompt_id)
+            reasons.extend(f"{prompt_id}: {reason}" for reason in row_reasons)
+
+    if duplicate_prompt_ids:
+        reasons.append(
+            "duplicate canary rows for prompt ids: "
+            + ", ".join(sorted(set(duplicate_prompt_ids)))
+        )
+        failed_prompt_ids.extend(sorted(set(duplicate_prompt_ids)))
+
+    passed = not missing_prompt_ids and not failed_prompt_ids
+    return ExportLoadCanaryDecision(
+        status="pass" if passed else "fail",
+        passed=passed,
+        checked_prompt_ids=tuple(sorted(row_by_prompt_id)),
+        failed_prompt_ids=tuple(sorted(set(failed_prompt_ids))),
+        missing_prompt_ids=tuple(missing_prompt_ids),
+        reasons=tuple(reasons),
+        diagnostics={
+            "prompt_set_id": canary["prompt_set_id"],
+            "denominator_policy": VALID_CANARY_DENOMINATOR_POLICY,
+            "expected_prompt_count": len(expected_prompts),
+            "observed_prompt_count": len(row_by_prompt_id),
+            "duplicate_prompt_ids": sorted(set(duplicate_prompt_ids)),
+            "by_prompt": diagnostics_by_prompt,
+        },
+    )
+
+
+def evaluate_v11_base_vs_ft_gate(
+    *,
+    base_score: Aime2025Score | None,
+    ft_score: Aime2025Score | None,
+    canary_decision: ExportLoadCanaryDecision | None,
+) -> BaseVsFtDecision:
+    """Compare V11 FT against base only after the export-load canary passes."""
+    if canary_decision is None:
+        return BaseVsFtDecision(
+            status="blocked_missing_export_load_canary",
+            base_score=base_score,
+            ft_score=ft_score,
+            delta_exact_normalized_accuracy=None,
+            reasons=(
+                "V11 FT artifact must pass the non-AIME export-load canary "
+                "before same-harness AIME2025 comparison is requested",
+            ),
+            diagnostics={
+                "canary_required": True,
+                "ft_judged": False,
+            },
+        )
+    if not canary_decision.passed:
+        return BaseVsFtDecision(
+            status="blocked_failed_export_load_canary",
+            base_score=base_score,
+            ft_score=ft_score,
+            delta_exact_normalized_accuracy=None,
+            reasons=(
+                "V11 FT artifact failed the non-AIME export-load canary; "
+                "do not run or judge AIME2025 comparison",
+                *canary_decision.reasons,
+            ),
+            diagnostics={
+                "canary_required": True,
+                "ft_judged": False,
+                "canary": canary_decision.to_jsonable(),
+            },
+        )
+    decision = evaluate_base_vs_ft_gate(base_score=base_score, ft_score=ft_score)
+    diagnostics = dict(decision.diagnostics)
+    diagnostics["canary_required"] = True
+    diagnostics["canary"] = canary_decision.to_jsonable()
+    return BaseVsFtDecision(
+        status=decision.status,
+        base_score=decision.base_score,
+        ft_score=decision.ft_score,
+        delta_exact_normalized_accuracy=decision.delta_exact_normalized_accuracy,
+        reasons=decision.reasons,
+        diagnostics=diagnostics,
+    )
+
+
 def format_base_vs_ft_report(decision: BaseVsFtDecision) -> str:
     """Render a compact review report."""
     lines = [
@@ -522,16 +988,25 @@ def format_base_vs_ft_report(decision: BaseVsFtDecision) -> str:
 __all__ = [
     "Aime2025Score",
     "BaseVsFtDecision",
+    "ExportLoadCanaryDecision",
     "PROTOCOL_MATCH_FIELDS",
     "QWEN_AIME2025_BASE_VS_FT_GATE_PATH",
+    "QWEN_V11_EXPORT_LOAD_CANARY_PROMPTS_PATH",
+    "VALID_CANARY_DENOMINATOR_POLICY",
     "VALID_DENOMINATOR_POLICY",
     "VALID_SCORER",
+    "VALID_V11_CANARY_PROMPT_SET_ID",
     "assert_same_harness",
     "evaluate_base_vs_ft_gate",
+    "evaluate_v11_base_vs_ft_gate",
+    "evaluate_v11_export_load_canary",
     "format_base_vs_ft_report",
     "load_base_vs_ft_gate_config",
     "load_jsonl",
+    "load_v11_canary_prompt_set",
     "normalize_aime2025_rows",
     "validate_aime2025_protocol",
     "validate_base_vs_ft_gate_config",
+    "validate_v11_artifact_retention_schema",
+    "validate_v11_canary_prompt_set",
 ]

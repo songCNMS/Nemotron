@@ -14,3 +14,12 @@
 5. A V11 canary must use synthetic non-AIME prompts only and should be
    documented with prompt-source hashes so reviewers can verify it is not
    train or held-out AIME data.
+6. The task264 canary prompt set is
+   `qwen_v11_non_aime_export_load_canary_v1`, five synthetic prompts, sha256
+   `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`.
+7. Future V11 AIME artifacts must retain `full_completions.jsonl` and
+   `completion_retention_manifest.json` with response text hashes/references;
+   these artifacts are review-only and not trainable data.
+8. The first pytest attempt without `PYTHONPATH=src` cannot import `nemotron`;
+   the focused test command for this repo is `PYTHONPATH=src pytest -q
+   tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py`.

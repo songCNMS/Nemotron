@@ -1,6 +1,6 @@
 # task264_qwen_aime_v11_eval_gate_canary_retention_s1 - V11 eval canary and retention gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 
