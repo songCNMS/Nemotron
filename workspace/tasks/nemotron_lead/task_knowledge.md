@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=52 -->
+<!-- METADATA:SESSION=53 -->
 
 ## Knowledge Entries
 
@@ -69,3 +69,4 @@
 63. The HotpotQA `trust_remote_code` failure should be handled as a worker-owned data-source/config unblock task before task243 resumes; task243 cannot compare base-vs-FT until a real candidate FT artifact exists.
 64. task251 is scoped to a Qwen3-4B local prep unblock and must stop before NemTron training or FT live eval unless lead explicitly clears continuation after reviewing the local prep artifacts.
 65. worker_2's #327 mailbox closeout recorded post-merge branch-only head `bbc8555`; this does not change the merged PR head `3405acf` or the gate disposition.
+66. task251 branch head `a5d48c3` is acceptance/docs/status only; it is not unblock evidence until worker_2 provides cache/override artifacts, commands/environment, row counts, checksums, and HotpotQA pass/fail.

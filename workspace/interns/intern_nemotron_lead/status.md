@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #327 merged/closeout reconciled; task251 assigned/reported for HotpotQA loader unblock; gate HOLD |
+| PR | task251 branch a5d48c3 visible, no PR/artifacts yet; #327 merged; gate HOLD |
 | Session | 53 |
