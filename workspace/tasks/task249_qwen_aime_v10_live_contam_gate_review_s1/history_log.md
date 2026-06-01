@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -34,3 +34,48 @@
 - task250 branch/PR was not visible in remote branch/PR listing at this checkpoint.
 - Scope remains review-only; no product edits, training, eval, endpoint launch,
   merge, main push, or worker branch rewrite was performed.
+- Continued Session 2 review after PR #323 was visible. Fetched/inspected
+  task246, task247, task248, and task250 PR #324 evidence.
+- Published `live_gate_review_matrix.md` with decisions:
+  task246 BLOCK/HOLD, task247 BLOCK/HOLD, task248 BLOCK/HOLD, task250
+  REQUEST_CHANGES/HOLD, and combined first go/no-go NO-GO/HOLD.
+
+## Session 3 - Current live matrix refresh
+
+- Refreshed refs per lead request: task246
+  `a53c913ab80e37197ccfe7525ea04e0ac80c96fe`, task247
+  `94c21c9a8cb229f0357a049a698de898963810f1`, task248
+  `200741802a9ae9cb9f3e16af8f1b7e66fee69857`, task250 PR #324
+  `d1525aa617378e407ffa2e99fde44630f9ab43dc`, and task249 PR #323
+  `65c2bda8d0ff3f99486bee605ff558f67ca2b11e`.
+- Verified PR #324 is OPEN/CLEAN and PR #323 remains OPEN/CLEAN.
+- Read task248 `qwen4b_v10_pilot_report.md`; it correctly blocks before
+  local prep/train because task246 real corpus/input and task247 base artifacts
+  are not accepted evidence. Marked the blocked-before-prep report approved,
+  while keeping the runtime go/no-go on HOLD.
+- Read task250 Session 4 runbook; it keeps NO-GO/HOLD but only corrects
+  metadata and still has stale visibility for the task247 cache, task248 branch
+  report, and task249 PR. Kept PR #324 at REQUEST_CHANGES/HOLD.
+- Read-only output probe found no task246 output dir and no task248/task250
+  output dirs. task247 has an AIME2025 input/cache bundle with 30 rows and
+  `labels_stored_in_cache: true`, but `qwen4b_base_smoke` is empty and no
+  base score report/artifacts are published.
+- Updated `live_gate_review_matrix.md` with Session 3 evidence and preserved
+  combined first Qwen3-4B V10 go/no-go as NO-GO/HOLD.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, or shared
+  file deletion was performed.
+
+## Session 4 - task247 cache/base distinction addendum
+
+- Incorporated lead addendum that task247 now has local corrected AIME
+  input/cache files, but still has no pushed task247 report/base artifact.
+- Preserved the distinction in `live_gate_review_matrix.md`: task247 cache and
+  input availability is eval material only and does not satisfy the missing
+  Qwen3-4B base endpoint or base score requirements.
+- Current per-task disposition remains: task246 BLOCK/HOLD, task247
+  BLOCK/HOLD, task248 APPROVE blocked-before-prep report/HOLD, task250 PR #324
+  REQUEST_CHANGES/HOLD, and combined first Qwen3-4B V10 go/no-go NO-GO/HOLD.
+- Scope remained review-only: no product code edits, training, live eval,
+  endpoint launch, NemTron sync, merge, main push, branch rewrite, or shared
+  file deletion was performed.
