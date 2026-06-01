@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Session 0 - Created with team lead
 
@@ -2169,5 +2169,83 @@
   HotpotQA loader blocker. There are still no packed Qwen shards, no candidate
   FT checkpoint/export/live eval artifacts, no task243 same-harness FT-vs-base
   comparison against accepted base `11/30`, and no 30B/8-GPU clearance.
+- Lead did not implement product code, run implementation tests, train models,
+  launch evals, merge PRs, or push `main`.
+
+## Session 59 - 2026-06-01 UTC - task253 local packing closeout, task254 review assigned
+
+- Received coordinator Session 29 ack/update:
+  - coordinator verified lead branch `076751b39a6611a0ef63ccc57c37e6201b91a67a`;
+  - `origin/main` remains
+    `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - #328 remains merged from head
+    `694197c81720dcc157518d8a86b2b5d7a7a2dd05` with merge commit
+    `61fa65e9e9a535d531a65072c839760c3488207f`;
+  - coordinator observed task253 artifacts had advanced to
+    `PASS_PACKED_QWEN_LOCAL_ONLY`, but no official worker_2 report was visible
+    to coordinator yet.
+- Read lead mailbox first; no unread messages were present at session start.
+- Rechecked task253 state:
+  - remote branch had advanced from `be3803f` to
+    `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`;
+  - no task253 PR is visible;
+  - branch delta remains task/status docs only, with no repo code/config/script
+    changes;
+  - worker_2 local status is `Idle` and records artifact-only closeout.
+- Received and marked read worker_2's official task253 closeout mailbox:
+  - branch head
+    `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`;
+  - PR `N/A` because no repo code/config/script changes were needed;
+  - disposition `PASS_PACKED_QWEN_LOCAL_ONLY`;
+  - report
+    `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/qwen_packing_xenna_unblock_report.md`;
+  - output root
+    `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen`;
+  - shard summary
+    `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen_shard_summary.json`;
+  - `metadata.json` sha256
+    `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`;
+  - `blend.json` sha256
+    `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`;
+  - data-prep metadata `total_tokens=951216`, `total_sequences=1093`,
+    `num_shards=8`, `pack_size=8192`;
+  - shard summary: train `8` symlink shards / `8` unique files / `79` rows /
+    `596944` input tokens / `110945` supervised tokens; valid `1` symlink
+    shard / `1` unique file / `15` rows / `115993` input tokens / `18998`
+    supervised tokens;
+  - Qwen packed SFT chat contract validation passed per worker report;
+  - boundaries preserved: no AIME2025 train prompts/labels, no shared
+    `lei.song` deletion, no NemTron training, no FT live eval, no task243
+    comparison, no promotion, and no 30B/8-GPU;
+  - residual risk: local user-site pip install generated dependency conflict
+    warnings and should be treated as local packing evidence only, not a
+    production environment prescription.
+- Evaluated active workers for independent review:
+  - worker_2 authored task253 and is not suitable as independent reviewer;
+  - worker_5 is idle in its own workspace and has artifact/runbook verification
+    ownership history;
+  - worker_4 is also idle but most recently served as #328 reviewer;
+  - worker_1 and worker_3 are not needed for this single artifact review.
+- Created task254
+  `task254_qwen_aime_v10_task253_packing_artifact_review_s1`, assigned to
+  `intern_nemotron_worker_5`, for independent read-only review/test of exact
+  task253 head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e` and the task253
+  output artifacts.
+- task254 scope:
+  - verify report paths, commands/env, dependency probes, metadata/blend
+    checksums, shard counts, Qwen chat-template settings, and boundaries;
+  - optionally run lightweight read-only checksum/metadata and Qwen packed chat
+    contract validation;
+  - return approve/request-changes/block and residual risk.
+- task254 boundaries:
+  - no code edits, commits, PRs, merges, training, FT live eval, task243
+    comparison, promotion, or 30B/8-GPU;
+  - no deletion or overwrite under `/mnt/cephfs/data/processing/lei.song`;
+  - packed shards remain local prep evidence only.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: task253, even if
+  independently approved, supplies local packed-shard prep evidence only. There
+  is still no candidate FT checkpoint/export/live eval artifact, no task243
+  same-harness FT-vs-base comparison against accepted base `11/30`, no
+  promotion, and no 30B/8-GPU clearance.
 - Lead did not implement product code, run implementation tests, train models,
   launch evals, merge PRs, or push `main`.

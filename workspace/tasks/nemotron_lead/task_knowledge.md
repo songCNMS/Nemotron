@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Knowledge Entries
 
@@ -80,3 +80,5 @@
 74. After #328, the next live blocker is Qwen packing environment dependency `ModuleNotFoundError: No module named 'cosmos_xenna'`; a follow-up worker task may unblock Xenna-enabled local packing and packed shard evidence only, but still must not authorize NemTron training, FT eval, task243 comparison, promotion, or 30B/8-GPU scale.
 75. task253 branch head `be3803fcf1aa7863255d939d34d03f633f95845d` plus worker_2 mailbox acceptance confirms scope/ownership only; it is not packing evidence until worker_2 provides a PR or artifact paths with commands, Xenna import probe, packed shard checksums, or exact blocker logs.
 76. Read-only task253 output logs can be used to monitor likely progress or blockers, but lead must not convert them into a gate disposition without worker_2's official report; current observed logs show `cosmos_xenna` import OK but no packed shards and an unresolved/stale `pydantic_settings` packing failure sequence.
+77. worker_2's task253 official closeout at branch head `749ade2e05b18ae0f1083342eeef0f8a2d61b11e` reports `PASS_PACKED_QWEN_LOCAL_ONLY`; this can satisfy the local packing evidence precondition only after independent review, and still does not authorize training, FT eval, task243 comparison, promotion, or 30B/8-GPU.
+78. A local user-site dependency fix for packing (`cosmos-xenna==0.1.8`, `pydantic-settings==2.14.1`) is artifact evidence for this worker environment, not a production environment prescription; independent review should preserve that residual risk.

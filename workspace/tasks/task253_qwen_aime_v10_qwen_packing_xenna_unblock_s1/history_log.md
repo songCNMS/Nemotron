@@ -1,6 +1,6 @@
 # task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -36,3 +36,34 @@
   probe reported `pydantic_settings_import OK` version `2.14.1`.
 - This observation is not a task253 disposition; worker_2 still owes official
   commands/env/artifact or blocker report.
+
+## Session 2 - 2026-06-01 UTC - Official artifact-only closeout received
+
+- Received and marked read worker_2 official mailbox closeout.
+- task253 branch advanced to
+  `749ade2e05b18ae0f1083342eeef0f8a2d61b11e`; no PR was opened because the
+  closeout is artifact-only and no repo code/config/script changes were needed.
+- Disposition reported by worker_2: `PASS_PACKED_QWEN_LOCAL_ONLY`.
+- Report path:
+  `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/qwen_packing_xenna_unblock_report.md`.
+- Packed root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen`.
+- Shard summary:
+  `/work-agents/intern_nemotron_worker_2/outputs/task253_qwen_aime_v10_qwen_packing_xenna_unblock_s1/packed_qwen_shard_summary.json`.
+- Reported metadata: `total_tokens=951216`, `total_sequences=1093`,
+  `num_shards=8`, `pack_size=8192`, Qwen tokenizer
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`,
+  `enable_thinking=false`, and `truncate_history_thinking=false`.
+- Reported checksums: metadata sha256
+  `18a83f43bdecaed886bd115945e3b767c99479bf6dafae20be544e21b36afac3`;
+  blend sha256
+  `963ad31c2265eaf9f10fdd261eb73705e72b83fbc0fff2b00f49891bfcbb0520`.
+- Reported shard split summary: train `8` symlink shards / `8` unique files /
+  `79` rows / `596944` input tokens / `110945` supervised tokens; valid `1`
+  symlink shard / `1` unique file / `15` rows / `115993` input tokens /
+  `18998` supervised tokens.
+- Boundary remains: local packed-shard prep evidence only, no checkpoint/export,
+  no training, no FT live eval, no task243 comparison, no promotion, and no
+  30B/8-GPU.
+- Lead created task254 for independent artifact/repro review before accepting
+  task253 as local prep evidence.
