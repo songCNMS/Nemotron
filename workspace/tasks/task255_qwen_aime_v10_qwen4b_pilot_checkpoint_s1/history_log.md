@@ -1,6 +1,6 @@
 # task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1 - History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0 - Assigned
 
@@ -240,3 +240,13 @@
 - This does not approve #329 because task256 still request-changes artifact
   accessibility and task258 remains pending.
 - Current task255 candidate remains not promotable; 30B/8-GPU remains blocked.
+
+## Session 9 - 2026-06-01 UTC - task257 failure record merged
+
+- PR #330 merged from task257 head
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3` with merge commit
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- #330 records the same-harness task255 FT result `0/30`, below accepted base
+  `11/30`.
+- #329 remains open/HOLD because task256 request-changed reviewer artifact
+  accessibility and task258 is still pending.

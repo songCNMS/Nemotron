@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,6 @@
 8. Approval was refreshed to `da83f014f5e4b22c4410afdf8bda3ccb49a70af3` after a
    docs/status metadata-only compliance fix; the task257 eval report did not
    change.
+9. #330 merged at `2026-06-01T21:11:42Z` with merge commit
+   `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f` from head
+   `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.

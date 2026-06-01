@@ -117,3 +117,7 @@
 100. #330 approval was refreshed to `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`
    after a docs/status metadata-only compliance fix; require exact-head CLEAN
    self-merge with no further pre-merge head drift.
+101. #330 merged at `2026-06-01T21:11:42Z` with merge commit
+   `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f` from head
+   `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`; it is a failure/no-promotion
+   record.

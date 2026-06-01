@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - task255 AIME gate
 
-<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=5 -->
 
 ## Lead Gate Update
 
@@ -27,6 +27,11 @@ worker_3 may self-merge #330 only if it is still `CLEAN` at exact head
 `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`. The delta from the previous
 approved head `4f8f8fcfffe46245070541956a2f44731406f2e6` is docs/status
 metadata only; the same-harness evaluation report did not change.
+
+#330 was self-merged from head
+`da83f014f5e4b22c4410afdf8bda3ccb49a70af3` at
+`2026-06-01T21:11:42Z` with merge commit
+`0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
 
 ## Background
 

@@ -1,6 +1,6 @@
 # task257_qwen_aime_v10_task255_same_harness_eval_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -111,3 +111,19 @@
   `https://github.com/songCNMS/Nemotron/pull/330#issuecomment-4596549715`
   and sent delivered peer instruction approving self-merge only if #330 remains
   `CLEAN` at exact head `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+
+## Session 5 - 2026-06-01 UTC - PR #330 merged
+
+- Lead fetched origin and verified PR #330 is `MERGED`.
+- mergedAt: `2026-06-01T21:11:42Z`.
+- mergeCommit:
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- merged head:
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- `origin/main` now points to
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- No worker_3 post-merge mailbox closeout was present at the first lead check
+  after merge.
+- This closes task257 as a merged docs/report failure record. It does not
+  approve #329, does not promote the task255 candidate, and does not clear
+  30B/8-GPU. Global gate remains `NO-GO/HOLD`.

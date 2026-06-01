@@ -2809,3 +2809,21 @@
   remains `CLEAN` at that exact head, with no further pre-merge head drift.
 - #329 remains `HOLD`; task258 branch is not visible yet; global Qwen AIME gate
   remains `NO-GO/HOLD`, no promotion, no 30B/8-GPU.
+
+## Session 68 - 2026-06-01 UTC - task257 #330 merged
+
+- Fetched origin and verified PR #330 is `MERGED`.
+- #330 mergedAt: `2026-06-01T21:11:42Z`.
+- #330 mergeCommit:
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- #330 merged head:
+  `da83f014f5e4b22c4410afdf8bda3ccb49a70af3`.
+- `origin/main` is now
+  `0dfc63bc4856a55e26a3fb4143fcb969b3c7bc3f`.
+- No worker_3 post-merge mailbox closeout was present at the first check after
+  merge.
+- #330 closes task257 as a merged docs/report failure record: task255 FT
+  `0/30` below accepted base `11/30`. It is not a promotion or go/no-go pass.
+- #329 remains open/HOLD pending task258 reviewer-accessible artifact evidence
+  or blocker. Global Qwen AIME gate remains `NO-GO/HOLD`; 30B/8-GPU remains
+  blocked.
