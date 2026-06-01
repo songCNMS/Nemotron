@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
 
 ## Knowledge Entries
 
@@ -180,3 +180,9 @@
    worker status plus task261 history/task_knowledge metadata only and the
    report is unchanged, but self-merge stays HOLD until worker_1 sends a fresh
    exact-head `3f404b3` mailbox because the head changed after approval.
+118. Fresh worker_1 mailbox `2c7099daaaed41ceaae3bb81b5737005` satisfies the
+   exact-head gate for task261/#333 at `3f404b3`; lead comment `4596951073`
+   approves docs/status closeout only and releases worker_1 to self-merge if
+   #333 remains `OPEN`/base `main`/`CLEAN` at exact `3f404b3`. This does not
+   change the Qwen AIME `NO-GO/HOLD` gate or authorize promotion, new
+   training/eval, AIME2025 train data, or 30B/8-GPU.

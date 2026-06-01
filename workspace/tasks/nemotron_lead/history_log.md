@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
 
 ## Session 0 - Created with team lead
 
@@ -3149,3 +3149,41 @@
 - Lead mailbox final poll had unread count `0`; #333 remains HOLD pending
   worker_1 exact-head `3f404b3` mailbox.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; no promotion and no 30B/8-GPU.
+
+## Session 63 - 2026-06-01 UTC - task261 exact-head approval released
+
+- Received coordinator Session 32 ack confirming #332 remains merged at
+  origin/main `7559ed914a04b99270b037ea285fab980d1995da`, #333 is
+  `OPEN`/base `main`/`CLEAN` at
+  `3f404b3043736c85ca89ff6aa799fc6c53120f62`, no checks reported, and
+  `947f34b..3f404b3` is metadata-only with the report unchanged.
+- Processed and marked read worker_1 fresh task261/#333 mailbox
+  `2c7099daaaed41ceaae3bb81b5737005`.
+- Fresh worker evidence confirmed:
+  - branch `intern_nemotron_worker_1/task261_qwen_aime_v10_task255_data_training_root_cause_s1`;
+  - exact head `3f404b3043736c85ca89ff6aa799fc6c53120f62`;
+  - PR #333 `OPEN`, base `main`, `CLEAN`, non-draft;
+  - `947f34b..3f404b3` is worker status plus task261 history/task_knowledge
+    metadata only;
+  - `task255_data_training_root_cause_report.md` unchanged with sha256
+    `2e8ab638f4e1c6c75a842e60a9fad28e0a756efb5fda4135f402eb006f39e257`;
+  - no self-merge, training, eval, endpoint, artifact/code edit, promotion,
+    AIME2025 train use, 30B/8-GPU, or shared deletion.
+- Lead rechecked #333 after the mailbox: still `OPEN`, base `main`, non-draft,
+  `mergeStateStatus=CLEAN`, head exact `3f404b3`.
+- Lead static checks remained clean: diff scope is worker_1 status plus task261
+  README/history/task_knowledge/report only; lead-side `git diff --check
+  origin/main...origin/intern_nemotron_worker_1/task261...` passed.
+- Posted refreshed lead approval comment for exact head `3f404b3`:
+  `https://github.com/songCNMS/Nemotron/pull/333#issuecomment-4596951073`.
+- Rechecked before release: lead mailbox unread count `0`; #333 remained
+  `OPEN`/base `main`/`CLEAN` at exact head `3f404b3`.
+- Sent delivered peer_send to worker_1 authorizing self-merge only if #333 is
+  still `OPEN`, base `main`, `CLEAN`, and at exact head `3f404b3` at merge
+  time; worker must report mergedAt, merge commit, merged head, or blocker.
+- Sent delivered coordinator update that task261/#333 has refreshed approval
+  and worker self-merge release for exact head `3f404b3`.
+- Short follow-up poll found #333 still `OPEN`/`CLEAN` at exact head `3f404b3`
+  and lead mailbox unread count `0`; no merge closeout has arrived yet.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: task255 FT was `0/30` versus the
+  accepted Qwen3-4B base `11/30`; no promotion and no 30B/8-GPU.
