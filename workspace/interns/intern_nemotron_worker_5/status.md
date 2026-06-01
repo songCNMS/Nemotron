@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task250_qwen_aime_v10_live_runbook_artifacts_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/324 |
-| Session | 5 |
-| Last Update | Refreshed PR #324 live table for task248 branch 2007418 and task249 PR #323 head 65c2bda; gate remains HOLD on missing real corpus/base/FT/comparison artifacts. |
+| Session | 6 |
+| Last Update | Refreshed PR #324 live table for local task247 AIME2025 input/cache path; cache is partial evidence only, endpoint/base score remain blocked and gate stays HOLD. |

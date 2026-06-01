@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -55,5 +55,24 @@
 - Refreshed `live_runbook_artifact_report.md` so task248/task249 are no longer
   marked invisible, while the overall gate remains NO-GO/HOLD on missing real
   corpus/base/FT/comparison artifacts and 30B permission.
+- Did not run training, live eval, endpoint serving, NemTron sync,
+  30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
+
+## Session 6 - Recorded local task247 AIME input/cache evidence
+
+- Verified local task247 cache directory exists:
+  `/work-agents/intern_nemotron_worker_3/outputs/task247_qwen_aime2025_qwen4b_base_smoke_s1/aime2025_input_cache`.
+- Recorded cache files: `aime2025-I.jsonl` 15 rows,
+  `aime2025-II.jsonl` 15 rows, `aime_score_cache.opencompass_a6ad95f.db`,
+  `aime_score_cache_source_manifest.json`, and `README.md`.
+- Recorded source manifest facts: source dataset `opencompass/AIME2025`,
+  revision `a6ad95f611d72cf628a80b58bd0432ef6638f958`, 30 rows, 30 unique
+  problems, and `labels_stored_in_cache=true`.
+- Updated `live_runbook_artifact_report.md` so corrected AIME input/cache is
+  PARTIAL rather than fully missing; it still requires task247 formal report/PR
+  before acceptance.
+- Reconfirmed Qwen3-4B endpoints `127.0.0.1:13000` and `127.0.0.1:30001`
+  are not reachable, so base score artifacts remain blocked and #324 stays
+  NO-GO/HOLD.
 - Did not run training, live eval, endpoint serving, NemTron sync,
   30B/8-GPU launch, self-merge, `main` push, or shared-storage deletion.
