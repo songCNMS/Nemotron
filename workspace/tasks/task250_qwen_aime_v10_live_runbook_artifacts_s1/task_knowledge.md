@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -16,3 +16,5 @@
 5. Current live gate status is HOLD because real task246 corpus/input, task247
    base artifacts, task248 candidate artifacts, task249 review, and task243
    comparison artifacts are not yet published as accepted evidence.
+6. Session 4 is a metadata/status correction for acceptance visibility; it does
+   not change the live artifact gate or authorize runtime work.

@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task250_qwen_aime_v10_live_runbook_artifacts_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/324 |
-| Session | 1 |
-| Last Update | Accepted task250 on branch intern_nemotron_worker_5/task250_qwen_aime_v10_live_runbook_artifacts_s1 from origin/main after PR #321; opened PR #324 with read-only live artifact/runbook table and current HOLD blockers. |
+| Session | 4 |
+| Last Update | Synced task250 session metadata to Session 4 and kept PR #324 live artifact/runbook table at HOLD; no train/eval/endpoints/30B, main push, self-merge, or shared-storage deletion performed. |

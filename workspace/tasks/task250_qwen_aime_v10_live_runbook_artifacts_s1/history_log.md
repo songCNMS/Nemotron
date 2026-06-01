@@ -1,6 +1,6 @@
 # task250_qwen_aime_v10_live_runbook_artifacts_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -25,3 +25,15 @@
   artifacts, no candidate FT artifacts, and no 30B/8-GPU permission.
 - Did not run training, live eval, endpoint serving, NemTron sync, deletion,
   merge, or `main` push.
+
+## Session 4 - Session metadata correction and acceptance visibility
+
+- Updated task250 session metadata to Session 4 for the worker status and task
+  docs after the stop hook required a Session 4 record.
+- Preserved the same live artifact state from PR #324 head `0a20f0b`: current
+  gate remains NO-GO/HOLD because task246 corpus/input, task247 base
+  artifacts, task248 candidate artifacts, task249 review, task243 comparison,
+  and explicit 30B permission are not yet accepted evidence.
+- No new runtime actions were taken: no training, live eval, endpoint serving,
+  NemTron sync, 30B/8-GPU launch, shared-storage deletion, self-merge, or
+  `main` push.
