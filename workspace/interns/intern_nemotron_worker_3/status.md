@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | |
-| PR | #332 |
+| PR | #335 |
 | Session | 1 |
-| Progress | Completed task260 read-only forensic report in PR #332: task255 FT failure is generation degeneration/corruption, not an evaluator-only parser issue. Awaiting lead gate. |
+| Progress | Completed task264 V11 canary/retention gate implementation and report in PR #335; awaiting lead gate. No live AIME eval/training/endpoints were run. |

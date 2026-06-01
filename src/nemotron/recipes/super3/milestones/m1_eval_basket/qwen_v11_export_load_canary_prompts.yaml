@@ -1,0 +1,66 @@
+# Copyright (c) 2025, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0.
+
+schema_version: 1
+prompt_set_id: qwen_v11_non_aime_export_load_canary_v1
+created_for_task: task264_qwen_aime_v11_eval_gate_canary_retention_s1
+description: |
+  Synthetic non-AIME export-load canary prompts for future Qwen3-4B V11
+  fine-tuned artifacts. This prompt set is intended to catch corrupted exports
+  or incoherent generation before any held-out AIME2025 same-harness eval is
+  requested.
+
+non_aime_non_train_confirmation:
+  synthetic_prompts_only: true
+  excludes_aime2025: true
+  excludes_training_rows: true
+  review_only_not_trainable: true
+  no_aime2025_prompt_or_label_text: true
+
+generation_contract:
+  endpoint_type: openai_chat_completions
+  route: /v1/chat/completions
+  tokenizer_chat_template: Qwen checkpoint tokenizer
+  chat_template_kwargs:
+    enable_thinking: false
+    truncate_history_thinking: false
+  max_tokens: 256
+  temperature: 0.0
+  top_p: 1.0e-5
+  response_contract: |
+    Return concise coherent text followed by a final answer marker, preferably
+    `Final Answer: ...` or `\boxed{...}`. This is an export-load canary, not a
+    benchmark score.
+
+prompts:
+  - id: synthetic_arithmetic_sum_37_58
+    category: arithmetic
+    prompt: |
+      Compute 37 + 58. Give one short line of reasoning, then write the result
+      as `Final Answer: \boxed{...}`.
+    expected_answer: "95"
+  - id: synthetic_counting_pens_6_9
+    category: arithmetic
+    prompt: |
+      A desk cup has 6 blue pens and 9 black pens. How many pens are in the cup
+      in total? Answer with a short sentence and `Final Answer: \boxed{...}`.
+    expected_answer: "15"
+  - id: synthetic_linear_expression_2x_plus_y
+    category: arithmetic
+    prompt: |
+      Let x = 12 and y = 5. Compute 2x + y. Keep the response under four
+      sentences and end with `Final Answer: \boxed{...}`.
+    expected_answer: "29"
+  - id: synthetic_next_integer_246
+    category: numeric_instruction
+    prompt: |
+      What integer comes immediately after 246? Respond with exactly one short
+      explanation sentence and then `Final Answer: \boxed{...}`.
+    expected_answer: "247"
+  - id: synthetic_word_completion_ready_set
+    category: coherence
+    prompt: |
+      Complete the phrase "ready, set, ___". Use normal English text and end
+      with `Final Answer: ...`.
+    expected_answer: "go"

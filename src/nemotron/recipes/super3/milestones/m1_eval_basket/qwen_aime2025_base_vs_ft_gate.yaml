@@ -98,3 +98,74 @@ artifact_requirements:
   comparison:
     - base_vs_ft_gate_decision.json
     - base_vs_ft_gate_report.md
+
+v11_pre_aime_export_load_canary:
+  required_before_aime_comparison: true
+  prompt_set_id: qwen_v11_non_aime_export_load_canary_v1
+  prompt_set_path: qwen_v11_export_load_canary_prompts.yaml
+  prompt_source: synthetic task264 canary prompts; no AIME2025 or train rows
+  endpoint_type: openai_chat_completions
+  route: /v1/chat/completions
+  tokenizer_chat_template: Qwen checkpoint tokenizer
+  chat_template_kwargs:
+    enable_thinking: false
+    truncate_history_thinking: false
+  max_tokens: 256
+  temperature: 0.0
+  top_p: 1.0e-5
+  denominator_policy: all_canary_prompts
+  pass_conditions:
+    - all prompts return status ok
+    - each response has non-empty message.content
+    - no reasoning-content-only response shape
+    - each response has a short final-answer marker
+    - each extracted final answer matches the synthetic expected answer
+    - no mixed-script/code-token degeneration signature
+
+v11_artifact_retention_schema:
+  required_for_aime_comparison: true
+  usage: review_only_not_trainable
+  required_files:
+    - summary.json
+    - results.jsonl
+    - command.txt
+    - endpoint_model_manifest.json
+    - full_completions.jsonl
+    - completion_retention_manifest.json
+  results_jsonl_required_fields:
+    - sample_id
+    - task
+    - status
+    - finish_reason
+    - parsed
+    - correct
+    - prediction
+    - boxed_values
+    - response_chars
+    - response_tail
+    - response_text_sha256
+    - response_text_ref
+    - usage
+  full_completions_jsonl_required_fields:
+    - sample_id
+    - task
+    - model_id
+    - prompt_sha256
+    - response_text
+    - response_text_sha256
+    - finish_reason
+    - usage
+  manifest_required_fields:
+    - schema_version
+    - retention_policy
+    - review_only_not_trainable
+    - artifact_sha256
+    - prompt_set_id
+    - model_id
+    - model_path
+    - endpoint_route
+    - generation_config
+  retention_policy: |
+    Store full completions or an equivalent deterministic reviewer transcript
+    for forensic review. These artifacts are eval evidence only and must not be
+    used as trainable AIME2025 data.
