@@ -1,33 +1,32 @@
 # task245 Runbook Verification Report
 
-<!-- METADATA:STATUS=BlockedForGate,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=BlockedForGate,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Summary
 
-PR #317 now persists the artifact/runbook verification requested by task245.
-This is verification documentation only: no training, live eval, endpoint
-serving, 30B/8-GPU scale, shared-file deletion, merge, or `main` push was
-performed.
+PR #317 persists the artifact/runbook verification requested by task245. This
+is verification documentation only: no training, live eval, endpoint serving,
+30B/8-GPU scale, shared-file deletion, merge, or `main` push was performed.
 
 Current gate verdict: **BLOCKED for first Qwen3-4B AIME go/no-go readiness**.
-The base Qwen3-4B model path is verified, and task243 PR #319 defines a
-same-harness AIME25 base-vs-FT gate whose unit tests pass. However, the V10
-data/planner artifacts are not yet published as reviewable PR artifacts, the
-task243 base config still names a missing `/mnt/3fs` path, no corrected base
-score artifacts exist in this workspace, no Qwen endpoint is listening, and no
-candidate FT checkpoint/export/eval output exists.
+Resolved since the prior report: task241 PR #320 is open/CLEAN at `5753713`
+with V10 data-prep code/report present, and task243 PR #319 is open/CLEAN at
+`61a12dd` with the Qwen3-4B AIME gate configured to the verified cephfs base
+path. The gate remains blocked only on the current blockers listed below:
+task242 has no published PR, the corrected AIME input/cache is missing, no
+reachable Qwen3-4B endpoint exists, no base score artifacts exist, no candidate
+FT checkpoint/export/eval exists, and 30B scale has no permission.
 
 ## Inputs Inspected
 
 | Input | Status |
 | --- | --- |
-| PR #317 `intern_nemotron_worker_5/task245_qwen_aime_v10_artifact_runbook_verify_s1` | Open; this report added after head `aa071c4` |
-| task241 branch `origin/intern_nemotron_worker_1/task241_qwen_aime_v10_sidecar_data_s1` @ `233a0e0` | Remote branch contains task/status docs only; no PR found |
-| task241 local worker_1 workspace | Uncommitted V10 data-prep diff observed; not accepted as PR evidence |
+| PR #317 `intern_nemotron_worker_5/task245_qwen_aime_v10_artifact_runbook_verify_s1` | Open/CLEAN; this refresh is based on pre-edit head `ba3c2a1` |
+| task241 PR #320 @ `5753713` | Open/CLEAN; V10 data-prep code/report present, including `hard_math_runlength_dp_v10`, `prepare_m1_agentic_sft.py`, and `v10_sidecar_data_report.md`; no training or live eval run |
 | task242 branch `origin/intern_nemotron_worker_2/task242_qwen_aime_v10_planner_smoke_s1` @ `b2d16a7` | Remote branch contains task/status docs only; no PR found |
-| task242 local worker_2 workspace | Uncommitted V10 planner diff observed; used only for non-launch planner-shape probes |
-| task243 PR #319 @ `bfb49a8` | Open; gate module/config/report present; tests pass locally |
-| task244 PR #318 @ `069424b` | Open; independent review blocks #317 until this report exists |
+| task242 local worker_2 workspace | Uncommitted V10 planner diff previously observed; used only for non-launch planner-shape probes |
+| task243 PR #319 @ `61a12dd` | Open/CLEAN; gate module/config/report present and Qwen3-4B base path now matches the verified cephfs path |
+| task244 PR #318 @ `e5f4677` | Open/CLEAN; independent review exists but may predate the #319/#320 state refresh |
 | `origin/main` | `f5a844765c5ac1a756b7f7e94d27ee466fe25a9b` |
 
 ## Verified Paths
@@ -36,7 +35,9 @@ candidate FT checkpoint/export/eval output exists.
 | --- | --- | --- |
 | Qwen3-4B base model, approved for the 4B pilot | `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` | Exists, `du -sh` reported `7.6G`; top-level model/tokenizer files present |
 | Qwen3-30B-A3B model, scale held | `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` | Exists, `du -sh` reported `57G`; not used or launched |
-| task243 configured Qwen3-4B base path | `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507` | Missing in this workspace; path mismatch must be fixed or explicitly mapped before base scoring |
+| task243 Qwen3-4B AIME gate base path | `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` | PR #319 head `61a12dd` config points here; matches the verified accessible base path |
+| task241 V10 data-prep code | `origin/pr/320:src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py` | Present in PR #320 with `hard_math_runlength_dp_v10` |
+| task241 V10 data-prep report | `origin/pr/320:workspace/tasks/task241_qwen_aime_v10_sidecar_data_s1/v10_sidecar_data_report.md` | Present in PR #320 |
 | task243 corrected AIME runner | `workspace/tasks/task071_m1_agentic_qwen_scaleup_train_exec/run_corrected_math_full_eval.py` | Exists in worker_5 and worker_3 worktrees |
 | task243 cited AIME score cache | `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db` | Missing in this workspace |
 | Shared no-delete root | `/mnt/cephfs/data/processing/lei.song` | Exists and was only listed; current listing was empty |
@@ -44,9 +45,9 @@ candidate FT checkpoint/export/eval output exists.
 ## Expected Artifact Paths
 
 These are the paths task245 expects before the first measurable go/no-go can be
-declared. Paths under task242 are derived from the observed local planner shape;
-they remain conditional until worker_2 publishes and review-gates the planner
-PR.
+declared. Task241 data-prep code/report are now published in PR #320. Paths
+under task242 are still derived from the observed local planner shape and remain
+conditional until worker_2 publishes and review-gates the planner PR.
 
 | Stage | Expected path | Current status |
 | --- | --- | --- |
@@ -72,13 +73,13 @@ PR.
 
 | Step | Required command/protocol condition | Verification result |
 | --- | --- | --- |
-| Local CPU prep | Run from local CPU first; include V10 strategy, Qwen3-4B model/tokenizer, held-out decontamination corpus, Qwen chat template kwargs `enable_thinking=false`, `truncate_history_thinking=false` | BLOCKED: no published task241/task242 artifact; local worker_2 planner probe emitted the expected flags but is uncommitted evidence |
-| Decontamination | V10 must fail closed without `--decontaminate-math-against-corpus`; AIME25/HMMT/MATH prompts are held-out only | PASS for local worker_2 planner probe: missing corpus returned rc=1 with explicit error; no train files were produced |
-| 30B hold | V10 30B planning must be held until the Qwen3-4B same-harness AIME gate passes | PASS for local worker_2 planner probe: 30B V10 planning returned rc=1 without `--allow-v10-30b-scale`; no 30B launch |
-| Sync to NemTron | Sync code and bundle to `/root/...` on NemTron; any cleanup must be restricted to the task-owned `/root/task242_qwen_aime_v10_planner_smoke_s1` tree | CONDITIONAL PASS: local planner probe generated `rm -rf /root/task242_qwen_aime_v10_planner_smoke_s1/Nemotron /root/task242_qwen_aime_v10_planner_smoke_s1/<run>` only; no shared `/mnt/cephfs/data/processing/lei.song` deletion |
+| Local CPU prep | Run from local CPU first; include V10 strategy, Qwen3-4B model/tokenizer, held-out decontamination corpus, Qwen chat template kwargs `enable_thinking=false`, `truncate_history_thinking=false` | PARTIAL: task241 PR #320 publishes V10 data-prep code/report; BLOCKED until task242 publishes planner scripts/manifest and the corrected AIME input/cache is available |
+| Decontamination | V10 must fail closed without `--decontaminate-math-against-corpus`; AIME25/HMMT/MATH prompts are held-out only | REVIEWED: PR #320 implements the V10 decontamination contract; release evidence still requires the exact corrected AIME input/cache and review-gated task242 repro artifacts |
+| 30B hold | V10 30B planning must be held until the Qwen3-4B same-harness AIME gate passes and lead grants scale permission | HELD: no 30B/8-GPU launch was run and no 30B scale permission exists |
+| Sync to NemTron | Sync code and bundle to `/root/...` on NemTron; any cleanup must be restricted to the task-owned `/root/task242_qwen_aime_v10_planner_smoke_s1` tree | CONDITIONAL: task242 has no published PR; previously observed local planner shape restricted cleanup to task-owned `/root` paths and never to shared `/mnt/cephfs/data/processing/lei.song` |
 | Remote train | Qwen3-4B pilot only; no 30B/8-GPU scale; expected `CUDA_VISIBLE_DEVICES=0,1`, `nproc_per_node=2` in the local planner probe | NOT RUN by task boundary |
 | Endpoint serving | Serve base and FT through `/v1/chat/completions` with identical route/settings | BLOCKED: no endpoint command or live endpoint artifact supplied; curls to `127.0.0.1:13000` and `127.0.0.1:30001` failed with connection refused |
-| Corrected AIME pilot smoke | 30 AIME 2025 problems x 1 repeat, max tokens `8192`, temperature `0.0`, top_p `1e-5`, exact-normalized scoring over all request rows | Defined by task243 PR #319; no live base score produced |
+| Corrected AIME pilot smoke | 30 AIME 2025 problems x 1 repeat, max tokens `8192`, temperature `0.0`, top_p `1e-5`, exact-normalized scoring over all request rows | Defined by task243 PR #319; corrected AIME input/cache and live base score artifacts are still missing |
 | Full AIME protocol | 30 AIME 2025 problems x 10 repeats, same parser/scorer/settings as pilot except repeat count | Defined by task243 PR #319; not required before first pilot go/no-go |
 | Result collection | Persist numerator, denominator, exact-normalized accuracy, parsed count/rate, finish reasons, per-problem rows, status counts, command, endpoint model manifest | BLOCKED: no base or FT output artifacts exist |
 
@@ -87,10 +88,10 @@ PR.
 Before any FT result is judged, worker_5 should verify the base artifacts from
 task243 or a lead-approved successor as follows:
 
-1. Confirm task243 gate config/report uses an accessible base model path. The
-   current PR #319 config uses `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`,
-   which is missing here; the verified accessible path is
-   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+1. Confirm task243 gate config/report uses an accessible base model path. PR
+   #319 head `61a12dd` uses
+   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, which exists
+   in this workspace and matches the approved Qwen3-4B pilot path.
 2. Confirm the base output directory contains exactly these minimum artifacts:
    `summary.json`, `results.jsonl`, `command.txt`, and
    `endpoint_model_manifest.json`.
@@ -110,7 +111,7 @@ task243 or a lead-approved successor as follows:
    `pass_ft_at_least_base`; status `blocked_missing_base`,
    `blocked_missing_ft`, or `fail_ft_below_base` keeps 30B/8-GPU scale held.
 
-Task243 PR #319 unit check run:
+Session 1 task243 unit check run:
 
 ```bash
 PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py
@@ -120,30 +121,23 @@ Observed result: `7 passed in 0.09s`.
 
 ## Current Blockers
 
-1. **No published V10 data implementation/artifacts**: task241 remote branch
-   currently contains task/status docs only. Local worker_1 uncommitted diff
-   shows a V10 strategy name and filters, but there is no PR, data report,
-   decontamination report, train JSONL, sidecar row count, packed shard, or
-   no-leakage test artifact to verify.
-2. **No published V10 planner artifacts**: task242 remote branch currently
-   contains task/status docs only. Local worker_2 uncommitted planner probe
-   generated a plausible Qwen3-4B V10 bundle shape and fail-closed checks, but
-   the scripts/manifest are not reviewable PR artifacts.
-3. **Base path mismatch in task243**: PR #319 pins
-   `/mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507`, which is
-   missing here. The accessible base model is
-   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
-4. **Corrected AIME input artifact missing**: the cited score-cache path
+1. **task242 has no published PR**: the remote branch currently contains
+   task/status docs only. The V10 pilot planner scripts, manifest, sync/runbook,
+   and cleanup contract are not reviewable PR artifacts yet.
+2. **Corrected AIME input/cache is missing**: the cited score-cache path
    `/work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db`
    is not visible in this workspace.
-5. **No live endpoint**: `curl` probes to `127.0.0.1:13000/v1/models` and
+3. **No reachable Qwen3-4B endpoint**: `curl` probes to `127.0.0.1:13000/v1/models` and
    `127.0.0.1:30001/v1/models` returned connection refused.
-6. **No candidate FT checkpoint/export**: expected checkpoint/export/eval/log
-   paths are not present, so same-harness base-vs-FT AIME25 cannot be
-   reproduced yet.
-7. **No 4B base-score artifacts**: without task243 base `summary.json`,
+4. **No 4B base-score artifacts**: without task243 base `summary.json`,
    `results.jsonl`, `command.txt`, and endpoint manifest, FT judgment must be
    blocked.
+5. **No candidate FT checkpoint/export/eval**: expected checkpoint, HF export,
+   eval output, and train/eval logs are not present, so same-harness
+   base-vs-FT AIME25 cannot be reproduced yet.
+6. **No 30B scale permission**: 30B/8-GPU planning and launch remain held until
+   the Qwen3-4B same-harness AIME gate is independently satisfied and lead
+   grants explicit scale permission.
 
 ## No-Delete Shared Storage Guarantee
 
@@ -161,16 +155,26 @@ Observed result: `7 passed in 0.09s`.
 ## Verification Commands Run
 
 ```bash
+gh pr view 317 --json number,state,headRefName,headRefOid,mergeStateStatus,url
+gh pr view 319 --json number,state,headRefName,headRefOid,mergeStateStatus,url
+gh pr view 320 --json number,state,headRefName,headRefOid,mergeStateStatus,url
+gh pr view 318 --json number,state,headRefName,headRefOid,mergeStateStatus,url
+git fetch origin pull/319/head:refs/remotes/origin/pr/319 pull/320/head:refs/remotes/origin/pr/320
+git show origin/pr/319:src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_aime2025_base_vs_ft_gate.yaml | sed -n '1,40p'
+git ls-tree -r --name-only origin/pr/320
+git show origin/pr/320:workspace/tasks/task241_qwen_aime_v10_sidecar_data_s1/v10_sidecar_data_report.md | sed -n '1,120p'
+git show origin/pr/320:src/nemotron/recipes/super3/milestones/m1_agentic_sft/prepare_m1_agentic_sft.py | rg -n "hard_math_runlength_dp_v10|decontaminate-math-against-corpus|AIME-25|HMMT"
 test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
 du -sh /mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507
-test -d /mnt/3fs/data/lei.song/models/Qwen/Qwen3-4B-Instruct-2507
+test -d /mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507
+du -sh /mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507
 test -f /work-agents/intern_nemontron_code_reading/debug/task071_eval_logic_debug/math_artifact_audit_session36/aime_score_cache.db
 curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:13000/v1/models
 curl -sS --connect-timeout 2 --max-time 4 http://127.0.0.1:30001/v1/models
-PYTHONPATH=src pytest -q tests/recipes/super3/test_qwen_aime2025_base_vs_ft_gate.py
 ```
 
-Local worker_2 planner-shape probes were also run without launching training:
+Session 1 local worker_2 planner-shape probes were also run without launching
+training:
 
 ```bash
 PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan_qwen_scaleup_run.py \
@@ -183,9 +187,8 @@ PYTHONPATH=src python src/nemotron/recipes/super3/milestones/m1_agentic_sft/plan
 ```
 
 The probe emitted the expected Qwen3-4B base path, V10 strategy,
-decontamination corpus, candidate FT checkpoint path, and 30B hold rule, but
-it is not accepted as release evidence because it was generated from
-uncommitted local worker_2 changes.
+decontamination corpus, candidate FT checkpoint path, and 30B hold rule. It is
+not accepted as release evidence because task242 still has no published PR.
 
 ## Go/No-Go Readiness
 
@@ -195,17 +198,17 @@ Current status: **NO-GO** for judging the first Qwen3-4B V10 FT checkpoint and
 The first measurable gate becomes ready only when all of the following are
 present and independently verified:
 
-1. task241 publishes V10 data-prep code/report with decontamination scanned and
-   dropped counts, sidecar row counts, no AIME25/HMMT/MATH leakage evidence,
-   and packed shard paths.
+1. task241 PR #320 remains reviewable for V10 data-prep code/report evidence,
+   including decontamination scanned/dropped counts, sidecar row counts, and
+   no AIME25/HMMT/MATH leakage evidence.
 2. task242 publishes the Qwen3-4B V10 pilot manifest/scripts and the scripts
    fail closed on missing decontamination corpus while restricting cleanup to
    task-owned `/root` paths.
-3. task243 aligns the base checkpoint path to an accessible path or documents a
-   lead-approved mapping, then produces same-harness base AIME25 pilot
-   artifacts.
+3. task243 produces same-harness base AIME25 pilot artifacts from the verified
+   cephfs Qwen3-4B base path before any FT judgment.
 4. A candidate FT checkpoint/export is produced under the documented task-owned
    path and served through the same route/protocol as the base.
 5. task243 comparison artifacts show
    `ft_exact_normalized_accuracy >= base_exact_normalized_accuracy` with
    parsed/finish/per-problem diagnostics included.
+6. Lead grants explicit permission before any 30B/8-GPU scale action.
