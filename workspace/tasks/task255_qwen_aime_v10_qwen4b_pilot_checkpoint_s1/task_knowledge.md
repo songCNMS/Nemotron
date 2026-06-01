@@ -21,3 +21,7 @@
    at `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`,
    but it remains unofficial until worker_2 reports closeout/export status and
    boundary confirmation.
+9. Lead read-only monitoring also observed HF export
+   `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001`
+   with three safetensors shards and `EXPORT_COMMAND_RC=0`; it still requires
+   worker_2 official closeout before independent review/task243 planning.

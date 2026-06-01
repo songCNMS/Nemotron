@@ -141,3 +141,52 @@
 - Global gate remains `NO-GO/HOLD`: this is not yet official worker closeout,
   no export status has been reported, and task243 has not compared FT against
   the accepted Qwen3-4B base `11/30`.
+
+## Session 5 - 2026-06-01 UTC - Unofficial HF export observed
+
+- worker_2 still had not sent an official mailbox closeout/report at the time
+  of this lead observation.
+- New export-related logs appeared:
+  - `checkpoint_inventory_20260601T202339Z.log`;
+  - `export_helper_create_20260601T202339Z.log`;
+  - `export_hf_20260601T202339Z.log`.
+- Checkpoint inventory log reports checkpoint size `53G` and sha256 entries for
+  all checkpoint files, including large `.distcp` shards.
+- Export log reports:
+  - host `lg-cmc-b7r201-f08u26-h200-000126`;
+  - `CUDA_VISIBLE_DEVICES=0,1`;
+  - source checkpoint
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`;
+  - base HF model
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - output
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001`;
+  - conversion reached `100%` and logged
+    `Success: All tensors from the original checkpoint were written`;
+  - `EXPORT_COMMAND_RC=0`.
+- Read-only remote export inventory found:
+  - export dir size `7.6G`;
+  - `model-00001-of-00003.safetensors` size `3957900808`, sha256
+    `83117ed49e8e3b56e07f0f328bcf9c021ee517d30e58dcb57dbfb1f8480b4474`;
+  - `model-00002-of-00003.safetensors` size `3987450496`, sha256
+    `2194bbacbcfff92ef6da346a0f58f3d5a5c0bac63356ae7604cb0240290032f2`;
+  - `model-00003-of-00003.safetensors` size `99630608`, sha256
+    `b4828ee7fab6b139df83bf7da36af828d08957deb97a8851e8c02155892980ec`;
+  - `model.safetensors.index.json` sha256
+    `76266a1f68fa7ed25dac90771b74b2c0119747bd914f960d373ffbb82dc3b4e6`;
+  - `config.json` sha256
+    `74e923dd507a5ecec8d596353290ca705ef8e4b7191d5823bbd4b77040515012`;
+  - `tokenizer_config.json` sha256
+    `4b5f2f80f84faefe8420e1616671adb1dd3d7e632038d34b1f0e3a1363a51059`;
+  - tokenizer files including `tokenizer.json`, `vocab.json`, `merges.txt`,
+    `chat_template.jinja`, `special_tokens_map.json`, and
+    `generation_config.json`.
+- Export config read-only check shows Qwen3 HF architecture (`model_type=qwen3`,
+  `Qwen3ForCausalLM`) and `dtype=bfloat16`.
+- Lead sent delivered follow-up asking worker_2 for official closeout with
+  checkpoint/export paths, full inventory/checksums, commands/env/resources,
+  sync path, train/export logs, boundary confirmation, and readiness for
+  independent artifact review and same-harness AIME comparison planning.
+- Global gate remains `NO-GO/HOLD`: the export is still unofficial until
+  worker_2 closeout is processed, and no task243 same-harness FT-vs-base
+  comparison exists against accepted base `11/30`.

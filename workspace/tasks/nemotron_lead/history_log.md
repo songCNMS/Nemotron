@@ -2534,3 +2534,41 @@
 - Current global Qwen AIME gate remains `NO-GO/HOLD`: the checkpoint evidence is
   still unofficial, export status is missing, and task243 has not performed a
   same-harness FT-vs-base comparison against accepted base `11/30`.
+
+## Monitor - 2026-06-01 UTC - task255 HF export observed unofficially
+
+- Read lead mailbox; no official worker_2 closeout/report was present.
+- New task255 export logs appeared:
+  - `checkpoint_inventory_20260601T202339Z.log`;
+  - `export_helper_create_20260601T202339Z.log`;
+  - `export_hf_20260601T202339Z.log`.
+- Checkpoint inventory log reports checkpoint size `53G` and includes hashes
+  for the checkpoint files.
+- Export log reports:
+  - source checkpoint
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/checkpoints_retry_no_training_contract_cli`;
+  - output
+    `/root/task255_qwen_aime_v10_qwen4b_pilot_checkpoint_s1/run_20260601T202339Z/hf_export_iter_0000001`;
+  - base HF model
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - conversion `100%`, `Success: All tensors from the original checkpoint were
+    written`, and `EXPORT_COMMAND_RC=0`.
+- Read-only export inventory on `NemTron` found export dir size `7.6G` with HF
+  config/tokenizer files and three safetensors shards:
+  - `model-00001-of-00003.safetensors` sha256
+    `83117ed49e8e3b56e07f0f328bcf9c021ee517d30e58dcb57dbfb1f8480b4474`;
+  - `model-00002-of-00003.safetensors` sha256
+    `2194bbacbcfff92ef6da346a0f58f3d5a5c0bac63356ae7604cb0240290032f2`;
+  - `model-00003-of-00003.safetensors` sha256
+    `b4828ee7fab6b139df83bf7da36af828d08957deb97a8851e8c02155892980ec`;
+  - `model.safetensors.index.json` sha256
+    `76266a1f68fa7ed25dac90771b74b2c0119747bd914f960d373ffbb82dc3b4e6`;
+  - `config.json` sha256
+    `74e923dd507a5ecec8d596353290ca705ef8e4b7191d5823bbd4b77040515012`.
+- Export config read-only check shows Qwen3 HF architecture and `bfloat16`.
+- Lead sent delivered follow-up asking worker_2 for official task255 closeout,
+  full checkpoint/export inventory and checksums, boundary confirmation, and
+  readiness for independent review/task243 planning.
+- Current global Qwen AIME gate remains `NO-GO/HOLD`: export evidence is still
+  unofficial until worker_2 closeout is processed, and no task243 same-harness
+  FT-vs-base comparison against accepted base `11/30` exists.
