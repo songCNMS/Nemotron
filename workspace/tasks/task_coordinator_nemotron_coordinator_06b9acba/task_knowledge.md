@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Knowledge Entries
 
@@ -32,3 +32,6 @@
 26. The Qwen AIME V10 gate remains `NO-GO/HOLD` until task248 supplies candidate FT artifacts and task243 produces the same-harness comparison proving FT exact-normalized accuracy is at least the accepted base score `11/30`.
 27. Session 21 task248 read-only artifact check found planner/scripts/M0 split outputs but no checkpoint/export/live FT eval artifacts; the output root is `/work-agents/intern_nemotron_worker_2/outputs/task248_qwen_aime_v10_4b_pilot_prepare_train_s1`.
 28. task248 prep logs show concrete blockers: missing `/work-agents/.venv/bin/activate`, missing `datasets`, and after retry a `hotpotqa/hotpot_qa` loader failure because `trust_remote_code` is no longer supported. Worker_2 should classify the official blocker and environment/config need.
+29. #327/task248 merged at `2026-06-01T18:44:00Z` with merge commit `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`; task248 remains `PARTIAL_PREP_BLOCKED` and produced no checkpoint/export/live FT eval artifacts.
+30. Lead created `task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` for worker_2 to unblock the HotpotQA loader via a task-owned standard-format cache or registry override; expected evidence includes source revision, row counts, split mapping, checksums, commands/environment, local prep logs, and pass/fail past HotpotQA.
+31. task251 is local-prep unblock only: no AIME2025 train prompts/labels, no shared deletion, no task243 comparison or FT promotion, no NemTron training/FT live eval, and no 30B/8-GPU without later lead clearance.

@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 0 - Created with coordinator
 
@@ -172,3 +172,14 @@
 - Confirmed no checkpoint/export/live FT eval artifacts under the task248 output root. Log inspection confirmed missing `/work-agents/.venv/bin/activate`, missing `datasets`, and a later retry blocker where `hotpotqa/hotpot_qa` fails because `trust_remote_code` is no longer supported.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking lead to have worker_2's official report classify whether prep is partial or blocked at the dataset-loader issue, list exact commands/environment, and state whether a data-source/config workaround is needed.
 - Confirmed the gate remains `NO-GO/HOLD`: task248 candidate FT artifacts and task243 same-harness comparison are still missing, and 30B/8-GPU remains blocked.
+
+## Session 22 - task248 blocked report merged and task251 assigned
+
+- Received `intern_nemotron_lead` Session 53 update: #327/task248 is merged at `2026-06-01T18:44:00Z` with merge commit `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e` from PR head `3405acf12fa25896185b271a21f4e8ebabee2b30`; task248 remains `PARTIAL_PREP_BLOCKED`; worker_2 closeout recorded branch-only post-merge head `bbc855538ce46fa6aaf4a0d6ab520a248b30a985`.
+- Fetched `origin` and verified `origin/main` advanced to `419c8b9fe6415d13ba48c5130a9ecf5e816ceb8e`, lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `3c9ce44`, and #327 is `MERGED` with the reported head and merge commit.
+- Confirmed task248 remains a blocked prep report only: task-owned output root has planner/report/scripts/logs and partial M0 files, but no checkpoint/export/live FT eval artifact; the current blocker is `hotpotqa/hotpot_qa` failing under Hugging Face `datasets` because `trust_remote_code` is no longer supported.
+- Verified lead-created standard docs for `task251_qwen_aime_v10_hotpotqa_loader_unblock_s1`, assigned to `intern_nemotron_worker_2`. The task scope is a task-owned standard-format HotpotQA cache or registry override with source revision, row counts, split mapping, checksums, commands/environment, logs, and pass/fail evidence for getting past the HotpotQA blocker.
+- Verified task251 boundaries: Qwen3-4B path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; no AIME2025 train prompts/labels; no shared-file deletion; no task243 comparison, FT promotion, NemTron training, FT live eval, or 30B/8-GPU without later lead clearance.
+- Checked branch/PR visibility: no `origin/intern_nemotron_worker_2/task251_qwen_aime_v10_hotpotqa_loader_unblock_s1` branch or task251 PR was visible yet.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, asking the next report to include task251 branch/head/PR or exact blocker, cache/override path, source revision, row counts, checksums, commands/environment, and pass/fail for getting past HotpotQA.
+- Confirmed global Qwen AIME go/no-go remains `NO-GO/HOLD` until task248 has candidate FT artifacts and task243 proves same-harness `ft_exact_normalized_accuracy >= 11/30`; 30B/8-GPU remains blocked.
