@@ -11,4 +11,4 @@
 | Current Task | task246_qwen_aime_v10_real_decontam_corpus_s1 |
 | PR | #325 |
 | Session | 2 |
-| Progress | Opened PR #325 with task246 real prompt-only heldout corpus and sparse real V10 M0 sidecar input; mailbox report pending, no training/eval run. |
+| Progress | Opened PR #325 with task246 real prompt-only heldout corpus and sparse real V10 M0 sidecar input; ready for lead review, no training/eval run. |
