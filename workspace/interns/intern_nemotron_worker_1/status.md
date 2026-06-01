@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task246_qwen_aime_v10_real_decontam_corpus_s1 |
-| PR | N/A |
+| PR | #325 |
 | Session | 2 |
-| Progress | Produced task246 real prompt-only heldout corpus and sparse real V10 M0 sidecar input; preparing PR and mailbox report without training/eval. |
+| Progress | Opened PR #325 with task246 real prompt-only heldout corpus and sparse real V10 M0 sidecar input; mailbox report pending, no training/eval run. |

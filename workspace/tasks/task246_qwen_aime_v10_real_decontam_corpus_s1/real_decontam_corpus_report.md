@@ -7,6 +7,8 @@ V10 M0 sidecar input path for the Qwen3-4B V10 pilot. No training, eval,
 endpoint launch, main push, or shared `/mnt/cephfs/data/processing/lei.song`
 deletion was performed.
 
+PR: `#325`
+
 Output root:
 `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`
 

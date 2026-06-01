@@ -81,8 +81,8 @@ path needed by the Qwen3-4B V10 pilot.
   `20973e78f196d7e5d71993f60dc74a3500223f5f`, after PR #321.
 - Task docs source: `origin/intern_nemotron_lead/session1-recovery-task-docs`
   at `5d5e3fa`.
-- Status: real heldout corpus and V10 M0 sidecar input produced; PR preparation
-  in progress.
+- Status: real heldout corpus and V10 M0 sidecar input produced; PR #325 is
+  open for review.
 - Output root:
   `/work-agents/intern_nemotron_worker_1/outputs/task246_qwen_aime_v10_real_decontam_corpus_s1`.
 - Heldout corpus:
