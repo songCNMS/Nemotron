@@ -101,3 +101,8 @@
   elapsed; progress reached `26/30`, correct `11/26`, with `aime_25_r01` and
   `aime_26_r01` stopped, parsed, and incorrect. No final artifacts, official
   report, or PR exists yet.
+- Follow-up read-only poll at `2026-06-02T10:40:55Z`: PID `433268` still
+  active at about 106 minutes elapsed; progress reached `27/30`, correct
+  `12/27`, with `aime_27_r01` stopped, parsed, and correct. Remote artifacts
+  still only contain prompt/checkpoint-load/command-env manifests. No final
+  summary/results/checksums, official worker report, or PR exists yet.

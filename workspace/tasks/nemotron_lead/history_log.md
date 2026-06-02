@@ -5759,3 +5759,10 @@
   `aime_26_r01` stopped, parsed, and were incorrect. Current partial total
   remains `11/26` correct. Remote artifacts still only include manifests and
   mailbox remains empty. This remains non-gating partial evidence.
+- Follow-up read-only live observation at `2026-06-02T10:40:55Z`: PID
+  `433268` remains active at about 106 minutes elapsed. Log reached `27/30`;
+  row `aime_27_r01` stopped, parsed, and was correct. Current partial total is
+  `12/27` correct. Remote artifacts still only include prompt/checkpoint-load/
+  command-env manifests, mailbox remains empty, and no task293 PR is visible.
+  This remains non-gating partial evidence pending all 30 rows plus final
+  summary/results/checksums and official worker report.
