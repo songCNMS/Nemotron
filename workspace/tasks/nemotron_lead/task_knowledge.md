@@ -1302,3 +1302,18 @@
    equivalence PASS, decontam PASS, and residuals adapted-copy plus sparse
    valid/test. Lead has requested worker_4 independent review before treating
    this as task301 launch-cleared.
+389. worker_4 mailbox `8138ce524b6e4be1b4907f274207bd4c` independently
+   approves task299/#365 exact head `b8b760fb` with residuals. The task299
+   data/packing/decontam gate is lead-approved via #365 issuecomment
+   `4603965694`, pending worker_1 exact-head self-merge and closeout.
+390. Task299 residuals that must be carried into training/runbook: valid split
+   has one row, test split has zero rows, the accepted root is an adapted
+   metadata/root copy rather than fresh 30B retokenization, and copied source
+   provenance references to task276/task251/source 4B exist in non-active
+   metadata while active tokenizer_uri/blend/split/validator paths point to the
+   task299 30B root.
+391. task300 remains the current hard blocker for task301 launch. worker_3 has a
+   local unpushed runner commit `89a3d371` and input-cache-only output root
+   `run_20260602T152008Z`; lead requested official branch/mailbox evidence with
+   30B base AIME score or exact blocker. task301 remains HOLD until task300 base
+   score is accepted and lead gives explicit launch clearance.

@@ -6456,3 +6456,49 @@
 - This was lead bookkeeping only. No product code, implementation test,
   training, eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, merge, or direct main push was performed by lead.
+- Continued Session 76 gate processing after the explicit-entry fix. Initial
+  scan found mailbox empty and PRs unchanged: #365/task299 OPEN/CLEAN at
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`, #363/task300 OPEN/CLEAN at
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and #362/task301 OPEN/CLEAN at
+  `681ddea29c28afde6eaeeea416fe72a0255963ac`.
+- Read-only local observations before official mail arrived: worker_4 local
+  status still reflected #361 closeout and had no pushed #365 review yet;
+  worker_3 local task300 branch was ahead by commit `89a3d371` adding
+  `run_sglang_base_aime_eval.py`, and a new task300 output root
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`
+  contained only copied AIME input cache/checksums. These observations were not
+  treated as gate evidence.
+- Processed and marked read worker_4 task302 follow-up mailbox
+  `8138ce524b6e4be1b4907f274207bd4c`: decision
+  `APPROVE_TASK299_30B_DATA_PACKING_CONTRACT_WITH_RESIDUALS` for #365 exact
+  head `b8b760fb8f46cda8f302adbea106f19cc234e038`. Review confirmed #365
+  OPEN/base main/CLEAN/MERGEABLE/non-draft, docs/status/report-only diff,
+  artifact root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`,
+  shard checksum validation OK for 48 parquet files, recomputed counts matching
+  worker_1 report, intended-vs-exposed parity PASS, tokenizer/chat-template/
+  contract validators PASS, decontam PASS, no AIME2025 prompt/label train rows,
+  no task255 reuse, no shared deletion, and no forbidden actions. Residuals to
+  carry: sparse valid/test (`1`/`0` rows), adapted metadata/root copy rather than
+  fresh 30B retokenization, and copied source-provenance references that are not
+  active read paths.
+- Rechecked #365 exact head before gate action: #365 remained OPEN/base main/
+  CLEAN/non-draft at `b8b760fb8f46cda8f302adbea106f19cc234e038`; `git diff
+  --check origin/main...b8b760fb...` passed and file scope was worker_1 status
+  plus task299 docs/report only.
+- Added lead gate comment on #365, issuecomment `4603965694`, approving task299
+  data/packing/decontam evidence with residuals at exact head `b8b760fb...`.
+  Sent delivered peer instruction to worker_1 to self-merge #365 only if it
+  remains exact/open/clean/mergeable/non-draft and then send mergedAt/
+  mergeCommit/head closeout.
+- Sent delivered follow-up to worker_3 requesting official task300 base-AIME
+  status for the local ahead runner/output observation: report whether base AIME
+  eval launched, endpoint/export choice if any, commands/env, artifacts,
+  checksums, denominator/score/completions/parser diagnostics, or exact blocker.
+  Reiterated base AIME only, no FT eval/canary/training/promotion actions.
+- Sent delivered update to worker_5: task299/#365 is lead-approved pending
+  self-merge, but task301 training remains HOLD until #365 is merged/closed out,
+  task300 base score is accepted, and lead gives explicit launch clearance.
+- Final poll for this update found mailbox empty. #365, #363, and #362 remained
+  OPEN/base main/CLEAN at heads `b8b760fb...`, `a54fb96e...`, and `681ddea...`
+  respectively.
