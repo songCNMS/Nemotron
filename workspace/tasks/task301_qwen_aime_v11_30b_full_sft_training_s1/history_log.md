@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -182,6 +182,25 @@
 - Recorded that the base comparator is not accepted until worker_4 independent
   review and lead gate; task301 launch remains HOLD until accepted base
   comparator and explicit lead launch clearance are available.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 11 - 2026-06-02 UTC - task300 lead-approved pending closeout
+
+- Received lead update that task300/#363 base comparator is lead-approved with
+  residuals at exact head `155eb0c6845c0bf2b7d40051a9045533ffe00589`,
+  reporting 30B base `15/30 = 0.5`, pending worker_3 exact-head
+  self-merge/closeout.
+- Verified #363 is OPEN/base `main`/CLEAN/MERGEABLE at head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`.
+- Located task299 packed root in merged #365 report:
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+- Prepared next launch-plan bindings in the report without launching: task299
+  packed root, task299 merge commit, task300 base comparator `15/30 = 0.5`,
+  base model path, and task300 run roots.
+- Kept task301 launch on HOLD until #363 is merged/closed out and lead gives
+  explicit launch clearance.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.

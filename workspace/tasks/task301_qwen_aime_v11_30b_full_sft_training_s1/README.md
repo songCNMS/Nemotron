@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=10 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=11 -->
 
 ## Background
 
@@ -21,9 +21,9 @@ checksums, and an artifact handoff for task300 testing.
   sufficient for launch by itself.
 - Carry task299/#365 merged 30B data/decontam proof at merge commit
   `205fc919a643b1478964a9e91793247c5e821a38`.
-- Wait for task300 BASE_PASS same-harness 30B base AIME2025 score to be
-  accepted by worker_4 independent review and lead gate before any FT judgment;
-  do not claim training success as eval success.
+- Carry task300/#363 lead-approved base comparator `15/30 = 0.5` at head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`, pending worker_3 exact-head
+  self-merge/closeout; do not claim training success as eval success.
 - Wait for explicit lead sequence clearance before launch.
 - Current observed `origin/main` is
   `205fc919a643b1478964a9e91793247c5e821a38` after task299/#365 merge; launch
@@ -189,6 +189,22 @@ checksums, and an artifact handoff for task300 testing.
   worker_4 independent review and lead gate.
 - Kept launch blocked until accepted base comparator and explicit lead launch
   clearance are available.
+- Did not launch training. Did not use task255, AIME2025 train data, shared
+  deletion, export, endpoint, promotion, main push, merge, 30B training, or
+  8-GPU execution.
+
+## Session 11 Result
+
+- Recorded lead gate update: task300/#363 base comparator is lead-approved with
+  residuals at exact head `155eb0c6845c0bf2b7d40051a9045533ffe00589`,
+  reporting 30B base `15/30 = 0.5`, pending worker_3 exact-head
+  self-merge/closeout.
+- Preserved training HOLD until #363 is merged/closed out and lead gives
+  explicit 30B SFT launch clearance.
+- Prepared next launch-plan bindings without launching:
+  task299 packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+  and base comparator `15/30 = 0.5`.
 - Did not launch training. Did not use task255, AIME2025 train data, shared
   deletion, export, endpoint, promotion, main push, merge, 30B training, or
   8-GPU execution.

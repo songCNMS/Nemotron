@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -56,3 +56,10 @@
     but it is not accepted until worker_4 independent review and lead gate.
     Task301 launch remains HOLD until accepted base comparator and explicit
     launch clearance are available.
+15. Session 11 lead gate: task300/#363 base comparator is lead-approved with
+    residuals at exact head `155eb0c6845c0bf2b7d40051a9045533ffe00589`,
+    reporting `15/30 = 0.5`, pending worker_3 exact-head self-merge/closeout.
+    Task301 launch remains HOLD until #363 is merged/closed out and lead gives
+    explicit launch clearance.
+16. Prepared launch binding: task299 packed root is
+    `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.

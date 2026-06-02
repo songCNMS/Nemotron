@@ -1,8 +1,8 @@
 # task301 30B Full SFT Training Report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=10 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=11 -->
 
-Generated: 2026-06-02T15:40:32Z
+Generated: 2026-06-02T15:47:20Z
 
 ## Disposition
 
@@ -13,17 +13,18 @@ gate state requires all of the following before launch:
 
 - task298 runtime route lead approval with residuals carried;
 - task299/#365 final 30B data/decontam approval merged and carried;
-- task300 accepted 30B same-harness base-score artifact before any FT judgment;
+- task300/#363 lead-approved base comparator merged/closed out before any FT
+  judgment;
 - explicit lead sequence clearance.
 
-At the Session 10 refresh, lead reports task299/#365 is merged into `main` at
+At the Session 11 refresh, lead reports task299/#365 is merged into `main` at
 `205fc919a643b1478964a9e91793247c5e821a38`; runtime and data gates are carried.
 Task300/#363 now has base-score evidence at head
-`155eb0c6845c0bf2b7d40051a9045533ffe00589` reporting 30B base `15/30`
-(`0.5` exact-normalized accuracy), but lead has not accepted it yet. Task301
-remains HOLD until worker_4 independent review and lead gate accept the base
-comparator and lead gives explicit launch clearance. The safe action is to hold
-launch and report the remaining blocker.
+`155eb0c6845c0bf2b7d40051a9045533ffe00589` reporting 30B base `15/30 = 0.5`.
+Lead has approved that comparator with residuals, pending worker_3 exact-head
+self-merge/closeout. Task301 remains HOLD until #363 is merged/closed out and
+lead gives explicit launch clearance. The safe action is to hold launch and
+report the remaining blocker.
 
 ## Branch And Sources
 
@@ -43,7 +44,7 @@ launch and report the remaining blocker.
 |---|---|---|---|
 | task298 | Runtime/resource/base-load route for 30B | Lead update reports runtime route approved with residuals; not an active launch blocker after Session 6 | CARRIED |
 | task299 | Lead-approved final 30B data/decontam proof merged or otherwise closed out | PR #365 is MERGED from head `b8b760fb8f46cda8f302adbea106f19cc234e038` with merge commit `205fc919a643b1478964a9e91793247c5e821a38` | CARRIED |
-| task300 | Accepted 30B same-harness base AIME score artifact before any FT judgment | PR #363 is OPEN/base `main`/CLEAN/MERGEABLE at head `155eb0c6845c0bf2b7d40051a9045533ffe00589`; report at that head gives base `15/30` (`0.5`) with artifact roots, but lead says it is not accepted until worker_4 independent review and lead gate | HOLD pending review |
+| task300 | Lead-approved 30B same-harness base AIME comparator merged/closed out before any FT judgment | PR #363 is OPEN/base `main`/CLEAN/MERGEABLE at head `155eb0c6845c0bf2b7d40051a9045533ffe00589`; lead approves base `15/30 = 0.5` with residuals, pending worker_3 exact-head self-merge/closeout | HOLD pending closeout |
 | lead clearance | Explicit sequence clearance for task301 launch | Not granted; lead states full 30B SFT remains HOLD | BLOCK |
 
 ## Read-Only Checks
@@ -87,12 +88,28 @@ lead launch clearance are absent:
 - 30B packed root: task299/#365 is carried by merge commit
   `205fc919a643b1478964a9e91793247c5e821a38`, but launch command binding still
   waits on task300 and lead clearance;
-- base comparator artifact: task300/#363 reports base `15/30` at
-  `155eb0c6845c0bf2b7d40051a9045533ffe00589`, but it is blocked pending
-  worker_4 independent review and lead acceptance;
+- base comparator artifact: task300/#363 is lead-approved with residuals at
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`, reporting `15/30 = 0.5`, but
+  blocked pending #363 merge/closeout and lead launch clearance;
 - LR, train steps, optimizer, parallelism, GPU count/type, validation settings,
   seed, resume policy, checkpoint root, and log root: blocked pending the
   remaining upstream gate artifacts and lead launch clearance.
+
+## Prepared Launch Bindings
+
+These bindings are recorded for the next launch plan only. No launch command was
+run.
+
+| Binding | Value | Status |
+|---|---|---|
+| 30B packed root | `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b` | Carried from merged task299/#365 |
+| Task299 merge commit | `205fc919a643b1478964a9e91793247c5e821a38` | Carried |
+| 30B base comparator | `15/30 = 0.5` exact-normalized accuracy | Lead-approved with residuals at #363 head `155eb0c6845c0bf2b7d40051a9045533ffe00589`, pending #363 closeout |
+| Base model path | `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` | From task300/#363 base report |
+| Task300 local run root | `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z` | Pending #363 closeout |
+| Task300 remote run root | `/root/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z` | Pending #363 closeout |
+| Task300 eval directory | `eval/qwen30b_base_aime2025_30x1_20260602T152351Z` | Pending #363 closeout |
+| Launch clearance | Explicit lead clearance | Missing |
 
 ## Artifact Status
 
@@ -101,7 +118,7 @@ created by this session.
 
 ## Boundary Confirmation
 
-Confirmed through Session 10:
+Confirmed through Session 11:
 
 - no task255 reuse;
 - no AIME2025 prompts or labels as trainable data;
@@ -115,9 +132,9 @@ Confirmed through Session 10:
 
 ## Blockers
 
-1. task300 30B same-harness base AIME score evidence exists in #363 at
-   `155eb0c6845c0bf2b7d40051a9045533ffe00589` with reported base `15/30`, but
-   it is not accepted pending worker_4 independent review and lead gate.
+1. task300/#363 base comparator is lead-approved with residuals at
+   `155eb0c6845c0bf2b7d40051a9045533ffe00589` with reported base `15/30 = 0.5`,
+   but #363 is not merged/closed out.
 2. Lead has not cleared the task301 launch sequence.
 3. Without the above exact gate refs, artifacts, and lead clearance, training
    launch would violate the task301 fail-closed contract.
