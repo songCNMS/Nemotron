@@ -92,3 +92,8 @@
   elapsed; progress reached `23/30`, correct `10/23`, with `aime_23_r01`
   length-stopped and unparsed. No final artifacts, official report, or PR
   exists yet.
+- Follow-up read-only poll: PID `433268` still active at about 93 minutes
+  elapsed; progress reached `24/30`, correct `11/24`, with `aime_24_r01`
+  stopped, parsed, and correct. This matches the accepted base numerator but is
+  still non-gating pending all 30 rows plus final artifacts and official
+  worker report. No final artifacts, official report, or PR exists yet.

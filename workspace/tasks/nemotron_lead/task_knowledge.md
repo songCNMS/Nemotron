@@ -1032,3 +1032,8 @@
 327. Later read-only task293 poll shows progress `23/30`, correct `10/23`;
    `aime_23_r01` length-stopped and did not parse. PID `433268` remains active;
    artifacts are still manifests only and mailbox remains empty.
+328. Later read-only task293 poll shows progress `24/30`, correct `11/24`;
+   `aime_24_r01` stopped, parsed, and was correct. This matches the accepted
+   base numerator but is still non-gating until all 30 rows and final
+   artifacts/worker report exist. PID `433268` remains active; artifacts are
+   still manifests only and mailbox remains empty.
