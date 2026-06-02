@@ -23,3 +23,6 @@
   release only if #338 is still `OPEN`/base `main`/`CLEAN` at exact head
   `49e3728a8751909cc041110acd0e9212059dc6c5`.
 - task269 is complete as independent blocker-evidence review.
+- #338 merged at `2026-06-02T00:42:53Z` with merge commit
+  `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` from approved head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.

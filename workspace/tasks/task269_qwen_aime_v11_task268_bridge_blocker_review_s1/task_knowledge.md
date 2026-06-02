@@ -19,3 +19,6 @@
    blocker-evidence-only at exact head
    `49e3728a8751909cc041110acd0e9212059dc6c5`; this is not
    Bridge/checkpoint-load proof or training/promotion clearance.
+7. #338 merged at `2026-06-02T00:42:53Z` with merge commit
+   `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` from approved head
+   `49e3728a8751909cc041110acd0e9212059dc6c5`.

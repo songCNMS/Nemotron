@@ -3935,3 +3935,11 @@
   assigned to `intern_nemotron_worker_5`, to find a concrete no-training runtime
   unblock route or confirm the exact resource blocker.
 - Sent delivered peer_send to worker_5 assigning task270 runtime-route audit.
+- Received and marked read worker_2 task268/#338 merge closeout mailbox
+  `5423b6746f9e471db75e29b80025b65d`, confirming pre-merge exact-head gate,
+  mergedAt `2026-06-02T00:42:53Z`, merge commit
+  `8d4382b6572b91ec2ca27876cd0f961deb7c2f81`, merged head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`, and branch-only closeout
+  `068170031a7b78ed1dc6ccfb2127f0ca65829709`.
+- Initial check after task270 assignment found no worker_5 task270 branch or
+  mailbox response yet.

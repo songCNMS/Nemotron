@@ -352,8 +352,12 @@
 151. #338 merged at `2026-06-02T00:42:53Z` with merge commit
    `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` from approved head
    `49e3728a8751909cc041110acd0e9212059dc6c5`; it remains blocker evidence only.
+   Worker_2 closeout mailbox `5423b6746f9e471db75e29b80025b65d` recorded
+   branch-only closeout commit `068170031a7b78ed1dc6ccfb2127f0ca65829709`.
 152. The next missing evidence is a positive Qwen3-4B Bridge/checkpoint-load
    proof in a task-owned NemTron/NeMo/Megatron-Bridge runtime; task270 is
    assigned to worker_5 to identify a concrete runtime route or exact resource
    blocker without training/eval.
 153. task270 assignment peer_send was delivered to worker_5.
+154. Initial check after task270 assignment found no worker_5 task270 branch or
+   mailbox response yet.
