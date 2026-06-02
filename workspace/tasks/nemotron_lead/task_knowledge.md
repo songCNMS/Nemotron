@@ -412,3 +412,8 @@
    Qwen PRs or mailbox evidence exist, does not change the Qwen AIME gate.
    Keep the team in monitor/HOLD unless a concrete runtime route or worker-owned
    evidence appears.
+166. After repeated monitor turns with mailbox `0`, no worker Qwen PRs open, and
+   only #312 coordinator audit changing, the active thread goal is externally
+   blocked even though the local team lead lifecycle task must remain Working.
+   The unblocking event is concrete runtime access for a no-training Qwen3-4B
+   Bridge/checkpoint-load proof.

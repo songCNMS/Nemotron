@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | monitor recheck: mailbox 0, no worker Qwen PRs open, only #312 coordinator audit; external runtime blocker; gate NO-GO/HOLD |
+| PR | monitor recheck repeated: mailbox 0, no worker Qwen PRs open, only #312 coordinator audit; external runtime blocker; gate NO-GO/HOLD |
 | Session | 70 |
