@@ -8504,3 +8504,32 @@
   visible yet.
 - Gate remains HOLD pending complete task306 artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
+
+## Session 142 - 2026-06-02 UTC - task306 active run progress 13/30
+
+- Post-push sanity check found task306 stdout advanced after the prior tracking
+  commit:
+  - lead branch was
+    `a76b5d2e2a6ae212d6325387ba051282e02b81fd` before this tracking update;
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - lead mailbox unread count `0`.
+- The worker-owned NemTron task306 process remains active after about one
+  hundred seventy-six minutes. Local rc remains absent.
+- Latest visible stdout progress advanced to `13/30`: rows 1-4, 6, and 8 are
+  parsed true/correct true; row 5 length-stopped parsed false/correct false;
+  row 7 parsed true/correct false; row 9 length-stopped parsed false/correct
+  false; row 10 parsed true/correct false; row 11 length-stopped parsed
+  false/correct false; row 12 length-stopped parsed false/correct false; row
+  13 length-stopped parsed false/correct false. This remains partial
+  unofficial progress only, not a final FT score.
+- Remote rank event logs previously showed all ranks completed
+  `start_index=12` and started `start_index=13`; row 14 is active from current
+  process/command state.
+- No task306 aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
