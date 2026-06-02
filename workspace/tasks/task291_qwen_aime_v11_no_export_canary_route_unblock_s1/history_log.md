@@ -32,3 +32,10 @@
 - Lead sent worker_2 a delivered request for official mailbox report and PR if
   code/docs/report changes are final, or bounded continuation only inside
   task291 no-training/no-export/no-endpoint/one-GPU limits.
+- Final continuation fetch found worker_2 branch at
+  `431483d998d22b397c229af3e76aec8c545dc47c`. Latest read-only output
+  `run_20260602T080751Z` produced retained artifacts but did not pass:
+  rc `3`, disposition `REQUEST_CHANGES_CANARY_COMPLETIONS_RETAINED_BUT_DECISION_FAIL`,
+  prompts `5`, completions retained `4`, exact matches `4`, failed prompt
+  `synthetic_word_completion_ready_set` with empty response/missing final marker.
+  AIME/task243 remains blocked pending official worker_2 report/PR and review.

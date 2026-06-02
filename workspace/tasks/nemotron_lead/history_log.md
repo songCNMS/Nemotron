@@ -5477,3 +5477,38 @@
   report and PR if code/docs/report changes are final, or continue only within
   no-export/no-endpoint one-GPU bounds; worker_5 must keep #351 on HOLD and
   refresh or explicitly wait for task291 official evidence.
+- Final continuation fetch found worker_2 task291 branch advanced again to
+  `431483d998d22b397c229af3e76aec8c545dc47c` with a one-line helper change
+  disabling unsupported tokenizer segments in the canary probe. No task291 PR or
+  mailbox report is visible.
+- Latest task291 output root is
+  `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T080751Z`
+  with source head `431483d...`, local artifacts copied from remote root
+  `/root/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T080751Z`.
+  Run rc is `3`, disposition is
+  `REQUEST_CHANGES_CANARY_COMPLETIONS_RETAINED_BUT_DECISION_FAIL`, and
+  `canary_pass=false`.
+- Read-only task291 `run_20260602T080751Z` metrics: prompts requested `5`,
+  result rows `5`, full completion rows `5`, completions retained `4`, exact
+  expected-answer matches `4`, final-answer marker count `8`. Failed prompt is
+  `synthetic_word_completion_ready_set`, with empty response content, no
+  extracted final answer, and no final-answer marker.
+- task291 `run_20260602T080751Z` checkpoint/load evidence: command used
+  `CUDA_VISIBLE_DEVICES=0`, source head `431483d...`, no-export/no-endpoint
+  route `direct_in_process_mcore_static_engine_no_export_no_endpoint_topk1_greedy`,
+  `LOAD_MEGATRON_MODEL=PASS`, Qwen3-4B path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, and boundary
+  confirmations true for no training/optimizer, no AIME/task243, no export,
+  no endpoint, no task255, no shared deletion, no 30B, and no 8-GPU.
+- Key task291 `run_20260602T080751Z` hashes observed read-only:
+  canary summary `bb53b8a504af91c0a1a1ac9a4d11171090abef730c646915c52712512db8b302`,
+  canary decision `1e30c69893fe1e4756aa32b7d9e21aea442723ed6a8bbea1dbc0537fdb0085cd`,
+  canary results `c68a0d56773945ddd0538783761f2d3f216dcfe6b219c6f3399191033035283e`,
+  full completions `005ca256ba94e13e92781c344d5755be7ed07f4c5989f2cd4f07e15e783fce4c`,
+  checksum manifest `13ad9490144187463c43428d75030449ed0ce9c21a3938c60e60ae1083bec687`,
+  remote probe log `d2b8452da9848c837af4ad12ead69871132f250a43a871cf535f1a091005dedb`.
+- Sent delivered follow-up to worker_2 with the current `431483d...` metrics:
+  worker_2 must either produce official mailbox report/PR for current head or
+  continue only inside task291 bounds to resolve the one failed synthetic prompt.
+  AIME/task243 remains blocked until canary pass is official and independently
+  reviewed.

@@ -876,3 +876,17 @@
 287. The next hard gate remains task291 official PASS/BLOCK report and, if code
    changes are final, PR/review. Corrected AIME2025/task243 FT-vs-base remains
    blocked until retained non-AIME canary completions pass and are reviewed.
+288. task291 latest observed branch head is
+   `431483d998d22b397c229af3e76aec8c545dc47c`; no PR/mailbox report yet. Latest
+   output `run_20260602T080751Z` is not a pass: rc `3`, disposition
+   `REQUEST_CHANGES_CANARY_COMPLETIONS_RETAINED_BUT_DECISION_FAIL`,
+   `canary_pass=false`.
+289. task291 `run_20260602T080751Z` retained some evidence: prompts `5`, result
+   rows `5`, full completion rows `5`, completions retained `4`, exact matches
+   `4`, final-answer marker count `8`, `LOAD_MEGATRON_MODEL=PASS`, one GPU
+   (`CUDA_VISIBLE_DEVICES=0`), no-export/no-endpoint route. The failing prompt is
+   `synthetic_word_completion_ready_set` with empty response/missing marker.
+290. task291 `run_20260602T080751Z` observed hashes: summary `bb53b8a...`,
+   decision `1e30c69...`, results `c68a0d5...`, full completions `005ca25...`,
+   checksum manifest `13ad949...`, remote log `d2b8452...`. These are read-only
+   observations pending worker_2 official report and independent review.
