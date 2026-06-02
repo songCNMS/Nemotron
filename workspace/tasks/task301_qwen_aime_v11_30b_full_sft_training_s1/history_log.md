@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -43,3 +43,21 @@
 - No task255 reuse, AIME2025 train data, shared deletion, export-promotion,
   endpoint-promotion, main push, merge, 30B training, or 8-GPU execution was
   performed.
+
+## Session 3 - 2026-06-02 UTC - upstream branch visibility refresh
+
+- Refreshed origin and verified PR #362 state:
+  OPEN/base `main`/CLEAN/MERGEABLE at head
+  `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`.
+- Recorded visible upstream branch heads:
+  - task298 `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`;
+  - task299 `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`;
+  - task300 `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`.
+- Exact branch PR checks for task298/task299/task300 returned no open or merged
+  PRs at this snapshot.
+- Read upstream task README files; all three remain `InProgress` and do not
+  publish task298 PASS, task299 PASS, or task300 30B base-score artifacts.
+- Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
