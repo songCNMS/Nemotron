@@ -39,3 +39,11 @@
   prompts `5`, completions retained `4`, exact matches `4`, failed prompt
   `synthetic_word_completion_ready_set` with empty response/missing final marker.
   AIME/task243 remains blocked pending official worker_2 report/PR and review.
+- Subsequent read-only observation found worker_2 branch
+  `dfb6ca64a5479990be9d4f54defb9f294c09866f` and latest run
+  `run_20260602T081136Z` with rc `0`, disposition `PASS`, canary pass true,
+  prompts/result rows/full completion rows `5/5/5`, retained completions `5`,
+  exact matches `5`, and final-answer markers `9`. The prior failed word prompt
+  passed via `generated_tokens_detokenize_fallback`.
+- task292 was created for worker_4 independent review of this exact task291 head
+  and artifact root before any AIME/task243 release.

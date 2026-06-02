@@ -890,3 +890,14 @@
    decision `1e30c69...`, results `c68a0d5...`, full completions `005ca25...`,
    checksum manifest `13ad949...`, remote log `d2b8452...`. These are read-only
    observations pending worker_2 official report and independent review.
+291. task291 latest read-only observed PASS is head
+   `dfb6ca64a5479990be9d4f54defb9f294c09866f`, artifact root
+   `run_20260602T081136Z`, rc `0`, `canary_pass=true`, prompts/result rows/full
+   completion rows `5/5/5`, retained completions `5`, exact matches `5`, final
+   markers `9`. This supersedes the earlier `431483d...` 4/5 failure.
+292. task291 PASS uses a detokenized fallback on `synthetic_word_completion_ready_set`
+   (`response_text_source=generated_tokens_detokenize_fallback`), so independent
+   review must decide whether that fallback is acceptable for the canary route.
+293. task292 is assigned to worker_4 to review exact task291 head `dfb6ca64...`
+   and artifact root `run_20260602T081136Z`. AIME/task243 remains blocked until
+   task292 report is processed and lead explicitly releases the eval task.

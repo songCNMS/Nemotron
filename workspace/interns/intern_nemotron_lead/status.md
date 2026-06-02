@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #352/#353 merged BLOCK evidence; #351 HOLD at 7f4a223; task291 head 431483d observed 4/5 retained/correct but canary fail, official report pending; AIME/export/promotion/30B HOLD |
+| PR | #352/#353 merged BLOCK evidence; #351 HOLD at 7f4a223; task291 head dfb6ca6 read-only PASS observed; task292 review assigned; AIME/export/promotion/30B HOLD |
 | Session | 75 |

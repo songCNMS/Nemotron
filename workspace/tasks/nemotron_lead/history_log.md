@@ -5512,3 +5512,29 @@
   continue only inside task291 bounds to resolve the one failed synthetic prompt.
   AIME/task243 remains blocked until canary pass is official and independently
   reviewed.
+- Subsequent fetch found task291 branch advanced to
+  `dfb6ca64a5479990be9d4f54defb9f294c09866f`, with a helper change to retain a
+  detokenized fallback for empty MCore text. Latest artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`
+  reports rc `0`, disposition `PASS`, and `canary_pass=true`.
+- Read-only task291 `run_20260602T081136Z` metrics: prompts requested `5`,
+  result rows `5`, full completion rows `5`, completions retained `5`, exact
+  expected-answer matches `5`, final-answer marker count `9`. The word prompt
+  `synthetic_word_completion_ready_set` used
+  `generated_tokens_detokenize_fallback` and extracted final answer `go`.
+- Read-only task291 `run_20260602T081136Z` evidence remains no-export/
+  no-endpoint and one-GPU: route
+  `direct_in_process_mcore_static_engine_no_export_no_endpoint_topk1_greedy`,
+  `LOAD_MEGATRON_MODEL=PASS`, `CUDA_VISIBLE_DEVICES=0`, and boundary
+  confirmations true for no training/optimizer, no AIME/task243, no task255,
+  no export/endpoint/promotion, no shared deletion, no 30B, and no 8-GPU.
+- Key task291 `run_20260602T081136Z` hashes: canary summary
+  `dd855c2c32b0b7411ee1cd365311363f1d3338753560107768b684b8fb660d40`,
+  canary decision `c3c9964b6024e1fb137c0db66d255e773727dc8d30fde75c56834b34778c0bca`,
+  canary results `67e6304786f5bb79fee07f5253ff4de2e449d2756aa6fd2d38762322bdad3dc7`,
+  full completions `b2768f75415abfeb268b58ba425abe41a7b169fdacbd07e9aa27422e46d7611d`,
+  remote probe log `e2044aae855a7a660968e3d2940c946ca874198bef2a04e05163c4235707f17b`.
+- Created task292 and assigned it to worker_4 for independent read-only review
+  of exact task291 head `dfb6ca64...` and artifact root `run_20260602T081136Z`.
+  This does not release AIME/task243; it is the review gate before any corrected
+  AIME2025 same-harness FT-vs-base eval can be assigned.
