@@ -35,3 +35,5 @@
 - Updated task status to Review for PR/mailbox closeout. No training data,
   shared artifacts, training, eval, export, endpoint, promotion, main, or merge
   operations were modified or run.
+- Opened PR #342:
+  https://github.com/songCNMS/Nemotron/pull/342.

@@ -57,6 +57,8 @@ before training can be considered.
 - Status: review complete; preparing PR and mailbox closeout.
 - Report:
   `workspace/tasks/task274_qwen_aime_v11_data_safety_ready_review_s1/data_safety_ready_review_report.md`.
+- PR:
+  https://github.com/songCNMS/Nemotron/pull/342
 - Disposition: source/decontamination evidence is safe, but currently visible
   packed Qwen data remains blocked for direct pilot use until V11 data is
   rematerialized with task262 collision-safe split logic.
