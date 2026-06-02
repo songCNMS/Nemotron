@@ -4144,3 +4144,5 @@
   no-training Bridge import/preflight proof only. It still does not authorize
   training, nonzero-LR smoke, live AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, or 30B/8-GPU.
+- Sent delivered coordinator update with task271-task275 assignments, visible
+  branch state, task271 approve/caveat, and unchanged global `NO-GO/HOLD`.

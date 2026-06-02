@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task271 APPROVE core Bridge proof with inventory caveat; task272-task275 reports pending; gate NO-GO/HOLD |
+| PR | task271 APPROVE core Bridge proof with inventory caveat; coordinator updated; task272-task275 reports pending; gate NO-GO/HOLD |
 | Session | 71 |
