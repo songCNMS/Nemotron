@@ -364,3 +364,6 @@
 155. worker_5 local status shows task270 accepted/Working, but there is still no
    coordinator-visible task270 remote branch, PR, mailbox report, or output
    artifact.
+156. worker_5 local task270 branch currently has uncommitted acceptance
+   docs/status only; lead sent a follow-up asking for a pushed branch or mailbox
+   blocker/ETA while preserving no-training boundaries.
