@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0 - Assigned
 
@@ -249,6 +249,36 @@
   canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data use, shared deletion, merge, main push, or 30B/8-GPU
   action.
+
+## Session 17 - task279 PR #347 blocker evidence approval
+
+- Reviewed task278 PR #347 current exact head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; final `gh pr view` confirmed
+  OPEN/base `main`/MERGEABLE at that head.
+- Verified PR diff scope: worker_2 status plus task278 docs/helper/report;
+  `git diff --check origin/main...origin/pr/347` was clean.
+- Verified task278 report sha
+  `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`.
+- Verified latest artifact run
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`:
+  manifest sha `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`
+  and report sha `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`
+  sidecars were OK.
+- Verified task276 packed manifest and shard checksum sidecars, packed
+  readability counts, Qwen packed chat contract PASS, Qwen training-pipeline
+  config contract PASS, negative fail-closed guard PASS, Qwen HF config/tokenizer
+  import PASS, and carried no-AIME2025-leakage evidence.
+- Verified blocker
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`: `nemo`,
+  `megatron`, `megatron.bridge`, Bridge training config, Qwen Bridge recipe,
+  and helper import of `stage1_sft.train` fail through missing runtime modules;
+  `/root` route also lacks Docker daemon, `nvidia-smi`, `srun`, `enroot`, and
+  `singularity`.
+- Sent mailbox `76d1c2b457004c25a27e4eedc26edd6f`: APPROVE #347 as
+  blocker/preflight evidence only. This confirms real NemTron/NeMo/
+  Megatron-Bridge runtime remediation is required before nonzero-LR smoke.
+- No training/eval/export/endpoint/promotion/merge/main push/30B clearance was
+  granted; boundaries remained read-only.
 
 ## Session 16 - task279 PR #347 exact-head drift
 

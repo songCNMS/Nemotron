@@ -1,6 +1,6 @@
 # task279_qwen_aime_v11_task278_preflight_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Knowledge Entries
 
@@ -16,3 +16,6 @@
    carried in this branch diff.
 6. PR #347 exact-head drift from requested `6d3e5825` to current `b7e5441`
    blocks final task279 disposition until lead supplies the current exact head.
+7. PR #347 current head `b7e5441` is approved as blocker/preflight evidence
+   only; it proves local packed/Qwen/config/HF checks pass but the missing
+   NeMo/Megatron-Bridge runtime must be remediated before nonzero-LR smoke.

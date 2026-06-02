@@ -1,6 +1,6 @@
 # task279_qwen_aime_v11_task278_preflight_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0 - Assigned
 
@@ -39,6 +39,32 @@
   canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data use, shared deletion, merge, main push, or 30B/8-GPU
   action.
+
+## Session 17 - Current-head task278 blocker evidence review
+
+- Reviewed PR #347 exact current head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; initial and final `gh pr view`
+  showed OPEN/base `main`/MERGEABLE at that head.
+- Verified diff scope and `git diff --check` were clean for the task278 docs,
+  helper, report, and worker_2 status changes.
+- Verified report sha
+  `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23` and
+  latest artifact run
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
+- Verified task278 manifest/report sidecars, task276 packed manifest/shard
+  checksum sidecars, local packed readability, Qwen packed chat contract,
+  Qwen training-pipeline config contract, negative fail-closed guard, Qwen HF
+  config/tokenizer import, no-training boundary flags, sparse valid/test
+  preflight-only risk, and carried no-AIME2025-leakage evidence.
+- Verified blocker
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; `/root` route
+  lacks usable Docker daemon/accelerator/container launch path and the Python
+  runtime lacks NeMo/Megatron/Bridge imports.
+- Sent mailbox `76d1c2b457004c25a27e4eedc26edd6f` with decision APPROVE as
+  blocker/preflight evidence only. Real NemTron/NeMo/Megatron-Bridge runtime
+  remediation is required before any nonzero-LR smoke.
+- This approval is not training, live canary, AIME/task243 eval,
+  export/endpoint/promotion, merge/main push, or 30B/8-GPU clearance.
 
 ## Session 16 - PR #347 exact-head drift during review
 

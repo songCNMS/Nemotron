@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Knowledge Entries
 
@@ -96,3 +96,7 @@
 27. For task279, if PR #347 head drifts from the lead-requested exact head,
     stop and report mismatch; do not issue approve/request-changes/block for
     the new head until lead provides that exact head.
+28. At Session 17, task279 approved PR #347 head `b7e5441` as
+    blocker/preflight evidence only: local packed/Qwen/config/HF preflight
+    evidence passed, but missing NemTron/NeMo/Megatron-Bridge runtime keeps
+    nonzero-LR smoke blocked until remediation.
