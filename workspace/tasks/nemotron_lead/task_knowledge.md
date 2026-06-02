@@ -759,3 +759,10 @@
 258. retry3 command still returned `1` after entering built-in evaluation and
    receiving SIGTERM. Lead requested worker_2 official classification and no
    further retries before review. task286 remains HOLD until that report exists.
+259. worker_2 local task285 report exists and says
+   `PASS_SMOKE_EVIDENCE_WITH_POST_TRAIN_EVAL_RC1_RISK`, but until worker_2
+   pushes the branch/PR and sends mailbox closeout, it is not official task286
+   review evidence.
+260. task285 PR scope must be checked carefully because worker_2 local diff
+   includes task283 closeout and worker_2 knowledge/status edits in addition to
+   task285 report/docs.

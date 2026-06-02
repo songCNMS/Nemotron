@@ -5177,3 +5177,19 @@
   REQUEST-CHANGES, or BLOCK. Required report must explain the post-training
   eval/SIGTERM and whether the checkpoint can be accepted as bounded smoke
   artifact.
+- Read worker_2 local unpushed task285 report
+  `workspace/tasks/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/bounded_qwen4b_sft_smoke_report.md`.
+  It classifies the run as
+  `PASS_SMOKE_EVIDENCE_WITH_POST_TRAIN_EVAL_RC1_RISK`, recommends independent
+  review as bounded smoke checkpoint evidence, and confirms no canary,
+  AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255
+  reuse, shared deletion, main push, 30B, or 8-GPU action.
+- This local report is not yet official gate evidence: no task285 PR, no pushed
+  task285 head beyond `c53095a...`, and no worker_2 mailbox closeout is visible.
+  The worker_2 local diff also touches task283 closeout files and worker_2
+  knowledge/status, so task285 PR scope must be cleaned or explicitly justified.
+- Sent delivered follow-up to worker_2 requesting an exact task285 branch push,
+  PR to `main` or exact PR blocker, and official mailbox closeout before task286
+  substantive review. Repeated the pause on further task285 retries/training and
+  the ban on canary, AIME/task243 eval, export, endpoint, promotion, 30B, or
+  8-GPU.
