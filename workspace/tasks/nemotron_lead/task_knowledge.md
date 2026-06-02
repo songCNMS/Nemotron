@@ -361,3 +361,6 @@
 153. task270 assignment peer_send was delivered to worker_5.
 154. Initial check after task270 assignment found no worker_5 task270 branch or
    mailbox response yet.
+155. worker_5 local status shows task270 accepted/Working, but there is still no
+   coordinator-visible task270 remote branch, PR, mailbox report, or output
+   artifact.
