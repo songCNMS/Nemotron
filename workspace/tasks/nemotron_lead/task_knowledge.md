@@ -649,3 +649,16 @@
 229. #348 remote head `4947f18e56bf5ec62ab21d96d599b4e21b769346` is still
    stale. Do not approve until worker_5 pushes a refresh that records #347
    merged blocker state and task283/task284 gates.
+230. #348/task282 head `19024996b9eb1327e0566fa6c16a76b4ba3c1460` has the
+   corrected Session 4 runbook refresh and is approved by lead comment
+   `4599009179` for worker_5 self-merge if exact head remains clean/mergeable.
+231. task283 unofficial run
+   `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`
+   reached `ENERGON_IMPORT=PASS` and `QWEN_RECIPE_IMPORT=PASS` in
+   `post_webdataset_import_probe.log` after task-owned venv installs through
+   `webdataset`; this is a positive signal but not official task283 gate
+   evidence yet.
+232. task283 still needs official branch/PR/mailbox evidence covering package
+   versions, commands/env, `/root` sync/code revision proof, task276 input
+   checksums, config/import/load preflight scope, and no-training/no-eval proof
+   before task284 can review.

@@ -4848,3 +4848,38 @@
   exact blocker. No nonzero-LR SFT smoke, live canary, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, lead main push, lead merge, or 30B/8-GPU is authorized.
+- Fetched origin and verified #348/task282 advanced to exact head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`, `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE`. Diff scope is worker_5 status plus task282 docs and the
+  task266 runbook update; `git diff --check
+  origin/main...origin/intern_nemotron_worker_5/task282...` passed.
+- Processed worker_5 mailbox
+  `c8684a283e0d42c8aef725021b3c53f6`: worker_5 confirmed #348 Session 4
+  refresh is remote-visible at head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`, records #347/task278 merged
+  blocker docs, task279 blocker-evidence approval, task283 accepted head
+  `c1d988e29abafa51a9c3f83a98e21b229135f97e`, task284 accepted/cleaned head
+  `27d28b54342a98a4a336c46661964759f2790619`, and keeps global V11 execution
+  `NO-GO/HOLD`. Output report sha256 is
+  `bf69d2cd99ca52357b58fb8014437b56183d1a70838570410628361752a7d15a`.
+- Left #348 lead approval comment `4599009179` and sent delivered peer_send to
+  worker_5 releasing self-merge only if exact head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460` remains `CLEAN`/`MERGEABLE` at
+  merge time. As of the post-approval check, #348 remains open and clean at the
+  approved head.
+- Read-only observation of task283 unofficial run
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`
+  found additional no-training dependency remediation through `filetype` and
+  `webdataset`. The latest `post_webdataset_import_probe.log` shows
+  `ENERGON_IMPORT=PASS` and `QWEN_RECIPE_IMPORT=PASS` for
+  `megatron.bridge.recipes.qwen.qwen3`, using the task-owned venv under the
+  `/root/task283.../run_20260602T052346Z` path.
+- Sent delivered peer_send to worker_2 noting the positive unofficial import
+  signal, but requiring official task283 evidence before gate review:
+  package list/versions, exact commands/env, `/root` sync/code revision proof,
+  task276 input checksum results, whether config/import/load preflight beyond
+  symbol import passed, and proof no training/optimizer step/checkpoint
+  save/export/endpoint/live canary/AIME/task243 eval ran.
+- Current state remains fail-closed: task283 official report/PR or exact blocker
+  is still missing, task284 substantive review has not started, #348 self-merge
+  closeout is pending, and no training/eval/promotion/30B action is released.

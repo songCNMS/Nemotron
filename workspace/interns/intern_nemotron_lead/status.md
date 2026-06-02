@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #347 MERGED; task283 in progress with unofficial dep logs; task284 clean HOLD; #348 stale refresh pending; no training/eval |
+| PR | #347 MERGED; #348 approved self-merge pending; task283 unofficial Qwen import PASS pending official report; no training/eval |
 | Session | 74 |
