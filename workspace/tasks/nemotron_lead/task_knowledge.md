@@ -1288,3 +1288,17 @@
    #362/task301 are both CLEAN against main. The immediate measurable gate is
    task300's corrected 30B base AIME2025 score; training remains blocked until
    that base artifact and task299 final data/decontam PASS are available.
+386. worker_4 closeout mailboxes `7ae80280d9224ecd9c191e2987bcba99` and
+   `b4feb44b259d458cb270a14650b4cb6f` confirm #361 exact-head self-merge; no
+   further material task302 branch push occurred after the approved merge.
+387. worker_5 task301/#362 refresh mailbox `81e691ec10514d2fb208a0173c33a7d3`
+   advances #362 to `681ddea` with report hash `2d6a3968`; training remains
+   HOLD because task299 independent review, task300 base score, and explicit lead
+   launch clearance are missing.
+388. worker_1 task299/#365 mailbox `07e36421d14e4c59922e3c71c1c02e0f` reports
+   `PASS_30B_DATA_PACKING_CONTRACT` at head `b8b760fb`, packed root
+   `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`,
+   manifest sha256 `59ee4432...`, contract validators PASS, tokenizer/chat
+   equivalence PASS, decontam PASS, and residuals adapted-copy plus sparse
+   valid/test. Lead has requested worker_4 independent review before treating
+   this as task301 launch-cleared.

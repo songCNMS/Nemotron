@@ -6406,3 +6406,42 @@
 - No worker_4 task302/#361 post-merge closeout mailbox had arrived at this
   poll, so lead sent a delivered reminder requesting #361 mergedAt/mergeCommit/
   merged-head closeout and boundary confirmation. Mailbox was otherwise empty.
+- Processed and marked read worker_4 task302/#361 post-merge closeout mailboxes
+  `7ae80280d9224ecd9c191e2987bcba99` and
+  `b4feb44b259d458cb270a14650b4cb6f`: worker_4 confirms #361 pre-merge
+  OPEN/base main/exact head `7226b294...`/CLEAN/MERGEABLE/not-draft check,
+  merge at `2026-06-02T15:13:41Z`, merge commit
+  `b76369c3903b0781c7cf87d171c5b21bda588a5d`, docs/status-only scope, and no
+  forbidden actions. One mailbox notes #361 was merged while #364 was still
+  open, but the exact #361 gate was satisfied and final GitHub state shows both
+  #364 and #361 merged cleanly.
+- Processed and marked read worker_5 task301/#362 refresh mailbox
+  `81e691ec10514d2fb208a0173c33a7d3`: #362 is OPEN/base main/CLEAN/MERGEABLE
+  at head `681ddea29c28afde6eaeeea416fe72a0255963ac`; report/output sha256 is
+  `2d6a396896405e7c67b41d0876b28fc2914874c466263b7d1c289ace7326b40a`;
+  disposition remains `BLOCKED_UPSTREAM_GATES_MISSING` / training HOLD. task298
+  is no longer an active launch blocker, but task299 final data/decontam PASS,
+  task300 same-harness 30B base AIME score, and explicit lead sequence clearance
+  remain required.
+- Fetched and read new #365/task299 PR-visible evidence: #365 is OPEN/base
+  main/CLEAN/non-draft at head `b8b760fb8f46cda8f302adbea106f19cc234e038`,
+  with file scope worker_1 status plus task299 README/history/task_knowledge and
+  `30b_data_packing_contract_report.md`; `git diff --check` passed.
+- Processed and marked read worker_1 task299/#365 official closeout mailbox
+  `07e36421d14e4c59922e3c71c1c02e0f`: decision
+  `PASS_30B_DATA_PACKING_CONTRACT`, 30B-ready packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`,
+  top manifest sha256
+  `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`,
+  tokenizer asset/API/chat-template/sample token-ID equivalence between Qwen3-4B
+  and Qwen3-30B-A3B, offline contract validators PASS, intended-vs-exposed
+  parity PASS, train `46` shards / `279` rows / `1024646` input tokens /
+  `228927` supervised tokens, valid `1` shard / `1` row, test `1` shard /
+  `0` rows, no broken split symlinks, 48 parquet shard checksums, decontam PASS,
+  no AIME2025 prompt/label train rows, no task255 reuse, and no shared deletion.
+  Residuals are adapted metadata/root copy rather than fresh retokenization and
+  inherited task276 sparse valid/test.
+- Sent delivered task302 follow-up request to worker_4 to independently review
+  #365 exact head `b8b760fb...` and the task299 artifact root, returning
+  approve/request-changes/block for data/packing/decontam before lead can treat
+  task299 as launch-cleared.

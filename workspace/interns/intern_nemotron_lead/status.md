@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: #364 task298 merged; #361 task302 merged; task300 30B base AIME released; task299 data pending; #362 training HOLD |
+| PR | 30B gate live: #364/#361 merged; #365 task299 PASS claim pending worker_4 review; task300 30B base AIME released; #362 training HOLD |
 | Session | 76 |
