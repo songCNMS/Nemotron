@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -163,6 +163,25 @@
   `b8b760fb8f46cda8f302adbea106f19cc234e038`.
 - Preserved task301 HOLD until task300 provides an accepted same-harness 30B
   base AIME score artifact and lead gives explicit launch clearance.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 10 - 2026-06-02 UTC - task300 base evidence under review
+
+- Received lead update that task300 base-score evidence now exists in #363 at
+  head `155eb0c6845c0bf2b7d40051a9045533ffe00589` with reported 30B base
+  `15/30`.
+- Verified #363 is OPEN/base `main`/CLEAN/MERGEABLE at that head.
+- Read task300 base report: route disposition `BASE_PASS`, exact-normalized
+  accuracy `0.5`, local run root
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`,
+  remote run root
+  `/root/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`,
+  and eval directory `eval/qwen30b_base_aime2025_30x1_20260602T152351Z`.
+- Recorded that the base comparator is not accepted until worker_4 independent
+  review and lead gate; task301 launch remains HOLD until accepted base
+  comparator and explicit lead launch clearance are available.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.

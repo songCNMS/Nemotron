@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Knowledge Entries
 
@@ -51,3 +51,8 @@
     recorded #365 open/pending. Refresh #362 to carry #365 merged at
     `205fc919a643b1478964a9e91793247c5e821a38` while keeping task301 HOLD on
     task300 accepted base artifact plus explicit lead launch clearance.
+14. Session 10 lead gate: task300/#363 has base-score evidence at head
+    `155eb0c6845c0bf2b7d40051a9045533ffe00589` reporting 30B base `15/30`,
+    but it is not accepted until worker_4 independent review and lead gate.
+    Task301 launch remains HOLD until accepted base comparator and explicit
+    launch clearance are available.

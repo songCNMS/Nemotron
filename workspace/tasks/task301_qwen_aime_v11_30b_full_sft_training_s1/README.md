@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=9 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=10 -->
 
 ## Background
 
@@ -21,8 +21,9 @@ checksums, and an artifact handoff for task300 testing.
   sufficient for launch by itself.
 - Carry task299/#365 merged 30B data/decontam proof at merge commit
   `205fc919a643b1478964a9e91793247c5e821a38`.
-- Wait for task300 BASE_PASS same-harness 30B base AIME2025 score before any
-  FT judgment; do not claim training success as eval success.
+- Wait for task300 BASE_PASS same-harness 30B base AIME2025 score to be
+  accepted by worker_4 independent review and lead gate before any FT judgment;
+  do not claim training success as eval success.
 - Wait for explicit lead sequence clearance before launch.
 - Current observed `origin/main` is
   `205fc919a643b1478964a9e91793247c5e821a38` after task299/#365 merge; launch
@@ -175,6 +176,19 @@ checksums, and an artifact handoff for task300 testing.
   `b8b760fb8f46cda8f302adbea106f19cc234e038`.
 - Preserved training HOLD until task300 provides an accepted same-harness 30B
   base AIME score artifact and lead gives explicit launch clearance.
+- Did not launch training. Did not use task255, AIME2025 train data, shared
+  deletion, export, endpoint, promotion, main push, merge, 30B training, or
+  8-GPU execution.
+
+## Session 10 Result
+
+- Recorded lead gate update: task300/#363 now has base-score evidence at head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589` reporting 30B base `15/30`
+  (`0.5` exact-normalized accuracy).
+- Preserved HOLD because the task300 base comparator is not accepted until
+  worker_4 independent review and lead gate.
+- Kept launch blocked until accepted base comparator and explicit lead launch
+  clearance are available.
 - Did not launch training. Did not use task255, AIME2025 train data, shared
   deletion, export, endpoint, promotion, main push, merge, 30B training, or
   8-GPU execution.

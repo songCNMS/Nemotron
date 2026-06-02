@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task301_qwen_aime_v11_30b_full_sft_training_s1 |
 | PR | #362 |
-| Session | 9 |
-| Last Update | Refreshed #362 docs/status for the exact-head request: task299/#365 is merged into main at `205fc919a643b1478964a9e91793247c5e821a38`, so runtime and data gates are carried. Task301 full 30B SFT remains HOLD until task300 provides an accepted same-harness 30B base AIME score artifact and lead gives explicit launch clearance. |
+| Session | 10 |
+| Last Update | Recorded lead gate update: task300/#363 now has base-score evidence at head `155eb0c6845c0bf2b7d40051a9045533ffe00589` reporting 30B base `15/30`, but it is not accepted pending worker_4 independent review and lead gate. Task301 full 30B SFT remains HOLD until accepted base comparator and explicit lead launch clearance. |
