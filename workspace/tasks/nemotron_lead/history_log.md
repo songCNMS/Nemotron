@@ -6019,3 +6019,14 @@
   against substantive task296 evidence. Current gate remains: path A not yet
   accepted, path B not triggered, no export/endpoint/promotion/further
   training/eval/task255/AIME2025 train data/shared deletion/30B/8-GPU.
+- Worker_1 advanced #359 once more to
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06` as a HOLD acknowledgement. Lead
+  verified `04c5dc0b...` to `b9c1af29...` was status/history/task_knowledge-only
+  and the task296 audit report was unchanged; `git diff --check` still passes.
+  Added updated #359 HOLD comment `4602479162`.
+- Sent worker_4 a delivered review-target update: review #359 current head
+  `b9c1af29...`; if #359 advances again only by status/history bookkeeping with
+  unchanged audit report, task297 should state the exact final head reviewed and
+  unchanged-report finding. Latest poll after that message: no unread mailbox,
+  #359 remains OPEN/CLEAN at `b9c1af29...`, and #358 remains OPEN/CLEAN at old
+  HOLD head `68bc1dfd...`.
