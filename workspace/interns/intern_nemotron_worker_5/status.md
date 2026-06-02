@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task282_qwen_aime_v11_runbook_provenance_pipeline_s1 |
 | PR | #348 |
-| Session | 1 |
-| Last Update | Opened PR #348 for task282 Session 74 runbook/provenance update; report recommends `PASS` for docs while global V11 execution remains `NO-GO/HOLD`. |
+| Session | 2 |
+| Last Update | Refreshed PR #348 against current main `7ba6554`: recorded #345/#346 merged plan-only HOLD and #347/task278 OPEN/CLEAN blocker evidence while global V11 execution remains `NO-GO/HOLD`. |

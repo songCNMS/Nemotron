@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -25,3 +25,17 @@
    smoke if explicitly released, non-AIME canary, corrected AIME2025 same-harness
    FT-vs-base comparison, and then no promotion/30B unless FT >= base and a
    separate lead gate authorizes it.
+9. #345/task281 is merged plan-only HOLD at merge commit
+   `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`; it does not authorize live
+   canary, AIME/task243 eval, endpoint, promotion, or scale.
+10. #346/task280 is merged plan-only HOLD at merge commit
+    `7ba65549500e9ca70fc560ed919d6bfa61f088b2`; it does not authorize
+    nonzero-LR smoke execution or training.
+11. #347/task278 is open/clean at
+    `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, with latest artifact root
+    `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`
+    and report sha
+    `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`.
+12. task278 current disposition is
+    `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; #347 remains
+    unapproved pending task279 current-head review.
