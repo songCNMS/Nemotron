@@ -74,3 +74,7 @@
 - Boundary confirmation remains unchanged: no export, endpoint, promotion,
   training, AIME2025 train data, shared deletion, main push/merge, 30B, or
   8-GPU.
+- Opened PR #356 for the docs/report closeout. Eval run source head remains
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e`; report-packaging branch head
+  before PR-number bookkeeping was
+  `5ace7c74e83cddb8a622775cb70f4d3a5be63fcd`.

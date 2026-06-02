@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 |
-| PR | Pending |
+| PR | #356 |
 | Session | 3 |
-| Progress | Packaging official task293 closeout/PR evidence for eval source head 87de0a97: FT 12/30 versus base 11/30, same-harness proof and sampling residual risk documented, boundaries confirmed. |
+| Progress | Opened PR #356 for official task293 closeout: eval source head 87de0a97 scored FT 12/30 versus base 11/30; awaiting lead gate, no promotion/export/endpoint/30B/8-GPU authorization. |
