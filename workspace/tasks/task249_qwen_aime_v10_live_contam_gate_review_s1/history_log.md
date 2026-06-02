@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0 - Assigned
 
@@ -232,3 +232,21 @@
 - Scope remained review-only: no implementation, training, live eval, endpoint
   launch, shared deletion, direct `main` push, branch rewrite, first go/no-go
   approval, or 30B scale action was performed.
+
+## Session 12 - task277 read-only packed Qwen review side assignment
+
+- Per lead refresh, reviewed task277/task276 packed Qwen evidence for PR #344
+  exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+- Verified the core report sha stayed
+  `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887`
+  after metadata-only drift from the previous requested head.
+- Reviewed artifact run
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z`
+  for split manifest, shard checksums, row/token/source counts, intended vs
+  exposed parity, Qwen packed-data contract, and AIME2025 leakage evidence.
+- Sent mailbox report `2188c870f0374fc7bfa91bef2622fc5c`: APPROVE as packed
+  data/packing evidence only, with residual risk that valid split has one row
+  and test split has zero rows.
+- This side review does not change task249/#323 gate state, does not grant
+  training/promotion/go-no-go clearance, and did not edit task276 artifacts,
+  PR files, product code, or run training/eval/export/endpoint/30B actions.

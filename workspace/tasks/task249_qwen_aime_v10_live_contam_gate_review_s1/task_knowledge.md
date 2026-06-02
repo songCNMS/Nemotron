@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,9 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. At Session 12, task277/task276 PR #344 exact head
+    `07efab4fa0d8367e96f54af3d2cdc70768d73595` was approved by mailbox
+    `2188c870f0374fc7bfa91bef2622fc5c` as packed data/packing evidence only.
+    This approval is not training clearance, promotion clearance, first
+    go/no-go approval, or a replacement for later validation/test distribution
+    gates.
