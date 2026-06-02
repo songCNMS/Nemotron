@@ -6685,3 +6685,9 @@
   accepted; do not run non-AIME canary, FT AIME, export, endpoint, or promotion
   until worker_5 provides task301 checkpoint artifacts and lead assigns the next
   eval gate.
+- Final scan after launch-clearance push found #362/task301 OPEN/base
+  main/CLEAN at `e4c00524aca255de205a749995b23ed48493cb8b`. Fetched report at
+  that head was generated before the explicit launch clearance and still records
+  `BLOCKED_UPSTREAM_GATES_MISSING`; lead launch clearance was sent after this
+  report and supersedes it. No worker_5 post-clearance launch acknowledgement or
+  training artifact mailbox had arrived yet; mailbox unread count was `0`.

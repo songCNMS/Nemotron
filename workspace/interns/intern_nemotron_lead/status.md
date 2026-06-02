@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: #363 merged; task301 30B SFT launch cleared; awaiting training artifacts |
+| PR | 30B gate live: #363 merged; task301 30B SFT launch cleared after #362 e4c005 HOLD report; awaiting training artifacts |
 | Session | 76 |

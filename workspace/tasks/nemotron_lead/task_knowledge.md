@@ -1372,3 +1372,7 @@
    checksums, and artifact inventory. Non-AIME canary and corrected AIME FT-vs-
    base are not cleared until lead reviews task301 artifacts and assigns the next
    eval gate.
+405. #362/task301 head `e4c0052` is open/clean but is a pre-launch-clearance HOLD
+   report. Lead sent explicit launch clearance after that head; current expected
+   next evidence is worker_5 post-clearance launch acknowledgement, blocker, or
+   training artifact report.
