@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - Session 74 runbook provenance
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=4 -->
 
 ## Background
 
@@ -76,13 +76,47 @@ AIME comparison, and future closeout.
     `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`, plan-only HOLD;
   - #346/task280 MERGED at `2026-06-02T04:59:45Z`, merge commit
     `7ba65549500e9ca70fc560ed919d6bfa61f088b2`, plan-only HOLD;
-  - #347/task278 OPEN/CLEAN at
+  - #347/task278 pre-merge blocker artifact at exact head
     `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, blocker report sha
     `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`,
     artifact root
     `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
 - Recommendation remains `PASS` for docs-only runbook/provenance update.
-  Combined execution disposition remains `NO-GO/HOLD`.
+  Combined execution disposition remains `NO-GO/HOLD`; Session 3 supersedes the
+  #347 PR-state details.
+
+## Session 3 Result
+
+- Refreshed against current `origin/main`
+  `28039222ad5d4054891713d85d05a15a491d8a96`.
+- Recorded #347/task278 as MERGED at `2026-06-02T05:13:14Z`, merge commit
+  `28039222ad5d4054891713d85d05a15a491d8a96`, merged head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`.
+- Recorded task279 approval of #347 exact head as blocker/preflight evidence
+  only, with lead approval comment `4598906687`.
+- Recorded task283/task284 as follow-on no-training remediation/review gates;
+  Session 4 records their accepted branch heads.
+- Runbook disposition remains: #347 merged as blocker docs only; task278 remains
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; task280/task281
+  remain plan-only HOLD; global execution remains `NO-GO/HOLD`.
+
+## Session 4 Result
+
+- Confirmed #348 remote remained stale at head
+  `4947f18e56bf5ec62ab21d96d599b4e21b769346`, so this refresh must be pushed.
+- Verified current `origin/main`
+  `28039222ad5d4054891713d85d05a15a491d8a96` and current lead docs head
+  `bbe63bf7939873c1b4a3a0ee56d70472026ce9ec`.
+- Verified task283 remote branch
+  `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+  at `c1d988e29abafa51a9c3f83a98e21b229135f97e`.
+- Verified task284 remote branch
+  `origin/intern_nemotron_worker_4/task284_qwen_aime_v11_task283_runtime_gate_review_s1`
+  at `27d28b54342a98a4a336c46661964759f2790619`.
+- Updated the runbook/report/status records so remote #348 will show #347
+  merged as blocker docs only, task279 approval as blocker/preflight evidence
+  only, task283 accepted, task284 accepted/cleaned, and global execution
+  `NO-GO/HOLD`.
 
 ## Assignment
 

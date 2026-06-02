@@ -4,16 +4,18 @@
 
 Generated: 2026-06-02T04:50:06Z
 
-Refreshed: 2026-06-02T05:15:00Z against `origin/main`
-`7ba65549500e9ca70fc560ed919d6bfa61f088b2`.
+Refreshed: 2026-06-02T05:27:41Z against `origin/main`
+`28039222ad5d4054891713d85d05a15a491d8a96`.
 
 ## Decision
 
 Recommendation: `PASS` for runbook/provenance update.
 
 The Session 74 record now points at the merged task276 packed Qwen root, merged
-task280/task281 plan-only HOLD records, and current task278 blocker evidence.
-It keeps the combined V11 execution gate at `NO-GO/HOLD`. This report is
+task280/task281 plan-only HOLD records, merged task278 blocker/preflight
+evidence, task279 blocker-evidence approval, and task283/task284 follow-on
+no-training gates. It keeps the combined V11 execution gate at `NO-GO/HOLD`.
+This report is
 documentation and read-only verification only. It does not authorize SFT
 training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
 promotion, task255 reuse, AIME2025 train data, shared deletion, main push, merge,
@@ -26,15 +28,19 @@ or 30B/8-GPU.
 | Worker branch | `intern_nemotron_worker_5/task282_qwen_aime_v11_runbook_provenance_pipeline_s1` |
 | Initial branch base | `origin/main` at `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` |
 | Session 2 refresh base | `origin/main` at `7ba65549500e9ca70fc560ed919d6bfa61f088b2` |
+| Session 3 refresh base | `origin/main` at `28039222ad5d4054891713d85d05a15a491d8a96` |
 | Assigned lead docs commit | `be45766c6fc127b0ba00e784d84810a378b3e8e4` |
-| Current lead docs head checked | `0bb37f4b5dd866096e23fc4c185b8ac3c7686d6a` |
+| Current lead docs head checked | `bbe63bf7939873c1b4a3a0ee56d70472026ce9ec`; task283/task284 assignment baseline `641f36229703de19cf3b9bba3f934201dcbaa552` |
 | Related merged PR | #344/task276 |
 | #344 merged at | `2026-06-02T04:19:38Z` |
 | #344 merge commit | `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` |
 | #344 merged head | `07efab4fa0d8367e96f54af3d2cdc70768d73595` |
 | #345/task281 state | MERGED at `2026-06-02T04:54:59Z`, merge commit `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`, plan-only HOLD |
 | #346/task280 state | MERGED at `2026-06-02T04:59:45Z`, merge commit `7ba65549500e9ca70fc560ed919d6bfa61f088b2`, plan-only HOLD |
-| #347/task278 state | OPEN/CLEAN at `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; unapproved pending task279 current-head review |
+| #347/task278 state | MERGED at `2026-06-02T05:13:14Z`, merge commit `28039222ad5d4054891713d85d05a15a491d8a96`, merged head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; blocker docs only |
+| task279 state | worker_4 approved #347 exact head `b7e544100ac13eaa908a9d1af6fafaf599bc3310` as blocker/preflight evidence only; lead approval comment `4598906687` |
+| task283 state | accepted remote branch `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1` at `c1d988e29abafa51a9c3f83a98e21b229135f97e` for no-training runtime-route remediation/config-import preflight |
+| task284 state | accepted/cleaned remote branch `origin/intern_nemotron_worker_4/task284_qwen_aime_v11_task283_runtime_gate_review_s1` at `27d28b54342a98a4a336c46661964759f2790619` for independent read-only review of task283 evidence |
 | task276 report | `workspace/tasks/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/v11_rematerialized_packed_qwen_report.md` |
 
 ## Merged task276 Artifact Inventory
@@ -56,11 +62,11 @@ or 30B/8-GPU.
 
 | Artifact | Path / value | SHA256 / result |
 |---|---|---|
-| PR | #347 | OPEN/CLEAN at `b7e544100ac13eaa908a9d1af6fafaf599bc3310` |
+| PR | #347 | MERGED at `2026-06-02T05:13:14Z`, merge commit `28039222ad5d4054891713d85d05a15a491d8a96`, merged head `b7e544100ac13eaa908a9d1af6fafaf599bc3310` |
 | Run root | `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z` | present |
 | Report | `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_report.md` | `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`; sidecar PASS |
 | Manifest | `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_manifest.json` | `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`; sidecar PASS |
-| Disposition | `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE` | not accepted preflight readiness |
+| Disposition | `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE` | accepted as blocker/preflight evidence only |
 | Blocker | `ModuleNotFoundError: No module named 'megatron'`; `nemo` also missing in available route | blocks full Megatron-Bridge training-stack import |
 
 task278 current evidence records local packed-data readability PASS,
@@ -69,6 +75,18 @@ and full Megatron-Bridge training-stack import BLOCKED. It also records that no
 training loop, optimizer step, training checkpoint save, export, endpoint, live
 canary, AIME/task243 eval, promotion, task255 reuse, AIME2025 train data, shared
 deletion, main push, merge, or 30B/8-GPU action was performed.
+
+task279 approved #347 exact head
+`b7e544100ac13eaa908a9d1af6fafaf599bc3310` as blocker/preflight evidence only.
+Lead approval comment `4598906687` released worker_2 to self-merge #347 only if
+the exact head stayed clean/mergeable; #347 then merged as blocker docs only.
+
+## Current Follow-On Gates
+
+| Gate | Assigned worker | Scope | Current state |
+|---|---|---|---|
+| task283 `task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1` | worker_2 | no-training runtime-route remediation/config-import preflight using task276 packed data and Qwen3-4B path | accepted branch at `c1d988e29abafa51a9c3f83a98e21b229135f97e`; next remediation gate |
+| task284 `task284_qwen_aime_v11_task283_runtime_gate_review_s1` | worker_4 | independent read-only review of exact task283 branch/head/artifacts | accepted/cleaned branch at `27d28b54342a98a4a336c46661964759f2790619`; waits for task283 evidence |
 
 ## Split And Contract Evidence
 
@@ -104,7 +122,7 @@ git merge-base --is-ancestor be45766c6fc127b0ba00e784d84810a378b3e8e4 \
 gh pr view 344 --json number,state,baseRefName,headRefName,headRefOid,mergeCommit,mergedAt,mergeable,url
 gh pr view 345 --json number,state,baseRefName,headRefOid,mergeCommit,mergedAt,url
 gh pr view 346 --json number,state,baseRefName,headRefOid,mergeCommit,mergedAt,url
-gh pr view 347 --json number,state,baseRefName,headRefOid,mergeable,mergeStateStatus,url
+gh pr view 347 --json number,state,baseRefName,headRefOid,mergeCommit,mergedAt,url
 
 cd /work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/evidence
 sha256sum -c packed_qwen_evidence_manifest.json.sha256
@@ -136,10 +154,17 @@ Results:
   `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`, plan-only HOLD.
 - #346/task280 is MERGED at `2026-06-02T04:59:45Z`, merge commit
   `7ba65549500e9ca70fc560ed919d6bfa61f088b2`, plan-only HOLD.
-- #347/task278 is OPEN/CLEAN at
+- #347/task278 is MERGED at `2026-06-02T05:13:14Z` with merge commit
+  `28039222ad5d4054891713d85d05a15a491d8a96` from exact head
   `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; task278 current report and
-  manifest sidecars PASS, but disposition is
+  manifest sidecars PASS, but disposition remains
   `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`.
+- task279 approved #347 as blocker/preflight evidence only; lead approval
+  comment is `4598906687`.
+- task283 is accepted at remote branch head
+  `c1d988e29abafa51a9c3f83a98e21b229135f97e` and task284 is accepted/cleaned
+  at remote branch head `27d28b54342a98a4a336c46661964759f2790619`; they are
+  the next no-training remediation/review gates.
 
 ## Session 74 Gate Matrix
 
@@ -147,10 +172,12 @@ Results:
 |---|---|---|---|
 | task276 packed Qwen evidence | merged #344 with task-owned packed root, manifest, checksums, parity, Qwen contract, no-AIME train-leakage record | #344 merged at `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`; packed root and checksums verified read-only by task282 | `PASS` as packed-data provenance only |
 | task277 independent packed-data review | classify task276 artifact and sparse valid/test risk before preflight | task282 assignment records task276/task277 accepted residual risk; no repo-visible task277 review artifact is present in current main or lead docs | accepted risk is recorded; not a training/eval approval |
-| task278 config/import preflight | no-training config resolution, data readability, Qwen3-4B Bridge/checkpoint import or equivalent load proof, fail-closed guards, logs, host, code revision, NemTron `/root` sync if remote | #347 OPEN/CLEAN at `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; run root `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`; report sha `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`; local data/Qwen checks PASS; full Megatron-Bridge import BLOCKED missing `megatron`/`nemo` | `BLOCKED/HOLD`; not approved |
-| task279 preflight review | independent read-only review of exact task278 evidence | task279 must review current #347 head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; no current-head task279 approval is recorded in this runbook | `HOLD` pending task279 current-head review |
+| task278 config/import preflight | no-training config resolution, data readability, Qwen3-4B Bridge/checkpoint import or equivalent load proof, fail-closed guards, logs, host, code revision, NemTron `/root` sync if remote | #347 MERGED at `28039222ad5d4054891713d85d05a15a491d8a96` from exact head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; run root `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`; report sha `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`; local data/Qwen checks PASS; full Megatron-Bridge import BLOCKED missing `megatron`/`nemo` | merged blocker docs only; preflight still blocked |
+| task279 preflight review | independent read-only review of exact task278 evidence | worker_4 approved #347 exact head `b7e544100ac13eaa908a9d1af6fafaf599bc3310` as blocker/preflight evidence only; lead approval comment `4598906687` | blocker evidence accepted; no runtime pass |
 | task280 bounded SFT smoke plan | no-run fail-closed plan for minimal Qwen3-4B nonzero-LR SFT smoke using task276 root | #346 MERGED at `2026-06-02T04:59:45Z`, merge commit `7ba65549500e9ca70fc560ed919d6bfa61f088b2`; disposition `PLAN_READY_HOLD_TASK278_TASK279_RELEASE` | plan-only HOLD; no smoke execution authorized |
 | task281 canary/AIME plan | no-run non-AIME canary and corrected AIME2025 same-harness comparison plan | #345 MERGED at `2026-06-02T04:54:59Z`, merge commit `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`; disposition `PLAN_READY_HOLD` | plan-only HOLD; no live canary/AIME authorized |
+| task283 runtime remediation | no-training NemTron/NeMo/Megatron-Bridge runtime route remediation/config-import preflight | accepted on worker_2 remote branch at `c1d988e29abafa51a9c3f83a98e21b229135f97e`; must reconcile Session 40 positive import evidence with task278 missing-runtime evidence | next remediation gate |
+| task284 task283 review | independent review of exact task283 evidence | accepted/cleaned on worker_4 remote branch at `27d28b54342a98a4a336c46661964759f2790619`; no substantive approval until exact task283 evidence exists | next review gate |
 | promotion or 30B/8-GPU | FT exact-normalized AIME2025 score `>= 11/30` under same harness, plus separate lead gate | no V11 FT candidate, canary pass, or FT-vs-base artifact exists | `NO-GO/HOLD` |
 
 ## Artifact Requirements To Preserve
@@ -205,12 +232,15 @@ The no-run canary/AIME plan must preserve:
 - The valid split has only one packed hard-math row and the test split has zero
   rows. This is accepted as carried risk for the current preflight sequence,
   not as broad validation readiness.
-- task278 #347 now has repo-visible blocker evidence and a verified latest
-  artifact root, but its disposition is
-  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; it is not
-  approved preflight readiness.
-- No task279 current-head approval of #347
-  `b7e544100ac13eaa908a9d1af6fafaf599bc3310` is recorded in this runbook.
+- task278 #347 is merged as blocker docs only. Its disposition remains
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; it is not runtime
+  preflight readiness.
+- task279 approved #347 current head as blocker/preflight evidence only, not as
+  a runtime pass or smoke release.
+- task283 accepted branch `c1d988e29abafa51a9c3f83a98e21b229135f97e` and
+  task284 accepted/cleaned branch `27d28b54342a98a4a336c46661964759f2790619`
+  must produce and review the next no-training remediation evidence before any
+  smoke release can be considered.
 - task280 #346 and task281 #345 are merged planning records only; they do not
   authorize live execution.
 - No nonzero-LR SFT smoke artifact, live canary pass, candidate FT checkpoint,

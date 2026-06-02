@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -31,11 +31,26 @@
 10. #346/task280 is merged plan-only HOLD at merge commit
     `7ba65549500e9ca70fc560ed919d6bfa61f088b2`; it does not authorize
     nonzero-LR smoke execution or training.
-11. #347/task278 is open/clean at
-    `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, with latest artifact root
+11. #347/task278 merged at `2026-06-02T05:13:14Z` with merge commit
+    `28039222ad5d4054891713d85d05a15a491d8a96` from exact head
+    `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, with artifact root
     `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`
     and report sha
     `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`.
-12. task278 current disposition is
-    `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; #347 remains
-    unapproved pending task279 current-head review.
+12. task278 current disposition remains
+    `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; #347 was
+    approved and merged as blocker/preflight evidence only.
+13. #348 remote PR head was stale at
+    `4947f18e56bf5ec62ab21d96d599b4e21b769346` before this Session 4 push,
+    so the refreshed #347/#283/#284 content must be pushed to become visible.
+14. task279 approved #347 exact head as blocker/preflight evidence only; lead
+    approval comment is `4598906687`. This does not convert task278 into a
+    runtime pass or smoke release.
+15. task283 is accepted on remote branch
+    `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+    at `c1d988e29abafa51a9c3f83a98e21b229135f97e` as the next no-training
+    runtime-remediation/config-import preflight gate.
+16. task284 is accepted/cleaned on remote branch
+    `origin/intern_nemotron_worker_4/task284_qwen_aime_v11_task283_runtime_gate_review_s1`
+    at `27d28b54342a98a4a336c46661964759f2790619` as the independent read-only
+    review gate for exact task283 evidence.
