@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -24,3 +24,16 @@
   `intern_nemotron_lead/session1-recovery-task-docs` at
   `a9c380e9d2fe4577d89c2e013cc86d67c0479365`.
 - Delivered peer_send assignment to `intern_nemotron_worker_3`.
+
+## Session 89 - 2026-06-02 UTC - worker acceptance observed by lead
+
+- Observed worker branch
+  `origin/intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`
+  at `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`.
+- Branch diff versus `origin/main` is acceptance only: worker_3 status plus
+  task306 README/history/task_knowledge. `git diff --check` passed.
+- Worker branch status says task306 is accepted and that worker_3 is preparing
+  corrected AIME2025 same-harness FT-vs-base evaluation or exact blocker for
+  task301 `iter_0000035` against accepted task300 base `15/30`.
+- No task306 PR, mailbox completion report, or task-owned output root is visible
+  yet. Gate remains HOLD pending official worker evidence.

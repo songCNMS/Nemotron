@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: task306 delivered to worker_3 for corrected AIME FT-vs-base |
-| Session | 88 |
+| PR | 30B gate: task306 branch accepted; awaiting worker_3 evidence/report |
+| Session | 89 |

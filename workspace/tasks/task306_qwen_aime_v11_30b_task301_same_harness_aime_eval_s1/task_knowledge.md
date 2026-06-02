@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,7 @@
 9. Lead branch task docs were pushed at
    `a9c380e9d2fe4577d89c2e013cc86d67c0479365`, and the task306 assignment
    peer_send to `intern_nemotron_worker_3` was delivered.
+10. Worker_3 acceptance branch is visible at
+   `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`; branch diff is acceptance docs/
+   status only and no task306 PR/output/mailbox completion report is visible
+   yet.

@@ -7251,3 +7251,25 @@
   independent review/runbook task. No promotion, endpoint/export, additional
   training, task255 reuse, AIME2025 train data, shared deletion, direct main
   push, or self-merge is authorized by this lead update.
+
+## Session 89 - 2026-06-02 UTC - task306 acceptance branch observed
+
+- Fetched origin and confirmed `origin/main` remains
+  `7a93a6cea16e45284a58287b91c0069b7416fa99`.
+- Lead mailbox unread count is `0`; no task306 official worker report has
+  arrived yet.
+- Observed worker_3 task306 branch
+  `origin/intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`
+  at `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`.
+- Checked `origin/main...task306` diff: worker_3 status plus task306 README/
+  history/task_knowledge acceptance docs only; `git diff --check` passed.
+- GitHub PR search for task306 returned none. No task306 output root was visible
+  under `/work-agents/intern_nemotron_worker_3/outputs/`.
+- Read branch status/history: worker_3 accepted task306, plans to prove or fail
+  task300 protocol equivalence, prefers the task304 no-export/no-endpoint route,
+  and reaffirmed boundaries: no training, no AIME2025 train data, no task255,
+  no shared deletion, no promotion, no endpoint, no main push, no merge, and no
+  export/endpoint unless stopped for lead authorization.
+- Gate remains HOLD pending worker_3 official mailbox with branch/head/PR or
+  exact blocker and task306 artifacts/metrics. No approve/request-changes/block
+  decision is possible yet.

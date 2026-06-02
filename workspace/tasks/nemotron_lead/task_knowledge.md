@@ -1659,3 +1659,10 @@
    Expected worker branch is
    `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`;
    worker must report by mailbox with branch/head/PR or exact blocker.
+472. task306 worker_3 acceptance branch is visible at
+   `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`; diff versus origin/main is
+   worker_3 status plus task306 README/history/task_knowledge acceptance docs
+   only and diff-check passes.
+473. As of Session 89, task306 has no GitHub PR, no official mailbox report,
+   and no task306 output root under worker_3 outputs. Gate remains HOLD; no
+   corrected AIME FT-vs-base decision can be made yet.
