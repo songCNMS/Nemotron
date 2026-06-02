@@ -1,14 +1,14 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task270_qwen_aime_v11_nemtron_runtime_route_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_5 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | |
+| Current Task | task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 |
 | PR | |
 | Session | 1 |
-| Last Update | Refreshed task266/#334 runbook matrix against task262/#336 merged at `2ca6541c275d1eb64068e665af24147a796c818a`, task263 `4af57e0e61703a063c1ef42def44119a7eea5cf9`, task264/#335 merged at `98e8aad39af9e705feed581e0ff9f8814073e2d8`, and task265 mailbox-only evidence `7e718a2c0ea746ed81352db5b5b6fe57`; task266 remains static PASS while global V11 execution remains NO-GO/HOLD. |
+| Last Update | Completed task270 no-training runtime-route audit report; recommendation `BLOCK` under current permissions because no complete NeMo/Megatron-Bridge route is available, with smallest external action documented. |
