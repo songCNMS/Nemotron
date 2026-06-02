@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #344/task276 OPEN/CLEAN at 07efab4; waiting task277 worker_4 independent review; gate NO-GO/HOLD |
+| PR | #344/task276 OPEN/CLEAN at 07efab4; task277 worker_4 review pending, no unread mailbox; gate NO-GO/HOLD |
 | Session | 73 |

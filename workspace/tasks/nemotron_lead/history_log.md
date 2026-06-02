@@ -4387,6 +4387,14 @@
 - Current gate: wait for worker_4 independent approve/request-changes/block
   report for #344 exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595`. #344
   is not approved and must not be merged by lead.
+- Follow-up monitor found lead mailbox unread count `0`; no worker_4 task277
+  remote branch or PR visible; worker_4 local status remains stale from old
+  task249 and has no task277 output files. This is observation only, not gate
+  evidence.
+- Rechecked #344 after the wait: GitHub still reports `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE` at
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`, non-draft, blank
+  reviewDecision. Gate remains waiting for worker_4 task277 mailbox report.
 - task277 scope: approve/request-changes/block for task276 data/packing
   evidence only. It must not edit files, train, eval, export, launch endpoints,
   promote, use AIME2025 train data, reuse task255, delete shared files, merge,
