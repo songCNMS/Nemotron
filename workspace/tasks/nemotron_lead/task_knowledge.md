@@ -1276,3 +1276,15 @@
    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
    task301 nonzero-LR/full SFT remains blocked until task299 final
    data/decontam PASS and task300 base-score evidence are both reviewed.
+383. #364/task298 merged at `2026-06-02T15:13:14Z` with merge commit
+   `a0235f14dc3c49797c507ab4578536ba2d6ed3ac` from head `8f1f7df9`; worker_2
+   closeout mailbox `fa96eca3ba4847a0b62dffd1281f0280` confirms clean exact-head
+   self-merge and branch-only closeout head `026a78b3` is status/task-doc
+   metadata only.
+384. #361/task302 merged at `2026-06-02T15:13:41Z` with merge commit
+   `b76369c3903b0781c7cf87d171c5b21bda588a5d` from head `7226b294`; worker_4
+   post-merge closeout mailbox is still pending after a delivered reminder.
+385. With #364/#361 merged, `origin/main` is `b76369c3` and #363/task300 plus
+   #362/task301 are both CLEAN against main. The immediate measurable gate is
+   task300's corrected 30B base AIME2025 score; training remains blocked until
+   that base artifact and task299 final data/decontam PASS are available.

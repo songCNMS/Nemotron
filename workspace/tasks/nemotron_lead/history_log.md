@@ -6381,3 +6381,28 @@
   parser diagnostics, denominator, score, and blockers; worker_1 to finish the
   final 30B data/packing/decontam report; worker_5 to keep #362/task301
   training HOLD until task299 PASS and task300 base-score evidence exist.
+- Final live scan after push found #364/task298 MERGED at
+  `2026-06-02T15:13:14Z` with merge commit
+  `a0235f14dc3c49797c507ab4578536ba2d6ed3ac` from approved head
+  `8f1f7df9d6499eedb150d7e63323df8ee0411f41`, and #361/task302 MERGED at
+  `2026-06-02T15:13:41Z` with merge commit
+  `b76369c3903b0781c7cf87d171c5b21bda588a5d` from approved head
+  `7226b2942d393b3d98db950151517e30f391270b`. Fetched `origin/main` is now
+  `b76369c3903b0781c7cf87d171c5b21bda588a5d`.
+- Processed and marked read worker_2 task298/#364 closeout mailbox
+  `fa96eca3ba4847a0b62dffd1281f0280`: worker_2 confirms pre-merge
+  OPEN/base main/CLEAN/not-draft exact-head check, self-merge details above,
+  no forbidden actions, and branch-only closeout head
+  `026a78b34eb0b16b67f8efd4b86f819e7d47d5ce` updating worker status/task
+  metadata only. Diff from approved #364 head to branch-only closeout is
+  worker_2 status plus task298 README/history/task_knowledge; `git diff --check`
+  passed.
+- After #364/#361 merged, #363/task300 remained OPEN/base main/CLEAN at
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, #362/task301 remained
+  OPEN/base main/CLEAN at `6200d070eab93ab94f5c5c12fc6c16fb783eeccd`, and
+  coordinator #360 remained OPEN/base main/CLEAN at
+  `dd8ea4aaf8ebc387ef30e53423a28ec75b9f31bf`. task299 branch remained
+  `ff30fad8e6899b9a98d9530006ef49c52c7d72fb` with no final data PASS yet.
+- No worker_4 task302/#361 post-merge closeout mailbox had arrived at this
+  poll, so lead sent a delivered reminder requesting #361 mergedAt/mergeCommit/
+  merged-head closeout and boundary confirmation. Mailbox was otherwise empty.
