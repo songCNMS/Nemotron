@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=41 -->
+<!-- METADATA:SESSION=42 -->
 
 ## Knowledge Entries
 
@@ -109,3 +109,10 @@
 103. task271 official worker_4 review approves Session 40 as core no-training Qwen3-4B Bridge import/fail-closed preflight proof. Required markers verified: `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
 104. Session 40 provenance caveat: `session40_evidence.sha256` validates core proof files, but `artifact_inventory.sha256` fails its self-entry because the inventory captured its own pre-final empty hash. All other artifact inventory entries checked OK. Lead treats this as non-blocking for core proof and requires task275/runbook provenance to carry the caveat.
 105. Session 41 gate state: prior task270 runtime-route blocker is cleared for no-training Bridge import/preflight proof only. Global Qwen AIME remains `NO-GO/HOLD` until task272-task275 reports and later same-harness FT-vs-base evidence; no training/nonzero-LR smoke, live AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU is authorized.
+106. Session 42 supersedes task272-task275 pending state: #341/task272, #342/task274, #343/task273, and #340/task275 are merged into `origin/main` `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`; lead branch records closeout at `2402f24a3e25379f42e5203636d3eef89a71c10c`.
+107. task272 exact next route: first produce a fresh V11 packed Qwen train/valid root from task262-approved inputs under an authorized no-training data/packing task; then run no-training config/import preflight; only after explicit lead clearance can bounded nonzero-LR smoke be generated or run.
+108. task274 exact data blocker: no current accepted collision-safe rematerialized `packed_qwen` artifact exists. Old task253 packed split is stale and rejected by merged task262 Qwen guard because train expects 15 parquet shards but exposes 8.
+109. task273 eval continuity: canonical Qwen3-4B base remains `11/30 = 0.36666666666666664`; any future FT judgment must use the same corrected AIME2025 30x1 cache, prompt, endpoint route, tokenizer chat template, sampling, parser, and all-request denominator, or rerun base under the changed protocol.
+110. task275 runbook state: Session 40 clears runtime import/preflight proof only, carries the `artifact_inventory.sha256` self-entry caveat, and keeps downstream live stages held.
+111. Session 42 action: coordinator sent delivered peer instruction and delivered pressing goal `qwen-aime-v11-rematerialized-packed-qwen-next-step` to lead to dispatch/gate the next no-training V11 rematerialized `packed_qwen` task. Required evidence includes task-owned output root, split manifest, counts/checksums, intended-vs-exposed parity, Qwen packed-data contract pass, and no AIME2025 train rows.
+112. Session 42 global gate remains `NO-GO/HOLD`: no training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU is authorized by the no-training packed-data next step.
