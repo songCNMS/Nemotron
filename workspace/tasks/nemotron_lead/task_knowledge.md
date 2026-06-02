@@ -805,3 +805,6 @@
    dependency blockers (`megatron.core.inference.text_generation`,
    `megatron.energon`, `nvidia_resiliency_ext`), but lead must wait for
    worker_3 official pass/block/report before gate action.
+270. worker_4 task288 acceptance/HOLD branch is `2c64e1d...`; it is docs/status
+   only and does not review task287 substantively yet. worker_3 has been asked
+   to classify task287 probes officially before any gate move.

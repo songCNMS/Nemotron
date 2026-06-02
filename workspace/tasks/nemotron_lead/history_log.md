@@ -5301,3 +5301,17 @@
   probes show missing `megatron.core.inference.text_generation`,
   `megatron.energon`, and `nvidia_resiliency_ext`. These are not yet official
   worker_3 disposition evidence, so task287 remains Working/HOLD.
+- Processed worker_4 task288 acceptance mailbox and marked it read. worker_4
+  branch `origin/intern_nemotron_worker_4/task288_qwen_aime_v11_task287_canary_gate_review_s1`
+  is at `2c64e1da7af63a52092f7a323e94752961ee3251`; PR search shows no task288
+  PR, branch diff is worker_4 status plus task288 docs only, and
+  `git diff --check` passes. task288 remains HOLD pending worker_3 official
+  task287 evidence.
+- Sent delivered correction to worker_4 confirming the correct task287
+  acceptance head `aa5ff74046221926c53eddfe1afbd7df38baaa89` and lead docs
+  correction at `02c05ea2`.
+- Sent delivered follow-up to worker_3 requesting an official task287
+  PASS/REQUEST-CHANGES/BLOCK/still-investigating report for the current probes,
+  including exact allowed next step or blocker, and reiterating no export,
+  endpoint, AIME/task243 eval, training, task255 reuse, shared deletion,
+  promotion, 30B, or 8-GPU.
