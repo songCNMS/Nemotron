@@ -73,3 +73,7 @@
 - Follow-up read-only poll: PID `433268` still active at about 62 minutes
   elapsed; progress reached `17/30`, correct `7/17`, with `aime_17_r01`
   stopped, parsed, and correct. No official report or PR exists yet.
+- Follow-up read-only poll: PID `433268` still active at about 69 minutes
+  elapsed; progress reached `19/30`, correct `8/19`, with `aime_18_r01`
+  length-stopped and unparsed and `aime_19_r01` stopped, parsed, and correct.
+  No final artifacts, official report, or PR exists yet.
