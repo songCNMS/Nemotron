@@ -18,3 +18,6 @@
    `AutoBridge.import_ckpt` checkpoint-load proof, no full `stage1_sft.train`
    import pass, `pip check` rc `1`, missing `nvidia_resiliency_ext`, missing
    `lightning`, and task276 sparse valid/test.
+7. #349 later merged from the exact approved head with merge commit
+   `f82f8f73c39bc93ff268f45845a94060585b8290`; task284 remains evidence only,
+   not training/eval/promotion clearance.

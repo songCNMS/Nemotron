@@ -713,3 +713,10 @@
    approval can only release a later non-AIME canary/completion-retention gate;
    corrected AIME2025 same-harness comparison remains blocked until canary
    passes and a reviewed FT artifact exists.
+246. #349/task283 merged at `2026-06-02T06:03:58Z` with merge commit
+   `f82f8f73c39bc93ff268f45845a94060585b8290` from exact approved head
+   `2d042cedb0c4cc448c89d57d7b18986d92361349`; task285 can now start under its
+   documented fail-closed bounds.
+247. worker_4 task284 branch `55babea5...` is branch/status/docs closeout only;
+   the authoritative gate decision remains the mailbox APPROVE for #349 exact
+   head and does not add training/eval clearance.
