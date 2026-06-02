@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -32,6 +32,24 @@
 - Boundary kept: no training, nonzero-LR smoke, live canary, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or 30B/8-GPU action.
+
+## Session 5 - 2026-06-02 UTC - Lead-approved self-merge closeout
+
+- Received lead approval to self-merge #348 as docs/runbook provenance only for
+  exact head `19024996b9eb1327e0566fa6c16a76b4ba3c1460`.
+- Re-verified #348 was `OPEN`, base `main`, `CLEAN/MERGEABLE`, and still at
+  approved exact head `19024996b9eb1327e0566fa6c16a76b4ba3c1460` at merge
+  time.
+- Merged #348 through GitHub at `2026-06-02T05:36:00Z`; merge commit
+  `3dc19dbd889ac0554e73c51a43b4ecb27b210920`; merged head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`.
+- Confirmed `origin/main` advanced to
+  `3dc19dbd889ac0554e73c51a43b4ecb27b210920`.
+- Marked task282 Completed and worker status Idle in the post-merge closeout
+  record.
+- Boundary kept: no training, nonzero-LR smoke, live canary, AIME/task243 eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, direct main push, or 30B/8-GPU action.
 
 ## Session 4 - 2026-06-02 UTC - Remote-visible accepted-head refresh
 

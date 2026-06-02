@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - Session 74 runbook provenance
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=4 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=5 -->
 
 ## Background
 
@@ -117,6 +117,23 @@ AIME comparison, and future closeout.
   merged as blocker docs only, task279 approval as blocker/preflight evidence
   only, task283 accepted, task284 accepted/cleaned, and global execution
   `NO-GO/HOLD`.
+
+## Session 5 Result
+
+- Lead approved #348 as docs/runbook provenance only for exact head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`.
+- Re-verified #348 was `OPEN`, base `main`, `CLEAN/MERGEABLE`, and still at
+  the approved exact head before merge.
+- Self-merged #348 through GitHub; merged at `2026-06-02T05:36:00Z` with merge
+  commit `3dc19dbd889ac0554e73c51a43b4ecb27b210920` from merged head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`.
+- Diff scope was docs/runbook/provenance/status only:
+  `session74_runbook_provenance_pipeline_report.md`, shared task266 runbook,
+  task282 README/history/task knowledge, and worker status.
+- This closeout does not release task283 runtime remediation, task280 smoke
+  execution, live canary, AIME/task243 eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, main push, or
+  30B/8-GPU.
 
 ## Assignment
 

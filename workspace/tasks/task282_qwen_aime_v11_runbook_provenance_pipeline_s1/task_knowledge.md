@@ -1,6 +1,6 @@
 # task282_qwen_aime_v11_runbook_provenance_pipeline_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -54,3 +54,11 @@
     `origin/intern_nemotron_worker_4/task284_qwen_aime_v11_task283_runtime_gate_review_s1`
     at `27d28b54342a98a4a336c46661964759f2790619` as the independent read-only
     review gate for exact task283 evidence.
+17. #348 was approved by lead as docs/runbook provenance only for exact head
+    `19024996b9eb1327e0566fa6c16a76b4ba3c1460` and merged at
+    `2026-06-02T05:36:00Z` with merge commit
+    `3dc19dbd889ac0554e73c51a43b4ecb27b210920`.
+18. #348 merge does not release task283 runtime remediation, task280 smoke
+    execution, live canary, AIME/task243 eval, export, endpoint, promotion,
+    task255 reuse, AIME2025 train data, shared deletion, main push, or
+    30B/8-GPU.
