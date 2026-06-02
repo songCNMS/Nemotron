@@ -1635,3 +1635,23 @@
    self-merge #367 only if exact head `1f23d833`, base `main`, CLEAN/
    MERGEABLE, and non-draft remain true. This is task304 non-AIME canary
    evidence only, not corrected AIME/task243 or promotion clearance.
+466. #367/task304 merged at `2026-06-02T18:42:02Z` with merge commit
+   `7a93a6cea16e45284a58287b91c0069b7416fa99` from exact approved head
+   `1f23d8339c123702eaa9336c1fe2b25afcd6122a`; #368/task305 remains merged at
+   `094946afb4fc86f4587ec65968cf443ee13d621f`.
+467. worker_3 closeout mailbox `eb40f945d1134bb2be2fa8f82cb8b93a` confirms
+   #367 was self-merged through PR path only and that branch-only post-merge
+   closeout head `2f480f7d17276c09ef912e8e1f4907146420c4cf` is status/history/
+   task_knowledge bookkeeping only.
+468. task304/task305 accepted evidence clears only the bounded synthetic
+   non-AIME checkpoint-load/completion-retention pre-AIME gate for task301
+   `iter_0000035`; it does not clear corrected AIME, export, endpoint,
+   promotion, additional training, task255 reuse, AIME2025 train data, or shared
+   deletion.
+469. task306 is assigned to worker_3 for corrected AIME2025 same-harness
+   evaluation of task301 `iter_0000035` against the accepted task300 Qwen3-30B-
+   A3B base `15/30 = 0.5`; PASS requires FT exact-normalized score `>= 15/30`.
+470. task306 must prove protocol equivalence to task300 or fail closed as HOLD;
+   full completions, parser diagnostics, denominator/normalization proof,
+   command/env, artifact paths, and checksums are required before any 30B
+   FT-vs-base gate decision.

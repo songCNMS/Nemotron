@@ -7217,3 +7217,34 @@
   remain blocked until later lead tasks.
 - Follow-up poll showed #367 still OPEN/base `main`/CLEAN/MERGEABLE at
   `1f23d833`, no merge yet, and lead mailbox unread count `0`.
+
+## Session 88 - 2026-06-02 UTC - task304 merged and corrected AIME task assigned
+
+- Fetched origin and verified PR #367 is MERGED at
+  `2026-06-02T18:42:02Z` with merge commit
+  `7a93a6cea16e45284a58287b91c0069b7416fa99` from exact approved head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
+- Verified PR #368 remains MERGED at `2026-06-02T18:38:17Z` with merge commit
+  `094946afb4fc86f4587ec65968cf443ee13d621f` from exact approved head
+  `e0809da85900d9ed96cd8d053d34911fb7bd3080`.
+- Processed and marked read worker_3 final closeout mailbox
+  `eb40f945d1134bb2be2fa8f82cb8b93a`. The closeout reports #367 pre-merge
+  state was exact approved head/base `main`/CLEAN/MERGEABLE/non-draft, that
+  #367 was self-merged through PR path only, and that the branch-only post-merge
+  closeout head `2f480f7d17276c09ef912e8e1f4907146420c4cf` changed only
+  worker_3 status plus task304 history/task_knowledge.
+- Accepted task304 closeout remains limited to bounded synthetic non-AIME
+  checkpoint-load/completion-retention evidence with task305 residuals. It is
+  not corrected AIME2025 evidence, not promotion/export/endpoint clearance, and
+  not new training clearance.
+- Created `task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1` and
+  assigned it to `intern_nemotron_worker_3` for corrected AIME2025 same-harness
+  FT-vs-base evaluation of the task301 salvage checkpoint
+  `iter_0000035`.
+- task306 must compare the task301 FT checkpoint against the accepted task300
+  Qwen3-30B-A3B base score `15/30 = 0.5`. PASS is possible only if the FT
+  corrected AIME exact-normalized score is `>= 15/30` under the same protocol.
+- Global 30B gate remains HOLD pending task306 worker artifacts and any later
+  independent review/runbook task. No promotion, endpoint/export, additional
+  training, task255 reuse, AIME2025 train data, shared deletion, direct main
+  push, or self-merge is authorized by this lead update.

@@ -1,0 +1,22 @@
+# task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
+
+<!-- METADATA:SESSION=88 -->
+
+## Session 88 - 2026-06-02 UTC - assignment
+
+- Created by `intern_nemotron_lead` after #367/task304 merged and worker_3
+  final closeout mailbox `eb40f945d1134bb2be2fa8f82cb8b93a` was processed.
+- Assigned to `intern_nemotron_worker_3`.
+- Purpose: corrected AIME2025 same-harness FT-vs-base comparison for task301
+  Qwen3-30B-A3B salvage checkpoint `iter_0000035`.
+- Current main: `7a93a6cea16e45284a58287b91c0069b7416fa99`.
+- Accepted base comparator: task300 Qwen3-30B-A3B base `15/30 = 0.5` with
+  artifact root
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`.
+- Required disposition: PASS only if FT corrected AIME exact-normalized score
+  is `>= 15/30`; FAIL if below base; HOLD if same-harness proof or artifacts
+  are incomplete; BLOCK if boundaries would be violated.
+- Boundaries: no training, no AIME2025 train prompts/labels, no task255 reuse,
+  no shared deletion, no promotion, no production endpoint, no direct main
+  push/merge, and no export/endpoint unless the worker stops and reports a
+  lead-authorized eval-only need.
