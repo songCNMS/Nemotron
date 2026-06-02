@@ -1238,3 +1238,7 @@
    runbook/status PR, not approval for task298-task301. task301/#362 has advanced
    to `82cb4067` and still needs exact-head mailbox before lead can reconcile
    the blocker report.
+375. task301/#362 advanced again to `cd779a91`; the drift from `82cb4067` is
+   status/history/task_knowledge-only and leaves `30b_full_sft_training_report.md`
+   unchanged. It still needs exact-head mailbox reconciliation and remains
+   training HOLD.

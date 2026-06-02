@@ -6266,3 +6266,9 @@
   CLEAN. Sent delivered worker_5 follow-up requesting official mailbox for this
   exact refreshed head and clarification of PR report hash versus refreshed local
   output copy hash. Training remains HOLD.
+- Final recheck found #362 advanced from `82cb4067...` to
+  `cd779a91fe566e77236729306bd09a7bb386d17a`; #362 remains OPEN/base
+  main/CLEAN. Diff from `82cb4067...` to `cd779a91...` is worker_5 status plus
+  task301 history/task_knowledge only; `30b_full_sft_training_report.md` is
+  unchanged. No exact-head mailbox for `cd779a91...` has arrived yet, so #362
+  remains HOLD/pending mailbox reconciliation and no training authorization.
