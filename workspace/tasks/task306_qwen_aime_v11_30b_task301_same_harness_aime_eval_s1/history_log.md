@@ -165,3 +165,15 @@
 - No task306 aggregate summary/results/full completions/parser diagnostics,
   checksum manifest, blocker file, task306 PR, or official worker report is
   visible. Gate remains HOLD pending completion and official worker report.
+
+## Session 100 - 2026-06-02 UTC - active run continued progress HOLD
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after about thirty-three minutes.
+  Local and remote rc files are still absent.
+- Latest visible progress remains `3/30`, with `aime_01_r01`, `aime_02_r01`,
+  and `aime_03_r01` parsed true and correct true.
+- No task306 aggregate summary/results/full completions/parser diagnostics,
+  checksum manifest, or blocker file is visible. Gate remains HOLD pending
+  completion and official worker report.
