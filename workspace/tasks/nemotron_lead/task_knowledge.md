@@ -1242,3 +1242,19 @@
    status/history/task_knowledge-only and leaves `30b_full_sft_training_report.md`
    unchanged. It still needs exact-head mailbox reconciliation and remains
    training HOLD.
+376. worker_5 mailbox `287f6934a5664942aefcaa397a841362` reconciles task301/#362
+   current head `6200d070`: report hash is now `8afc1629...`, drift from
+   `82cb4067` to `6200d070` is status/history/task_knowledge-only, disposition
+   remains `BLOCKED_UPSTREAM_GATES_MISSING`, and no training launched.
+377. worker_2 official task298/#364 mailboxes
+   `1158fa9eb09140c4854b7d462e0499c7` and
+   `59ba26de6bd3468aa61c64a61e2cc840` report exact head `a1bd2af` as
+   `PASS_RUNTIME_RESOURCE_BASE_LOAD_GATE_WITH_TRAINING_LAUNCH_RESIDUALS`: 30B
+   Instruct HF path exists, no-training config/import preflight passed, and
+   Bridge import wrote task-owned iter0 checkpoint. This is not yet a lead gate
+   approval; task302 independent review is required before task300 base AIME
+   can proceed.
+378. task298/#364 advanced to `8f1f7df9`; worker_2 mailbox
+   `1faf8bf2b05d4881ba256c282128d318` confirms the drift from `a1bd2af` is
+   status/history/task_knowledge-only and leaves the runtime report and artifacts
+   unchanged. It remains pending task302 review.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task298 official report pending; task299 not final; #363 task300 BLOCK; #361 HOLD; #362 CLEAN at cd779a91 pending mailbox; training HOLD |
+| PR | 30B gate live: #364 task298 PASS claim at 8f1f7df9 pending task302 review; task299 not final; #363 BLOCK; #361/#362 HOLD |
 | Session | 76 |

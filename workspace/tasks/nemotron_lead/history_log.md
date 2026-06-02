@@ -6272,3 +6272,63 @@
   task301 history/task_knowledge only; `30b_full_sft_training_report.md` is
   unchanged. No exact-head mailbox for `cd779a91...` has arrived yet, so #362
   remains HOLD/pending mailbox reconciliation and no training authorization.
+- Processed and marked read worker_5 task301/#362 hash clarification mailbox
+  `287f6934a5664942aefcaa397a841362`: current #362 head reported as
+  `6200d070eab93ab94f5c5c12fc6c16fb783eeccd`, OPEN/base main/CLEAN/MERGEABLE.
+  The report refresh head `82cb4067...` and current `6200d070...` committed
+  `30b_full_sft_training_report.md` both hash
+  `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
+  earlier `b8e42b3...` evidence hash was
+  `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`.
+  Diff from `82cb4067...` to `6200d070...` is status/history/task_knowledge
+  only; disposition remains `BLOCKED_UPSTREAM_GATES_MISSING`, no 30B launch,
+  no 8-GPU execution, and training HOLD.
+- Fetched #364 worker_2/task298 PR. #364 is OPEN/base main/CLEAN at
+  `a1bd2af05aeb6554e7d9130076d9b81a3aa95b85`; diff scope is worker_2 status
+  plus task298 README/history/task_knowledge and
+  `30b_runtime_resource_base_load_report.md`; `git diff --check` passed.
+- Processed and marked read worker_2 task298/#364 official mailboxes
+  `1158fa9eb09140c4854b7d462e0499c7` and
+  `59ba26de6bd3468aa61c64a61e2cc840`: exact head `a1bd2af...`, disposition
+  `PASS_RUNTIME_RESOURCE_BASE_LOAD_GATE_WITH_TRAINING_LAUNCH_RESIDUALS`.
+  Evidence includes model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, local
+  output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z`,
+  remote root
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z`,
+  host `lg-cmc-b7r201-f08u26-h200-000126`, Python `3.12.3`, Torch
+  `2.9.1+cu129`, Transformers `4.57.1`, 8 H200 GPUs, 57G 30B HF path with 16
+  safetensor shards, no-training preflight PASS, and Bridge import
+  `BRIDGE_IMPORT_RC=0` / `IMPORT_DONE` to task-owned
+  `qwen3_30b_bridge_import_iter0` size 57G.
+- task298 key checksums recorded by worker_2: preflight manifest
+  `3279ed2b1f6383a13954bd43b300ec1f92c847ae409720e563ad8b79a0f04dd7`,
+  preflight log `5ec05b25d96462f7fbf95eb922b0e8f922d373fdd19bbad9415e8a05fdd67668`,
+  bridge import log `0218eea8ab8334ac697bc465edce9e40ade3afa4523825d450ab152cd912629b`,
+  bridge inventory `09644a889efa598e8614b60cffa63dbf9ca5be1ed0b2a77ea4cc1120db25c38c`,
+  and full bridge checksum manifest
+  `d01f2f4a9440d1b11691abf507f2354ecc0e079c3dbb9cb2a0cbb1f4a8a9649c`.
+  Recommended later training route: `qwen3_30b_a3b_local_train.py`,
+  `tp=4`, `pp=2`, `ep=4`, `etp=1`, `sequence_parallel=true`, `GBS=8`,
+  `MBS=1`, one 8xH200 node with `torch.distributed.run --nproc_per_node=8`.
+- task298 eval-route decision: base HF can use eval-only SGLang endpoint
+  directly; future Megatron SFT checkpoint comparison likely needs eval-only HF
+  export plus SGLang unless a separate 30B no-export MCore route is assigned and
+  proven. Residuals: `pip check` rc=1 dependency warnings, full distributed
+  TP4/PP2/EP4 optimizer launch still needs its own task gate, and no 30B
+  no-export generation route is proven. No training, eval, endpoint, export,
+  promotion, task255, AIME2025 train data, shared deletion, main push, or merge
+  occurred.
+- Sent delivered worker_4 review trigger for task302/#361 to independently
+  review #364 exact head `a1bd2af...` and return approve/request-changes/block
+  for task298. Until task302 review and lead gate, task300 base AIME and task301
+  training remain HOLD.
+- Processed and marked read worker_2 follow-up mailbox
+  `1faf8bf2b05d4881ba256c282128d318`: after exact-head task298 report, #364
+  advanced to `8f1f7df9d6499eedb150d7e63323df8ee0411f41`, OPEN/base main/CLEAN.
+  Diff from `a1bd2af...` to `8f1f7df...` is worker_2 status plus task298
+  history/task_knowledge only; `30b_runtime_resource_base_load_report.md`,
+  commands/env, artifacts/checksums, model path, Bridge proof, resource/
+  parallelism, eval-route decision, residuals, and boundaries are unchanged.
+  #364 remains HOLD for task302 review and lead gate.
