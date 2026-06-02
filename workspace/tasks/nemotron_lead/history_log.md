@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Session 0 - Created with team lead
 
@@ -5927,3 +5927,33 @@
   #351 merged at `2026-06-02T11:35:48Z` with merge commit `5d8b8d85...`,
   merged head `c2c2172...`, diff scope docs/provenance/status only, and
   branch-only closeout head `e9cfbb13...`. Marked the mailbox read.
+
+## Session 75 - 2026-06-02 UTC - current-main equivalence audit assignments
+
+- Coordinator reported user-requested #312 merge completed: #312 MERGED at
+  `2026-06-02T12:13:44Z` with merge commit
+  `2d84ec75960fb51ba9091427638b00083625e137` from head
+  `c7ada6134f63c88d1efcbf993452186d14ae24f3`. Treat post-merge origin/main
+  `2d84ec75...` as current-code baseline.
+- Lead fetched origin and verified #312 GitHub file list: coordinator status,
+  coordinator task history, coordinator `session16_aime2025_qwen_handoff.md`,
+  and coordinator task knowledge only.
+- Lead preliminary diff check
+  `git diff --name-status 5d8b8d850d26e785332f8b707c772d99881a1b5d..2d84ec75960fb51ba9091427638b00083625e137`
+  showed only coordinator workspace docs; `git diff --check` passed.
+- Lead preliminary source comparison found no `src/` product-path changes in
+  the quick checks from task285 source `c53095a...` or task293 run source
+  `87de0a97...` to current main, but this remains preliminary and not final
+  gate evidence.
+- Created task296 for worker_1 to produce a no-run/read-only current-main
+  equivalence audit and decide `A_PROVED_NO_RERUN` versus
+  `B_REQUIRED_RERUN`.
+- Created task297 for worker_4 to independently review exact task296 evidence.
+  Initial expected state is `HOLD_WAITING_TASK296` until worker_1 publishes a
+  report.
+- If task296/task297 approve path A, lead can report that no fresh current-main
+  data/training/non-AIME/AIME rerun is required because #312 is docs-only and
+  artifacts remain product-code-equivalent. If either blocks, lead must launch
+  a fresh bounded current-main pipeline. No export, endpoint, promotion,
+  further training/eval, task255 reuse, AIME2025 train data, shared deletion,
+  30B, or 8-GPU is authorized by this assignment.

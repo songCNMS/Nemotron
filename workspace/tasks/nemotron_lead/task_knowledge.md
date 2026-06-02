@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Knowledge Entries
 
@@ -1122,3 +1122,17 @@
    confirms #351 pre-merge exact approved head/state, mergedAt/mergeCommit/head,
    docs/provenance/status-only scope, branch-only closeout head `e9cfbb13...`,
    and unchanged no-clearance boundaries.
+349. #312 merged after #351 at `2026-06-02T12:13:44Z` with merge commit
+   `2d84ec75960fb51ba9091427638b00083625e137` from head
+   `c7ada6134f63c88d1efcbf993452186d14ae24f3`; current-code baseline is now
+   origin/main `2d84ec75...`.
+350. Lead preliminary #312 diff check showed coordinator docs only:
+   `workspace/interns/intern_nemotron_coordinator/status.md`,
+   coordinator task history, `session16_aime2025_qwen_handoff.md`, and
+   coordinator task knowledge. This suggests path A may be valid, but worker
+   evidence is required.
+351. task296 is assigned to worker_1 for no-run current-main equivalence audit:
+   prove task285/task293 artifacts are product-code-equivalent to current main
+   or return `B_REQUIRED_RERUN`.
+352. task297 is assigned to worker_4 for independent review of exact task296
+   evidence before lead accepts no-rerun-needed for the current-code request.
