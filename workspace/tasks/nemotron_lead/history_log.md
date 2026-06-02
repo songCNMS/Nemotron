@@ -5921,3 +5921,9 @@
   and confirms no runtime, training, canary, AIME re-eval, task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   30B, 8-GPU, or artifact mutation action was performed.
+- Processed worker_5 official task295/#351 merge closeout mailbox
+  `d27a39d8b1144952921d2eae26c7f9e3`, which matches GitHub and branch
+  closeout: pre-merge exact approved head `c2c2172...` was CLEAN/MERGEABLE,
+  #351 merged at `2026-06-02T11:35:48Z` with merge commit `5d8b8d85...`,
+  merged head `c2c2172...`, diff scope docs/provenance/status only, and
+  branch-only closeout head `e9cfbb13...`. Marked the mailbox read.

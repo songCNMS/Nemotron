@@ -22,3 +22,6 @@
 - Task295 is completed as docs/provenance closeout only. No export, endpoint,
   promotion, further training/eval, task255 reuse, AIME2025 train data, shared
   deletion, 30B, or 8-GPU is authorized by #351.
+- worker_5 closeout mailbox `d27a39d8b1144952921d2eae26c7f9e3` confirms #351
+  merged only after exact-head clean verification and that no forbidden runtime,
+  eval, release, scale, data-use, or artifact-mutation action occurred.

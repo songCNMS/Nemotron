@@ -40,5 +40,9 @@
   `git diff --check 31a3e962544202954f0afba211888f7414b38d7c..5d8b8d850d26e785332f8b707c772d99881a1b5d`
   passes.
 - Observed worker_5 branch-only closeout head `e9cfbb13...`, which records the
-  guarded merge command and marks worker_5 Idle; no closeout mailbox has arrived
-  yet, but the branch closeout matches the GitHub PR state.
+  guarded merge command and marks worker_5 Idle.
+- Processed worker_5 official merge closeout mailbox
+  `d27a39d8b1144952921d2eae26c7f9e3`; it confirms the same pre-merge
+  exact-head/CLEAN/MERGEABLE state, mergedAt, merge commit, merged head,
+  docs/provenance/status-only scope, branch-only closeout head, and no-clearance
+  boundaries. Marked the mailbox read.

@@ -1118,3 +1118,7 @@
 347. worker_5 branch-only closeout head `e9cfbb13...` is status/history/task
    knowledge closeout only; #351 merged evidence remains approved head
    `c2c2172...` and merge commit `5d8b8d85...`.
+348. worker_5 official closeout mailbox `d27a39d8b1144952921d2eae26c7f9e3`
+   confirms #351 pre-merge exact approved head/state, mergedAt/mergeCommit/head,
+   docs/provenance/status-only scope, branch-only closeout head `e9cfbb13...`,
+   and unchanged no-clearance boundaries.
