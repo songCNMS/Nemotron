@@ -901,3 +901,6 @@
 293. task292 is assigned to worker_4 to review exact task291 head `dfb6ca64...`
    and artifact root `run_20260602T081136Z`. AIME/task243 remains blocked until
    task292 report is processed and lead explicitly releases the eval task.
+294. task292 assignment was delivered to worker_4 after lead branch `744eafcd`
+   pushed. worker_2 was separately notified to provide official task291 report
+   and PR for head `dfb6ca64...` if final.

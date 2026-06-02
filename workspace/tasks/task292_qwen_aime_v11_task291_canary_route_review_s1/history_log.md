@@ -13,3 +13,5 @@
   boundary evidence.
 - AIME/task243 remains blocked until task292 review is processed and lead
   explicitly releases the next eval task.
+- Lead branch `744eafcd` was pushed, then the task292 assignment was delivered
+  to worker_4 by peer message.

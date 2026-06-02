@@ -5538,3 +5538,9 @@
   of exact task291 head `dfb6ca64...` and artifact root `run_20260602T081136Z`.
   This does not release AIME/task243; it is the review gate before any corrected
   AIME2025 same-harness FT-vs-base eval can be assigned.
+- Pushed lead branch `744eafcd` containing task292 docs. Sent delivered
+  task292 assignment to worker_4 for read-only review of exact task291 head
+  `dfb6ca64...` and artifact root `run_20260602T081136Z`.
+- Sent delivered task291 follow-up to worker_2 requesting official mailbox
+  report and PR if final, including commands/env, roots, source head, artifact
+  hashes, detokenized fallback explanation, metrics, and boundary confirmation.
