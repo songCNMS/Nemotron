@@ -5079,3 +5079,32 @@
 - Global gate remains held: no live canary, corrected AIME2025/task243 eval,
   export, endpoint, promotion, AIME2025 train data, task255 reuse, shared
   deletion, 30B, or 8-GPU action is authorized.
+- Later fetched and observed task285 worker branch
+  `origin/intern_nemotron_worker_2/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1`
+  at `c53095a639f0ccf8ce34afcec1bdf302cf45add6`. Diff versus `origin/main`
+  is worker_2 status/knowledge, task283 post-merge closeout edits, and task285
+  docs; `git diff --check` passed. No task285 PR is visible.
+- Read-only unofficial artifact check found task285 output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z`
+  with pre-optimizer manifest/log only. It records host
+  `lg-cmc-b7r201-f08u26-h200-000126`, source head `c53095a...`, remote run
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z`,
+  bounds `train_iters=2`, `global_batch_size=2`, `micro_batch_size=1`,
+  `CUDA_VISIBLE_DEVICES=0,1`, LR `5e-7`, min LR `1e-7`, warmup `0`, decay `2`.
+- The same unofficial manifest records data readability PASS with train `279`
+  rows / `1024646` input tokens / `228927` supervised tokens, valid `1` row,
+  test `0` rows; Qwen packed/training contract PASS; Qwen HF config/tokenizer
+  PASS; Qwen recipe `ConfigContainer` build PASS.
+- The same unofficial manifest records no training, optimizer step, checkpoint
+  save, canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, 30B, or 8-GPU action before optimizer.
+  It also records missing runtime imports: `hydra`, `lightning`,
+  `nemo.collections.llm` via `lightning`,
+  `nemotron.recipes.super3.stage1_sft.train` via `nvidia_resiliency_ext`, and
+  `nvidia_resiliency_ext`.
+- No smoke training log, first-step LR evidence, finite train loss, or smoke
+  checkpoint artifact is visible in the task285 output root. Sent delivered
+  clarification to worker_2 asking for official task285 classification:
+  continuing pre-optimizer progress, BLOCKED before optimizer, or PASS smoke
+  with unseen artifacts. Also asked worker_2 to keep any task285 PR scoped or
+  explicitly justify task283 closeout edits.

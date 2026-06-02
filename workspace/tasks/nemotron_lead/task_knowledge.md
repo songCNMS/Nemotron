@@ -726,3 +726,11 @@
 249. worker_4 accepted task286 on branch `39ae82a...`; task286 is HOLD until
    task285 official evidence exists. Current lead checks found no task285 PR,
    no task285 remote branch, and no worker_2 task285 output root.
+250. task285 branch `c53095a...` currently has only acceptance docs plus
+   task283 closeout edits on remote, no PR. Unofficial task285 output
+   `run_20260602T061036Z` is pre-optimizer evidence only: no optimizer step,
+   no first-step LR proof, no finite loss, and no checkpoint artifact.
+251. The task285 pre-optimizer artifact is positive for packed data and config
+   bounds but still shows missing `hydra`, `lightning`, and
+   `nvidia_resiliency_ext`; lead requested worker_2 official classification
+   before task286 substantive review can begin.
