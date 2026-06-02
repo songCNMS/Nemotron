@@ -832,3 +832,6 @@
    task290 branch `c3753ed4...` independently supports the same blocker
    closeout. #352 is released for worker_3 self-merge if exact head remains
    clean. task291 is the next bounded unblock task for worker_2.
+277. #353/task290 is open/clean at `daad63ef...` but held until #352 merge/
+   closeout is reconciled. task291 assignment was delivered to worker_2 at lead
+   branch `6e401f70`.

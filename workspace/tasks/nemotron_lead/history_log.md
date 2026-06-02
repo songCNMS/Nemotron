@@ -5397,3 +5397,12 @@
   route unblock for task285 Qwen3-4B iter2 checkpoint. task291 may run one-GPU
   no-training non-AIME canary probes only and cannot run AIME/task243, export,
   endpoint, promotion, 30B, or 8-GPU.
+- Processed worker_1 task290 mailbox update: PR #353 is open/base main/CLEAN at
+  current head `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; drift from reported
+  `8443a812...` is metadata-only and decision remains
+  `APPROVE_BLOCKER_CLOSEOUT` for #352 exact head `52834d74...`.
+- Posted #353 lead HOLD comment `4599888812`; keep #353 unmerged until #352
+  merge/closeout is reconciled or lead explicitly releases it.
+- Sent delivered task291 assignment to worker_2 at lead branch `6e401f70`, with
+  no-export/no-endpoint route unblock scope, one-GPU/Qwen3-4B limit, and hard
+  no AIME/task243/export/endpoint/promotion/30B/8-GPU boundaries.
