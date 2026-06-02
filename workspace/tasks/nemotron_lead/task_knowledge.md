@@ -1222,3 +1222,8 @@
    `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`,
    `BLOCKED_UPSTREAM_GATES_MISSING`, and no 30B SFT launch or artifacts.
    Current open PRs #361/#362 are both CLEAN but remain HOLD/not approved.
+372. Local observations are not gate evidence until worker mailbox/branch/PR
+   confirms them: task298 output appears to have no-training runtime preflight
+   PASS for Qwen3-30B-A3B-Instruct on 8x H200 with `tp=4/pp=2/ep=4`, and
+   task300 local blocker report exists, but lead must keep task300/task301 held
+   pending official task298 and task300 reports.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task298 accepted 7d24b929; task299 progress ff30fad8 not final; task300 accepted 85a5ba13; #361/#362 OPEN CLEAN; training HOLD |
+| PR | 30B gate live: task298 local preflight observed pending official report; task299 not final; task300 blocker unpushed; #361/#362 CLEAN; training HOLD |
 | Session | 76 |

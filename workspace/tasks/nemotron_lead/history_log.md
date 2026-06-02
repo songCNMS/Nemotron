@@ -6192,3 +6192,38 @@
   OPEN/base main/CLEAN at `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`.
   Neither PR is approved by lead; both remain documentation/status gate records,
   not training/test authorization.
+- Continuation scan found no new mailbox and no remote head changes:
+  task298 `7d24b929...`, task299 `ff30fad8...`, task300 `85a5ba13...`,
+  task302 `a87d57e6...`, and task301 `b8e42b3e...` remained current.
+- Local worker-output observation only, not accepted gate evidence: worker_2
+  task298 output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z`
+  contains `no_training_30b_config_import_manifest.json` with disposition
+  `PASS_NO_TRAINING_30B_RUNTIME_CONFIG_IMPORT_PREFLIGHT`, exact model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, 8 visible
+  H200 GPUs, Qwen3 MoE config/tokenizer import PASS, training entrypoint
+  `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, and
+  suggested later training parallelism `tp=4`, `pp=2`, `ep=4`, `nproc=8`.
+  Because no official worker_2 task298 PASS/BLOCK report/mailbox/PR has arrived,
+  task300 and task301 remain gated.
+- Local worker_3 observation only: worker_3 has an unpushed
+  `30b_base_aime2025_report.md` with disposition
+  `BLOCK_UPSTREAM_TASK298_ROUTE_MISSING`; it reports NemTron has 8 H200 GPUs,
+  the candidate and nearby 30B model paths exist, imports for `sglang`, `torch`,
+  `transformers`, `megatron`, and `megatron.core` pass, no endpoint was
+  listening on probed ports, and no corrected AIME base score was produced.
+  This needs official mailbox/branch push before lead can treat it as task300
+  evidence.
+- Local worker_5 output copy observation: PR #362 report hashes
+  `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`, while
+  the current local worker output copy hashes
+  `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c` after a
+  Session 3 refresh that records newly visible upstream branches. The branch PR
+  report remains the accepted #362 evidence until worker_5 clarifies or pushes
+  the refreshed output.
+- Sent delivered follow-ups to worker_2, worker_3, and worker_5: worker_2 must
+  send official task298 PASS/BLOCK with artifact paths/checksums, model path,
+  resources/parallelism, entrypoint, and eval-route decision; worker_3 must push
+  or mailbox the task300 blocker report and not run 30B base AIME before task298
+  official route PASS; worker_5 must clarify PR evidence hash versus refreshed
+  local output hash. Mailbox remained unread `0` after dispatch.
