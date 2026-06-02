@@ -40,3 +40,6 @@
    `8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
    `2b661ac38360b5a8a957359a59ffa63923928845`; global Qwen AIME gate remains
    `NO-GO/HOLD`.
+11. Worker_2 post-merge closeout mailbox `572cac2316744ae9bd70ffadc0d667c6`
+   confirmed branch-only closeout commit
+   `128cda9df2206f3d21aa483fa6318fd5feb84bd3` and no boundary violation.

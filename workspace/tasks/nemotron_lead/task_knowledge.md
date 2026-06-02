@@ -308,6 +308,8 @@
    `2b661ac38360b5a8a957359a59ffa63923928845`; it remains blocker evidence
    only and does not clear Bridge/checkpoint-load proof, training, AIME/task243
    eval, promotion, AIME2025 train data, or 30B/8-GPU.
+   Worker_2 post-merge mailbox `572cac2316744ae9bd70ffadc0d667c6` recorded
+   branch-only closeout commit `128cda9df2206f3d21aa483fa6318fd5feb84bd3`.
 140. task268 is assigned to worker_2 for Qwen3-4B-only NemTron/NeMo/
    Megatron-Bridge import/checkpoint-load preflight proof or exact blocker,
    with no SFT training, nonzero-LR smoke, live eval, export, endpoint,
