@@ -1317,3 +1317,10 @@
    `run_20260602T152008Z`; lead requested official branch/mailbox evidence with
    30B base AIME score or exact blocker. task301 remains HOLD until task300 base
    score is accepted and lead gives explicit launch clearance.
+392. #365/task299 merged at `2026-06-02T15:29:15Z` with merge commit
+   `205fc919a643b1478964a9e91793247c5e821a38` from approved head `b8b760fb`.
+   worker_1 post-merge closeout mailbox is pending after a delivered reminder.
+393. With #364 runtime, #361 review, and #365 data merged, task300 same-harness
+   30B base AIME2025 score is the active blocker before task301 training launch
+   can be considered. #362/task301 remains HOLD until task300 base evidence is
+   accepted and lead explicitly clears launch.

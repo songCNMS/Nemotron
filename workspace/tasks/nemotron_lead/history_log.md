@@ -6502,3 +6502,17 @@
 - Final poll for this update found mailbox empty. #365, #363, and #362 remained
   OPEN/base main/CLEAN at heads `b8b760fb...`, `a54fb96e...`, and `681ddea...`
   respectively.
+- Follow-up PR scan found #365/task299 MERGED at `2026-06-02T15:29:15Z` with
+  merge commit `205fc919a643b1478964a9e91793247c5e821a38` from approved head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`. After fetch, `origin/main` is
+  `205fc919a643b1478964a9e91793247c5e821a38`.
+- No worker_1 #365 post-merge closeout mailbox had arrived at that poll. Lead
+  sent delivered worker_1 reminder requesting mergedAt/mergeCommit/merged-head
+  closeout and boundary confirmation.
+- After #365 merged, #363/task300 remained OPEN/base main/CLEAN at
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and #362/task301 remained
+  OPEN/base main/CLEAN at `681ddea29c28afde6eaeeea416fe72a0255963ac`.
+- Sent delivered updates to worker_3 and worker_5: runtime and data gates are
+  merged/carried, task300 same-harness 30B base AIME2025 score artifact is now
+  the current hard blocker, and task301 nonzero-LR training remains HOLD until
+  task300 base score is accepted and lead gives explicit launch clearance.
