@@ -1770,3 +1770,7 @@
 500. Session 114: task306 remains active after about eighty minutes; latest
    visible progress remains `6/30`, branch and origin/main are unchanged, and
    no mailbox, PR, rc, final artifacts, or official report exists yet.
+501. Session 115: task306 remains active after about eighty-two minutes;
+   progress advanced to `7/30`, with row 7 parsed true/correct false after row
+   5 length-stop/nonparsed/incorrect. No rc, final artifacts, PR, or official
+   report exists yet.
