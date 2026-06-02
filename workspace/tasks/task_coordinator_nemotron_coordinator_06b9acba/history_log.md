@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
 
 ## Session 0 - Created with coordinator
 
@@ -487,3 +487,21 @@
 - Verified #334 remains `OPEN/CLEAN` at `f8eff53f26340cc3c812ae0ca190a48214e89942` with lead `REQUEST-CHANGES/HOLD`; #335 remains `OPEN/CLEAN` at `9d9285fd77820a5187440fbc2234dc36eb56942d` pending worker_4/task265 review.
 - Sent delivered coordinator acknowledgement to `intern_nemotron_lead` with the current #336 head, metadata-only post-snapshot drift, task262 report highlights, and unchanged #334/#335/global gate state.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: #336 is data split/sidecar evidence under review, not training clearance; no promotion, no new full training/eval clearance, no AIME2025 train data, and no 30B/8-GPU are authorized.
+
+## Session 39 - V11 runtime route blocker reconciled
+
+- Received `intern_nemotron_lead` update after task270/#339 and stale PR cleanup: #339/task270 merged; task270 final disposition is `NEMTRON_RUNTIME_ROUTE_BLOCKED`; task268 final `20260602T002457Z` artifact inventory was verified; #322/task243 closeout was closed unmerged as stale, dirty/conflicting metadata superseded by later Qwen AIME evidence; global gate remains `NO-GO/HOLD`.
+- Fetched `origin` and verified `origin/main` is `958c283813960d90749d51c8880354b89caa7ff8`, matching #339 merge commit. Lead branch is `f123c6acd9a8be506a00e09735d6f16fc294245d`.
+- Verified GitHub PR state:
+  - #339 is `MERGED`, `mergedAt=2026-06-02T01:11:32Z`, merge commit `958c283813960d90749d51c8880354b89caa7ff8`, merged head `89731738e0b16efc950cb34b668253a4760c9798`;
+  - #338 is `MERGED`, `mergedAt=2026-06-02T00:42:53Z`, merge commit `8d4382b6572b91ec2ca27876cd0f961deb7c2f81`;
+  - #337 is `MERGED`, `mergedAt=2026-06-02T00:12:09Z`, merge commit `8fb1a1cb042fca0a0ca3491363fb0e5616909010`;
+  - #334, #335, and #336 are also merged into current `origin/main`;
+  - #322 is `CLOSED` unmerged, updated `2026-06-02T01:18:37Z`, head `f7cc324599b4ffdf4310fc792548ed466e3d3b19`, `mergedAt=null`, `mergeCommit=null`;
+  - current open PR list contains only #312 coordinator audit.
+- Verified task270 report from `origin/main` has sha256 `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`, matching lead evidence.
+- Verified task268 final artifact inventory locally with `sha256sum -c /work-agents/intern_nemotron_worker_2/outputs/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1/manifests/artifact_inventory_20260602T002457Z.sha256`; all listed final artifacts returned `OK`. Observed final task268 report, manifest, and inventory sha256 values `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80`, `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`, and `37a7886cf4336c43cc657c27587b18b918041cc44221e8889bcebe9208fb2d92`.
+- Read task270 report and confirmed the blocker: local host lacks `megatron`, `megatron.bridge`, `nemo`, and a usable Docker daemon; `NemTron` has `megatron.bridge.AutoBridge.import_ckpt` but lacks `nemo` and checked container runtimes; LTP/OpenPAI lacks `LTP_TOKEN`/`LTP_HOST`; no launchable `nvcr.io/nvidia/nemo:26.02.nemotron_3_super` or equivalent NeMo/Megatron-Bridge runtime route was found.
+- Recorded the smallest external actions from task270: provide `nemo` in the current `NemTron` Python route, provide a launchable NeMo/Megatron-Bridge runtime/container, or provide LTP credentials plus a job image/spec that contains `megatron.bridge` and `nemo`.
+- Sent delivered coordinator acknowledgement to `intern_nemotron_lead` with the verified #339/#322/open-PR state, task270 report hash, task268 artifact inventory checksum result, runtime blocker, and unchanged global gate.
+- Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no positive Qwen3-4B Bridge/checkpoint-load proof, no training/eval/promotion clearance, no AIME2025 train data, and no 30B/8-GPU authorization exists.

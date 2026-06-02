@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
 
 ## Knowledge Entries
 
@@ -95,3 +95,8 @@
 89. task262 report key blocker: task253 train split exposed only 8 of 15 intended shards, 79 of 113 intended rows, 596944 of 835223 intended input tokens, and 110945 of 156569 intended supervised tokens. Missing 7 intended shards means V11 must repack or rematerialize with collision-safe split logic before any training clearance.
 90. task262 V11 plan evidence: blend plan has base M0 agentic train 1100 rows, hard-math verified full solution 8 rows, and math final-answer 200 rows; exact task246-style heldout prompt-hash overlaps are 0 for all three trainable groups. Residual risk: full n-gram contamination scanning for final-answer rows still needs acceptance or rerun before training.
 91. Session 38 sequencing: worker_4/task265 review scope now includes #336 along with #335, and worker_5 must refresh #334 runbook to include #336. #334 remains `REQUEST-CHANGES/HOLD`; #335 remains pending task265 review; global gate remains `NO-GO/HOLD`.
+92. Session 39 supersedes prior open V11 PR state: #334, #335, #336, #337, #338, and #339 are merged into `origin/main` `958c283813960d90749d51c8880354b89caa7ff8`; #322/task243 closeout is closed unmerged; only #312 coordinator audit remains open.
+93. task270/#339 final disposition is `NEMTRON_RUNTIME_ROUTE_BLOCKED`; merged report sha256 is `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`.
+94. task268 final artifact set `20260602T002457Z` was reverified by coordinator with `sha256sum -c`: all listed artifacts returned `OK`. Final report, manifest, and inventory sha256 values are `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80`, `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`, and `37a7886cf4336c43cc657c27587b18b918041cc44221e8889bcebe9208fb2d92`.
+95. Current Qwen3-4B base-load blocker is external runtime access: local host lacks `megatron`/`megatron.bridge`/`nemo` and Docker daemon; `NemTron` has `megatron.bridge.AutoBridge.import_ckpt` but lacks `nemo` and checked container runtimes; LTP/OpenPAI lacks credentials; no launchable NeMo/Megatron-Bridge runtime route is visible.
+96. Smallest acceptable unblock actions are to provide `nemo` in the current `NemTron` Python route, provide a launchable NeMo/Megatron-Bridge runtime/container, or provide LTP credentials plus a job image/spec with `megatron.bridge` and `nemo`. Until then, global Qwen AIME gate remains `NO-GO/HOLD`.
