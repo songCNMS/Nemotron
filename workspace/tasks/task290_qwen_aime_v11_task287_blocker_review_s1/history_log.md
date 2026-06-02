@@ -52,6 +52,8 @@
   artifacts before any AIME/task243 release.
 - Opened task290 PR #353:
   https://github.com/songCNMS/Nemotron/pull/353.
+- Corrected worker status session metadata to Session 2 for the task290
+  closeout branch head.
 - No code edit, canary run, training, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train-data use, shared deletion, merge,
   main push, 30B, or 8-GPU action was performed.
