@@ -20,6 +20,8 @@ or 30B task launch clearance.
 - Task: `task298_qwen_aime_v11_30b_runtime_resource_base_load_s1`
 - Worker branch:
   `intern_nemotron_worker_2/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1`
+- PR: #364
+  `https://github.com/songCNMS/Nemotron/pull/364`
 - Evidence source head synced to NemTron:
   `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`
 - Local output root:

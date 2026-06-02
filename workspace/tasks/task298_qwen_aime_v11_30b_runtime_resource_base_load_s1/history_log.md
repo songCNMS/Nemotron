@@ -48,6 +48,7 @@
   57G torch-dist checkpoint with checksum manifest.
 - Disposition recorded in `30b_runtime_resource_base_load_report.md`:
   `PASS_RUNTIME_RESOURCE_BASE_LOAD_GATE_WITH_TRAINING_LAUNCH_RESIDUALS`.
+- Opened PR #364 to main with the task298 report and status/task metadata.
 - Boundaries held: no SFT training, optimizer step, corrected AIME scoring,
   non-AIME canary, eval run, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, main push, merge, or shared-root
