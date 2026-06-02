@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task292_qwen_aime_v11_task291_canary_route_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task294_qwen_aime_v11_task293_aime_gate_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task292_qwen_aime_v11_task291_canary_route_review_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/355 |
-| Session | 2 |
-| Progress | Completed read-only independent review of task291 PR #354 exact head `2fda1ed46da4c82712a5c22c85bf124c26c6376f` and artifact root `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`; mailbox `2859a46c6db94679ae1ec64177120dee` reported `APPROVE_CANARY_ROUTE_PASS` for non-AIME no-export/no-endpoint canary route evidence only. Opened docs/status review PR #355. No canary/training/AIME/task243/export/endpoint/promotion/task255/shared deletion/main push/30B/8-GPU action was performed. |
+| Current Task | task294_qwen_aime_v11_task293_aime_gate_review_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/357 |
+| Session | 1 |
+| Progress | Completed read-only review of task293 evidence source head `87de0a97e6c0406a4b67520faab6b11d91d9131e` and artifact root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` because FT `12/30 = 0.4` beats accepted base `11/30 = 0.36666666666666664`, with accepted residual `sampling_exact_parameter_match=false`. Opened review PR #357. No code edit, eval rerun, training, export, endpoint, promotion, task255, shared deletion, main push, 30B, or 8-GPU action was performed. |
