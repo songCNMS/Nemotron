@@ -1,14 +1,14 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Working,TASK=task301_qwen_aime_v11_30b_full_sft_training_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_5 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task301_qwen_aime_v11_30b_full_sft_training_s1 |
-| PR | #362 |
-| Session | 15 |
-| Last Update | Lead-cleared SIGTERM terminated the validation hang after task301 reached iter `35/35`; wrapper wrote `train_rc=1` and `train_end=2026-06-02T16:58:51Z`, GPUs released, and `iter_0000035` is inventoried/checksummed as `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE` rather than training PASS. |
+| Current Task | none |
+| PR | #362 merged |
+| Session | 16 |
+| Last Update | task301/#362 merged at `2026-06-02T17:35:53Z` with merge commit `c94216b04bc3d71577391883d0cb76aa8c95e621` from head `c75c584875afdbdde4130775cbdc83355e7639ea`; task disposition remains salvage closeout only, not training PASS. |

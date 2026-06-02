@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=15 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=16 -->
 
 ## Background
 
@@ -312,3 +312,21 @@ and an artifact handoff for review before any eval/export/promotion path.
 - No canary, corrected AIME FT eval, task243 eval, export, endpoint,
   promotion, follow-on 30B work, task255 reuse, AIME2025 train rows, shared
   deletion, direct main push, or merge was performed.
+
+## Session 16 Result
+
+- Lead approved #362 as salvage closeout only at exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Verified #362 was OPEN, base `main`, non-draft, CLEAN/MERGEABLE, and still at
+  exact head `c75c584875afdbdde4130775cbdc83355e7639ea` immediately before
+  merge.
+- Self-merged through the approved PR path.
+- Merge result: `mergedAt=2026-06-02T17:35:53Z`, merge commit
+  `c94216b04bc3d71577391883d0cb76aa8c95e621`, merged head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Final accepted disposition remains
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`
+  only; this is not a training PASS.
+- No non-AIME canary, AIME/task243 eval, export, endpoint, promotion, follow-on
+  30B work, task255 reuse, AIME2025 train data, shared deletion, or direct main
+  push beyond the approved PR merge was performed.

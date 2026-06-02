@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -344,3 +344,23 @@
 - No canary, corrected AIME FT eval, task243 eval, export, endpoint, promotion,
   follow-on 30B work, task255 reuse, AIME2025 train rows, shared deletion,
   direct main push, or merge was performed.
+
+## Session 16 - 2026-06-02 UTC - PR #362 merged as salvage closeout only
+
+- Received lead approval comment `issuecomment-4605235881` for #362 exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea` as salvage closeout only.
+- Verified immediately before merge that #362 was OPEN, base `main`, non-draft,
+  CLEAN/MERGEABLE, and still at exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Self-merged #362 through GitHub PR merge, not by direct main push.
+- Merge result: `mergedAt=2026-06-02T17:35:53Z`, merge commit
+  `c94216b04bc3d71577391883d0cb76aa8c95e621`, merged head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Confirmed `origin/main` advanced to
+  `c94216b04bc3d71577391883d0cb76aa8c95e621`.
+- Accepted disposition remains
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`
+  only; this is not a clean training PASS.
+- No non-AIME canary, AIME/task243 eval, export, endpoint, promotion, follow-on
+  30B work, task255 reuse, AIME2025 train data, shared deletion, or direct main
+  push beyond the approved PR merge was performed.

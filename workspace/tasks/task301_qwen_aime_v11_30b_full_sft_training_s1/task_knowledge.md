@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -98,3 +98,10 @@
     `7c7e60b5bf9a5e747e3115e37701da00b6643cd1c895e3336bef175dc6d13261`;
     checksum manifest sha256 is
     `c3f2d4b4b5d1c26041d96e5eb8799cf591acef346f75ebfdcdce40a12ec09c03`.
+25. Session 16 merge closeout: #362 merged at `2026-06-02T17:35:53Z` with
+    merge commit `c94216b04bc3d71577391883d0cb76aa8c95e621` from exact head
+    `c75c584875afdbdde4130775cbdc83355e7639ea`.
+26. Session 16 boundary: accepted task301 disposition remains
+    `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`
+    only; no canary/AIME/task243 eval, export, endpoint, promotion, follow-on
+    30B work, task255 reuse, or AIME2025 train data is cleared.
