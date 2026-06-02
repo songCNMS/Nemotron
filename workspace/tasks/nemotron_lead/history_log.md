@@ -6966,3 +6966,27 @@
   `c75c584875afdbdde4130775cbdc83355e7639ea`, local/remote task301 artifact
   roots, read-only boundaries, and required approve/request-changes/block
   mailbox report.
+
+## Session 83 - 2026-06-02 UTC - task303 branch correction
+
+- Polled current state: #362 remained OPEN/base `main`/CLEAN at
+  `c75c584875afdbdde4130775cbdc83355e7639ea`, no task303 worker_4 remote branch
+  or PR was visible, and the lead mailbox had no unread messages.
+- Observed worker_4 pane running read-only task301 artifact checks. Pane
+  evidence showed local copied salvage bundle validation, 35 metric rows with
+  skipped/NaN sums both zero, validation-hang and SIGTERM markers, remote root
+  present over SSH, `iter_0000035` with 28 files/399G, selected salvage files
+  validating remotely, `latest=35`, `rc=1`, and GPUs/processes clean. This pane
+  output is useful context but is not accepted gate evidence until reported in
+  worker-owned task303 docs/mailbox.
+- Detected a branch/documentation ownership problem before worker_4 pushed:
+  worker_4 local repo was still on
+  `intern_nemotron_worker_4/task302_qwen_aime_v11_30b_independent_review_runbook_s1`
+  and modified only task302/status files, with no task303 task directory present.
+- Sent delivered `stop` peer_send to prevent pushing the wrong branch, then sent
+  delivered correction: preserve the read-only findings but move/record them
+  under task303 docs on branch
+  `intern_nemotron_worker_4/task303_qwen_aime_v11_30b_task301_salvage_review_s1`;
+  do not push/PR task302 edits as task303; report via mailbox or blocker.
+- Gate remains HOLD. #362 cannot be approved or followed by non-AIME canary
+  until worker_4 produces corrected task303 branch/docs/mailbox evidence.

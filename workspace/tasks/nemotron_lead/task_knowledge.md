@@ -1499,3 +1499,14 @@
 429. task303 assignment peer_send to `intern_nemotron_worker_4` was delivered
    after lead branch `f6eb2b9b` was pushed. Await worker_4 branch/PR/mailbox
    evidence before approving #362 or assigning non-AIME canary work.
+430. During Session 83 monitoring, worker_4 pane showed promising read-only
+   task301 salvage checks, including local/remote checksum validation and clean
+   GPU/process release. This is not accepted gate evidence until worker_4
+   reports it through corrected task303 docs/mailbox.
+431. worker_4 initially began writing the task303 review on the stale task302
+   branch and task302 docs. Lead sent delivered `stop` plus corrective
+   peer_send. Required corrected branch remains
+   `intern_nemotron_worker_4/task303_qwen_aime_v11_30b_task301_salvage_review_s1`.
+432. #362/task301 remains HOLD pending corrected task303 branch/docs/mailbox.
+   Do not approve #362 or assign non-AIME canary based only on pane output or
+   stale-task302 edits.
