@@ -3855,3 +3855,6 @@
 - task268 explicitly does not authorize SFT training, nonzero-LR smoke,
   task243/live AIME eval, export, endpoint, promotion, AIME2025 train data,
   task255 reuse, 30B/8-GPU, or shared deletion.
+- Sent delivered peer_send to worker_2 assigning task268. Initial 5-second
+  check found no worker_2 mailbox response, no remote task268 branch, and no
+  task268 PR yet.

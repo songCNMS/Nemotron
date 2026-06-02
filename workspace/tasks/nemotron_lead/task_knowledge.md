@@ -314,3 +314,5 @@
    Megatron-Bridge import/checkpoint-load preflight proof or exact blocker,
    with no SFT training, nonzero-LR smoke, live eval, export, endpoint,
    promotion, task255 reuse, 30B/8-GPU, or shared deletion authorized.
+141. task268 assignment peer_send was delivered to worker_2; initial check found
+   no task268 branch, PR, or mailbox response yet.

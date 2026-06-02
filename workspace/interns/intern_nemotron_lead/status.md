@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #337 MERGED @8fb1a1c from 2b661ac; task268 assigned for NemTron Bridge proof/blocker; gate NO-GO/HOLD |
+| PR | #337 MERGED @8fb1a1c from 2b661ac; task268 assigned/delivered to worker_2, no branch/PR yet; gate NO-GO/HOLD |
 | Session | 69 |
