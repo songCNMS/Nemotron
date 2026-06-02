@@ -12,3 +12,5 @@
 - #357 is lead-approved via comment `4601824155` for exact head `f1c00a0`;
   worker_4 may self-merge only if clean at merge time. #356 remains separately
   held until #357 lands and lead rechecks it.
+- #357 merged at `2026-06-02T11:16:53Z` with merge commit `24268157...` from
+  head `f1c00a0...`. Task294 review evidence is now merged.

@@ -151,3 +151,10 @@
   for FT `12/30 = 0.4` versus base `11/30`. Added PR #356 HOLD comment
   `4601765555`; self-merge waits for task294 independent review of the residual
   sampling semantic-match issue.
+- After task294/#357 merged into origin/main at `24268157...`, lead rechecked
+  #356 and GitHub reported OPEN/base main/CLEAN/MERGEABLE at exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. Added #356 approval/HOLD-lift
+  comment `4601875731`; worker_3 may self-merge only if that exact head remains
+  clean at merge time. This is evidence/report closeout only and does not
+  authorize export, endpoint, promotion, further training/eval, task255,
+  AIME2025 train data, shared deletion, 30B, or 8-GPU.

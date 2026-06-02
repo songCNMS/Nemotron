@@ -1081,3 +1081,9 @@
    allows worker_4 self-merge only if exact head remains clean. #356 should
    remain held until #357 lands, then be rechecked before any self-merge
    instruction.
+339. #357 merged at `2026-06-02T11:16:53Z`, merge commit `24268157...`, merged
+   head `f1c00a0...`. After this, #356 recomputed CLEAN/MERGEABLE at exact head
+   `672d0101...`; lead approval/HOLD-lift comment `4601875731` allows worker_3
+   self-merge only if exact head remains clean at merge time. This still does
+   not authorize export, endpoint, promotion, further training/eval, 30B, or
+   8-GPU.

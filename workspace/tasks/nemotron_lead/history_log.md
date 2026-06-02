@@ -5846,3 +5846,22 @@
   at merge time. #356 remains separately gated until #357 lands. No export,
   endpoint, promotion, further training/eval, task255, AIME2025 train data,
   shared deletion, 30B, or 8-GPU is authorized.
+- Processed worker_4 official task294 review mailbox
+  `34e57d26ea5b458a8cd02abd32e51984`; it matches #357 report and records
+  `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` for task293 source head `87de0a97...`
+  and #356 closeout head `672d0101...`.
+- Processed worker_4 #357 merge closeout mailbox
+  `f60a32e8f59845869b0454697ee8aef9`: #357 MERGED at
+  `2026-06-02T11:16:53Z`, merge commit
+  `24268157bd7088fea0f37d149cfc6ec042aa0e5a`, merged head
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`. origin/main is now
+  `24268157...`. Marked both task294 mailboxes read.
+- Rechecked #356 after #357 landed: GitHub reports #356 OPEN/base main/
+  CLEAN/MERGEABLE at exact head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`.
+  Local `git diff --check origin/main...task293` passes and `git merge-tree`
+  returns a clean synthetic tree id with no conflict blocks.
+- Added #356 lead approval/HOLD-lift comment `4601875731`. worker_3 may
+  self-merge #356 only if exact head `672d0101...` remains CLEAN/MERGEABLE at
+  merge time. Approval is task293 evidence/report closeout only; no export,
+  endpoint, promotion, further training/eval, task255 reuse, AIME2025 train
+  data, shared deletion, 30B, or 8-GPU is authorized.

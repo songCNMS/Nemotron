@@ -24,3 +24,7 @@
 - Worker_3 opened #356 at head `672d0101`; report matches artifacts, but lead
   set HOLD via comment `4601765555` pending task294 independent review. #356
   must not be self-merged before that review is processed.
+- task294/#357 is now merged and #356 has been rechecked clean. Lead approval/
+  HOLD-lift comment `4601875731` allows worker_3 self-merge if exact head
+  `672d0101` remains CLEAN/MERGEABLE at merge time. This still does not
+  authorize export, endpoint, promotion, further training/eval, 30B, or 8-GPU.

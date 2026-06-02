@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #357 task294 OPEN/CLEAN at f1c00a0 approved via comment 4601824155 for self-merge; #356 task293 remains separate HOLD until #357 lands; task295/#351 refresh pending; export/promotion/30B HOLD |
+| PR | #357 task294 MERGED at 24268157 from f1c00a0; #356 task293 OPEN/CLEAN at 672d0101 approved via comment 4601875731 for self-merge; task295/#351 refresh pending; export/promotion/30B HOLD |
 | Session | 76 |
