@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - Post-smoke runbook provenance
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=4 -->
 
 ## Background
 
@@ -32,15 +32,17 @@ and the remaining corrected AIME2025 FT-vs-base requirement.
   - task286 approved #350 as smoke evidence only;
   - #352/task287 is merged with BLOCK/no retained completions;
   - task288 approved task287 blocker closeout as evidence only;
-  - #353/task290 is lead-approved at exact head
+  - #353/task290 is merged at
+    `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head
     `daad63efe77f19b8d56c62eca9d9f9331efd6e22`;
   - task291 is assigned to worker_2 for bounded no-export/no-endpoint route
-    unblock.
+    unblock and remains pending official report/PR.
 - Preserve accepted base comparator for future AIME comparison:
   Qwen3-4B base score `11/30 = 0.36666666666666664` under the corrected
   AIME2025 harness.
 - Make clear that same-harness FT-vs-base AIME comparison remains blocked until
-  task291 resolves the route blocker and lead explicitly releases the AIME task.
+  task291 publishes an accepted route result or exact blocker and lead
+  explicitly releases the AIME task.
 
 ## Boundaries
 
@@ -97,6 +99,25 @@ and the remaining corrected AIME2025 FT-vs-base requirement.
   inputs.
 - Kept corrected AIME2025 same-harness FT-vs-base comparison, export, endpoint,
   promotion, 30B, and 8-GPU blocked.
+- No runtime, training, canary, AIME/task243 eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, merge, main push, 30B, or
+  8-GPU action was performed.
+
+## Session 4 Result
+
+- Refreshed PR #351 after lead request-changes comment `4600040776`.
+- Recorded #353/task290 as MERGED at `2026-06-02T07:52:08Z` with merge commit
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Recorded task291 lead-observed head
+  `4dffb40caea801503b8c39241f9afbe321887760` with read-only observed
+  no-export canary blockers/no retained completions, and current fetched task291
+  branch `ec099d2e523064640c676e2f682e54f44ccd6098`.
+- Explicitly held task291 pending worker_2's official task291 report/PR and
+  lead processing; local task291 output probes are not treated as accepted
+  closeout evidence by this runbook.
+- Kept AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, 30B, and 8-GPU blocked.
 - No runtime, training, canary, AIME/task243 eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, merge, main push, 30B, or
   8-GPU action was performed.

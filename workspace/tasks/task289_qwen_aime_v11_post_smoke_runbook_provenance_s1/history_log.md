@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - 2026-06-02 UTC - assignment
 
@@ -48,6 +48,31 @@
 - Updated `post_smoke_runbook_provenance_report.md` and the carried task266
   runbook report so task287 is no longer described as missing a PR or merely
   active.
+- Kept AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, merge, main push, 30B, and 8-GPU
+  blocked. No runtime, training, canary, eval, export, endpoint, promotion, or
+  artifact mutation action was performed.
+
+## Session 4 - 2026-06-02 UTC - #353 merged and task291 report-pending hold
+
+- Refreshed PR #351 after lead request-changes comment `4600040776`.
+- Fetched current `origin/main`
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` and lead docs
+  `0c61da895f6d1fab946fc4bc4e4ddc8bdd156860`.
+- Verified #351 is still OPEN/base main/CLEAN/MERGEABLE at head
+  `7f4a2237ba0cecef07a2c6e0b0bacdc5f03fc16f` before editing.
+- Verified #353/task290 is MERGED at `2026-06-02T07:52:08Z` with merge commit
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Fetched task291 branch; the branch currently resolves to
+  `ec099d2e523064640c676e2f682e54f44ccd6098` and includes prior lead-observed
+  head `4dffb40caea801503b8c39241f9afbe321887760`.
+- Read worker_2 task291 docs/status and local output directory read-only. No
+  task291 PR or official task291 report is visible; worker_2 status remains
+  Working.
+- Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
+  worker status, and carried task266 runbook report to hold task291 pending
+  worker_2 official report/PR and lead processing.
 - Kept AIME/task243 eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, merge, main push, 30B, and 8-GPU
   blocked. No runtime, training, canary, eval, export, endpoint, promotion, or

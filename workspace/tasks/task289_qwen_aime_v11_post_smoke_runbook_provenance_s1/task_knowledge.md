@@ -1,13 +1,14 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 1. #350/task285 is bounded smoke evidence only: it does not create a clean
    end-to-end train/eval pass and does not clear AIME/task243 eval.
 2. #352/task287 is the merged non-AIME canary blocker record; task288 and
-   #353/task290 approve the blocker closeout as evidence only. Corrected
+   merged #353/task290 approve the blocker closeout as evidence only. Corrected
    AIME2025 same-harness FT-vs-base comparison remains blocked until task291
-   resolves the route blocker and lead releases the gate.
+   publishes an accepted route result or exact blocker and lead releases the
+   gate.
 3. The accepted same-harness base comparator remains Qwen3-4B `11/30 =
    0.36666666666666664`.
 4. #349/task283 merged at `2026-06-02T06:03:58Z` with merge commit
@@ -40,11 +41,15 @@
    `a4afc814554f92039d886548a8979cf847e6265e`; Session 27 records
    `APPROVE_BLOCKER_CLOSEOUT` for #352 exact head and mailbox
    `a7667e01d0cb4188aa0e5dc222ae7da0`.
-10. #353/task290 is OPEN/base main/CLEAN/MERGEABLE at exact head
-   `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; lead approval comment
-   `4599915303` approves read-only blocker review evidence only. The task290
-   report decision is `APPROVE_BLOCKER_CLOSEOUT`.
-11. task291 current fetched branch head is
-   `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0`; it is the active bounded
-   no-export/no-endpoint route-unblock assignment for worker_2. AIME/task243,
-   export, endpoint, promotion, 30B, and 8-GPU remain blocked.
+10. #353/task290 is MERGED at `2026-06-02T07:52:08Z` with merge commit
+   `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head
+   `daad63efe77f19b8d56c62eca9d9f9331efd6e22`. The task290 report decision is
+   `APPROVE_BLOCKER_CLOSEOUT`.
+11. Lead request-changes comment `4600040776` reports task291 head
+   `4dffb40caea801503b8c39241f9afbe321887760` with read-only observed
+   no-export canary blockers and no retained completions. Current fetched
+   task291 branch is `ec099d2e523064640c676e2f682e54f44ccd6098`, but no
+   official task291 report or PR is visible. Hold task291 pending worker_2
+   official report/PR and lead processing.
+12. AIME/task243, export, endpoint, promotion, task255 reuse, AIME2025 train
+   data, shared deletion, 30B, and 8-GPU remain blocked.
