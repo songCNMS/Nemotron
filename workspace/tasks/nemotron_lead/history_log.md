@@ -4636,3 +4636,65 @@
   approve/request-changes/block on task278 evidence and whether NemTron
   no-training preflight remediation is required. No training/eval release is in
   effect.
+- Processed worker_1 task280 post-merge closeout mailbox
+  `ba39a349d356484391163d94608443ea`: #346 self-merged at
+  `2026-06-02T04:59:45Z` with merge commit
+  `7ba65549500e9ca70fc560ed919d6bfa61f088b2` from exact approved head
+  `49206d3b88ee074873b4f8102720eef5d69bac57`. Scope stayed docs/status/
+  report only; disposition remains `PLAN_READY_HOLD_TASK278_TASK279_RELEASE`.
+  No smoke command execution, training, live canary, AIME/task243 eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, or
+  30B/8-GPU was performed.
+- Fetched origin after #346: `origin/main` is now
+  `7ba65549500e9ca70fc560ed919d6bfa61f088b2`. #347/task278 remains
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE`, but its current head advanced to
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`.
+- Read current #347/task278 evidence at head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`: latest artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`,
+  report sha256
+  `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`,
+  manifest sha256
+  `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`,
+  runtime probe log sha256
+  `5fb97e01fecb735eba89c318bae39091ef6c57195c30ca3bd6f5bac6832cfe18`,
+  and root preflight log sha256
+  `7180274cbed295a0462f2d53fa36a8c96c7ca519419119887eebf8f7a07d686b`.
+  Disposition remains
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`: packed-data,
+  Qwen packed chat contract, training-pipeline contract, negative fail-closed
+  guard, HF config/tokenizer import, and task276 hash checks pass, but the
+  required NeMo/Megatron-Bridge training-stack imports fail even on the
+  attempted `/root` route. No training/eval release follows from this evidence.
+- Fetched worker_4 task279 branch at
+  `94a87009a4f25cc1f97c832d9b18392e505f58c8`. The branch correctly records
+  that review of #347 head `6d3e5825` stopped after #347 drifted to
+  `b7e5441`; no final approve/request-changes/block was issued for the current
+  head.
+- Sent delivered refreshed task279 review request to worker_4 for #347 exact
+  head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, report sha
+  `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`, and
+  artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
+  Requested approve/request-changes/block only for blocker/preflight evidence
+  and whether a real NemTron/Bridge runtime remediation is required before any
+  nonzero-LR smoke. No training/eval release was sent.
+- Observed worker_5 task282 branch and #348: PR #348 is
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at head
+  `2500fab3a3fcd4924cd9ffb12446bb617140ce3c`. Scope is docs/status/runbook
+  only. Worker_5 mailbox `09fa411cf42a4bcc90a496eac532aa62` recommends PASS
+  for runbook/provenance, but the report was generated before current #347
+  task278 evidence and still states no repo-visible task278 artifact.
+- Attempted formal GitHub request-changes review on #348, but GitHub rejected
+  it because the current account is treated as the PR author. Left canonical
+  lead gate HOLD comment `4598882299` instead and sent delivered peer_send to
+  worker_5 requesting a refresh against current `origin/main`
+  `7ba65549500e9ca70fc560ed919d6bfa61f088b2`, #345/#346 merged plan-only HOLD
+  state, and current #347 blocker evidence pending task279 review.
+- Current Session 74 gate: task276/task277 packed-data risk is carried
+  (valid 1 row, test 0 rows); task278 preflight is blocked on missing
+  NeMo/Megatron-Bridge runtime route; task279 current-head review is pending;
+  task280/task281 are merged planning-HOLD docs only; task282/#348 is HOLD for
+  provenance refresh. No nonzero-LR SFT smoke, live canary, AIME/task243 eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, main push, merge by lead, or 30B/8-GPU is authorized.

@@ -567,3 +567,28 @@
 207. #346/task280 at head `49206d3b88ee074873b4f8102720eef5d69bac57` is
    approved only as no-run bounded SFT smoke planning-HOLD docs; it does not
    release the smoke command.
+208. #346/task280 merged at `2026-06-02T04:59:45Z` with merge commit
+   `7ba65549500e9ca70fc560ed919d6bfa61f088b2` from exact approved head
+   `49206d3b88ee074873b4f8102720eef5d69bac57`. The merged evidence remains
+   no-run planning-HOLD only.
+209. #347/task278 has advanced to current head
+   `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; the prior task279 review of
+   `6d3e5825` is stale and cannot approve or block the current head.
+210. Current #347/task278 evidence records
+   `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE` with report sha
+   `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23` and
+   artifact root
+   `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
+   It is blocker/preflight evidence only and does not release training.
+211. task279 must review #347 exact head
+   `b7e544100ac13eaa908a9d1af6fafaf599bc3310` before lead can approve #347
+   as blocker evidence, request changes, or create a runtime-remediation task.
+212. #348/task282 at head `2500fab3a3fcd4924cd9ffb12446bb617140ce3c` is held
+   for provenance refresh because its report predates current #347 evidence.
+   The canonical lead HOLD is PR comment `4598882299`; worker_5 has been asked
+   to refresh against `origin/main`
+   `7ba65549500e9ca70fc560ed919d6bfa61f088b2`.
+213. Until #347/task278 either passes no-training config/import preflight or is
+   converted through lead gate into a reviewed runtime remediation path, the
+   full data-to-training-to-evaluation attempt remains fail-closed at the
+   preflight stage. task280/task281 plans do not authorize execution.
