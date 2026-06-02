@@ -150,3 +150,7 @@
    seventeen minutes. Latest stdout progress advanced to `10/30`, with row 10
    parsed true/correct false, and rank logs show `start_index=10` active. No
    final artifacts, blocker, PR, or official report exists.
+48. Session 125: active run remains in progress after about one hundred
+   twenty-four minutes. Latest stdout progress remains `10/30`, and rank logs
+   still show `start_index=10` active with no done event. No final artifacts,
+   blocker, PR, or official report exists.
