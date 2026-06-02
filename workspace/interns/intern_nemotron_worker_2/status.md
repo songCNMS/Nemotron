@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task276_qwen_aime_v11_rematerialize_packed_qwen_s1 |
-| PR | Pending |
+| PR | #344 |
 | Session | 1 |
-| Last Update | 2026-06-02T03:56:38Z: Produced task276 fresh no-training V11 `packed_qwen` artifact with Qwen contract PASS and split parity PASS; PR pending. |
+| Last Update | 2026-06-02T03:57:50Z: Opened PR #344 for task276 fresh no-training V11 `packed_qwen` artifact with Qwen contract PASS and split parity PASS. |
