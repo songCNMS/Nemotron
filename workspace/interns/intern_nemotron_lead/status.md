@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task276 delivered; worker_2 local branch observed but no remote branch/PR/mailbox/artifact yet; follow-up queued; gate NO-GO/HOLD |
+| PR | task276 worker_2 acceptance branch visible at 745f78b; no PR/mailbox/artifact yet; gate NO-GO/HOLD |
 | Session | 73 |
