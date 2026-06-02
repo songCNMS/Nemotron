@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
 
 ## Knowledge Entries
 
@@ -471,3 +471,13 @@
    split/review into the next HOLD state: fresh V11 packed Qwen root and
    no-training config/import preflight are still missing before any pilot
    action can be considered.
+181. task276 is the worker-owned next step after Session 42: produce a fresh
+   collision-safe V11 `packed_qwen` root from the task262 blend plan under
+   merged task262 split logic. It is no-training artifact production only.
+182. Do not parallelize multiple workers writing the same task276 output root;
+   use one artifact owner, then assign independent review/preflight workers
+   after exact artifact/head evidence exists.
+183. task276 success can only unlock later no-training config/import preflight
+   review. It still does not authorize nonzero-LR smoke, live canary,
+   AIME/task243 eval, export, endpoint, promotion, AIME2025 train data,
+   task255 reuse, shared deletion, or 30B/8-GPU.

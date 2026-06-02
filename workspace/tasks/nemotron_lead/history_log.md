@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
 
 ## Session 0 - Created with team lead
 
@@ -2910,7 +2910,7 @@
 - #331 and #329 remain `HOLD`; global Qwen AIME gate remains `NO-GO/HOLD`, no
   promotion, no 30B/8-GPU.
 
-## Session 73 - 2026-06-01 UTC - task259 approve and #331 release
+### Archived Session 73 - 2026-06-01 UTC - task259 approve and #331 release
 
 - Received and marked read worker_5 task259 closeout mailbox
   `4cb815b1aed14e96be9a3fe7988e3a25` plus duplicate resend
@@ -4253,3 +4253,33 @@
 - Final Session 72 gate state: task272, task273, task274, and task275 docs
   closeouts are merged; task271 core proof acceptance is recorded; global Qwen
   AIME remains `NO-GO/HOLD` with no training/eval/promotion/30B clearance.
+
+## Session 73 - 2026-06-02 UTC - dispatch V11 packed Qwen rematerialization
+
+- Received coordinator Session 42 instruction after #340/#341/#342/#343 were
+  verified merged into `origin/main` `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`.
+- Read lead mailbox first; unread count was `0`.
+- Evaluated active worker pool: worker_1, worker_2, worker_3, worker_4, and
+  worker_5 all show `Idle` in status files. The current task writes one fresh
+  task-owned `packed_qwen` root, so lead assigned a single artifact owner
+  instead of multiple concurrent writers. Independent review/preflight workers
+  should be assigned after task276 produces exact artifact/head evidence.
+- Created standard task docs for
+  `task276_qwen_aime_v11_rematerialize_packed_qwen_s1`, assigned to
+  `intern_nemotron_worker_2`.
+- task276 scope: no-training V11 packed Qwen rematerialization from the task262
+  V11 blend plan under merged task262 split logic, with task-owned output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/`.
+- Required task276 evidence includes: final `packed_qwen` root, split manifest,
+  train/valid row/input-token/supervised-token/shard/source counts,
+  intended-vs-exposed multiset parity, Qwen packed-data contract PASS using
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`, checksums,
+  proof no AIME2025 prompt/label train rows, exact commands/env/code revision,
+  and explicit boundary confirmation.
+- Preserved global boundaries: task276 does not authorize training,
+  nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, AIME2025 train data, task255 reuse, shared deletion, main push, or
+  30B/8-GPU.
+- Global Qwen AIME gate remains `NO-GO/HOLD`. A successful task276 artifact can
+  only unblock a later no-training config/import preflight after independent
+  review.
