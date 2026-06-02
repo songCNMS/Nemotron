@@ -121,6 +121,15 @@ def build_chat_prompt(hf_tokenizer: Any, prompt: str) -> str:
             )
 
 
+def detokenize_generated_tokens(tokenizer: Any, tokens: list[int]) -> str:
+    if not tokens:
+        return ""
+    try:
+        return tokenizer.detokenize(tokens, skip_special_tokens=True)
+    except TypeError:
+        return tokenizer.detokenize(tokens)
+
+
 def file_inventory(root: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for path in sorted(p for p in root.rglob("*") if p.is_file()):
@@ -195,6 +204,7 @@ def main() -> int:
         "route_adjustments": [
             "checkpoint model_config.attention_backend None is set in-memory to AttnBackend.auto",
             "MCore SamplingParams uses top_k=1 greedy branch to avoid torch.multinomial invalid-probability blocker",
+            "if MCore request.generated_text is empty, response_text falls back to checkpoint tokenizer detokenize(generated_tokens)",
         ],
         "boundary_confirmations": {
             "qwen3_4b_only": True,
@@ -459,12 +469,16 @@ def main() -> int:
         exact_matches = 0
         retained_count = 0
         for prompt, request in zip(prompts, requests):
-            generated_text = request.generated_text or ""
             generated_tokens = (
                 request.generated_tokens.detach().cpu().tolist()
                 if request.generated_tokens is not None
                 else []
             )
+            generated_text = request.generated_text or ""
+            response_text_source = "request.generated_text"
+            if not generated_text.strip() and generated_tokens:
+                generated_text = detokenize_generated_tokens(tokenizer, generated_tokens)
+                response_text_source = "generated_tokens_detokenize_fallback"
             completion_tokens = (
                 int(request.generated_length)
                 if request.generated_length is not None
@@ -495,6 +509,7 @@ def main() -> int:
                     "prompt_tokens": prompt.get("megatron_prompt_token_count"),
                 },
                 "finish_reason": "mcore_static_engine_completed",
+                "response_text_source": response_text_source,
                 "route": ROUTE_ID,
             }
             result_rows.append(result_row)
