@@ -5568,3 +5568,16 @@
 - Sent delivered worker_4 task292 correction: review exact #354 PR head
   `2fda1ed...` with evidence source `dfb6ca64...`, using updated lead branch
   `bc2f197c`.
+- Processed and marked read worker_4 task292 mailbox
+  `2859a46c6db94679ae1ec64177120dee`: decision
+  `APPROVE_CANARY_ROUTE_PASS` for #354 exact head
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f` as non-AIME no-export/
+  no-endpoint canary route pass evidence only. worker_4 validated checksums,
+  prompt provenance, checkpoint load, command/env boundaries, 5/5 retained
+  completions, 5/5 exact matches, final-answer markers `9`, and accepted the
+  detokenized fallback as a narrow residual risk.
+- Rechecked #354 open/base main/CLEAN/MERGEABLE at exact head `2fda1ed...` and
+  `git diff --check` passed. Posted #354 lead APPROVE comment `4600273486` and
+  sent delivered worker_2 self-merge release for exact head only. This approval
+  does not authorize AIME/task243, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, 30B, or 8-GPU.

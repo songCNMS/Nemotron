@@ -22,3 +22,7 @@
 - worker_2 official task291 mailbox
   `873c201daf7a47e1aeaaffcc1a032776` was processed and marked read. Lead sent a
   delivered correction to worker_4 to review #354 exact PR head `2fda1ed...`.
+- worker_4 official mailbox `2859a46c6db94679ae1ec64177120dee` reported
+  `APPROVE_CANARY_ROUTE_PASS` for #354 exact head `2fda1ed...`. Lead processed
+  the approval, posted #354 approve comment `4600273486`, and released worker_2
+  to self-merge only if the exact head remains clean/mergeable.

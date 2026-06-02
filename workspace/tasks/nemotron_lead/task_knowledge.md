@@ -918,3 +918,10 @@
 298. worker_4 received delivered task292 correction to review exact #354 PR
    head `2fda1ed...`; AIME/task243 remains blocked pending task292 decision and
    lead processing.
+299. task292 mailbox `2859a46c6db94679ae1ec64177120dee` approved #354 exact
+   head `2fda1ed...` as `APPROVE_CANARY_ROUTE_PASS`; the approval is canary
+   route evidence only and carries the detokenized fallback residual risk.
+300. #354 is lead-approved via comment `4600273486`; worker_2 may self-merge
+   only if #354 remains exact head `2fda1ed...` and CLEAN/MERGEABLE at merge
+   time. AIME/task243 remains blocked until #354 merge closeout and next task
+   assignment.
