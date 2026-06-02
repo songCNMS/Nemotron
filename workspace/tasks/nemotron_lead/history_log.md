@@ -5406,3 +5406,23 @@
 - Sent delivered task291 assignment to worker_2 at lead branch `6e401f70`, with
   no-export/no-endpoint route unblock scope, one-GPU/Qwen3-4B limit, and hard
   no AIME/task243/export/endpoint/promotion/30B/8-GPU boundaries.
+- Session 75 continuation after fetch: #352/task287 is now merged at
+  `2026-06-02T07:39:18Z` with merge commit
+  `ca1ab63588651351b3e669450659abd2ad2c73e8` from exact approved head
+  `52834d74c79ab98b5e125434160843752c34d47a`. Disposition remains `BLOCK`:
+  task285 iter2 loads, but no retained synthetic non-AIME canary completions
+  exist and AIME/task243 remains unreleased.
+- #353/task290 remains open/base main/CLEAN/MERGEABLE at exact approved head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`. Sent delivered peer release to
+  worker_1 allowing self-merge only if this exact head remains clean/mergeable
+  at merge time, with post-merge mailbox closeout required.
+- #351/task289 remains open/base main/CLEAN at
+  `e806048cd3da59c405f121ab52cca0e175dfcb62`, but still stale relative to the
+  merged #352 BLOCK closeout and #353 lead approval. Sent delivered peer HOLD
+  to worker_5 requesting another provenance/runbook refresh and no merge.
+- task291 worker_2 branch is visible at
+  `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0`, acceptance/status/task-docs only,
+  no PR and no output root visible. The branch is based on pre-#352 main
+  `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; sent delivered peer instruction
+  to refresh/rebase onto current `origin/main`
+  `ca1ab63588651351b3e669450659abd2ad2c73e8` before final route evidence or PR.

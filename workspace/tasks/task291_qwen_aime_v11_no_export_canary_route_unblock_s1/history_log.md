@@ -10,3 +10,10 @@
   reuse, export, endpoint, promotion, shared deletion, main push, merge, 30B,
   or 8-GPU.
 - Sent delivered peer assignment to worker_2 with lead branch `6e401f70`.
+- Follow-up lead check found worker_2 branch
+  `origin/intern_nemotron_worker_2/task291_qwen_aime_v11_no_export_canary_route_unblock_s1`
+  at `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0`, acceptance/status/task-docs
+  only, no PR, and no task291 output root. The branch is based on pre-#352 main
+  `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`, so lead sent a delivered
+  instruction to refresh/rebase onto current `origin/main`
+  `ca1ab63588651351b3e669450659abd2ad2c73e8` before final route evidence or PR.

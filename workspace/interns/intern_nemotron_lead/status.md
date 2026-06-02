@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #352 approved for self-merge; #351 request-changes; #353 HOLD; task291 delivered; AIME/export/promotion/30B HOLD |
+| PR | #352 merged BLOCK; #353 approved for exact-head self-merge; #351 HOLD refresh; task291 accepted branch must refresh to current main; AIME/export/promotion/30B HOLD |
 | Session | 75 |
