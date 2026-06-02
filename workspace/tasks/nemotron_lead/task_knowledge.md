@@ -975,3 +975,7 @@
    far, remote artifacts currently only contain prompt/checkpoint/command
    manifests. No summary/results/final checksums or official mailbox yet; do not
    treat this as same-harness FT-vs-base gate evidence.
+312. Later read-only task293 observation reached `6/30`, parsed `6/6`, correct
+   `5/6`, with remote PID `433268` still active. This is still partial live
+   evidence only; final summary/results/checksums and official worker report are
+   required before any FT-vs-base gate decision.

@@ -33,3 +33,6 @@
   active on NemTron PID `433268`; partial progress is `2/30` with one correct
   and one incorrect. Only manifests are present so far; no final summary,
   results, checksums, official worker report, or PR exists yet.
+- Follow-up read-only observation reached `6/30`, parsed `6/6`, correct `5/6`;
+  PID `433268` remains active and no final artifacts or official report exist.
+  This remains non-gating partial evidence.

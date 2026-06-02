@@ -5664,3 +5664,9 @@
   manifests only; no summary/results/checksums or official worker mailbox are
   visible. This is not gate evidence and does not release promotion/export/
   endpoint/30B/8-GPU.
+- Follow-up read-only live observation: task293 NemTron process PID `433268`
+  remains active, elapsed about 14 minutes. Log reached `6/30`; all six parsed,
+  five correct so far (`aime_02_r01` incorrect). Remote artifacts still only
+  include prompt/checkpoint-load/command-env manifests; no final summary,
+  results, checksums, PR, or official mailbox report is visible. Gate remains
+  `NO-GO/HOLD`.
