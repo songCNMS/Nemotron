@@ -1,6 +1,6 @@
 # task302_qwen_aime_v11_30b_independent_review_runbook_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -72,3 +72,45 @@
 - Boundaries preserved: no product code edits, training, testing, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   main push, merge, or release/scale claim.
+
+## Session 4 - task298 runtime/base-load evidence review
+
+- Lead reported worker_2 official task298 mailbox
+  `1158fa9eb09140c4854b7d462e0499c7` was processed and requested independent
+  review of task298/#364.
+- Rechecked #364. The lead-trigger head was
+  `a1bd2af05aeb6554e7d9130076d9b81a3aa95b85`; current #364 head at review time
+  was `8f1f7df9d6499eedb150d7e63323df8ee0411f41`, `OPEN`, base `main`,
+  `CLEAN`, not draft.
+- Verified drift `a1bd2af0..8f1f7df9` is worker_2 status plus task298
+  history/task_knowledge only, with `30b_runtime_resource_base_load_report.md`
+  unchanged and `git diff --check` clean.
+- Reviewed task298 report and local artifacts under
+  `/work-agents/intern_nemotron_worker_2/outputs/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z`.
+- Recomputed listed hashes, inspected the preflight manifest, checked Bridge
+  import log evidence, verified 8 x H200 runtime evidence, model path evidence,
+  TP4/PP2/EP4 route recommendation, eval-only SGLang/export decision, residuals,
+  and boundaries.
+- Added `task298_runtime_resource_base_load_review_report.md` and updated the
+  runbook matrix. Task298 disposition is
+  `APPROVE_TASK298_RUNTIME_RESOURCE_BASE_LOAD_PASS_WITH_RESIDUALS`.
+- Overall 30B/task302 remains HOLD: task300 base AIME remains pending lead gate,
+  task299 final data/decontam artifacts are missing, and task301 training stays
+  blocked.
+- Boundaries preserved: no training, testing, AIME scoring, canary, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+  main push, merge, release, or scale claim.
+
+## Session 5 - official task298 review report requested
+
+- Lead confirmed worker_2 official task298 mailbox is processed for current
+  #364 head `8f1f7df9d6499eedb150d7e63323df8ee0411f41`, and requested the
+  official task302 mailbox with approve/request-changes/block for task298.
+- Rechecked #364: `OPEN`, base `main`, `CLEAN`, not draft, exact current head
+  `8f1f7df9d6499eedb150d7e63323df8ee0411f41`.
+- Kept the Session 4 substantive decision unchanged:
+  `APPROVE_TASK298_RUNTIME_RESOURCE_BASE_LOAD_PASS_WITH_RESIDUALS`.
+- Task300 base AIME remains HOLD pending lead gate. No training, testing,
+  AIME scoring, canary, export, endpoint, promotion, task255 reuse, AIME2025
+  train data, shared deletion, main push, merge, release, or scale claim was
+  performed.

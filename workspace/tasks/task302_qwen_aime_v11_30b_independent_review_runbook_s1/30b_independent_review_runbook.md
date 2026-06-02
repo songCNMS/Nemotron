@@ -1,10 +1,12 @@
 # task302 30B independent review runbook
 
-<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_4,SESSION=3 -->
+<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_4,SESSION=5 -->
 
 ## Decision
 
-- Overall disposition: `HOLD_REQUEST_CHANGES_MISSING_UPSTREAM_ARTIFACT_EVIDENCE`
+- Overall disposition: `HOLD_TASK298_APPROVED_PENDING_LEAD_GATE_AND_REMAINING_ARTIFACTS`
+- Task298 runtime/resource/base-load disposition:
+  `APPROVE_TASK298_RUNTIME_RESOURCE_BASE_LOAD_PASS_WITH_RESIDUALS`
 - Current branch:
   `intern_nemotron_worker_4/task302_qwen_aime_v11_30b_independent_review_runbook_s1`
 - Base main:
@@ -13,10 +15,13 @@
   `origin/intern_nemotron_lead/session1-recovery-task-docs`
   exact requested commit `676d8556`
 
-No 30B gate is approved. Current visibility now includes exact upstream branch
-heads for task298-task300 and task301 PR #362, but the required official
-artifact-root, command/env, log, checksum, metric, and residual evidence is not
-complete enough for any gate approval.
+Task298 runtime/resource/base-load evidence is independently approved with
+residuals for lead review. Downstream task300 base AIME, task301 training, and
+the overall 30B run remain HOLD until lead gates task298 and the remaining
+task299/task300/task301 artifacts are complete.
+
+Focused review report:
+`workspace/tasks/task302_qwen_aime_v11_30b_independent_review_runbook_s1/task298_runtime_resource_base_load_review_report.md`.
 
 ## Initial Visibility Scan
 
@@ -75,14 +80,51 @@ All reviewed upstream branch diffs against `origin/main` are workspace
 status/task-doc/report surfaces only. No product code diff was observed in the
 branch file-scope checks.
 
+## Session 4 Task298 Review
+
+Task298/#364 was reviewed after lead processed worker_2 mailbox
+`1158fa9eb09140c4854b7d462e0499c7`.
+
+Current #364 state at review time:
+
+- PR: #364 `https://github.com/songCNMS/Nemotron/pull/364`
+- Current head: `8f1f7df9d6499eedb150d7e63323df8ee0411f41`
+- Lead-trigger head: `a1bd2af05aeb6554e7d9130076d9b81a3aa95b85`
+- State: `OPEN`, base `main`, `CLEAN`, not draft
+
+Freshness:
+
+- Drift `a1bd2af0..8f1f7df9` is worker_2 status plus task298
+  history/task_knowledge only.
+- `30b_runtime_resource_base_load_report.md` is unchanged across that drift.
+- `git diff --check a1bd2af0..8f1f7df9` is clean.
+
+Independent evidence result:
+
+- `APPROVE_TASK298_RUNTIME_RESOURCE_BASE_LOAD_PASS_WITH_RESIDUALS`
+- Exact model path:
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`
+- Runtime: 8 x H200 visible.
+- Config/import preflight: `PASS_NO_TRAINING_30B_RUNTIME_CONFIG_IMPORT_PREFLIGHT`.
+- Bridge import: `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, iteration `0`, 57G,
+  checksum-backed.
+- Training route recommendation reviewed: TP4 / PP2 / EP4 / ETP1 on one
+  8 x H200 node with `nproc_per_node=8`.
+- Eval route decision reviewed: base HF can use eval-only SGLang; future
+  Megatron SFT checkpoint likely needs eval-only HF export plus SGLang unless a
+  separate 30B no-export MCore route is proven.
+- Residuals preserved: `pip check` rc 1, full TP4/PP2/EP4 optimizer launch not
+  proven, no no-export 30B generation route, no task299/task300/task301 final
+  evidence.
+
 ## Gate Matrix
 
 | Gate | Upstream task | Required evidence | Current evidence | Disposition |
 |---|---|---|---|---|
-| Runtime/base-load | task298 | Exact head/PR, artifact root, commands/env, logs, checksums, 30B path, import/load proof or precise blocker | Branch visible at `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`; no official report in branch | `REQUEST_CHANGES/HOLD` |
+| Runtime/base-load | task298 | Exact head/PR, artifact root, commands/env, logs, checksums, 30B path, import/load proof or precise blocker | PR #364 `OPEN`/`CLEAN` at `8f1f7df9d6499eedb150d7e63323df8ee0411f41`; report unchanged from lead-trigger `a1bd2af05aeb6554e7d9130076d9b81a3aa95b85`; artifact hashes and Bridge import proof verified | `APPROVE_WITH_RESIDUALS` |
 | Data/packing | task299 | Exact head/PR, source manifests, split/row/token counts, checksums, no AIME2025 train leakage, no task255 reuse | Branch visible at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`; preliminary tokenizer parity notes only, no final 30B-ready root/checksums | `REQUEST_CHANGES/HOLD` |
-| Testing/eval | task300 | Exact head/PR, same-harness base-vs-FT metrics, command/env, checksums, denominator, residuals | Branch visible at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`; no base score/canary/FT-vs-base metrics | `REQUEST_CHANGES/HOLD` |
-| Training | task301 | Exact head/PR, command/env, checkpoint/artifact roots, checksums, metrics, fail-closed boundaries | PR #362 visible at `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`; blocker report says no training/artifacts, but visibility section is stale | `REQUEST_CHANGES/HOLD` |
+| Testing/eval | task300 | Exact head/PR, same-harness base-vs-FT metrics, command/env, checksums, denominator, residuals | PR #363 now visible at `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`; report blocks base scoring pending task298 route/lead gate and contains no base score/canary/FT-vs-base metrics | `REQUEST_CHANGES/HOLD` |
+| Training | task301 | Exact head/PR, command/env, checkpoint/artifact roots, checksums, metrics, fail-closed boundaries | PR #362 visible at `6200d070eab93ab94f5c5c12fc6c16fb783eeccd`; blocker report says no training/artifacts/checkpoint/loss/LR/checksums | `REQUEST_CHANGES/HOLD` |
 
 ## Required Review Order
 
