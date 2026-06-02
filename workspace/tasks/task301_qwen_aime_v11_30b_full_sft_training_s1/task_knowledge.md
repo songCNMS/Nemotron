@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -27,3 +27,8 @@
    `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
    lead-observed `5924d937...` is prior PR evidence and must be reported
    separately from the refreshed output-copy hash.
+9. Session 5 reconciliation: exact PR head `82cb4067e3dad6d2f8da8d94c3251e46263ff3db`
+   is the report refresh that changed the report hash from
+   `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9` to
+   `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
+   subsequent task-local bookkeeping did not change the report content hash.

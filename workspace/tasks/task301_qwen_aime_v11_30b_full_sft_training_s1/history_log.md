@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -78,6 +78,28 @@
 - Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`; task298 PASS,
   task299 PASS, task300 30B base-score artifact, and lead sequence clearance
   remain absent.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 5 - 2026-06-02 UTC - exact-head race reconciliation
+
+- Reconciled the lead request for exact PR #362 head
+  `82cb4067e3dad6d2f8da8d94c3251e46263ff3db` with the subsequent Session 4
+  task-local bookkeeping push.
+- Verified report hash history:
+  - `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6` report hash was
+    `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`;
+  - `82cb4067e3dad6d2f8da8d94c3251e46263ff3db` report hash is
+    `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
+  - Session 4 bookkeeping head `cd779a91fe566e77236729306bd09a7bb386d17a`
+    preserves report hash
+    `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`.
+- Verified the worker output copy still hashes to
+  `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`.
+- Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`; task298 PASS,
+  task299 PASS, task300 30B base-score artifact, and lead sequence clearance
+  remain required before any task301 training launch.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.
