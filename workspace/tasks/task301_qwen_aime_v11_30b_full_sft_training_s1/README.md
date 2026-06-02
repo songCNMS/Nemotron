@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=11 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_5,SESSION=14 -->
 
 ## Background
 
@@ -11,27 +11,23 @@ are available.
 
 ## Goal
 
-Run the bounded 30B Qwen AIME V11 SFT training only after required upstream
-gates pass, producing checkpoint, LR/loss/validation, commands/env, logs,
-checksums, and an artifact handoff for task300 testing.
+Run the bounded 30B Qwen AIME V11 SFT training after required upstream gates
+pass, producing checkpoint, LR/loss/validation, commands/env, logs, checksums,
+and an artifact handoff for review before any eval/export/promotion path.
 
 ## Scope
 
-- Carry task298 runtime route lead approval with residuals; do not treat it as
-  sufficient for launch by itself.
-- Carry task299/#365 merged 30B data/decontam proof at merge commit
-  `205fc919a643b1478964a9e91793247c5e821a38`.
-- Carry task300/#363 lead-approved base comparator `15/30 = 0.5` at head
-  `155eb0c6845c0bf2b7d40051a9045533ffe00589`, pending worker_3 exact-head
-  self-merge/closeout; do not claim training success as eval success.
-- Wait for explicit lead sequence clearance before launch.
-- Current observed `origin/main` is
-  `205fc919a643b1478964a9e91793247c5e821a38` after task299/#365 merge; launch
-  still requires task300 and lead clearance.
+- Carry task298 runtime route lead approval with residuals.
+- Carry task299/#365 merged 30B data/decontam proof.
+- Carry task300/#363 accepted same-harness base comparator `15/30 = 0.5`.
+- Use explicit lead launch clearance for `origin/main`
+  `e400cea8a1604bc95cc430a194811ff553b99401`.
 - Run full 30B SFT with documented model path, packed root, LR, train steps,
   optimizer, parallelism, GPU count/type, validation settings, seed, resume
   policy, output/checkpoint roots, and logs.
-- Produce checksum manifests and artifact handoff for task300.
+- Produce checksum manifests and artifact handoff for checkpoint artifact
+  review after the training command returns or after lead-cleared read-only
+  collection.
 
 ## Boundaries
 
@@ -70,7 +66,7 @@ checksums, and an artifact handoff for task300 testing.
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_5`
 - Original assignment main: `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`
-- Current observed main: `205fc919a643b1478964a9e91793247c5e821a38`
+- Launch main: `e400cea8a1604bc95cc430a194811ff553b99401`
 - Related tasks: task276, task298, task299, task300
 
 ## Session 1 Result
@@ -208,3 +204,76 @@ checksums, and an artifact handoff for task300 testing.
 - Did not launch training. Did not use task255, AIME2025 train data, shared
   deletion, export, endpoint, promotion, main push, merge, 30B training, or
   8-GPU execution.
+
+## Session 12 Result
+
+- Received explicit lead launch clearance after the runtime/resource gate,
+  data/packing gate, and same-harness 30B base comparator were accepted or
+  merged.
+- Synced `origin/main` `e400cea8a1604bc95cc430a194811ff553b99401` to
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/Nemotron`.
+- Used the lead-accepted task-owned dereferenced packed-data mirror at
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/input/task299_packed_qwen_30b_deref_mirror`
+  with `391` files, `0` symlinks, and source/remote dereference manifest sha256
+  `d80241a9c659c2546591c27941e7c24c32717983250df38c0254113cd28bfc6c`.
+- Launched bounded Qwen3-30B-A3B V11 SFT on NemTron with 8x H200,
+  `train_iters=35`, LR `5e-7`, min LR `1e-7`, seed `5678`, TP `4`, PP `2`,
+  EP `4`, ETP `1`, and checkpoint save interval `5`.
+- Training reached iteration `35/35`, saved checkpoint `iter_0000035`, and
+  `latest_checkpointed_iteration.txt` reports `35`; skipped iterations and NaN
+  iterations remained `0`.
+- Current live state is `STILL_RUNNING_VALIDATION_WATCH`: the harness entered
+  built-in validation at `Evaluating on 80 samples` / `Evaluating iter 1/10`,
+  the log has not advanced since `2026-06-03 00:23:43 +0800`, and no
+  `train_rc.txt` or `train_end.txt` exists as of `2026-06-02T16:32:19Z`.
+- Process status: launcher, torchrun parent, eight rank processes, and
+  TorchInductor compile-worker children are alive; GPU memory remains allocated
+  with GPU utilization at `0%` in the snapshot and rank CPU activity visible.
+- No kill/restart, canary, corrected AIME FT eval, task243 eval, export,
+  endpoint, promotion, follow-on 30B work, task255 reuse, AIME2025 train rows,
+  shared deletion, direct main push, or merge was performed.
+
+## Session 13 Result
+
+- Sent official live-status mailbox
+  `3bf90a62cca94a939f8e55321fdaea1c` to `intern_nemotron_lead` with disposition
+  `STILL_RUNNING_VALIDATION`.
+- Fresh read-only snapshot at `2026-06-02T16:35:42Z` still shows no
+  `train_rc.txt` or `train_end.txt`; log mtime remains
+  `2026-06-03 00:23:43.221057699 +0800`, tailing at
+  `Evaluating on 80 samples` / `Evaluating iter 1/10`.
+- `latest_checkpointed_iteration.txt` remains `35`, and checkpoint directories
+  through `iter_0000035` remain present.
+- GPU utilization reads `0%`, but GPU memory remains allocated on all 8x H200;
+  rank processes `1258278` through `1258285` are alive with CPU activity and
+  `198` TorchInductor compile-worker children were observed.
+- Recommended action remains read-only monitoring; if no log or return-code
+  progress appears by `2026-06-02T16:53:43Z`, report
+  `BLOCKED_VALIDATION_HANG` / validation-teardown blocker and wait for lead
+  decision before any termination or checkpoint salvage action.
+- No kill/restart/terminate, canary, corrected AIME FT eval, task243 eval,
+  export, endpoint, promotion, follow-on 30B work, task255 reuse, AIME2025 train
+  rows, shared deletion, direct main push, or merge was performed.
+
+## Session 14 Result
+
+- Sent official publish-status mailbox
+  `a8351925601040fa91d7862479201ff8` to `intern_nemotron_lead` with exact
+  classification `STILL_RUNNING_VALIDATION_WATCH`.
+- Fresh read-only snapshot at `2026-06-02T16:37:54Z` still shows no
+  `train_rc.txt` or `train_end.txt`; log mtime remains
+  `2026-06-03 00:23:43.221057699 +0800`, tailing at
+  `Evaluating on 80 samples` / `Evaluating iter 1/10`.
+- `latest_checkpointed_iteration.txt` remains `35`, and checkpoint directories
+  through `iter_0000035` remain present.
+- GPU utilization reads `0%`, but GPU memory remains allocated on all 8x H200;
+  rank processes `1258278` through `1258285` are alive with CPU activity and
+  `198` TorchInductor compile-worker children were observed.
+- Safe wait threshold is `2026-06-02T16:53:43Z`, 30 minutes after the last log
+  mtime. If no log or return-code progress appears by that threshold, report
+  `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG` and
+  wait for lead clearance before termination, salvage, restart, eval, export,
+  endpoint, promotion, or follow-on work.
+- No kill/restart/terminate, canary, corrected AIME FT eval, task243 eval,
+  export, endpoint, promotion, follow-on 30B work, task255 reuse, AIME2025 train
+  rows, shared deletion, direct main push, or merge was performed.

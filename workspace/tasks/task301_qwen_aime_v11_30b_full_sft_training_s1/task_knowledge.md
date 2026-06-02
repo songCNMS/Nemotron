@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -63,3 +63,22 @@
     explicit launch clearance.
 16. Prepared launch binding: task299 packed root is
     `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+17. Session 12 launch binding: lead accepted the task-owned dereferenced packed
+    mirror
+    `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/input/task299_packed_qwen_30b_deref_mirror`
+    for launch when source/remote dereference manifests both hash to
+    `d80241a9c659c2546591c27941e7c24c32717983250df38c0254113cd28bfc6c` and
+    the mirror has `0` symlinks.
+18. Session 12 training state: the bounded 8x H200 Qwen3-30B-A3B V11 SFT
+    reached iteration `35/35`, saved checkpoint `iter_0000035`, and
+    `latest_checkpointed_iteration.txt` reports `35`; skipped and NaN
+    iteration counts remained `0` through iteration 35.
+19. Session 14 validation watch rule: classify current live state as
+    `STILL_RUNNING_VALIDATION_WATCH` while ranks remain alive, CPU activity is
+    visible, GPU memory remains allocated, and the run is before the safe wait
+    threshold `2026-06-02T16:53:43Z`.
+20. Session 14 blocker rule: if no log progress or `train_rc.txt` /
+    `train_end.txt` appears by `2026-06-02T16:53:43Z`, report
+    `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG`
+    and wait for lead clearance before termination, salvage, restart, eval,
+    export, endpoint, promotion, or follow-on work.
