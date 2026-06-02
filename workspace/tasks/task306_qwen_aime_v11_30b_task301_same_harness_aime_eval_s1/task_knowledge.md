@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
 
 ## Knowledge Entries
 
@@ -30,3 +30,8 @@
    `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`; branch diff is acceptance docs/
    status only and no task306 PR/output/mailbox completion report is visible
    yet.
+11. Session 90 follow-up: task306 remains without PR, official report, output
+   root, or active process; an untracked worker-local runner script exists but
+   is not evidence until pushed/reported.
+12. Lead sent a queued `next` peer_send asking worker_3 for official task306
+   artifacts/report or exact blocker.

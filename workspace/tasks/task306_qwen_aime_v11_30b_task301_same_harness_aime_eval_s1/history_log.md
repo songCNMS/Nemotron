@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -37,3 +37,15 @@
   task301 `iter_0000035` against accepted task300 base `15/30`.
 - No task306 PR, mailbox completion report, or task-owned output root is visible
   yet. Gate remains HOLD pending official worker evidence.
+
+## Session 90 - 2026-06-02 UTC - lead follow-up queued
+
+- Rechecked worker branch: still
+  `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`.
+- No task306 PR, official mailbox report, task-owned output root, or active
+  task306 process was visible.
+- Lead observed a worker-local untracked
+  `run_30b_no_export_aime_eval.py`; this is not accepted evidence until worker
+  pushes/reports it and binds any artifacts.
+- Sent queued `next` peer_send follow-up to worker_3 requesting official
+  artifacts/report or exact blocker. Gate remains HOLD.

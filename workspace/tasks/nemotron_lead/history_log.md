@@ -7273,3 +7273,26 @@
 - Gate remains HOLD pending worker_3 official mailbox with branch/head/PR or
   exact blocker and task306 artifacts/metrics. No approve/request-changes/block
   decision is possible yet.
+
+## Session 90 - 2026-06-02 UTC - task306 follow-up queued
+
+- Rechecked current state:
+  - lead branch local/remote `d6b1280328ec38903e13a84cfe51896251e787da`;
+  - `origin/main` `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead mailbox unread count `0`;
+  - worker_3 task306 branch remains
+    `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`;
+  - GitHub PR search for task306 returned none;
+  - no task306 output root was visible under worker_3 outputs.
+- Observed worker_3 local task306 worktree has an untracked
+  `run_30b_no_export_aime_eval.py`, but no active task306 process or official
+  report was visible. This is an unofficial progress observation only and not
+  gate evidence.
+- Sent delivered queued `next` peer_send follow-up to `intern_nemotron_worker_3`
+  asking for official task306 artifacts/report if the route is ready, or an
+  exact mailbox blocker if protocol equivalence, checkpoint load, runtime,
+  eval-only export/endpoint need, or another boundary issue blocks progress.
+- Reaffirmed in the follow-up: no training, no AIME2025 train prompts/labels,
+  no task255, no shared deletion, no promotion, no production endpoint, no
+  main push, and no merge/self-merge.
+- Gate remains HOLD pending worker_3 official mailbox and task306 evidence.
