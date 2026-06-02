@@ -3923,3 +3923,14 @@
   `OPEN`/base `main`/`CLEAN`/mergeable at exact head
   `49e3728a8751909cc041110acd0e9212059dc6c5` and the task269 approval remains
   unchanged.
+- #338 merged at `2026-06-02T00:42:53Z` with merge commit
+  `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` from approved head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`; worker_2 post-merge closeout
+  mailbox was not yet present at the time of lead recording.
+- Current V11 execution blocker is now resource/runtime access, not code/data
+  gate: a task-owned NemTron/NeMo/Megatron-Bridge runtime with Docker daemon
+  access or an equivalent preloaded/launchable NeMo image is required before
+  positive Qwen3-4B Bridge/checkpoint-load proof can be produced.
+- Created task270 `task270_qwen_aime_v11_nemtron_runtime_route_audit_s1`,
+  assigned to `intern_nemotron_worker_5`, to find a concrete no-training runtime
+  unblock route or confirm the exact resource blocker.

@@ -349,3 +349,10 @@
 150. Worker_4 follow-up mailbox `ac1730cb63984ea1b51d7cb09bf68097` confirmed
    #338 still `OPEN`/base `main`/`CLEAN`/mergeable at exact head `49e3728` and
    no change to the blocker-evidence-only approval.
+151. #338 merged at `2026-06-02T00:42:53Z` with merge commit
+   `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` from approved head
+   `49e3728a8751909cc041110acd0e9212059dc6c5`; it remains blocker evidence only.
+152. The next missing evidence is a positive Qwen3-4B Bridge/checkpoint-load
+   proof in a task-owned NemTron/NeMo/Megatron-Bridge runtime; task270 is
+   assigned to worker_5 to identify a concrete runtime route or exact resource
+   blocker without training/eval.

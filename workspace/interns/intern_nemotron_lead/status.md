@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #338 OPEN/CLEAN @49e3728 APPROVE blocker-evidence-only; release self-merge only if exact head remains clean; gate NO-GO/HOLD |
+| PR | #338 MERGED @8d4382b from 49e3728; task270 assigned for NemTron/NeMo runtime route audit; gate NO-GO/HOLD |
 | Session | 69 |
