@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -21,3 +21,19 @@
 7. session2 follow-up: lead explicitly reiterated that 30B base AIME must not
    run until task298 official route PASS is processed; task300 remains blocked
    on that route proof.
+8. session3 release: task298/#364 merged with approved route head
+   `8f1f7df9d6499eedb150d7e63323df8ee0411f41`; base testing is allowed through
+   eval-only SGLang direct from
+   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+9. session3 base result: corrected same-harness 30B base AIME2025 score is
+   `15/30`, exact-normalized accuracy `0.5`, with all-request denominator,
+   `30/30` ok, parsed `19/30`, finish reasons `stop=19` and `length=11`.
+10. session3 artifact root:
+    `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`;
+    eval directory
+    `eval/qwen30b_base_aime2025_30x1_20260602T152351Z`; full completions and
+    parser diagnostics are retained as JSONL artifacts.
+11. session3 residual: `11/30` length-truncated rows are unparsed and counted
+    incorrect under the corrected denominator; future 30B FT comparison must
+    use the same cache, prompt, endpoint/chat API semantics, sampling settings,
+    parser, normalizer, and denominator.
