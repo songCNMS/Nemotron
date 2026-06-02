@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 |
 | PR | #351 |
-| Session | 1 |
-| Last Update | Opened PR #351 for task289 post-smoke docs/runbook provenance at branch head `5870481`; global V11 AIME/export/endpoint/promotion/30B/8-GPU clearance remains blocked. |
+| Session | 2 |
+| Last Update | Refreshing PR #351 for task287 #352 blocker evidence: #352 is open/CLEAN at `52834d74c79ab98b5e125434160843752c34d47a` with BLOCK/no retained completions; task288/task290 review pending; global V11 AIME/export/endpoint/promotion/30B/8-GPU clearance remains blocked. |

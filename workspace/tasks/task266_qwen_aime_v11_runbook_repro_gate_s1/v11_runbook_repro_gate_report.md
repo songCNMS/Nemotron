@@ -6,8 +6,9 @@
 
 - Recommendation for task266: PASS as a static V11 runbook/repro gate.
 - Recommendation for V11 execution: HOLD / NO-GO beyond the bounded smoke
-  evidence until task287 canary evidence, task288 review, same-harness
-  comparison, and lead clearance clear the future stage gates.
+  evidence until the task287 canary blocker is resolved, task288/task290
+  reviews, same-harness comparison, and lead clearance clear the future stage
+  gates.
 - Branch:
   `intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1`.
 - Branch creation base: `origin/main` at
@@ -49,20 +50,23 @@
   task279 approved #347 as blocker/preflight evidence only, lead approval
   comment `4598906687`. At that time, task283 was accepted at
   `c1d988e29abafa51a9c3f83a98e21b229135f97e`; task284 is accepted/cleaned at
-  `27d28b54342a98a4a336c46661964759f2790619`. Session 75 below supersedes
-  this with merged #349/#350 post-smoke provenance.
-- Session 75 post-smoke refresh from task289: #349/task283 is merged
+  `27d28b54342a98a4a336c46661964759f2790619`. The post-smoke refresh below
+  supersedes this with merged #349/#350 provenance.
+- task289 post-smoke refresh: #349/task283 is merged
   no-training preflight PASS at merge commit
   `f82f8f73c39bc93ff268f45845a94060585b8290`; #350/task285 is merged bounded
   Qwen3-4B smoke evidence at merge commit
   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; task286 approved #350 exact head
   `fc379240c8517de10e37a5438f87b6b0994399f0` as bounded smoke evidence only.
-  task287 is the active non-AIME canary/completion-retention gate at fetched
-  branch head `aa5ff74046221926c53eddfe1afbd7df38baaa89`, and task288 is the
-  independent review gate at fetched branch head
-  `2c64e1da7af63a52092f7a323e94752961ee3251`. Corrected AIME2025 same-harness
-  comparison remains blocked until task287 passes and lead explicitly releases
-  it.
+  #352/task287 is now open/base main/CLEAN at exact head
+  `52834d74c79ab98b5e125434160843752c34d47a` with official `BLOCK` evidence:
+  checkpoint load proof passed, but no retained completions or accepted canary
+  pass exist. task288 is pending review at fetched branch head
+  `e62fad1da9a4279869e939a34604c4f1ce13827b`, and task290 is pending blocker
+  review at fetched branch head
+  `dab9a8bb87315bed529af0f00e3c843b1f910d0e`. Corrected AIME2025
+  same-harness comparison remains blocked until the task287 blocker is resolved
+  and lead explicitly releases it.
 - Boundary kept: no training, eval, export, endpoint launch, merge,
   promotion, 30B/8-GPU authorization, AIME2025 train-data use, shared deletion,
   or worker branch alteration.
@@ -84,15 +88,16 @@ and independent contamination/regression review exist.
 | task278 config/import preflight | PR #347 MERGED at `2026-06-02T05:13:14Z` as `28039222ad5d4054891713d85d05a15a491d8a96` from head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; artifact root `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`; report sha `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`; manifest sha `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`; disposition `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE` | MERGED BLOCKER DOCS ONLY; runtime preflight remains blocked |
 | task279 preflight review | worker_4 approved #347 exact head `b7e544100ac13eaa908a9d1af6fafaf599bc3310` as blocker/preflight evidence only; lead approval comment `4598906687` | BLOCKER EVIDENCE APPROVED; no runtime pass |
 | task263/runtime base-load planner sanity | task263 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` remains the older local-env blocker record. Coordinator Session 40 at branch `intern_nemotron_coordinator/session1-resume-interrupted-work` head `8c8364101d6adb07f9e67c17fece3e2b2bb280ca` provides newer no-training runtime proof: `nemo=/root/.local/lib/python3.12/site-packages/nemo/__init__.py`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`, remote imported checkpoint root `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/qwen3_4b_bridge_import_iter0`, local evidence root `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z` | RUNTIME PROOF PRESENT for no-training Bridge import/preflight only; live nonzero-LR training evidence and future candidate artifacts remain HOLD |
-| task264 canary/retention gate | PR #335 MERGED at `9d9285fd77820a5187440fbc2234dc36eb56942d`; merged at `2026-06-01T23:00:37Z` as `98e8aad39af9e705feed581e0ff9f8814073e2d8`; official closeout report `v11_canary_retention_report.md`; static canary/retention code/config/tests added | STATIC MERGED into main; task287 is the active canary execution/blocker gate for the task285 checkpoint |
+| task264 canary/retention gate | PR #335 MERGED at `9d9285fd77820a5187440fbc2234dc36eb56942d`; merged at `2026-06-01T23:00:37Z` as `98e8aad39af9e705feed581e0ff9f8814073e2d8`; official closeout report `v11_canary_retention_report.md`; static canary/retention code/config/tests added | STATIC MERGED into main; #352/task287 is the current canary execution/blocker gate for the task285 checkpoint |
 | task280 bounded smoke plan | PR #346 MERGED at `2026-06-02T04:59:45Z` as `7ba65549500e9ca70fc560ed919d6bfa61f088b2`; report `qwen3_4b_v11_sft_smoke_plan_hold_report.md`; disposition `PLAN_READY_HOLD_TASK278_TASK279_RELEASE` | PLAN SUPERSEDED by #350 bounded smoke evidence; future training remains held |
-| task281 canary/AIME plan | PR #345 MERGED at `2026-06-02T04:54:59Z` as `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`; report `canary_aime_eval_plan_hold_report.md`; disposition `PLAN_READY_HOLD` | PLAN-ONLY RECORD; task287/task288 must clear before AIME/task243 |
+| task281 canary/AIME plan | PR #345 MERGED at `2026-06-02T04:54:59Z` as `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`; report `canary_aime_eval_plan_hold_report.md`; disposition `PLAN_READY_HOLD` | PLAN-ONLY RECORD; task287/task288/task290 gates must clear before AIME/task243 |
 | task283 runtime remediation | PR #349 MERGED at `2026-06-02T06:03:58Z` as `f82f8f73c39bc93ff268f45845a94060585b8290` from head `2d042cedb0c4cc448c89d57d7b18986d92361349`; report `bridge_runtime_remediation_preflight_report.md`; local root `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`; disposition `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE` | NO-TRAINING PREFLIGHT PASS; not a training/export/eval release |
 | task284 task283 review | prior worker_4 review gate for task283; task283 subsequently merged as #349 with lead processing | REVIEW GATE PROCESSED for no-training preflight only |
 | task285 bounded Qwen3-4B smoke | PR #350 MERGED at `2026-06-02T06:53:14Z` as `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0` from head `fc379240c8517de10e37a5438f87b6b0994399f0`; local root `/work-agents/intern_nemotron_worker_2/outputs/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z`; two optimizer iterations with nonzero LR and finite loss; latest checkpoint iteration `2`; checkpoint inventory sha `d4cc3d1e5a047e321e98896996610f1ace0b5c45acd3cbe11bb0a8389ea97b78` | BOUNDED SMOKE EVIDENCE ONLY; post-train eval/SIGTERM RC=1 risk |
 | task286 smoke review | worker_4 branch `origin/intern_nemotron_worker_4/task286_qwen_aime_v11_task285_smoke_gate_review_s1` at `a0db36c1d6831744cd972ac65b90817cfbcfefdc`; mailboxes `71d5ac1b1bb44bae8163f014563714cf` and `9b673d61cf6e4ce5a64d84f7f6198230` approve #350 exact head as bounded smoke evidence only | APPROVED SMOKE-ONLY; next gate is non-AIME canary |
-| task287 non-AIME canary | worker_3 branch `origin/intern_nemotron_worker_3/task287_qwen_aime_v11_non_aime_canary_retention_s1` fetched at `aa5ff74046221926c53eddfe1afbd7df38baaa89`; no PR or accepted canary artifact report visible in task289 | ACTIVE/HOLD; no canary pass accepted |
-| task288 task287 review | worker_4 branch `origin/intern_nemotron_worker_4/task288_qwen_aime_v11_task287_canary_gate_review_s1` fetched at `2c64e1da7af63a52092f7a323e94752961ee3251`; no PR; task288 history records HOLD pending official task287 evidence | HOLD pending task287 evidence |
+| task287 non-AIME canary | PR #352 OPEN/base main/CLEAN at exact head `52834d74c79ab98b5e125434160843752c34d47a`; report `non_aime_canary_retention_report.md`; local root `/work-agents/intern_nemotron_worker_3/outputs/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z`; disposition `BLOCK`; checkpoint load proof passed, but retained completion rows are `0` and `canary_summary.json` is absent | BLOCK; no canary pass accepted |
+| task288 task287 review | worker_4 branch `origin/intern_nemotron_worker_4/task288_qwen_aime_v11_task287_canary_gate_review_s1` fetched at `e62fad1da9a4279869e939a34604c4f1ce13827b`; no PR; review has not approved #352 exact head | HOLD pending current-head task287 review |
+| task290 task287 blocker review | worker_1 branch `origin/intern_nemotron_worker_1/task290_qwen_aime_v11_task287_blocker_review_s1` fetched at `dab9a8bb87315bed529af0f00e3c843b1f910d0e`; no PR visible; assigned to independently review task287 blocker artifacts and #352 exact head | HOLD pending blocker review |
 | task265 independent review | Remote branch `origin/intern_nemotron_worker_4/task265_qwen_aime_v11_contam_regression_review_s1` is visible at `ca5ea1c405ef142ee51a43fcbab477a2958e48dc`; no PR or repo-visible task265 report exists; worker_4 status records a mailbox-only task265 read-only matrix refresh for #335/#336 with id `7e718a2c0ea746ed81352db5b5b6fe57` | MAILBOX-ONLY EVIDENCE: current repo cannot inspect the full task265 matrix file; final live execution still HOLD |
 | task260 failure forensics | Merged PR #332; report says task255 FT failure is generation degeneration/corruption, not evaluator-only parser failure | Used as V11 canary/retention requirement source |
 | task261 root cause | Merged PR #333; report identifies likely missing Qwen base load, zero LR at only step, and split basename collisions | Used as V11 data/base-load/schedule gate source |
@@ -296,9 +301,9 @@ Expected V11 task output roots:
 |---|---|---|---|
 | 1. V11 data/packing ready | task262 report with collision-free split materialization or fail-closed assertion; intended-vs-exposed rows/tokens/shards; hard-math/final-answer sidecar paths, counts, hashes; decontamination evidence; no AIME2025 train rows; task276 fresh packed root with manifest/checksum/Qwen contract evidence | task262 PR #336 is MERGED into main as `2ca6541c275d1eb64068e665af24147a796c818a`; task276 PR #344 is MERGED into main as `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` and supplies accepted packed root `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen` with Qwen contract PASS, parity PASS, and no-AIME train-leakage evidence | PACKED DATA EVIDENCE PRESENT and used by task283/task285; sparse valid/test risk remains carried |
 | 2. Base-load/import proof ready | task263 report proving Qwen3-4B base weight load or Bridge-approved HF import; positive load line or import manifest; base hashes; abort checks for random-init loss, NaN/Inf, zero LR; nonzero first-step LR schedule; NemTron sync path; task283 no-training preflight accepted | Coordinator Session 40 provides positive no-training Bridge import/preflight proof, and #349/task283 is MERGED with `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`; #350/task285 also records Bridge base import rc `0` before optimizer execution | NO-TRAINING/BASE IMPORT EVIDENCE PRESENT; training/eval/export still gated |
-| 3. Non-AIME canary ready | task264 canary prompt set with source/hashes; proof prompts are not AIME2025 and not train rows; config/tokenizer parity checks; retention schema for full completions/debug transcript; task287 pass and task288 review | task264 static prompt/retention contract is merged; task287 is active at `aa5ff74046221926c53eddfe1afbd7df38baaa89`, but no accepted canary pass exists; task288 is HOLD at `2c64e1da7af63a52092f7a323e94752961ee3251` | ACTIVE/HOLD; no live AIME release |
+| 3. Non-AIME canary ready | task264 canary prompt set with source/hashes; proof prompts are not AIME2025 and not train rows; config/tokenizer parity checks; retention schema for full completions/debug transcript; task287 pass and task288/task290 review | task264 static prompt/retention contract is merged; #352/task287 is OPEN/CLEAN at `52834d74c79ab98b5e125434160843752c34d47a` with `BLOCK`, no retained completions, and no accepted pass; task288 is pending at `e62fad1da9a4279869e939a34604c4f1ce13827b`; task290 is pending at `dab9a8bb87315bed529af0f00e3c843b1f910d0e` | BLOCKED/HOLD; no live AIME release |
 | 4. Bounded Qwen3-4B pilot allowed | Stages 1-3 pre-smoke gates, task283 preflight PASS, task286 approval, lead smoke release, Qwen3-4B only, code synced to task-owned `/root` run dir on NemTron, no AIME2025 train data, no task255 reuse | #350/task285 is MERGED and task286 approved it as bounded smoke evidence only: two optimizer iterations, nonzero LR, finite loss, iter2 checkpoint; post-train built-in eval/SIGTERM returned RC=1 | SMOKE EVIDENCE PRESENT ONLY; no clean train/eval pass |
-| 5. Same-harness AIME comparison allowed | New V11 FT artifact is reviewer-readable with manifest/hash checks, task287 non-AIME canary pass, task288/lead review not blocking, base protocol parity, accepted task247 cache/protocol, explicit lead release | Accepted base comparator remains `11/30 = 0.36666666666666664`, but task287 has no accepted canary pass and lead has not released AIME/task243 | NO-GO/HOLD |
+| 5. Same-harness AIME comparison allowed | New V11 FT artifact is reviewer-readable with manifest/hash checks, task287 non-AIME canary pass, task288/task290/lead review not blocking, base protocol parity, accepted task247 cache/protocol, explicit lead release | Accepted base comparator remains `11/30 = 0.36666666666666664`, but #352/task287 is BLOCK/no retained completions and lead has not released AIME/task243 | NO-GO/HOLD |
 | 6. Promotion/non-regression decision | FT exact-normalized AIME25 score `>= 11/30` under same 30x1 pilot protocol, and full promotion only after lead-defined full protocol; no 30B/8-GPU without explicit permission | no V11 same-harness result exists | NO-GO/HOLD |
 
 ## Command Templates
@@ -676,11 +681,18 @@ Required before same-harness AIME comparison can be considered:
 - retained full completions, response hashes, final-answer extraction, and
   degeneration flags.
 
-Current state: task287 is active on worker_3 branch
-`origin/intern_nemotron_worker_3/task287_qwen_aime_v11_non_aime_canary_retention_s1`
-at fetched head `aa5ff74046221926c53eddfe1afbd7df38baaa89`. No task287 PR or
-accepted canary artifact report is visible in task289. Therefore same-harness
-AIME remains blocked.
+Current state: #352/task287 is open/base main/CLEAN at exact head
+`52834d74c79ab98b5e125434160843752c34d47a` with official disposition `BLOCK`.
+The report records `LOAD_MEGATRON_MODEL=PASS`, prompt source sha
+`150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`, prompt
+manifest sha `69d6634c47eea160548fe2779b6dd6038dc7605e8c9a894660a385efc9ae7cc2`,
+local output root
+`/work-agents/intern_nemotron_worker_3/outputs/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z`,
+and remote run root
+`/root/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z`.
+The final attempt hit a CUDA device-side assert during sampling, retained no
+completions, wrote no `canary_summary.json`, and recorded correct canary
+answers `0/5`. Therefore same-harness AIME remains blocked.
 
 ### task288
 
@@ -693,8 +705,23 @@ Required before same-harness AIME comparison can be considered:
 
 Current state: task288 is active on worker_4 branch
 `origin/intern_nemotron_worker_4/task288_qwen_aime_v11_task287_canary_gate_review_s1`
-at fetched head `2c64e1da7af63a52092f7a323e94752961ee3251`. No task288 PR is
-visible. Its current state is HOLD pending official task287 evidence.
+at fetched head `e62fad1da9a4279869e939a34604c4f1ce13827b`. No task288 PR is
+visible. It has not approved #352 exact head.
+
+### task290
+
+Required before same-harness AIME comparison can be considered:
+
+- independent review of task287 blocker artifacts at #352 exact head;
+- confirmation whether the no-retained-completions blocker is sufficient
+  blocker evidence or needs corrections;
+- confirmation no export, endpoint, AIME/task243 eval, additional training,
+  task255 reuse, 30B, or 8-GPU was used.
+
+Current state: task290 is active on worker_1 branch
+`origin/intern_nemotron_worker_1/task290_qwen_aime_v11_task287_blocker_review_s1`
+at fetched head `dab9a8bb87315bed529af0f00e3c843b1f910d0e`. No task290 PR is
+visible in this refresh.
 
 ### task280
 
@@ -749,8 +776,9 @@ is authorized.
   quality claim.
 - task286 approved #350 as bounded smoke evidence only and only for a
   separately authorized non-AIME canary/completion-retention gate.
-- task287/task288 are now the active canary/review gates. No accepted canary
-  pass or task288 approval exists yet.
+- #352/task287 is the official non-AIME canary blocker record. It passed
+  checkpoint load proof but retained no completions and has no accepted canary
+  pass. task288/task290 reviews are pending.
 - task280 #346 and task281 #345 are merged planning records only; task285
   supplies the bounded smoke evidence but does not release AIME/task243.
 - task263 is visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, but it has
@@ -758,9 +786,9 @@ is authorized.
   40 supersedes that blocker for no-training Bridge import/preflight proof, but
   does not provide nonzero-LR training evidence or a future candidate artifact.
 - task264 static canary/retention evidence from #335 is merged into main at
-  `98e8aad39af9e705feed581e0ff9f8814073e2d8`; task287 is now the active
-  non-AIME canary gate for the task285 checkpoint, but no accepted canary pass
-  exists yet.
+  `98e8aad39af9e705feed581e0ff9f8814073e2d8`; #352/task287 is now the
+  non-AIME canary blocker gate for the task285 checkpoint, with no retained
+  completions.
 - task265 remains the pending independent review input: remote branch is
   `ca5ea1c405ef142ee51a43fcbab477a2958e48dc` and worker_4 status records a
   mailbox-only matrix refresh, but no task265 PR or repo-visible matrix file is
@@ -777,9 +805,9 @@ is authorized.
 | task266 runbook/repro gate | PASS as static documentation |
 | V11 data/packing ready | PACKED DATA EVIDENCE PRESENT via #336/#344 and used by #349/#350 |
 | V11 base-load/import ready | TASK283 #349 NO-TRAINING PREFLIGHT PASS plus task285 Bridge import proof |
-| V11 non-AIME canary ready | ACTIVE/HOLD: task287 must produce accepted canary evidence and task288 must review |
+| V11 non-AIME canary ready | BLOCKED/HOLD: #352/task287 is BLOCK/no retained completions and task288/task290 reviews are pending |
 | Bounded Qwen3-4B pilot allowed | SMOKE EVIDENCE PRESENT ONLY via #350/#286; no clean train/eval pass |
-| Same-harness AIME comparison allowed | NO-GO/HOLD until task287 passes and lead explicitly releases AIME/task243 |
+| Same-harness AIME comparison allowed | NO-GO/HOLD until task287 blocker is resolved and lead explicitly releases AIME/task243 |
 | Promotion or 30B/8-GPU | NO-GO |
 
 No future stage should move past HOLD until the missing upstream artifacts are
