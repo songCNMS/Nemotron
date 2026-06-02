@@ -955,3 +955,8 @@
    `e519fecc1065bd055a69fdf271bd21994facd13b`. origin/main is now
    `228ffd74...`; #355 is review/docs closeout only. worker_4 official closeout
    mailbox `9d3102a36da54ae3b8109b25e9f8fbd1` matches this state.
+308. task293 worker_3 acceptance branch is visible at
+   `6fbaf68ac84e94e8bccfe74145db8aa21bb8be75`; diff is status/task293 docs
+   only and diff-check passes. Because it is based on #354-era `34de04ff...`,
+   worker_3 was instructed to refresh/rebase to current main `228ffd74...`
+   before PR/final evidence.

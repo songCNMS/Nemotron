@@ -18,3 +18,8 @@
   mailbox. Required output is branch/head/PR or exact blocker, commands/env,
   artifact roots, same-harness protocol proof, FT metrics, checksums, and
   PASS/FAIL/HOLD/BLOCK against the accepted base `11/30`.
+- Observed worker_3 acceptance branch at
+  `6fbaf68ac84e94e8bccfe74145db8aa21bb8be75`; it is docs/status only and
+  diff-check clean, but based on `34de04ff...` before #355 merged. Sent
+  delivered follow-up requiring refresh/rebase to current main `228ffd74...`
+  before any PR or final evidence.

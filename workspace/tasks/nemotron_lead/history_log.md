@@ -5627,3 +5627,12 @@
   `9d3102a36da54ae3b8109b25e9f8fbd1`; it matches the observed merge state and
   confirms no AIME/task243 release, export, endpoint, promotion, training/
   canary rerun, task255 reuse, shared deletion, 30B, 8-GPU, or direct main push.
+- Fetched after #355 merge and observed worker_3 task293 acceptance branch
+  `origin/intern_nemotron_worker_3/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1`
+  at `6fbaf68ac84e94e8bccfe74145db8aa21bb8be75`. Diff is worker_3 status plus
+  task293 README/history/task_knowledge only and `git diff --check` passes, but
+  the branch is based on #354-era `34de04ff...` while `origin/main` is now
+  `228ffd741bb9fa4eae6abf8d37bc171397151d7a`.
+- Sent delivered worker_3 follow-up requiring task293 to refresh/rebase to
+  current `origin/main` before opening any PR or sending final evidence. No
+  task293 PR or official eval/blocker mailbox is visible yet.
