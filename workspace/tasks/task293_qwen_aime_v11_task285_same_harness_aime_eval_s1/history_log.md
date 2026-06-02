@@ -1,6 +1,6 @@
 # task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -45,3 +45,32 @@
   same-harness FT-vs-base eval for task285 iter2, with no training, optimizer
   steps, AIME2025 train prompts/labels, task255 reuse, export/conversion,
   endpoint, promotion, shared deletion, main push/merge, 30B, or 8-GPU.
+- Added task-owned no-export/no-endpoint corrected AIME2025 runner at
+  `run_no_export_aime_eval.py`, synced the repo plus task247 cache/base
+  artifacts to NemTron, and ran task285 iter2 on one H200 with no endpoint or
+  export.
+- Run `run_20260602T085237Z` completed with `30/30` ok requests, `21/30`
+  parsed, `12/30` correct, exact-normalized accuracy `0.4`, and finish reasons
+  `stop=21,length=9`.
+- Compared against accepted task247 Qwen3-4B base `11/30 =
+  0.36666666666666664`; task293 disposition is `PASS` for this eval gate only,
+  with no promotion, export, endpoint, 30B, or 8-GPU authorization.
+
+## Session 3 - 2026-06-02 UTC - official closeout packaging
+
+- Lead requested official task293 closeout/PR evidence for eval source head
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e` after independent read-only
+  confirmation of `run_20260602T085237Z`.
+- Packaged the closeout report with command/env, artifact paths, checksum
+  manifest, `30` row all-request denominator, same-harness proof, and boundary
+  confirmations.
+- Recorded the sampling residual risk explicitly: task293 reports
+  `sampling_exact_parameter_match=false` because task247 base used SGLang
+  `/v1/chat/completions` with `temperature=0.0,top_p=1e-5`, while task293 was
+  required to avoid endpoints and therefore used task291 MCore local
+  `top_k=1` greedy argmax with `temperature=1.0,top_p=0.0`; deterministic
+  greedy semantic intent, prompt tokenization, parser, cache, max tokens, and
+  denominator match.
+- Boundary confirmation remains unchanged: no export, endpoint, promotion,
+  training, AIME2025 train data, shared deletion, main push/merge, 30B, or
+  8-GPU.

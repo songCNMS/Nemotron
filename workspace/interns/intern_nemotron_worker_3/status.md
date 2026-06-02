@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 |
 | PR | Pending |
-| Session | 2 |
-| Progress | Rebased task293 branch onto current origin/main 228ffd741bb9fa4eae6abf8d37bc171397151d7a; continuing corrected AIME2025 same-harness task285 iter2 FT-vs-base run/block analysis within boundaries. |
+| Session | 3 |
+| Progress | Packaging official task293 closeout/PR evidence for eval source head 87de0a97: FT 12/30 versus base 11/30, same-harness proof and sampling residual risk documented, boundaries confirmed. |

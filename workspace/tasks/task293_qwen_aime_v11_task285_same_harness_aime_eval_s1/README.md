@@ -1,6 +1,6 @@
 # task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 - corrected AIME2025 FT-vs-base eval
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=3 -->
 
 ## Background
 
