@@ -4004,3 +4004,18 @@
   evidence only and does not authorize Bridge/checkpoint-load proof claims,
   SFT training, nonzero-LR smoke, task243/live AIME eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, 30B/8-GPU, or shared deletion.
+- Audited stale #322/task243 closeout PR after #339: GitHub showed #322
+  `OPEN`/base `main`/`DIRTY`/`CONFLICTING` at head
+  `f7cc324599b4ffdf4310fc792548ed466e3d3b19`; diff scope was old post-#319
+  worker/status/task243 closeout metadata only, with no live base-vs-FT evidence.
+- Posted #322 lead superseded/close-unmerged comment `4597853072` and sent
+  delivered peer_send to worker_3 instructing closure without refresh or merge.
+  Worker_3 mailbox `d9e1e5be4dd4423fb65102634d684d0b` was received and marked
+  read: #322 is now `CLOSED`, closedAt `2026-06-02T01:18:37Z`, mergedAt `null`,
+  mergeCommit `null`, still `DIRTY`, and worker_3 did not modify files or
+  branches.
+- Rechecked open PRs after #322 cleanup: only #312 coordinator audit remains
+  open; no worker Qwen PRs are open.
+- Sent delivered coordinator update with #339 merge evidence, task270
+  `NEMTRON_RUNTIME_ROUTE_BLOCKED` findings and artifact hashes, #322 closeout,
+  and unchanged global `NO-GO/HOLD` gate.

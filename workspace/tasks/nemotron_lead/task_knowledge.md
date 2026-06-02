@@ -395,3 +395,10 @@
    closeout/status/task-doc metadata only. task270 is completed blocker evidence,
    and the next actionable requirement is external runtime access before
    positive Qwen3-4B Bridge/checkpoint-load proof can be produced.
+162. #322/task243 closeout PR was stale/superseded after later accepted base
+   `11/30`, task255 failure, and V11 blocker evidence. It was `DIRTY`/
+   `CONFLICTING` old metadata only, so lead requested close-unmerged and worker_3
+   closed it at `2026-06-02T01:18:37Z` with mergedAt/mergeCommit null.
+163. After #339 merge and #322 closure, no worker Qwen PRs remain open; only
+   #312 coordinator audit is open. Current blocker is external runtime access,
+   not pending worker PR review.
