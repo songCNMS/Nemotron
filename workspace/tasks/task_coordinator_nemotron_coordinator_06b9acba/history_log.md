@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
 
 ## Session 0 - Created with coordinator
 
@@ -505,3 +505,22 @@
 - Recorded the smallest external actions from task270: provide `nemo` in the current `NemTron` Python route, provide a launchable NeMo/Megatron-Bridge runtime/container, or provide LTP credentials plus a job image/spec that contains `megatron.bridge` and `nemo`.
 - Sent delivered coordinator acknowledgement to `intern_nemotron_lead` with the verified #339/#322/open-PR state, task270 report hash, task268 artifact inventory checksum result, runtime blocker, and unchanged global gate.
 - Confirmed global Qwen AIME gate remains `NO-GO/HOLD`: no positive Qwen3-4B Bridge/checkpoint-load proof, no training/eval/promotion clearance, no AIME2025 train data, and no 30B/8-GPU authorization exists.
+
+## Session 40 - NemTron NeMo install and Bridge import proof
+
+- Received user instruction to try installing the missing packages on `NemTron`, noting the GPU node itself is already a Docker environment and does not support Docker as the runtime route.
+- Probed `NemTron` before installation: `/usr/bin/python3` could import `megatron.bridge` and `AutoBridge.import_ckpt`, but `nemo` was missing. `hydra` also remains missing, but it is not required by the task270/task268 symbol/import/preflight route.
+- Plain `python3 -m pip install --user --no-deps nemo-toolkit` was blocked by PEP 668 externally-managed-environment policy. Retried with user-site scope and the necessary override: `python3 -m pip install --user --break-system-packages --no-deps nemo-toolkit`.
+- Installed `nemo-toolkit==2.7.3` under `/root/.local/lib/python3.12/site-packages` on `NemTron`. No system-site package write, Docker/container use, training, eval, export, endpoint launch, AIME2025 train data use, task255 reuse, shared deletion, promotion, or 30B/8-GPU action was performed.
+- Synced a fresh `origin/main` tree to task-owned remote run root `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/Nemotron` and ran only the task270 no-training Bridge import/preflight route.
+- Symbol preflight passed with `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`; observed `nemo=/root/.local/lib/python3.12/site-packages/nemo/__init__.py`, `megatron.bridge=/usr/local/lib/python3.12/dist-packages/megatron/bridge/__init__.py`, and `AutoBridge.import_ckpt` present.
+- Bridge import succeeded for Qwen3-4B base `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`: `bridge_import_probe.log` contains `IMPORT_DONE` and `BRIDGE_IMPORT_RC=0`.
+- Fail-closed preflight passed: `fail_closed_preflight.log` contains `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+- Remote imported checkpoint root is `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/qwen3_4b_bridge_import_iter0`, size `7.5G`, with `iter_0000000` files and `latest_checkpointed_iteration.txt`.
+- Local evidence path is `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`. Evidence sha256 values:
+  - `logs/bridge_import_probe.log`: `170b51d0c846c374a82badf780d478d64a946d3131cdc7032808d7c53db21756`;
+  - `logs/fail_closed_preflight.log`: `60db59059560304dc18a6e28498f6be1a08cbc24c26abd6e82241f6e1729c440`;
+  - `logs/symbol_preflight.log`: `bfa15c5b26849ef2c802c03b0303d57ada11922c4872068bd17de2c7d0081534`;
+  - `remote_checkpoint_manifest.txt`: `51b4ab937a5be23f1391cddd5c5c1425a3f8860e84fe81827fc5ebdee2afb522`.
+- Sent delivered coordinator update to `intern_nemotron_lead`, reporting the install, proof paths, shas, remote checkpoint root, and boundaries. Lead must still decide how to incorporate this coordinator-produced evidence into official V11 gate flow.
+- Current interpretation: task270's previous `NEMTRON_RUNTIME_ROUTE_BLOCKED` condition appears cleared for positive Qwen3-4B Bridge import proof only. Global Qwen AIME remains `NO-GO/HOLD` for downstream SFT training, eval, promotion, AIME2025 train-data use, and 30B/8-GPU until lead-reviewed gates authorize those steps.

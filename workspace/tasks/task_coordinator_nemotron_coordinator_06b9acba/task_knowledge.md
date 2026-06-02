@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
 
 ## Knowledge Entries
 
@@ -100,3 +100,7 @@
 94. task268 final artifact set `20260602T002457Z` was reverified by coordinator with `sha256sum -c`: all listed artifacts returned `OK`. Final report, manifest, and inventory sha256 values are `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80`, `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`, and `37a7886cf4336c43cc657c27587b18b918041cc44221e8889bcebe9208fb2d92`.
 95. Current Qwen3-4B base-load blocker is external runtime access: local host lacks `megatron`/`megatron.bridge`/`nemo` and Docker daemon; `NemTron` has `megatron.bridge.AutoBridge.import_ckpt` but lacks `nemo` and checked container runtimes; LTP/OpenPAI lacks credentials; no launchable NeMo/Megatron-Bridge runtime route is visible.
 96. Smallest acceptable unblock actions are to provide `nemo` in the current `NemTron` Python route, provide a launchable NeMo/Megatron-Bridge runtime/container, or provide LTP credentials plus a job image/spec with `megatron.bridge` and `nemo`. Until then, global Qwen AIME gate remains `NO-GO/HOLD`.
+97. Session 40 supersedes the `nemo` portion of entry 95/96: `nemo-toolkit==2.7.3` is installed on `NemTron` user site `/root/.local/lib/python3.12/site-packages` via `python3 -m pip install --user --break-system-packages --no-deps nemo-toolkit`. Docker remains unsupported/unneeded for this route.
+98. Session 40 produced positive Qwen3-4B Bridge import proof from fresh `origin/main`: remote run `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z`, checkpoint root `qwen3_4b_bridge_import_iter0` size `7.5G`, log contains `IMPORT_DONE` and `BRIDGE_IMPORT_RC=0`, and fail-closed preflight contains `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+99. Session 40 local evidence path is `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`; key shas are bridge log `170b51d0c846c374a82badf780d478d64a946d3131cdc7032808d7c53db21756`, fail-closed log `60db59059560304dc18a6e28498f6be1a08cbc24c26abd6e82241f6e1729c440`, symbol preflight log `bfa15c5b26849ef2c802c03b0303d57ada11922c4872068bd17de2c7d0081534`, and remote checkpoint manifest `51b4ab937a5be23f1391cddd5c5c1425a3f8860e84fe81827fc5ebdee2afb522`.
+100. Session 40 did not run SFT training, nonzero-LR smoke, export, endpoint serving, live AIME/task243 eval, promotion, AIME2025 train data use, task255 reuse, shared deletion, or 30B/8-GPU. The runtime blocker appears cleared for Bridge import proof only; downstream V11 actions still require lead-reviewed gate clearance.
