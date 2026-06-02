@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
 
 ## Knowledge Entries
 
@@ -49,3 +49,7 @@
 17. Session 94: active run remains in progress after more than twelve minutes,
    still without rc/results/report; command timeout is configured for 240
    minutes, so lead did not interrupt.
+18. Session 95: active run remains in progress after more than seventeen
+   minutes and log progress reached `1/30` with `aime_01_r01` parsed/correct,
+   but no final artifacts or official worker report exist yet; gate remains
+   HOLD.

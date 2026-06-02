@@ -1692,3 +1692,7 @@
 480. Session 94: task306 run remains active after more than twelve minutes with
    no rc, no summary/completions/parser diagnostics, no PR, and no mailbox. Lead
    did not interrupt because the worker command has `rank-timeout-minutes 240`.
+481. Session 95: task306 run remains active after more than seventeen minutes;
+   log progress reached `1/30` (`aime_01_r01`, parsed true, correct true), but
+   there is still no rc, summary, results, parser diagnostics, final checksum
+   manifest, PR, or mailbox report, so the 30B FT-vs-base gate remains HOLD.

@@ -97,3 +97,16 @@
   Summary, full completions, parser diagnostics, and final checksum manifest are
   absent.
 - Lead did not interrupt the worker-owned run. Gate remains HOLD.
+
+## Session 95 - 2026-06-02 UTC - active run partial progress
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after more than seventeen minutes.
+  Local and remote rc files are still absent.
+- Log progress now shows the first AIME row completed:
+  `progress 1/30 aime25 aime_01_r01 stop parsed=True correct=True
+  source=request.generated_text`.
+- This is partial unofficial observation only. Remote artifacts still lack
+  final summary/results/full completions/parser diagnostics/checksum manifest.
+  Gate remains HOLD pending completion and official worker report.

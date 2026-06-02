@@ -7385,3 +7385,25 @@
   interrupt or terminate it.
 - Gate remains HOLD. No FT-vs-base decision is possible until the run exits and
   worker_3 reports complete artifacts or a blocker.
+
+## Session 95 - 2026-06-02 UTC - task306 active run partial progress
+
+- Rechecked task306 after Session 94:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch remote remains `0995981ba8795f56b6aa3a83829fcb02380d01e6`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- Worker-launched task306 NemTron process remains active after more than
+  seventeen minutes. No local or remote rc file exists.
+- Current log now shows generation progress rather than only startup:
+  `progress 1/30 aime25 aime_01_r01 stop parsed=True correct=True
+  source=request.generated_text`. This is partial unofficial run observation,
+  not a final score or lead gate decision.
+- Remote artifacts still do not include `summary.json`, `results.jsonl`,
+  `parser_diagnostics.jsonl`, `full_completions.jsonl`, or final
+  `checksum_manifest.json`.
+- Gate remains HOLD pending run completion, complete artifacts, and an official
+  worker_3 mailbox/PR or artifact report. Lead did not interrupt the active
+  worker-owned eval.
