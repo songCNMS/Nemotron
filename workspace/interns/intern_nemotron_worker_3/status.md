@@ -1,6 +1,6 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 |
-| PR | #367 |
-| Session | 3 |
-| Progress | Task304 PR #367 remains on lead HOLD; lead refreshed task305 to review head e5cc4982 and instructed no further #367 head changes unless requested; no self-merge, eval, export, endpoint, promotion, training, or main push. |
+| Current Task | task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 |
+| PR | N/A |
+| Session | 1 |
+| Progress | Accepted task306; preparing corrected AIME2025 same-harness FT-vs-base evaluation or exact blocker for task301 Qwen3-30B-A3B iter_0000035 against accepted task300 base 15/30. |
