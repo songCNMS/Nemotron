@@ -111,3 +111,8 @@
   `12/28`, with `aime_28_r01` length-stopped, unparsed, and incorrect. Remote
   artifacts still only contain prompt/checkpoint-load/command-env manifests. No
   final summary/results/checksums, official worker report, or PR exists yet.
+- Follow-up read-only poll at `2026-06-02T10:52:27Z`: PID `433268` still
+  active at about 119 minutes elapsed; progress reached `29/30`, correct
+  `12/29`, with `aime_29_r01` length-stopped, unparsed, and incorrect. Remote
+  artifacts still only contain prompt/checkpoint-load/command-env manifests. No
+  final summary/results/checksums, official worker report, or PR exists yet.

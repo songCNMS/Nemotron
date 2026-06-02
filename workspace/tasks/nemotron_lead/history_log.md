@@ -5772,3 +5772,9 @@
   partial total is `12/28` correct. Remote artifacts still only include the
   three manifests, mailbox remains empty, and no task293 PR is visible. This is
   still non-gating partial evidence.
+- Follow-up read-only live observation at `2026-06-02T10:52:27Z`: PID
+  `433268` remains active at about 119 minutes elapsed. Log reached `29/30`;
+  row `aime_29_r01` length-stopped, did not parse, and was incorrect. Current
+  partial total is `12/29` correct. Remote artifacts still only include the
+  three manifests, mailbox remains empty, and no task293 PR is visible. This is
+  still non-gating partial evidence.

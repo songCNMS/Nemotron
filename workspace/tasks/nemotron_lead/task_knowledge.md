@@ -1049,3 +1049,7 @@
    `aime_28_r01` length-stopped, did not parse, and was incorrect. PID `433268`
    remains active; artifacts are still manifests only, mailbox remains empty,
    and no task293 PR is visible. This is still not final gate evidence.
+332. Later read-only task293 poll shows progress `29/30`, correct `12/29`;
+   `aime_29_r01` length-stopped, did not parse, and was incorrect. PID `433268`
+   remains active; artifacts are still manifests only, mailbox remains empty,
+   and no task293 PR is visible. This is still not final gate evidence.
