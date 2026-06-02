@@ -554,3 +554,16 @@
 204. task279 acceptance branch head `57df20cf7c5d8310e0f46b23966ee2513b85fe24`
    is HOLD and needs cleanup because it includes unrelated task249 history/task
    knowledge changes. Do not approve or ask for a task279 PR until refreshed.
+205. #345/task281 merged as no-run canary/AIME planning-HOLD documentation at
+   `2026-06-02T04:54:59Z`, merge commit
+   `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`, approved head
+   `420cbcae8acb5a7720b286231c90cc9dd41739af`. It does not authorize live
+   canary or AIME eval.
+206. #347/task278 at head `6d3e5825a58529d86e9bb9f8f44b941f05324ba6` is the
+   official local preflight blocker report: data/config/HF checks pass, but
+   local Megatron-Bridge import is blocked by missing `megatron`/`nemo`.
+   Training remains blocked; next evidence should be task279 review and/or a
+   NemTron no-training preflight remediation.
+207. #346/task280 at head `49206d3b88ee074873b4f8102720eef5d69bac57` is
+   approved only as no-run bounded SFT smoke planning-HOLD docs; it does not
+   release the smoke command.

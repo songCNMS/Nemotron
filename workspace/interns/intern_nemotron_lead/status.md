@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task278 ead53f2 active; task279 57df20c HOLD needs branch cleanup; no PRs; no training/eval released |
+| PR | #347/task278 BLOCKED pending task279 review/NemTron remediation; #346 released as no-run plan; no training/eval released |
 | Session | 74 |

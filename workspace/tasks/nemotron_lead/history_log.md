@@ -4575,3 +4575,64 @@
 - Sent delivered non-interrupting peer_send to worker_4 requesting task279
   branch cleanup before any PR or final review report, while preserving HOLD
   until task278 exact preflight evidence exists.
+- Read-only observation found task278 local preflight artifacts under
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T044941Z`.
+  The report disposition is
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`: local packed-data
+  readability PASS, Qwen packed/training contract PASS, Qwen HF
+  config/tokenizer import PASS, but full Megatron-Bridge training-stack import
+  BLOCKED because local runtime lacks `megatron`/`nemo`.
+- Sent delivered queued peer_send to worker_2 asking them to continue task278
+  in a task-owned NemTron/NeMo/Megatron-Bridge no-training preflight route after
+  syncing code to `/root`, or send an official blocker if unavailable. The
+  message explicitly forbade `qwen_local_train.py`/`run_finetune`, training,
+  optimizer step, training checkpoint save, nonzero-LR smoke, live canary,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push, merge, and 30B/8-GPU.
+- Processed worker_3 task281 closeout mailbox
+  `7f5312febb6a404385002ccfaf279035`: PR #345 open/base main/CLEAN at exact
+  head `420cbcae8acb5a7720b286231c90cc9dd41739af`, disposition
+  `PLAN_READY_HOLD`, scope worker_3 status plus task281 docs/report only, with
+  no live canary/AIME/training action. Lead marked it read.
+- Lead approved #345 exact head
+  `420cbcae8acb5a7720b286231c90cc9dd41739af` by PR comment
+  `4598824924` as no-run canary/AIME evaluation planning-HOLD documentation
+  only, then sent delivered self-merge release to worker_3 under exact-head and
+  clean/mergeable conditions.
+- Worker_3 merge closeout mailbox
+  `48881feb1df248a9a9f635039f189f4d` confirmed #345 self-merged at
+  `2026-06-02T04:54:59Z` with merge commit
+  `0d008ddbc8a87445e69f95e02ef9a07ae17791d6` from exact approved head
+  `420cbcae8acb5a7720b286231c90cc9dd41739af`; scope remained docs/status/
+  report only and disposition remains `PLAN_READY_HOLD`. Lead marked it read
+  and fetched `origin/main` to `0d008ddbc8a87445e69f95e02ef9a07ae17791d6`.
+- Processed worker_1 task280 closeout mailbox
+  `60f3ceec1f4647b0beb5a5ac5177b25e`: PR #346 open/base main/CLEAN at exact
+  head `49206d3b88ee074873b4f8102720eef5d69bac57`, disposition
+  `PLAN_READY_HOLD_TASK278_TASK279_RELEASE`, report sha256
+  `29b74a5da734610a68fbca8ccb39eb86124d8a1352226e3a60fca760c0c9e700`. Lead
+  marked it read.
+- Lead approved #346 exact head
+  `49206d3b88ee074873b4f8102720eef5d69bac57` by PR comment `4598845512` as
+  no-run bounded Qwen3-4B SFT smoke planning-HOLD documentation only, then sent
+  delivered self-merge release to worker_1 under exact-head and clean/mergeable
+  conditions. This approval does not authorize executing the smoke command.
+- Processed worker_2 task278 official report mailbox
+  `d24f7ad8ba214dbaa2e38013b419cfaa`: PR #347 open/base main/CLEAN at exact
+  head `6d3e5825a58529d86e9bb9f8f44b941f05324ba6`, disposition
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`. Official artifact
+  run root is
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T044941Z`,
+  manifest sha256 `67abd81f1dda95d7df6b86321af96965fef2b012802f0a678e385e0bb023536f`,
+  report sha256 `9790d0b2340bd3f36dde004237b97b524347cb7f7ed2a304dd8fa1159778e823`.
+  Lead marked it read.
+- Rechecked #347 after #345 merged: PR #347 is still `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE` at exact head
+  `6d3e5825a58529d86e9bb9f8f44b941f05324ba6`; `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task278...` passed and scope is
+  worker_2 status plus task278 docs/report/helper only.
+- Sent delivered task279 review request to worker_4 for #347 exact head
+  `6d3e5825a58529d86e9bb9f8f44b941f05324ba6`, asking for independent
+  approve/request-changes/block on task278 evidence and whether NemTron
+  no-training preflight remediation is required. No training/eval release is in
+  effect.
