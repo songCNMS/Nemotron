@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -33,3 +33,9 @@
     `/root/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
     It is a bounded non-AIME canary PASS only, not AIME/task243 or promotion
     clearance.
+11. Lead placed task304/#367 on HOLD at exact head
+    `a38abd53c897b3c68878abb770cb80f762c20e6f` pending task305 independent
+    review. Until lead releases after task305, task304 evidence remains pending
+    gate review and must not be self-merged or used to start AIME/task243,
+    export, endpoint, promotion, training, task255 reuse, AIME train-data use,
+    shared deletion, or main push.

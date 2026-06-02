@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 83 - 2026-06-02 UTC - assignment
 
@@ -58,3 +58,19 @@
   `fc8b3ac0f8204548b62760099e08d884`.
 - Follow-up status hygiene: worker status remains `Working` while awaiting lead
   gate because allowed status values are only `Idle` and `Working`.
+
+## Session 2 - 2026-06-02 UTC - lead HOLD pending task305 review
+
+- Received lead HOLD for task304/#367 after lead processed the closeout mailbox
+  and addendum.
+- Lead observed PR #367 OPEN/CLEAN/MERGEABLE at head
+  `a38abd53c897b3c68878abb770cb80f762c20e6f` and left HOLD comment
+  `issuecomment-4605742037`.
+- Lead refreshed task305 for independent worker_4 review of exact head
+  `a38abd53c897b3c68878abb770cb80f762c20e6f`.
+- Worker action in this session is status-only: record HOLD and preserve task304
+  evidence as pending independent gate review.
+- Boundaries reaffirmed: do not self-merge #367; do not advance to AIME/task243
+  or corrected AIME; do not export, launch endpoint, promote, train, reuse
+  task255, use AIME2025 train data, delete shared files, or push main unless
+  lead later releases after task305 approval/request-changes/block.
