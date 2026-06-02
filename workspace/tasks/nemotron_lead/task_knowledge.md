@@ -1346,3 +1346,15 @@
    head `656242c` carries runtime+data gates as merged and keeps training HOLD.
    No launch may proceed until worker_4 independently reviews #363 and lead
    explicitly accepts the base comparator and clears launch.
+399. worker_4 mailbox `cbb5a796cc5641f3bc50fc50eb98c919` independently
+   approves task300/#363 exact head `155eb0c` as the accepted 30B base
+   comparator with residuals. Lead gate comment is #363 issuecomment
+   `4604130026`.
+400. Accepted 30B base comparator for future FT-vs-base gate is
+   Qwen3-30B-A3B-Instruct-2507 base `15/30 = 0.5`, corrected cache, original
+   prompt, chat completions API, max_tokens 8192, temp 0.0, top_p 1e-5,
+   last-boxed parser, normalize_answer exact match, all-request denominator.
+   Residuals: 30x1 only, parsed 19/30, 11 length rows counted incorrect.
+401. worker_5 mailbox `e5a8a191081e4095ab735eb3b04ce3ff` refreshes #362 to
+   `314aac8`, keeps training HOLD, and confirms no launch. #363 is approved but
+   still awaiting exact-head self-merge/closeout before lead can clear task301.

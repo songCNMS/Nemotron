@@ -6596,3 +6596,56 @@
 - Sent delivered holds to worker_3 and worker_5: do not self-merge or change
   #363 unless requested; task301 remains HOLD until worker_4 review and lead
   gate accept the base comparator, then lead separately clears launch.
+- Processed and marked read worker_4 task302 follow-up review mailbox
+  `cbb5a796cc5641f3bc50fc50eb98c919`: decision
+  `APPROVE_TASK300_30B_BASE_AIME_COMPARATOR_WITH_RESIDUALS` for #363 exact head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`. Worker_4 confirms #363 is
+  OPEN/base main/CLEAN/MERGEABLE/non-draft; reviewed worker_3 mailbox
+  `d7a2c37798bf48b29a4b4f93c05cbf3d`, artifact root
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`,
+  exact-head report/runner, task071/task247 harness semantics, manifests,
+  `sha256sum -c manifests/run_artifact_checksums.sha256`, JSONL/SQLite row and
+  score recomputation, upstream PR refs, and `git diff --check`.
+- worker_4 independently accepted the same-harness base comparator protocol:
+  corrected OpenCompass AIME2025 cache, `30` rows x `1`, original prompt,
+  `/v1/chat/completions`, `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`,
+  last boxed parser, `normalize_answer` exact match, all-request denominator.
+  Input provenance matches task247: opencompass/AIME2025 rev `a6ad95f`,
+  `30` unique rows, cache sha `c8b287d9...`, source manifest sha
+  `0c68142e...`.
+- worker_4 recomputed and confirmed task300 result: `ok=30`, `stop=19`,
+  `length=11`, parsed `19`, correct `15`, accuracy `15/30 = 0.5`, with all
+  `11` length rows counted incorrect. Run manifest validated OK; key hashes
+  matched report. Endpoint/export verdict: eval-only SGLang direct from
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, no export/
+  conversion, endpoint probe OK, post-stop check shows no port/process and H200s
+  at `1 MiB` / `0 %`.
+- Processed and marked read worker_5 task301/#362 Session 10 refresh mailbox
+  `e5a8a191081e4095ab735eb3b04ce3ff`: #362 is OPEN/base main/CLEAN/MERGEABLE at
+  refreshed head `314aac8de3f22c47f4400412af0de8efd1d13804`, report/output
+  sha256 `a483c147200799aebba6180412a17b6058cd1514583ee79f38c4a8bbf3bbaa31`.
+  Runtime and data gates are carried; remaining HOLD conditions are accepted
+  base comparator and explicit launch clearance. No training/eval/export/
+  endpoint/promotion/task255/AIME train data/shared deletion/30B launch/8-GPU
+  execution occurred.
+- Rechecked #363 and #362 before lead gate action: #363 remained OPEN/base
+  main/CLEAN/non-draft at exact head `155eb0c...`; `git diff --check
+  origin/main...155eb0c...` passed and scope was worker_3 status plus task300
+  docs/report/task-owned runner. #362 remained OPEN/base main/CLEAN at
+  `314aac8...`.
+- Added lead gate comment on #363, issuecomment `4604130026`, approving task300
+  30B same-harness base AIME comparator with residuals at exact head
+  `155eb0c...`. Accepted base comparator is Qwen3-30B-A3B-Instruct-2507 base
+  `15/30 = 0.5`; residuals to carry are base comparator only, 30x1 only, parsed
+  `19/30` with `11` length-capped rows counted incorrect, and future FT
+  comparison must use the same cache/prompt/API/sampling/parser/normalizer/
+  denominator.
+- Sent delivered peer instruction to worker_3 to self-merge #363 only if still
+  OPEN/base main/CLEAN/MERGEABLE/non-draft at exact head `155eb0c...`, with
+  post-merge mailbox required. Sent delivered update to worker_5: task300 base
+  comparator is lead-approved pending #363 exact-head self-merge/closeout, but
+  task301 training remains HOLD until #363 is merged/closed out and lead
+  explicitly clears 30B SFT launch.
+- Final poll for this update found mailbox empty. #363 remains OPEN/base
+  main/CLEAN at `155eb0c...`; #362 remains OPEN/base main/CLEAN at
+  `314aac8...`.
