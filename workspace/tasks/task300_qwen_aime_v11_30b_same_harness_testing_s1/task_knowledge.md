@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,7 @@
     incorrect under the corrected denominator; future 30B FT comparison must
     use the same cache, prompt, endpoint/chat API semantics, sampling settings,
     parser, normalizer, and denominator.
+12. session4 hold: lead acknowledged mailbox
+    `d7a2c37798bf48b29a4b4f93c05cbf3d` and placed PR #363 exact head
+    `155eb0c6845c0bf2b7d40051a9045533ffe00589` under worker_4 independent
+    review; do not self-merge or change #363 head unless requested.

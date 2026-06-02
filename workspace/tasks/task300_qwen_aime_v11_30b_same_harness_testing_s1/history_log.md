@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -81,3 +81,19 @@
   optimizer step, no export for promotion, no endpoint promotion, no task255
   reuse, no AIME2025 train data, no shared deletion, no promotion claim, no main
   push, and no merge.
+
+## Session 4 - 2026-06-02 UTC - independent review hold
+
+- Lead acknowledged receipt of official base-score mailbox
+  `d7a2c37798bf48b29a4b4f93c05cbf3d`.
+- Lead confirmed PR #363 exact head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589` is now under independent
+  worker_4 review.
+- Hold instruction recorded: do not self-merge PR #363 and do not change its
+  head unless requested; report before pushing if any material issue is found.
+- To avoid moving PR #363 head while satisfying Session 4 status bookkeeping,
+  this hold note is recorded on separate status-only branch
+  `intern_nemotron_worker_3/task300_session4_review_hold_status`.
+- Boundaries unchanged: no FT eval, no non-AIME canary, no training or
+  optimizer step, no export, no endpoint promotion, no task255 reuse, no
+  AIME2025 train data, no shared deletion, and no promotion action.
