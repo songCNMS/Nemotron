@@ -4698,3 +4698,41 @@
   provenance refresh. No nonzero-LR SFT smoke, live canary, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge by lead, or 30B/8-GPU is authorized.
+- Processed worker_4 task279 mailbox
+  `76d1c2b457004c25a27e4eedc26edd6f`: task279 reviewed #347 exact current head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`, verified #347 remained
+  `OPEN`/base `main`/`MERGEABLE`, verified report sha
+  `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`,
+  verified task278 latest artifact sidecars under
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`,
+  and approved #347 as blocker/preflight evidence only. The blocker is
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; worker_4 confirms
+  a real NemTron/NeMo/Megatron-Bridge runtime remediation is required before any
+  nonzero-LR smoke.
+- Rechecked #347 after worker_4 approval: PR #347 is still `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE` at exact head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task278...` passed.
+- Left canonical #347 lead approval comment `4598906687` and sent delivered
+  peer_send to worker_2 releasing self-merge only if #347 remains exact head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310` and `CLEAN`/`MERGEABLE` at merge
+  time. Approval is blocker/preflight documentation only and does not release
+  runtime remediation or training.
+- Created task283
+  `task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1` assigned to
+  `intern_nemotron_worker_2` for the next no-training runtime-route remediation
+  and config/import preflight attempt. The task must reconcile coordinator
+  Session 40 positive import evidence with task278 missing-runtime evidence,
+  use task276 packed data and Qwen3-4B path, sync any remote debug to a
+  task-owned `/root` directory on `NemTron`, and either produce no-training
+  Bridge/config/import proof or an exact blocker.
+- Created task284
+  `task284_qwen_aime_v11_task283_runtime_gate_review_s1` assigned to
+  `intern_nemotron_worker_4` for independent read-only review of exact task283
+  evidence. No substantive approval is possible until task283 exact
+  branch/head/artifacts or mailbox evidence exists.
+- Updated lead status, history, and task knowledge with #347 approval,
+  task283/task284 assignments, and the continued global `NO-GO/HOLD` state. No
+  nonzero-LR SFT smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, merge by
+  lead, main push, or 30B/8-GPU was performed.

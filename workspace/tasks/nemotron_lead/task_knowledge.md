@@ -592,3 +592,19 @@
    converted through lead gate into a reviewed runtime remediation path, the
    full data-to-training-to-evaluation attempt remains fail-closed at the
    preflight stage. task280/task281 plans do not authorize execution.
+214. worker_4/task279 approved #347 exact head
+   `b7e544100ac13eaa908a9d1af6fafaf599bc3310` as blocker/preflight evidence
+   only. The approved blocker is
+   `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`; a real
+   NemTron/NeMo/Megatron-Bridge runtime remediation is required before any
+   nonzero-LR smoke.
+215. #347 approval is canonical PR comment `4598906687`. worker_2 may
+   self-merge #347 only if exact head
+   `b7e544100ac13eaa908a9d1af6fafaf599bc3310` remains `CLEAN`/`MERGEABLE` at
+   merge time.
+216. task283 is assigned to worker_2 as the next no-training runtime-route
+   remediation/config-import preflight attempt. It may only produce
+   no-training import/config/load proof or an exact blocker.
+217. task284 is assigned to worker_4 as independent read-only review of
+   task283 evidence. Even task283 PASS plus task284 approval would still
+   require lead release before task280 smoke execution.
