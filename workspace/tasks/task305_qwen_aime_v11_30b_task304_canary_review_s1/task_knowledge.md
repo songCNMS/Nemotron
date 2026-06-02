@@ -1,6 +1,6 @@
 # task305_qwen_aime_v11_30b_task304_canary_review_s1 - task knowledge
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
 
 ## Knowledge Entries
 
@@ -45,3 +45,9 @@
 15. worker_3 mailbox `2a7ca0758b4b4bca933ee0bad14b0653` is the official
     addendum for #367 head `1f23d833` and confirms the no-further-head-changes
     bookkeeping delta is docs/status only with no forbidden downstream action.
+16. worker_4 local task305 report/status observed in
+    `/work-agents/intern_nemotron_worker_4/Nemotron_task305` still reviewed
+    `e5cc4982`, not current #367 head `1f23d833`. This is not acceptable gate
+    evidence until worker_4 refreshes to `1f23d833` and reports officially.
+17. Lead sent a queued `next` peer_send follow-up to worker_4 requiring exact
+    `1f23d833` refresh and explicit `e5cc4982..1f23d833` verification.

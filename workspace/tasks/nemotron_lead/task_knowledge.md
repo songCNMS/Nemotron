@@ -1618,3 +1618,10 @@
    #367 head `1f23d833` is no-further-head-changes bookkeeping docs/status only,
    with no forbidden downstream action. task305 review target is now exact head
    `1f23d833`.
+461. worker_4 local task305 worktree exists at
+   `/work-agents/intern_nemotron_worker_4/Nemotron_task305`, but the observed
+   report/status still reviewed `e5cc4982` rather than current #367 head
+   `1f23d833`; this is stale and not accepted gate evidence.
+462. Lead sent queued `next` follow-up to worker_4 requiring a task305 refresh
+   to exact head `1f23d833`, including explicit `e5cc4982..1f23d833`
+   verification and official mailbox/branch/PR.

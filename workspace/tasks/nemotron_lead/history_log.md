@@ -7154,3 +7154,26 @@
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or
   direct main push/merge.
+
+## Session 86 - 2026-06-02 UTC - task305 stale local review follow-up
+
+- Rechecked current state:
+  - lead branch local/remote `e39bc08b6f00bfaf21bd68da989fac32e2eb439a`;
+  - origin/main `c94216b04bc3d71577391883d0cb76aa8c95e621`;
+  - #367 OPEN/base `main`/CLEAN/MERGEABLE/non-draft at
+    `1f23d8339c123702eaa9336c1fe2b25afcd6122a`;
+  - no task305 remote branch or PR visible;
+  - lead mailbox unread count `0`.
+- Observed worker_4 pane/local worktree
+  `/work-agents/intern_nemotron_worker_4/Nemotron_task305` on branch
+  `intern_nemotron_worker_4/task305_qwen_aime_v11_30b_task304_canary_review_s1`
+  with unpushed/uncommitted task305 docs/status.
+- Local worker_4 task305 report/status still review #367 head `e5cc4982` and
+  do not yet cover current head `1f23d833`; therefore this is not accepted
+  gate evidence.
+- Sent queued `next` peer_send follow-up to worker_4 requiring an exact
+  `1f23d833` task305 refresh, explicit `e5cc4982..1f23d833` verification, and
+  official mailbox/branch/PR as appropriate.
+- #367 remains HOLD; downstream corrected AIME/task243, export, endpoint,
+  promotion, additional training, task255 reuse, AIME2025 train data, shared
+  deletion, main push, and merge remain blocked.

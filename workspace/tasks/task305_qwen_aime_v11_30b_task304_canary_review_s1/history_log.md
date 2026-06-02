@@ -75,3 +75,24 @@
   `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
 - #367 remains HOLD pending task305 approve/request-changes/block for the
   refreshed exact head.
+
+## Session 86 - 2026-06-02 UTC - worker_4 stale local review follow-up
+
+- Rechecked current state after lead branch `e39bc08b`:
+  - #367 is OPEN/base `main`/CLEAN/MERGEABLE/non-draft at exact head
+    `1f23d8339c123702eaa9336c1fe2b25afcd6122a`;
+  - no task305 remote branch or PR is visible;
+  - lead mailbox has no unread task305 report.
+- Found worker_4 task305 activity in local worktree
+  `/work-agents/intern_nemotron_worker_4/Nemotron_task305`, but local
+  `task304_canary_review_report.md` and worker_4 status still name reviewed
+  head `e5cc49821d39a014756dfd3ce961bab351a4f0fe`, not current #367 head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
+- Because the worker_4 local review is stale and unofficial, lead cannot accept
+  task305 yet.
+- Sent queued `next` peer_send follow-up to worker_4 requiring refresh to exact
+  head `1f23d833`, explicit verification of `e5cc4982..1f23d833`, and an
+  official mailbox plus branch/PR if docs/status are changed.
+- #367 remains HOLD; no corrected AIME/task243, export, endpoint, promotion,
+  extra training, task255 reuse, AIME2025 train data, shared deletion, main
+  push, or merge is cleared.
