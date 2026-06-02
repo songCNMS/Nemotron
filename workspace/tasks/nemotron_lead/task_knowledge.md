@@ -823,3 +823,8 @@
    artifacts because worker_3 has not yet published official task287 report/PR.
    task290 is read-only and can only recommend blocker closeout or request
    stronger evidence; it cannot release AIME/task243.
+275. #352/task287 is the official blocker PR, current exact head
+   `52834d74c79ab98b5e125434160843752c34d47a`, open/base main/CLEAN. It is HOLD
+   pending task288/task290 review. #351/task289 is request-changes because it
+   predates #352 and must refresh provenance to the official task287 BLOCK
+   state.

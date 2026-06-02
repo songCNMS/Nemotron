@@ -5358,3 +5358,25 @@
 - Sent delivered peer assignment to worker_1 for task290 at lead branch
   `e5b92fff`, with artifact paths, expected hash checks, and read-only
   boundaries.
+- Processed worker_5 task289 mailbox: PR #351 is open/base main/CLEAN at head
+  `f31f8e88bfad3bd3e1c1a115c557e096a5498a20` for docs/runbook provenance.
+  PR #351 diff is worker_5 status, task266 runbook report, and task289 docs/
+  report. `git diff --check` passes, but the report is stale because it records
+  task287 at acceptance/HOLD and no PR, while #352 is now official BLOCK
+  evidence.
+- Processed worker_3 task287 mailbox: PR #352 is open/base main/CLEAN at head
+  `e01ced3303ce136ba36e299845b19a03278a3181`, then advanced to
+  `52834d74c79ab98b5e125434160843752c34d47a` for docs/status formatting only.
+  #352 report disposition remains `BLOCK`: checkpoint load passes, no retained
+  completions exist, direct no-export/no-endpoint canary attempts fail, and
+  global Qwen AIME gate remains `NO-GO/HOLD`.
+- Posted #352 lead HOLD comments `4599791914` for the prior head and
+  `4599798656` for current head `52834d74...`, pending task288/task290
+  independent review before task287 closeout or bounded unblock assignment.
+- Posted #351 lead `REQUEST-CHANGES/HOLD` comment `4599791923`: worker_5 must
+  refresh runbook/provenance to include #352 current BLOCK state and address
+  Copilot comments before lead gate can approve.
+- Sent delivered release to worker_4 for task288 review of #352 exact current
+  head `52834d74...`; sent delivered update to worker_1 for task290 to review
+  #352 official blocker evidence instead of only the earlier local snapshot;
+  sent delivered request-changes instruction to worker_5 for #351 refresh.
