@@ -35,6 +35,8 @@
   task247 base hashes, and same-harness proof.
 - Decision: `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`. FT score is `12/30 = 0.4`
   versus accepted base `11/30 = 0.36666666666666664`.
+- Opened task294 review PR #357:
+  `https://github.com/songCNMS/Nemotron/pull/357`.
 - Explicit residual accepted: `sampling_exact_parameter_match=false` because
   base used an endpoint route while FT used the task291-approved no-export
   MCore top-k-1 greedy route. This is acceptable only as a bounded semantic

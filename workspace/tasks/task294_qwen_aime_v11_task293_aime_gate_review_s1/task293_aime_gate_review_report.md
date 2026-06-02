@@ -11,6 +11,8 @@
   `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`
 - Task293 PR: #356
   `https://github.com/songCNMS/Nemotron/pull/356`
+- Task294 review PR: #357
+  `https://github.com/songCNMS/Nemotron/pull/357`
 - Artifact root:
   `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`
 
