@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -49,3 +49,9 @@
 14. The Session 6 history entry must remain a single `## Session 6` section;
     dated follow-ups belong under that section as lower-level subsections to
     satisfy the stop-hook duplicate-session check.
+15. #337 was approved and self-merged as blocker-evidence-only at exact head
+    `2b661ac38360b5a8a957359a59ffa63923928845`; merge commit
+    `8fb1a1cb042fca0a0ca3491363fb0e5616909010`, mergedAt
+    `2026-06-02T00:12:09Z`. This merge does not authorize Bridge/checkpoint
+    proof, training, task243/live AIME eval, promotion, AIME2025 train data, or
+    30B/8-GPU.
