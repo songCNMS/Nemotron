@@ -5766,3 +5766,9 @@
   command-env manifests, mailbox remains empty, and no task293 PR is visible.
   This remains non-gating partial evidence pending all 30 rows plus final
   summary/results/checksums and official worker report.
+- Follow-up read-only live observation at `2026-06-02T10:46:45Z`: PID
+  `433268` remains active at about 113 minutes elapsed. Log reached `28/30`;
+  row `aime_28_r01` length-stopped, did not parse, and was incorrect. Current
+  partial total is `12/28` correct. Remote artifacts still only include the
+  three manifests, mailbox remains empty, and no task293 PR is visible. This is
+  still non-gating partial evidence.
