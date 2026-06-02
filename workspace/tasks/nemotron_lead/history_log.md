@@ -6445,3 +6445,14 @@
   #365 exact head `b8b760fb...` and the task299 artifact root, returning
   approve/request-changes/block for data/packing/decontam before lead can treat
   task299 as launch-cleared.
+
+## Session 76 - 2026-06-02 UTC - Stop-hook explicit entry confirmation
+
+- Stop-hook recheck requested an explicit Session 76 history entry. This entry
+  confirms the current Session 76 state is recorded in history after the 30B gate
+  updates: #364/task298 and #361/task302 are merged, #365/task299 has an
+  official PASS claim pending worker_4 independent review, task300 30B base AIME
+  is released, and #362/task301 training remains HOLD.
+- This was lead bookkeeping only. No product code, implementation test,
+  training, eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, merge, or direct main push was performed by lead.
