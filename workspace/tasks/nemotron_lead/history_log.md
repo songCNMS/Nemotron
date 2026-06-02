@@ -4790,3 +4790,23 @@
   evidence or exact blocker. Training, live canary, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   lead merge, lead main push, and 30B/8-GPU remain blocked.
+- Processed worker_4 task284 acceptance mailbox
+  `00b76d351f7d4746a530544b031a34a8`: worker_4 accepted task284 and pushed
+  branch
+  `origin/intern_nemotron_worker_4/task284_qwen_aime_v11_task283_runtime_gate_review_s1`
+  at `c47ee3c5a93661b7112f5c1549066e3bbcc0c798`, based on `origin/main`
+  `28039222ad5d4054891713d85d05a15a491d8a96`, with disposition HOLD/no
+  substantive review until task283 exact evidence exists.
+- Verified task284 acceptance branch diff and found a branch hygiene issue:
+  scope includes unrelated task249 history/task_knowledge changes in addition
+  to worker_4 status and task284 docs. `git diff --check` passed, but the
+  branch is not clean for PR/review closeout until task249 files are restored
+  from `origin/main`.
+- Sent delivered peer_send to worker_4 requesting task284 branch cleanup and
+  noting that task283 acceptance branch
+  `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+  is visible at `c1d988e2a9ef4139b1fa7cf850d3f4552114be56` but contains
+  acceptance/docs only, so task284 HOLD remains correct.
+- Gate state unchanged: waiting for task283 runtime/config/import evidence or
+  exact blocker; task284 review remains HOLD; #348 runbook refresh remains
+  pending; no training/eval/promotion/30B action is released.

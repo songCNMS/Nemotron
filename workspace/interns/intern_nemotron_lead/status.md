@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #347/task278 MERGED blocker docs; task283 accepted at c1d988e; task284/#348 pending; no training/eval released |
+| PR | #347 MERGED; task283 accepted; task284 accepted HOLD with branch cleanup requested; #348 refresh pending; no training/eval |
 | Session | 74 |

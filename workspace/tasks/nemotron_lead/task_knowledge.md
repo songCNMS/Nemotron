@@ -628,3 +628,10 @@
    acceptance status/task docs only and there is no PR yet.
 223. task284 remains assigned but no worker_4 branch is visible yet. Its
    correct current disposition is HOLD until task283 exact evidence exists.
+224. task284 acceptance branch is visible at
+   `c47ee3c5a93661b7112f5c1549066e3bbcc0c798`, but it includes unrelated
+   task249 history/task_knowledge changes. Require branch cleanup before any
+   task284 PR or final review closeout.
+225. worker_4's task284 HOLD is substantively correct because task283 has only
+   acceptance docs at `c1d988e2a9ef4139b1fa7cf850d3f4552114be56`; no runtime
+   artifact or blocker report exists yet.
