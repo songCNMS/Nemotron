@@ -1552,3 +1552,11 @@
 443. task304 assignment peer_send to `intern_nemotron_worker_3` was delivered
    after lead branch `b390ac73` was pushed. Await worker_3 branch/mailbox
    evidence; task304 does not authorize AIME/task243 or promotion.
+444. worker_5 closeout mailbox `2cef6c33146d49e1827c2a75443da95d` confirms #362
+   merged via PR path only at `2026-06-02T17:35:53Z`, merge commit
+   `c94216b04bc3d71577391883d0cb76aa8c95e621`, merged head
+   `c75c584875afdbdde4130775cbdc83355e7639ea`. worker_5 pushed a branch-only
+   closeout/status commit `6d75157893244d9e038b08987b46a7597a8d7db6`; closed
+   PR evidence head remains `c75c5848`.
+445. worker_3 task304 acceptance was visible in the pane after assignment, but
+   no task304 remote branch/PR had appeared at the final poll.
