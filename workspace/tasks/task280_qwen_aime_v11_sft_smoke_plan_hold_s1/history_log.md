@@ -1,6 +1,6 @@
 # task280_qwen_aime_v11_sft_smoke_plan_hold_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -37,3 +37,18 @@
   visible on main or in PR search.
 - Opened PR #346:
   https://github.com/songCNMS/Nemotron/pull/346.
+
+## Session 2 - 2026-06-02 UTC - Merged and closed by worker
+
+- Received lead approval for no-run SFT smoke planning-HOLD docs at exact head
+  `49206d3b88ee074873b4f8102720eef5d69bac57`.
+- Verified PR #346 was `OPEN`, base `main`, `CLEAN`, non-draft,
+  `MERGEABLE`, and still at the approved head before merging.
+- Self-merged PR #346.
+- Merge timestamp: `2026-06-02T04:59:45Z`.
+- Merge commit: `7ba65549500e9ca70fc560ed919d6bfa61f088b2`.
+- Merged head: `49206d3b88ee074873b4f8102720eef5d69bac57`.
+- Scope remained docs/status/report only.
+- No smoke command, training, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, lead/main
+  push, or 30B/8-GPU action was run or authorized.

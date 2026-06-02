@@ -1,6 +1,6 @@
 # task280_qwen_aime_v11_sft_smoke_plan_hold_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -15,3 +15,6 @@
    30B/8-GPU scale.
 6. task278/task279 approval and explicit lead release are hard gates; task280
    only records the exact fail-closed candidate plan.
+7. PR #346 was merged as no-run planning documentation only; the merge does not
+   authorize executing the smoke command, training, eval, export, endpoint,
+   promotion, task255 reuse, AIME2025 train data, shared deletion, or 30B/8-GPU.

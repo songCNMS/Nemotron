@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task280_qwen_aime_v11_sft_smoke_plan_hold_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task280_qwen_aime_v11_sft_smoke_plan_hold_s1 |
+| Current Task | |
 | PR | https://github.com/songCNMS/Nemotron/pull/346 |
-| Session | 1 |
-| Progress | Completed task280 no-run Qwen3-4B SFT smoke planning HOLD report and opened PR #346; execution remains held pending task278 approval, task279 review, and explicit lead release. |
+| Session | 2 |
+| Progress | Merged task280 PR #346 at approved head 49206d3b88ee074873b4f8102720eef5d69bac57; scope remained no-run planning docs/status/report only. |

@@ -1,6 +1,6 @@
 # task280_qwen_aime_v11_sft_smoke_plan_hold_s1 - bounded SFT smoke plan hold
 
-<!-- METADATA:STATUS=PlanningHold,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
 
 ## Background
 
@@ -61,7 +61,8 @@ release later if task278/task279 pass.
 - Task docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at
   `be45766c6fc127b0ba00e784d84810a378b3e8e4`.
-- Status: accepted; preparing no-run bounded SFT smoke plan.
+- Status: completed; PR #346 merged at approved head
+  `49206d3b88ee074873b4f8102720eef5d69bac57`.
 - Report:
   `workspace/tasks/task280_qwen_aime_v11_sft_smoke_plan_hold_s1/qwen3_4b_v11_sft_smoke_plan_hold_report.md`.
 - PR:
@@ -70,3 +71,7 @@ release later if task278/task279 pass.
 - Execution remains HOLD until task278 no-training preflight is approved,
   task279 independent review is processed, and lead explicitly releases a
   nonzero-LR Qwen3-4B smoke execution task.
+- Merge commit:
+  `7ba65549500e9ca70fc560ed919d6bfa61f088b2`.
+- Merged at:
+  `2026-06-02T04:59:45Z`.
