@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -58,6 +58,26 @@
 - Read upstream task README files; all three remain `InProgress` and do not
   publish task298 PASS, task299 PASS, or task300 30B base-score artifacts.
 - Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 4 - 2026-06-02 UTC - hash clarification mailbox
+
+- Rechecked task301/#362 state and report hashes for the lead's hash
+  clarification request.
+- Current committed task report content hashes to
+  `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`.
+- Worker output copy at
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/30b_full_sft_training_report.md`
+  also hashes to
+  `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`.
+- Treated lead-observed `5924d937...` as prior PR evidence from before the
+  Session 3 refresh, and separated it from the current worker output-copy hash
+  in the mailbox response.
+- Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`; task298 PASS,
+  task299 PASS, task300 30B base-score artifact, and lead sequence clearance
+  remain absent.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.

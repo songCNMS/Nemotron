@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,8 @@
    `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`, and task300 is visible at
    `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`; their docs are still
    `InProgress` and do not satisfy the task301 launch gates.
+8. Session 4 hash clarification: the current task report content and worker
+   output copy both hash to
+   `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
+   lead-observed `5924d937...` is prior PR evidence and must be reported
+   separately from the refreshed output-copy hash.

@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task301_qwen_aime_v11_30b_full_sft_training_s1 |
 | PR | #362 |
-| Session | 3 |
-| Last Update | Refreshed task301/#362 visibility: task298 branch `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`, task299 branch `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`, and task300 branch `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6` are visible, but task298 PASS, task299 PASS, and task300 30B base-score artifact are not visible; 30B SFT launch remains blocked. |
+| Session | 4 |
+| Last Update | Clarified task301/#362 hash evidence for lead: current PR report content and worker output copy both hash `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`; lead-observed `5924d937...` is prior PR evidence, not the refreshed output-copy hash. Launch remains blocked on task298 PASS, task299 PASS, task300 30B base-score artifact, and lead sequence clearance. |
