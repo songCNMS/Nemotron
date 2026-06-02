@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,13 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. Session 19 task249 updates are hook-required bookkeeping for the worker
+    turn; they do not alter task249/#323 gate state or approve task283/task284
+    runtime readiness.
+27. Session 20 task249 updates are hook-required bookkeeping for the worker
+    turn; task284 stays HOLD until official task283 branch/head/artifacts or
+    mailbox evidence exists.
+28. Session 21 task249 updates are hook-required bookkeeping for the worker
+    turn; task284 approved task283 PR #349 only as no-training
+    runtime/config/import preflight evidence, not checkpoint-load proof,
+    training clearance, promotion, or go/no-go permission.

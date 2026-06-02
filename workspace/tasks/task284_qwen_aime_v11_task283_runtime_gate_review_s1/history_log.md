@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0 - Assigned
 
@@ -65,3 +65,35 @@
   nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data use, shared deletion, merge,
   main push, or 30B/8-GPU action.
+
+## Session 21 - Reviewed task283 PR #349 runtime preflight evidence
+
+- Reviewed task283 PR #349 exact head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349`; final `gh pr view` check found
+  it OPEN/base `main`/MERGEABLE.
+- Fetched `refs/remotes/origin/pr/349`; PR diff scope is worker_2 status plus
+  task283 README/report/history/task_knowledge. Drift from
+  `caa907dea478ca6a738b1334d80758c5184b967c` to `2d042ced...` is worker_2
+  status metadata only, and `git diff --check origin/main...refs/remotes/origin/pr/349`
+  is clean.
+- Verified local artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`.
+  The manifest, final log, and artifact inventory hashes match lead values:
+  `eaf06f61daa5c24e55d94f307abdc02f7870b3ea65d0edfa497625e58bc95ffd`,
+  `e62a06d815cc0a5f6fbdffd71f6e32668cb02c35b532718eeda2cb5329e790e4`,
+  and `c524c25f91ca0e417b7e84e62ca890b4069d6957f066990799d51ba477a6c9b1`.
+- Evidence supports `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`
+  for no-training runtime/config/import preflight only: Qwen Bridge recipe
+  import, ConfigContainer build, packed data readability, Qwen packed/training
+  contract, HF Qwen config/tokenizer, and fail-closed no-training/no-checkpoint
+  boundaries pass.
+- Mailed lead report `39b9dcc257dc43238de471adfe8087a6` with APPROVE as
+  no-training runtime/config/import evidence only.
+- Residual risks recorded: no `AutoBridge.import_ckpt` or checkpoint-load
+  proof, `pip check` rc 1, full `stage1_sft.train` import still missing
+  `nvidia_resiliency_ext`, `nemo.collections.llm` still missing `lightning`,
+  sparse task276 valid/test coverage, and `.git` excluded from remote sync
+  while source head `c1d988e29abafa51a9c3f83a98e21b229135f97e` was recorded.
+- No training, nonzero-LR smoke, live canary, AIME/task243 eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data use, shared deletion,
+  merge, main push, or 30B/8-GPU action was performed.

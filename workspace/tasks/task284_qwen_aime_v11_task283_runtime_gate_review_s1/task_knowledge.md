@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,14 @@
 7. An unofficial task283 output root is not accepted task284 review evidence;
    wait for worker_2's official branch/head/artifacts or mailbox report before
    substantive review.
+8. PR #349 head `2d042cedb0c4cc448c89d57d7b18986d92361349` supports only
+   no-training runtime/config/import preflight approval for task283; it does
+   not prove `AutoBridge.import_ckpt`, checkpoint load, full training import,
+   eval/export/promotion readiness, or broad training clearance.
+9. The task283 no-training evidence leaves dependency/runtime risks open:
+   `pip check` rc 1, missing `nvidia_resiliency_ext` for full
+   `stage1_sft.train`, missing `lightning` for `nemo.collections.llm`, and
+   sparse task276 valid/test splits.
+10. A bounded Qwen3-4B nonzero-LR smoke planning-to-execution gate requires
+    explicit lead authorization accepting the residual risks; task284 review
+    approval alone is not execution permission.
