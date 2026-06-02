@@ -12,7 +12,7 @@ export, endpoint, AIME/task243 eval, additional training, promotion, 30B, or
 
 The task287 acceptance branch currently exists at
 `origin/intern_nemotron_worker_3/task287_qwen_aime_v11_non_aime_canary_retention_s1`
-head `aa5ff7408766e44cfdb073734cff1e836c2e4e17` and contains acceptance docs
+head `aa5ff74046221926c53eddfe1afbd7df38baaa89` and contains acceptance docs
 only. No task287 PR or canary artifact report is visible yet.
 
 ## Goal

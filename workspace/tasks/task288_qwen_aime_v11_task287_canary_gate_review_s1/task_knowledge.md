@@ -1,6 +1,6 @@
 # task288_qwen_aime_v11_task287_canary_gate_review_s1 - task knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 1. task288 reviews task287 only after worker_3 provides official evidence for
    an exact task287 head/PR/artifact report.
@@ -17,3 +17,9 @@
    `d4cc3d1e5a047e321e98896996610f1ace0b5c45acd3cbe11bb0a8389ea97b78`, and
    checksum manifest sha
    `802ef28a30b7ae5a2359b481fc6c8882d1cc2804d0f1edd25cca84973f7794c4`.
+6. The task287 acceptance placeholder head is
+   `aa5ff74046221926c53eddfe1afbd7df38baaa89`; the earlier
+   `aa5ff7408766e44cfdb073734cff1e836c2e4e17` value was a lead-doc copy
+   error and should not be used.
+7. Future task288 substantive review must pin the eventual official task287
+   evidence head/PR/mailbox report, not the acceptance-only placeholder.

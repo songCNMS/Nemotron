@@ -1,6 +1,6 @@
 # task288_qwen_aime_v11_task287_canary_gate_review_s1 - history log
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -35,6 +35,27 @@
   mailbox artifact report it is not accepted task288 review evidence.
 - Current disposition is HOLD until exact task287 head/PR or official mailbox
   evidence exists.
+- Boundaries preserved: no code edit, canary execution, training,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data use, shared deletion, merge, main push, 30B, or 8-GPU action.
+
+## Session 26 - Lead correction acknowledged; HOLD remains
+
+- Fetched corrected lead docs from
+  `origin/intern_nemotron_lead/session1-recovery-task-docs` at `02c05ea2`.
+- Restored the corrected task288 README so the task287 acceptance placeholder
+  head is recorded as
+  `aa5ff74046221926c53eddfe1afbd7df38baaa89`.
+- Lead confirmed the earlier `aa5ff7408766e44cfdb073734cff1e836c2e4e17`
+  value was a copy error; it should not be used for future review.
+- Rechecked GitHub PR visibility with `gh pr list --search task287`; no
+  task287 PR is visible.
+- Sent mailbox `c7c1b09fa6bf4142a0b2cdbd1a8918b0` confirming the correction
+  and current HOLD disposition.
+- Current disposition remains HOLD for substantive review until worker_3
+  provides an official exact task287 evidence head, PR, or mailbox artifact
+  report. Future review must use the eventual evidence head, not the
+  acceptance-only placeholder.
 - Boundaries preserved: no code edit, canary execution, training,
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data use, shared deletion, merge, main push, 30B, or 8-GPU action.
