@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1 |
-| PR | pending |
+| PR | #338 |
 | Session | 3 |
-| Last Update | 2026-06-02T00:25:58Z: Fixed checksum reporting, reran task268 probe from head `9a9619f`, validated inventory, and prepared PR closeout for `NEMTRON_BRIDGE_RUNTIME_BLOCKED`. |
+| Last Update | 2026-06-02T00:25:58Z: Opened PR #338 for task268 `NEMTRON_BRIDGE_RUNTIME_BLOCKED` helper/docs/status closeout with corrected artifact inventory. |

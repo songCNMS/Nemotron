@@ -33,3 +33,5 @@
    `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80` and
    manifest hash
    `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`.
+10. PR #338 is the repo-visible closeout carrier for task268 helper/docs/status
+    and the corrected runtime blocker report.

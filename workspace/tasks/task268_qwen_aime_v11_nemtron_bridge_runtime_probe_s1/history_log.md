@@ -97,6 +97,8 @@
   unavailable for the requested NeMo image, local `megatron`/`nemo` are missing,
   local Bridge import rc is `1`, fail-closed preflight rc is `2`, and no
   positive Bridge/checkpoint-load proof exists.
+- Opened PR #338 to `main` for the task268 helper, docs/status, repo-visible
+  runtime report, and corrected artifact closeout.
 - No SFT training, nonzero-LR smoke, task243/live AIME eval, export, endpoint,
   promotion/go-no-go, task255 reuse, AIME2025 train prompt/label use,
   30B/8-GPU launch, or shared deletion/overwrite was performed.
