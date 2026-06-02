@@ -7,7 +7,8 @@
 - Task: `task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`
 - Branch:
   `intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`
-- PR: TBD
+- PR: #367
+  `https://github.com/songCNMS/Nemotron/pull/367`
 - Evidence source head: `d8e58461ca1cede2569589f95414c360e0ddd9bc`
 - Disposition: `PASS`
 
