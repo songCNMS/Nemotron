@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task272_qwen_aime_v11_post_bridge_pilot_plan_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task276_qwen_aime_v11_rematerialize_packed_qwen_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task272_qwen_aime_v11_post_bridge_pilot_plan_s1 |
-| PR | #341 |
-| Session | 5 |
-| Last Update | 2026-06-02T02:17:21Z: Session 5 closeout updated for PR #341 task272 no-training post-Bridge Qwen3-4B V11 pilot readiness plan; disposition remains `PLAN_READY_HOLD_TASK271_LEAD_GATE`. |
+| Current Task | task276_qwen_aime_v11_rematerialize_packed_qwen_s1 |
+| PR | Pending |
+| Session | 1 |
+| Last Update | 2026-06-02T03:44:43Z: Accepted task276 on worker branch to produce a fresh no-training V11 `packed_qwen` train/valid root from task262 blend evidence. |
