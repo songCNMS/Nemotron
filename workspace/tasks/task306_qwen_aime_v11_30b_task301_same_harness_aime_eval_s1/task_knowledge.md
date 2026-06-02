@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Knowledge Entries
 
@@ -58,3 +58,6 @@
    finalization should produce per-rank files plus rank0 aggregate summary,
    results, full completions, parser diagnostics, and checksum manifest before
    any gate decision.
+20. Session 97: active run still has no rc or final task306 artifacts; rank
+   logs remain at batch 1 start, and final-named local files are copied task300
+   base inputs rather than task306 outputs.

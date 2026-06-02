@@ -126,3 +126,17 @@
 - Runner disposition logic is `PASS` only when FT exact-normalized corrected
   AIME score is at least accepted base `15/30`, `FAIL` below base, and `HOLD`
   on denominator or prompt-token mismatch. No gate decision is possible yet.
+
+## Session 97 - 2026-06-02 UTC - active run continued HOLD
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after about twenty-four minutes.
+  Local and remote rc files are still absent.
+- Remote rank logs still end at `generation_batch_start` for `start_index=1`;
+  batch 1 has not yet produced a `generation_batch_done` event.
+- No task306 aggregate summary/results/full completions/parser diagnostics,
+  checksum manifest, or blocker file is visible. Local files with those names
+  are only the copied task300 base input artifacts.
+- Gate remains HOLD pending completion and official worker report. Lead did not
+  interrupt the active worker-owned eval.

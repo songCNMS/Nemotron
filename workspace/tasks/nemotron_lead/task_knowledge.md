@@ -1702,3 +1702,7 @@
    results plus rank0 aggregate summary/results/full completions/parser
    diagnostics/checksum manifest; its disposition logic is PASS only for FT
    `>= 15/30`, FAIL below, HOLD on denominator or prompt-token mismatch.
+483. Session 97: task306 remains active after about twenty-four minutes and
+   rank logs still end at `generation_batch_start` for `start_index=1`; no rc,
+   final task306 artifacts, blocker, PR, or mailbox report exists. Local final-
+   named files observed so far are only copied task300 base input artifacts.

@@ -7432,3 +7432,25 @@
   `HOLD` if denominator or prompt-token equivalence fails.
 - No final aggregate artifacts or official worker_3 report exist yet. Gate
   remains HOLD and lead did not interrupt the active worker-owned eval.
+
+## Session 97 - 2026-06-02 UTC - task306 active run continued HOLD
+
+- Rechecked task306 after Session 96:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch remote was `e7399334bb9981b1db16fbcfcfd80351d76d1e91`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- Worker-launched task306 NemTron process remains active after about twenty-four
+  minutes. Local and remote rc files are still absent.
+- Remote rank event logs still end at `generation_batch_start` for
+  `start_index=1`; there is not yet a `generation_batch_done` for batch 1.
+- Local files matching final artifact names are only the copied task300 base
+  input artifacts under `input/qwen30b_base_aime2025_30x1_20260602T152351Z`.
+  The remote task306 artifact tree still has no task306 aggregate
+  `summary.json`, `results.jsonl`, `full_completions.jsonl`,
+  `parser_diagnostics.jsonl`, `checksum_manifest.json`, or blocker file.
+- Gate remains HOLD pending run completion, complete task306 artifacts, and an
+  official worker_3 mailbox/PR or artifact report. Lead did not interrupt the
+  active worker-owned eval or request a course change.
