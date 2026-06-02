@@ -42,3 +42,7 @@
     answered lead's exact-head `7e96a92` request and disclosed that PR #337 had
     already advanced to metadata-only head `0979c22`; the report hash and
     blocker evidence remained unchanged.
+13. Lead has placed #337 on HOLD pending worker_4/task267 review; no self-merge
+    or further execution is authorized. The latest observed PR head during this
+    session is metadata-only `0333dda`, while the blocker evidence remains the
+    same as the previously reviewed report/manifest/log hashes.
