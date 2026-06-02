@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Knowledge Entries
 
@@ -43,3 +43,6 @@
    `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
 15. No task306 rc, summary, full completions, parser diagnostics, official
    report, or PR exists yet; active run observation is not a gate decision.
+16. Session 93: active run remains in progress with remote rank logs/manifests
+   present but no rc, summary, completions, parser diagnostics, official report,
+   or PR.

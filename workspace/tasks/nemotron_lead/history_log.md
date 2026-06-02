@@ -7341,3 +7341,26 @@
   final task306 report is visible yet.
 - This is worker-run progress observation only. Gate remains HOLD pending run
   completion, official worker mailbox/report, and reviewable artifacts/metrics.
+
+## Session 93 - 2026-06-02 UTC - task306 run still in progress
+
+- Rechecked task306 after Session 92:
+  - lead branch local/remote `7285cb07c80f8a3b546c4964d299ad7bed287867`;
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- The worker-launched NemTron task306 process is still active after roughly
+  nine minutes. Local rc file is still absent.
+- Remote artifacts now include rank event logs and prompt/checkpoint/command
+  manifests under
+  `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z/artifacts`.
+  Local artifacts are not yet synchronized beyond input/cache and command logs.
+- Current log still shows static-engine generation in progress and checkpoint
+  load warnings/missing `_extra_state` load-return messages; no summary, full
+  completions, parser diagnostics, checksum manifest, or final task306 report
+  is visible yet.
+- Gate remains HOLD pending rc, complete artifacts, official worker_3 mailbox/
+  PR or artifact report, and later lead review. No new worker follow-up was
+  sent because the worker-owned run is active.

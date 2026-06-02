@@ -1685,3 +1685,7 @@
    `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`;
    no rc/summary/completions/parser diagnostics/report are visible yet, so gate
    remains HOLD.
+479. Session 93: task306 run remains active after roughly nine minutes, branch
+   still `894e2e71`, no PR, no mailbox, and no rc/summary/completions/parser
+   diagnostics. Remote rank logs and manifests exist but are incomplete gate
+   evidence.
