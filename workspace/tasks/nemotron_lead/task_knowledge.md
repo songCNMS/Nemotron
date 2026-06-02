@@ -461,3 +461,13 @@
    AIME2025 train data, task255 reuse, shared deletion, or 30B/8-GPU. The next
    actionable evidence remains a fresh accepted V11 packed Qwen root and later
    lead-gated no-training config/import preflight before any pilot action.
+178. #340/#341/#342/#343 merged on 2026-06-02 as task275/task272/task274/task273
+   docs-only closeouts. The final origin/main after these merges is
+   `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`.
+179. Worker branch-only closeout commits after an approved merge, such as
+   task272 `7bbe122` and task274 `f0efe00`, do not change the merged evidence
+   head and should be recorded separately from PR merge proof.
+180. The merged task272-task275 closeouts move V11 from runtime-route proof
+   split/review into the next HOLD state: fresh V11 packed Qwen root and
+   no-training config/import preflight are still missing before any pilot
+   action can be considered.

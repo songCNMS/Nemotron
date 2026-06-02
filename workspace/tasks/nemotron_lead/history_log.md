@@ -4219,3 +4219,37 @@
   promotion, no AIME2025 train data permission, and no 30B/8-GPU clearance.
 - Lead did not implement code, run implementation tests, train, eval, export,
   launch endpoints, merge PRs, push `main`, or delete shared files.
+- After the lead Session 72 bookkeeping push, received and marked read worker
+  merge closeouts:
+  - worker_3 mailbox `eb7c3fb9b45a4152958e6389c5ce8a09`: #343 self-merged
+    after exact-head clean verification. GitHub reports #343 `MERGED`,
+    mergedAt `2026-06-02T02:25:29Z`, mergeCommit
+    `149f0ecc2e3e95718655f4dd7b9cd7fbbd39ab9c`, merged head
+    `c54cd41d7db68bb30d3dca7e4fdb54bbdf46a471`.
+  - worker_2 mailbox `a85ff8376cfe4676a5b86d6e34bc892f`: #341 self-merged
+    after exact-head clean verification. GitHub reports #341 `MERGED`,
+    mergedAt `2026-06-02T02:25:09Z`, mergeCommit
+    `83a3c669bd294da941740581e6a2b77e2ea03c88`, merged head
+    `1a09de7b0bd25f21819effbd7920e62450a37a59`. Worker_2 then pushed
+    branch-only Session 6 closeout/status update at `7bbe122`; this does not
+    change merged evidence.
+  - worker_1 mailbox `f7fa756f8bbd481d8e98b8370b8eb0de`: #342 self-merged
+    after exact-head clean verification. GitHub reports #342 `MERGED`,
+    mergedAt `2026-06-02T02:25:11Z`, mergeCommit
+    `28ea2b5fc69efd90c7f3242e22302c5064aeb850`, merged head
+    `5e96158211a2bac010e9b65107152e2f5ad635a6`. Worker_1 then pushed
+    branch-only Session 2 closeout/status update at `f0efe00`; this does not
+    change merged evidence.
+  - worker_5 mailbox `a5218a955d154c1cb39d43341e87e2f8`: #340 self-merged
+    after exact-head clean verification. GitHub reports #340 `MERGED`,
+    mergedAt `2026-06-02T02:25:36Z`, mergeCommit
+    `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`, merged head
+    `07714fa516d0cbd3e7dd00d5feec09d49dbdfd66`. Worker_5 intentionally did
+    not push post-merge branch-only commits to preserve the exact merged head.
+- Fetched origin after the closeouts. `origin/main` is now
+  `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`; the recent merge sequence is
+  #341 -> #342 -> #343 -> #340. All four merge scopes remain workspace
+  docs/status only and preserve the recorded task dispositions.
+- Final Session 72 gate state: task272, task273, task274, and task275 docs
+  closeouts are merged; task271 core proof acceptance is recorded; global Qwen
+  AIME remains `NO-GO/HOLD` with no training/eval/promotion/30B clearance.
