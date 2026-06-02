@@ -1139,3 +1139,13 @@
 353. task296/task297 peer assignments were delivered after lead docs push
    `c01fb614...`; initial post-assignment poll found no task296/task297 remote
    branches or PRs yet.
+354. task296 branch `4c6dc057...` is acceptance-only: worker_1 status plus
+   task296 docs, no equivalence report, no PR, and no mailbox. It cannot prove
+   path A yet.
+355. #358/task297 current head `607496a...` is an initial
+   `HOLD_WAITING_TASK296` review snapshot, not a final review. Lead HOLD comment
+   `4602355874` requires worker_4 to refresh after substantive task296 evidence;
+   #358 must not self-merge in current form.
+356. Until task296 publishes a substantive equivalence audit and task297
+   independently reviews it, current state remains neither path A completed nor
+   path B triggered.

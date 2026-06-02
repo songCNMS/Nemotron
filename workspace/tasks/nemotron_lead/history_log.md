@@ -5961,3 +5961,25 @@
 - Sent delivered peer assignments to worker_1 for task296 and worker_4 for
   task297. Follow-up poll found no unread lead mailbox, no visible task296 or
   task297 remote branch, and no open task296/task297 PR yet.
+- Later poll found worker_1 task296 branch
+  `origin/intern_nemotron_worker_1/task296_qwen_aime_v11_current_main_equivalence_audit_s1`
+  at `4c6dc0574844a48f70d85caca3288698ebd3caf9`. Diff from current main is
+  worker_1 status plus task296 README/history/task_knowledge only; worker_1
+  status says Working and PR pending. No substantive equivalence report or
+  task296 mailbox exists yet.
+- Later poll found worker_4 task297 branch and PR #358. Current #358 head after
+  refresh is `607496a9e1ae7b7fc56e3ee76aba82ed867350ef`, open/base main, with
+  diff worker_4 status plus task297 docs and
+  `current_main_equivalence_review_report.md`; `git diff --check` passes.
+- Processed worker_4 task297 mailbox
+  `aa58acfcd387465fa528a9537181980f`: decision `HOLD_WAITING_TASK296`, current
+  main `2d84ec75...`, no training/eval/export/scale actions. The report was a
+  correct initial HOLD snapshot from before worker_4 could see task296.
+- Lead recheck now sees task296 branch `4c6dc057...`, but it is acceptance-only.
+  Added #358 HOLD/request-refresh comment `4602355874`: #358 must not self-merge
+  and worker_4 should refresh only after worker_1 publishes substantive task296
+  report/head. Marked worker_4 mailbox read and sent delivered peer follow-up.
+- Sent worker_1 delivered follow-up: task297 is waiting; task296 still needs a
+  no-run/read-only equivalence report deciding `A_PROVED_NO_RERUN` versus
+  `B_REQUIRED_RERUN` with commands, #312 diff classification, source comparisons,
+  artifact roots/checksums, metrics, residuals, and boundaries.
