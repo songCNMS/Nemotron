@@ -408,3 +408,7 @@
    correct next worker action is only a task-owned no-training Bridge/checkpoint
    proof after `nemo` or an equivalent launchable NeMo/Megatron-Bridge runtime
    is available.
+165. A coordinator-only PR/head change, such as #312 advancing while no worker
+   Qwen PRs or mailbox evidence exist, does not change the Qwen AIME gate.
+   Keep the team in monitor/HOLD unless a concrete runtime route or worker-owned
+   evidence appears.
