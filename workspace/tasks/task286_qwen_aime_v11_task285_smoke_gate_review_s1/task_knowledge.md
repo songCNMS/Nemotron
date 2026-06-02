@@ -1,6 +1,6 @@
 # task286_qwen_aime_v11_task285_smoke_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,17 @@
 7. Task286 review must not treat sparse task276 valid/test evidence as model
    quality support, and must verify no AIME2025 prompt/label train leakage or
    task255 reuse before approving any later non-AIME canary eligibility.
+8. PR #350 head `fc379240c8517de10e37a5438f87b6b0994399f0` has enough
+   evidence for bounded Qwen3-4B smoke approval only: Bridge import rc `0`, two
+   positive-LR finite-loss optimizer iterations, and task-owned iter-2
+   checkpoint manifests.
+9. `SMOKE_RETRY3_COMMAND_RC=1` happened after iter-2 checkpoint save during
+   built-in validation/SIGTERM. It blocks any clean end-to-end training/eval or
+   validation-quality claim, but does not by itself block bounded smoke
+   evidence approval.
+10. The #350 smoke artifact can only feed a later non-AIME canary/completion
+    retention gate after explicit lead authorization; it does not authorize
+    AIME/task243 eval, export, endpoint, promotion, 30B, or 8-GPU.
+11. Session 24 rechecked #350 at the same exact head
+    `fc379240c8517de10e37a5438f87b6b0994399f0` with CLEAN/MERGEABLE state;
+    the APPROVE-as-bounded-smoke-only decision still stands.

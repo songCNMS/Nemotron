@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task249_qwen_aime_v10_live_contam_gate_review_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/323 |
-| Session | 22 |
-| Progress | Accepted task286 smoke-gate review on branch `intern_nemotron_worker_4/task286_qwen_aime_v11_task285_smoke_gate_review_s1` from `origin/main` `3dc19dbd889ac0554e73c51a43b4ecb27b210920`; read lead docs at `e42a3b5` and mailed acceptance/HOLD `1aa1d0d546984c59a911578891157b3b`. Substantive review is HOLD until worker_2/task285 official branch/PR/artifact report exists; current checks found no task285 PR, no matching task285/task286 remote head, and no visible worker_2 task285 output root. No code edit, training, canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train data use, shared deletion, merge, main push, 30B, or 8-GPU action. |
+| Session | 24 |
+| Progress | Reconfirmed task286 official read-only gate review for task285 PR #350 exact head `fc379240c8517de10e37a5438f87b6b0994399f0`; rechecked #350 as OPEN/base `main`/CLEAN/MERGEABLE and mailed lead `9b673d61cf6e4ce5a64d84f7f6198230` with APPROVE as bounded Qwen3-4B smoke evidence only. Prior detailed checksum mailbox was `71d5ac1b1bb44bae8163f014563714cf`. Post-train built-in eval RC=1 remains a residual risk, so no clean end-to-end train/eval pass or usable validation result is claimed. No code edit, training, canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train data use, shared deletion, merge, main push, 30B, or 8-GPU action. |
