@@ -1,6 +1,6 @@
 # task296_qwen_aime_v11_current_main_equivalence_audit_s1 - history log
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -29,6 +29,21 @@
 - Boundary maintained: no training, canary, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   main push, merge, 30B, 8-GPU, or artifact mutation.
+
+## Session 79 - 2026-06-02 UTC - approved self-merge closeout
+
+- Lead lifted HOLD and approved self-merge for exact PR #359 head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06` after task297/#358 merged.
+- Verified before merge that PR #359 was OPEN, base `main`, non-draft, exact
+  head `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`, `mergeStateStatus=CLEAN`,
+  and API `mergeable=true`, `mergeable_state=clean`.
+- Self-merged PR #359 through GitHub.
+- MergedAt: `2026-06-02T12:56:15Z`.
+- Merge commit: `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`.
+- Merged head: `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`.
+- Scope remained task296 docs/status current-main no-rerun equivalence evidence
+  only; no product code, artifact, training, eval, export, endpoint, promotion,
+  task255, AIME train data, shared deletion, 30B, or 8-GPU action was performed.
 
 ## Session 76 - 2026-06-02 UTC - worker_1 current-main equivalence audit
 

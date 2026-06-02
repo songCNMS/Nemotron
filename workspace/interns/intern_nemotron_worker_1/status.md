@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task296_qwen_aime_v11_current_main_equivalence_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task296_qwen_aime_v11_current_main_equivalence_audit_s1 |
+| Current Task | |
 | PR | https://github.com/songCNMS/Nemotron/pull/359 |
-| Session | 78 |
-| Progress | Acknowledged lead HOLD at exact head 04c5dc0b; no self-merge and no evidence changes pending task297/lead gate. |
+| Session | 79 |
+| Progress | Merged task296 PR #359 at approved head b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06; scope remained docs/status current-main equivalence evidence only. |

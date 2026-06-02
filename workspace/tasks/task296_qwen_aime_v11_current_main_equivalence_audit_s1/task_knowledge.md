@@ -1,6 +1,6 @@
 # task296_qwen_aime_v11_current_main_equivalence_audit_s1 - task knowledge
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 - Current main for this task is
   `2d84ec75960fb51ba9091427638b00083625e137`.
@@ -22,3 +22,6 @@
   and only task293 evidence docs changed.
 - Key task285/task293 artifact hashes were recomputed from local output roots
   and matched the merged reports.
+- PR #359 merged at `2026-06-02T12:56:15Z` with merge commit
+  `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7` from exact approved head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`.
