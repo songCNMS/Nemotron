@@ -3842,3 +3842,14 @@
   `2b661ac38360b5a8a957359a59ffa63923928845`. This does not authorize
   Bridge/checkpoint-load proof claims, training, live AIME/task243 eval,
   promotion/go-no-go, AIME2025 train data, 30B/8-GPU, or shared deletion.
+- #337 merged at `2026-06-02T00:12:09Z` with merge commit
+  `8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
+  `2b661ac38360b5a8a957359a59ffa63923928845`; no worker_2 post-merge mailbox
+  had arrived at the time of lead recording.
+- Marked task267 completed as independent blocker-evidence review.
+- Created task268 `task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1`,
+  assigned to `intern_nemotron_worker_2`, for Qwen3-4B-only NemTron/NeMo/
+  Megatron-Bridge import/checkpoint-load preflight proof or exact blocker.
+- task268 explicitly does not authorize SFT training, nonzero-LR smoke,
+  task243/live AIME eval, export, endpoint, promotion, AIME2025 train data,
+  task255 reuse, 30B/8-GPU, or shared deletion.

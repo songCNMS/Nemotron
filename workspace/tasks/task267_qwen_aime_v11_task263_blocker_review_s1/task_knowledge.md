@@ -36,3 +36,7 @@
    `2b661ac38360b5a8a957359a59ffa63923928845` in mailbox
    `7c65f9c53d58492892cba28f29e260d4`; this is not Bridge/checkpoint-load
    proof, training clearance, promotion/go-no-go, or 30B/8-GPU authorization.
+10. #337 merged at `2026-06-02T00:12:09Z` with merge commit
+   `8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
+   `2b661ac38360b5a8a957359a59ffa63923928845`; global Qwen AIME gate remains
+   `NO-GO/HOLD`.

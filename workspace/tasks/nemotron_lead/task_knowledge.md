@@ -303,3 +303,12 @@
    `7c65f9c53d58492892cba28f29e260d4`; lead approved #337 as
    blocker-evidence-only with self-merge allowed only if exact head remains
    `OPEN`/base `main`/`CLEAN`.
+139. #337 merged at `2026-06-02T00:12:09Z` with merge commit
+   `8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
+   `2b661ac38360b5a8a957359a59ffa63923928845`; it remains blocker evidence
+   only and does not clear Bridge/checkpoint-load proof, training, AIME/task243
+   eval, promotion, AIME2025 train data, or 30B/8-GPU.
+140. task268 is assigned to worker_2 for Qwen3-4B-only NemTron/NeMo/
+   Megatron-Bridge import/checkpoint-load preflight proof or exact blocker,
+   with no SFT training, nonzero-LR smoke, live eval, export, endpoint,
+   promotion, task255 reuse, 30B/8-GPU, or shared deletion authorized.

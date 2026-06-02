@@ -39,6 +39,11 @@
 - Lead gate decision: APPROVE #337 as blocker-evidence-only, with self-merge
   release only if #337 is still `OPEN`/base `main`/`CLEAN` at exact head
   `2b661ac38360b5a8a957359a59ffa63923928845`.
+- #337 merged at `2026-06-02T00:12:09Z` with merge commit
+  `8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
+  `2b661ac38360b5a8a957359a59ffa63923928845`.
+- task267 is complete as independent blocker-evidence review; global Qwen AIME
+  gate remains `NO-GO/HOLD`.
 - Scope is read-only review of blocker evidence; no implementation, merge,
   training, eval, promotion, AIME2025 train data, or 30B/8-GPU.
 - Global Qwen AIME gate remains `NO-GO/HOLD`.

@@ -1,6 +1,6 @@
 # task267_qwen_aime_v11_task263_blocker_review_s1 - task263 blocker review
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=0 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=0 -->
 
 ## Background
 
@@ -95,3 +95,7 @@ Approved as blocker-evidence-only for exact head
 `2b661ac38360b5a8a957359a59ffa63923928845`. This is not Bridge/checkpoint-load
 proof, not training clearance, not promotion/go-no-go, and not 30B/8-GPU
 authorization. Global Qwen AIME gate remains `NO-GO/HOLD`.
+
+#337 merged at `2026-06-02T00:12:09Z` with merge commit
+`8fb1a1cb042fca0a0ca3491363fb0e5616909010` from approved head
+`2b661ac38360b5a8a957359a59ffa63923928845`.
