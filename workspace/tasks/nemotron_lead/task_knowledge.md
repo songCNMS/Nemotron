@@ -1655,3 +1655,7 @@
    full completions, parser diagnostics, denominator/normalization proof,
    command/env, artifact paths, and checksums are required before any 30B
    FT-vs-base gate decision.
+471. task306 peer_send assignment was delivered to `intern_nemotron_worker_3`.
+   Expected worker branch is
+   `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`;
+   worker must report by mailbox with branch/head/PR or exact blocker.

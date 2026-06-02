@@ -23,3 +23,6 @@
 8. If task306 cannot prove prompt/cache/generation/parser/normalizer/denominator
    equivalence to task300, it must report HOLD or a justified no-training base
    rerun instead of judging the FT checkpoint.
+9. Lead branch task docs were pushed at
+   `a9c380e9d2fe4577d89c2e013cc86d67c0479365`, and the task306 assignment
+   peer_send to `intern_nemotron_worker_3` was delivered.

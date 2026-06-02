@@ -7244,6 +7244,9 @@
 - task306 must compare the task301 FT checkpoint against the accepted task300
   Qwen3-30B-A3B base score `15/30 = 0.5`. PASS is possible only if the FT
   corrected AIME exact-normalized score is `>= 15/30` under the same protocol.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_3` for task306.
+  Worker branch plan:
+  `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`.
 - Global 30B gate remains HOLD pending task306 worker artifacts and any later
   independent review/runbook task. No promotion, endpoint/export, additional
   training, task255 reuse, AIME2025 train data, shared deletion, direct main

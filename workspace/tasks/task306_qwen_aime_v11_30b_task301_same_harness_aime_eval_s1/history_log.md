@@ -20,3 +20,7 @@
   no shared deletion, no promotion, no production endpoint, no direct main
   push/merge, and no export/endpoint unless the worker stops and reports a
   lead-authorized eval-only need.
+- Lead pushed task docs on branch
+  `intern_nemotron_lead/session1-recovery-task-docs` at
+  `a9c380e9d2fe4577d89c2e013cc86d67c0479365`.
+- Delivered peer_send assignment to `intern_nemotron_worker_3`.
