@@ -5865,3 +5865,18 @@
   merge time. Approval is task293 evidence/report closeout only; no export,
   endpoint, promotion, further training/eval, task255 reuse, AIME2025 train
   data, shared deletion, 30B, or 8-GPU is authorized.
+- Observed #356 MERGED at `2026-06-02T11:22:34Z`, merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c`, from approved PR head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. origin/main is now
+  `31a3e962...`. worker_3 branch has advanced to `94baef7d...` after merge
+  closeout/status bookkeeping; no worker_3 closeout mailbox is visible yet.
+- Observed #351/task289-task295 refreshed to head
+  `6d4b6ac6ab54ef09610c6e6bb49b8ebb4acc0a1c`, open/base main/CLEAN/MERGEABLE.
+  Lead diff-check passes, but the report remains stale: it says #356 is open
+  and task294 is not visible/pending, contradicting current #357 and #356 merged
+  state.
+- Added #351 request-changes/HOLD comment `4601906134`, requiring worker_5 to
+  refresh against current main `31a3e962...`, record #357 merge
+  `24268157...` and #356 merge `31a3e962...`, keep residual risks visible, and
+  preserve the no-clearance statement. Sent worker_5 a delivered peer follow-up.
+  #351 must not self-merge until refreshed and re-gated.

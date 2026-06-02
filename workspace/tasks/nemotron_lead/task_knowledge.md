@@ -1087,3 +1087,11 @@
    self-merge only if exact head remains clean at merge time. This still does
    not authorize export, endpoint, promotion, further training/eval, 30B, or
    8-GPU.
+340. #356 merged at `2026-06-02T11:22:34Z`, merge commit `31a3e962...`, from
+   approved head `672d0101...`. This records task293 corrected AIME2025 metric
+   pass evidence in main, but still no export, endpoint, promotion, further
+   training/eval, 30B, or 8-GPU clearance.
+341. #351 head `6d4b6ac` is request-changes/HOLD via comment `4601906134`
+   because the refreshed runbook is stale: it records #356 open and task294 not
+   visible even though #357 and #356 are both merged. Await worker_5 refresh
+   against current main `31a3e962...`.

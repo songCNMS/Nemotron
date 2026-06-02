@@ -158,3 +158,9 @@
   clean at merge time. This is evidence/report closeout only and does not
   authorize export, endpoint, promotion, further training/eval, task255,
   AIME2025 train data, shared deletion, 30B, or 8-GPU.
+- Observed #356 merged at `2026-06-02T11:22:34Z` with merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c` from approved PR head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. This completes task293
+  repo-visible evidence/report merge. worker_3 branch later advanced to
+  `94baef7d...` for merge closeout/status bookkeeping; official closeout
+  mailbox is not yet visible.

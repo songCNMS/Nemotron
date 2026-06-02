@@ -8,3 +8,6 @@
 - Runbook must preserve residual risks: task293 sampling semantic-match review,
   task292 canary fallback risk, worker_3 official closeout status, and task294
   independent review status.
+- #351 head `6d4b6ac` was refreshed but remains stale after #357/#356 merged.
+  Lead request-changes/HOLD comment `4601906134` requires a new refresh against
+  current main `31a3e962...`.
