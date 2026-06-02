@@ -342,6 +342,7 @@ def main() -> int:
         },
         "route_adjustments": [
             "distributed torchrun route uses task301 checkpoint parallelism TP=4 PP=2 EP=4 ETP=1",
+            "load_megatron_model receives explicit mp_overrides matching task301 checkpoint parallelism",
             "checkpoint model_config.attention_backend None is set in-memory to AttnBackend.auto",
             "MCore SamplingParams uses top_k=1 greedy branch to avoid torch.multinomial invalid-probability blocker",
             "rank-local completion artifacts are retained because pipeline-parallel text may appear only on some ranks",
@@ -477,7 +478,24 @@ def main() -> int:
         cfg, mlm_args = load_model_config(str(args.checkpoint_iter_dir))
         tokenizer = load_tokenizer(str(args.checkpoint_iter_dir))
         append_rank_event(rank_log, "checkpoint_config_tokenizer_loaded")
-        model = load_megatron_model(str(args.checkpoint_iter_dir), skip_temp_dist_context=True)
+        mp_overrides = {
+            "tensor_model_parallel_size": args.tensor_model_parallel_size,
+            "pipeline_model_parallel_size": args.pipeline_model_parallel_size,
+            "context_parallel_size": args.context_parallel_size,
+            "expert_model_parallel_size": args.expert_model_parallel_size,
+            "expert_tensor_parallel_size": args.expert_tensor_parallel_size,
+            "sequence_parallel": True,
+            "virtual_pipeline_model_parallel_size": None,
+            "hierarchical_context_parallel_sizes": None,
+            "perform_initialization": False,
+        }
+        command_manifest["load_megatron_model_mp_overrides"] = mp_overrides
+        append_rank_event(rank_log, "load_megatron_model_start", mp_overrides=mp_overrides)
+        model = load_megatron_model(
+            str(args.checkpoint_iter_dir),
+            mp_overrides=mp_overrides,
+            skip_temp_dist_context=True,
+        )
         model_obj = model[0] if isinstance(model, list) else model
         model_obj.eval()
         append_rank_event(rank_log, "checkpoint_model_loaded")
