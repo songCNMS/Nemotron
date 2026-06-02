@@ -828,3 +828,7 @@
    pending task288/task290 review. #351/task289 is request-changes because it
    predates #352 and must refresh provenance to the official task287 BLOCK
    state.
+276. task288 approved #352 exact head `52834d74...` as blocker closeout;
+   task290 branch `c3753ed4...` independently supports the same blocker
+   closeout. #352 is released for worker_3 self-merge if exact head remains
+   clean. task291 is the next bounded unblock task for worker_2.
