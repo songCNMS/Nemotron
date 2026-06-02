@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #339 MERGED @958c283; #322 CLOSED unmerged as superseded; only open PR #312 coordinator audit; gate NO-GO/HOLD |
-| Session | 69 |
+| PR | monitor: #339/#322 verified by coordinator; runtime access external blocker; only open PR #312 coordinator audit; gate NO-GO/HOLD |
+| Session | 70 |

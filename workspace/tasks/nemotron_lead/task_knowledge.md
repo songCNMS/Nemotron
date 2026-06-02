@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=70 -->
 
 ## Knowledge Entries
 
@@ -402,3 +402,9 @@
 163. After #339 merge and #322 closure, no worker Qwen PRs remain open; only
    #312 coordinator audit is open. Current blocker is external runtime access,
    not pending worker PR review.
+164. Coordinator Session 39 independently verified #339/#322/task268 artifact
+   state and the same runtime blocker. Until external runtime access changes,
+   the lead should not create another implementation/training/eval task; the
+   correct next worker action is only a task-owned no-training Bridge/checkpoint
+   proof after `nemo` or an equivalent launchable NeMo/Megatron-Bridge runtime
+   is available.
