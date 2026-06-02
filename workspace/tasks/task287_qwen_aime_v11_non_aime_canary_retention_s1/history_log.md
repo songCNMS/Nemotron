@@ -1,5 +1,7 @@
 # task287_qwen_aime_v11_non_aime_canary_retention_s1 - history log
 
+<!-- METADATA:SESSION=1 -->
+
 ## Session 74 - 2026-06-02 UTC - assignment
 
 - Created task after #350/task285 merged bounded Qwen3-4B smoke evidence and
@@ -10,7 +12,7 @@
   no endpoint, no promotion, no task255 reuse, no shared deletion, no 30B, and
   no 8-GPU.
 
-## Session 1 - 2026-06-02 UTC - Accepted by worker
+## Session 1 - 2026-06-02 UTC - Accepted and blocked by worker
 
 - Fetched current `origin/main` at
   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0` and lead docs branch
@@ -26,9 +28,6 @@
   AIME/task243 eval, no AIME2025 train prompts/labels, no task255 reuse, no
   export, no endpoint, no promotion, no shared deletion, no 30B, no 8-GPU, no
   merge, and no main push.
-
-## Session 1 - 2026-06-02 UTC - Blocker report by worker
-
 - Synced current branch to task-owned NemTron path
   `/root/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z/Nemotron`
   and kept task-owned local outputs under
