@@ -1994,3 +1994,8 @@
    No task306 FT final artifacts, PR, mailbox report, local/remote rc, or
    blocker exists. `start_index=22` is only about ten minutes old at this
    check, so this is not yet hang evidence.
+559. Session 173: task306 remains active after about two hundred ninety
+   minutes; latest visible stdout progress still `22/30`, with row 23 active.
+   No task306 FT final artifacts, PR, mailbox report, local/remote rc, or
+   blocker exists. `start_index=22` is about thirteen minutes old at this
+   check, so this is not yet hang evidence.
