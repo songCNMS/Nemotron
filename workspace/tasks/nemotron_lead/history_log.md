@@ -5733,3 +5733,7 @@
   and was incorrect. Current partial total is `8/20` correct. Remote artifacts
   still only include manifests and mailbox remains empty. This remains
   non-gating partial evidence.
+- Follow-up read-only live observation: PID `433268` remains active at about
+  80 minutes elapsed. Log reached `21/30`; row `aime_21_r01` stopped, parsed,
+  and was correct. Current partial total is `9/21` correct. Mailbox remains
+  empty. This remains non-gating partial evidence.
