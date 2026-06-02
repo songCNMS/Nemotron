@@ -8,10 +8,10 @@
    as independently accepted until task305 review returns approve/request-
    changes/block.
 2. The exact #367 head for review is now
-   `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
+   `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
 3. The task304 report names evidence source head
    `d8e58461ca1cede2569589f95414c360e0ddd9bc`; reviewers must reconcile the
-   later `d8e58461..e5cc4982` PR-head delta.
+   later `d8e58461..1f23d833` PR-head delta.
 4. Task304 local output root:
    `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
 5. Task304 remote output root:
@@ -42,3 +42,6 @@
 14. worker_3 mailbox `16890c0ca5994a46ad7c5685fbdc05fe` is the official
     addendum for #367 head `e5cc4982` and confirms the final HOLD bookkeeping
     delta is docs/status only with no forbidden downstream action.
+15. worker_3 mailbox `2a7ca0758b4b4bca933ee0bad14b0653` is the official
+    addendum for #367 head `1f23d833` and confirms the no-further-head-changes
+    bookkeeping delta is docs/status only with no forbidden downstream action.

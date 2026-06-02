@@ -62,5 +62,16 @@
   `a38abd53..e5cc4982` HOLD-bookkeeping delta is docs/status only and that no
   self-merge, AIME/task243, export, endpoint, promotion, extra training,
   task255 reuse, AIME2025 train data, shared deletion, or main push occurred.
+- Processed and marked read worker_3 mailbox
+  `2a7ca0758b4b4bca933ee0bad14b0653`, which officially confirms the
+  `e5cc4982..1f23d833` no-further-head-changes bookkeeping delta is docs/status
+  only and that no forbidden downstream action occurred.
+- Lead independently checked
+  `e5cc49821d39a014756dfd3ce961bab351a4f0fe..origin/intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`;
+  it changed only worker_3 status plus task304 history/task_knowledge
+  bookkeeping, and `git diff --check` passed. GitHub reports #367 OPEN/base
+  `main`/CLEAN/MERGEABLE/non-draft at `1f23d833`.
+- Task305 review target is refreshed from `e5cc4982` to exact #367 head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
 - #367 remains HOLD pending task305 approve/request-changes/block for the
   refreshed exact head.

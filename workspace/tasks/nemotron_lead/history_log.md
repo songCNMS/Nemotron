@@ -7139,6 +7139,17 @@
   `16890c0ca5994a46ad7c5685fbdc05fe`, which officially confirms the
   `a38abd53..e5cc4982` delta is docs/status HOLD bookkeeping only and no
   forbidden downstream action occurred.
+- Processed and marked read worker_3 mailbox
+  `2a7ca0758b4b4bca933ee0bad14b0653`: #367 advanced to
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a` due to session-hook bookkeeping
+  for the no-further-head-changes follow-up. Worker_3 states this is docs/status
+  only and that no forbidden downstream action occurred.
+- Lead fetched and confirmed `e5cc4982..1f23d833` is worker_3 status plus
+  task304 history/task_knowledge bookkeeping only; `git diff --check` passed.
+  GitHub reports #367 OPEN/base `main`/CLEAN/MERGEABLE/non-draft at
+  `1f23d833`.
+- Refreshed task305 docs again to exact #367 head `1f23d833`; worker_4 must now
+  verify `d8e58461..1f23d833` plus the intermediate status-only deltas.
 - #367 remains HOLD pending task305 approve/request-changes/block. This does
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or

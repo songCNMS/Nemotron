@@ -1614,3 +1614,7 @@
 459. worker_3 mailbox `16890c0ca5994a46ad7c5685fbdc05fe` officially confirms
    #367 head `e5cc4982` is HOLD-bookkeeping docs/status only, with no
    forbidden downstream action.
+460. worker_3 mailbox `2a7ca0758b4b4bca933ee0bad14b0653` officially confirms
+   #367 head `1f23d833` is no-further-head-changes bookkeeping docs/status only,
+   with no forbidden downstream action. task305 review target is now exact head
+   `1f23d833`.

@@ -12,7 +12,7 @@ Current observed state:
 - `origin/main`: `c94216b04bc3d71577391883d0cb76aa8c95e621`.
 - PR #367: OPEN, base `main`, CLEAN/MERGEABLE, non-draft.
 - PR #367 current head:
-  `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
 - Worker branch:
   `intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`.
 - Task304 report disposition: `PASS`.
@@ -20,8 +20,9 @@ Current observed state:
   `d8e58461ca1cede2569589f95414c360e0ddd9bc`. PR head first reached
   `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, then advanced to `a38abd53`
   after worker_3 status/history hygiene, then to `e5cc4982` after worker_3
-  recorded lead HOLD status. These later deltas must be confirmed by this
-  review.
+  recorded lead HOLD status, then to `1f23d833` after worker_3 recorded the
+  no-further-head-changes follow-up. These later deltas must be confirmed by
+  this review.
 
 Lead has not yet approved #367. No corrected AIME2025/task243 evaluation,
 export, endpoint, promotion, or FT-vs-base claim is cleared by task304 alone.
@@ -29,7 +30,7 @@ export, endpoint, promotion, or FT-vs-base claim is cleared by task304 alone.
 ## Goal
 
 Independently review #367 exact head
-`e5cc49821d39a014756dfd3ce961bab351a4f0fe` and the task304 canary artifacts.
+`1f23d8339c123702eaa9336c1fe2b25afcd6122a` and the task304 canary artifacts.
 Return an approve/request-changes/block gate decision for whether lead may
 accept task304 as a non-AIME checkpoint-load/completion-retention canary and
 then consider a separate corrected AIME2025 FT-vs-base task.
@@ -37,19 +38,22 @@ then consider a separate corrected AIME2025 FT-vs-base task.
 ## Scope
 
 - Review PR #367 exact head
-  `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
 - Confirm #367 is base `main`, CLEAN/MERGEABLE, non-draft, and diff-check
   clean.
 - Confirm PR diff scope is task304 docs/report/runner plus worker_3 status, and
   that no unrelated product training/eval path is changed.
 - Compare the task304 report evidence source
-  `d8e58461ca1cede2569589f95414c360e0ddd9bc` with PR head `e5cc4982`; state
+  `d8e58461ca1cede2569589f95414c360e0ddd9bc` with PR head `1f23d833`; state
   whether the later delta is only report/docs/status/hygiene closeout.
 - Separately compare `773aff2cc9eaa7d0900b06f5d49dc29515cae709..a38abd53` and
   confirm whether it is only worker status plus task304 history hygiene.
 - Separately compare `a38abd53c897b3c68878abb770cb80f762c20e6f..e5cc4982` and
   confirm whether it is only worker status plus task304 history/knowledge HOLD
   bookkeeping.
+- Separately compare `e5cc49821d39a014756dfd3ce961bab351a4f0fe..1f23d833` and
+  confirm whether it is only worker status plus task304 history/knowledge
+  no-further-head-changes bookkeeping.
 - Review task304 report:
   `workspace/tasks/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/30b_salvage_non_aime_canary_report.md`.
 - Review local task304 artifact root:
@@ -137,8 +141,8 @@ then consider a separate corrected AIME2025 FT-vs-base task.
   - branch/head/PR or mailbox-only status;
   - commands used and output summary;
   - artifact paths and checksum verification results;
-  - PR diff scope plus `d8e58461..e5cc4982`, `773aff2c..a38abd53`, and
-    `a38abd53..e5cc4982` assessments;
+  - PR diff scope plus `d8e58461..1f23d833`, `773aff2c..a38abd53`,
+    `a38abd53..e5cc4982`, and `e5cc4982..1f23d833` assessments;
   - canary metrics and checkpoint-load proof;
   - prompt-provenance/decontam/boundary verification;
   - approve/request-changes/block decision;
