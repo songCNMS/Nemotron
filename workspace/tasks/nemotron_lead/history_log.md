@@ -4366,6 +4366,27 @@
 - Updated task277 review target to current exact #344 head
   `07efab4fa0d8367e96f54af3d2cdc70768d73595`; worker_4 must stop and report if
   #344 head changes again.
+- Worker_2 sent official reconciliation mailbox
+  `0ae55f7597564e168a366200f63f7508`: #344 is `OPEN`/base `main`/`CLEAN` at
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`, artifact evidence is unchanged,
+  and disposition remains `PACKED_QWEN_READY_FOR_REVIEW` as no-training
+  data/packing artifact only. Lead marked it read.
+- Worker_4 sent task277 mailbox `873d4658f6b74eb8a98bb45b571e2161`: accepted
+  task277 but correctly held because the then-current docs named old exact head
+  `98d1bded1f365d1f38de1db676ad12f5c6489738`; worker_4 independently verified
+  #344 current head `07efab4fa0d8367e96f54af3d2cdc70768d73595` and report sha
+  `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887` are
+  unchanged. Lead marked it read.
+- Re-read #344 after mailbox processing: GitHub reports `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE` at
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`, non-draft, no checks, blank
+  reviewDecision.
+- Sent refreshed task277 peer_send to worker_4 with lead docs
+  `d3a25b9c7398540ec6347f2d99ef80aea00c585d` and exact review head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`. Delivery returned `delivered`.
+- Current gate: wait for worker_4 independent approve/request-changes/block
+  report for #344 exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595`. #344
+  is not approved and must not be merged by lead.
 - task277 scope: approve/request-changes/block for task276 data/packing
   evidence only. It must not edit files, train, eval, export, launch endpoints,
   promote, use AIME2025 train data, reuse task255, delete shared files, merge,

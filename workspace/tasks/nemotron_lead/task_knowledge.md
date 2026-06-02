@@ -502,3 +502,10 @@
    `07efab4fa0d8367e96f54af3d2cdc70768d73595` is worker_2 status plus task276
    history/task_knowledge only; the report payload remains unchanged. task277
    now reviews exact head `07efab4`.
+190. worker_4's first task277 response is a correct HOLD, not a substantive
+   data/packing approval, because old docs named `98d1bde` while #344 was at
+   `07efab4`. After lead docs `d3a25b9`, worker_4 has a refreshed instruction
+   to review exact head `07efab4`.
+191. #344 remains unapproved until worker_4 reports approve/request-changes/
+   block for exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595` and lead
+   processes that report.
