@@ -1718,3 +1718,7 @@
    visible progress is still `3/30`, with no rc, final task306 artifacts,
    blocker, PR, or official mailbox report. Lead left the worker-owned eval
    running.
+487. Session 101: task306 remains active after about thirty-seven minutes; batch
+   3 completed in about 430.6s, batch 4 started, and log progress reached
+   `4/30` with `aime_01_r01` through `aime_04_r01` parsed/correct. Still no rc,
+   final task306 artifacts, blocker, PR, or official mailbox report.
