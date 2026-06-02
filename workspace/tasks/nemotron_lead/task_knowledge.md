@@ -778,3 +778,8 @@
    task-doc evidence only, not the substantive #350 review. #350 remains HOLD
    until worker_4 sends an official mailbox report reviewing exact head
    `fc379240c8517de10e37a5438f87b6b0994399f0`.
+264. worker_4/task286 official mailbox approved #350 exact head `fc379240...`
+   as bounded Qwen3-4B smoke evidence only. Approval carries the retry3
+   post-checkpoint built-in-validation/SIGTERM `RC=1` risk and does not
+   authorize canary, AIME/task243 eval, export, endpoint, promotion, 30B, or
+   8-GPU. worker_2 may self-merge #350 only if exact head remains clean.

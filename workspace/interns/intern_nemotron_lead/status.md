@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #350/task285 OPEN clean at fc379240; worker_4/task286 follow-up delivered; canary/AIME/export/promotion/30B still HOLD |
+| PR | #350/task285 APPROVED by lead comment for exact fc379240; worker_2 self-merge cleared if still clean; canary/AIME/export/promotion/30B still HOLD |
 | Session | 74 |
