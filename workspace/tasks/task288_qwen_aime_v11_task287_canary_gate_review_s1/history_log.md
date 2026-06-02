@@ -1,6 +1,6 @@
 # task288_qwen_aime_v11_task287_canary_gate_review_s1 - history log
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -36,6 +36,48 @@
 - Current disposition is HOLD until exact task287 head/PR or official mailbox
   evidence exists.
 - Boundaries preserved: no code edit, canary execution, training,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data use, shared deletion, merge, main push, 30B, or 8-GPU action.
+
+## Session 27 - Reviewed task287 PR #352 blocker evidence
+
+- Reviewed task287 PR #352 exact head
+  `52834d74c79ab98b5e125434160843752c34d47a`; final `gh pr view` check found
+  it OPEN/base `main`, `mergeStateStatus=CLEAN`, and MERGEABLE.
+- Fetched `refs/remotes/origin/pr/352`; PR diff scope is worker_3 status plus
+  task287 README/report/history/task_knowledge, and
+  `git diff --check origin/main...refs/remotes/origin/pr/352` is clean.
+- Reviewed PR report
+  `workspace/tasks/task287_qwen_aime_v11_non_aime_canary_retention_s1/non_aime_canary_retention_report.md`
+  and local artifact root
+  `/work-agents/intern_nemotron_worker_3/outputs/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z`.
+- Verified report sha256
+  `9d88a9f7fce7c7904adccedc924f881b51bb4471988785283b6460396600846e`.
+- Verified checkpoint-load proof: `remote_single_gpu_checkpoint_load_probe.log`
+  sha256 `e63eb5634677e2640984bd8666b5b7134f6f6ce71ff9982ba68322c2672d61c1`
+  reports `LOAD_MEGATRON_MODEL=PASS`, model on `cuda:0`, dtype
+  `torch.bfloat16`, and `MODEL_EVAL_SET=PASS`.
+- Verified prompt manifest sha256
+  `69d6634c47eea160548fe2779b6dd6038dc7605e8c9a894660a385efc9ae7cc2`
+  with five synthetic non-AIME, non-train prompts.
+- Verified blocker artifacts for the three no-export/no-endpoint generation
+  attempts: blocker shas `551e76ad...`, `77a6c76e...`, and `aa451bfb...`;
+  checkpoint-load manifest sha `e48c8128...`; retry log shas `c1a8c122...`
+  and `f32df07a...`.
+- Confirmed all three canary attempt directories lack `canary_summary.json`,
+  `canary_results.jsonl`, and `canary_full_completions.jsonl`; retained
+  completion rows are `0`.
+- Decision mailed to lead as `a7667e01d0cb4188aa0e5dc222ae7da0`:
+  `APPROVE_BLOCKER_CLOSEOUT` for task287 BLOCK evidence only.
+- Rationale: task285 iter2 checkpoint loads directly without export/endpoint,
+  but the allowed local MCore generation route failed before retained
+  completions. This is route/runtime blocker evidence, not model-quality
+  evidence.
+- Residual risks: no retained completions or canary quality evidence exist;
+  checkpoint load has missing `_extra_state` warnings even though load/eval
+  returned PASS. A bounded unblock task should remediate an approved
+  no-export/no-endpoint generation route before any AIME/task243 release.
+- Boundaries preserved: no code edit, canary execution by worker_4, training,
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data use, shared deletion, merge, main push, 30B, or 8-GPU action.
 

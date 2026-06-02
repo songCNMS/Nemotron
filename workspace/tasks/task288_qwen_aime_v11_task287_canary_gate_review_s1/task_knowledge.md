@@ -1,6 +1,6 @@
 # task288_qwen_aime_v11_task287_canary_gate_review_s1 - task knowledge
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 1. task288 reviews task287 only after worker_3 provides official evidence for
    an exact task287 head/PR/artifact report.
@@ -23,3 +23,11 @@
    error and should not be used.
 7. Future task288 substantive review must pin the eventual official task287
    evidence head/PR/mailbox report, not the acceptance-only placeholder.
+8. PR #352 head `52834d74c79ab98b5e125434160843752c34d47a` supports
+   `APPROVE_BLOCKER_CLOSEOUT` for task287 BLOCK evidence only: checkpoint load
+   passed, but no retained non-AIME canary completions were produced.
+9. Lead may close task287 as BLOCK and create a bounded unblock task for an
+   approved no-export/no-endpoint generation route. This does not release
+   AIME/task243 eval, export, endpoint, promotion, 30B, or 8-GPU.
+10. The task287 blocker is route/runtime, not model quality: direct local MCore
+    generation failed before retained completions despite checkpoint-load PASS.
