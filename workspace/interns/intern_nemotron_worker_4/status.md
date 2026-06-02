@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | none |
-| PR | task305 branch pending head-mismatch review |
+| PR | task305 branch pending final review PR |
 | Session | 1 |
-| Progress | Accepted task305 on branch `intern_nemotron_worker_4/task305_qwen_aime_v11_30b_task304_canary_review_s1` from current `origin/main` `c94216b04bc3d71577391883d0cb76aa8c95e621` and imported lead docs from `origin/intern_nemotron_lead/session1-recovery-task-docs` `53daa627c24bb22ec158078edeafc7c34ec20390`. Stopped substantive task304/#367 review because GitHub reports current #367 head `a38abd53c897b3c68878abb770cb80f762c20e6f`, not assigned exact head `773aff2cc9eaa7d0900b06f5d49dc29515cae709`. Decision: `BLOCK_REVIEW_HEAD_MISMATCH` / HOLD for refreshed exact-head instruction. No artifact review beyond static head/diff checks, no canary/AIME/task243/eval/export/endpoint/promotion/training/main push/merge/product-code change was performed. |
+| Progress | Completed task305 read-only review of task304/#367 exact head `1f23d8339c123702eaa9336c1fe2b25afcd6122a` after refreshed lead docs `e39bc08b6f00bfaf21bd68da989fac32e2eb439a`. Decision: `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` for task304 as bounded synthetic non-AIME checkpoint-load/completion-retention canary evidence only. Verified PR state/diff, `d8e58461..1f23d833`, `773aff2c..a38abd53`, `a38abd53..e5cc4982`, `e5cc4982..1f23d833`, local artifact checksums/metrics/prompt provenance/checkpoint-load proof/boundaries, plus remote root key artifacts. No training, AIME/task243/corrected AIME/eval rerun, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, main push, merge, direct #367 approval, or product-code modification was performed. |
