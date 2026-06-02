@@ -1258,3 +1258,7 @@
    `1faf8bf2b05d4881ba256c282128d318` confirms the drift from `a1bd2af` is
    status/history/task_knowledge-only and leaves the runtime report and artifacts
    unchanged. It remains pending task302 review.
+379. Latest continuation scan found no new gate evidence: #364 remains pending
+   task302 review, task299 final 30B-ready packed root/decontam PASS is missing,
+   #363 task300 remains blocked until task298 is approved, and #362 training is
+   still HOLD.
