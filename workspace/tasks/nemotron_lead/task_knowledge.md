@@ -340,3 +340,5 @@
 147. Worker_2 official task268 closeout mailbox
    `1da04d3abab24d8e8bfa80d65ea12dbd` confirms #338 corrected artifact evidence
    and `NEMTRON_BRIDGE_RUNTIME_BLOCKED`; global gate remains `NO-GO/HOLD`.
+148. task269 assignment peer_send was delivered to worker_4 for #338 exact head
+   `49e3728a8751909cc041110acd0e9212059dc6c5`.
