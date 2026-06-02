@@ -5957,3 +5957,7 @@
   a fresh bounded current-main pipeline. No export, endpoint, promotion,
   further training/eval, task255 reuse, AIME2025 train data, shared deletion,
   30B, or 8-GPU is authorized by this assignment.
+- Pushed lead assignment docs at `c01fb614...`.
+- Sent delivered peer assignments to worker_1 for task296 and worker_4 for
+  task297. Follow-up poll found no unread lead mailbox, no visible task296 or
+  task297 remote branch, and no open task296/task297 PR yet.

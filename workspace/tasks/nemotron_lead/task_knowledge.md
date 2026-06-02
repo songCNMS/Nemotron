@@ -1136,3 +1136,6 @@
    or return `B_REQUIRED_RERUN`.
 352. task297 is assigned to worker_4 for independent review of exact task296
    evidence before lead accepts no-rerun-needed for the current-code request.
+353. task296/task297 peer assignments were delivered after lead docs push
+   `c01fb614...`; initial post-assignment poll found no task296/task297 remote
+   branches or PRs yet.
