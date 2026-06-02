@@ -1,6 +1,6 @@
 # task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,15 @@
 6. task283 starts after task278/#347 merged into main as
    `28039222ad5d4054891713d85d05a15a491d8a96`; the task278 branch-only
    closeout is not required for task283 evidence.
+7. `NemTron` can currently import `nemo`, `megatron.bridge`,
+   `megatron.bridge.training.config`, and `AutoBridge.import_ckpt`, but Qwen
+   recipe import needs a task-owned venv layer with `megatron-energon` and its
+   small import-time support packages.
+8. A minimal task-owned `--system-site-packages` venv with targeted `--no-deps`
+   installs through `webdataset==1.0.2` is enough for
+   `megatron.bridge.recipes.qwen.qwen3` import and Qwen `ConfigContainer`
+   build against task276 packed data.
+9. The current route is not a full training environment: `pip check` remains
+   rc `1`, full `stage1_sft.train` import still needs
+   `nvidia_resiliency_ext`, and `nemo.collections.llm` still needs
+   `lightning`.

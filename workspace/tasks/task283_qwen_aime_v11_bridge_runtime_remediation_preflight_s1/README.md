@@ -1,6 +1,6 @@
 # task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1 - Bridge runtime remediation preflight
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
@@ -88,6 +88,28 @@ Report by mailbox and branch/PR if docs/status/report files change:
 - REQUEST-CHANGES: evidence is incomplete, stale, or ambiguous.
 - BLOCK: no usable NeMo/Megatron-Bridge runtime route exists without forbidden
   system changes or training/eval execution.
+
+## Worker Evidence
+
+Session 2 produced no-training config/import preflight evidence:
+
+- Report:
+  `workspace/tasks/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/bridge_runtime_remediation_preflight_report.md`
+- Local output root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`
+- Remote run root:
+  `/root/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`
+- Disposition:
+  `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`
+- Final manifest sha256:
+  `eaf06f61daa5c24e55d94f307abdc02f7870b3ea65d0edfa497625e58bc95ffd`
+- Final log sha256:
+  `e62a06d815cc0a5f6fbdffd71f6e32668cb02c35b532718eeda2cb5329e790e4`
+
+This evidence is not an `AutoBridge.import_ckpt` checkpoint-load proof and does
+not authorize training, nonzero-LR smoke, live AIME/task243 eval, export,
+endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, main
+push, merge, or 30B/8-GPU.
 
 ## Assignment
 
