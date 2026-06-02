@@ -3955,3 +3955,52 @@
 - Sent delivered peer_send follow-up to worker_5 requesting either pushed
   acceptance branch and continued no-training runtime-route audit, or mailbox
   blocker/ETA.
+- Received and marked read worker_5 task270 mailbox
+  `22bcef25bf2c4423a400e19f4fb29d3b`, reporting #339 `OPEN`/base `main`/
+  `CLEAN` at head `0d33486748e04c34f33e1a33ead7148779920625` with report
+  sha256 `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`.
+- Verified #339 diff scope is worker_5 status plus task270 README/history/
+  task_knowledge and `nemtron_runtime_route_audit_report.md`; diff hygiene
+  passed, GitHub shows no checks, and drift from initial report head
+  `8dcb2e1b139a45d11c344ac2d607f5c205e9cc2a` to `0d33486748e04c34f33e1a33ead7148779920625`
+  is status/history PR metadata only.
+- Independent lead checksum checks passed: PR-head report sha matches
+  `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`, worker_5
+  output sidecar `sha256sum -c` passed, and task268 final
+  `20260602T002457Z` artifact inventory `sha256sum -c` passed.
+- Lead disposition for #339/task270: approve as blocker-evidence-only
+  closeout documenting `NEMTRON_RUNTIME_ROUTE_BLOCKED` under current
+  permissions/resources. GitHub rejected a formal approving review because the
+  current credentials are treated as the PR author identity, so lead gate was
+  posted as issuecomment `4597793906`.
+- Sent delivered peer_send telling worker_5 to self-merge #339 only if it
+  remains `OPEN`/base `main`/`CLEAN` at merge time with no material head drift,
+  then mailbox closeout with mergedAt, mergeCommit, merged head, and final
+  `NEMTRON_RUNTIME_ROUTE_BLOCKED` disposition.
+- Observed #339 head drift to `e16ec77289809b57b5e036ccdeeb52dfd8c10c0b`;
+  drift from `0d33486748e04c34f33e1a33ead7148779920625` is worker_5 status plus
+  task270 history/task_knowledge stop-hook metadata only. The report remains
+  unchanged at sha256
+  `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`, diff
+  hygiene still passes, GitHub reports #339 `OPEN`/base `main`/`CLEAN`/
+  `MERGEABLE`, and there are no checks.
+- Posted current-head lead gate refresh comment `4597812050` approving #339 as
+  blocker-evidence-only for exact head
+  `e16ec77289809b57b5e036ccdeeb52dfd8c10c0b`, then sent delivered peer_send
+  instructing worker_5 to self-merge only if the PR remains clean/mergeable and
+  no further material head drift occurs.
+- Received and marked read worker_5 post-merge closeout mailbox
+  `38f1d224f6964245b813dd8b17a902f2`. #339 merged at
+  `2026-06-02T01:11:32Z` with merge commit
+  `958c283813960d90749d51c8880354b89caa7ff8` from merged head
+  `89731738e0b16efc950cb34b668253a4760c9798`; origin/main now matches
+  `958c283813960d90749d51c8880354b89caa7ff8`.
+- Verified final drift from
+  `e16ec77289809b57b5e036ccdeeb52dfd8c10c0b` to
+  `89731738e0b16efc950cb34b668253a4760c9798` is closeout/status/task-doc
+  metadata only; `nemtron_runtime_route_audit_report.md` remains sha256
+  `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: task270 is resource blocker
+  evidence only and does not authorize Bridge/checkpoint-load proof claims,
+  SFT training, nonzero-LR smoke, task243/live AIME eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, 30B/8-GPU, or shared deletion.

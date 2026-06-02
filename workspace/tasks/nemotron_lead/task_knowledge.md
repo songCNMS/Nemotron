@@ -367,3 +367,31 @@
 156. worker_5 local task270 branch currently has uncommitted acceptance
    docs/status only; lead sent a follow-up asking for a pushed branch or mailbox
    blocker/ETA while preserving no-training boundaries.
+157. task270/#339 current formal evidence head is
+   `e16ec77289809b57b5e036ccdeeb52dfd8c10c0b`; initial report head
+   `8dcb2e1b139a45d11c344ac2d607f5c205e9cc2a` through
+   `0d33486748e04c34f33e1a33ead7148779920625` to current head is status/history/
+   task_knowledge PR metadata only, and `nemtron_runtime_route_audit_report.md`
+   remains sha256
+   `73d1f4b56d3a7e7e5e6a67391731428625a649bc0539a95ee75c6264e3a41941`.
+158. task270 conclusion is `NEMTRON_RUNTIME_ROUTE_BLOCKED`: local host lacks
+   `megatron`/`megatron.bridge`/`nemo` and Docker daemon access; NemTron has
+   `megatron.bridge.AutoBridge.import_ckpt` but lacks `nemo` and checked
+   container runtimes; LTP/OpenPAI route cannot be validated without
+   `LTP_TOKEN`/`LTP_HOST`; visible image evidence has eval-factory refs but no
+   launchable `nvcr.io/nvidia/nemo:26.02.nemotron_3_super` route.
+159. The smallest task270 runtime unblock is external resource action: provide
+   `nemo` in the current NemTron Python route, provide a launchable NeMo/
+   Megatron-Bridge container/runtime, or provide LTP/OpenPAI credentials plus a
+   no-training job image/spec with the Qwen3-4B base mount.
+160. Lead approval of #339 is blocker-evidence-only and was refreshed to current
+   head in PR issuecomment `4597812050`; earlier issuecomment `4597793906`
+   records the pre-metadata-drift gate. GitHub would not accept a formal
+   approving review from the current credentials. This does not authorize
+   training, eval, promotion, task255 reuse, AIME2025 train data, or 30B/8-GPU.
+161. #339/task270 merged at `2026-06-02T01:11:32Z` with merge commit
+   `958c283813960d90749d51c8880354b89caa7ff8` from head
+   `89731738e0b16efc950cb34b668253a4760c9798`; final drift from `e16ec77` is
+   closeout/status/task-doc metadata only. task270 is completed blocker evidence,
+   and the next actionable requirement is external runtime access before
+   positive Qwen3-4B Bridge/checkpoint-load proof can be produced.
