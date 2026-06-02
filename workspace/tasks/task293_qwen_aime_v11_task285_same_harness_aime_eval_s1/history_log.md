@@ -70,3 +70,6 @@
   elapsed; progress reached `16/30`, correct `6/16`, with `aime_15_r01`
   stopped, parsed, and incorrect and `aime_16_r01` stopped, parsed, and
   correct. No final artifacts, official report, or PR exists yet.
+- Follow-up read-only poll: PID `433268` still active at about 62 minutes
+  elapsed; progress reached `17/30`, correct `7/17`, with `aime_17_r01`
+  stopped, parsed, and correct. No official report or PR exists yet.
