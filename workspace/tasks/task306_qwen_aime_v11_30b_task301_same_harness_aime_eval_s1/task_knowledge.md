@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Knowledge Entries
 
@@ -46,3 +46,6 @@
 16. Session 93: active run remains in progress with remote rank logs/manifests
    present but no rc, summary, completions, parser diagnostics, official report,
    or PR.
+17. Session 94: active run remains in progress after more than twelve minutes,
+   still without rc/results/report; command timeout is configured for 240
+   minutes, so lead did not interrupt.

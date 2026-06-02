@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -86,3 +86,14 @@
   `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z/artifacts`.
 - Local rc/summary/full-completions/parser diagnostics are still absent. Gate
   remains HOLD pending completion and official worker report.
+
+## Session 94 - 2026-06-02 UTC - extended monitor
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no PR or
+  official mailbox report exists.
+- Task306 NemTron run remains active after more than twelve minutes. No local or
+  remote rc file exists.
+- Remote artifacts remain rank logs plus prompt/checkpoint/command manifests.
+  Summary, full completions, parser diagnostics, and final checksum manifest are
+  absent.
+- Lead did not interrupt the worker-owned run. Gate remains HOLD.

@@ -1689,3 +1689,6 @@
    still `894e2e71`, no PR, no mailbox, and no rc/summary/completions/parser
    diagnostics. Remote rank logs and manifests exist but are incomplete gate
    evidence.
+480. Session 94: task306 run remains active after more than twelve minutes with
+   no rc, no summary/completions/parser diagnostics, no PR, and no mailbox. Lead
+   did not interrupt because the worker command has `rank-timeout-minutes 240`.

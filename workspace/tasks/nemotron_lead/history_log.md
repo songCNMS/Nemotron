@@ -7364,3 +7364,24 @@
 - Gate remains HOLD pending rc, complete artifacts, official worker_3 mailbox/
   PR or artifact report, and later lead review. No new worker follow-up was
   sent because the worker-owned run is active.
+
+## Session 94 - 2026-06-02 UTC - task306 active run extended monitor
+
+- Rechecked current task306 state:
+  - lead branch local/remote `d3e2acd9c853e91207cc15bf1b0b4f52e3573f3b`;
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- Worker-launched task306 NemTron process remains active after more than twelve
+  minutes. It has no local or remote rc file yet.
+- Remote artifacts still contain rank logs and manifests only; no summary, full
+  completions, parser diagnostics, final checksum manifest, or official
+  worker_3 report is visible.
+- Log tail remains at static-engine generation warnings after checkpoint-load
+  incompatible-key warnings. This may indicate slow or stuck generation, but the
+  worker command's configured `rank-timeout-minutes` is `240`; lead did not
+  interrupt or terminate it.
+- Gate remains HOLD. No FT-vs-base decision is possible until the run exits and
+  worker_3 reports complete artifacts or a blocker.
