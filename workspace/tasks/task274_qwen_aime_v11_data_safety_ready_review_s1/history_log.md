@@ -37,3 +37,6 @@
   operations were modified or run.
 - Opened PR #342:
   https://github.com/songCNMS/Nemotron/pull/342.
+- Corrected worker `status.md` metadata/table status from non-canonical
+  `Review` to canonical `Working`; report disposition and task evidence are
+  unchanged.
