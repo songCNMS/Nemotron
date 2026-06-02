@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task287_qwen_aime_v11_non_aime_canary_retention_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | none |
-| PR | #345 |
+| Current Task | task287_qwen_aime_v11_non_aime_canary_retention_s1 |
+| PR | #352 |
 | Session | 1 |
-| Progress | Completed task281 no-run canary/AIME evaluation plan HOLD on branch `intern_nemotron_worker_3/task281_qwen_aime_v11_canary_aime_eval_plan_hold_s1`; disposition `PLAN_READY_HOLD`, no live eval/training/export/endpoint action run. |
+| Progress | PR #352 reports task287 BLOCK; corrected history metadata/session format after hook validation. |
