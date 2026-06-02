@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=123 -->
+<!-- METADATA:SESSION=124 -->
 
 ## Knowledge Entries
 
@@ -146,3 +146,7 @@
    thirteen minutes. Latest stdout progress remains `9/30`, and remote rank
    logs still show `start_index=9` in progress with no done event. No final
    artifacts, blocker, PR, or official report exists.
+47. Session 124: active run remains in progress after about one hundred
+   seventeen minutes. Latest stdout progress advanced to `10/30`, with row 10
+   parsed true/correct false, and rank logs show `start_index=10` active. No
+   final artifacts, blocker, PR, or official report exists.
