@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - history log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-06-02 UTC - assignment
 
@@ -67,9 +67,9 @@
 - Fetched task291 branch; the branch currently resolves to
   `ec099d2e523064640c676e2f682e54f44ccd6098` and includes prior lead-observed
   head `4dffb40caea801503b8c39241f9afbe321887760`.
-- Read worker_2 task291 docs/status and local output directory read-only. No
-  task291 PR or official task291 report is visible; worker_2 status remains
-  Working.
+- Read worker_2 task291 docs/status and local output directory read-only. At
+  that Session 4 point, a task291 published PR/report was not visible and
+  worker_2 status remained Working.
 - Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
   worker status, and carried task266 runbook report to hold task291 pending
   worker_2 official report/PR and lead processing.
@@ -106,3 +106,38 @@
   AIME2025 train data, shared deletion, merge, main push, 30B, and 8-GPU
   blocked. No runtime, training, canary, eval, export, endpoint, promotion, or
   artifact mutation action was performed.
+
+## Session 5 - 2026-06-02 UTC - task295 post-AIME metric refresh
+
+- Accepted task295 on existing #351 because the PR was still OPEN/base main and
+  MERGEABLE at head `ac85acace556f3861576314fc2684733498074f2`, with no
+  unrelated worktree changes.
+- Fetched current `origin/main`
+  `228ffd741bb9fa4eae6abf8d37bc171397151d7a` and lead docs
+  `70d7aafd0ef4c5073561dcea89cad5fb1d876b6d`.
+- Verified #354/task291 is MERGED at `2026-06-02T08:30:04Z` with merge commit
+  `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf` from head
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`.
+- Verified #355/task292 is MERGED at `2026-06-02T08:37:35Z` with merge commit
+  `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from head
+  `e519fecc1065bd055a69fdf271bd21994facd13b`.
+- Verified #356/task293 is OPEN/base main/CLEAN/MERGEABLE at exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb` and read
+  `task285_iter2_same_harness_aime_eval_report.md`.
+- Recorded task293 corrected AIME2025 result: task285 iter2 FT `12/30 = 0.4`
+  versus accepted base `11/30 = 0.36666666666666664`, delta `+1/30`.
+- Recorded task293 local artifact root
+  `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`,
+  remote root
+  `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`,
+  and key checksum values in the runbook report.
+- Checked for task294 with `gh pr list --state all --search task294` and
+  `git ls-remote --heads origin '*task294*'`; no task294 PR or branch was
+  visible.
+- Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
+  worker status, and the carried task266 runbook report. Imported task295 docs
+  under `workspace/tasks/task295_qwen_aime_v11_post_aime_pass_runbook_refresh_s1/`.
+- Kept export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, 30B, and 8-GPU blocked. No runtime, training, canary, AIME re-eval,
+  task243 eval, export, endpoint, promotion, merge, main push, or artifact
+  mutation action was performed.
