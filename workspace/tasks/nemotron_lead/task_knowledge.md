@@ -481,3 +481,6 @@
    review. It still does not authorize nonzero-LR smoke, live canary,
    AIME/task243 eval, export, endpoint, promotion, AIME2025 train data,
    task255 reuse, shared deletion, or 30B/8-GPU.
+184. A worker-local task276 branch with staged task docs is not formal gate
+   evidence. Lead should wait for a pushed branch and/or mailbox acceptance,
+   then for artifact paths/checksums or exact blocker before assigning review.

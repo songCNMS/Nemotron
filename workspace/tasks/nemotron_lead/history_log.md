@@ -4292,3 +4292,18 @@
   from current `origin/main` `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce`; PR to
   `main` if repo docs/status/scripts change, or mailbox with artifact paths and
   checksums if artifact-only.
+- Goal-continuation monitor: lead mailbox unread count remained `0`; no remote
+  task276 worker branch or PR was visible via GitHub; no task276 output root was
+  visible under `/work-agents/intern_nemotron_worker_2/outputs`.
+- Read-only worker_2 local repo observation showed branch
+  `intern_nemotron_worker_2/task276_qwen_aime_v11_rematerialize_packed_qwen_s1`
+  checked out against `origin/main` with task276 docs staged, but worker_2
+  status still referenced task272 and no official task276 mailbox acceptance or
+  artifact report had arrived.
+- Re-read mailbox before contact; unread count was `0`.
+- Sent non-interrupting `next` peer_send follow-up to worker_2 requesting either
+  pushed task276 acceptance branch/status update or mailbox exact blocker/ETA.
+  Delivery returned `delivered`, `kind=queued`.
+- Current lead gate remains unchanged: task276 is in-progress ownership
+  monitoring only. No packed Qwen artifact, reviewable manifest/counts/parity/
+  contract evidence, or exact blocker exists yet.
