@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -39,3 +39,9 @@
     gate review and must not be self-merged or used to start AIME/task243,
     export, endpoint, promotion, training, task255 reuse, AIME train-data use,
     shared deletion, or main push.
+12. Lead follow-up confirmed task304/#367 at
+    `e5cc49821d39a014756dfd3ce961bab351a4f0fe` and refreshed task305 worker_4
+    review to that exact head. Do not make further #367 head changes, even
+    status-only changes, unless lead asks; keep all downstream AIME/task243,
+    export, endpoint, promotion, training, task255 reuse, AIME train-data use,
+    shared deletion, and main push actions blocked.

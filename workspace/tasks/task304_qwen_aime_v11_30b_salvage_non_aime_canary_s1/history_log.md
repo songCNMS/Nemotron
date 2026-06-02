@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 83 - 2026-06-02 UTC - assignment
 
@@ -74,3 +74,18 @@
   or corrected AIME; do not export, launch endpoint, promote, train, reuse
   task255, use AIME2025 train data, delete shared files, or push main unless
   lead later releases after task305 approval/request-changes/block.
+
+## Session 3 - 2026-06-02 UTC - HOLD follow-up and no head changes
+
+- Received lead HOLD follow-up confirming task304/#367 at head
+  `e5cc49821d39a014756dfd3ce961bab351a4f0fe` remains
+  OPEN/CLEAN/MERGEABLE.
+- Lead instructed not to make further #367 head changes, status-only or
+  otherwise, unless lead asks.
+- Lead refreshed task305 worker_4 independent review to exact head
+  `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
+- This session records the HOLD follow-up only; canary evidence remains pending
+  task305 independent gate review.
+- Boundaries reaffirmed: no self-merge; no downstream AIME/task243/corrected
+  AIME; no export, endpoint, promotion, training, task255 reuse, AIME2025 train
+  data, shared deletion, or main push.
