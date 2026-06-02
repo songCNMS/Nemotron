@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 |
 | PR | Pending |
-| Session | 1 |
-| Progress | Accepted task293; preparing corrected AIME2025 same-harness task285 iter2 FT-vs-base run or precise boundary/protocol blocker. |
+| Session | 2 |
+| Progress | Rebased task293 branch onto current origin/main 228ffd741bb9fa4eae6abf8d37bc171397151d7a; continuing corrected AIME2025 same-harness task285 iter2 FT-vs-base run/block analysis within boundaries. |

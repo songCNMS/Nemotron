@@ -1,6 +1,6 @@
 # task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 - Accepted base comparator is task247 Qwen3-4B corrected AIME2025 `11/30 =
   0.36666666666666664`; use it only if same-harness equivalence is proven.
@@ -12,3 +12,6 @@
   candidate.
 - No export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, 30B, or 8-GPU is authorized.
+- Session 2 branch refresh: current base is `origin/main`
+  `228ffd741bb9fa4eae6abf8d37bc171397151d7a` after #355/task292; task293
+  branch rebased cleanly before continuing evidence work.
