@@ -523,3 +523,7 @@
 195. task276/task277 accepted residual risk: valid split has one row and test
    split has zero rows. Later config/import/pilot gates must decide whether
    broader validation/test distributions are needed.
+196. #344/task276 merged at `2026-06-02T04:19:38Z` with merge commit
+   `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` from exact approved head
+   `07efab4fa0d8367e96f54af3d2cdc70768d73595`. The merge accepted packed-data
+   evidence only; global Qwen AIME gate remains `NO-GO/HOLD`.

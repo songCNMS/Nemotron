@@ -4435,6 +4435,29 @@
   `07efab4fa0d8367e96f54af3d2cdc70768d73595` and remains `CLEAN`/`MERGEABLE`
   at merge time; otherwise stop and report refresh needs. Worker must send
   mergedAt/mergeCommit/merged-head closeout after merge.
+- Follow-up GitHub check found #344 `MERGED` at `2026-06-02T04:19:38Z` with
+  merge commit `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` from exact approved
+  head `07efab4fa0d8367e96f54af3d2cdc70768d73595`. No lead merge was run.
+- Fetched origin and verified `origin/main` is
+  `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`.
+- Verified #344 merge scope from prior main
+  `fd4f3b2b60cab7340a1a187e011af79ea1cb76ce` to `origin/main`: worker_2
+  status plus task276 README/history/task_knowledge/
+  `v11_rematerialized_packed_qwen_report.md` only. `git diff --check` passed.
+- Verified merged task276 report sha256 on `origin/main` is
+  `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887`.
+- Verified task276 local artifact roots remain present:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`,
+  `packed_qwen/splits/manifest.json`, and
+  `evidence/packed_qwen_evidence_manifest.json`.
+- Lead mailbox unread count was `0` after merge; worker_2 mailbox closeout has
+  not arrived yet, but GitHub merge state is verified.
+- task276/task277 closeout disposition: accepted no-training packed Qwen
+  data/packing evidence only. This can unblock a later separately assigned
+  no-training config/import preflight review, but it does not authorize
+  training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, main push by
+  lead, or 30B/8-GPU.
 - task277 scope: approve/request-changes/block for task276 data/packing
   evidence only. It must not edit files, train, eval, export, launch endpoints,
   promote, use AIME2025 train data, reuse task255, delete shared files, merge,
