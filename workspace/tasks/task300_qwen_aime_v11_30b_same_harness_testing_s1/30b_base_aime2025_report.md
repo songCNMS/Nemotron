@@ -1,6 +1,6 @@
 # task300 30B base AIME2025 report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=5 -->
 
 ## Summary
 

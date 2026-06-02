@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -81,3 +81,26 @@
   optimizer step, no export for promotion, no endpoint promotion, no task255
   reuse, no AIME2025 train data, no shared deletion, no promotion claim, no main
   push, and no merge.
+
+## Session 5 - 2026-06-02 UTC - PR merged
+
+- Lead gate approved self-merge of PR #363 after worker_4 independent review
+  approved exact head `155eb0c6845c0bf2b7d40051a9045533ffe00589` with
+  residuals.
+- Verified PR #363 was `OPEN`, base `main`, `CLEAN`, `MERGEABLE`, non-draft,
+  and still at exact head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589` immediately before merge.
+- Self-merged PR #363 through GitHub. Merge time:
+  `2026-06-02T15:46:29Z`; merge commit:
+  `e400cea8a1604bc95cc430a194811ff553b99401`; merged head:
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`.
+- Fetched `origin/main` and confirmed it advanced to merge commit
+  `e400cea8a1604bc95cc430a194811ff553b99401`.
+- No post-merge issue observed.
+- Scope remains base comparator evidence only: corrected same-harness 30B base
+  score `15/30`, exact-normalized accuracy `0.5`, with full completions,
+  parser diagnostics, manifests, and checksums retained under the task300
+  artifact root.
+- Boundaries maintained after merge: no FT eval, no non-AIME canary, no
+  training or optimizer step, no export, no endpoint promotion, no task255
+  reuse, no AIME2025 train data, no shared deletion, and no promotion action.

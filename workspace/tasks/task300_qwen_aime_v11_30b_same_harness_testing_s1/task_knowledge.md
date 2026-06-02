@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,9 @@
     incorrect under the corrected denominator; future 30B FT comparison must
     use the same cache, prompt, endpoint/chat API semantics, sampling settings,
     parser, normalizer, and denominator.
+12. session5 merge: PR #363 merged at `2026-06-02T15:46:29Z` with merge commit
+    `e400cea8a1604bc95cc430a194811ff553b99401` from exact reviewed head
+    `155eb0c6845c0bf2b7d40051a9045533ffe00589`.
+13. session5 scope: merged evidence is base comparator only; it does not
+    authorize FT eval, canary, training, export, endpoint promotion, task255
+    reuse, AIME2025 train data, shared deletion, or promotion.
