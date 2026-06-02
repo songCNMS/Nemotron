@@ -7,6 +7,7 @@
 - Task: `task287_qwen_aime_v11_non_aime_canary_retention_s1`
 - Branch:
   `intern_nemotron_worker_3/task287_qwen_aime_v11_non_aime_canary_retention_s1`
+- PR: #352
 - Base: `origin/main`
   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`
 - Lead docs source:
