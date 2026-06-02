@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #344/task276 MERGED at 793e7df; packed-data evidence accepted only; gate NO-GO/HOLD |
+| PR | #344/task276 MERGED at 793e7df; worker closeouts processed; gate NO-GO/HOLD |
 | Session | 73 |

@@ -4452,6 +4452,21 @@
   `evidence/packed_qwen_evidence_manifest.json`.
 - Lead mailbox unread count was `0` after merge; worker_2 mailbox closeout has
   not arrived yet, but GitHub merge state is verified.
+- Worker_4 sent final official task277 mailbox
+  `da314e3445424dbd835706f993c4d58a`, confirming #344 exact head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595` remained unchanged and that the
+  decision is `APPROVE` as packed data/packing evidence only even though the PR
+  was already `MERGED` by the time of that report. Lead marked it read.
+- Worker_2 sent #344 merge closeout mailbox
+  `14a4d89e925e4124841ec35507205d88`: self-merged after verifying #344 was
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at exact approved head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`; mergedAt
+  `2026-06-02T04:19:38Z`; merge commit
+  `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`; merged PR head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`. Lead marked it read.
+- Worker_2 branch-only closeout after merge is
+  `c6a9368d6f094c36527da6dc6f8496c791f57121`; it updates worker/task status
+  docs after the merge and does not change merged PR evidence.
 - task276/task277 closeout disposition: accepted no-training packed Qwen
   data/packing evidence only. This can unblock a later separately assigned
   no-training config/import preflight review, but it does not authorize

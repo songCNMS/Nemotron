@@ -527,3 +527,6 @@
    `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` from exact approved head
    `07efab4fa0d8367e96f54af3d2cdc70768d73595`. The merge accepted packed-data
    evidence only; global Qwen AIME gate remains `NO-GO/HOLD`.
+197. worker_2 branch-only post-merge closeout head for task276 is
+   `c6a9368d6f094c36527da6dc6f8496c791f57121`; do not confuse it with the
+   merged PR evidence head `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
