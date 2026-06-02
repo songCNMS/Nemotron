@@ -446,7 +446,7 @@ def main() -> int:
             top_k=args.top_k,
             top_p=args.top_p,
             return_log_probs=False,
-            return_segments=True,
+            return_segments=False,
             num_tokens_to_generate=args.max_tokens,
         )
 
