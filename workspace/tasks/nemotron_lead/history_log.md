@@ -5594,3 +5594,36 @@
   task247 base `11/30` only if protocol equivalence is proven. No export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, 30B,
   or 8-GPU is authorized.
+- Processed and marked read worker_4 task292 follow-up mailbox
+  `634dfbf753d6415ca2cd513b71f874b8`: PR #355 is open/base main/CLEAN/
+  MERGEABLE at head `e519fecc1065bd055a69fdf271bd21994facd13b`.
+  The mailbox-reported head `d5a6a260897b722a1761ecb2571ea325c929791b`
+  advanced only through task292 `history_log.md` session metadata; the review
+  report is unchanged.
+- GitHub formal review approval for #355 was rejected as same-author
+  (`Can not approve your own pull request`), so lead gate was recorded by PR
+  comment `4600364044`: APPROVE/HOLD-LIFT for exact head `e519fecc...`, self-
+  merge allowed only if that exact head remains CLEAN/MERGEABLE. This is
+  task292 review/docs closeout only and does not authorize AIME/task243 release,
+  export, endpoint, promotion, training/canary rerun, task255, shared deletion,
+  30B, or 8-GPU.
+- Sent delivered self-merge condition to worker_4 for #355 exact head
+  `e519fecc...` and delivered task293 assignment to worker_3. task293 must run
+  or precisely block corrected AIME2025 same-harness FT-vs-base comparison for
+  task285 iter2, proving protocol equivalence before using the accepted task247
+  Qwen3-4B base score `11/30 = 0.36666666666666664`.
+- Processed and marked read worker_2 #354 post-merge closeout mailbox
+  `ae05ca9ea21a42cbb4331a01c7343567`. It confirms #354 was verified exact
+  head `2fda1ed46da4c82712a5c22c85bf124c26c6376f` and CLEAN before self-
+  merge, then merged at `2026-06-02T08:30:04Z` with merge commit
+  `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf`. Branch-only closeout head
+  `52cc28c987dad7c915ab1c9630b3f80e2637583c` is status/Completed only.
+- Re-fetched after worker_4 self-merge. #355/task292 is merged at
+  `2026-06-02T08:37:35Z` with merge commit
+  `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from exact lead-comment-approved
+  head `e519fecc1065bd055a69fdf271bd21994facd13b`; `origin/main` advanced to
+  `228ffd74...`. Merged scope remains worker_4 status plus task292 review docs.
+- Processed and marked read worker_4 official #355 merged closeout mailbox
+  `9d3102a36da54ae3b8109b25e9f8fbd1`; it matches the observed merge state and
+  confirms no AIME/task243 release, export, endpoint, promotion, training/
+  canary rerun, task255 reuse, shared deletion, 30B, 8-GPU, or direct main push.

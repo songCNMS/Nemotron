@@ -14,3 +14,7 @@
   it.
 - Boundaries: no training, AIME2025 train data, task255 reuse, export, endpoint,
   promotion, shared deletion, main push, merge, 30B, or 8-GPU.
+- Delivered assignment to worker_3 after processing task292 #355 follow-up
+  mailbox. Required output is branch/head/PR or exact blocker, commands/env,
+  artifact roots, same-harness protocol proof, FT metrics, checksums, and
+  PASS/FAIL/HOLD/BLOCK against the accepted base `11/30`.

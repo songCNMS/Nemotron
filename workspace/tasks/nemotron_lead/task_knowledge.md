@@ -931,3 +931,27 @@
 302. task293 is assigned to worker_3 for corrected AIME2025 FT-vs-base eval or
    fail-closed blocker. Accepted base is task247 `11/30`; worker_3 must prove
    same corrected protocol before judging FT. No export/endpoint/promotion/30B.
+303. #355/task292 current head after fetch is
+   `e519fecc1065bd055a69fdf271bd21994facd13b`, open/base main/CLEAN/MERGEABLE.
+   Drift from mailbox-reported `d5a6a260897b722a1761ecb2571ea325c929791b` is
+   only task292 history metadata; `task291_canary_route_review_report.md` is
+   unchanged and `git diff --check` passes.
+304. Formal GitHub approval for #355 is unavailable from this credential because
+   GitHub treats it as the PR author. Lead gate is therefore PR comment
+   `4600364044`: exact-head APPROVE/HOLD-LIFT for `e519fecc...`, worker_4
+   self-merge only if exact head remains CLEAN/MERGEABLE. This records docs/
+   review closeout only.
+305. task293 assignment was delivered to worker_3 after processing task292
+   mailbox. The FT candidate is task285 iter2 at
+   `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3/iter_0000002`;
+   comparator remains task247 corrected Qwen3-4B base `11/30 =
+   0.36666666666666664` only if same-harness equivalence is proven.
+306. worker_2 #354 post-merge mailbox `ae05ca9ea21a42cbb4331a01c7343567`
+   matches observed GitHub state: #354 merged at `2026-06-02T08:30:04Z`,
+   merge commit `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf`, merged head
+   `2fda1ed46da4c82712a5c22c85bf124c26c6376f`, and no boundary expansion.
+307. #355/task292 merged at `2026-06-02T08:37:35Z`, merge commit
+   `228ffd741bb9fa4eae6abf8d37bc171397151d7a`, merged head
+   `e519fecc1065bd055a69fdf271bd21994facd13b`. origin/main is now
+   `228ffd74...`; #355 is review/docs closeout only. worker_4 official closeout
+   mailbox `9d3102a36da54ae3b8109b25e9f8fbd1` matches this state.
