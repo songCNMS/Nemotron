@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task263_qwen_aime_v11_base_load_planner_sanity_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task263_qwen_aime_v11_base_load_planner_sanity_s1 |
-| PR | #337 |
-| Session | 6 |
-| Last Update | 2026-06-02T00:03:26Z: Fixed Session 6 hook metadata by removing duplicate history heading; #337 remains HOLD with unchanged blocker evidence. |
+| Current Task | task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-02T00:19:08Z: Accepted task268, created worker branch from `origin/main` after #337 merge, and imported lead task docs for NemTron/NeMo Bridge runtime probe. |
