@@ -1,6 +1,6 @@
 # task291_qwen_aime_v11_no_export_canary_route_unblock_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 1. task291 exists because task287 can load the task285 iter2 checkpoint but
    cannot produce retained completions through the allowed no-export/no-endpoint

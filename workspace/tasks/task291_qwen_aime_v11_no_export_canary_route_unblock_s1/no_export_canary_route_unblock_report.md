@@ -7,6 +7,8 @@
 - Task: `task291_qwen_aime_v11_no_export_canary_route_unblock_s1`
 - Branch:
   `intern_nemotron_worker_2/task291_qwen_aime_v11_no_export_canary_route_unblock_s1`
+- PR: #354
+  `https://github.com/songCNMS/Nemotron/pull/354`
 - Evidence source head:
   `dfb6ca64a5479990be9d4f54defb9f294c09866f`
 - Base history includes task287/#352 and task290/#353 through

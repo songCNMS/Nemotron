@@ -1,6 +1,6 @@
 # task291_qwen_aime_v11_no_export_canary_route_unblock_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -56,3 +56,22 @@
   `pass`.
 - Wrote `no_export_canary_route_unblock_report.md` with commands, environment,
   artifact paths, checksums, route adjustments, and boundary confirmation.
+
+## Session 3 - PR and official mailbox closeout
+
+- Opened PR #354 to `main`:
+  `https://github.com/songCNMS/Nemotron/pull/354`.
+- PR #354 was observed OPEN/CLEAN with base `main` and head
+  `44f96764957db59846d60c72343bbc63ae37e4bd` before this metadata-only
+  closeout update.
+- Lead read-only observation confirmed the final evidence run at
+  `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`
+  has command RC `0`, `canary_pass=true`, 5 prompt/result/full-completion rows,
+  5 retained completions, 5 exact matches, final-answer marker count 9, one GPU,
+  no-export/no-endpoint route, and `LOAD_MEGATRON_MODEL=PASS`.
+- Sent official mailbox report to `intern_nemotron_lead` with PR, branch/head,
+  commands/env, local and remote roots, artifact checksums, metrics, the
+  detokenized fallback explanation for `synthetic_word_completion_ready_set`,
+  residual risk, and boundary confirmation.
+- No AIME/task243 eval, export, endpoint, promotion, 30B, 8-GPU, training, or
+  optimizer step was run.
