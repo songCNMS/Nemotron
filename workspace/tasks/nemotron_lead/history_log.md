@@ -5193,3 +5193,22 @@
   substantive review. Repeated the pause on further task285 retries/training and
   the ban on canary, AIME/task243 eval, export, endpoint, promotion, 30B, or
   8-GPU.
+- Fetched worker_2 task285 publication. PR #350 is open, base `main`, clean/
+  mergeable, non-draft, at exact head
+  `fc379240c8517de10e37a5438f87b6b0994399f0`. The PR-style diff is scoped to
+  worker_2 status plus task285 README, history, task_knowledge, and
+  `bounded_qwen4b_sft_smoke_report.md`; `git diff --check` passed.
+- #350 report disposition is
+  `PASS_SMOKE_EVIDENCE_WITH_POST_TRAIN_EVAL_RC1_RISK`. Key reported evidence:
+  Bridge import `BRIDGE_IMPORT_RC=0`, retry3 two optimizer iterations with
+  nonzero LR and finite loss, checkpoint root
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3`,
+  latest iteration `2`, size `105G`, inventory file count `34`, and explicit
+  post-train built-in eval/SIGTERM `RC=1` residual risk.
+- Posted #350 lead HOLD comment `4599464149` pending worker_4/task286
+  independent review of exact head `fc379240...`; no canary, AIME/task243 eval,
+  export, endpoint, promotion, 30B, or 8-GPU is authorized.
+- Sent delivered peer message to worker_4 releasing task286 substantive review
+  for #350 exact head `fc379240c8517de10e37a5438f87b6b0994399f0`, with focus on
+  whether the RC=1 post-train eval/SIGTERM residual risk still permits
+  accepting retry3 as bounded smoke evidence only.

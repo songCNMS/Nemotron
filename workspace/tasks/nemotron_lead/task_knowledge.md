@@ -766,3 +766,11 @@
 260. task285 PR scope must be checked carefully because worker_2 local diff
    includes task283 closeout and worker_2 knowledge/status edits in addition to
    task285 report/docs.
+261. #350/task285 is the official task285 docs/report PR at exact head
+   `fc379240c8517de10e37a5438f87b6b0994399f0`; its PR-style diff is scoped to
+   worker_2 status plus task285 docs/report only. It is HOLD pending
+   worker_4/task286 review.
+262. task286 must decide whether task285 retry3's `RC=1` after post-train
+   built-in eval/SIGTERM is acceptable as bounded smoke evidence only. Even if
+   approved, it does not authorize canary, AIME/task243 eval, export, endpoint,
+   promotion, 30B, or 8-GPU.
