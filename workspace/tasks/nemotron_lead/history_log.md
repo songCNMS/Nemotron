@@ -5250,3 +5250,15 @@
   from origin/main `5d32f076...`. The task explicitly fails closed if the
   canary requires export or endpoint, and it keeps corrected AIME2025 comparison
   blocked until a later lead release.
+- Processed worker_2 official #350 merge closeout mailbox. It confirms
+  pre-merge #350 was exact approved head `fc379240...` and clean/mergeable,
+  mergedAt `2026-06-02T06:53:14Z`, merge commit `5d32f076...`, merged head
+  `fc379240...`, and no further task285 retry/training, live canary,
+  AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255
+  reuse, shared deletion, 30B, or 8-GPU. Marked the mailbox read.
+- Fetched worker_2 post-merge branch-only closeout head
+  `3adcc6f56afba6ec404ca260727994424354a29c`; it is not part of the approved
+  PR merge evidence.
+- Sent delivered task287 assignment to worker_3 with lead docs pushed at
+  `bb33e3ee`, origin/main `5d32f076...`, task285 iter2 checkpoint root, and
+  strict no-export/no-endpoint/no-AIME/no-training/no-promotion/no-30B bounds.

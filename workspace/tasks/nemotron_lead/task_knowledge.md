@@ -788,3 +788,7 @@
    task287 is the next gate for worker_3: non-AIME canary/completion retention
    on the task285 iter2 checkpoint. It must block rather than use export or
    endpoint, and AIME/task243 remains unreleased.
+266. worker_2 post-merge task285 branch head `3adcc6f...` is branch-only
+   closeout after #350 merged and is not part of merged evidence. The approved
+   task285 evidence remains PR head `fc379240...` and merge commit
+   `5d32f076...`.

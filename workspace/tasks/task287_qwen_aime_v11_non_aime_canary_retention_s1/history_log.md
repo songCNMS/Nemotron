@@ -9,3 +9,5 @@
 - Boundaries remain fail-closed: no training, no AIME/task243 eval, no export,
   no endpoint, no promotion, no task255 reuse, no shared deletion, no 30B, and
   no 8-GPU.
+- Sent delivered peer assignment to worker_3 with lead docs at `bb33e3ee` and
+  origin/main `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`.

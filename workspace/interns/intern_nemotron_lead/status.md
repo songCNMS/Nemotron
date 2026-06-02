@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #350/task285 MERGED at 5d32f076; task287 non-AIME canary assigned; AIME/export/promotion/30B still HOLD |
+| PR | #350/task285 MERGED at 5d32f076; task287 delivered to worker_3; AIME/export/promotion/30B still HOLD |
 | Session | 74 |
