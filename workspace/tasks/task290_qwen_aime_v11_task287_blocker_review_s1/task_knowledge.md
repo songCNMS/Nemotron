@@ -1,6 +1,6 @@
 # task290_qwen_aime_v11_task287_blocker_review_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 1. task290 reviews task287 blocker artifacts only; it does not run the canary or
    attempt an implementation fix.
@@ -16,3 +16,5 @@
 5. The accepted blocker is route/runtime specific: task285 iter2 checkpoint
    load passes on one H200, but the no-export/no-endpoint in-process MCore
    generation route fails before retained non-AIME completions.
+6. PR #353 was merged as blocker review documentation only. It does not
+   authorize AIME/task243 eval, export, endpoint, promotion, 30B, or 8-GPU.

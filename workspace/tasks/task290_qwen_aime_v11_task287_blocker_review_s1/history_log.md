@@ -1,6 +1,6 @@
 # task290_qwen_aime_v11_task287_blocker_review_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -57,3 +57,18 @@
 - No code edit, canary run, training, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train-data use, shared deletion, merge,
   main push, 30B, or 8-GPU action was performed.
+
+## Session 3 - 2026-06-02 UTC - Merged and closed by worker
+
+- Received lead approval for exact task290 PR #353 head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Verified PR #353 was `OPEN`, base `main`, `CLEAN`, non-draft,
+  `MERGEABLE`, and still at the approved head before merging.
+- Self-merged PR #353.
+- Merge timestamp: `2026-06-02T07:52:08Z`.
+- Merge commit: `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`.
+- Merged head: `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Scope remained blocker review docs/status/report only.
+- Boundary confirmation: no AIME/task243 eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train-data use, shared deletion, main push, 30B, or
+  8-GPU action was run or authorized.

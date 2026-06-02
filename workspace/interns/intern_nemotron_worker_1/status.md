@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task290_qwen_aime_v11_task287_blocker_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task290_qwen_aime_v11_task287_blocker_review_s1 |
+| Current Task | |
 | PR | https://github.com/songCNMS/Nemotron/pull/353 |
-| Session | 2 |
-| Progress | Completed task290 read-only review of task287 PR #352 head 52834d74c79ab98b5e125434160843752c34d47a and blocker artifacts; opened PR #353 with decision APPROVE_BLOCKER_CLOSEOUT. |
+| Session | 3 |
+| Progress | Merged task290 PR #353 at approved head daad63efe77f19b8d56c62eca9d9f9331efd6e22; scope remained blocker review docs only. |

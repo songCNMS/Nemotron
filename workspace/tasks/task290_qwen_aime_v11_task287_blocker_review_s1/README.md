@@ -1,6 +1,6 @@
 # task290_qwen_aime_v11_task287_blocker_review_s1 - task287 blocker evidence review
 
-<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=3 -->
 
 ## Background
 
@@ -120,3 +120,7 @@ Key observed fields to verify:
 - Reviewed authoritative task287 PR #352 exact head:
   `52834d74c79ab98b5e125434160843752c34d47a`.
 - Decision: `APPROVE_BLOCKER_CLOSEOUT`.
+- PR #353 merged at approved head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Merge timestamp: `2026-06-02T07:52:08Z`.
+- Merge commit: `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`.
