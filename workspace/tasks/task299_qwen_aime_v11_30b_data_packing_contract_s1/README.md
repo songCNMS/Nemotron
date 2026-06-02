@@ -1,6 +1,6 @@
 # task299_qwen_aime_v11_30b_data_packing_contract_s1 - 30B data/packing contract gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_1,SESSION=80 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=83 -->
 
 ## Background
 

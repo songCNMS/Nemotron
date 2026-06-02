@@ -1,6 +1,6 @@
 # task299_qwen_aime_v11_30b_data_packing_contract_s1 - history log
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=83 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -46,3 +46,44 @@
   scoring, non-AIME canary, export, endpoint, promotion, task255 reuse,
   AIME2025 train prompts/labels, shared deletion, main push, merge, 30B
   training, or 8-GPU launch.
+
+## Session 82 - 2026-06-02 UTC - final 30B packing contract evidence
+
+- Produced task-owned 30B-ready packed root:
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+- Decision recorded in `30b_data_packing_contract_report.md`:
+  `PASS_30B_DATA_PACKING_CONTRACT`.
+- Top manifest sha256:
+  `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`.
+- Proved Qwen3-4B and Qwen3-30B-A3B tokenizer assets/API/chat-template samples
+  are equivalent, then adapted the copied metadata tokenizer URI to the 30B
+  tokenizer path.
+- Offline no-training contract validators passed:
+  `validate_qwen_packed_sft_chat_contract` and
+  `validate_qwen_training_pipeline_contract`.
+- Split parity and counts passed: train `279` rows/`46` shards, valid `1`
+  row/`1` shard, test `0` rows/`1` shard.
+- Decontam proof passed: zero AIME contest mentions in trainable messages,
+  zero label-like top-level keys, zero task246 prompt-hash overlaps, and task262
+  final-answer n-gram blocker rows/pairs `0`.
+- Boundary maintained: no training, optimizer steps, testing, corrected AIME
+  scoring/eval, non-AIME canary, export, endpoint, promotion, task255 reuse,
+  AIME2025 train prompts/labels, shared deletion, main push, merge, 30B
+  training, or 8-GPU launch.
+
+## Session 83 - 2026-06-02 UTC - final PR/mailbox preparation
+
+- Lead requested final task299 report/PR on the critical path after task298's
+  official PASS claim.
+- Final evidence remains `PASS_30B_DATA_PACKING_CONTRACT` with task-owned
+  30B-ready packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+- Required evidence is present in `30b_data_packing_contract_report.md`: source
+  manifest, root path, counts, checksums, intended-vs-exposed parity,
+  tokenizer/chat-template equivalence, no-AIME2025-train proof, no task255
+  reuse, no shared deletion, exact commands/env, and boundaries.
+- Top manifest sha256 remains
+  `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`.
+- Boundary maintained: no training, testing, corrected AIME eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+  main push, merge, 30B training, or 8-GPU launch.
