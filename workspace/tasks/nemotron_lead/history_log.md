@@ -3918,3 +3918,8 @@
   Bridge/checkpoint-load proof claims, training, nonzero-LR smoke, live
   AIME/task243 eval, export, endpoint, promotion/go-no-go, AIME2025 train data,
   task255 reuse, 30B/8-GPU, or shared deletion.
+- Received and marked read worker_4 follow-up mailbox
+  `ac1730cb63984ea1b51d7cb09bf68097`, confirming #338 remains
+  `OPEN`/base `main`/`CLEAN`/mergeable at exact head
+  `49e3728a8751909cc041110acd0e9212059dc6c5` and the task269 approval remains
+  unchanged.

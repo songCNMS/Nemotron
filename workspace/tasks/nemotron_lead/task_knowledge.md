@@ -346,3 +346,6 @@
    #338 as blocker-evidence-only at exact head
    `49e3728a8751909cc041110acd0e9212059dc6c5`; lead released worker_2
    self-merge only if #338 remains exact-head `OPEN`/base `main`/`CLEAN`.
+150. Worker_4 follow-up mailbox `ac1730cb63984ea1b51d7cb09bf68097` confirmed
+   #338 still `OPEN`/base `main`/`CLEAN`/mergeable at exact head `49e3728` and
+   no change to the blocker-evidence-only approval.
