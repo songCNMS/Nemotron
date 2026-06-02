@@ -22,10 +22,11 @@ task boundaries, report a precise blocker.
 
 ## Inputs
 
-- Required current base for final evidence/PR: `origin/main` after #352 merge
-  `ca1ab63588651351b3e669450659abd2ad2c73e8`. Initial assignment referenced
-  post-#350 main `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; any branch still
-  based there must refresh before final route evidence.
+- Required current base for final evidence/PR: latest `origin/main`, currently
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` after #353 merge. Initial
+  assignment referenced post-#350 main
+  `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; any branch still based there
+  must refresh before final route evidence.
 - task287 PR #352 current approved blocker head:
   `52834d74c79ab98b5e125434160843752c34d47a`.
 - task285 checkpoint root:

@@ -839,15 +839,15 @@
    `ca1ab63588651351b3e669450659abd2ad2c73e8`, from exact approved head
    `52834d74c79ab98b5e125434160843752c34d47a`. The merged decision is still
    `BLOCK`: no retained non-AIME canary completions, no AIME/task243 release.
-279. #353/task290 is lead-approved for exact head
-   `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; worker_1 has been instructed to
-   self-merge only if that exact head remains clean/mergeable, then send
-   closeout. This remains blocker-review documentation only.
+279. #353/task290 merged at `2026-06-02T07:52:08Z`, merge commit
+   `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`, from exact approved head
+   `daad63efe77f19b8d56c62eca9d9f9331efd6e22`. This is blocker-review
+   documentation only and does not release AIME/task243/export/promotion/30B.
 280. #351/task289 remains HOLD at `e806048c...` because it needs another
    provenance refresh after #352 merged and #353 was released. worker_5 has
    been told not to merge and to record #352 MERGED/BLOCK, #353 current state,
    task291 assignment, and ongoing AIME/export/promotion/30B hold.
-281. task291 worker_2 acceptance branch exists at
-   `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0` with docs/status only, no PR, no
-   output root. It is based on pre-#352 main `5d32f076...`; final evidence/PR
-   must refresh to current main `ca1ab635...`.
+281. task291 worker_2 acceptance branch force-refreshed to
+   `e75e0097d7a4771f0ee07c69bec5f50304e67a3f`, based on current main
+   `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`. It remains docs/status only
+   with no PR and no output root; final route evidence is still pending.

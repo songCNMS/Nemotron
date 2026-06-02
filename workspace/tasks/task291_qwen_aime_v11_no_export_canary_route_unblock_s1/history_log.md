@@ -17,3 +17,8 @@
   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`, so lead sent a delivered
   instruction to refresh/rebase onto current `origin/main`
   `ca1ab63588651351b3e669450659abd2ad2c73e8` before final route evidence or PR.
+- Follow-up fetch confirmed worker_2 force-refreshed task291 to
+  `e75e0097d7a4771f0ee07c69bec5f50304e67a3f`, now based on current main
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` after #353 merged. Branch diff is
+  still acceptance/status/task-docs only; no PR or task291 output root is
+  visible yet.

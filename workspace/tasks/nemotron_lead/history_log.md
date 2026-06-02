@@ -5426,3 +5426,15 @@
   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; sent delivered peer instruction
   to refresh/rebase onto current `origin/main`
   `ca1ab63588651351b3e669450659abd2ad2c73e8` before final route evidence or PR.
+- Final Session 75 reconciliation found #353/task290 merged at
+  `2026-06-02T07:52:08Z` with merge commit
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact approved head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`. No worker_1 mailbox closeout has
+  arrived yet.
+- After #353 merged, #351/task289 remains open/base main/CLEAN/MERGEABLE at
+  `e806048cd3da59c405f121ab52cca0e175dfcb62` and still on lead HOLD pending
+  worker_5 refresh to current facts.
+- worker_2 refreshed task291 by force-updating the remote branch to
+  `e75e0097d7a4771f0ee07c69bec5f50304e67a3f`; it is now based on current
+  `origin/main` `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`, with only
+  acceptance/status/task-doc diffs, no PR, and no task291 output root visible.
