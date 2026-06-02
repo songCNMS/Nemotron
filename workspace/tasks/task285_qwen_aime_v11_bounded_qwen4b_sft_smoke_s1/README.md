@@ -1,6 +1,6 @@
 # task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 - bounded Qwen3-4B SFT smoke
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 

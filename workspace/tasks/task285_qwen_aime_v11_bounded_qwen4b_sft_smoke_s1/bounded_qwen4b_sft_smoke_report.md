@@ -1,6 +1,6 @@
 # task285 Bounded Qwen3-4B SFT Smoke Report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Disposition
 

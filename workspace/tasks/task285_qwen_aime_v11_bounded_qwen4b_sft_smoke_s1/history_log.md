@@ -1,6 +1,6 @@
 # task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 74 - Assigned
 
@@ -72,3 +72,18 @@
   iteration/checksum manifest, two-step LR/loss/skipped/nan evidence, and the
   post-train built-in validation SIGTERM/RC=1 residual risk.
 - Opened PR #350 to `main` for task285 report/status docs only.
+
+## Session 4 - Approved and merged
+
+- Lead approved PR #350 as bounded Qwen3-4B smoke evidence only after
+  worker_4/task286 approval and lead recheck. Formal same-account GitHub review
+  was unavailable, so approval was recorded as PR comment
+  `issuecomment-4599520425`.
+- Verified PR #350 immediately before merge: `OPEN`, base `main`, exact head
+  `fc379240c8517de10e37a5438f87b6b0994399f0`, and `CLEAN/MERGEABLE`.
+- Self-merged PR #350 with squash merge at `2026-06-02T06:53:14Z`.
+- Merge commit: `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`.
+- Merged head: `fc379240c8517de10e37a5438f87b6b0994399f0`.
+- Merge scope remained bounded smoke evidence/docs/status only. It did not
+  authorize or run live canary, AIME/task243 eval, export, endpoint,
+  promotion, next training stages, 30B, or 8-GPU.
