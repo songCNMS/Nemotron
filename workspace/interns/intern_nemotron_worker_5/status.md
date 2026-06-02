@@ -1,6 +1,6 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Working,TASK=task289_qwen_aime_v11_post_smoke_runbook_provenance_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task301_qwen_aime_v11_30b_full_sft_training_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 |
-| PR | #351 |
-| Session | 6 |
-| Last Update | Refreshing PR #351 after lead request-changes `4601906134`: current `origin/main` is `31a3e962544202954f0afba211888f7414b38d7c`, #357/task294 is merged at `24268157bd7088fea0f37d149cfc6ec042aa0e5a`, #356/task293 is merged at `31a3e962544202954f0afba211888f7414b38d7c`, AIME metric pass is `12/30 = 0.4` versus base `11/30 = 0.36666666666666664`, and export/endpoint/promotion/further training/eval/task255/AIME2025 train data/shared deletion/30B/8-GPU remain blocked. |
+| Current Task | task301_qwen_aime_v11_30b_full_sft_training_s1 |
+| PR | #362 |
+| Session | 15 |
+| Last Update | Lead-cleared SIGTERM terminated the validation hang after task301 reached iter `35/35`; wrapper wrote `train_rc=1` and `train_end=2026-06-02T16:58:51Z`, GPUs released, and `iter_0000035` is inventoried/checksummed as `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE` rather than training PASS. |
