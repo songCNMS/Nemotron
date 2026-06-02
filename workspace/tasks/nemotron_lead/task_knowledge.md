@@ -1676,3 +1676,12 @@
 476. Session 91 found no change from Session 90: task306 branch still
    `2ef5515e`, no PR, no official mailbox, no output root, and no active
    task306 process. HOLD continues without a new follow-up.
+477. Session 92 supersedes entry 476 for current task306 state: branch advanced
+   to `894e2e71e72f09926128e37f22000802804522bc`, adding a task-owned
+   no-export AIME runner; no PR or official mailbox exists yet.
+478. Active task306 worker-launched NemTron run observed at local output root
+   `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`
+   and remote root
+   `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`;
+   no rc/summary/completions/parser diagnostics/report are visible yet, so gate
+   remains HOLD.

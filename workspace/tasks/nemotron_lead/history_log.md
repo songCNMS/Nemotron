@@ -7315,3 +7315,29 @@
   an instruction requesting official task306 artifacts/report or exact blocker.
 - Gate remains HOLD pending official worker_3 mailbox/PR/artifacts. No
   approve/request-changes/block decision is possible yet.
+
+## Session 92 - 2026-06-02 UTC - task306 active run observed
+
+- Rechecked task306 after the Session 91 record and observed worker_3 branch
+  advanced to `894e2e71e72f09926128e37f22000802804522bc`.
+- GitHub PR search for task306 still returned none, and lead mailbox unread
+  count remained `0`; no official worker_3 completion report has arrived.
+- Branch diff versus `origin/main` now includes worker_3 status, task306 docs,
+  and task-owned runner
+  `workspace/tasks/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_30b_no_export_aime_eval.py`;
+  `git diff --check` passed.
+- Observed task-owned local output root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Observed active worker-launched NemTron command via local `ssh NemTron`
+  process. It uses 8 GPUs, source head `894e2e71`, task301 checkpoint
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/checkpoints/iter_0000035`,
+  base model `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`,
+  task300 base artifact copy, AIME score cache, `aime-limit-rows 30`, greedy
+  no-export settings `top_k=1`, `temperature=1.0`, `top_p=0.0`, and
+  TP4/PP2/EP4/ETP1.
+- Current log shows checkpoint load progressed into static engine generation,
+  with missing `_extra_state` warnings recorded as load-return incompatible
+  keys. No return code file, summary, full completions, parser diagnostics, or
+  final task306 report is visible yet.
+- This is worker-run progress observation only. Gate remains HOLD pending run
+  completion, official worker mailbox/report, and reviewable artifacts/metrics.

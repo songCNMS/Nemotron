@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -60,3 +60,18 @@
   - lead mailbox unread count `0`.
 - Worker-local untracked runner remains unofficial progress only. Gate remains
   HOLD pending official worker_3 report or artifacts.
+
+## Session 92 - 2026-06-02 UTC - active worker run observed
+
+- Worker branch advanced to `894e2e71e72f09926128e37f22000802804522bc`, adding
+  task-owned `run_30b_no_export_aime_eval.py`; no task306 PR exists yet.
+- Observed local output root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Observed active 8-GPU worker-launched NemTron AIME eval process with source
+  head `894e2e71`, task301 `iter_0000035`, accepted task300 base artifact copy,
+  AIME score cache, greedy no-export generation settings, and TP4/PP2/EP4/ETP1.
+- Input/cache files and command/hash logs are present. The run has no return
+  code, summary, full completions, parser diagnostics, or official worker
+  report yet.
+- Gate remains HOLD pending run completion and official worker_3 mailbox/PR or
+  artifact report.

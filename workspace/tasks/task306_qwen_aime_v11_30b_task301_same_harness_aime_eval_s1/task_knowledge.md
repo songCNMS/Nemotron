@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,9 @@
    artifacts/report or exact blocker.
 13. Session 91 confirms no new official task306 evidence: branch unchanged at
    `2ef5515e`, no PR, no mailbox report, no output root, and no active process.
+14. Session 92 current state supersedes entry 13: branch is now
+   `894e2e71e72f09926128e37f22000802804522bc` with task-owned no-export AIME
+   runner and active worker-launched NemTron run under
+   `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+15. No task306 rc, summary, full completions, parser diagnostics, official
+   report, or PR exists yet; active run observation is not a gate decision.
