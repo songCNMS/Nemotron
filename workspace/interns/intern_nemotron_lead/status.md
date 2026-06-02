@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #359/task296 OPEN CLEAN at b9c1af29 A_PROVED_NO_RERUN; worker_4 local task297 APPROVE observed but #358 remote still HOLD 68bc1dfd; export/promotion/30B HOLD |
+| PR | #358/#359 MERGED; path A accepted A_PROVED_NO_RERUN, no fresh current-main rerun needed; task293 FT 12/30 vs base 11/30; export/promotion/30B HOLD |
 | Session | 75 |

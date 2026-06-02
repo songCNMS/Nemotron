@@ -6044,3 +6044,41 @@
   OPEN/CLEAN/MERGEABLE at `b9c1af29...`; #358 remains OPEN/CLEAN/MERGEABLE at
   `68bc1dfd...`. Current gate remains: task296 has plausible path-A evidence,
   but path A is not accepted until task297 is official; path B is not triggered.
+- Processed worker_4 task297 official refresh mailbox
+  `283b9dc34baf4ad4950e1b68993b8625`: worker_4 reviewed task296/#359 exact
+  head `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`, verified the substantive
+  task296 report was unchanged since `b45308e9...`, pushed #358 to
+  `6b46bfbcc386918b4a907ebf5e1e39dabac139d2`, and decided
+  `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`.
+- Lead approved #358 only as independent review/docs closeout for exact head
+  `6b46bfb...` while clean. #358 then merged at `2026-06-02T12:53:03Z` with
+  merge commit `834472e69b23dc71b49824cda57f866a60839c0a` from approved head
+  `6b46bfbcc386918b4a907ebf5e1e39dabac139d2`; worker_4 merge closeout mailbox
+  `d9265df66121460f8ada2e7f604f6663` confirmed docs/review/status-only scope
+  and no forbidden actions.
+- After #358 landed, lead approved #359 only as task296 docs/status
+  current-main equivalence evidence for exact head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06` while clean. #359 merged at
+  `2026-06-02T12:56:15Z` with merge commit
+  `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7` from approved head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`.
+- Processed worker_1 task296 post-merge closeout mailbox
+  `9ea071883dde42d8b08e7d11cb8f2abc`: #359 pre-merge state was exact approved
+  head, base main, non-draft, clean/mergeable; branch-only closeout head
+  `deba655a451f30c78eb82a54c2be1a2333d7441f`; merged scope remained
+  task296 docs/status current-main no-rerun equivalence evidence only; no
+  export, endpoint, promotion, fresh training/eval, task255 reuse, AIME train
+  data, shared deletion, main push, 30B, 8-GPU, or artifact mutation. Marked the
+  mailbox read.
+- Final disposition for the current-code request: path A accepted. Existing
+  task285/task293 artifacts are accepted as product-code-equivalent to current
+  main after #312, so path B fresh current-main data/training/non-AIME/AIME
+  rerun is not needed. Evidence remains task285 bounded Qwen3-4B SFT smoke and
+  task293 corrected AIME2025 FT `12/30 = 0.4` versus accepted same-harness base
+  `11/30 = 0.36666666666666664`.
+- Residuals carried: task285 post-train built-in eval `RC=1` after iter2
+  checkpoint during validation/SIGTERM, task276 sparse valid/test, task292
+  detokenized fallback residual, and task293
+  `sampling_exact_parameter_match=false` accepted only as semantic greedy
+  equivalence. Still no export, endpoint, promotion, fresh training/eval,
+  task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU clearance.

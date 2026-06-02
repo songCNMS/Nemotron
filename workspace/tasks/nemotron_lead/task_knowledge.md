@@ -1170,3 +1170,27 @@
    `b9c1af29...`, but remote #358 remains old HOLD `68bc1dfd...` and no mailbox
    has arrived. Treat the local approval as observation only, not gate evidence,
    until pushed and reported.
+362. worker_4 official task297 refresh mailbox `283b9dc34baf4ad4950e1b68993b8625`
+   promoted the local observation into gate evidence: reviewed task296/#359
+   exact head `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`, pushed #358 head
+   `6b46bfbcc386918b4a907ebf5e1e39dabac139d2`, and decided
+   `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`.
+363. #358 merged at `2026-06-02T12:53:03Z`, merge commit
+   `834472e69b23dc71b49824cda57f866a60839c0a`, from approved task297 head
+   `6b46bfbcc386918b4a907ebf5e1e39dabac139d2`; scope was review docs/status
+   only.
+364. #359 merged at `2026-06-02T12:56:15Z`, merge commit
+   `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`, from approved task296 head
+   `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`; worker_1 closeout mailbox
+   `9ea071883dde42d8b08e7d11cb8f2abc` confirms `A_PROVED_NO_RERUN` and
+   docs/status-only scope.
+365. Current-code request final disposition is path A: no fresh current-main
+   pipeline rerun is needed because #312 was coordinator-docs-only and
+   task285/task293 relevant product/eval paths remained equivalent to current
+   main. The accepted metric remains task293 FT `12/30 = 0.4` versus accepted
+   Qwen3-4B base `11/30 = 0.36666666666666664`.
+366. Path-A acceptance does not grant release or scale clearance: preserve
+   task285 `RC=1` validation/SIGTERM residual, task276 sparse valid/test,
+   task292 detokenized fallback residual, task293 semantic-greedy sampling
+   residual, and all holds on export, endpoint, promotion, fresh training/eval,
+   task255 reuse, AIME2025 train data, shared deletion, 30B, and 8-GPU.

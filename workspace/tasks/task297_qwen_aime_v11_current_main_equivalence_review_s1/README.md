@@ -1,6 +1,6 @@
 # task297_qwen_aime_v11_current_main_equivalence_review_s1 - current-main equivalence review
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=75 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=75 -->
 
 ## Background
 
