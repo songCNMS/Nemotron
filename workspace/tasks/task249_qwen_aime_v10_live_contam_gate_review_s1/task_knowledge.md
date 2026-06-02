@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,6 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. Session 15 task249 updates are hook-required bookkeeping for the worker
+    turn; they do not alter task249/#323 gate state or approve task279/task278
+    preflight readiness.

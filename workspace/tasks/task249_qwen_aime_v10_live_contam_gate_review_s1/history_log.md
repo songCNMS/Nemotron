@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0 - Assigned
 
@@ -232,3 +232,20 @@
 - Scope remained review-only: no implementation, training, live eval, endpoint
   launch, shared deletion, direct `main` push, branch rewrite, first go/no-go
   approval, or 30B scale action was performed.
+
+## Session 15 - Hook-required status bookkeeping
+
+- Stop-hook required task249 `history_log.md` and `task_knowledge.md` to carry
+  Session 15 metadata/entry for this worker turn.
+- The active side assignment remains task279 branch hygiene for
+  task278 preflight gate review; task279 substantive disposition stays HOLD
+  until exact task278 branch/head/artifacts or worker mailbox report exists.
+- Task279 branch cleanup was pushed at
+  `fd4b417b54a6675d51048fc17fd14d4b1564f7d3`, and lead was notified by
+  mailbox `e514a0eee0c04d1dab3dc4e31ff235ea`.
+- This entry is status bookkeeping only and does not change task249/#323 gate
+  state, task279 review status, or any training/promotion/go-no-go decision.
+- Boundaries preserved: no product edits, training, nonzero-LR smoke, live
+  canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data use, shared deletion, merge, main push, or 30B/8-GPU
+  action.
