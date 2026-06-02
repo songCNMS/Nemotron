@@ -3732,6 +3732,29 @@
 - Removed literal metadata marker text from history body references so only the top metadata line remains.
 - Current gate state remains unchanged: #334/#335/#336 are `MERGED`; task263 remains `BLOCK/HOLD` pending NemTron/NeMo Bridge/base-load proof or exact blocker; global Qwen AIME gate remains `NO-GO/HOLD`.
 - No implementation, training, eval, merge, or product-code change was performed by lead.
+- Continued task263 gate after worker_2 pushed #337. Verified #337 is `OPEN`/
+  base `main`/`CLEAN` at head `7e96a92a36e9bcd439319b9634e5fcf3269db888`.
+- Read #337 report and confirmed disposition `NEMTRON_NEMO_RUNTIME_BLOCKED`:
+  Bridge import probe fails with `ModuleNotFoundError: No module named
+  'megatron'`, Bridge import rc `1`, and fail-closed preflight rc `2`.
+- Verified #337 diff hygiene with `git diff --check`; lead did not run
+  implementation tests, training, or eval.
+- Created task267 standard docs for independent read-only review of #337 exact
+  head `7e96a92a36e9bcd439319b9634e5fcf3269db888`, assigned to
+  `intern_nemotron_worker_4`.
+- Sent delivered peer_send to worker_4 requesting task267 review of #337 blocker
+  evidence, with no edits, PRs, merge, training, eval, promotion, AIME2025 train
+  data, or 30B/8-GPU.
+- Sent delivered peer_send to worker_2 requesting official task263/#337 closeout
+  mailbox for exact head `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3` and no
+  self-merge before lead approval.
+- Observed #337 drift from `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3` to
+  `7e96a92a36e9bcd439319b9634e5fcf3269db888`; drift is metadata-only and
+  `v11_base_load_gate_report.md` remains sha256
+  `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+- Current lead disposition: #337 is `HOLD` pending worker_2 official closeout
+  and task267 independent review; #334/#335/#336 remain `MERGED`; global Qwen
+  AIME gate remains `NO-GO/HOLD`.
 - Continued task263 audit after worker_2 follow-up: no unread mailbox was present,
   no task263 PR was visible, and remote task263 branch remained
   `4af57e0e61703a063c1ef42def44119a7eea5cf9`.
@@ -3753,3 +3776,59 @@
   commit/push or PR if code/docs changed, exact branch/head/PR or artifact-only
   blocker status, commands/env, paths/checksums, CPU-host versus NemTron/NeMo
   distinction, and exact blocker or smallest remediation path.
+- Processed worker_2 official task263/#337 closeout mailbox
+  `bb902bdc809545a0bd83a49fbb6e30b0` for evidence head
+  `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3` and follow-up mailbox
+  `cf1a9028c8044e8ca9b2185525845eba` for current head
+  `0979c22990eda95e732bde5543569e77eeebfa6c`; both were marked read.
+- Re-fetched origin and verified #337 remains `OPEN`/base `main`/`CLEAN` at
+  `0979c22990eda95e732bde5543569e77eeebfa6c`.
+- Verified #337 drift from `7e96a92a36e9bcd439319b9634e5fcf3269db888` to
+  `0979c22990eda95e732bde5543569e77eeebfa6c` is metadata-only: worker_2 status
+  plus task263 history/task_knowledge. `v11_base_load_gate_report.md` remains
+  sha256 `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+- Updated task267 docs so worker_4 review target is #337 exact current head
+  `0979c22990eda95e732bde5543569e77eeebfa6c`, with no implementation, merge,
+  training, eval, promotion, AIME2025 train data, or 30B/8-GPU authorized.
+- Received and marked read worker_4 task267 mailbox
+  `2aaadb8b48664e5dbf9585f1b24ebbdc`, approving #337 at
+  `0979c22990eda95e732bde5543569e77eeebfa6c` as blocker-evidence-only and
+  explicitly not Bridge proof, training clearance, promotion, or go/no-go.
+- Received and marked read worker_2 follow-up mailbox
+  `8f3deada7c7e42a09d5edc495d79e6a7`: worker_2 pushed stop-hook
+  metadata-only head `0333ddae511a7924846a3e47b1b9f658eda26fef`.
+- Verified #337 is now `OPEN`/base `main`/`CLEAN` at
+  `0333ddae511a7924846a3e47b1b9f658eda26fef`; drift from
+  `0979c22990eda95e732bde5543569e77eeebfa6c` is metadata-only, with
+  `v11_base_load_gate_report.md` still sha256
+  `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+- Updated task267 docs to current exact head
+  `0333ddae511a7924846a3e47b1b9f658eda26fef`; lead disposition remains #337
+  `HOLD` pending worker_4 refreshed exact-head confirmation.
+- Received and marked read worker_4 task267 refresh mailbox
+  `3ac66fef3f364ae78262560fd0be1361`, approving #337 at
+  `0333ddae511a7924846a3e47b1b9f658eda26fef` as blocker-evidence-only.
+- Received and marked read worker_2 mailbox `b91096b945f54e42b02d4461ea3acec3`:
+  worker_2 pushed hold-ack metadata-only head
+  `7149ae924108bc3a1ecc7997bb23fb81697f8d17`.
+- Verified #337 is now `OPEN`/base `main`/`CLEAN` at
+  `7149ae924108bc3a1ecc7997bb23fb81697f8d17`; drift from
+  `0333ddae511a7924846a3e47b1b9f658eda26fef` is metadata-only, with
+  `v11_base_load_gate_report.md` still sha256
+  `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+- Updated task267 docs to current exact head
+  `7149ae924108bc3a1ecc7997bb23fb81697f8d17`; #337 remains `HOLD` pending
+  worker_4 refreshed exact-head confirmation for that head.
+- Received and marked read worker_4 task267 refresh mailbox
+  `03959e3364d94ea2a2a6b22b89ce3175`, extending APPROVE-as-blocker-evidence-only
+  substantively to `7149ae924108bc3a1ecc7997bb23fb81697f8d17`.
+- Received and marked read worker_2 hook correction mailbox
+  `d5f53e5c42af47819feefb1598a344d3`: worker_2 pushed metadata-only head
+  `2b661ac38360b5a8a957359a59ffa63923928845`.
+- Verified #337 is now at `2b661ac38360b5a8a957359a59ffa63923928845`; drift from
+  `7149ae924108bc3a1ecc7997bb23fb81697f8d17` is metadata-only, with
+  `v11_base_load_gate_report.md` still sha256
+  `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+- Updated task267 docs to current exact head
+  `2b661ac38360b5a8a957359a59ffa63923928845`; #337 remains `HOLD` pending
+  worker_4 refreshed exact-head confirmation for that head.

@@ -281,3 +281,23 @@
    and missing `megatron`/`nemo`. Treat as read-only lead observation until
    worker_2 sends official mailbox and pushes branch/PR or declares artifact-only
    blocker status.
+138. #337/task263 is now `OPEN`/`CLEAN` at
+   `2b661ac38360b5a8a957359a59ffa63923928845` with blocker disposition
+   `NEMTRON_NEMO_RUNTIME_BLOCKED`. Drift from evidence head
+   `7eac25b48ecb7a43a869d2dde2a7da5493a3e3e3` through
+   `7e96a92a36e9bcd439319b9634e5fcf3269db888` and
+   `0979c22990eda95e732bde5543569e77eeebfa6c` and
+   `0333ddae511a7924846a3e47b1b9f658eda26fef` and
+   `7149ae924108bc3a1ecc7997bb23fb81697f8d17` is metadata-only and report hash
+   remains `d563a35298e9bf751a4ff13ee9ceb3c278a24c64a3ab7d532187fc15909ed060`.
+   Worker_2 official mailbox closeouts
+   `bb902bdc809545a0bd83a49fbb6e30b0` and
+   `cf1a9028c8044e8ca9b2185525845eba` are processed. Worker_4 approved
+   `0979c22990eda95e732bde5543569e77eeebfa6c` as blocker-evidence-only in
+   mailbox `2aaadb8b48664e5dbf9585f1b24ebbdc`, and approved
+   `0333ddae511a7924846a3e47b1b9f658eda26fef` in mailbox
+   `3ac66fef3f364ae78262560fd0be1361`, and extended approval to
+   `7149ae924108bc3a1ecc7997bb23fb81697f8d17` in mailbox
+   `03959e3364d94ea2a2a6b22b89ce3175`, but #337 remains on `HOLD` pending
+   refreshed exact-head confirmation for
+   `2b661ac38360b5a8a957359a59ffa63923928845`.
