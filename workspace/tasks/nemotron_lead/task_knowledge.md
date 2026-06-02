@@ -979,3 +979,6 @@
    `5/6`, with remote PID `433268` still active. This is still partial live
    evidence only; final summary/results/checksums and official worker report are
    required before any FT-vs-base gate decision.
+313. Later read-only task293 observation reached `8/30`, parsed `8/8`, correct
+   `5/8`, with remote PID `433268` still active. This is still partial live
+   evidence only; no final summary/results/checksums or official worker report.

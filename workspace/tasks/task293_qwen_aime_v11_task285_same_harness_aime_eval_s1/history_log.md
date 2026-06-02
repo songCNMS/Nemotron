@@ -36,3 +36,6 @@
 - Follow-up read-only observation reached `6/30`, parsed `6/6`, correct `5/6`;
   PID `433268` remains active and no final artifacts or official report exist.
   This remains non-gating partial evidence.
+- Follow-up read-only observation reached `8/30`, parsed `8/8`, correct `5/8`;
+  PID `433268` remains active and only manifests exist remotely. No final
+  summary/results/checksums, official worker report, or PR exists yet.

@@ -5670,3 +5670,9 @@
   include prompt/checkpoint-load/command-env manifests; no final summary,
   results, checksums, PR, or official mailbox report is visible. Gate remains
   `NO-GO/HOLD`.
+- Follow-up read-only live observation: task293 PID `433268` remains active,
+  elapsed about 19 minutes. Log reached `8/30`; all eight parsed, five correct
+  so far. Current incorrect rows are `aime_02_r01`, `aime_07_r01`, and
+  `aime_08_r01`. Remote artifacts still only include prompt/checkpoint-load/
+  command-env manifests; no final summary/results/checksums, PR, or worker
+  mailbox report is visible. Gate remains `NO-GO/HOLD`.
