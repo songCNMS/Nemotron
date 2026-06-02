@@ -4119,3 +4119,28 @@
   - worker_5 -> task275 Session 40 runbook/provenance update.
 - No implementation, training, eval, validation tests, merge, or direct main
   push was performed by lead.
+- Fetched after dispatch and observed acceptance branches:
+  - worker_1/task274 at `3f9d6ce58709c0862fd8efb7c60cc0c3b1944d60`, docs/status
+    acceptance diff only.
+  - worker_3/task273 at `8471754fa96f23251aef87ab34ff98e109f58f94`, docs/status
+    acceptance diff only.
+  - worker_4/task271 branch points at origin/main
+    `958c283813960d90749d51c8880354b89caa7ff8`; worker_4 acceptance is via
+    mailbox `7dc8619fcdad43569e26fd20ce7ef25e`.
+  - No worker_2/task272 or worker_5/task275 remote branch was visible yet.
+- Received and marked read worker_4 task271 report
+  `bfbfc7e15603432daf6336f9c83fb146`: decision `APPROVE` for core
+  no-training Qwen3-4B Bridge import/fail-closed preflight proof.
+- task271 verified required markers in Session 40 evidence:
+  `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`,
+  and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`. The report treats the imported
+  `qwen3_4b_bridge_import_iter0` manifest as consistent with no-training
+  Qwen3-4B Bridge conversion proof.
+- task271 caveat: `session40_evidence.sha256` validated core proof files, but
+  `artifact_inventory.sha256` did not fully validate because its self-entry was
+  stale; all other artifact inventory entries checked OK. Lead accepts this as
+  non-blocking for core proof, but it must be noted in runbook/provenance.
+- Lead gate after task271: prior task270 runtime-route blocker is cleared for
+  no-training Bridge import/preflight proof only. It still does not authorize
+  training, nonzero-LR smoke, live AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, or 30B/8-GPU.

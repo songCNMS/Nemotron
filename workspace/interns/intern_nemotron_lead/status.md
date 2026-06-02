@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Session40 runtime proof observed; task271-task275 docs pushed and worker notifications delivered; gate NO-GO/HOLD pending reports |
+| PR | task271 APPROVE core Bridge proof with inventory caveat; task272-task275 reports pending; gate NO-GO/HOLD |
 | Session | 71 |

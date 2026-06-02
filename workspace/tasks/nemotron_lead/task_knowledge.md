@@ -431,3 +431,11 @@
 170. task271 is the first gate input: until worker_4 independently accepts the
    Session 40 proof, task272-task275 outputs are planning/review evidence only
    and no downstream training/eval clearance should be granted.
+171. worker_4/task271 accepted the Session 40 core proof: Bridge import and
+   fail-closed preflight markers are present and sufficient for no-training
+   import proof. The remaining checksum issue is a stale self-entry in
+   `artifact_inventory.sha256`; it is not blocking for core proof but must be
+   carried into runbook/provenance.
+172. Clearing task270 runtime-route blocker moves the next gate to worker-owned
+   pilot readiness, data safety, eval continuity, and runbook evidence. It does
+   not clear training/eval/promotion.
