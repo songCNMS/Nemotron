@@ -577,10 +577,7 @@ def main() -> int:
         "artifact_checksums": {},
     }
 
-    write_json(manifest_path, manifest)
-    write_text(report_path, render_report(manifest))
-
-    artifact_paths = [
+    stable_artifact_paths = [
         sync_log,
         docker_version_log,
         docker_image_log,
@@ -590,17 +587,17 @@ def main() -> int:
         preflight_script,
         preflight_log,
         preflight_wrapper_log,
-        manifest_path,
-        report_path,
     ]
     checksums: dict[str, str] = {}
-    for path in artifact_paths:
+    for path in stable_artifact_paths:
         if path.exists():
             checksums[str(path)] = sha256_sidecar(path)
     manifest["artifact_checksums"] = checksums
     write_json(manifest_path, manifest)
-    sha256_sidecar(manifest_path)
     write_text(report_path, render_report(manifest))
+
+    artifact_paths = [*stable_artifact_paths, manifest_path, report_path]
+    sha256_sidecar(manifest_path)
     sha256_sidecar(report_path)
 
     inventory_lines = [
