@@ -7091,6 +7091,11 @@
   `task305_qwen_aime_v11_30b_task304_canary_review_s1` and assigned
   `intern_nemotron_worker_4` to independently review #367 exact head and the
   task304 local/remote artifacts.
+- Pushed lead branch head `53daa627` and sent delivered peer_send assignment to
+  `intern_nemotron_worker_4`. The message fixed task305, #367 exact head
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, artifact roots, read-only review
+  scope, and the no-training/no-AIME/no-export/no-endpoint/no-promotion/no-merge
+  boundaries.
 - #367 remains HOLD pending task305 approve/request-changes/block. This does
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or

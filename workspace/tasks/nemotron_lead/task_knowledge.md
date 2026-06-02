@@ -1585,3 +1585,6 @@
    until task305 accepts task304 and lead creates a separate AIME evaluation
    task. The accepted 30B base remains `15/30 = 0.5`; task304 is not benchmark
    evidence and not promotion/export/endpoint clearance.
+452. task305 assignment peer_send to `intern_nemotron_worker_4` was delivered
+   after lead branch `53daa627` was pushed. Await worker_4 branch/PR/mailbox
+   evidence before approving #367 or assigning any corrected AIME/task243 work.
