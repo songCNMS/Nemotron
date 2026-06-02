@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: #362/#366 merged; task304 non-AIME canary assigned |
-| Session | 83 |
+| PR | 30B gate: #367 OPEN/CLEAN; task305 independent canary review assigned |
+| Session | 84 |

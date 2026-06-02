@@ -1560,3 +1560,28 @@
    PR evidence head remains `c75c5848`.
 445. worker_3 task304 acceptance was visible in the pane after assignment, but
    no task304 remote branch/PR had appeared at the final poll.
+446. PR #367/task304 is now OPEN/base `main`/CLEAN/MERGEABLE/non-draft at
+   head `773aff2cc9eaa7d0900b06f5d49dc29515cae709`. Lead mailbox had no
+   unread worker_3 task304 closeout at the Session 84 poll, and PR reviews only
+   included Copilot commentary.
+447. task304 report claims synthetic non-AIME canary `PASS` for task301
+   `iter_0000035`: 8x H200, TP4/PP2/EP4/ETP1, checkpoint load PASS, `5`
+   prompts, `5` retained completions, `5/5` exact expected-answer matches, and
+   `0` empty/mixed-script/degeneration counts.
+448. Lead read-only artifact observation matched task304 key hashes and
+   `remote_no_export_canary.rc=0`, but this is not independent gate acceptance.
+   Because #367 is the pre-AIME salvage canary gate, lead assigned task305 for
+   independent review before approving or releasing any AIME/task243 work.
+449. task305 is assigned to `intern_nemotron_worker_4` to review #367 exact head
+   `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, task304 local output root
+   `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`,
+   and remote root
+   `/root/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
+450. Review residual: task304 report evidence source head is
+   `d8e58461ca1cede2569589f95414c360e0ddd9bc`, while PR #367 head is
+   `773aff2c`; task305 must confirm the later delta is only report/docs/status
+   closeout and does not undermine the canary artifact evidence.
+451. Corrected AIME2025 same-harness 30B FT-vs-base comparison remains blocked
+   until task305 accepts task304 and lead creates a separate AIME evaluation
+   task. The accepted 30B base remains `15/30 = 0.5`; task304 is not benchmark
+   evidence and not promotion/export/endpoint clearance.

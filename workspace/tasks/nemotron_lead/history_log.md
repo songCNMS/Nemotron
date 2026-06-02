@@ -7056,3 +7056,42 @@
   in progress from origin/main `c94216b04bc3d71577391883d0cb76aa8c95e621`;
   no remote task304 branch or PR was visible yet, and lead mailbox was otherwise
   clear.
+
+## Session 84 - 2026-06-02 UTC - task304 canary review assignment
+
+- Fetched origin and verified lead branch at `1568a286`, origin/main
+  `c94216b04bc3d71577391883d0cb76aa8c95e621`.
+- Lead mailbox had no unread messages, so no official worker_3 task304 mailbox
+  closeout was available before this gate decision.
+- PR #367/task304 is OPEN/base `main`/CLEAN/MERGEABLE/non-draft at head
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, with no reviewDecision and only
+  a Copilot review comment.
+- `git diff --check` passed for
+  `origin/main...origin/intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`.
+  Diff scope is worker_3 status plus task304 README/history/task_knowledge,
+  `30b_salvage_non_aime_canary_report.md`, and
+  `run_30b_no_export_canary_probe.py`.
+- Read the task304 report. It claims `PASS` for a synthetic non-AIME canary:
+  Qwen3-30B-A3B task301 `iter_0000035` loaded on NemTron 8x H200 with
+  TP4/PP2/EP4/ETP1, retained `5/5` completions, matched `5/5` expected answers,
+  and reported no empty/mixed-script/degeneration flags.
+- Lead read-only artifact observation under
+  `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`
+  matched the task304 reported key hashes, `remote_no_export_canary.rc=0`,
+  aggregate results/full-completions row counts `5/5`, each rank result/
+  full-completion row count `5`, summary disposition `PASS`, and rank0
+  checkpoint load proof `load_megatron_model=PASS`, dtype `torch.bfloat16`,
+  eval true, TP4/PP2/EP4/ETP1, sequence parallel true.
+- Noted residual for review: task304 report evidence source is
+  `d8e58461ca1cede2569589f95414c360e0ddd9bc`, while PR #367 current head is
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709`. Lead observed
+  `d8e58461..773aff2c` as report/docs/status closeout changes with diff-check
+  clean, but task305 must verify this independently.
+- Created task305
+  `task305_qwen_aime_v11_30b_task304_canary_review_s1` and assigned
+  `intern_nemotron_worker_4` to independently review #367 exact head and the
+  task304 local/remote artifacts.
+- #367 remains HOLD pending task305 approve/request-changes/block. This does
+  not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
+  additional training, task255 reuse, AIME2025 train data, shared deletion, or
+  direct main push/merge.
