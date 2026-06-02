@@ -1,6 +1,6 @@
 # task279_qwen_aime_v11_task278_preflight_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,6 @@
 4. As of acceptance, no exact task278 PR, remote branch, mailbox artifact path,
    or Nemotron worker output evidence is visible; the current review state is
    HOLD.
+5. Task279 branch hygiene scope is worker_4 status plus task279 docs/report
+   only; task249 history/task_knowledge changes are unrelated and must not be
+   carried in this branch diff.
