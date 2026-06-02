@@ -46,3 +46,6 @@
     or further execution is authorized. The latest observed PR head during this
     session is metadata-only `0333dda`, while the blocker evidence remains the
     same as the previously reviewed report/manifest/log hashes.
+14. The Session 6 history entry must remain a single `## Session 6` section;
+    dated follow-ups belong under that section as lower-level subsections to
+    satisfy the stop-hook duplicate-session check.

@@ -1,6 +1,6 @@
 # task263_qwen_aime_v11_base_load_planner_sanity_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -166,7 +166,7 @@
   promotion/go-no-go claim, task255 checkpoint/export reuse, AIME2025 train
   prompt/label use, 30B/8-GPU launch, or shared deletion was performed.
 
-## Session 6 - 2026-06-02 UTC - Lead HOLD acknowledgment
+### 2026-06-02 UTC - Lead HOLD acknowledgment
 
 - Received lead message that closeout mailboxes
   `bb902bdc809545a0bd83a49fbb6e30b0` and
@@ -182,3 +182,5 @@
 - Current task state remains HOLD: do not self-merge, train, eval, export,
   promote, use AIME2025 train prompts/labels, use task255, run 30B/8-GPU, or
   delete shared files.
+- Stop-hook correction: kept this HOLD acknowledgment under the single Session 6
+  section to avoid duplicate `Session 6` headings; no evidence files changed.
