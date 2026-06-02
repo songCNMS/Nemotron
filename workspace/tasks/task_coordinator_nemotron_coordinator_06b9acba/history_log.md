@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Session 0 - Created with coordinator
 
@@ -524,3 +524,24 @@
   - `remote_checkpoint_manifest.txt`: `51b4ab937a5be23f1391cddd5c5c1425a3f8860e84fe81827fc5ebdee2afb522`.
 - Sent delivered coordinator update to `intern_nemotron_lead`, reporting the install, proof paths, shas, remote checkpoint root, and boundaries. Lead must still decide how to incorporate this coordinator-produced evidence into official V11 gate flow.
 - Current interpretation: task270's previous `NEMTRON_RUNTIME_ROUTE_BLOCKED` condition appears cleared for positive Qwen3-4B Bridge import proof only. Global Qwen AIME remains `NO-GO/HOLD` for downstream SFT training, eval, promotion, AIME2025 train-data use, and 30B/8-GPU until lead-reviewed gates authorize those steps.
+
+## Session 41 - Session 40 proof review wave tracked
+
+- Received `intern_nemotron_lead` Session 71 update: lead read Session 40 evidence root read-only, created and pushed task271-task275 docs on `origin/intern_nemotron_lead/session1-recovery-task-docs`, and assigned all five workers to parallel, non-conflicting follow-up gates.
+- Fetched `origin` and verified:
+  - `origin/main` remains `958c283813960d90749d51c8880354b89caa7ff8`;
+  - lead branch is `fd078c0bbf9f8fd3ef292184a2607528f1021fb9`;
+  - task274 worker_1 branch `origin/intern_nemotron_worker_1/task274_qwen_aime_v11_data_safety_ready_review_s1` is `3f9d6ce58709c0862fd8efb7c60cc0c3b1944d60`;
+  - task273 worker_3 branch `origin/intern_nemotron_worker_3/task273_qwen_aime_v11_eval_gate_continuity_s1` is `8471754fa96f23251aef87ab34ff98e109f58f94`;
+  - task271 worker_4 branch `origin/intern_nemotron_worker_4/task271_qwen_aime_v11_session40_bridge_proof_review_s1` points at `origin/main` `958c283813960d90749d51c8880354b89caa7ff8`;
+  - no task272 worker_2 or task275 worker_5 remote branch is visible yet.
+- Verified diff scope for visible branches: task274 and task273 are worker status plus task docs acceptance only and `git diff --check` passes; task271 branch has no diff from `origin/main` and relies on lead-processed mailbox evidence.
+- Verified GitHub search for task271-task275 PRs returns `[]`; no task271-task275 PR is visible yet.
+- Rechecked Session 40 evidence caveat locally:
+  - `session40_evidence.sha256` validates all core proof files as `OK`;
+  - `artifact_inventory.sha256` fails only its self-entry because the inventory listed its pre-final empty-file hash;
+  - non-self entries for `bridge_import_probe.log`, `fail_closed_preflight.log`, `symbol_preflight.log`, `remote_run.txt`, and `timestamp.txt` validate `OK`.
+- Recorded lead-processed worker_4 task271 decision: official mailbox `bfbfc7e15603432daf6336f9c83fb146` approves Session 40 as core no-training Qwen3-4B Bridge import/fail-closed preflight proof. Required markers verified are `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+- Accepted lead gate statement for coordinator tracking: prior task270 runtime-route blocker is cleared for no-training Bridge import/preflight proof only; the `artifact_inventory.sha256` self-entry caveat is non-blocking for core proof but must be carried by task275/runbook provenance.
+- Sent delivered coordinator acknowledgement to `intern_nemotron_lead` with branch visibility, no-PR state, checksum caveat reproduction, task271 approval, and unchanged downstream gate.
+- Confirmed global Qwen AIME remains `NO-GO/HOLD`: no training/nonzero-LR smoke, live AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU until task272-task275 reports and later same-harness FT-vs-base evidence prove non-regression.

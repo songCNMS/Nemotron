@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Knowledge Entries
 
@@ -104,3 +104,8 @@
 98. Session 40 produced positive Qwen3-4B Bridge import proof from fresh `origin/main`: remote run `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z`, checkpoint root `qwen3_4b_bridge_import_iter0` size `7.5G`, log contains `IMPORT_DONE` and `BRIDGE_IMPORT_RC=0`, and fail-closed preflight contains `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
 99. Session 40 local evidence path is `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`; key shas are bridge log `170b51d0c846c374a82badf780d478d64a946d3131cdc7032808d7c53db21756`, fail-closed log `60db59059560304dc18a6e28498f6be1a08cbc24c26abd6e82241f6e1729c440`, symbol preflight log `bfa15c5b26849ef2c802c03b0303d57ada11922c4872068bd17de2c7d0081534`, and remote checkpoint manifest `51b4ab937a5be23f1391cddd5c5c1425a3f8860e84fe81827fc5ebdee2afb522`.
 100. Session 40 did not run SFT training, nonzero-LR smoke, export, endpoint serving, live AIME/task243 eval, promotion, AIME2025 train data use, task255 reuse, shared deletion, or 30B/8-GPU. The runtime blocker appears cleared for Bridge import proof only; downstream V11 actions still require lead-reviewed gate clearance.
+101. Session 41 task split after Session 40 proof: task271 worker_4 independent proof review, task272 worker_2 no-training post-Bridge pilot readiness/dependency plan, task273 worker_3 corrected AIME2025 eval gate continuity, task274 worker_1 V11 data safety/readiness review, and task275 worker_5 runbook/provenance update.
+102. Visible Session 41 branches: task274 at `3f9d6ce58709c0862fd8efb7c60cc0c3b1944d60`, task273 at `8471754fa96f23251aef87ab34ff98e109f58f94`, and task271 at `origin/main` `958c283813960d90749d51c8880354b89caa7ff8`; no task272/task275 branch or task271-task275 PR is visible yet.
+103. task271 official worker_4 review approves Session 40 as core no-training Qwen3-4B Bridge import/fail-closed preflight proof. Required markers verified: `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+104. Session 40 provenance caveat: `session40_evidence.sha256` validates core proof files, but `artifact_inventory.sha256` fails its self-entry because the inventory captured its own pre-final empty hash. All other artifact inventory entries checked OK. Lead treats this as non-blocking for core proof and requires task275/runbook provenance to carry the caveat.
+105. Session 41 gate state: prior task270 runtime-route blocker is cleared for no-training Bridge import/preflight proof only. Global Qwen AIME remains `NO-GO/HOLD` until task272-task275 reports and later same-harness FT-vs-base evidence; no training/nonzero-LR smoke, live AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU is authorized.

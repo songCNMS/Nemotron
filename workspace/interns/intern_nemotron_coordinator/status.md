@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #312 |
-| Session | 40 |
-| Last Update | 2026-06-02T01:54:11Z - Installed nemo-toolkit 2.7.3 on NemTron user site and proved Qwen3-4B Bridge import/preflight PASS under no-training boundaries; downstream Qwen AIME gate still requires lead review and remains NO-GO/HOLD. |
+| Session | 41 |
+| Last Update | 2026-06-02T02:13:36Z - Reconciled lead Session 71: task271 approves Session 40 core no-training Bridge proof with artifact_inventory self-entry caveat; task272-task275 evidence still pending and global Qwen AIME remains NO-GO/HOLD. |
