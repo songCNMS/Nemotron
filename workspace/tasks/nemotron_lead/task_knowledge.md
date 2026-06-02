@@ -1696,3 +1696,9 @@
    log progress reached `1/30` (`aime_01_r01`, parsed true, correct true), but
    there is still no rc, summary, results, parser diagnostics, final checksum
    manifest, PR, or mailbox report, so the 30B FT-vs-base gate remains HOLD.
+482. Session 96: task306 rank logs confirm batch 0 completed at about 832.5s
+   and batch 1 started (`start_index=1`), while the process remains active with
+   no rc/final artifacts/report. The worker runner is expected to emit rank
+   results plus rank0 aggregate summary/results/full completions/parser
+   diagnostics/checksum manifest; its disposition logic is PASS only for FT
+   `>= 15/30`, FAIL below, HOLD on denominator or prompt-token mismatch.

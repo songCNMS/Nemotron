@@ -7407,3 +7407,28 @@
 - Gate remains HOLD pending run completion, complete artifacts, and an official
   worker_3 mailbox/PR or artifact report. Lead did not interrupt the active
   worker-owned eval.
+
+## Session 96 - 2026-06-02 UTC - task306 runner/finalization audit
+
+- Rechecked task306 after Session 95:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch remote was `f7e0b518981cdd24c403d61560583ddf67d8d733`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- Worker-launched task306 NemTron process remains active after about twenty
+  minutes. Local and remote rc files are still absent.
+- Remote rank event logs show the first batch completed on rank0 and rank7 with
+  about `832.5s` latency, then `generation_batch_start` at `start_index=1`.
+  This supports slow active progress rather than a finished eval.
+- Audited the pushed worker_3 runner from the task306 branch. Its finalization
+  path writes per-rank results/full completions/parser diagnostics and, on
+  rank0, aggregate `aime_eval/summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`, plus
+  `manifests/checksum_manifest.json`.
+- The runner's rank0 disposition logic matches the lead gate shape: `PASS` only
+  when FT exact-normalized corrected AIME score is `>= 15/30`; `FAIL` if below;
+  `HOLD` if denominator or prompt-token equivalence fails.
+- No final aggregate artifacts or official worker_3 report exist yet. Gate
+  remains HOLD and lead did not interrupt the active worker-owned eval.

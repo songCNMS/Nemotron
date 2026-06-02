@@ -110,3 +110,19 @@
 - This is partial unofficial observation only. Remote artifacts still lack
   final summary/results/full completions/parser diagnostics/checksum manifest.
   Gate remains HOLD pending completion and official worker report.
+
+## Session 96 - 2026-06-02 UTC - runner/finalization audit
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after about twenty minutes. Local and
+  remote rc files are still absent.
+- Remote rank logs show `generation_batch_done` for `start_index=0` with about
+  `832.5s` latency and then `generation_batch_start` for `start_index=1`.
+- Audited the pushed worker runner. Expected final evidence is per-rank
+  results/full completions/parser diagnostics plus rank0 aggregate
+  `aime_eval/summary.json`, `results.jsonl`, `full_completions.jsonl`,
+  `parser_diagnostics.jsonl`, and `manifests/checksum_manifest.json`.
+- Runner disposition logic is `PASS` only when FT exact-normalized corrected
+  AIME score is at least accepted base `15/30`, `FAIL` below base, and `HOLD`
+  on denominator or prompt-token mismatch. No gate decision is possible yet.

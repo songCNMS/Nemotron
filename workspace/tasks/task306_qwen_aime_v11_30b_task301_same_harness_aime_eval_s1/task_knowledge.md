@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Knowledge Entries
 
@@ -53,3 +53,8 @@
    minutes and log progress reached `1/30` with `aime_01_r01` parsed/correct,
    but no final artifacts or official worker report exist yet; gate remains
    HOLD.
+19. Session 96: rank event logs show `generation_batch_done` for batch 0 at
+   about 832.5s and `generation_batch_start` for `start_index=1`; runner
+   finalization should produce per-rank files plus rank0 aggregate summary,
+   results, full completions, parser diagnostics, and checksum manifest before
+   any gate decision.
