@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task275_qwen_aime_v11_session40_runbook_update_s1 |
-| PR | |
+| PR | #340 |
 | Session | 1 |
-| Last Update | Completed task275 Session 40 runbook/provenance update; report recommends PASS for import/preflight proof update while global V11 gate remains `NO-GO/HOLD`. |
+| Last Update | Opened PR #340 for task275 Session 40 runbook/provenance update; report recommends PASS for import/preflight proof update while global V11 gate remains `NO-GO/HOLD`. |
