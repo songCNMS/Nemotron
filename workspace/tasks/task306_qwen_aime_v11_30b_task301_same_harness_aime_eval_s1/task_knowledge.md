@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=119 -->
+<!-- METADATA:SESSION=120 -->
 
 ## Knowledge Entries
 
@@ -127,6 +127,10 @@
    `generation_batch_start` at `start_index=8` on ranks 0-7, with no
    corresponding done event yet; no final artifacts or official report exist.
 42. Session 119: active run remains in progress after about ninety-nine
+   minutes. Latest stdout progress remains `8/30`, and remote rank logs still
+   show `start_index=8` in progress with no done event. No final artifacts,
+   blocker, PR, or official report exists.
+43. Session 120: active run remains in progress after about one hundred three
    minutes. Latest stdout progress remains `8/30`, and remote rank logs still
    show `start_index=8` in progress with no done event. No final artifacts,
    blocker, PR, or official report exists.
