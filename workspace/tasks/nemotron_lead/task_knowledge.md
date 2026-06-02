@@ -960,3 +960,8 @@
    only and diff-check passes. Because it is based on #354-era `34de04ff...`,
    worker_3 was instructed to refresh/rebase to current main `228ffd74...`
    before PR/final evidence.
+309. task293 worker_3 refresh mailbox `d99074422e8b4568ad36325e32277c47`
+   reports refreshed head `b120dc9ea747a8bb5052be707a256ddc1694e8f2` on current
+   main `228ffd741bb9fa4eae6abf8d37bc171397151d7a`. Lead recheck confirms
+   main is ancestor, diff remains docs/status only, and diff-check passes. No
+   task293 PR/eval result/blocker evidence yet.
