@@ -860,3 +860,19 @@
    #353 mergedAt `2026-06-02T07:52:08Z`, merge commit `a372dcd7...`, merged
    head `daad63ef...`, closeout branch `6dc03291...`, and confirms no boundary
    violations.
+284. task291 current remote head is
+   `4dffb40caea801503b8c39241f9afbe321887760`; no PR is visible. Read-only
+   latest output root `run_20260602T080247Z` reports `TASK291_DISPOSITION=BLOCK`,
+   rc `2`, and `AssertionError: tensor model parallel group is not initialized`.
+   No retained canary JSON/JSONL artifacts are visible.
+285. task291 earlier output `run_20260602T075913Z` also blocked at rc `2` with
+   `AttributeError: 'Qwen3ModelProvider' object has no attribute
+   'padded_vocab_size'`; the `4dffb40...` vocab fallback changed the blocker but
+   did not produce retained completions.
+286. #351/task289 current head `7f4a223...` is clean but remains HOLD via PR
+   comment `4600040776`; its report is stale because it still records #353 open
+   and task291 old head `63c5715...`. worker_5 mailbox
+   `d7c884a9894848a8b32499d38ecbc621` was processed and marked read.
+287. The next hard gate remains task291 official PASS/BLOCK report and, if code
+   changes are final, PR/review. Corrected AIME2025/task243 FT-vs-base remains
+   blocked until retained non-AIME canary completions pass and are reviewed.

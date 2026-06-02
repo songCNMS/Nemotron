@@ -5448,3 +5448,32 @@
   `2026-06-02T07:52:08Z`, merge commit
   `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`, merged head `daad63ef...`,
   branch-only closeout `6dc03291...`, and no boundary violations.
+- Continuation after goal resume: fetched origin and found worker_2 task291
+  branch advanced to `4dffb40caea801503b8c39241f9afbe321887760`; no task291 PR
+  is visible. Branch diff adds/updates task291 docs/status and
+  `run_no_export_canary_probe.py`; `git diff --check` passes.
+- Read-only task291 artifact checks found latest output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T080247Z`
+  with source head `4dffb40...`, command log, rc file, and sync log only. No
+  JSON/JSONL retained-completion artifacts are visible. The remote probe reports
+  `TASK291_DISPOSITION=BLOCK`, rc `2`, and blocker
+  `AssertionError: tensor model parallel group is not initialized`.
+- An earlier task291 run
+  `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T075913Z`
+  also reported `TASK291_DISPOSITION=BLOCK`, rc `2`, with
+  `AttributeError: 'Qwen3ModelProvider' object has no attribute 'padded_vocab_size'`.
+  The newer `4dffb40...` branch added a vocab-size fallback but still blocks
+  before retained canary completions.
+- Processed and marked read worker_5 task289 mailbox
+  `d7c884a9894848a8b32499d38ecbc621` for #351 head
+  `7f4a2237ba0cecef07a2c6e0b0bacdc5f03fc16f`; #351 is open/base
+  main/CLEAN/MERGEABLE and docs-only, but stale because it still records #353
+  as open and task291 as old head `63c5715...`.
+- Posted #351 lead `REQUEST-CHANGES/HOLD` comment `4600040776` for current head
+  `7f4a223...`, requiring refresh to record #353 merged at `a372dcd7...` and
+  task291 current `4dffb40...` blocker observations or explicitly hold pending
+  worker_2 official task291 report.
+- Sent delivered peer updates: worker_2 must send official task291 mailbox
+  report and PR if code/docs/report changes are final, or continue only within
+  no-export/no-endpoint one-GPU bounds; worker_5 must keep #351 on HOLD and
+  refresh or explicitly wait for task291 official evidence.

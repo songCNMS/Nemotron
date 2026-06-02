@@ -22,3 +22,13 @@
   `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` after #353 merged. Branch diff is
   still acceptance/status/task-docs only; no PR or task291 output root is
   visible yet.
+- Later continuation found worker_2 remote branch at
+  `4dffb40caea801503b8c39241f9afbe321887760`, with helper-script changes and no
+  PR. Read-only outputs show two blocked probe attempts:
+  `run_20260602T075913Z` blocked with missing `Qwen3ModelProvider.padded_vocab_size`;
+  `run_20260602T080247Z` blocked with `AssertionError: tensor model parallel
+  group is not initialized`. Neither run has retained canary JSON/JSONL
+  completion artifacts visible.
+- Lead sent worker_2 a delivered request for official mailbox report and PR if
+  code/docs/report changes are final, or bounded continuation only inside
+  task291 no-training/no-export/no-endpoint/one-GPU limits.
