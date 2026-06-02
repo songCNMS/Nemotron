@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task291_qwen_aime_v11_no_export_canary_route_unblock_s1 |
-| PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-02T07:05:00Z: Accepted task291 on worker branch from #350 merge base; preparing no-export/no-endpoint one-GPU canary route unblock probes for task285 iter2 checkpoint. |
+| PR | Pending |
+| Session | 2 |
+| Last Update | 2026-06-02T08:13:33Z: task291 no-export/no-endpoint one-GPU MCore canary route PASS evidence produced at source head dfb6ca64; 5/5 retained synthetic non-AIME completions, preparing PR/mailbox. |

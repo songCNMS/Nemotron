@@ -1,6 +1,6 @@
 # task291_qwen_aime_v11_no_export_canary_route_unblock_s1 - No-export canary route unblock
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
