@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task278_qwen_aime_v11_task276_config_import_preflight_s1 |
 | PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-02T04:40:28Z: Accepted task278 no-training Qwen3-4B V11 config/import preflight from lead docs at be45766. |
+| Session | 2 |
+| Last Update | 2026-06-02T04:50:43Z: Produced task278 no-training preflight evidence; local data/Qwen contracts pass, blocked at missing local NeMo/Megatron-Bridge runtime. |

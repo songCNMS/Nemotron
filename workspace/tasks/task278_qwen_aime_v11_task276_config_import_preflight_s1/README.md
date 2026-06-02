@@ -1,6 +1,6 @@
 # task278_qwen_aime_v11_task276_config_import_preflight_s1 - task276 config/import preflight
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
