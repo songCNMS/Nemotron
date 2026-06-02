@@ -5644,3 +5644,23 @@
   status plus task293 README/history/task_knowledge only, `git diff --check`
   passes, and `origin/main` is an ancestor. No task293 PR, artifact, eval
   result, or precise blocker report is visible yet.
+- Later fetch observed task293 branch advanced to
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e`, adding
+  `run_no_export_aime_eval.py`. Branch diff is worker_3 status plus task293
+  docs and runner; `git diff --check` passes. Open PR list still has no
+  task293 PR.
+- Read-only live artifact observation at `2026-06-02T09:01:17Z`: local output
+  root
+  `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`
+  contains only sync logs and the remote command log so far. Remote NemTron run
+  PID `433268` is active with command using `CUDA_VISIBLE_DEVICES=0`,
+  checkpoint
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3/iter_0000002`,
+  Qwen3-4B base path, task247 AIME score cache, 30 rows, top-k 1, and no-export
+  runner head `87de0a97...`.
+- Partial log observation only: progress reached `2/30`; `aime_01_r01`
+  parsed/correct true and `aime_02_r01` parsed true/correct false. Remote
+  artifacts currently contain prompt, checkpoint-load, and command/env
+  manifests only; no summary/results/checksums or official worker mailbox are
+  visible. This is not gate evidence and does not release promotion/export/
+  endpoint/30B/8-GPU.

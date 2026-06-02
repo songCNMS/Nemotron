@@ -28,3 +28,8 @@
   `228ffd741bb9fa4eae6abf8d37bc171397151d7a`. Lead recheck confirms the branch
   is still docs/status only and diff-check clean. Awaiting official AIME eval
   result, PR, or precise fail-closed blocker.
+- Observed branch head `87de0a97e6c0406a4b67520faab6b11d91d9131e` adding a
+  no-export AIME eval runner. Read-only live run `run_20260602T085237Z` is
+  active on NemTron PID `433268`; partial progress is `2/30` with one correct
+  and one incorrect. Only manifests are present so far; no final summary,
+  results, checksums, official worker report, or PR exists yet.

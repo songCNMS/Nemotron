@@ -965,3 +965,13 @@
    main `228ffd741bb9fa4eae6abf8d37bc171397151d7a`. Lead recheck confirms
    main is ancestor, diff remains docs/status only, and diff-check passes. No
    task293 PR/eval result/blocker evidence yet.
+310. task293 branch advanced to
+   `87de0a97e6c0406a4b67520faab6b11d91d9131e` with
+   `run_no_export_aime_eval.py`; diff-check passes but no PR is open. Read-only
+   live run observation shows active NemTron PID `433268`, output root
+   `run_20260602T085237Z`, command `CUDA_VISIBLE_DEVICES=0`, Qwen3-4B, task285
+   iter2 checkpoint, task247 AIME cache/base artifacts, 30 rows, top-k 1.
+311. task293 live log is partial only: `2/30` rows observed, `1/2` correct so
+   far, remote artifacts currently only contain prompt/checkpoint/command
+   manifests. No summary/results/final checksums or official mailbox yet; do not
+   treat this as same-harness FT-vs-base gate evidence.

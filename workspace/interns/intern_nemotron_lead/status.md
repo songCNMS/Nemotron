@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #354/#355 merged; task293 branch refreshed to b120dc9 on main 228ffd74, no PR/eval result yet; #351 HOLD at ac85aca; export/promotion/30B HOLD |
+| PR | #354/#355 merged; task293 runner branch 87de0a9 live no-export AIME eval observed 2/30 partial, no PR/final report yet; #351 HOLD at ac85aca; export/promotion/30B HOLD |
 | Session | 76 |
