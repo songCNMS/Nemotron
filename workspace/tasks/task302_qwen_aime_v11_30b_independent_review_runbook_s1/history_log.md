@@ -17,6 +17,8 @@
 - Imported task docs from lead docs commit
   `676d8556` on `origin/intern_nemotron_lead/session1-recovery-task-docs`.
 - Created initial `30b_independent_review_runbook.md`.
+- Opened task302 PR #361:
+  `https://github.com/songCNMS/Nemotron/pull/361`.
 - Initial upstream visibility scan found no task298-task301 PRs or remote heads.
   Initial disposition is HOLD/pending exact upstream evidence, with no approval
   for any 30B gate.
