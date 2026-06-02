@@ -6516,3 +6516,26 @@
   merged/carried, task300 same-harness 30B base AIME2025 score artifact is now
   the current hard blocker, and task301 nonzero-LR training remains HOLD until
   task300 base score is accepted and lead gives explicit launch clearance.
+- Processed and marked read worker_1 task299/#365 post-merge closeout mailbox
+  `6ecad9e74bb34545bdd29b72e6ee3001`: worker_1 confirms #365 pre-merge check
+  was OPEN/base main/non-draft/exact head `b8b760fb...`, `CLEAN`, API
+  mergeable true / clean; merged at `2026-06-02T15:29:15Z` with merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38` from merged head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`. Worker_1 pushed branch-only
+  closeout head `ee71ba898b496e317ac4dbe2cbdb963912c77d48` with status/
+  README/history/task_knowledge metadata only and confirmed no forbidden
+  actions.
+- Fetched worker branches after closeout: task299 branch-only closeout diff from
+  merged head is worker_1 status plus task299 README/history/task_knowledge
+  only; `git diff --check` passed. #365 remains MERGED in GitHub.
+- #362/task301 advanced from `681ddea...` to
+  `efc9aef71c97e53e71eccb3f26416cd479adf1f2`, OPEN/base main/CLEAN. Diff is
+  worker_5 status plus task301 README/history/task_knowledge and refreshed
+  `30b_full_sft_training_report.md`; `git diff --check` passed. The report
+  remains `BLOCKED_UPSTREAM_GATES_MISSING` and confirms no training launched,
+  but it was written before #365 merged and still describes task299/#365 as
+  open/pending.
+- Sent delivered worker_5 exact-head refresh request for #362 after #365 merge:
+  refresh docs/status and mailbox so runtime+data gates are carried as merged,
+  while preserving training HOLD until task300 accepted 30B base AIME score and
+  explicit lead launch clearance.

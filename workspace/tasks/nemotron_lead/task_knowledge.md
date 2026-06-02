@@ -1324,3 +1324,10 @@
    30B base AIME2025 score is the active blocker before task301 training launch
    can be considered. #362/task301 remains HOLD until task300 base evidence is
    accepted and lead explicitly clears launch.
+394. worker_1 closeout mailbox `6ecad9e74bb34545bdd29b72e6ee3001` confirms
+   #365 exact-head merge: mergedAt `2026-06-02T15:29:15Z`, merge commit
+   `205fc919a643b1478964a9e91793247c5e821a38`, merged head `b8b760fb`, and
+   branch-only closeout head `ee71ba89` with status/task-doc metadata only.
+395. #362/task301 head `efc9aef` remains a training-HOLD report and no launch
+   evidence, but it is stale on task299 state because it was written before
+   #365 merged. Lead requested worker_5 exact-head refresh after #365 merge.
