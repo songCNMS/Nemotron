@@ -1204,3 +1204,21 @@
    worker_1/task299 data-packing contract, worker_3/task300 same-harness
    testing, worker_5/task301 gated 30B SFT training, and worker_4/task302
    independent review/runbook.
+369. Current visible 30B gate state: task298 acceptance is official via
+   worker_2 mailbox `62c47ba1ac17414c93d83ebaa6fdd882` at head `7d24b929`;
+   task300 acceptance is official via worker_3 mailbox
+   `b90b085ba5b04bb4a37cb9d580143b3b` at head `85a5ba13`; task299 branch
+   `9dc8d394` and task302 PR #361/head `7c36f6eb` still need official mailbox
+   reports; task301 still needs a remote branch or blocker report.
+370. Updated 30B gate state: task299 is in progress at `ff30fad8` with
+   preliminary tokenizer-equivalence evidence but no final 30B-ready packed root
+   yet; task302/#361 is official but HOLD at `a87d57e6`; task301/#362 exists at
+   `b8e42b3e` with `BLOCKED_UPSTREAM_GATES_MISSING` and no training launched.
+   The first hard unblock remains task298 PASS runtime/resource/base-load proof,
+   task299 final data/packing PASS, and task300 30B base AIME score before
+   task301 can train.
+371. worker_5 official task301 mailbox `db7ec9b8e69e4f5d8d1d8f639c347e6b`
+   confirms #362 head `b8e42b3e`, report sha256
+   `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`,
+   `BLOCKED_UPSTREAM_GATES_MISSING`, and no 30B SFT launch or artifacts.
+   Current open PRs #361/#362 are both CLEAN but remain HOLD/not approved.

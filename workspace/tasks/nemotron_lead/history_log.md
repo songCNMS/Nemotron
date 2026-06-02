@@ -6120,3 +6120,75 @@
   worker_3/task300 same-harness testing gate,
   worker_5/task301 full 30B SFT training gate, and
   worker_4/task302 independent review/runbook gate.
+- Continuation live scan: origin/main remained
+  `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`, lead branch was clean at
+  `be6bcc9baa7901ad898cb62e4d3add3dd5945c27`, and no worker task output roots
+  for task298-task302 were visible yet.
+- Fetched visible worker branches:
+  worker_1/task299 at `9dc8d3949d0d1c562c53e959a61873f4771ef146`,
+  worker_2/task298 at `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`,
+  worker_3/task300 at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`,
+  and worker_4/task302 at `7c36f6eb605f2781c1c70a934a6e1eea55e87401`.
+  task301 had no remote branch yet.
+- Branch diff checks for task298/task299/task300 showed acceptance/status/task
+  docs only and passed `git diff --check`; task302 additionally includes an
+  initial `30b_independent_review_runbook.md` and passed `git diff --check`.
+- Open PRs: #361 worker_4/task302 open/base main/CLEAN at `7c36f6eb...`; #360
+  coordinator request-record PR open/base main/CLEAN. No task298/task299/task300
+  or task301 PR was visible.
+- Processed and marked read worker_2 acceptance mailbox
+  `62c47ba1ac17414c93d83ebaa6fdd882`: task298 accepted at head `7d24b929...`,
+  current main `31137bc1...`, no-training/no-testing runtime/resource/base-load
+  scope acknowledged, and worker is proceeding to read-only probes.
+- Processed and marked read worker_3 acceptance mailbox
+  `b90b085ba5b04bb4a37cb9d580143b3b`: task300 accepted at head `85a5ba13...`,
+  current main `31137bc1...`, first step is to wait for/inspect task298 route
+  before exact 30B base AIME2025 scoring, and all boundaries were confirmed.
+- Sent delivered follow-ups to worker_1, worker_4, and worker_5 requesting
+  official mailbox for task299 branch `9dc8d394...`, official mailbox for #361
+  task302 head `7c36f6eb...`, and task301 acceptance branch/mailbox or blocker.
+  Reiterated that task301 training remains gated on task298 PASS, task299 PASS,
+  and task300 30B base-score artifact.
+- Processed and marked read worker_4 task302 acceptance mailbox
+  `100b71d6cd3040678599dbfa60bd1d01`: PR #361 opened for task302, branch
+  initially reported at `1c56762f...`, base main `31137bc1...`, initial runbook
+  created, disposition `HOLD_WAITING_TASK298_TASK301_EVIDENCE`, no gate
+  approvals and no forbidden actions.
+- Fetched updated #361 state: worker_4 branch advanced to
+  `a87d57e6b7151ee2df2c7045c6b873921a19db87`; #361 is OPEN/base main/CLEAN.
+  Diff scope remains worker_4 status plus task302 README/history/task_knowledge
+  and `30b_independent_review_runbook.md`; `git diff --check` passed.
+- Processed and marked read worker_1 task299 progress mailbox
+  `57a791c185ba47299302db1a61ba9253`: task299 branch advanced to
+  `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`, preliminary PASS path but not
+  final. Worker_1 found 4B and 30B tokenizer assets byte-identical for
+  `tokenizer.json`, `tokenizer_config.json`, `vocab.json`, and `merges.txt`,
+  with matching tokenizer-native API, but task276 raw metadata still points to
+  the 4B tokenizer URI. Final task299 still needs a task-owned 30B-ready packed
+  root, validation, counts, parity, checksums, and decontam proof.
+- Fetched worker_5 task301 branch and PR #362. Current #362 head is
+  `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`, base main, mergeStateStatus
+  `UNKNOWN` at the time of check. Diff scope is worker_5 status plus task301
+  docs and `30b_full_sft_training_report.md`; `git diff --check` passed.
+- Read #362 task301 report: disposition `BLOCKED_UPSTREAM_GATES_MISSING`, no
+  30B training launched, no checkpoint/loss/LR/validation artifacts created,
+  and launch correctly blocked pending task298 PASS, task299 PASS, and task300
+  30B base-score artifact. Sent delivered worker_5 follow-up requesting official
+  mailbox with exact #362 head/PR state and blocker confirmation.
+- Sent delivered worker_4 follow-up: #361 remains HOLD, not approved, and should
+  refresh its runbook matrix against current visibility
+  task298 `7d24b929...`, task299 `ff30fad8...`, task300 `85a5ba13...`, and
+  task301/#362 `b8e42b3e...`.
+- Processed and marked read worker_5 task301 acceptance/blocker mailbox
+  `db7ec9b8e69e4f5d8d1d8f639c347e6b`: PR #362 exact head
+  `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`, base main `31137bc1...`,
+  disposition `BLOCKED_UPSTREAM_GATES_MISSING`, worker output report copy
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/30b_full_sft_training_report.md`,
+  report sha256 `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9`,
+  no training commands/env, no checkpoint/loss/LR/validation/checksum artifacts,
+  and no forbidden actions.
+- Rechecked GitHub after mailbox processing: #361/task302 is OPEN/base
+  main/CLEAN at `a87d57e6b7151ee2df2c7045c6b873921a19db87`; #362/task301 is
+  OPEN/base main/CLEAN at `b8e42b3e748c8c80cb3c4a938f2db06c9cb0b6d6`.
+  Neither PR is approved by lead; both remain documentation/status gate records,
+  not training/test authorization.

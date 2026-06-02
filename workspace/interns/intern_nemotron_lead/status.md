@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B V11 scale-up task docs pushed and peer-delivered: task298 w2, task299 w1, task300 w3, task301 w5, task302 w4; awaiting worker mailbox/branches |
+| PR | 30B gate live: task298 accepted 7d24b929; task299 progress ff30fad8 not final; task300 accepted 85a5ba13; #361/#362 OPEN CLEAN; training HOLD |
 | Session | 76 |
