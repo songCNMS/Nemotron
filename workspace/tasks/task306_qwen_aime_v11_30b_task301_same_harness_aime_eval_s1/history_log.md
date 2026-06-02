@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=91 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -49,3 +49,14 @@
   pushes/reports it and binds any artifacts.
 - Sent queued `next` peer_send follow-up to worker_3 requesting official
   artifacts/report or exact blocker. Gate remains HOLD.
+
+## Session 91 - 2026-06-02 UTC - no new worker evidence
+
+- Rechecked task306 after fetch:
+  - worker branch still `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`;
+  - no GitHub PR;
+  - no task-owned output root;
+  - no active task306 process;
+  - lead mailbox unread count `0`.
+- Worker-local untracked runner remains unofficial progress only. Gate remains
+  HOLD pending official worker_3 report or artifacts.
