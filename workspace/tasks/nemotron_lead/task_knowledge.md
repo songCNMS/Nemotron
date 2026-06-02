@@ -752,3 +752,10 @@
 256. task285 retry3 was observed running through worker_2's SSH command with
    simplified overrides. Until worker_2 reports completion and artifacts, it is
    unofficial in-progress evidence only; task286 remains HOLD.
+257. task285 retry3 later produced unofficial partial smoke evidence: two
+   optimizer iterations with nonzero LR and finite loss, skipped/nan iteration
+   counts `0`, and remote checkpoints through latest iteration `2` under
+   `smoke_checkpoints_retry3`; remote checkpoint root size is `105G`.
+258. retry3 command still returned `1` after entering built-in evaluation and
+   receiving SIGTERM. Lead requested worker_2 official classification and no
+   further retries before review. task286 remains HOLD until that report exists.

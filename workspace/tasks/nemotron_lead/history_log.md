@@ -5153,3 +5153,27 @@
 - Lead did not interrupt the worker-owned run and did not run any training or
   eval. task286 remains HOLD until worker_2 reports exact task285 result or
   blocker.
+- Later read-only remote check found retry3 completed with two optimizer
+  iterations but overall command return code `1`. The log records iteration `1`
+  learning rate `3.000000E-07`, lm loss `1.506399E+00`, grad norm `24.782`,
+  skipped iterations `0`, nan iterations `0`; iteration `2` learning rate
+  `1.000000E-07`, lm loss `8.874496E-01`, grad norm `33.138`, skipped
+  iterations `0`, nan iterations `0`.
+- retry3 saved checkpoints at iterations `1` and `2` under remote root
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3`.
+  Remote checkpoint size is `105G`, latest checkpointed iteration is `2`, and
+  the checkpoint root contains `iter_0000001` and `iter_0000002`.
+- retry3 then entered built-in evaluation (`Evaluating on 64 samples`,
+  `Evaluating iter 1/32`) and received SIGTERM; log ends
+  `SMOKE_RETRY3_COMMAND_RC=1`. Lead treats this as unofficial partial smoke
+  evidence pending worker_2 classification, not as a promotion/canary/AIME gate.
+- Remote retry3 log sha256 is
+  `096e622a94beae16c114afcf6d6cdd923b01f77d4f5a76200b22eed5fcf0767e`;
+  retry3 script sha256 is
+  `14ec9206372a292486ea2a5fff68ec9d35536b4ff80de5901a6e27ade2f12321`.
+- Sent delivered message to worker_2 requesting no further task285 retries or
+  training until lead review, and asking for official task285 report/branch/PR
+  classification: PASS smoke evidence with residual post-train eval RC=1 risk,
+  REQUEST-CHANGES, or BLOCK. Required report must explain the post-training
+  eval/SIGTERM and whether the checkpoint can be accepted as bounded smoke
+  artifact.
