@@ -154,3 +154,14 @@
 - No task306 aggregate summary/results/full completions/parser diagnostics,
   checksum manifest, or blocker file is visible. Gate remains HOLD pending
   completion and official worker report.
+
+## Session 99 - 2026-06-02 UTC - active run progress 3/30
+
+- Final post-push poll found task306 still active after about thirty minutes.
+  Local and remote rc files are still absent.
+- Log progress advanced to `3/30`: `aime_01_r01`, `aime_02_r01`, and
+  `aime_03_r01` are parsed true and correct true. This is partial unofficial
+  progress only.
+- No task306 aggregate summary/results/full completions/parser diagnostics,
+  checksum manifest, blocker file, task306 PR, or official worker report is
+  visible. Gate remains HOLD pending completion and official worker report.

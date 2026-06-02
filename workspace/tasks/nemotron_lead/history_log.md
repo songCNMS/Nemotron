@@ -7477,3 +7477,17 @@
   `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
   visible yet. Gate remains HOLD and lead did not interrupt the active
   worker-owned eval.
+
+## Session 99 - 2026-06-02 UTC - task306 active run progress 3/30
+
+- Final post-push poll after Session 98 found task306 still active after about
+  thirty minutes, with local and remote rc files still absent.
+- Log progress advanced to `3/30`: `aime_01_r01`, `aime_02_r01`, and
+  `aime_03_r01` are all parsed true and correct true. This remains partial
+  unofficial progress only, not a final FT score.
+- No task306 aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.

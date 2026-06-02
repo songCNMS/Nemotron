@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
 
 ## Knowledge Entries
 
@@ -64,3 +64,6 @@
 21. Session 98: active run progressed to `2/30`; batch 1 latency was about
    708s and batch 2 started. No rc, final task306 artifacts, blocker, PR, or
    official worker report exists yet.
+22. Session 99: active run progressed to `3/30`; the first three AIME rows are
+   parsed/correct in log output, but there is still no rc, final task306
+   artifacts, blocker, PR, or official worker report.
