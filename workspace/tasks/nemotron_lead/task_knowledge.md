@@ -1376,3 +1376,8 @@
    report. Lead sent explicit launch clearance after that head; current expected
    next evidence is worker_5 post-clearance launch acknowledgement, blocker, or
    training artifact report.
+406. task301 read-only output observation: run `run_20260602T155725Z` synced
+   current main `e400cea8` to NemTron and mirrored task299 packed data to the
+   remote task301 run root. Source and remote packed-data checksum manifests both
+   hash `a5b05d1e...`; official worker_5 launch status/artifacts are still
+   pending after a delivered status request.

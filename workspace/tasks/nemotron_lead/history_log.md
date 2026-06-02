@@ -6691,3 +6691,24 @@
   `BLOCKED_UPSTREAM_GATES_MISSING`; lead launch clearance was sent after this
   report and supersedes it. No worker_5 post-clearance launch acknowledgement or
   training artifact mailbox had arrived yet; mailbox unread count was `0`.
+- Follow-up read-only observation of worker_5 local outputs found task301 run
+  root
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`.
+  It includes `repo_sync.log` syncing current main
+  `e400cea8a1604bc95cc430a194811ff553b99401` to remote run root
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`,
+  and `path_probe.log` showing the 30B model exists on NemTron while the initial
+  local `/work-agents/.../packed_qwen_30b` path was not directly present there.
+- The same run root now includes `packed_remote_mirror.log` and matching source/
+  remote checksum manifests for the task299 packed data:
+  `task299_packed_source_files.sha256` and `task299_packed_remote_files.sha256`
+  both hash to
+  `a5b05d1e3a8ea2724e09058e3e7646ae5c1d499adb93be12d28eca78ce73190b`.
+  Read-only observation only; no official worker_5 launch-status mailbox has
+  arrived yet.
+- Sent delivered worker_5 status request asking for official mailbox with
+  whether training launched, is preparing, or is blocked, including remote
+  packed root, command/env, LR/steps/parallelism/GPU/seed if launched,
+  checkpoint/log roots, process/job status, return codes/log tails, checksums,
+  and exact blocker if any. Reiterated no AIME2025 train data, task255, shared
+  deletion, FT eval, canary, export, endpoint, or promotion outside clearance.
