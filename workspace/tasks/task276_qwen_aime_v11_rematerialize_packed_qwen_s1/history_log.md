@@ -1,6 +1,6 @@
 # task276_qwen_aime_v11_rematerialize_packed_qwen_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -33,7 +33,7 @@
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, main push, or 30B/8-GPU.
 
-## Session 1 - Rematerialization evidence
+### Rematerialization evidence
 
 - Generated task-owned run root:
   `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z`.
@@ -78,3 +78,20 @@
   packed hard-math row; this task does not authorize training, live canary,
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, main push, or 30B/8-GPU.
+
+## Session 2 - Mailbox reconciliation
+
+- Processed lead follow-up noting stale visibility around task276/#344 and
+  missing official mailbox closeout.
+- Rechecked PR #344: current PR state is `OPEN`, base `main`, and
+  `mergeStateStatus=CLEAN`; current head before this Session 2 status update was
+  `98d1bded1f365d1f38de1db676ad12f5c6489738`.
+- Confirmed artifact evidence remains unchanged from the task-owned run root
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z`.
+- Prepared a compact official mailbox report pointing lead to the full committed
+  task report, evidence manifest, checksums, split counts, Qwen contract PASS,
+  no-AIME leakage decision, residual sparse-valid risk, and boundary
+  confirmation.
+- No training, nonzero-LR smoke, live canary, AIME/task243 eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, main
+  push, or 30B/8-GPU action was performed.

@@ -1,6 +1,6 @@
 # task276_qwen_aime_v11_rematerialize_packed_qwen_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,7 @@
 6. The fresh split is sparse in validation: valid has 1 packed hard-math row.
    This should be reviewed before any later config/import preflight treats the
    valid split as representative.
+7. Session 2 is a mailbox/status reconciliation only. The authoritative packed
+   artifact remains
+   `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`;
+   no new packing, training, evaluation, export, or promotion action was run.
