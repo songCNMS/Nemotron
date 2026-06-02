@@ -6793,3 +6793,51 @@
   shared deletion, and no FT eval/canary/export/endpoint/promotion. Lead gate
   remains HOLD for every downstream testing step until task301 completion
   artifacts are reviewed.
+
+## Session 79 - 2026-06-02 UTC - task301 validation/teardown live triage
+
+- Resumed active 30B goal and rechecked authoritative state: lead branch was
+  clean at `1369ce2716b3b5ec430c81b8a9e3f3c8506ee7e3`, `origin/main` remained
+  `e400cea8a1604bc95cc430a194811ff553b99401`, and #362/task301 remained
+  OPEN/base main/CLEAN at `e4c00524aca255de205a749995b23ed48493cb8b`. No
+  unread lead mailbox was present at the first scan.
+- Read-only task301 output-root scan still showed only preflight/launch files
+  locally under
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`;
+  no worker-pushed completion report, artifact inventory, or local copied
+  train log/checksum bundle was visible.
+- Performed read-only NemTron probes against remote run
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`.
+  Observed the training command active on host
+  `lg-cmc-b7r201-f08u26-h200-000126`, with 8 H200s allocated and Python ranks
+  alive. These probes did not modify the run, start tests, kill/restart
+  processes, or run external eval.
+- Runtime progress observed from the remote train log: iterations reached
+  `35/35`; checkpoints were saved at iterations 5, 10, 15, 20, 25, 30, and 35;
+  `latest_checkpointed_iteration.txt` reported `35`; final checkpoint
+  directory `checkpoints/iter_0000035` existed. Last reported training metrics
+  at iteration 35 were learning rate `1.000000E-07`, global batch size `8`, LM
+  loss `8.325640E-01`, load-balancing loss `1.434611E+00`, grad norm `9.089`,
+  skipped iterations `0`, and NaN iterations `0`.
+- After the training loop, the log printed `Deleting CUDA graphs`, `[after
+  training is done]`, a second checkpoint save at iteration 35, then entered
+  built-in validation with `Evaluating on 80 samples` and `Evaluating iter 1/10`.
+  As of the final live probe in this session, no `train_rc.txt` or
+  `train_end.txt` existed, the train log mtime/size had not advanced past
+  `2026-06-03 00:23:43.221057699 +0800` / `272557` bytes, GPU utilization read
+  `0%` across all 8 GPUs, and Python ranks were still alive with aggregate CPU
+  activity around `530.9%`.
+- Sent delivered peer request to worker_5:
+  `TASK301 LIVE STATUS REQUEST`. Requested official mailbox classification of
+  the state as still-running validation versus validation/teardown blocker/hang,
+  including process status, log tail, whether validation is expected to be
+  CPU-only/long, any safe wait threshold, and exact next action. Explicitly
+  instructed worker_5 not to kill/restart, run canary/AIME/FT eval, export,
+  endpoint, promotion, or follow-on work without reporting and receiving lead
+  clearance.
+- Short post-request mailbox poll found no unread worker_5 response. Current
+  lead disposition: task301 training loop produced checkpoint material but
+  remains incomplete as a gate because the command has not exited and no
+  worker-owned completion/blocker report, return code, final artifact inventory,
+  checksums, or reviewed metrics exist. All downstream canary/AIME/export/
+  endpoint/promotion gates remain HOLD.

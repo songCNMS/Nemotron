@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task301 launched; process active; awaiting return code/checkpoints/metrics |
-| Session | 77 |
+| PR | 30B gate live: task301 reached 35/35; built-in validation/teardown not exited; waiting worker_5 status |
+| Session | 79 |

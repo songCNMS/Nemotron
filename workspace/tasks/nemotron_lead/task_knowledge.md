@@ -1411,3 +1411,17 @@
    inventory, loss/LR/validation metrics, artifact checksums, canary result, or
    corrected AIME FT-vs-base result exists yet. #362 PR docs remain pre-launch
    until worker_5 pushes a refresh or sends completion/blocker closeout.
+413. Read-only task301 runtime probes on NemTron during Session 79 showed the
+   30B SFT reached iteration `35/35`, saved checkpoints through
+   `iter_0000035`, and reported final training-step metrics: LR `1e-7`, LM loss
+   `0.8325640`, load-balancing loss `1.434611`, grad norm `9.089`, skipped
+   iterations `0`, NaN iterations `0`.
+414. task301 was not gate-complete after reaching 35/35 because the script
+   entered built-in validation (`Evaluating on 80 samples`, `Evaluating iter
+   1/10`) and had not written `train_rc.txt` or `train_end.txt`. Remote log
+   stalled/paused at mtime `2026-06-03 00:23:43.221057699 +0800`, GPU
+   utilization read `0%`, but ranks remained alive with CPU activity.
+415. Lead sent worker_5 a delivered `TASK301 LIVE STATUS REQUEST` asking for an
+   official mailbox classification: still-running validation vs validation/
+   teardown blocker or hang. Worker_5 was instructed not to kill/restart or run
+   canary/AIME/export/endpoint/promotion/follow-on work without lead clearance.
