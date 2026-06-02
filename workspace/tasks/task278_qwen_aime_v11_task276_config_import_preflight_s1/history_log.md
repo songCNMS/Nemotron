@@ -1,6 +1,6 @@
 # task278_qwen_aime_v11_task276_config_import_preflight_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -60,3 +60,44 @@
   endpoint, live canary, AIME/task243 eval, promotion, task255 reuse,
   AIME2025 train data, shared deletion, main push, merge, or 30B/8-GPU action
   was performed.
+
+## Session 3 - `/root` sync runtime retry
+
+- Processed lead follow-up requesting the same no-training preflight in a
+  NemTron/NeMo/Megatron-Bridge runtime after syncing code to `/root`, if
+  available.
+- Created task-owned sync path:
+  `/root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron`.
+- Synced by local git clone/checkout at branch
+  `intern_nemotron_worker_2/task278_qwen_aime_v11_task276_config_import_preflight_s1`
+  head `6d3e5825a58529d86e9bb9f8f44b941f05324ba6`.
+- Runtime route probe on host `lg-cmc-b7r201-n09u29-cpu-000191` found:
+  Docker CLI present but daemon unavailable, `nvidia-smi` missing, `srun`
+  missing, `enroot` missing, and `singularity` missing.
+- Python import probes from the `/root` sync path found `nemo` and `megatron`
+  missing; `megatron.bridge.training.config` and
+  `megatron.bridge.recipes.qwen.qwen3` therefore cannot import.
+- Reran the no-training helper from the `/root` sync path:
+  `PYTHONPATH=/root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron/src python3 /root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron/workspace/tasks/task278_qwen_aime_v11_task276_config_import_preflight_s1/build_task278_config_import_preflight.py`.
+- New run root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
+- New manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_manifest.json`
+  sha256 `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`.
+- New report:
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_report.md`
+  sha256 `c81208f6af524d117a333495ab4b5a971aeecf36d38000a737318ff346f77f23`.
+- Runtime probe log:
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/logs/session3_root_runtime_probe_20260602T045631Z.log`
+  sha256 `5fb97e01fecb735eba89c318bae39091ef6c57195c30ca3bd6f5bac6832cfe18`.
+- Root-synced preflight log:
+  `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/logs/session3_root_preflight_20260602T045631Z.log`
+  sha256 `7180274cbed295a0462f2d53fa36a8c96c7ca519419119887eebf8f7a07d686b`.
+- Disposition remains
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`. The task278 local
+  data/Qwen contract/HF config-tokenizer checks still pass, but the available
+  `/root` route cannot provide a NeMo/Megatron-Bridge import proof.
+- No `qwen_local_train.py`, `run_finetune`, training loop, optimizer step,
+  checkpoint save from training, nonzero-LR smoke, live canary, AIME/task243
+  eval, export, endpoint, promotion, task255 reuse, AIME2025 train data,
+  shared deletion, main push, merge, or 30B/8-GPU action was performed.

@@ -1,6 +1,6 @@
 # task278_qwen_aime_v11_task276_config_import_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,12 @@
    has disposition `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`;
    next remediation is a task-owned NemTron/NeMo/Megatron-Bridge no-training
    import preflight, not a training launch.
+8. Session 3 synced the branch to
+   `/root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron`
+   and reran the same helper from `/root`; the result remains blocked because
+   Docker daemon, `nvidia-smi`, `srun`, `enroot`, `singularity`, `nemo`, and
+   `megatron` are unavailable on the host.
+9. Current strongest task278 artifact is
+   `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`,
+   with manifest sha256
+   `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`.

@@ -1,6 +1,6 @@
 # task278 Config/Import Preflight Report
 
-Generated: 2026-06-02T04:49:41.546401Z
+Generated: 2026-06-02T04:56:42.646860Z
 
 Disposition: `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`.
 
@@ -20,16 +20,16 @@ deletion, main push, merge, or 30B/8-GPU.
 ## Artifact Paths
 
 - Output root: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1`.
-- Run root: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T044941Z`.
-- Manifest: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T044941Z/evidence/task278_config_import_preflight_manifest.json`.
-- Report: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T044941Z/evidence/task278_config_import_preflight_report.md`.
+- Run root: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`.
+- Manifest: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_manifest.json`.
+- Report: `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z/evidence/task278_config_import_preflight_report.md`.
 - Task276 packed root: `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`.
 - Task276 splits root: `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen/splits`.
 
 ## Config Payload
 
-- Train entrypoint checked but not executed: `/work-agents/intern_nemotron_worker_2/Nemotron/src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py`.
-- Config path: `/work-agents/intern_nemotron_worker_2/Nemotron/src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml`.
+- Train entrypoint checked but not executed: `/root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron/src/nemotron/recipes/super3/stage1_sft/qwen_local_train.py`.
+- Config path: `/root/task278_qwen_aime_v11_task276_config_import_preflight_s1/Nemotron/src/nemotron/recipes/super3/stage1_sft/config/m1_agentic_train.yaml`.
 - Packed data env: `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen/splits`.
 - Qwen model/tokenizer env: `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
 - Training profile: `qwen`.
