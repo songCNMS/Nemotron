@@ -819,3 +819,7 @@
    report is still required before task288 review/gate action.
 273. worker_5 has accepted task289 locally and is editing runbook/provenance,
    but no task289 remote branch/PR is visible yet.
+274. task290 is assigned to worker_1 to independently review task287 blocker
+   artifacts because worker_3 has not yet published official task287 report/PR.
+   task290 is read-only and can only recommend blocker closeout or request
+   stronger evidence; it cannot release AIME/task243.
