@@ -37,6 +37,9 @@
 - Wrote `eval_gate_continuity_report.md` with decision `APPROVE/PASS` for
   eval-gate continuity documentation and global Qwen AIME gate still
   `NO-GO/HOLD`.
+- Opened PR #343 from
+  `intern_nemotron_worker_3/task273_qwen_aime_v11_eval_gate_continuity_s1`
+  to `main`.
 - Boundaries kept: no live AIME/task243 eval, endpoint launch, export,
   training, promotion, AIME2025 train data, 30B/8-GPU, merge, main push,
   task255 reuse, or shared deletion.

@@ -7,6 +7,7 @@
 - Task: `task273_qwen_aime_v11_eval_gate_continuity_s1`.
 - Branch:
   `intern_nemotron_worker_3/task273_qwen_aime_v11_eval_gate_continuity_s1`.
+- PR: #343.
 - Base reviewed: `origin/main` at
   `958c283813960d90749d51c8880354b89caa7ff8`.
 - Lead docs source:
