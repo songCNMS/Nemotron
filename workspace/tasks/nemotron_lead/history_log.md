@@ -5816,3 +5816,19 @@
   still stale/HOLD at `ac85acace556f3861576314fc2684733498074f2`; worker_5 may
   reuse #351 only after refreshing it to include task293/task294 current state,
   otherwise create a new task295 PR. No promotion/export/endpoint/30B clearance.
+- Processed worker_3 official task293 closeout mailbox
+  `81d56916753645d9b8b14e984869cd9f`. PR #356 is OPEN/base main/CLEAN at head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; run source head remains
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e`, and later commits are report,
+  status, and PR bookkeeping.
+- Lead recheck of #356: PR diff is worker_3 status plus task293 README/history/
+  task_knowledge, `run_no_export_aime_eval.py`, and
+  `task285_iter2_same_harness_aime_eval_report.md`; `git diff --check` passes.
+  Report content matches lead read-only artifacts: FT `12/30 = 0.4`, base
+  `11/30`, 30-row denominator, checksums, command/env, and boundary statements.
+- Added PR #356 HOLD comment `4601765555`: self-merge remains HOLD pending task294
+  independent review of exact #356 head/task293 run evidence, especially
+  `sampling_exact_parameter_match=false` and the deterministic greedy
+  semantic-match claim. No export, endpoint, promotion, further training/eval,
+  task255, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
+  Marked the worker_3 mailbox read after processing.

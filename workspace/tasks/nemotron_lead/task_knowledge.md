@@ -1071,3 +1071,8 @@
 336. task294 is assigned to worker_4 for independent artifact/protocol review;
    task295 is assigned to worker_5 for runbook/provenance refresh. #351 remains
    stale/HOLD until refreshed with task293/task294 current state or superseded.
+337. worker_3 official task293 closeout opened #356 at head `672d0101`; run
+   source head remains `87de0a97`. Lead recheck confirms the report matches
+   read-only artifacts and `git diff --check` passes, but #356 is HOLD via
+   comment `4601765555` pending task294 independent review. Do not self-merge
+   #356 yet.

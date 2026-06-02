@@ -21,3 +21,6 @@
 - Worker_3 official closeout/PR is still pending. Until it lands and task294
   reviews exact head `87de0a97...`, keep export, endpoint, promotion, 30B, and
   8-GPU on HOLD.
+- Worker_3 opened #356 at head `672d0101`; report matches artifacts, but lead
+  set HOLD via comment `4601765555` pending task294 independent review. #356
+  must not be self-merged before that review is processed.

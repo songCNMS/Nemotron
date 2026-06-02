@@ -141,3 +141,13 @@
   or labels, no task255 reuse, no export/conversion, no endpoint, no promotion,
   no shared deletion, no 30B, no 8-GPU, one GPU, and no training/optimizer
   steps. Worker_3 official mailbox report and PR are still pending.
+- Processed worker_3 official closeout mailbox
+  `81d56916753645d9b8b14e984869cd9f`: PR #356 is open/base main/CLEAN at head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. The eval run source head is
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e`; later commits add report/status
+  and PR bookkeeping.
+- Lead recheck confirms `git diff --check` passes and
+  `task285_iter2_same_harness_aime_eval_report.md` matches the artifact evidence
+  for FT `12/30 = 0.4` versus base `11/30`. Added PR #356 HOLD comment
+  `4601765555`; self-merge waits for task294 independent review of the residual
+  sampling semantic-match issue.
