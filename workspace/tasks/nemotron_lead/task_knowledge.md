@@ -1781,3 +1781,7 @@
    visible progress is still `8/30`, branch remains `894e2e71`, mailbox unread
    count is `0`, no PR exists, and no rc, final artifacts, blocker, or official
    worker_3 report exists yet.
+504. Session 118: task306 remains active after about ninety-five minutes; remote
+   rank logs show all ranks started `start_index=8` after completing
+   `start_index=7`, with no `generation_batch_done` for `start_index=8` yet.
+   No PR, mailbox report, local/remote rc, final artifacts, or blocker exists.

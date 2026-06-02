@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=117 -->
+<!-- METADATA:SESSION=118 -->
 
 ## Knowledge Entries
 
@@ -122,3 +122,7 @@
 40. Session 117: active run remains in progress after about ninety-two minutes;
    latest visible progress is still `8/30`. No PR, mailbox report, local/remote
    rc, final FT artifacts, or blocker exists.
+41. Session 118: active run remains in progress after about ninety-five
+   minutes. Remote rank logs show row 9 generation in progress via
+   `generation_batch_start` at `start_index=8` on ranks 0-7, with no
+   corresponding done event yet; no final artifacts or official report exist.

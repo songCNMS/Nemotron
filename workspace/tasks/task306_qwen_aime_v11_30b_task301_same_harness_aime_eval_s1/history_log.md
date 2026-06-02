@@ -393,3 +393,18 @@
 - No task306 aggregate summary/results/full completions/parser diagnostics,
   checksum manifest, or blocker file is visible. Gate remains HOLD pending
   completion and official worker report.
+
+## Session 118 - 2026-06-02 UTC - active run row9 in progress
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after about ninety-five minutes. Local
+  and remote rc files remain absent.
+- Latest visible stdout progress remains `8/30`: rows 1-4, 6, and 8 parsed
+  true/correct true, row 5 length-stopped parsed false/correct false, and row
+  7 parsed true/correct false.
+- Remote rank event logs show all ranks completed `start_index=7` and started
+  `start_index=8`, with no `generation_batch_done` for `start_index=8` yet.
+- No task306 aggregate summary/results/full completions/parser diagnostics,
+  checksum manifest, or blocker file is visible. Gate remains HOLD pending
+  completion and official worker report.
