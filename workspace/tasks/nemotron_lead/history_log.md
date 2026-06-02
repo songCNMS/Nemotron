@@ -5983,3 +5983,39 @@
   no-run/read-only equivalence report deciding `A_PROVED_NO_RERUN` versus
   `B_REQUIRED_RERUN` with commands, #312 diff classification, source comparisons,
   artifact roots/checksums, metrics, residuals, and boundaries.
+- Worker_1 advanced task296 branch to `b45308e99db75620dd421c4cdc44560cdcda8eec`
+  and opened PR #359. Lead recheck: #359 OPEN/base main/CLEAN/MERGEABLE; diff is
+  worker_1 status plus task296 docs/report; `git diff --check` passes. The
+  report decision is `A_PROVED_NO_RERUN`, with #312 coordinator-docs-only
+  classification, zero `src/`/`tests` diffs from task285/task293 source heads to
+  current main, unchanged task293 `run_no_export_aime_eval.py`, matched task285
+  and task293 artifact checksums, task293 metric FT `12/30 = 0.4` versus base
+  `11/30`, and residuals carried.
+- Added #359 HOLD comment `4602399351` for head `b45308e9...`, pending
+  independent task297 review. Sent worker_4 exact-head review trigger and
+  worker_1 follow-up to keep #359 unmerged pending task297/lead gate.
+- Worker_1 advanced #359 from `b45308e9...` to `43d57345...`; lead verified the
+  drift was status/history only and the task296 audit report was unchanged.
+  Added updated #359 HOLD comment `4602415504` and sent worker_4 a new review
+  target.
+- Worker_1 sent official compressed task296 mailbox
+  `b7fc615a2255420e8c1e4c46ac8207a7`, confirming #359, decision
+  `A_PROVED_NO_RERUN`, #312 docs-only classification, source-to-current
+  comparisons, artifact roots/checksums, metrics, residuals, and boundaries.
+  The mailbox was processed and marked read.
+- Worker_1 then advanced #359 to `a910573dfdb3955bb07825e260b1fdbcd8a864b9`;
+  lead verified `43d57345...` to `a910573d...` was status/history/task_knowledge
+  only and the audit report was unchanged. Added updated #359 HOLD comment
+  `4602432560` and sent worker_4 another exact-head review target.
+- Worker_1 then advanced #359 to current head
+  `04c5dc0bed61e89606f7f72b9f3bf6905dea0d92`; lead verified
+  `a910573d...` to `04c5dc0b...` was status/history only and the audit report
+  was unchanged. Added updated #359 HOLD comment `4602446418`, told worker_1 to
+  stop further pre-review pushes, and told worker_4 to review exact #359 head
+  `04c5dc0b...`.
+- Latest poll: no unread mailbox; #359 is OPEN/base main/CLEAN/MERGEABLE at
+  `04c5dc0b...`; #358/task297 remains OPEN/base main/CLEAN/MERGEABLE at
+  `68bc1dfd...` with old `HOLD_WAITING_TASK296` report and has not yet refreshed
+  against substantive task296 evidence. Current gate remains: path A not yet
+  accepted, path B not triggered, no export/endpoint/promotion/further
+  training/eval/task255/AIME2025 train data/shared deletion/30B/8-GPU.

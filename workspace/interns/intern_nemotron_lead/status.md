@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #312 MERGED at 2d84ec75; task296 branch 4c6dc057 acceptance-only; #358/task297 HOLD at 607496a pending task296 report; export/promotion/30B HOLD |
+| PR | #359/task296 OPEN CLEAN at 04c5dc0b A_PROVED_NO_RERUN pending #358/task297 review; #358 HOLD at 68bc1dfd; export/promotion/30B HOLD |
 | Session | 75 |

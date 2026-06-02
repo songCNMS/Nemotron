@@ -1149,3 +1149,18 @@
 356. Until task296 publishes a substantive equivalence audit and task297
    independently reviews it, current state remains neither path A completed nor
    path B triggered.
+357. task296/#359 now has substantive worker_1 evidence at current head
+   `04c5dc0bed61e89606f7f72b9f3bf6905dea0d92`; the audit decision is
+   `A_PROVED_NO_RERUN`. The report says #312 changed coordinator docs only,
+   task285/task293 source-to-current product/eval paths are unchanged, artifact
+   checksums match, and task293 remains FT `12/30` vs base `11/30` with known
+   residuals.
+358. #359 head drift from `b45308e9...` to `43d57345...` to `a910573d...` to
+   `04c5dc0b...` was status/history/task_knowledge-only; the
+   `current_main_equivalence_audit_report.md` content remained unchanged.
+359. #359 is still HOLD via latest lead comment `4602446418` until #358/task297
+   refreshes against exact head `04c5dc0b...` and lead processes the independent
+   review. worker_1 was told to stop further pre-review pushes.
+360. #358/task297 remains at old HOLD head `68bc1dfd...`; it has not yet reviewed
+   substantive #359 head `04c5dc0b...`, so path A is not accepted and path B is
+   not triggered.
