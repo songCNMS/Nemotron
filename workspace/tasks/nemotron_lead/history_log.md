@@ -5135,3 +5135,21 @@
   proof, no finite train loss, no local smoke checkpoint artifact, no task285
   PR, no unread mailbox, and no local `task285`/`qwen_local_train` process.
   task286 remains HOLD for official task285 evidence.
+- A later task285 artifact poll found smoke retry logs/scripts. Retry1 failed
+  before optimizer with Hydra override error on `convert_to_hf.enabled`; log
+  ends `SMOKE_RETRY1_COMMAND_RC=1`.
+- Retry2 failed before optimizer with Hydra override error on
+  `dataset.super3_packed_sft_dir`; log ends `SMOKE_RETRY2_COMMAND_RC=1`.
+- Retry3 script exists and removes the dataset/training-contract override set,
+  keeping Qwen3-4B, task276 packed env vars, two GPUs, `train_iters=2`,
+  `global_batch_size=2`, `micro_batch_size=1`, LR `5e-7`, min LR `1e-7`,
+  warmup `0`, decay `2`, checkpoint load disabled, and
+  `checkpoint.pretrained_checkpoint` pointed at the Bridge import root.
+- Observed a live worker-owned SSH process running retry3 on `NemTron`:
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/scripts/run_bounded_qwen4b_sft_smoke_retry3.sh`
+  writing to `logs/bounded_qwen4b_sft_smoke_retry3.log`. At the poll, no
+  reviewable retry3 log output, first-step LR, finite loss, smoke checkpoint,
+  task285 PR, or official mailbox report was available.
+- Lead did not interrupt the worker-owned run and did not run any training or
+  eval. task286 remains HOLD until worker_2 reports exact task285 result or
+  blocker.

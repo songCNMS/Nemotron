@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task285 c53095a has read-only Bridge import proof but no official report/PR/smoke checkpoint; task286 HOLD; no AIME/export/promotion/30B |
+| PR | task285 retry3 smoke running unofficially; retry1/2 failed pre-optimizer; no official report/PR/checkpoint; task286 HOLD; no AIME/export/promotion/30B |
 | Session | 74 |

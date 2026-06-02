@@ -745,3 +745,10 @@
 254. task285 still has no reviewable smoke result: no official report/PR, no
    first-step nonzero LR proof, no finite loss, and no smoke checkpoint visible.
    task286 must remain HOLD.
+255. task285 retry1 and retry2 failed before optimizer on Hydra override
+   composition errors (`convert_to_hf.enabled`, then
+   `dataset.super3_packed_sft_dir`). These failures are not smoke passes and
+   do not produce checkpoint evidence.
+256. task285 retry3 was observed running through worker_2's SSH command with
+   simplified overrides. Until worker_2 reports completion and artifacts, it is
+   unofficial in-progress evidence only; task286 remains HOLD.
