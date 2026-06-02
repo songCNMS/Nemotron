@@ -649,6 +649,7 @@
   - prior task071/task075 Qwen3-30B-A3B train/export/eval runbook evidence and notes.
 - Sent delivered peer message to `intern_nemotron_lead` with the user instruction and requested gated 30B full data, training, and testing startup from current main.
 - Set delivered lead pressing goal `qwen-aime-v11-30b-full-train-test-session45`.
+- Created coordinator PR #360 for the Session 45 record, scoped to coordinator status/history/task_knowledge only.
 - Required lead sequence in the 30B handoff:
   1. 30B runtime/resource/base-load proof with exact model path, GPU/parallelism, entrypoint, and testing route;
   2. same-harness 30B base AIME2025 score before judging FT;
