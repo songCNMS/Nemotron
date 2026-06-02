@@ -6895,3 +6895,35 @@
   at validation iter `1/10`; #362 remained OPEN/base main/CLEAN at
   `aaffbf330c9964b437c77f86cb86bd7a9fd7d7de`. A later mailbox poll found no
   worker_5 post-clearance termination/inventory report yet.
+
+## Session 81 - 2026-06-02 UTC - task301 termination observed, closeout pending
+
+- After pushing Session 80 lead records, performed a final read-only live scan.
+  No unread mailbox was present, lead branch was clean at `7ad8f4ff`, and #362
+  remained OPEN/base main/CLEAN at
+  `aaffbf330c9964b437c77f86cb86bd7a9fd7d7de`.
+- Read-only NemTron observation showed worker_5 had acted on the salvage
+  clearance: `train_rc.txt` existed with value `1`, `train_end.txt` existed with
+  `2026-06-02T16:58:51Z`, all eight H200s were released to about `1 MiB`, and
+  no task301 worker rank remained. The only process match in a later `pgrep`
+  output was the probe command itself.
+- Remote log tail now records SIGTERM-driven termination from torch distributed:
+  closing signal `SIGTERM` and `SignalException: Process 1258209 got signal:
+  15`. This is consistent with the lead-cleared salvage action, not a clean
+  harness exit.
+- Local worker_5 output root gained termination-related files
+  `manifests/final_pre_termination_snapshot.txt` and
+  `manifests/termination_signal_log.txt`, but no official worker_5 mailbox,
+  final inventory/checksum closeout, or refreshed #362 post-termination report
+  had arrived by the follow-up poll.
+- Sent delivered `TASK301 TERMINATION/INVENTORY CLOSEOUT REQUEST` to worker_5.
+  Requested official mailbox and #362 refresh with disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`,
+  exact signals/commands, process/GPU release proof, artifact roots, metrics
+  through iter 35, `iter_0000035` inventory/checksums, log/preflight/manifest
+  checksums, `train_rc`/`train_end`, and the residual risk that the harness did
+  not exit cleanly.
+- Gate remains HOLD: the salvage candidate is not approved for canary,
+  corrected AIME/task243 eval, export, endpoint, promotion, follow-on 30B work,
+  merge, or any task255/AIME2025-train-data use until worker_5 closeout and
+  independent artifact review are processed.

@@ -1448,3 +1448,17 @@
    `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
    This is not clearance for canary, AIME/task243 eval, export, endpoint,
    promotion, follow-on 30B work, or merge.
+420. Post-clearance read-only observation showed task301 validation was
+   terminated: `train_rc.txt=1`, `train_end.txt=2026-06-02T16:58:51Z`, GPU
+   memory released to about `1 MiB`, and the log tail records SIGTERM/
+   `SignalException`. This is a salvage termination, not a clean harness exit.
+421. worker_5 output root now has `manifests/final_pre_termination_snapshot.txt`
+   and `manifests/termination_signal_log.txt`, but lead has not yet received an
+   official worker_5 closeout mailbox or refreshed #362 report with final
+   inventory/checksums.
+422. Lead sent delivered `TASK301 TERMINATION/INVENTORY CLOSEOUT REQUEST` asking
+   worker_5 for disposition
+   `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`,
+   exact termination evidence, process/GPU release proof, checkpoint/log/
+   manifest checksums, metrics through iter 35, and residual risks. Downstream
+   canary/AIME/export/endpoint/promotion remain HOLD.

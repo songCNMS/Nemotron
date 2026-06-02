@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task301 validation hang; salvage clearance sent; awaiting worker_5 termination/inventory report |
-| Session | 80 |
+| PR | 30B gate live: task301 validation terminated rc=1; awaiting worker_5 inventory/report |
+| Session | 81 |
