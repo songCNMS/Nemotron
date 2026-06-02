@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 |
-| PR | pending |
+| PR | #351 |
 | Session | 1 |
-| Last Update | Accepted task289 on branch `intern_nemotron_worker_5/task289_qwen_aime_v11_post_smoke_runbook_provenance_s1` from `origin/main` `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`; updating post-smoke docs/runbook provenance only. |
+| Last Update | Opened PR #351 for task289 post-smoke docs/runbook provenance at branch head `5870481`; global V11 AIME/export/endpoint/promotion/30B/8-GPU clearance remains blocked. |

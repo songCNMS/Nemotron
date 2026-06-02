@@ -25,6 +25,7 @@
   approval and canary/review HOLD state.
 - Updated the shared task266 V11 runbook matrix so it no longer says task283 is
   merely pending or that bounded Qwen3-4B smoke has no artifact.
+- Opened PR #351 against `main` for the docs/runbook provenance update.
 - Preserved the hard no-clearance state for canary execution, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, merge, main push, 30B, and 8-GPU.
