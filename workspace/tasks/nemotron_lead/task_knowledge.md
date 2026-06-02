@@ -1745,3 +1745,7 @@
    stays `894e2e71`, mailbox unread count is `0`, no PR exists, no rc exists,
    and no final FT summary/results/completions/parser diagnostics/checksum
    artifacts exist. Latest visible progress is still `4/30`.
+494. Session 108: task306 remains active after about sixty minutes; progress
+   advanced to `5/30`, with row 5 (`aime_05_r01`) length-stopped, parsed
+   false, and correct false. No rc, final artifacts, PR, or official report
+   exists yet.
