@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -100,6 +100,20 @@
 - Retained launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`; task298 PASS,
   task299 PASS, task300 30B base-score artifact, and lead sequence clearance
   remain required before any task301 training launch.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 6 - 2026-06-02 UTC - task298 gate update carried
+
+- Received lead update that task298 runtime route is lead-approved with
+  residuals.
+- Kept task301 full 30B SFT launch on HOLD; lead explicitly did not authorize
+  nonzero-LR training.
+- Updated the report, README, status, and task knowledge to record task298 as
+  carried with residuals and keep remaining launch blockers on task299 final
+  30B data/decontam PASS, task300 same-harness 30B base AIME score artifact,
+  and explicit lead sequence clearance.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.

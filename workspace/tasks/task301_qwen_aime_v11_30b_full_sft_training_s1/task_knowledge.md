@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -32,3 +32,7 @@
    `5924d937642a9f684c317a36c43699faaedef2f2004c94e2fd2e9830a5f60fb9` to
    `8afc1629b7a42d0fa5db1a19c17f0c4dae888f88d6753c498114ec2be7e3a34c`;
    subsequent task-local bookkeeping did not change the report content hash.
+10. Session 6 lead gate: task298 runtime route is lead-approved with residuals,
+    but task301 launch remains blocked until task299 final 30B data/decontam
+    PASS, task300 same-harness 30B base AIME score artifact, and explicit lead
+    sequence clearance are available.

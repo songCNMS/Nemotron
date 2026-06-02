@@ -1,23 +1,25 @@
 # task301 30B Full SFT Training Report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
 
-Generated: 2026-06-02T14:42:19Z
+Generated: 2026-06-02T15:13:36Z
 
 ## Disposition
 
 Recommendation: `BLOCKED_UPSTREAM_GATES_MISSING`.
 
-Task301 was accepted, but no 30B full SFT training was launched. The task docs
-require all of the following before launch:
+Task301 was accepted, but no 30B full SFT training was launched. Current lead
+gate state requires all of the following before launch:
 
-- task298 PASS runtime/resource/base-load proof;
+- task298 runtime route lead approval with residuals carried;
 - task299 PASS 30B data/packing root and decontamination proof;
-- task300 30B same-harness base-score artifact before any FT judgment.
+- task300 30B same-harness base-score artifact before any FT judgment;
+- explicit lead sequence clearance.
 
-At the Session 3 refresh, task298, task299, and task300 branches are visible,
-but the required PASS/base-score gate artifacts are not visible. The safe action
-is to hold launch and report the blocker.
+At the Session 6 refresh, lead reports task298 runtime route is approved with
+residuals. The task299 final 30B data/decontam PASS and task300 same-harness
+30B base AIME score artifact are still required. The safe action is to hold
+launch and report the remaining blocker.
 
 ## Branch And Sources
 
@@ -34,9 +36,10 @@ is to hold launch and report the blocker.
 
 | Gate | Required evidence | Visibility result | Launch decision |
 |---|---|---|---|
-| task298 | PASS runtime/resource/base-load proof for 30B | Branch visible at `7d24b9295740ef5c21fd443d6399ec9641f8f5c5`; docs `InProgress`; no exact-branch PR and no PASS report visible | BLOCK |
-| task299 | PASS 30B data/packing root and decontamination proof | Branch visible at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`; docs `InProgress`; no exact-branch PR and no PASS report visible | BLOCK |
-| task300 | 30B base-score artifact before any FT judgment | Branch visible at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`; docs `InProgress`; no exact-branch PR and no base-score report visible | BLOCK |
+| task298 | Runtime/resource/base-load route for 30B | Lead update reports runtime route approved with residuals; not an active launch blocker after Session 6 | CARRIED |
+| task299 | PASS 30B data/packing root and decontamination proof | Branch visible at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`; final PASS proof is still required | BLOCK |
+| task300 | 30B same-harness base AIME score artifact before any FT judgment | Branch visible at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`; base-score artifact is still required | BLOCK |
+| lead clearance | Explicit sequence clearance for task301 launch | Not granted; lead states full 30B SFT remains HOLD | BLOCK |
 
 ## Read-Only Checks
 
@@ -68,15 +71,16 @@ resources, mutate artifacts, or delete shared files.
 
 No training command was executed.
 
-Planned command/env fields remain unbound because the required upstream gates
-are absent:
+Planned command/env fields remain unbound because required upstream gates and
+lead launch clearance are absent:
 
-- model path: blocked pending task298;
+- runtime/model route: task298 approved with residuals, but not enough for
+  launch by itself;
 - 30B packed root: blocked pending task299;
 - base comparator artifact: blocked pending task300;
 - LR, train steps, optimizer, parallelism, GPU count/type, validation settings,
   seed, resume policy, checkpoint root, and log root: blocked pending the
-  upstream gate artifacts and lead review.
+  remaining upstream gate artifacts and lead launch clearance.
 
 ## Artifact Status
 
@@ -85,7 +89,7 @@ created by this session.
 
 ## Boundary Confirmation
 
-Confirmed for Session 1:
+Confirmed through Session 6:
 
 - no task255 reuse;
 - no AIME2025 prompts or labels as trainable data;
@@ -99,13 +103,11 @@ Confirmed for Session 1:
 
 ## Blockers
 
-1. task298 PASS runtime/resource/base-load proof is not visible; only an
-   `InProgress` branch at `7d24b9295740ef5c21fd443d6399ec9641f8f5c5` is
-   visible.
-2. task299 PASS 30B data/packing/decontamination proof is not visible; only an
+1. task299 final 30B data/packing/decontamination PASS proof is not visible; only an
    `InProgress` branch at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb` is
    visible.
-3. task300 30B base-score artifact is not visible; only an `InProgress` branch
+2. task300 30B same-harness base AIME score artifact is not visible; only an `InProgress` branch
    at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6` is visible.
-4. Without the above exact gate refs and artifacts, training launch would violate
-   the task301 fail-closed contract.
+3. Lead has not cleared the task301 launch sequence.
+4. Without the above exact gate refs, artifacts, and lead clearance, training
+   launch would violate the task301 fail-closed contract.
