@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task278 branch ead53f2 and task280 branch 522cc23 visible; no PRs; waiting task278 preflight evidence |
+| PR | task278 ead53f2 active; task279 57df20c HOLD needs branch cleanup; no PRs; no training/eval released |
 | Session | 74 |

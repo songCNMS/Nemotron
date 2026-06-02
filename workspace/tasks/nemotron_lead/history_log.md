@@ -4562,3 +4562,16 @@
   are worker status plus task docs only, and `git diff --check` passes for both.
 - Current gate remains waiting for task278 preflight evidence or exact blocker.
   No training/eval action is released.
+- Processed worker_4 mailbox `7dfb4d7243794ad59ba2eb8a3f6fea81`: task279
+  accepted at branch
+  `intern_nemotron_worker_4/task279_qwen_aime_v11_task278_preflight_gate_review_s1`
+  head `57df20cf7c5d8310e0f46b23966ee2513b85fe24`, with disposition
+  `HOLD/no substantive review` until task278 exact branch/head/artifacts or
+  worker mailbox report is visible. Lead marked it read.
+- After fetch, task279 branch is visible, but lead-side diff hygiene found
+  unrelated task249 history/task_knowledge changes alongside task279
+  docs/status. `git diff --check` passed, but the branch scope is not clean for
+  a task279 PR.
+- Sent delivered non-interrupting peer_send to worker_4 requesting task279
+  branch cleanup before any PR or final review report, while preserving HOLD
+  until task278 exact preflight evidence exists.

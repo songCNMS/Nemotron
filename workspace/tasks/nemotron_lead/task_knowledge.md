@@ -551,3 +551,6 @@
    `ead53f2c5c9e4e6ca854f31dc86dc6861dafa57e`; task280 no-run planning HOLD
    branch head is `522cc23c04429fdfb023efc296cb302d98f9653d`. Neither is
    preflight/training/eval evidence yet.
+204. task279 acceptance branch head `57df20cf7c5d8310e0f46b23966ee2513b85fe24`
+   is HOLD and needs cleanup because it includes unrelated task249 history/task
+   knowledge changes. Do not approve or ask for a task279 PR until refreshed.
