@@ -1830,3 +1830,7 @@
    length-stopped parsed false/correct false. Rank logs show `start_index=11`
    active. No PR, mailbox report, local/remote rc, final artifacts, or blocker
    exists.
+516. Session 130: task306 remains active after about one hundred thirty-nine
+   minutes; latest visible stdout progress remains `11/30`, and remote rank
+   logs still show `start_index=11` active with no done event. No PR, mailbox
+   report, local/remote rc, final artifacts, or blocker exists.
