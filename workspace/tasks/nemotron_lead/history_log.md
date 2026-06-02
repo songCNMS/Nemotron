@@ -3866,3 +3866,22 @@
   still no task268 PR, mailbox report, or output artifact root.
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task268 has not yet produced
   NemTron/NeMo Bridge import/checkpoint-load proof or an exact runtime blocker.
+- task268 remote branch advanced to
+  `ebc6a446dc338abc135486fe182a1c12336ddd76` with
+  `build_task268_bridge_runtime_probe.py`; there is still no task268 PR or
+  mailbox report.
+- Read-only local artifact observation found task268 output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1`
+  with report/manifest/logs for run `20260602T002335Z`. Report disposition is
+  `NEMTRON_BRIDGE_RUNTIME_BLOCKED`: Docker daemon unavailable for
+  `nvcr.io/nvidia/nemo:26.02.nemotron_3_super`, local `megatron`/`nemo` missing,
+  Bridge import rc `1`, fail-closed preflight rc `2`, and no positive
+  Bridge/checkpoint-load proof.
+- Artifact caveat: actual sidecar/inventory hashes for the report and manifest
+  are `a0f508088a8a047d1e09687335e002c27699315d75618f52887f25e42f917e95` and
+  `f3344aace8c289f7031a7d84d30d1c10f5031da046d984042d0b4c8e4a5583f5`, while
+  the report/manifest internal `artifact_checksums` entries list stale
+  `a144430...` and `d5a692...` values.
+- Sent delivered peer_send to worker_2 requesting official task268 PR/mailbox
+  closeout, and requesting that the self-checksum mismatch be fixed or
+  explained before lead accepts the artifact as gate evidence.

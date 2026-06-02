@@ -320,3 +320,12 @@
    `072fee967bdeb5b280e100f606637e2800e5a98f`; its diff is acceptance/status/
    task-doc copies only, with no PR, mailbox report, output artifacts, Bridge
    proof, or exact runtime blocker yet.
+143. task268 branch `ebc6a446dc338abc135486fe182a1c12336ddd76` adds a probe
+   helper and unofficial local artifacts reporting `NEMTRON_BRIDGE_RUNTIME_BLOCKED`:
+   Docker daemon unavailable for the requested NeMo image, local
+   `megatron`/`nemo` missing, Bridge rc `1`, preflight rc `2`, and no positive
+   Bridge/checkpoint-load proof.
+144. task268 artifacts currently have a self-checksum inconsistency: actual
+   sidecar/inventory hashes for report/manifest are `a0f508...`/`f3344a...`,
+   while internal `artifact_checksums` list `a144430...`/`d5a692...`; worker_2
+   must fix or explain this in official PR/mailbox before lead gate acceptance.
