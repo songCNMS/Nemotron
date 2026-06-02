@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1 |
-| PR | #349 |
-| Session | 2 |
-| Last Update | 2026-06-02T05:43:30Z: Opened PR #349 with task283 no-training Qwen3-4B V11 config/import preflight PASS evidence at run_20260602T052346Z; status remains Working while awaiting lead gate. |
+| Current Task | task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-02T06:08:00Z: Accepted task285 after #349 merged; preparing bounded Qwen3-4B two-GPU max SFT smoke attempt with fail-closed base-load/import and dependency checks. |

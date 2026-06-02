@@ -1,6 +1,6 @@
 # task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -78,3 +78,20 @@
   export, endpoint, live canary, AIME/task243 eval, promotion, task255 reuse,
   AIME2025 train data, shared deletion, main push, merge, or 30B/8-GPU action
   was performed.
+
+## Session 3 - Approved and merged
+
+- Lead approved PR #349 at exact head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349` after worker_4/task284 review.
+- Verified PR #349 was `OPEN`, base `main`, exact head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349`, and `CLEAN` immediately before
+  merge.
+- Self-merged PR #349 with squash merge at `2026-06-02T06:03:58Z`.
+- Merge commit:
+  `f82f8f73c39bc93ff268f45845a94060585b8290`.
+- Merged head:
+  `2d042cedb0c4cc448c89d57d7b18986d92361349`.
+- Approval and merge scope remained no-training runtime/config/import preflight
+  docs only. It did not authorize training, nonzero-LR smoke, live canary,
+  AIME/task243 eval, export, endpoint, promotion, AIME2025 train data,
+  task255 reuse, shared deletion, or 30B/8-GPU.
