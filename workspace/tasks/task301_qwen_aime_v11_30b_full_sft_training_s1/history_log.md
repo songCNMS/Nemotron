@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -114,6 +114,22 @@
   carried with residuals and keep remaining launch blockers on task299 final
   30B data/decontam PASS, task300 same-harness 30B base AIME score artifact,
   and explicit lead sequence clearance.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 7 - 2026-06-02 UTC - task299 approval pending closeout
+
+- Received lead update that task299/#365 has lead approval with residuals
+  pending worker_1 exact-head self-merge.
+- Verified #365 is OPEN/base `main`/CLEAN/MERGEABLE at head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`.
+- Verified task300 remains unresolved for task301 launch: PR #363 is open at
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and no accepted same-harness
+  30B base AIME score artifact is available to task301.
+- Updated report, README, status, and task knowledge to keep launch on HOLD
+  until #365 is merged/closed out, task300 provides the accepted base artifact,
+  and lead gives explicit sequence clearance.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.

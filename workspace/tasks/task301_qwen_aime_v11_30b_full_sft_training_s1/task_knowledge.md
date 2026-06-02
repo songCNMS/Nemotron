@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -36,3 +36,8 @@
     but task301 launch remains blocked until task299 final 30B data/decontam
     PASS, task300 same-harness 30B base AIME score artifact, and explicit lead
     sequence clearance are available.
+11. Session 7 lead gate: task299/#365 is lead-approved with residuals at head
+    `b8b760fb8f46cda8f302adbea106f19cc234e038`, but task301 launch remains
+    blocked until #365 is merged/closed out, task300 provides an accepted
+    same-harness 30B base AIME score artifact, and lead gives explicit launch
+    clearance.

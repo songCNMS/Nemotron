@@ -1,8 +1,8 @@
 # task301 30B Full SFT Training Report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
 
-Generated: 2026-06-02T15:13:36Z
+Generated: 2026-06-02T15:28:36Z
 
 ## Disposition
 
@@ -12,14 +12,15 @@ Task301 was accepted, but no 30B full SFT training was launched. Current lead
 gate state requires all of the following before launch:
 
 - task298 runtime route lead approval with residuals carried;
-- task299 PASS 30B data/packing root and decontamination proof;
+- task299/#365 final 30B data/decontam approval merged or otherwise closed out;
 - task300 30B same-harness base-score artifact before any FT judgment;
 - explicit lead sequence clearance.
 
-At the Session 6 refresh, lead reports task298 runtime route is approved with
-residuals. The task299 final 30B data/decontam PASS and task300 same-harness
-30B base AIME score artifact are still required. The safe action is to hold
-launch and report the remaining blocker.
+At the Session 7 refresh, lead reports task299/#365 has lead approval with
+residuals, pending worker_1 exact-head self-merge. Task301 remains HOLD until
+#365 is merged/closed out, task300 provides an accepted same-harness 30B base
+AIME score artifact, and lead gives explicit launch clearance. The safe action
+is to hold launch and report the remaining blocker.
 
 ## Branch And Sources
 
@@ -37,8 +38,8 @@ launch and report the remaining blocker.
 | Gate | Required evidence | Visibility result | Launch decision |
 |---|---|---|---|
 | task298 | Runtime/resource/base-load route for 30B | Lead update reports runtime route approved with residuals; not an active launch blocker after Session 6 | CARRIED |
-| task299 | PASS 30B data/packing root and decontamination proof | Branch visible at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb`; final PASS proof is still required | BLOCK |
-| task300 | 30B same-harness base AIME score artifact before any FT judgment | Branch visible at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6`; base-score artifact is still required | BLOCK |
+| task299 | Lead-approved final 30B data/decontam proof merged or otherwise closed out | PR #365 is OPEN/base `main`/CLEAN/MERGEABLE at head `b8b760fb8f46cda8f302adbea106f19cc234e038`; lead reports approval with residuals pending worker_1 exact-head self-merge | BLOCK until merge/closeout |
+| task300 | Accepted 30B same-harness base AIME score artifact before any FT judgment | PR #363 is OPEN at head `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`; branch report remains blocked and no accepted base-score artifact is available to task301 | BLOCK |
 | lead clearance | Explicit sequence clearance for task301 launch | Not granted; lead states full 30B SFT remains HOLD | BLOCK |
 
 ## Read-Only Checks
@@ -61,6 +62,8 @@ git ls-tree -r --name-only origin/main workspace/tasks | rg 'task(298|299|300|30
 git ls-tree -r --name-only origin/intern_nemotron_worker_2/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 workspace/tasks/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1
 git ls-tree -r --name-only origin/intern_nemotron_worker_1/task299_qwen_aime_v11_30b_data_packing_contract_s1 workspace/tasks/task299_qwen_aime_v11_30b_data_packing_contract_s1
 git ls-tree -r --name-only origin/intern_nemotron_worker_3/task300_qwen_aime_v11_30b_same_harness_testing_s1 workspace/tasks/task300_qwen_aime_v11_30b_same_harness_testing_s1
+gh pr view 365 --json state,baseRefName,headRefOid,mergeStateStatus,mergeable,isDraft,url,mergedAt
+gh pr list --state all --head intern_nemotron_worker_3/task300_qwen_aime_v11_30b_same_harness_testing_s1 --json number,state,headRefName,headRefOid,mergeable,title,url,mergedAt,updatedAt --limit 10
 git log --oneline --max-count=20 origin/main
 ```
 
@@ -76,7 +79,7 @@ lead launch clearance are absent:
 
 - runtime/model route: task298 approved with residuals, but not enough for
   launch by itself;
-- 30B packed root: blocked pending task299;
+- 30B packed root: blocked pending task299/#365 merge or closeout;
 - base comparator artifact: blocked pending task300;
 - LR, train steps, optimizer, parallelism, GPU count/type, validation settings,
   seed, resume policy, checkpoint root, and log root: blocked pending the
@@ -89,7 +92,7 @@ created by this session.
 
 ## Boundary Confirmation
 
-Confirmed through Session 6:
+Confirmed through Session 7:
 
 - no task255 reuse;
 - no AIME2025 prompts or labels as trainable data;
@@ -103,11 +106,12 @@ Confirmed through Session 6:
 
 ## Blockers
 
-1. task299 final 30B data/packing/decontamination PASS proof is not visible; only an
-   `InProgress` branch at `ff30fad8e6899b9a98d9530006ef49c52c7d72fb` is
-   visible.
-2. task300 30B same-harness base AIME score artifact is not visible; only an `InProgress` branch
-   at `85a5ba134c486ac36f30b63e9bcae97f51fdc1f6` is visible.
+1. task299/#365 is lead-approved with residuals but remains open at
+   `b8b760fb8f46cda8f302adbea106f19cc234e038`; task301 launch must wait for
+   merge or closeout.
+2. task300 30B same-harness base AIME score artifact is not accepted; task300
+   PR #363 is open at `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5` and its
+   branch report remains blocked.
 3. Lead has not cleared the task301 launch sequence.
 4. Without the above exact gate refs, artifacts, and lead clearance, training
    launch would violate the task301 fail-closed contract.
