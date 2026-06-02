@@ -11,4 +11,4 @@
 | Current Task | task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 |
 | PR | #339 |
 | Session | 1 |
-| Last Update | Opened PR #339 for task270 no-training runtime-route audit report; recommendation `BLOCK` under current permissions because no complete NeMo/Megatron-Bridge route is available, with smallest external action documented. |
+| Last Update | Normalized task270 history log to a single Session 1 section for PR #339; audit recommendation remains `BLOCK` under current permissions. |

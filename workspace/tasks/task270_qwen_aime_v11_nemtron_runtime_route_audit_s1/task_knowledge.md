@@ -31,3 +31,6 @@
     existing `NemTron` Python environment, or provide a launchable
     `nvcr.io/nvidia/nemo:26.02.nemotron_3_super`/equivalent runtime or LTP job
     route with `megatron.bridge` and `nemo`.
+11. PR #339 hook correction normalized `history_log.md` to a single Session 1
+    section; the runtime audit evidence and `BLOCK` recommendation are
+    unchanged.

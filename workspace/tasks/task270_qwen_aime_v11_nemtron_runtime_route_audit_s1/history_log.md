@@ -14,7 +14,9 @@
   authorized.
 - Global Qwen AIME gate remains `NO-GO/HOLD`.
 
-## Session 1 - Accepted by worker_5
+## Session 1
+
+### Accepted by worker_5
 
 - Fetched current `origin/main` at
   `8d4382b6572b91ec2ca27876cd0f961deb7c2f81`.
@@ -29,7 +31,7 @@
   eval, export, endpoint, promotion, task255 reuse, AIME2025 train data,
   30B/8-GPU, merge/main push, or shared deletion/overwrite.
 
-## Session 1 - Runtime Route Audit Complete
+### Runtime Route Audit Complete
 
 - Wrote audit report:
   `workspace/tasks/task270_qwen_aime_v11_nemtron_runtime_route_audit_s1/nemtron_runtime_route_audit_report.md`
@@ -58,7 +60,7 @@
   endpoint, promotion, task255 reuse, AIME2025 train data, 30B/8-GPU, merge,
   main push, artifact modification, or shared deletion/overwrite was performed.
 
-## Session 1 - PR Opened
+### PR Opened
 
 - Opened PR #339 from branch
   `intern_nemotron_worker_5/task270_qwen_aime_v11_nemtron_runtime_route_audit_s1`
