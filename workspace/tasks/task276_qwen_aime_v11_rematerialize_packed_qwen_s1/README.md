@@ -1,6 +1,6 @@
 # task276_qwen_aime_v11_rematerialize_packed_qwen_s1 - V11 packed Qwen rematerialization
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Background
 
@@ -93,6 +93,30 @@ The worker report must include:
   `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/packed_qwen/`.
 - Report:
   `workspace/tasks/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/v11_rematerialized_packed_qwen_report.md`.
+
+## Session 1 Closeout
+
+Disposition: `PACKED_QWEN_READY_FOR_REVIEW`.
+
+- Fresh packed root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`.
+- Splits root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen/splits`.
+- Evidence manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/evidence/packed_qwen_evidence_manifest.json`
+  sha256 `74f3c58283eef46a3b8f63699d730baa90337b9a7177146822170c22ec29e9ee`.
+- Shard checksum list:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/evidence/packed_qwen_shard_checksums.sha256`
+  sha256 `bb6107163f366334468b8db9b8e6ca74f8ddbd612f8b90d3e500e0efa3ba0312`.
+- Split multiset parity: train 46/46, valid 1/1, test 1/1, all PASS.
+- Qwen packed-data contract: PASS with tokenizer/model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`.
+- No AIME2025 train leakage scan: PASS; zero AIME pattern mentions, zero
+  label-like top-level keys, zero task246 heldout prompt-hash overlaps, and
+  task262 final-answer n-gram blocker rows/pairs remain zero.
+- Residual review note: valid split is sparse by shard-ratio split, with 1
+  packed hard-math row. This is enough for artifact review but not a training or
+  eval clearance.
 
 ## Acceptance Criteria
 

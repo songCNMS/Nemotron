@@ -32,3 +32,49 @@
 - Boundaries acknowledged: no training, nonzero-LR smoke, live canary,
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, main push, or 30B/8-GPU.
+
+## Session 1 - Rematerialization evidence
+
+- Generated task-owned run root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z`.
+- Converted task262 V11 blend plan into task-owned DataBlend input:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/input/v11_data_blend_agentic_sft_v0.json`
+  sha256 `859da9fb9d12c03d184152da12a9978072902f1390399d67391e885dabc47893`.
+- Ran local no-training Qwen data prep with `execution_mode=streaming`,
+  `num_shards=16`, `pack_size=4096`, and tokenizer/model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; result
+  `DATA_PREP_RC=0`.
+- Produced fresh packed root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`.
+- Split counts:
+  - train: 46 exposed shards, 279 packed rows, 1,024,646 input tokens, 228,927
+    supervised tokens;
+  - valid: 1 exposed shard, 1 packed row, 1,491 input tokens, 1,428 supervised
+    tokens;
+  - test: 1 exposed shard, 0 packed rows, 0 input tokens, 0 supervised tokens.
+- Source counts in train:
+  - `m1-agentic-sft-v11-from-m0`: 16 shards, 244 packed rows, 942,062 input
+    tokens, 167,555 supervised tokens;
+  - `m1-agentic-sft-v11-math-final-answer`: 16 shards, 28 packed rows, 75,305
+    input tokens, 54,821 supervised tokens;
+  - `m1-agentic-sft-v11-math-hard-verified-full-solution`: 14 shards, 7 packed
+    rows, 7,279 input tokens, 6,551 supervised tokens.
+- Intended-vs-exposed split multiset parity passed for train 46/46, valid 1/1,
+  and test 1/1.
+- Qwen packed-data contract passed:
+  `QWEN_PACKED_DATA_CONTRACT=PASS`, `QWEN_CONTRACT_RC=0`.
+- Fresh source leakage scan passed: zero AIME pattern mentions, zero top-level
+  label-like keys, zero task246 user prompt-hash overlaps, zero task246
+  system+user prompt-hash overlaps, and task262 final-answer blocker rows/pairs
+  remain zero.
+- Targeted checks passed:
+  - `python3 -m py_compile src/nemotron/data_prep/utils/splits.py src/nemotron/recipes/super3/stage1_sft/qwen_chat_contract.py`
+    with `PY_COMPILE_RC=0`;
+  - `PYTHONPATH=src pytest -q tests/data_prep/test_split_utils.py tests/recipes/super3/test_qwen_chat_contract.py`
+    with `TARGETED_PYTEST_RC=0`, 26 passed.
+- Wrote report
+  `workspace/tasks/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/v11_rematerialized_packed_qwen_report.md`.
+- Residual review note: valid split is sparse by shard-ratio split, with one
+  packed hard-math row; this task does not authorize training, live canary,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push, or 30B/8-GPU.

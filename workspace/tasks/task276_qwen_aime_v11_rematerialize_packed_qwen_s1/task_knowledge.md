@@ -16,3 +16,10 @@
    `pyarrow`, `transformers`, and `torch` importable, so the initial path is to
    try local no-training data prep/packing before reporting an environment
    blocker.
+5. task276 produced a fresh packed root under
+   `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`;
+   Qwen contract and split multiset parity passed. The artifact is ready for
+   independent review only, not training/eval/export/promotion.
+6. The fresh split is sparse in validation: valid has 1 packed hard-math row.
+   This should be reviewed before any later config/import preflight treats the
+   valid split as representative.
