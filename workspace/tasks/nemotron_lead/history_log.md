@@ -5355,3 +5355,6 @@
   worker_3 must publish a cleaner official report first. task290 does not
   authorize canary execution, training, AIME/task243 eval, export, endpoint,
   promotion, 30B, or 8-GPU.
+- Sent delivered peer assignment to worker_1 for task290 at lead branch
+  `e5b92fff`, with artifact paths, expected hash checks, and read-only
+  boundaries.

@@ -9,3 +9,4 @@
 - Boundaries: no code edits, canary execution, training, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, merge, main push, 30B, or 8-GPU.
+- Sent delivered peer assignment to worker_1 with lead branch `e5b92fff`.
