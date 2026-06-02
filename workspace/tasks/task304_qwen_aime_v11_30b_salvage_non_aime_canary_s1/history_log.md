@@ -30,7 +30,7 @@
   deletion, no main push/merge, and no export/endpoint without stopping for
   lead authorization.
 
-## Session 1 - 2026-06-02 UTC - canary PASS evidence
+## Session 6 - 2026-06-02 UTC - canary PASS evidence and PR closeout
 
 - Added 30B distributed no-export/no-endpoint canary runner and pushed source
   head `d8e58461ca1cede2569589f95414c360e0ddd9bc`.
@@ -51,3 +51,10 @@
   degeneration `0`; remote return code `0`; GPUs returned to `1 MiB`, `0 %`.
 - Report added at
   `workspace/tasks/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/30b_salvage_non_aime_canary_report.md`.
+- Opened PR #367 at head
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709`; GitHub reported
+  OPEN/base `main`/non-draft/CLEAN/MERGEABLE.
+- Sent official mailbox closeout to lead; mailbox message id
+  `fc8b3ac0f8204548b62760099e08d884`.
+- Follow-up status hygiene: worker status remains `Working` while awaiting lead
+  gate because allowed status values are only `Idle` and `Working`.
