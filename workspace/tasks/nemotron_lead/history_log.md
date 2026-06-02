@@ -6961,3 +6961,8 @@
   checkpoint candidate, validation did not complete, lead-cleared SIGTERM
   produced `train_rc=1`, GPUs/processes were released, and no canary/AIME/
   export/endpoint/promotion/follow-on 30B work was run or cleared.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_4` for task303.
+  The message points to lead branch `f6eb2b9b`, #362 exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`, local/remote task301 artifact
+  roots, read-only boundaries, and required approve/request-changes/block
+  mailbox report.

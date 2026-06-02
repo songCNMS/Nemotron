@@ -1496,3 +1496,6 @@
    and the wrapper exit is `train_rc=1` after lead-cleared SIGTERM. This is why
    task303 independent review is required before any later non-AIME canary
    assignment.
+429. task303 assignment peer_send to `intern_nemotron_worker_4` was delivered
+   after lead branch `f6eb2b9b` was pushed. Await worker_4 branch/PR/mailbox
+   evidence before approving #362 or assigning non-AIME canary work.
