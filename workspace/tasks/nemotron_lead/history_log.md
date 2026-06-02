@@ -6539,3 +6539,60 @@
   refresh docs/status and mailbox so runtime+data gates are carried as merged,
   while preserving training HOLD until task300 accepted 30B base AIME score and
   explicit lead launch clearance.
+- Continuation scan fetched worker updates: #363/task300 advanced from
+  `a54fb96e...` to `155eb0c6845c0bf2b7d40051a9045533ffe00589`, OPEN/base
+  main/CLEAN, adding/updating worker_3 status, task300 README/history/
+  task_knowledge, `30b_base_aime2025_report.md`, and task-owned
+  `run_sglang_base_aime_eval.py`; `git diff --check` passed. #362/task301
+  advanced to `656242c3d601edc720259e61e1bb10ac6be856ec`, OPEN/base main/
+  CLEAN, with docs/status/report refresh only; `git diff --check` passed.
+- Read #363 exact-head report: task300 reports `BASE_PASS` for the first 30B
+  corrected same-harness base AIME2025 comparator using
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, eval-only
+  SGLang endpoint direct from HF, no export/conversion, task247 corrected cache,
+  original prompt, `/v1/chat/completions`, `max_tokens=8192`,
+  `temperature=0.0`, `top_p=1e-5`, last boxed parser, `normalize_answer`, and
+  all-request denominator.
+- Processed and marked read worker_3 task300 official mailbox
+  `d7a2c37798bf48b29a4b4f93c05cbf3d`: PR #363 exact head `155eb0c...`,
+  OPEN/base main/CLEAN/MERGEABLE, scope worker_3 status plus task300 docs/report
+  and task-owned runner. Reported base result is `15/30 = 0.5`, `30/30` status
+  ok, parsed `19/30`, finish reasons `stop=19` / `length=11`, all 11 length
+  rows counted incorrect, average completion tokens `5798.233333333334`, runtime
+  `187.932` seconds. Artifact root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`;
+  remote root:
+  `/root/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`;
+  eval dir `eval/qwen30b_base_aime2025_30x1_20260602T152351Z`.
+- task300 key hashes from worker_3: summary
+  `4a31904c118b09f80c1d77e7cd3aee0ede7117634b620092ea95e6306529e2ec`,
+  results `19c853420a6827fa70b43db74bba987ba984a150e0e2c799234f0abfa26642fb`,
+  full completions
+  `27bf059b5a6a2868e75435af4b1c738e7ded5649a3d0b48cc52b4c7d76f243a7`,
+  parser diagnostics
+  `aefd30646c089ebfe5ae3c36ed0725a0ffb0217925ff711fb5790b7851d87d8e`,
+  command env
+  `e4f6c67f5a0be30e7672d96ee7635e26b202875553db676325ebd7a66af907c8`,
+  endpoint manifest
+  `1e10c3b9ea92d8d581bd203e7641ec2e0a5db38e3770f04faeeb9ef7ea0d9c17`,
+  and run checksum manifest
+  `4ae7f6a8ccf6d2e7508103242f9a359f2f25f5a7d4f74f6ba8ddb714a02d6363`.
+  Worker_3 confirmed endpoint stopped after run and no FT eval, canary,
+  training, export/conversion, endpoint promotion, task255 reuse, AIME train
+  data, shared deletion, promotion claim, main push, or merge occurred.
+- Processed and marked read worker_5 task301/#362 exact-head refresh mailbox
+  `9f23a81031754d2a87c378e6ac2151ef`: #362 exact head `656242c...`, OPEN/base
+  main/CLEAN/MERGEABLE, report/output sha256
+  `225dc67e4f55719bd3b71742166b0121910de7e725363a50101cf8b3af4ff1fa`.
+  Runtime and data gates are carried as merged; remaining HOLD conditions are
+  accepted task300 base comparator and explicit lead launch clearance. No
+  training or 8-GPU execution occurred.
+- Sent delivered task302 follow-up review request to worker_4 for #363 exact
+  head `155eb0c...` and task300 artifact root. Required review focus:
+  corrected-harness protocol equivalence, task298/task299 gate refs, endpoint/
+  export choice, base `15/30` all-request denominator, full completions/parser
+  diagnostics row counts/checksums, length rows counted incorrect, endpoint
+  stopped/no promotion, no AIME train data/task255/shared deletion, and residuals.
+- Sent delivered holds to worker_3 and worker_5: do not self-merge or change
+  #363 unless requested; task301 remains HOLD until worker_4 review and lead
+  gate accept the base comparator, then lead separately clears launch.

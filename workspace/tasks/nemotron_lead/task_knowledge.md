@@ -1331,3 +1331,18 @@
 395. #362/task301 head `efc9aef` remains a training-HOLD report and no launch
    evidence, but it is stale on task299 state because it was written before
    #365 merged. Lead requested worker_5 exact-head refresh after #365 merge.
+396. worker_3 mailbox `d7a2c37798bf48b29a4b4f93c05cbf3d` reports task300/#363
+   exact head `155eb0c` with first 30B same-harness base AIME comparator:
+   `15/30 = 0.5`, parsed `19/30`, `length=11` counted incorrect, eval-only
+   SGLang direct from
+   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, no
+   export/conversion, endpoint stopped, no forbidden actions.
+397. task300 base artifact root is
+   `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`;
+   key hashes include summary `4a31904c...`, results `19c85342...`, full
+   completions `27bf059b...`, parser diagnostics `aefd3064...`, and run
+   checksum manifest `4ae7f6a8...`.
+398. worker_5 mailbox `9f23a81031754d2a87c378e6ac2151ef` confirms #362 exact
+   head `656242c` carries runtime+data gates as merged and keeps training HOLD.
+   No launch may proceed until worker_4 independently reviews #363 and lead
+   explicitly accepts the base comparator and clears launch.
