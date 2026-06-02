@@ -25,6 +25,8 @@
   search. No task296 branch or PR was visible.
 - Recorded decision `HOLD_WAITING_TASK296` in
   `current_main_equivalence_review_report.md`.
+- Opened task297 PR #358:
+  `https://github.com/songCNMS/Nemotron/pull/358`.
 - Scope remained read-only: no training, canary, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   main push, merge, 30B, or 8-GPU action was performed.

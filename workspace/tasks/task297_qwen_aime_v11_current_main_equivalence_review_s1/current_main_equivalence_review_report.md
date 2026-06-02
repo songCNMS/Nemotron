@@ -7,6 +7,8 @@
 - Decision: `HOLD_WAITING_TASK296`
 - Current main observed:
   `2d84ec75960fb51ba9091427638b00083625e137`
+- Task297 PR:
+  `https://github.com/songCNMS/Nemotron/pull/358`
 - Lead docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs`
   `c01fb6147c4d711c2a4e5f55dcbe2366ee764709`
