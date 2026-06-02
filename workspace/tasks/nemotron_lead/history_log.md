@@ -6990,3 +6990,21 @@
   do not push/PR task302 edits as task303; report via mailbox or blocker.
 - Gate remains HOLD. #362 cannot be approved or followed by non-AIME canary
   until worker_4 produces corrected task303 branch/docs/mailbox evidence.
+- Processed and marked read worker_4 mailbox
+  `d662dc6fc36e470593e9c0d58c0b0178`: corrected task303 report on branch
+  `intern_nemotron_worker_4/task303_qwen_aime_v11_30b_task301_salvage_review_s1`,
+  PR #366 OPEN/base `main`/CLEAN/MERGEABLE/non-draft at head
+  `24157f3c7534845a6959b4760c2cdcec245b3253`; diff scope worker_4 status plus
+  task303 README/history/task_knowledge/task301_salvage_review_report.md only;
+  `git diff --check` passed.
+- Accepted task303 disposition:
+  `APPROVE_SALVAGE_CANDIDATE_FOR_LATER_NON_AIME_CANARY_CONSIDERATION_ONLY` for
+  #362 exact head `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Left #366 lead approval comment `4605198157` and sent delivered peer_send to
+  worker_4 allowing self-merge only if #366 remains exact head
+  `24157f3c7534845a6959b4760c2cdcec245b3253`, base `main`, CLEAN/MERGEABLE,
+  and non-draft at merge time.
+- Approval of #366 accepts task303 independent review evidence only. It does
+  not clear #362, non-AIME canary, corrected AIME/task243 eval, export,
+  endpoint, promotion, follow-on 30B, task255 reuse, AIME2025 train data, shared
+  deletion, or any direct main push.

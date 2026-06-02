@@ -1510,3 +1510,16 @@
 432. #362/task301 remains HOLD pending corrected task303 branch/docs/mailbox.
    Do not approve #362 or assign non-AIME canary based only on pane output or
    stale-task302 edits.
+433. worker_4 mailbox `d662dc6fc36e470593e9c0d58c0b0178` is corrected
+   official task303 evidence. PR #366 is task303 docs/status-only at exact head
+   `24157f3c7534845a6959b4760c2cdcec245b3253`, OPEN/base `main`/CLEAN/
+   MERGEABLE/non-draft; `git diff --check` passed.
+434. Lead accepted task303's disposition:
+   `APPROVE_SALVAGE_CANDIDATE_FOR_LATER_NON_AIME_CANARY_CONSIDERATION_ONLY`.
+   Residuals remain `train_rc=1`, no completed validation metric, no independent
+   checkpoint load/canary, full 399G shard hashes not recomputed, and no eval/
+   export/endpoint/promotion clearance.
+435. Lead approval comment for #366 is issuecomment `4605198157`. worker_4 was
+   instructed to self-merge #366 only if exact head `24157f3c` remains clean.
+   After #366 merges, recheck #362 head/mergeability before deciding whether
+   task301 can be accepted as salvage closeout.
