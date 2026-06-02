@@ -1737,3 +1737,7 @@
    latest visible progress still `4/30`; no rc, final task306 artifacts,
    blocker, PR, or official mailbox report exists. Lead left the worker-owned
    eval running.
+492. Session 106: task306 remains active after about fifty-five minutes; worker
+   status is still Working/accepted, mailbox and PR are empty, and remote rank
+   event logs for ranks 0-7 all show `generation_batch_start` at
+   `start_index=4` with no row 5 completion. No rc or final artifacts exist.

@@ -240,3 +240,18 @@
 - No task306 aggregate summary/results/full completions/parser diagnostics,
   checksum manifest, or blocker file is visible. Gate remains HOLD pending
   completion and official worker report.
+
+## Session 106 - 2026-06-02 UTC - active run rank-log HOLD
+
+- Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306
+  PR or official mailbox report is visible.
+- The task306 NemTron run remains active after about fifty-five minutes. Local
+  and remote rc files are still absent.
+- worker_3 local status still shows Working/Session 1 acceptance and no new
+  report or blocker closeout.
+- Remote rank event logs for ranks 0-7 all show `generation_batch_start` for
+  `start_index=4`, after batch 3 completed. No rank shows
+  `generation_batch_done` for row 5 yet.
+- No task306 aggregate summary/results/full completions/parser diagnostics,
+  checksum manifest, or blocker file is visible. Gate remains HOLD pending
+  completion and official worker report.
