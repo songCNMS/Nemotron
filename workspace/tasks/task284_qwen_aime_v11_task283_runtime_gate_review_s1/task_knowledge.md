@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Knowledge Entries
 
@@ -13,3 +13,7 @@
    train data, shared deletion, main push, or 30B/8-GPU.
 5. As of acceptance, no exact task283 PR, branch/head, mailbox artifact path, or
    worker output evidence is visible; the current review state is HOLD.
+6. task283 acceptance branch `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+   at `c1d988e29abafa51a9c3f83a98e21b229135f97e` is docs/acceptance-only for
+   task284 purposes until a PR, artifact path, or mailbox evidence provides
+   substantive runtime/config/import proof.

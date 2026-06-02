@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0 - Assigned
 
@@ -23,6 +23,27 @@
 - Current visibility check found no task283 PR, no task283/task284 remote head,
   and no task283 worker artifact path outside lead docs.
 - Disposition is HOLD for substantive review until exact task283
+  branch/head/artifacts or worker mailbox evidence exists.
+- Boundaries preserved: no edits outside task/status docs, training,
+  nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data use, shared deletion, merge,
+  main push, or 30B/8-GPU action.
+
+## Session 19 - Branch hygiene cleanup and task283 acceptance visibility
+
+- Received lead follow-up that the remote task284 branch diff included
+  unrelated task249 history/task_knowledge changes.
+- Restored `workspace/tasks/task249_qwen_aime_v10_live_contam_gate_review_s1/history_log.md`
+  and `workspace/tasks/task249_qwen_aime_v10_live_contam_gate_review_s1/task_knowledge.md`
+  from `origin/main` so pushed task284 branch scope is worker_4 status plus
+  task284 docs/status only.
+- Verified task283 acceptance branch is visible:
+  `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+  at `c1d988e29abafa51a9c3f83a98e21b229135f97e`.
+- Checked for substantive evidence: no task283 PR is visible and no
+  `/work-agents/intern_nemotron_worker_2/outputs/*task283*` artifact path is
+  visible.
+- Current task284 disposition remains HOLD until exact task283
   branch/head/artifacts or worker mailbox evidence exists.
 - Boundaries preserved: no edits outside task/status docs, training,
   nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
