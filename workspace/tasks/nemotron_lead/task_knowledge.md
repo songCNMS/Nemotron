@@ -1381,3 +1381,18 @@
    remote task301 run root. Source and remote packed-data checksum manifests both
    hash `a5b05d1e...`; official worker_5 launch status/artifacts are still
    pending after a delivered status request.
+407. worker_5 mailbox `ef259845ccaf42ffb72abd04ca28a5aa` is official
+   PREPARING evidence, not launch evidence: no torchrun/training process had
+   started, current-main sync to NemTron succeeded, 8x H200 were idle, and the
+   initial blocker was that the local task299 packed root was not mounted on
+   NemTron.
+408. The task301 task-owned dereferenced mirror
+   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/input/task299_packed_qwen_30b_deref_mirror`
+   is accepted as the packed-data root for the bounded 30B SFT launch only if
+   worker_5's official report carries source-vs-remote manifest/checksum match
+   and no-symlink evidence. Observed source and remote checksum manifests hash to
+   `a5b05d1e3a8ea2724e09058e3e7646ae5c1d499adb93be12d28eca78ce73190b`.
+409. task301 launch remains training-only after the remote-mirror continuation:
+   no non-AIME canary, corrected AIME FT eval, export, endpoint, promotion, or
+   30B follow-on work is cleared until lead reviews worker_5 checkpoint/log/
+   checksum artifacts and assigns the next gate.

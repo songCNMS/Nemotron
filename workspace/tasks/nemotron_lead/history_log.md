@@ -6712,3 +6712,41 @@
   checkpoint/log roots, process/job status, return codes/log tails, checksums,
   and exact blocker if any. Reiterated no AIME2025 train data, task255, shared
   deletion, FT eval, canary, export, endpoint, or promotion outside clearance.
+
+## Session 77 - 2026-06-02 UTC - task301 remote mirror launch continuation
+
+- Scanned lead state after compaction: lead branch
+  `intern_nemotron_lead/session1-recovery-task-docs` was clean at
+  `6010c9d05141c1eacbaf3da002be09bb1ce91235`; fetched `origin/main` remained
+  `e400cea8a1604bc95cc430a194811ff553b99401`. No unread lead mailbox messages
+  were present.
+- Open PR scan showed #362/task301 still OPEN/base main/CLEAN at
+  `e4c00524aca255de205a749995b23ed48493cb8b`, which is the pre-launch-clearance
+  report head. #360/coordinator remained open/clean and is unrelated to the
+  worker_5 launch gate.
+- Reconciled worker_5's latest official mailbox `ef259845ccaf42ffb72abd04ca28a5aa`
+  as the current actionable state: `PREPARING`, no torchrun/training process
+  yet, current-main sync to NemTron done, 8x H200 idle, model and task298
+  imported checkpoint present, initial blocker was the local `/work-agents/...`
+  task299 packed root not being mounted on NemTron.
+- Accepted worker_5's prepared task-owned dereferenced NemTron packed-data mirror
+  as the training packed root for task301 launch:
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/input/task299_packed_qwen_30b_deref_mirror`.
+  This acceptance is conditional on worker_5 carrying the source-vs-remote
+  manifest/checksum evidence and no-symlink statement in the official launch or
+  closeout report. Observed source and remote checksum manifests still hash to
+  `a5b05d1e3a8ea2724e09058e3e7646ae5c1d499adb93be12d28eca78ce73190b`.
+- Sent delivered peer instruction to worker_5:
+  `TASK301 CONTINUE WITH REMOTE MIRROR`. The instruction preserves the prior
+  launch clearance only: current main `e400cea8...`, model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, task298
+  imported checkpoint root, 8x H200, bounded 35-step Qwen3-30B-A3B V11 SFT,
+  task-owned remote mirror as packed root, and required report fields for exact
+  command/env, LR, train steps, TP/PP/EP/ETP, GPUs, seed, checkpoint/log roots,
+  process/job state, return codes, loss/LR/validation metrics, checksums,
+  artifact inventory, and log tails.
+- Boundaries reiterated to worker_5: no AIME2025 prompt/label train rows, no
+  task255 reuse, no deletion under `/mnt/cephfs/data/processing/lei.song`, and
+  no non-AIME canary, corrected AIME FT eval, export, endpoint, promotion, or
+  30B follow-on work until lead reviews task301 checkpoint artifacts and gives
+  the next gate clearance.

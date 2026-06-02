@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task301 launch cleared; remote data mirror observed; awaiting official training status/artifacts |
-| Session | 76 |
+| PR | 30B gate live: task301 launch cleared; remote mirror accepted for bounded launch; awaiting official training status/artifacts |
+| Session | 77 |
