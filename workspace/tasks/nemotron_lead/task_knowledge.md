@@ -356,3 +356,4 @@
    proof in a task-owned NemTron/NeMo/Megatron-Bridge runtime; task270 is
    assigned to worker_5 to identify a concrete runtime route or exact resource
    blocker without training/eval.
+153. task270 assignment peer_send was delivered to worker_5.
