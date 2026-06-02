@@ -1733,3 +1733,7 @@
    latest visible progress still `4/30`; rank logs still show `start_index=4`
    in progress, and there is no rc, final task306 artifact, blocker, PR, or
    official mailbox report.
+491. Session 105: task306 remains active after about fifty-two minutes with
+   latest visible progress still `4/30`; no rc, final task306 artifacts,
+   blocker, PR, or official mailbox report exists. Lead left the worker-owned
+   eval running.
