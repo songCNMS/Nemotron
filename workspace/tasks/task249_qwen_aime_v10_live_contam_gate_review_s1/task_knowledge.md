@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,6 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. task284 reviews task283 only. Missing exact task283 branch/head/artifact or
+    mailbox evidence means HOLD; it does not approve training, runtime smoke,
+    live eval, export, endpoint, promotion, main push, or 30B/8-GPU.
