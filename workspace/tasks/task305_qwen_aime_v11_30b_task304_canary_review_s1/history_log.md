@@ -96,3 +96,29 @@
 - #367 remains HOLD; no corrected AIME/task243, export, endpoint, promotion,
   extra training, task255 reuse, AIME2025 train data, shared deletion, main
   push, or merge is cleared.
+
+## Session 87 - 2026-06-02 UTC - task305 accepted and merged
+
+- Processed and marked read worker_4 task305 final mailbox
+  `1379acca6101468f9b6af2f073d264c8`.
+- Verified PR #368 task305 review docs/report is OPEN/base `main`/CLEAN/
+  MERGEABLE/non-draft at exact head
+  `e0809da85900d9ed96cd8d053d34911fb7bd3080`, with diff scope worker_4 status
+  plus task305 README/history/task_knowledge/report only; `git diff --check`
+  passed.
+- Accepted task305 disposition:
+  `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` for #367 exact head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
+- Left #368 approval comment `4605911543` and sent delivered peer_send to
+  worker_4 allowing self-merge only if #368 remained exact head `e0809da8`,
+  base `main`, CLEAN/MERGEABLE, and non-draft.
+- PR #368 merged at `2026-06-02T18:38:17Z` with merge commit
+  `094946afb4fc86f4587ec65968cf443ee13d621f` from head
+  `e0809da85900d9ed96cd8d053d34911fb7bd3080`.
+- Processed and marked read worker_4 closeout mailbox
+  `aeca22f34616463ab208ed431d5945ce`, confirming #368 was merged through PR
+  path only, with task305 review docs/status-only scope and no downstream
+  AIME/export/endpoint/promotion/training action.
+- task305 is complete as independent review evidence. Corrected AIME/task243
+  remains blocked until task304/#367 is merged and lead creates a separate
+  evaluation task.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: #367 head 1f23d833 HOLD; task305 worker_4 refresh pending |
-| Session | 86 |
+| PR | 30B gate: #368 merged; #367 approved pending worker self-merge |
+| Session | 87 |

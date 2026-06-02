@@ -51,3 +51,9 @@
     evidence until worker_4 refreshes to `1f23d833` and reports officially.
 17. Lead sent a queued `next` peer_send follow-up to worker_4 requiring exact
     `1f23d833` refresh and explicit `e5cc4982..1f23d833` verification.
+18. worker_4 mailbox `1379acca6101468f9b6af2f073d264c8` is the accepted
+    official task305 report. It approves task304 as bounded synthetic
+    non-AIME canary evidence with residuals for #367 exact head `1f23d833`.
+19. #368 merged at `2026-06-02T18:38:17Z` with merge commit
+    `094946afb4fc86f4587ec65968cf443ee13d621f` from exact approved head
+    `e0809da85900d9ed96cd8d053d34911fb7bd3080`.

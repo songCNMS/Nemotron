@@ -7177,3 +7177,43 @@
 - #367 remains HOLD; downstream corrected AIME/task243, export, endpoint,
   promotion, additional training, task255 reuse, AIME2025 train data, shared
   deletion, main push, and merge remain blocked.
+
+## Session 87 - 2026-06-02 UTC - task305 accepted, #367 approved pending merge
+
+- Processed and marked read worker_4 task305 final mailbox
+  `1379acca6101468f9b6af2f073d264c8`.
+- Verified PR #368 is OPEN/base `main`/CLEAN/MERGEABLE/non-draft at exact head
+  `e0809da85900d9ed96cd8d053d34911fb7bd3080`. Diff scope is worker_4 status
+  plus task305 README/history/task_knowledge/task304_canary_review_report.md;
+  `git diff --check` passed.
+- Accepted task305 disposition:
+  `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` for task304/#367 exact
+  head `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
+- Left #368 lead approval comment `4605911543` and sent delivered peer_send to
+  worker_4 allowing #368 self-merge only at exact head `e0809da8`, base `main`,
+  CLEAN/MERGEABLE, and non-draft.
+- #368 merged at `2026-06-02T18:38:17Z` with merge commit
+  `094946afb4fc86f4587ec65968cf443ee13d621f` from exact approved head
+  `e0809da85900d9ed96cd8d053d34911fb7bd3080`.
+- Processed and marked read worker_4 closeout mailbox
+  `aeca22f34616463ab208ed431d5945ce`, confirming #368 merged through PR path
+  only, scope stayed task305 review docs/status only, and no downstream
+  corrected AIME/export/endpoint/promotion/training/shared-deletion action
+  occurred.
+- Fetched origin/main after #368; origin/main is
+  `094946afb4fc86f4587ec65968cf443ee13d621f`.
+- Rechecked #367 after #368 landed: #367 remains OPEN/base `main`/CLEAN/
+  MERGEABLE/non-draft at exact head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`; `git diff --check
+  origin/main...origin/intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`
+  passed and scope remains worker_3 status plus task304 docs/report/runner.
+- Left #367 lead approval comment `4605938281` and sent delivered peer_send to
+  worker_3 allowing self-merge only if #367 remains exact head `1f23d833`,
+  base `main`, CLEAN/MERGEABLE, and non-draft.
+- #367 approval is limited to accepting task304 as bounded synthetic non-AIME
+  checkpoint-load/completion-retention canary evidence. Corrected AIME/task243,
+  FT-vs-base go/no-go, export, endpoint, promotion, additional training,
+  task255 reuse, AIME2025 train data, shared deletion, and direct main push
+  remain blocked until later lead tasks.
+- Follow-up poll showed #367 still OPEN/base `main`/CLEAN/MERGEABLE at
+  `1f23d833`, no merge yet, and lead mailbox unread count `0`.

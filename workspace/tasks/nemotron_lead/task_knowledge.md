@@ -1625,3 +1625,13 @@
 462. Lead sent queued `next` follow-up to worker_4 requiring a task305 refresh
    to exact head `1f23d833`, including explicit `e5cc4982..1f23d833`
    verification and official mailbox/branch/PR.
+463. worker_4 mailbox `1379acca6101468f9b6af2f073d264c8` is accepted task305
+   evidence: `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` for #367
+   exact head `1f23d833`.
+464. #368/task305 merged at `2026-06-02T18:38:17Z` with merge commit
+   `094946afb4fc86f4587ec65968cf443ee13d621f` from approved head
+   `e0809da85900d9ed96cd8d053d34911fb7bd3080`.
+465. #367 lead approval comment is `4605938281`; worker_3 was instructed to
+   self-merge #367 only if exact head `1f23d833`, base `main`, CLEAN/
+   MERGEABLE, and non-draft remain true. This is task304 non-AIME canary
+   evidence only, not corrected AIME/task243 or promotion clearance.
