@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -93,3 +93,6 @@
 26. Session 15 task249 updates are hook-required bookkeeping for the worker
     turn; they do not alter task249/#323 gate state or approve task279/task278
     preflight readiness.
+27. For task279, if PR #347 head drifts from the lead-requested exact head,
+    stop and report mismatch; do not issue approve/request-changes/block for
+    the new head until lead provides that exact head.

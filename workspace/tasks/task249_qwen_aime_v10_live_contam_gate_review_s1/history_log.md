@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0 - Assigned
 
@@ -245,6 +245,28 @@
   mailbox `e514a0eee0c04d1dab3dc4e31ff235ea`.
 - This entry is status bookkeeping only and does not change task249/#323 gate
   state, task279 review status, or any training/promotion/go-no-go decision.
+- Boundaries preserved: no product edits, training, nonzero-LR smoke, live
+  canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data use, shared deletion, merge, main push, or 30B/8-GPU
+  action.
+
+## Session 16 - task279 PR #347 exact-head drift
+
+- Began read-only task279 review for task278 PR #347 at lead-requested exact
+  head `6d3e5825a58529d86e9bb9f8f44b941f05324ba6`.
+- Initial PR view and fetched `origin/pr/347` matched the requested head; diff
+  was limited to worker_2 status plus task278 docs/helper/report, and
+  `git diff --check origin/main...origin/pr/347` was clean.
+- Initial read-only checks against old head `6d3e5825` confirmed report sha
+  `9790d0b2340bd3f36dde004237b97b524347cb7f7ed2a304dd8fa1159778e823`,
+  artifact report/manifest sidecars OK, local packed-data/config/HF import PASS
+  evidence, and blocker
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`.
+- Before sending a final approve/request-changes/block report, rechecked #347
+  and found current head had changed to
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`; stopped per lead instruction.
+- Sent mailbox `1158d29e69a44fe9815388b41d2b6deb` reporting exact-head drift
+  and HOLD. No final disposition was issued for current head `b7e5441`.
 - Boundaries preserved: no product edits, training, nonzero-LR smoke, live
   canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data use, shared deletion, merge, main push, or 30B/8-GPU
