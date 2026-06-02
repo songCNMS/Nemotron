@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Knowledge Entries
 
@@ -439,3 +439,25 @@
 172. Clearing task270 runtime-route blocker moves the next gate to worker-owned
    pilot readiness, data safety, eval continuity, and runbook evidence. It does
    not clear training/eval/promotion.
+173. task272/#341 at exact head `1a09de7b0bd25f21819effbd7920e62450a37a59`
+   is approved only as no-training readiness-plan documentation; the drift from
+   `2fecaf1` is status/history/task_knowledge bookkeeping and the main plan
+   report remains unchanged.
+174. task273/#343 at exact head `c54cd41d7db68bb30d3dca7e4fdb54bbdf46a471`
+   is approved only as eval-gate continuity documentation. The canonical
+   comparator remains Qwen3-4B base `11/30` under the same corrected AIME2025
+   harness; any future FT must score at least that or force a same-protocol
+   base rerun.
+175. task274/#342 at exact head `5e96158211a2bac010e9b65107152e2f5ad635a6`
+   is approved only as data-safety/readiness documentation. The disposition is
+   `PASS_SOURCE_SAFETY` plus `BLOCK_PACKED_ARTIFACT_READY`; stale task253
+   packed data remains rejected because train expected 15 shards but exposed 8.
+176. task275/#340 at exact head `07714fa516d0cbd3e7dd00d5feec09d49dbdfd66`
+   is approved only as runbook/provenance documentation. It must preserve the
+   Session 40 proof caveat that `artifact_inventory.sha256` has a stale
+   self-entry, while core proof files validate.
+177. Approving task272-task275 closeout PRs does not authorize training,
+   nonzero-LR smoke, live AIME/task243 eval, export, endpoint, promotion,
+   AIME2025 train data, task255 reuse, shared deletion, or 30B/8-GPU. The next
+   actionable evidence remains a fresh accepted V11 packed Qwen root and later
+   lead-gated no-training config/import preflight before any pilot action.

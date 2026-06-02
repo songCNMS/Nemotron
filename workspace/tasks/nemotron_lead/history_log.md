@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Session 0 - Created with team lead
 
@@ -2888,7 +2888,7 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task255 candidate remains
   non-promotable because task257/#330 measured FT `0/30` below base `11/30`.
 
-## Session 72 - 2026-06-01 UTC - task259 follow-up queued
+### Archived Session 72 - 2026-06-01 UTC - task259 follow-up queued
 
 - Read lead mailbox; no unread messages were present.
 - Rechecked PR state:
@@ -4146,3 +4146,76 @@
   promotion, task255 reuse, AIME2025 train data, or 30B/8-GPU.
 - Sent delivered coordinator update with task271-task275 assignments, visible
   branch state, task271 approve/caveat, and unchanged global `NO-GO/HOLD`.
+
+## Session 72 - 2026-06-02 UTC - task272-task275 docs gate approvals
+
+- Read lead mailbox and processed worker reports:
+  - worker_3 task273 closeout mailbox
+    `4888ca724f204ba8bc57cbf63c726263`: PR #343 at head
+    `c54cd41d7db68bb30d3dca7e4fdb54bbdf46a471`, docs/status-only,
+    `APPROVE/PASS` for eval-gate continuity only. The accepted same-harness
+    Qwen3-4B base comparator remains `11/30 = 0.36666666666666664` with parsed
+    `23/30`, all-request denominator, and unchanged corrected AIME2025
+    protocol.
+  - worker_1 task274 closeout mailbox
+    `0bf00b0e587b490fa58f3ab90d6b5cb3`: PR #342 at reported head
+    `4bfd4a8a78151eecf266c4d4a530c454fee2495b`, docs/status-only,
+    `PASS_SOURCE_SAFETY` for source/sidecar/decontam evidence and
+    `BLOCK_PACKED_ARTIFACT_READY` for immediate Qwen3-4B pilot use because no
+    accepted collision-safe rematerialized `packed_qwen` artifact exists.
+- Marked both mailbox reports read before any worker peer_send.
+- Fetched origin and verified PR states:
+  - #340 task275 was `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at
+    `07714fa516d0cbd3e7dd00d5feec09d49dbdfd66`.
+  - #341 task272 was `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at
+    `1a09de7b0bd25f21819effbd7920e62450a37a59`.
+  - #342 task274 was initially `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at
+    `4bfd4a8a78151eecf266c4d4a530c454fee2495b`.
+  - #343 task273 was `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at
+    `c54cd41d7db68bb30d3dca7e4fdb54bbdf46a471`.
+- Verified PR diff scopes and hygiene: #340-#343 diffs are workspace
+  docs/status only and `git diff --check` passed for each checked PR range.
+- For #341, independently checked that head drift from
+  `2fecaf182702dd45203e4187dac697e679fbb094` to
+  `1a09de7b0bd25f21819effbd7920e62450a37a59` changed only worker status plus
+  task272 history/task_knowledge; `post_bridge_pilot_readiness_plan.md`
+  remained unchanged. Later worker_2 mailbox
+  `c2b78f5535c64a38b657896b81930188` confirmed the same exact-head
+  bookkeeping-only drift and preserved disposition
+  `PLAN_READY_HOLD_TASK271_LEAD_GATE`; it was marked read.
+- Posted lead gate comments:
+  - #340 comment `4598164675`: approve task275 as runbook/provenance docs only.
+  - #341 comment `4598164664`: approve task272 as no-training readiness-plan
+    docs only at exact head `1a09de7`.
+  - #342 comment `4598164696`: initial task274 approval at `4bfd4a8`.
+  - #343 comment `4598164673`: approve task273 eval-gate continuity docs only.
+- Before worker notification, re-read mailbox and received worker_1 task274
+  update `d2f52934d23c447d8f75572d67090507`: #342 advanced to
+  `5e96158211a2bac010e9b65107152e2f5ad635a6` with metadata-only drift
+  correcting worker status and task274 history. Fetched and verified the new
+  #342 head is still `OPEN`/base `main`/`CLEAN`/`MERGEABLE`, diff hygiene
+  passes, and `data_safety_ready_review_report.md` is unchanged at sha256
+  `0937696e006644d5afda734c4c08314098c6854c787060eed8b18d0f3277a7d2`.
+  Marked the mailbox read and posted renewed #342 approval comment
+  `4598172096` for exact head `5e96158`.
+- Re-read mailbox again before peer_send; unread count was `0`.
+- Sent delivered peer_send self-merge instructions:
+  - worker_5 may self-merge #340 only if exact head `07714fa` remains
+    `OPEN`/base `main`/`CLEAN`/`MERGEABLE`, then mailbox mergedAt,
+    mergeCommit, merged head, and issues.
+  - worker_2 may self-merge #341 only if exact head `1a09de7` remains clean,
+    with the same closeout report requirement.
+  - worker_1 may self-merge #342 only if exact head `5e96158` remains clean,
+    preserving `PASS_SOURCE_SAFETY` plus `BLOCK_PACKED_ARTIFACT_READY`.
+  - worker_3 may self-merge #343 only if exact head `c54cd41` remains clean,
+    preserving the same-harness `11/30` comparator.
+- Short poll after notifications found mailbox unread count `0`; #340/#341/#342
+  /#343 all remained `OPEN`, base `main`, `CLEAN`, and `MERGEABLE` at their
+  approved heads.
+- Lead decisions are approvals for documentation/closeout PRs only. Global
+  Qwen AIME gate remains `NO-GO/HOLD`: there is no fresh accepted V11 packed
+  Qwen root, no nonzero-LR training evidence, no live canary pass, no candidate
+  FT checkpoint/export, no task243 same-harness FT-vs-base comparison, no
+  promotion, no AIME2025 train data permission, and no 30B/8-GPU clearance.
+- Lead did not implement code, run implementation tests, train, eval, export,
+  launch endpoints, merge PRs, push `main`, or delete shared files.
