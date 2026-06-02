@@ -796,3 +796,12 @@
    no canary PR/artifacts are visible yet. task288 is worker_4's read-only
    review gate for eventual task287 evidence, and task289 is worker_5's
    post-smoke runbook/provenance task. AIME/task243 remains blocked.
+268. Exact task287 acceptance-only branch head is
+   `aa5ff74046221926c53eddfe1afbd7df38baaa89`; an earlier full-SHA value in
+   task288 assignment text was corrected. Future task288 review must bind to the
+   eventual exact task287 evidence head/PR.
+269. Unofficial task287 output `run_20260602T070403Z` currently has prompt and
+   route probes only, no completion artifacts. Probe logs show possible
+   dependency blockers (`megatron.core.inference.text_generation`,
+   `megatron.energon`, `nvidia_resiliency_ext`), but lead must wait for
+   worker_3 official pass/block/report before gate action.

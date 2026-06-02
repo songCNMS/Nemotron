@@ -5283,3 +5283,21 @@
   `3178c404`, with instruction to update post-smoke runbook/provenance and
   preserve no-clearance for AIME/task243, export, endpoint, promotion, 30B, and
   8-GPU.
+- Corrected task288 assignment docs: the exact task287 acceptance branch head is
+  `aa5ff74046221926c53eddfe1afbd7df38baaa89`, not the earlier mis-copied
+  `aa5ff740876...` value. This does not affect task287 evidence gating because
+  task288 must review the eventual exact task287 evidence head/PR, not the
+  acceptance-only placeholder.
+- Read-only task287 artifact poll found local output root
+  `/work-agents/intern_nemotron_worker_3/outputs/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z`
+  with prompt manifest, repo gate file hashes, remote sync files, checkpoint
+  metadata probe, symbol probe, and inference/direct-generation route probe
+  logs. The canary directory is still empty and no retained completions,
+  official task287 PR, or mailbox report is visible.
+- Unofficial probe observations: prompt manifest contains five synthetic
+  non-AIME prompts with prompt file sha
+  `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`;
+  checkpoint metadata sees task285 latest iteration `2`; symbol/direct route
+  probes show missing `megatron.core.inference.text_generation`,
+  `megatron.energon`, and `nvidia_resiliency_ext`. These are not yet official
+  worker_3 disposition evidence, so task287 remains Working/HOLD.
