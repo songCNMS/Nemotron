@@ -982,3 +982,6 @@
 313. Later read-only task293 observation reached `8/30`, parsed `8/8`, correct
    `5/8`, with remote PID `433268` still active. This is still partial live
    evidence only; no final summary/results/checksums or official worker report.
+314. Later read-only task293 poll still shows PID `433268` active at about 25
+   minutes elapsed and no progress beyond the last logged `8/30`; artifacts are
+   still manifests only and mailbox remains empty.

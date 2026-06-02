@@ -5676,3 +5676,8 @@
   `aime_08_r01`. Remote artifacts still only include prompt/checkpoint-load/
   command-env manifests; no final summary/results/checksums, PR, or worker
   mailbox report is visible. Gate remains `NO-GO/HOLD`.
+- Follow-up read-only live observation after another poll: PID `433268` remains
+  active at about 25 minutes elapsed, still last logged at `8/30`. Remote
+  artifacts still only include manifests and mailbox remains empty. This is
+  recorded as long-running partial progress only, not as a blocker or gate
+  decision.

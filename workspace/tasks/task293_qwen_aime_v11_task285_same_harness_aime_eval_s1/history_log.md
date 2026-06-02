@@ -39,3 +39,7 @@
 - Follow-up read-only observation reached `8/30`, parsed `8/8`, correct `5/8`;
   PID `433268` remains active and only manifests exist remotely. No final
   summary/results/checksums, official worker report, or PR exists yet.
+- Follow-up read-only poll after additional wait: PID `433268` still active at
+  about 25 minutes elapsed, last logged progress still `8/30`, and mailbox/
+  final artifacts remain absent. Continue waiting for worker-owned completion or
+  blocker report.
