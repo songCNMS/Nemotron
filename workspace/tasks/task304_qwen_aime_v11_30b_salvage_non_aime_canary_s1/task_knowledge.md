@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -45,3 +45,11 @@
     status-only changes, unless lead asks; keep all downstream AIME/task243,
     export, endpoint, promotion, training, task255 reuse, AIME train-data use,
     shared deletion, and main push actions blocked.
+13. task304/#367 was approved after task305/#368 independent review merged at
+    `094946afb4fc86f4587ec65968cf443ee13d621f`, then self-merged from exact
+    head `1f23d8339c123702eaa9336c1fe2b25afcd6122a` at
+    `2026-06-02T18:42:02Z` with merge commit
+    `7a93a6cea16e45284a58287b91c0069b7416fa99`. The merged scope is still only
+    bounded synthetic non-AIME canary evidence; no AIME/task243, export,
+    endpoint, promotion, training, task255 reuse, AIME train-data use, shared
+    deletion, or direct main push is authorized by the merge.

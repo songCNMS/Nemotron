@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 83 - 2026-06-02 UTC - assignment
 
@@ -89,3 +89,23 @@
 - Boundaries reaffirmed: no self-merge; no downstream AIME/task243/corrected
   AIME; no export, endpoint, promotion, training, task255 reuse, AIME2025 train
   data, shared deletion, or main push.
+
+## Session 4 - 2026-06-02 UTC - lead approval and self-merge
+
+- Received lead approval for task304/#367 after task305 independent review
+  merged via #368 at merge commit
+  `094946afb4fc86f4587ec65968cf443ee13d621f`.
+- Lead accepted task305 disposition
+  `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` and left #367
+  approval comment `issuecomment-4605938281`.
+- Pre-merge verification: PR #367 was OPEN, base `main`, non-draft,
+  CLEAN/MERGEABLE, and exact approved head
+  `1f23d8339c123702eaa9336c1fe2b25afcd6122a`.
+- Self-merged #367 with a merge commit; GitHub reports merged at
+  `2026-06-02T18:42:02Z` with merge commit
+  `7a93a6cea16e45284a58287b91c0069b7416fa99`.
+- Scope remains bounded synthetic non-AIME checkpoint-load/completion-retention
+  canary evidence only, with residuals from task305 review.
+- No corrected AIME/task243, FT-vs-base eval, export, endpoint, promotion,
+  additional training, task255 reuse, AIME2025 train data, shared deletion, or
+  direct main push was run.
