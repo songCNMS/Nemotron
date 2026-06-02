@@ -342,3 +342,7 @@
    and `NEMTRON_BRIDGE_RUNTIME_BLOCKED`; global gate remains `NO-GO/HOLD`.
 148. task269 assignment peer_send was delivered to worker_4 for #338 exact head
    `49e3728a8751909cc041110acd0e9212059dc6c5`.
+149. Worker_4 task269 mailbox `4fa99e76c4474c368363b9468ba52a93` approved
+   #338 as blocker-evidence-only at exact head
+   `49e3728a8751909cc041110acd0e9212059dc6c5`; lead released worker_2
+   self-merge only if #338 remains exact-head `OPEN`/base `main`/`CLEAN`.

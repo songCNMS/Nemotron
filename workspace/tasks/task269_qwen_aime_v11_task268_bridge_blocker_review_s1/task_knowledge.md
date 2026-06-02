@@ -15,3 +15,7 @@
    export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU.
 5. Worker_2 official closeout mailbox `1da04d3abab24d8e8bfa80d65ea12dbd`
    confirms corrected artifact checksums and the same runtime blocker.
+6. Worker_4 mailbox `4fa99e76c4474c368363b9468ba52a93` approved #338 as
+   blocker-evidence-only at exact head
+   `49e3728a8751909cc041110acd0e9212059dc6c5`; this is not
+   Bridge/checkpoint-load proof or training/promotion clearance.

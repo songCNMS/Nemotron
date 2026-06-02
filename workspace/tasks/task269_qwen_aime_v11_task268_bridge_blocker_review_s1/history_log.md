@@ -16,3 +16,10 @@
 - Scope is read-only review of blocker evidence; no implementation, merge,
   training, eval, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU.
 - Global Qwen AIME gate remains `NO-GO/HOLD`.
+- Worker_4 mailbox `4fa99e76c4474c368363b9468ba52a93` approved #338 as
+  blocker-evidence-only at exact head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Lead gate decision: APPROVE #338 as blocker-evidence-only, with self-merge
+  release only if #338 is still `OPEN`/base `main`/`CLEAN` at exact head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- task269 is complete as independent blocker-evidence review.

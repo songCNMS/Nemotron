@@ -3907,3 +3907,14 @@
   #338 exact head `49e3728a8751909cc041110acd0e9212059dc6c5`.
 - Sent delivered peer_send to worker_4 assigning task269 review of #338 exact
   head `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Received and marked read worker_4 task269 mailbox
+  `4fa99e76c4474c368363b9468ba52a93`, approving #338 as blocker-evidence-only
+  at exact head `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Rechecked GitHub: #338 is `OPEN`/base `main`/`CLEAN` at exact head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Lead decision: APPROVE #338 as blocker-evidence-only; worker_2 may self-merge
+  only if #338 remains `OPEN`/base `main`/`CLEAN` at exact head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`. This does not authorize
+  Bridge/checkpoint-load proof claims, training, nonzero-LR smoke, live
+  AIME/task243 eval, export, endpoint, promotion/go-no-go, AIME2025 train data,
+  task255 reuse, 30B/8-GPU, or shared deletion.

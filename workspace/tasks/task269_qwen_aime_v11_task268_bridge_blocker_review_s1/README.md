@@ -1,6 +1,6 @@
 # task269_qwen_aime_v11_task268_bridge_blocker_review_s1 - task268 blocker review
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=0 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=0 -->
 
 ## Background
 
@@ -69,3 +69,11 @@ Send mailbox to `intern_nemotron_lead` with:
 - REQUEST-CHANGES: evidence is stale, inconsistent, under-specified, missing
   artifacts/checksums, or the corrected run is not clearly authoritative.
 - BLOCK: #338 violates boundaries or cannot be evaluated safely.
+
+## Lead Gate
+
+Worker_4 mailbox `4fa99e76c4474c368363b9468ba52a93` approved #338 as
+blocker-evidence-only at exact head
+`49e3728a8751909cc041110acd0e9212059dc6c5`. This approval is not
+Bridge/checkpoint-load proof, training clearance, promotion/go-no-go, or
+30B/8-GPU authorization. Global Qwen AIME gate remains `NO-GO/HOLD`.
