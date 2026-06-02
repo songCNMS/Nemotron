@@ -11,4 +11,4 @@
 | Current Task | task300_qwen_aime_v11_30b_same_harness_testing_s1 |
 | PR | Pending |
 | Session | 1 |
-| Progress | Accepted task300 from lead docs branch 676d8556 on worker branch; reading task298 route before attempting exact 30B base AIME2025 score or reporting a precise blocker. |
+| Progress | Task300 first base gate blocked: task298 route proof is missing, so no 30B base AIME2025 eval/endpoint/export was launched; blocker report ready for PR. |

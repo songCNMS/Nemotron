@@ -24,3 +24,14 @@
 - Boundaries confirmed: no training, optimizer steps, task255 reuse, AIME2025
   train prompts/labels, shared deletion, promotion, main push/merge, or
   production endpoint.
+- Inspected fetched task298/task299/task301/task302 branches and visible output
+  roots. task298 has no runtime/resource/base-load report or artifacts visible;
+  task299 has no data/packing report visible; task301 PR #362 reports
+  `BLOCKED_UPSTREAM_GATES_MISSING` and no checkpoint; task302 remains HOLD.
+- Ran read-only NemTron probes under
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T144005Z`.
+  Candidate 30B model path exists and eight H200s were idle, but no local
+  endpoint was listening and no task298 route proof exists.
+- Wrote `30b_base_aime2025_report.md` with disposition
+  `BLOCK_UPSTREAM_TASK298_ROUTE_MISSING`. No base completions, parser
+  diagnostics, numerator, denominator, or score were produced.

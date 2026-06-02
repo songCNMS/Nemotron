@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - 30B same-harness testing gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 
