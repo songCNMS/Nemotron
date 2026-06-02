@@ -82,6 +82,8 @@
   manifest, root path, counts, checksums, intended-vs-exposed parity,
   tokenizer/chat-template equivalence, no-AIME2025-train proof, no task255
   reuse, no shared deletion, exact commands/env, and boundaries.
+- Opened PR #365:
+  `https://github.com/songCNMS/Nemotron/pull/365`.
 - Top manifest sha256 remains
   `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`.
 - Boundary maintained: no training, testing, corrected AIME eval, export,

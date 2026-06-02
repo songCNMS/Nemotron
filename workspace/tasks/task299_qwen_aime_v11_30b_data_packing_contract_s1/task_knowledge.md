@@ -18,3 +18,5 @@
    decontam proof; decision is `PASS_30B_DATA_PACKING_CONTRACT`.
 5. final artifact top manifest sha256 is
    `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`.
+6. PR #365 contains the final task299 docs/report closeout:
+   `https://github.com/songCNMS/Nemotron/pull/365`.

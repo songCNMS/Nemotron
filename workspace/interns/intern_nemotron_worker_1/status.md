@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task299_qwen_aime_v11_30b_data_packing_contract_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/365 |
 | Session | 83 |
-| Progress | Final task299 30B data/packing contract report is ready with PASS_30B_DATA_PACKING_CONTRACT; opening PR and sending official mailbox. |
+| Progress | Opened PR #365 with final task299 PASS_30B_DATA_PACKING_CONTRACT report; sending official final mailbox. |
