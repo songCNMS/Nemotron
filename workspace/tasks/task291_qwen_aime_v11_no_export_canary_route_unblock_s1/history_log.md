@@ -1,6 +1,6 @@
 # task291_qwen_aime_v11_no_export_canary_route_unblock_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -75,3 +75,21 @@
   residual risk, and boundary confirmation.
 - No AIME/task243 eval, export, endpoint, promotion, 30B, 8-GPU, training, or
   optimizer step was run.
+
+## Session 4 - Approved self-merge closeout
+
+- Lead approved #354 for exact head
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f` as no-export/no-endpoint
+  one-GPU synthetic non-AIME canary route evidence only.
+- Verified #354 immediately before merge: OPEN, base `main`, head exact
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`, `mergeStateStatus=CLEAN`.
+- Self-merged #354 at `2026-06-02T08:30:04Z`.
+- Merge commit:
+  `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf`.
+- Merged head:
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`.
+- Scope remained task291 helper/docs/status/report evidence; no AIME/task243
+  eval, export, endpoint, promotion, task255 reuse, AIME2025 train data,
+  shared deletion, 30B, 8-GPU, training, or optimizer step was run.
+- This branch-only closeout records the post-merge status update; it is not a
+  main push.

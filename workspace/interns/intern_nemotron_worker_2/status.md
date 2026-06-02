@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task291_qwen_aime_v11_no_export_canary_route_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=N/A,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task291_qwen_aime_v11_no_export_canary_route_unblock_s1 |
-| PR | #354 |
-| Session | 3 |
-| Last Update | 2026-06-02T08:16:00Z: task291 PR #354 opened for no-export/no-endpoint one-GPU MCore canary route PASS evidence; mailbox closeout being sent, no AIME/task243/export/endpoint/promotion/30B/8-GPU run. |
+| Current Task | N/A |
+| PR | #354 merged |
+| Session | 4 |
+| Last Update | 2026-06-02T08:31:47Z: task291/#354 merged at 2026-06-02T08:30:04Z with merge commit 34de04ff06cc2921ef1c65cde347b1f6e1b54bcf; task complete, no AIME/task243/export/endpoint/promotion/30B/8-GPU run. |
