@@ -5681,3 +5681,8 @@
   artifacts still only include manifests and mailbox remains empty. This is
   recorded as long-running partial progress only, not as a blocker or gate
   decision.
+- Follow-up read-only live observation: PID `433268` remains active at about
+  29 minutes elapsed. Log reached `9/30`; the ninth row `aime_09_r01` stopped
+  on length, parsed false and correct false. Current partial total is `5/9`
+  correct. Remote artifacts still only include manifests and mailbox remains
+  empty. This remains non-gating partial evidence.

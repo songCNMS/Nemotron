@@ -985,3 +985,6 @@
 314. Later read-only task293 poll still shows PID `433268` active at about 25
    minutes elapsed and no progress beyond the last logged `8/30`; artifacts are
    still manifests only and mailbox remains empty.
+315. Later read-only task293 poll shows progress `9/30`, correct `5/9`; row
+   `aime_09_r01` stopped on length and did not parse. PID `433268` remains
+   active; artifacts are still manifests only and mailbox remains empty.

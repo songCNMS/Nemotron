@@ -43,3 +43,6 @@
   about 25 minutes elapsed, last logged progress still `8/30`, and mailbox/
   final artifacts remain absent. Continue waiting for worker-owned completion or
   blocker report.
+- Follow-up read-only poll: PID `433268` still active at about 29 minutes
+  elapsed; progress reached `9/30`, correct `5/9`, with `aime_09_r01` stopped
+  on length and unparsed. No final artifacts, official report, or PR exists yet.
