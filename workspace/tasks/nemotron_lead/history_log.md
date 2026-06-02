@@ -5239,3 +5239,14 @@
   `4599520425`. Sent delivered message to worker_2 authorizing self-merge only
   if #350 remains exact head `fc379240...` and clean/mergeable at merge time;
   otherwise worker_2 must refresh/report before merge.
+- Rechecked #350 after worker_2 action: PR #350 is `MERGED` with mergedAt
+  `2026-06-02T06:53:14Z`, merge commit
+  `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0`, and merged head
+  `fc379240c8517de10e37a5438f87b6b0994399f0`. This merges task285 bounded
+  smoke docs/evidence only; it does not release AIME/task243 eval, export,
+  endpoint, promotion, 30B, or 8-GPU.
+- Created task287 standard docs for worker_3 to run or block the next gate:
+  non-AIME canary/completion-retention on task285 iter2 checkpoint, starting
+  from origin/main `5d32f076...`. The task explicitly fails closed if the
+  canary requires export or endpoint, and it keeps corrected AIME2025 comparison
+  blocked until a later lead release.

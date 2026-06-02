@@ -783,3 +783,8 @@
    post-checkpoint built-in-validation/SIGTERM `RC=1` risk and does not
    authorize canary, AIME/task243 eval, export, endpoint, promotion, 30B, or
    8-GPU. worker_2 may self-merge #350 only if exact head remains clean.
+265. #350/task285 merged at `2026-06-02T06:53:14Z` with merge commit
+   `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0` from head `fc379240...`.
+   task287 is the next gate for worker_3: non-AIME canary/completion retention
+   on the task285 iter2 checkpoint. It must block rather than use export or
+   endpoint, and AIME/task243 remains unreleased.
