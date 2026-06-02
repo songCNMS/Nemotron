@@ -1,6 +1,6 @@
 # task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1 - NemTron Bridge runtime probe
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Background
 
@@ -78,3 +78,24 @@ blocker that prevents doing so.
   smallest remediation path.
 - FAIL: any training/eval/promotion/AIME2025-train-data/30B action occurs or the
   preflight can silently proceed without positive base-load/import proof.
+
+## Current Evidence
+
+- Disposition: `NEMTRON_BRIDGE_RUNTIME_BLOCKED`.
+- Repo-visible summary:
+  `workspace/tasks/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1/runtime_probe_report.md`.
+- Full local artifact report:
+  `/work-agents/intern_nemotron_worker_2/outputs/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1/reports/task268_bridge_runtime_report_20260602T002457Z.md`.
+- Manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1/manifests/task268_bridge_runtime_manifest_20260602T002457Z.json`.
+- Artifact inventory:
+  `/work-agents/intern_nemotron_worker_2/outputs/task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1/manifests/artifact_inventory_20260602T002457Z.sha256`.
+- Exact blocker: Docker client exists but cannot connect to
+  `/var/run/docker.sock`; local Python runtime still lacks
+  `megatron`/`megatron.bridge`/`nemo`, so the Bridge import fails closed and no
+  positive base-load/import proof exists.
+- Checksum note: the earlier `20260602T002335Z` artifact set had a
+  self-referential manifest/report checksum mismatch because those files were
+  hashed before their final rewrite. The helper was fixed to keep manifest and
+  report hashes in the inventory only, and the `20260602T002457Z` inventory
+  validates with `sha256sum -c`.
