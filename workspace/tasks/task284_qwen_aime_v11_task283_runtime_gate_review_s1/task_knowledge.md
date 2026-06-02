@@ -11,3 +11,10 @@
 4. task284 should reject evidence that depends on training, live canary,
    AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025
    train data, shared deletion, main push, or 30B/8-GPU.
+5. Worker_4 approved #349 exact head
+   `2d042cedb0c4cc448c89d57d7b18986d92361349` as no-training
+   runtime/config/import evidence only.
+6. Residual task283 risks remain material for any smoke gate: no
+   `AutoBridge.import_ckpt` checkpoint-load proof, no full `stage1_sft.train`
+   import pass, `pip check` rc `1`, missing `nvidia_resiliency_ext`, missing
+   `lightning`, and task276 sparse valid/test.

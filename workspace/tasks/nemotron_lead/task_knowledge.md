@@ -697,3 +697,19 @@
    lead processes approve/request-changes/block, especially because task283
    residual risks include no checkpoint-load proof, `pip check` rc `1`, missing
    `nvidia_resiliency_ext`, missing `lightning`, and sparse valid/test.
+242. task284 approved #349 exact head
+   `2d042cedb0c4cc448c89d57d7b18986d92361349` only as no-training
+   runtime/config/import evidence. It does not clear broad training, canary,
+   AIME/task243 eval, export, endpoint, promotion, task255 reuse, or 30B/8-GPU.
+243. The next execution task is task285 for a bounded Qwen3-4B SFT smoke after
+   #349 merges. It is capped at two GPUs and at most two optimizer steps and
+   must prove Qwen3-4B base-load/import plus first-step LR `> 0` before any
+   checkpoint can be considered reviewable.
+244. task285 must fail closed before training on missing base-load/import proof,
+   missing `nvidia_resiliency_ext`/`lightning` or other runtime dependencies,
+   zero LR, random-init-scale first loss/PPL, NaN/Inf, task255 reuse, AIME2025
+   train leakage, shared-path safety issue, or task276 packed-data mismatch.
+245. task286 is the independent read-only review gate for task285. Even task286
+   approval can only release a later non-AIME canary/completion-retention gate;
+   corrected AIME2025 same-harness comparison remains blocked until canary
+   passes and a reviewed FT artifact exists.
