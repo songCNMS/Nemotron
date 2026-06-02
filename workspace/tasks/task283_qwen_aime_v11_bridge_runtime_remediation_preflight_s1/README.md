@@ -1,6 +1,6 @@
 # task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1 - Bridge runtime remediation preflight
 
-<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 

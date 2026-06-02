@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 |
-| PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-02T06:08:00Z: Accepted task285 after #349 merged; preparing bounded Qwen3-4B two-GPU max SFT smoke attempt with fail-closed base-load/import and dependency checks. |
+| PR | Pending |
+| Session | 3 |
+| Last Update | 2026-06-02T14:45:00Z: Packaging task285 retry3 PASS smoke evidence into a clean task285 PR and mailbox report; no further task285 retry/training per lead pause. |

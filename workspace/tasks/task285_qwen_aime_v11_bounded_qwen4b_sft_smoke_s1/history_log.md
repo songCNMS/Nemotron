@@ -1,6 +1,6 @@
 # task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 74 - Assigned
 
@@ -32,3 +32,42 @@
 - Boundaries acknowledged: no live canary, AIME/task243 eval, export, endpoint,
   promotion, AIME2025 train data, task255 reuse, shared deletion, main push,
   unapproved merge, 30B, or 8-GPU.
+
+## Session 2 - Bounded smoke evidence packaged
+
+- Completed fail-closed pre-optimizer checks on task-owned NemTron run
+  `run_20260602T061036Z`, including task276 packed data readiness and two-GPU
+  bounds.
+- Produced Bridge-approved Qwen3-4B base import proof before optimizer
+  execution: `BRIDGE_IMPORT_RC=0` for
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/qwen3_4b_bridge_import_iter0`.
+- Retry3 ran the bounded Qwen3-4B SFT smoke on `CUDA_VISIBLE_DEVICES=0,1`
+  with `train_iters=2`, `optimizer.lr=5e-7`, `optimizer.min_lr=1e-7`,
+  `scheduler.lr_warmup_iters=0`, and `scheduler.lr_decay_iters=2`.
+- Optimizer-step evidence: iteration 1 LR `3.000000E-07`, loss
+  `1.506399E+00`, grad norm `24.782`, skipped/nan iterations `0`; iteration 2
+  LR `1.000000E-07`, loss `8.874496E-01`, grad norm `33.138`,
+  skipped/nan iterations `0`.
+- Checkpoint evidence: latest checkpointed iteration `2`, checkpoint root
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3`,
+  size `105G`, with 34 inventoried files/checksums.
+- Classification: `PASS_SMOKE_EVIDENCE_WITH_POST_TRAIN_EVAL_RC1_RISK`.
+  The command returned `SMOKE_RETRY3_COMMAND_RC=1` only after completing the
+  bounded training/checkpoint save and entering the built-in validation path,
+  where the task-owned process received SIGTERM during `Evaluating iter 1/32`.
+- No further task285 retry/training attempts launched after lead pause. No live
+  canary, AIME/task243 eval, export, endpoint, promotion, AIME2025 train data,
+  task255 reuse, shared deletion, main push, 30B, or 8-GPU action occurred.
+
+## Session 3 - Official report packaging
+
+- Honored lead pause after read-only gate update: no further task285 retry,
+  training, canary, AIME/task243 eval, export, endpoint, promotion, 30B, or
+  8-GPU action was launched.
+- Cleaned the task285 branch scope so the PR diff carries task285 report/docs
+  and worker status only; task283 closeout noise is removed from the final PR
+  diff against `main`.
+- Prepared official mailbox report fields: branch/head/PR, artifact root,
+  Bridge import proof, retry3 script/log hashes, checkpoint root/size/latest
+  iteration/checksum manifest, two-step LR/loss/skipped/nan evidence, and the
+  post-train built-in validation SIGTERM/RC=1 residual risk.

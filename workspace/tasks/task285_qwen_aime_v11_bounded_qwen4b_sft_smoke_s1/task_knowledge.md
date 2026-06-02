@@ -1,6 +1,6 @@
 # task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -17,3 +17,8 @@
 5. Even a task285 PASS only enables independent review and a separate canary gate;
    it does not authorize AIME/task243 eval, export, endpoint, promotion, 30B, or
    8-GPU scale.
+6. task285 retry3 produced bounded smoke evidence despite command rc `1`:
+   the two permitted optimizer iterations completed with nonzero LR, finite
+   losses, and iter-2 checkpoint artifacts before the process was terminated in
+   post-train built-in validation. Treat the checkpoint as smoke evidence with
+   residual post-train eval/SIGTERM risk, not as quality or promotion evidence.

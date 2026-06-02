@@ -1,6 +1,6 @@
 # task283 Bridge Runtime Remediation Preflight Report
 
-<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Disposition
 
