@@ -1,6 +1,6 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Working,TASK=task275_qwen_aime_v11_session40_runbook_update_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task282_qwen_aime_v11_runbook_provenance_pipeline_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task275_qwen_aime_v11_session40_runbook_update_s1 |
-| PR | #340 |
-| Session | 1 |
-| Last Update | Opened PR #340 for task275 Session 40 runbook/provenance update; report recommends PASS for import/preflight proof update while global V11 gate remains `NO-GO/HOLD`. |
+| Current Task | task282_qwen_aime_v11_runbook_provenance_pipeline_s1 |
+| PR | #348 |
+| Session | 4 |
+| Last Update | Refreshed PR #348 for remote visibility against current main `2803922`: recorded #347/task278 merged blocker docs, task279 blocker-evidence approval, task283 accepted head `c1d988e`, and task284 accepted/cleaned head `27d28b5` while global V11 execution remains `NO-GO/HOLD`. |
