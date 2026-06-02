@@ -1,6 +1,6 @@
 # task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1 - 30B salvage non-AIME canary
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 
@@ -134,3 +134,20 @@ or make any promotion/export/endpoint claim.
 - Related PRs: #362, #366
 - Next gate: corrected AIME2025 same-harness FT-vs-base comparison remains
   blocked until this task passes and lead explicitly assigns the AIME task.
+
+## Worker Closeout
+
+- Report:
+  `workspace/tasks/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/30b_salvage_non_aime_canary_report.md`.
+- Evidence source head:
+  `d8e58461ca1cede2569589f95414c360e0ddd9bc`.
+- Run root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
+- NemTron run root:
+  `/root/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
+- Disposition: `PASS` for the bounded synthetic non-AIME canary only.
+- Metrics: `5/5` completions retained, `5/5` expected-answer matches, `0`
+  empty, `0` mixed-script, `0` degeneration.
+- Boundaries remained unchanged: no training, no AIME2025/task243 eval, no AIME
+  train data, no task255, no export, no endpoint, no promotion, no shared
+  deletion, no main push/merge.

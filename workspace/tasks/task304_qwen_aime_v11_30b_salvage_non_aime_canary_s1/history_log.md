@@ -29,3 +29,25 @@
   eval, no AIME2025 train data, no task255 reuse, no promotion, no shared
   deletion, no main push/merge, and no export/endpoint without stopping for
   lead authorization.
+
+## Session 1 - 2026-06-02 UTC - canary PASS evidence
+
+- Added 30B distributed no-export/no-endpoint canary runner and pushed source
+  head `d8e58461ca1cede2569589f95414c360e0ddd9bc`.
+- Resolved prompt source to
+  `src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_v11_export_load_canary_prompts.yaml`
+  with sha256
+  `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`.
+- First run `run_20260602T174849Z` blocked before generation because
+  `load_megatron_model` built a 1x model config and MCore distributed
+  checkpoint validation rejected the sharded tensor access pattern.
+- Retried within task bounds by passing explicit `mp_overrides` matching the
+  task301 checkpoint parallelism: `TP=4`, `PP=2`, `CP=1`, `EP=4`, `ETP=1`,
+  sequence parallel enabled, no parameter initialization.
+- Successful run: `run_20260602T175458Z`, NemTron 8x H200, no export, no
+  endpoint, no training, no AIME/task243.
+- Disposition: `PASS`; checkpoint load `PASS`; retained completions `5/5`;
+  exact expected-answer matches `5/5`; empty `0`; mixed-script `0`;
+  degeneration `0`; remote return code `0`; GPUs returned to `1 MiB`, `0 %`.
+- Report added at
+  `workspace/tasks/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/30b_salvage_non_aime_canary_report.md`.

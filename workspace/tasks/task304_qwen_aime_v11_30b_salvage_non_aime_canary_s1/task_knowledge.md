@@ -20,3 +20,16 @@
 7. Worker branch starts from `origin/main`
    `c94216b04bc3d71577391883d0cb76aa8c95e621`; task docs came from lead branch
    `b390ac734380b51db7226ebc0890b3778e144b5c`.
+8. The accepted synthetic non-AIME prompt source for task304 is
+   `src/nemotron/recipes/super3/milestones/m1_eval_basket/qwen_v11_export_load_canary_prompts.yaml`
+   sha256 `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`.
+9. For the 30B task301 checkpoint, `load_megatron_model` must receive explicit
+   `mp_overrides` matching the checkpoint parallelism. Without this, the wrapper
+   resets model parallelism to 1x and MCore distributed checkpoint validation
+   fails on sharded tensor access patterns before generation.
+10. Successful task304 canary evidence is under
+    `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`
+    and remote
+    `/root/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
+    It is a bounded non-AIME canary PASS only, not AIME/task243 or promotion
+    clearance.
