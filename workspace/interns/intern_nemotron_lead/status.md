@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Session 74 full-pipeline attempt split: task278 active no-training preflight; task280/task281 no-run HOLD; no training/eval released |
+| PR | Session 74 tasks278-282 assigned; task278 active no-training preflight; no training/eval released |
 | Session | 74 |

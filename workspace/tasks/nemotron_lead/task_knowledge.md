@@ -544,3 +544,6 @@
 201. task280 and task281 are no-run planning HOLD tasks; they do not authorize
    training, live canary, AIME/task243 eval, export, endpoint, promotion, or
    30B/8-GPU.
+202. Session 74 accept-task peer messages are subordinate to task docs. If a
+   worker sees duplicate accept-only messages, they do not broaden scope or
+   release training/eval.
