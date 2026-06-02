@@ -1,6 +1,6 @@
 # task276_qwen_aime_v11_rematerialize_packed_qwen_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - Assigned
 
@@ -95,3 +95,21 @@
 - No training, nonzero-LR smoke, live canary, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, main
   push, or 30B/8-GPU action was performed.
+
+## Session 3 - Approved self-merge closeout
+
+- Received lead gate release for task276/#344 after worker_4/task277 approved
+  packed data/packing evidence only.
+- Verified immediately before merge that PR #344 was `OPEN`, base `main`,
+  `CLEAN`, `MERGEABLE`, and at exact approved head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+- Self-merged PR #344 through GitHub PR merge. Merge timestamp:
+  `2026-06-02T04:19:38Z`; merge commit:
+  `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`; merged head:
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+- Scope remained docs/status/report and data/packing evidence only. No training,
+  nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, lead/main push, or
+  30B/8-GPU action was performed.
+- Wrote branch-only Session 3 closeout after preserving the exact approved PR
+  head for merge.

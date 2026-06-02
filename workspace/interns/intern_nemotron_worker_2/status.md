@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task276_qwen_aime_v11_rematerialize_packed_qwen_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task276_qwen_aime_v11_rematerialize_packed_qwen_s1 |
+| Current Task | |
 | PR | #344 |
-| Session | 2 |
-| Last Update | 2026-06-02T04:03:28Z: Reconciling task276/#344 mailbox visibility with lead follow-up; no-training packed_qwen evidence remains ready for review and no prohibited actions were run. |
+| Session | 3 |
+| Last Update | 2026-06-02T04:19:38Z: Merged task276/#344 at approved head 07efab4; task completed and worker returned to Idle. |

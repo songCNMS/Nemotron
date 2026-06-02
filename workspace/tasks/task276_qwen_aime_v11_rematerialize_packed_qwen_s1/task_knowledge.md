@@ -1,6 +1,6 @@
 # task276_qwen_aime_v11_rematerialize_packed_qwen_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -27,3 +27,7 @@
    artifact remains
    `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`;
    no new packing, training, evaluation, export, or promotion action was run.
+8. PR #344 merged at approved exact head
+   `07efab4fa0d8367e96f54af3d2cdc70768d73595` with merge commit
+   `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`; the merge is evidence-only and
+   keeps the global Qwen AIME gate in `NO-GO/HOLD`.
