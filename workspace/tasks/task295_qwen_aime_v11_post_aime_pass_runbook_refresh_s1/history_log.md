@@ -32,3 +32,13 @@
   `c2c217231c9d377430171166c85d1165ac75db69`. worker_5 was notified to
   self-merge only if that exact head remains CLEAN/MERGEABLE at merge time and
   to report mergedAt, mergeCommit, and merged head.
+- Observed #351 MERGED at `2026-06-02T11:35:48Z` with merge commit
+  `5d8b8d850d26e785332f8b707c772d99881a1b5d` from approved head
+  `c2c217231c9d377430171166c85d1165ac75db69`; origin/main advanced to
+  `5d8b8d85...`.
+- Rechecked #351 merge scope: docs/provenance/status only, and
+  `git diff --check 31a3e962544202954f0afba211888f7414b38d7c..5d8b8d850d26e785332f8b707c772d99881a1b5d`
+  passes.
+- Observed worker_5 branch-only closeout head `e9cfbb13...`, which records the
+  guarded merge command and marks worker_5 Idle; no closeout mailbox has arrived
+  yet, but the branch closeout matches the GitHub PR state.

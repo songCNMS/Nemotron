@@ -1109,3 +1109,12 @@
    head `c2c2172...` while CLEAN/MERGEABLE. This is docs/provenance closeout
    only; export, endpoint, promotion, further training/eval, task255 reuse,
    AIME2025 train data, shared deletion, 30B, and 8-GPU remain unauthorized.
+346. #351 merged at `2026-06-02T11:35:48Z` with merge commit
+   `5d8b8d850d26e785332f8b707c772d99881a1b5d` from approved head
+   `c2c217231c9d377430171166c85d1165ac75db69`. This completes task295/runbook
+   provenance closeout in main. It is documentation/provenance only and does
+   not authorize export, endpoint, promotion, further training/eval, task255
+   reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU.
+347. worker_5 branch-only closeout head `e9cfbb13...` is status/history/task
+   knowledge closeout only; #351 merged evidence remains approved head
+   `c2c2172...` and merge commit `5d8b8d85...`.

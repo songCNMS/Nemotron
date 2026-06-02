@@ -5907,3 +5907,17 @@
   `c2c217231c9d377430171166c85d1165ac75db69` and CLEAN/MERGEABLE at merge
   time. Sent worker_5 a delivered peer message with that condition and requested
   merge closeout with mergedAt, mergeCommit, and merged head.
+- Fetched after worker_5 self-merge: #351 is MERGED at `2026-06-02T11:35:48Z`
+  with merge commit `5d8b8d850d26e785332f8b707c772d99881a1b5d` from the
+  approved head `c2c217231c9d377430171166c85d1165ac75db69`; origin/main is now
+  `5d8b8d85...`.
+- Rechecked #351 merge scope from previous main `31a3e962...` to
+  `5d8b8d85...`: diff is worker_5 status, task266 carried runbook report, and
+  task289/task295 runbook/provenance docs only; `git diff --check` passes.
+- Observed worker_5 branch-only closeout head `e9cfbb13...` after the merge.
+  Diff from approved PR head is worker_5 status plus task289 history and task
+  knowledge closeout only. The branch records guarded command
+  `gh pr merge 351 --merge --match-head-commit c2c217231c9d377430171166c85d1165ac75db69`
+  and confirms no runtime, training, canary, AIME re-eval, task243 eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+  30B, 8-GPU, or artifact mutation action was performed.

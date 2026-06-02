@@ -1,6 +1,6 @@
 # task295_qwen_aime_v11_post_aime_pass_runbook_refresh_s1 - post-AIME runbook refresh
 
-<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_5,SESSION=76 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=76 -->
 
 ## Background
 
@@ -16,7 +16,7 @@ metric pass for task285 Qwen3-4B iter2:
 
 The pass does not authorize export, endpoint, promotion, 30B, or 8-GPU.
 Worker_3 official closeout, task293 merge, and task294 independent review have
-now been processed; task295/#351 is the docs/provenance closeout gate.
+now been processed; task295/#351 completed the docs/provenance closeout gate.
 
 ## Goal
 
@@ -60,7 +60,10 @@ current post-AIME state, including the remaining gate holds and residual risks.
 
 ## Expected Output
 
-- Updated #351 or a new task295 PR.
+- Updated #351 or a new task295 PR. Completed via #351 merged at
+  `2026-06-02T11:35:48Z`, merge commit
+  `5d8b8d850d26e785332f8b707c772d99881a1b5d`, from approved head
+  `c2c217231c9d377430171166c85d1165ac75db69`.
 - Official mailbox report with:
   - branch/head/PR;
   - whether #351 was refreshed or superseded;
