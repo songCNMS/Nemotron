@@ -28,6 +28,7 @@
   shared task266 runbook to record #344/task276 packed root, sparse valid/test
   risk, task278 preflight, task279 review, task280 planning hold, and task281
   planning hold.
+- Opened PR #348 for this runbook/provenance update.
 - Boundary kept: no training, nonzero-LR smoke, live canary, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or 30B/8-GPU action.

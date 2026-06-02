@@ -63,6 +63,7 @@ AIME comparison, and future closeout.
   disposition remains `NO-GO/HOLD` for training, live canary, AIME/task243
   eval, promotion, endpoint, export, task255 reuse, AIME2025 train data, shared
   deletion, and 30B/8-GPU.
+- PR: #348.
 
 ## Assignment
 
