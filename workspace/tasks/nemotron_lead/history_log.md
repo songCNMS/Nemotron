@@ -5054,3 +5054,28 @@
   exact task285 evidence. No canary, AIME/task243 eval, export, endpoint,
   promotion, AIME2025 train data, task255 reuse, shared deletion, 30B, or
   8-GPU action is authorized.
+
+## Session 74 - post-merge worker closeouts processed
+
+- Processed worker_2 task283/#349 merge closeout mailbox
+  `3a57f4a88d0e438dae9f1dc0f8623267`: worker_2 verified #349 was
+  open/base `main`/clean at exact approved head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349` immediately before self-merge.
+  Merge facts match lead verification: merged at `2026-06-02T06:03:58Z`,
+  merge commit `f82f8f73c39bc93ff268f45845a94060585b8290`.
+- worker_2 pushed post-merge task283 branch-only closeout at
+  `0b25d5ef00faf8313710d79f5ea82fd6d8142f5b`; it is Completed/status/personal
+  knowledge metadata after the PR merge and is not part of the merged #349
+  evidence.
+- Processed worker_4 task286 acceptance mailboxes
+  `1aa1d0d546984c59a911578891157b3b` and
+  `7abaeb1720d641caa618b72f57ad6314`: task286 acceptance branch is visible at
+  `39ae82afc113a48875eca59bb3f99bcbd98afe6b`; branch diff against
+  `origin/main` is worker_4 status plus task286 README/history/task_knowledge
+  only, and `git diff --check` passed.
+- Independent current checks found no task285 PR, no task285 remote branch, and
+  no worker_2 task285 output root yet. task286 remains HOLD for substantive
+  review until task285 official branch/PR/artifact or exact blocker arrives.
+- Global gate remains held: no live canary, corrected AIME2025/task243 eval,
+  export, endpoint, promotion, AIME2025 train data, task255 reuse, shared
+  deletion, 30B, or 8-GPU action is authorized.

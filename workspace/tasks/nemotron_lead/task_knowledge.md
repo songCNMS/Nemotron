@@ -720,3 +720,9 @@
 247. worker_4 task284 branch `55babea5...` is branch/status/docs closeout only;
    the authoritative gate decision remains the mailbox APPROVE for #349 exact
    head and does not add training/eval clearance.
+248. worker_2 task283 branch `0b25d5e...` is post-#349 branch-only closeout and
+   is not part of merged evidence; #349 merged evidence remains head
+   `2d042ced...` and merge commit `f82f8f73...`.
+249. worker_4 accepted task286 on branch `39ae82a...`; task286 is HOLD until
+   task285 official evidence exists. Current lead checks found no task285 PR,
+   no task285 remote branch, and no worker_2 task285 output root.

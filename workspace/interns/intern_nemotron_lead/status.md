@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #349/task283 MERGED f82f8f73; task285 released to worker_2 fail-closed; task286 review waiting; no canary/AIME/export/promotion/30B |
+| PR | #349/task283 MERGED f82f8f73; task285 released, no branch/PR/output yet; task286 accepted at 39ae82a; no canary/AIME/export/promotion/30B |
 | Session | 74 |
