@@ -39,6 +39,8 @@
   empty despite decodable generated token ids.
 - Sent mailbox report `2859a46c6db94679ae1ec64177120dee` to lead with
   decision `APPROVE_CANARY_ROUTE_PASS` for non-AIME canary route evidence only.
+- Opened docs/status review PR #355:
+  `https://github.com/songCNMS/Nemotron/pull/355`.
 - No canary run, training, AIME/task243 eval, export, endpoint launch,
   promotion, task255 reuse, shared deletion, main push, merge, 30B, or 8-GPU
   action was performed.

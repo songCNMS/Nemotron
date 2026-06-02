@@ -15,6 +15,8 @@
   `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`
 - Mailbox report:
   `2859a46c6db94679ae1ec64177120dee`
+- Review PR:
+  `https://github.com/songCNMS/Nemotron/pull/355`
 
 This approval is for task291 non-AIME no-export/no-endpoint canary route
 evidence only. It does not authorize AIME/task243 eval, export, endpoint,
