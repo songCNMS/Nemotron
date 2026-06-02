@@ -1706,3 +1706,7 @@
    rank logs still end at `generation_batch_start` for `start_index=1`; no rc,
    final task306 artifacts, blocker, PR, or mailbox report exists. Local final-
    named files observed so far are only copied task300 base input artifacts.
+484. Session 98: task306 remains active after about twenty-eight minutes; batch
+   1 completed in about 708s, batch 2 started, and log progress reached `2/30`
+   with `aime_01_r01` and `aime_02_r01` parsed/correct. Still no rc, final
+   task306 artifacts, blocker, PR, or official mailbox report.

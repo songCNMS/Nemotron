@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
 
 ## Knowledge Entries
 
@@ -61,3 +61,6 @@
 20. Session 97: active run still has no rc or final task306 artifacts; rank
    logs remain at batch 1 start, and final-named local files are copied task300
    base inputs rather than task306 outputs.
+21. Session 98: active run progressed to `2/30`; batch 1 latency was about
+   708s and batch 2 started. No rc, final task306 artifacts, blocker, PR, or
+   official worker report exists yet.
