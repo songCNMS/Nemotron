@@ -6,3 +6,4 @@
   evidence and before task287 canary completion.
 - Assigned to worker_5 as docs/provenance only; no training, canary, AIME eval,
   export, endpoint, promotion, 30B, or 8-GPU action is allowed.
+- Sent delivered peer assignment to worker_5 with lead branch `3178c404`.

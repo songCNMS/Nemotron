@@ -5276,3 +5276,10 @@
   merge and task287/task288 dispatch, preserving the hard statement that
   corrected AIME2025 same-harness comparison remains blocked until task287 and
   lead gate pass.
+- Sent delivered peer assignment to worker_4 for task288 at lead branch
+  `3178c404`, with instruction to wait for exact task287 evidence and review
+  it read-only as approve/request-changes/block.
+- Sent delivered peer assignment to worker_5 for task289 at lead branch
+  `3178c404`, with instruction to update post-smoke runbook/provenance and
+  preserve no-clearance for AIME/task243, export, endpoint, promotion, 30B, and
+  8-GPU.

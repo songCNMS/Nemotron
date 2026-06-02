@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #350/task285 MERGED; task287 worker_3 active; task288/task289 assigned; AIME/export/promotion/30B still HOLD |
+| PR | #350/task285 MERGED; task287 worker_3 active; task288/task289 delivered; AIME/export/promotion/30B still HOLD |
 | Session | 75 |
