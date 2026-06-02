@@ -7681,3 +7681,25 @@
   visible yet.
 - Gate remains HOLD pending complete task306 artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
+
+## Session 109 - 2026-06-02 UTC - task306 active run progress 6/30
+
+- Rechecked task306 after Session 108:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch remote was `9226b47e9df078c631a205c396ed8f193c30d16e`;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- Worker-launched task306 NemTron process remains active after about sixty-three
+  minutes. Local and remote rc files remain absent.
+- Latest visible log progress advanced to `6/30`: `aime_01_r01` through
+  `aime_04_r01` parsed true/correct true, `aime_05_r01` length-stopped parsed
+  false/correct false, and `aime_06_r01` parsed true/correct true. This remains
+  partial unofficial progress only and is not a final FT score.
+- No task306 aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
