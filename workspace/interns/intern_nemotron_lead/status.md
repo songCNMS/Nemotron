@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task276 worker_2 acceptance branch visible at 745f78b; no PR/mailbox/artifact yet; gate NO-GO/HOLD |
+| PR | #344/task276 OPEN/CLEAN at 98d1bde; task277 independent review assigned to worker_4; gate NO-GO/HOLD |
 | Session | 73 |

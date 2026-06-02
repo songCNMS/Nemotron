@@ -4317,3 +4317,48 @@
 - task276 remains pending artifact production or exact blocker; no output root,
   packed Qwen manifest, counts/parity, Qwen contract proof, or AIME25 leakage
   proof exists yet.
+- Continued monitoring found task276 local artifact evidence under
+  `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z`.
+  Read-only observations included `DATA_PREP_RC=0`, `QWEN_CONTRACT_RC=0`,
+  `QWEN_PACKED_DATA_CONTRACT=PASS`, evidence manifest sha256
+  `74f3c58283eef46a3b8f63699d730baa90337b9a7177146822170c22ec29e9ee`, shard
+  checksum list sha256
+  `bb6107163f366334468b8db9b8e6ca74f8ddbd612f8b90d3e500e0efa3ba0312`, and
+  split manifest sha256
+  `65501e0eff31cce77ff2d1e36dd915f66fb6b2fd145e0f59701d251e5b7d02c5`.
+- Worker_2 pushed task276 report branch head
+  `afd206e986b11acd67cbd220eb05f6e563d10a4a` and opened PR #344
+  `Add task276 V11 packed Qwen rematerialization evidence`; GitHub reports #344
+  `OPEN`/base `main`/`CLEAN` at that head.
+- #344 report disposition is `PACKED_QWEN_READY_FOR_REVIEW`, with train 46
+  exposed shards / 279 packed rows / 1,024,646 input tokens / 228,927
+  supervised tokens, valid 1 shard / 1 packed row / 1,491 input tokens / 1,428
+  supervised tokens, intended-vs-exposed multiset parity PASS for train/valid/
+  test, no-AIME leakage PASS, and boundaries preserved. Residual risk: valid
+  split has only one packed hard-math row.
+- Worker_2 official mailbox closeout was still missing at the time of lead
+  recording, so lead sent a non-interrupting `next` follow-up requesting a
+  mailbox closeout for exact #344 head `afd206e` and did not approve or merge.
+- Created standard task docs for
+  `task277_qwen_aime_v11_task276_packed_qwen_review_s1`, assigned to
+  `intern_nemotron_worker_4`, for independent read-only review of #344. After
+  worker_2's official closeout arrived, lead updated the exact review head to
+  current #344 head `98d1bded1f365d1f38de1db676ad12f5c6489738`.
+- Worker_2 official mailbox closeout `556de1edacce4c9690d2c889b980b88f` reports
+  `PACKED_QWEN_READY_FOR_REVIEW` for #344 at
+  `98d1bded1f365d1f38de1db676ad12f5c6489738`; lead marked the message read.
+- GitHub reports #344 `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at
+  `98d1bded1f365d1f38de1db676ad12f5c6489738`, non-draft, no checks, blank
+  reviewDecision.
+- Lead compared `afd206e986b11acd67cbd220eb05f6e563d10a4a..98d1bded1f365d1f38de1db676ad12f5c6489738`
+  and found only `workspace/interns/intern_nemotron_worker_2/status.md`
+  changed; the task276 report remained unchanged. `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task276_qwen_aime_v11_rematerialize_packed_qwen_s1`
+  passed.
+- task277 scope: approve/request-changes/block for task276 data/packing
+  evidence only. It must not edit files, train, eval, export, launch endpoints,
+  promote, use AIME2025 train data, reuse task255, delete shared files, merge,
+  push main, or use 30B/8-GPU.
+- Global Qwen AIME gate remains `NO-GO/HOLD`: task276 evidence, even if
+  independently approved, can only unblock a later no-training config/import
+  preflight review.
