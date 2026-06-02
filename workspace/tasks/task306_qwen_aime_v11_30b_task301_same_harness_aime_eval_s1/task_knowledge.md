@@ -339,3 +339,8 @@
    active. No task306 FT final artifacts, blocker, PR, or official report
    exists. `start_index=22` is about thirteen minutes old at this check, so
    this is not yet hang evidence.
+97. Session 174: active run remains in progress after about two hundred
+   ninety-three minutes. Latest visible stdout progress still `22/30`, with
+   row 23 active. No task306 FT final artifacts, blocker, PR, or official
+   report exists. `start_index=22` is about seventeen minutes old at this
+   check, still near the observed long-row range and not yet hang evidence.

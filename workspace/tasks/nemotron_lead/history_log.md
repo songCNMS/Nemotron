@@ -8985,6 +8985,38 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 174 - 2026-06-02 UTC - task306 active run still 22/30
+
+- Rechecked current gate state after fetching origin:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch was
+    `0fae1330c52fd9ab0afa411835a9f506b72a45ac` before this tracking update;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`;
+  - worker_3 local status remains Working on task306 with PR `N/A`.
+- The worker-owned NemTron task306 process remains active after about two
+  hundred ninety-three minutes. Local and remote rc files remain absent.
+- Latest visible stdout progress remains `22/30`: rows 1-4, 6, 8, 16, 17, 18,
+  19, 21, and 22 are parsed true/correct true; row 5 length-stopped parsed
+  false/correct false; row 7 parsed true/correct false; row 9 length-stopped
+  parsed false/correct false; row 10 parsed true/correct false; rows 11-15
+  length-stopped parsed false/correct false; row 20 parsed true/correct false.
+  This remains partial unofficial progress only, not a final FT score.
+- Remote rank event logs still show all ranks completed `start_index=21` and
+  started `start_index=22`; no completion event or stdout progress for row 23
+  is visible yet. The `start_index=22` event is about seventeen minutes old at
+  this check, which is still near the previously observed long-row range and
+  is not yet hang evidence.
+- The local task306 run root has no synced `artifacts/` directory yet; the
+  remote `artifacts/` tree exists for rank logs but has no task306 FT aggregate
+  `summary.json`, `results.jsonl`, `full_completions.jsonl`,
+  `parser_diagnostics.jsonl`, `checksum_manifest.json`, blocker file, PR, or
+  official worker_3 report visible yet.
+- Gate remains HOLD pending complete task306 FT artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
+
 ## Session 173 - 2026-06-02 UTC - task306 active run still 22/30
 
 - Rechecked current gate state after fetching origin:
