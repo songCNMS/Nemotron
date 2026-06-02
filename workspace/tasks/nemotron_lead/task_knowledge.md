@@ -792,3 +792,7 @@
    closeout after #350 merged and is not part of merged evidence. The approved
    task285 evidence remains PR head `fc379240...` and merge commit
    `5d32f076...`.
+267. task287 worker_3 branch `aa5ff740...` is acceptance/status/task-docs only;
+   no canary PR/artifacts are visible yet. task288 is worker_4's read-only
+   review gate for eventual task287 evidence, and task289 is worker_5's
+   post-smoke runbook/provenance task. AIME/task243 remains blocked.

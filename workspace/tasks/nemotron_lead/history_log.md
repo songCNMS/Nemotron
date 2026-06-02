@@ -5262,3 +5262,17 @@
 - Sent delivered task287 assignment to worker_3 with lead docs pushed at
   `bb33e3ee`, origin/main `5d32f076...`, task285 iter2 checkpoint root, and
   strict no-export/no-endpoint/no-AIME/no-training/no-promotion/no-30B bounds.
+- Session 75 follow-up: fetched origin and verified worker_3 task287 branch is
+  visible at `aa5ff7408766e44cfdb073734cff1e836c2e4e17`. The branch is
+  acceptance/status/task-docs only; no task287 PR, canary output root, or
+  official artifact mailbox is visible yet. Worker_3 local status says Working
+  on task287 and investigating an allowed no-export/no-endpoint checkpoint-load
+  canary path or exact blocker.
+- Created task288 for worker_4 as independent read-only review of task287 once
+  exact task287 head/PR/artifact evidence exists. task288 must approve/request-
+  changes/block only the non-AIME canary gate and cannot run code, canary, AIME,
+  export, endpoint, promotion, 30B, or 8-GPU.
+- Created task289 for worker_5 to update runbook/provenance after #350 smoke
+  merge and task287/task288 dispatch, preserving the hard statement that
+  corrected AIME2025 same-harness comparison remains blocked until task287 and
+  lead gate pass.
