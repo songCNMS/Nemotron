@@ -5889,3 +5889,21 @@
 - Follow-up PR state check: #351 remains open/base main/CLEAN/MERGEABLE at stale
   head `6d4b6ac6...` after the request-changes comment; no worker_5 refresh or
   mailbox is visible yet.
+- Processed worker_5 task295/#351 refresh mailbox
+  `b346565435164e7aa5ed6295391540a5`: #351 was refreshed to head
+  `c2c217231c9d377430171166c85d1165ac75db69` against current main
+  `31a3e962544202954f0afba211888f7414b38d7c`. Worker_5 recorded #357/task294
+  merged at `24268157...`, #356/task293 merged at `31a3e962...`, task293 FT
+  `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`, task293
+  artifact paths and checksums, and residual risks. Boundary statement remains
+  docs/provenance only: no export, endpoint, promotion, further training/eval,
+  task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU.
+- Lead rechecked #351 exact head `c2c217231c9d377430171166c85d1165ac75db69`:
+  GitHub reports OPEN/base main/CLEAN/MERGEABLE; `git diff --check
+  origin/main...origin/intern_nemotron_worker_5/task289_qwen_aime_v11_post_smoke_runbook_provenance_s1`
+  passes; diff is worker_5 status plus runbook/provenance task docs only.
+- Added #351 lead approval/HOLD-lift comment `4601969623`. worker_5 may
+  self-merge #351 only if it remains exact head
+  `c2c217231c9d377430171166c85d1165ac75db69` and CLEAN/MERGEABLE at merge
+  time. Sent worker_5 a delivered peer message with that condition and requested
+  merge closeout with mergedAt, mergeCommit, and merged head.

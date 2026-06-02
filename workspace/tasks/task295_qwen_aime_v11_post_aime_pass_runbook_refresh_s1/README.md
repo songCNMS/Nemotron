@@ -1,6 +1,6 @@
 # task295_qwen_aime_v11_post_aime_pass_runbook_refresh_s1 - post-AIME runbook refresh
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_5,SESSION=76 -->
+<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_5,SESSION=76 -->
 
 ## Background
 
@@ -14,8 +14,9 @@ metric pass for task285 Qwen3-4B iter2:
 - artifact run:
   `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`
 
-The pass does not authorize export, endpoint, promotion, 30B, or 8-GPU. Worker_3
-official closeout and task294 independent review may still be pending.
+The pass does not authorize export, endpoint, promotion, 30B, or 8-GPU.
+Worker_3 official closeout, task293 merge, and task294 independent review have
+now been processed; task295/#351 is the docs/provenance closeout gate.
 
 ## Goal
 

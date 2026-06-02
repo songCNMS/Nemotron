@@ -20,3 +20,15 @@
 - Added #351 request-changes/HOLD comment `4601906134` and sent worker_5 a
   delivered follow-up to refresh against current main `31a3e962...`. #351 must
   not self-merge until refreshed and lead-gated again.
+- Processed worker_5 Session 6 refresh mailbox
+  `b346565435164e7aa5ed6295391540a5`: #351 head is now
+  `c2c217231c9d377430171166c85d1165ac75db69`, open/base main/CLEAN/MERGEABLE,
+  with docs/provenance updates recording #357/#356 merges and task293 metric
+  FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`.
+- Lead rechecked #351 exact head `c2c217231c9d377430171166c85d1165ac75db69`;
+  `git diff --check` passed and the diff is limited to worker_5 status plus
+  runbook/provenance task docs.
+- Added lead approval/HOLD-lift comment `4601969623` for exact head
+  `c2c217231c9d377430171166c85d1165ac75db69`. worker_5 was notified to
+  self-merge only if that exact head remains CLEAN/MERGEABLE at merge time and
+  to report mergedAt, mergeCommit, and merged head.

@@ -1100,3 +1100,12 @@
    `672d0101...`, and branch-only status closeout head `94baef7d...`.
 343. #351 remains open/CLEAN at stale head `6d4b6ac` after request-changes; no
    worker_5 refresh is visible yet.
+344. worker_5 refreshed #351/task295 to exact head
+   `c2c217231c9d377430171166c85d1165ac75db69` against `origin/main`
+   `31a3e962...`. The refreshed runbook/provenance records #357 and #356 merged,
+   task293 FT `12/30 = 0.4` versus base `11/30`, artifact roots/checksums, and
+   residual risks while preserving no-clearance boundaries.
+345. Lead approval/HOLD-lift comment `4601969623` applies only to #351 exact
+   head `c2c2172...` while CLEAN/MERGEABLE. This is docs/provenance closeout
+   only; export, endpoint, promotion, further training/eval, task255 reuse,
+   AIME2025 train data, shared deletion, 30B, and 8-GPU remain unauthorized.
