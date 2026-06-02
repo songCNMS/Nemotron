@@ -681,3 +681,19 @@
    must decide if this is enough for any bounded smoke release.
 237. #349 is on lead HOLD via comment `4599052046` pending task284 exact-head
    review of `caa907dea478ca6a738b1334d80758c5184b967c`.
+238. #349 current head is
+   `2d042cedb0c4cc448c89d57d7b18986d92361349`; the drift from `caa907de` is
+   worker_2 status metadata only. The task283 report and artifact hashes are
+   unchanged.
+239. Refreshed #349 HOLD comment is `4599066664`; task284 must review exact
+   head `2d042cedb0c4cc448c89d57d7b18986d92361349`.
+240. task283 official evidence reports
+   `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE` with manifest
+   sha `eaf06f61daa5c24e55d94f307abdc02f7870b3ea65d0edfa497625e58bc95ffd`,
+   final log sha `e62a06d815cc0a5f6fbdffd71f6e32668cb02c35b532718eeda2cb5329e790e4`,
+   and artifact inventory sha
+   `c524c25f91ca0e417b7e84e62ca890b4069d6957f066990799d51ba477a6c9b1`.
+241. Do not release task280 smoke until task284 reviews #349 current head and
+   lead processes approve/request-changes/block, especially because task283
+   residual risks include no checkpoint-load proof, `pip check` rc `1`, missing
+   `nvidia_resiliency_ext`, missing `lightning`, and sparse valid/test.

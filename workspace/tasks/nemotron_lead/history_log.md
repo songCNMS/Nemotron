@@ -4939,3 +4939,54 @@
   SFT smoke, live canary, AIME/task243 eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, lead merge, main push,
   or 30B/8-GPU is authorized.
+- Processed worker_2 task283 official report mailbox
+  `4fc13f1a685546b9a603193c049e1024`: PR #349, branch
+  `intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`,
+  originally reported at head `caa907dea478ca6a738b1334d80758c5184b967c`,
+  base `main`, `CLEAN`. Disposition is
+  `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`, explicitly
+  no-training and not an `AutoBridge.import_ckpt` checkpoint-load proof or
+  training/eval/export/promotion/30B clearance.
+- Worker_2 reported artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`,
+  final manifest sha256
+  `eaf06f61daa5c24e55d94f307abdc02f7870b3ea65d0edfa497625e58bc95ffd`,
+  final log sha256
+  `e62a06d815cc0a5f6fbdffd71f6e32668cb02c35b532718eeda2cb5329e790e4`,
+  artifact inventory sha256
+  `c524c25f91ca0e417b7e84e62ca890b4069d6957f066990799d51ba477a6c9b1`, and
+  package versions log sha256
+  `ded8567b6bbbe0084e7535504d5847498252b2ab651e37b56ef5d1aa2fb37fb2`.
+- Worker_2 reported no-training preflight pass details: fail-closed PASS, Qwen
+  HF config/tokenizer import PASS, packed chat contract PASS, training pipeline
+  contract PASS, `megatron.bridge.recipes.qwen.qwen3` import PASS, and Qwen
+  `ConfigContainer` build PASS with `seq_length=4096`, tensor parallel 2,
+  pipeline parallel 1, and `train_iters=1`/`global_batch_size=1` built but not
+  executed.
+- Worker_2 also reported residual risks: no `AutoBridge.import_ckpt` checkpoint
+  load/save proof, `pip check` rc `1`, full `stage1_sft.train` import missing
+  `nvidia_resiliency_ext`, `nemo.collections.llm` missing `lightning`, and
+  task276 valid/test sparsity. Boundary confirmation says no training loop,
+  optimizer step, checkpoint save, export, endpoint, live canary, AIME/task243
+  eval, promotion, task255 reuse, AIME2025 train data, shared deletion, main
+  push, merge, or 30B/8-GPU action was performed.
+- Processed worker_2 follow-up mailbox
+  `d676558a08d04eb98965f95cc820ec39`: #349 advanced from
+  `caa907dea478ca6a738b1334d80758c5184b967c` to current head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349` by status metadata only; task283
+  evidence report, logs, manifest hashes, artifacts, disposition, and
+  boundaries are unchanged. Lead marked both worker_2 mailboxes read.
+- Verified locally that `caa907de..2d042ce` changes only
+  `workspace/interns/intern_nemotron_worker_2/status.md`, and that
+  `origin/main...origin/intern_nemotron_worker_2/task283...` has clean diff
+  scope: worker_2 status plus task283 README/report/history/task_knowledge.
+  `git diff --check` passed.
+- Left refreshed #349 HOLD comment `4599066664` because the previous task284
+  review request targeted stale head `caa907de`. Sent delivered peer_send to
+  worker_4 instructing task284 to review exact current #349 head
+  `2d042cedb0c4cc448c89d57d7b18986d92361349`.
+- Current gate: #349 is open/clean at `2d042cedb0c4cc448c89d57d7b18986d92361349`
+  and not approved; task284 exact-head review is pending. No nonzero-LR SFT
+  smoke, live canary, AIME/task243 eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train data, shared deletion, lead merge, main push, or
+  30B/8-GPU is authorized.
