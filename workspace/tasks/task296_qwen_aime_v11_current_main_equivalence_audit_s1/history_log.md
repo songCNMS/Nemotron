@@ -41,6 +41,8 @@
   roots and matched the merged report values.
 - Decision recorded in
   `current_main_equivalence_audit_report.md`: `A_PROVED_NO_RERUN`.
+- Opened PR #359:
+  `https://github.com/songCNMS/Nemotron/pull/359`.
 - Carried residuals forward: task285 post-train built-in eval RC=1/SIGTERM,
   task276 sparse valid/test split, task292 detokenized fallback residual,
   task293 `sampling_exact_parameter_match=false`, and no promotion/export/
