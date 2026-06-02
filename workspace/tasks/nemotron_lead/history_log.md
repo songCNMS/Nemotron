@@ -3885,3 +3885,23 @@
 - Sent delivered peer_send to worker_2 requesting official task268 PR/mailbox
   closeout, and requesting that the self-checksum mismatch be fixed or
   explained before lead accepts the artifact as gate evidence.
+- Worker_2 advanced task268 to `0be80e294b4a7399d9cdefdb4ad61bc5c21fc861`
+  with `runtime_probe_report.md`, fixed helper output, and regenerated
+  `20260602T002457Z` artifacts. The corrected report sha256 is
+  `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80`; manifest
+  sha256 is `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`;
+  inventory sha256 is `37a7886cf4336c43cc657c27587b18b918041cc44221e8889bcebe9208fb2d92`.
+- The corrected task268 artifacts still report `NEMTRON_BRIDGE_RUNTIME_BLOCKED`:
+  Docker daemon unavailable for `nvcr.io/nvidia/nemo:26.02.nemotron_3_super`,
+  local `megatron`/`nemo` missing, Bridge import rc `1`, fail-closed preflight
+  rc `2`, and no positive Bridge/checkpoint-load proof.
+- #338 opened for task268 and is `OPEN`/base `main`/`CLEAN` at head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`; drift from
+  `0be80e294b4a7399d9cdefdb4ad61bc5c21fc861` is PR/status metadata-only.
+- Received and marked read worker_2 official task268 closeout mailbox
+  `1da04d3abab24d8e8bfa80d65ea12dbd`, confirming #338 `OPEN`/`CLEAN`,
+  corrected artifact checksums, `NEMTRON_BRIDGE_RUNTIME_BLOCKED`, and all
+  no-training/no-eval/no-promotion boundaries.
+- Created task269 `task269_qwen_aime_v11_task268_bridge_blocker_review_s1`,
+  assigned to `intern_nemotron_worker_4`, for independent read-only review of
+  #338 exact head `49e3728a8751909cc041110acd0e9212059dc6c5`.

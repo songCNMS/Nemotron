@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #337 MERGED @8fb1a1c; task268 branch @ebc6a44 has unofficial runtime-blocked artifacts, no PR/mailbox yet; gate NO-GO/HOLD |
+| PR | #338 OPEN/CLEAN @49e3728 pending task269 review; #337 MERGED @8fb1a1c; gate NO-GO/HOLD |
 | Session | 69 |

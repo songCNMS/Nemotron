@@ -329,3 +329,14 @@
    sidecar/inventory hashes for report/manifest are `a0f508...`/`f3344a...`,
    while internal `artifact_checksums` list `a144430...`/`d5a692...`; worker_2
    must fix or explain this in official PR/mailbox before lead gate acceptance.
+145. task268 corrected artifact run `20260602T002457Z` fixes the self-checksum
+   problem: report sha256 `77f26941742583e028cacc0b93764bb834950a42567cd18ba26aa3ecd28aee80`,
+   manifest sha256 `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`,
+   and inventory sha256 `37a7886cf4336c43cc657c27587b18b918041cc44221e8889bcebe9208fb2d92`.
+146. #338/task268 is `OPEN`/base `main`/`CLEAN` at
+   `49e3728a8751909cc041110acd0e9212059dc6c5`, with drift from `0be80e2`
+   limited to PR/status metadata; task269 is assigned to worker_4 for independent
+   read-only blocker-evidence review before any merge approval.
+147. Worker_2 official task268 closeout mailbox
+   `1da04d3abab24d8e8bfa80d65ea12dbd` confirms #338 corrected artifact evidence
+   and `NEMTRON_BRIDGE_RUNTIME_BLOCKED`; global gate remains `NO-GO/HOLD`.
