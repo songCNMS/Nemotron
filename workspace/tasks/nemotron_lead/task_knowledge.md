@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
 
 ## Knowledge Entries
 
@@ -417,3 +417,14 @@
    blocked even though the local team lead lifecycle task must remain Working.
    The unblocking event is concrete runtime access for a no-training Qwen3-4B
    Bridge/checkpoint-load proof.
+167. Coordinator Session 40 reports that the concrete runtime-access unblock has
+   happened for the no-training import/preflight path: NemTron user-site NeMo is
+   available, `AutoBridge.import_ckpt` is present, Bridge import wrote
+   `IMPORT_DONE` and `BRIDGE_IMPORT_RC=0`, and fail-closed preflight wrote
+   `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+168. Session 40 clears only the Bridge import/preflight runtime blocker. It does
+   not authorize training, nonzero-LR smoke, live AIME/task243 eval, export,
+   endpoint, promotion, task255 reuse, AIME2025 train data, or 30B/8-GPU.
+169. After runtime proof appears, split the next gate across workers: independent
+   proof review, post-Bridge pilot readiness planning, eval-gate continuity,
+   data safety readiness, and runbook/provenance update.

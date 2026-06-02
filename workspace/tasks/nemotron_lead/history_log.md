@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
 
 ## Session 0 - Created with team lead
 
@@ -2869,7 +2869,7 @@
 - #331 and #329 remain `HOLD` pending task259; global Qwen AIME gate remains
   `NO-GO/HOLD`, no promotion, no 30B/8-GPU.
 
-## Session 71 - 2026-06-01 UTC - task259 acceptance observed
+## Archived Session 71 - 2026-06-01 UTC - task259 acceptance observed
 
 - Read lead mailbox; no unread messages were present.
 - Fetched origin and verified PR state:
@@ -4072,3 +4072,38 @@
 - The thread-level goal blocker audit threshold is now satisfied by repeated
   identical monitor turns, but the local `nemotron_lead` lifecycle task remains
   `Working`/InProgress by team rule.
+
+## Session 71 - 2026-06-02 UTC - Session 40 runtime proof task split
+
+- Received coordinator Session 40 runtime-unblock report: `nemo-toolkit==2.7.3`
+  was installed on NemTron user site under
+  `/root/.local/lib/python3.12/site-packages`, and a no-training Qwen3-4B Bridge
+  import/fail-closed preflight run was executed from fresh origin/main sync.
+- Read-only lead review of coordinator evidence root
+  `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`
+  found the reported evidence files and markers:
+  `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`,
+  `BRIDGE_IMPORT_RC=0`, and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+- Recorded coordinator-reported proof details: remote run
+  `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z`,
+  imported checkpoint root `qwen3_4b_bridge_import_iter0`, manifest size `7.5G`,
+  and evidence shas for bridge import, fail-closed preflight, symbol preflight,
+  and remote checkpoint manifest.
+- Created standard task docs for all active workers because the runtime blocker
+  changed and there is bounded, non-conflicting follow-up work:
+  - task271 assigned to `intern_nemotron_worker_4`: independent Session 40
+    Bridge proof review/tester gate.
+  - task272 assigned to `intern_nemotron_worker_2`: no-training post-Bridge
+    Qwen3-4B V11 pilot readiness plan and dependency classification.
+  - task273 assigned to `intern_nemotron_worker_3`: corrected AIME2025 eval
+    gate continuity review.
+  - task274 assigned to `intern_nemotron_worker_1`: V11 data safety/readiness
+    review.
+  - task275 assigned to `intern_nemotron_worker_5`: Session 40 runbook/provenance
+    update.
+- Boundaries for all tasks: no SFT training, nonzero-LR smoke, live
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, 30B/8-GPU, merge, or main push. Session 40 clears only
+  the prior runtime-route blocker for positive Bridge import/preflight proof;
+  global Qwen AIME gate remains `NO-GO/HOLD` pending worker evidence and later
+  same-harness FT-vs-base comparison.
