@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -14,3 +14,6 @@
    PR, or merged task dir, so task301 must remain fail-closed before launch.
 5. Never start task301 30B SFT until task298 PASS, task299 PASS, and task300
    30B base-score artifact are all recorded with exact heads/artifact paths.
+6. PR #362 is the task301 acceptance/blocker report PR. Current disposition is
+   `BLOCKED_UPSTREAM_GATES_MISSING`; this is expected until upstream gates are
+   visible and lead clears the sequence.

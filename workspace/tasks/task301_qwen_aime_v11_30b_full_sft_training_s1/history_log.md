@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -28,3 +28,18 @@
 - Boundaries preserved: no task255 reuse, no AIME2025 train data, no deletion
   under `/mnt/cephfs/data/processing/lei.song`, no export, no endpoint, no
   promotion, no main push, no merge, no 30B training, and no 8-GPU execution.
+
+## Session 2 - 2026-06-02 UTC - pushed branch and opened PR
+
+- Pushed branch
+  `intern_nemotron_worker_5/task301_qwen_aime_v11_30b_full_sft_training_s1`
+  to origin at head `b513d769`.
+- Opened PR #362 against `main`.
+- Updated worker status with PR #362 and retained launch disposition
+  `BLOCKED_UPSTREAM_GATES_MISSING`.
+- Did not start 30B training because task298 PASS, task299 PASS, and task300
+  30B base-score artifact remain absent from visible branches, PRs, and
+  `origin/main` task dirs.
+- No task255 reuse, AIME2025 train data, shared deletion, export-promotion,
+  endpoint-promotion, main push, merge, 30B training, or 8-GPU execution was
+  performed.

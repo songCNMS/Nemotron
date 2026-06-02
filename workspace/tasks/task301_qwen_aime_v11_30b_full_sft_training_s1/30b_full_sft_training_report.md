@@ -24,6 +24,7 @@ to hold launch and report the blocker.
 | Item | Value |
 |---|---|
 | Worker branch | `intern_nemotron_worker_5/task301_qwen_aime_v11_30b_full_sft_training_s1` |
+| PR | #362 `https://github.com/songCNMS/Nemotron/pull/362` |
 | Branch base | `origin/main` `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7` |
 | Lead docs source | `origin/intern_nemotron_lead/session1-recovery-task-docs` `676d85563e00dfb665b6a911995bd47b4932c370` |
 | Task docs path | `workspace/tasks/task301_qwen_aime_v11_30b_full_sft_training_s1/` |
