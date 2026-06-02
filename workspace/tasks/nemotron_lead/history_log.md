@@ -4897,3 +4897,45 @@
   Qwen AIME V11 gate remains task283 official no-training runtime evidence or
   exact blocker, followed by task284 review. No training/eval/promotion/30B
   action is released.
+- Processed worker_5 mailbox
+  `e39180e5aef8450fa8c300d2092678fd`: worker_5 confirmed #348 merged at
+  `2026-06-02T05:36:00Z` with merge commit
+  `3dc19dbd889ac0554e73c51a43b4ecb27b210920` from merged head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`, and pushed branch-only closeout
+  `origin/intern_nemotron_worker_5/task282_qwen_aime_v11_runbook_provenance_pipeline_s1_closeout_s5`
+  at `11229b6026a701cb469de23a55711779d7037e0d`. Lead marked the mailbox read.
+- Fetched task283 updates and observed #349/task283 is now `OPEN`/base `main`/
+  `CLEAN`/`MERGEABLE` at head
+  `caa907dea478ca6a738b1334d80758c5184b967c`. The previous #349 head
+  `d5315c60cb776ecf07dc87422f369b85ddb10754` advanced to `caa907de` by
+  worker_2 status metadata only; the task283 report content is unchanged.
+- Verified #349 diff scope: worker_2 status plus task283 README/history/
+  task_knowledge and `bridge_runtime_remediation_preflight_report.md`;
+  `git diff --check origin/main...origin/intern_nemotron_worker_2/task283...`
+  passed.
+- Read official task283 report at #349 head `caa907de`. Claimed disposition is
+  `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`, with local
+  artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`,
+  manifest sha256
+  `eaf06f61daa5c24e55d94f307abdc02f7870b3ea65d0edfa497625e58bc95ffd`, final
+  log sha256 `e62a06d815cc0a5f6fbdffd71f6e32668cb02c35b532718eeda2cb5329e790e4`,
+  and artifact inventory sha256
+  `c524c25f91ca0e417b7e84e62ca890b4069d6957f066990799d51ba477a6c9b1`.
+- Task283 reported Qwen recipe import PASS, Qwen recipe `ConfigContainer` build
+  PASS, Qwen HF config/tokenizer PASS, Qwen packed/training contracts PASS,
+  task276 data readability PASS, and fail-closed no-training/no-checkpoint-save
+  proof. It also explicitly reports no `AutoBridge.import_ckpt` checkpoint-load
+  proof, `pip check` rc `1`, `stage1_sft.train` still failing on missing
+  `nvidia_resiliency_ext`, `nemo.collections.llm` still failing on missing
+  `lightning`, and task276 sparse valid/test risk.
+- Left #349 lead HOLD comment `4599052046` and sent delivered exact-head
+  task284 review request to worker_4 for #349 head
+  `caa907dea478ca6a738b1334d80758c5184b967c`. Requested approve/
+  request-changes/block for no-training runtime/config/import evidence only and
+  asked worker_4 to evaluate whether the residual risks still block any
+  lead-released bounded Qwen3-4B nonzero-LR smoke.
+- Gate state: #349 is not approved; task284 review is pending. No nonzero-LR
+  SFT smoke, live canary, AIME/task243 eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, lead merge, main push,
+  or 30B/8-GPU is authorized.

@@ -667,3 +667,17 @@
    `19024996b9eb1327e0566fa6c16a76b4ba3c1460`. It is docs/runbook provenance
    only and does not release task283 execution beyond its no-training scope or
    any task280/task281 live action.
+234. worker_5 task282 branch-only closeout head
+   `11229b6026a701cb469de23a55711779d7037e0d` is post-merge status/docs
+   bookkeeping and is not the #348 merged evidence head.
+235. #349/task283 is open/clean at head
+   `caa907dea478ca6a738b1334d80758c5184b967c`; the `d5315c60..caa907de`
+   drift is worker_2 status only and task283 report content is unchanged.
+236. task283 official report claims
+   `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`, but residual
+   risks remain: no `AutoBridge.import_ckpt` checkpoint-load proof, `pip check`
+   rc `1`, `stage1_sft.train` missing `nvidia_resiliency_ext`,
+   `nemo.collections.llm` missing `lightning`, and sparse valid/test. task284
+   must decide if this is enough for any bounded smoke release.
+237. #349 is on lead HOLD via comment `4599052046` pending task284 exact-head
+   review of `caa907dea478ca6a738b1334d80758c5184b967c`.
