@@ -1,6 +1,6 @@
 # task299_qwen_aime_v11_30b_data_packing_contract_s1 - task knowledge
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,6 @@
    `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`.
 6. PR #365 contains the final task299 docs/report closeout:
    `https://github.com/songCNMS/Nemotron/pull/365`.
+7. PR #365 was lead-approved and self-merged at `2026-06-02T15:29:15Z`;
+   merge commit `205fc919a643b1478964a9e91793247c5e821a38`, merged head
+   `b8b760fb8f46cda8f302adbea106f19cc234e038`.

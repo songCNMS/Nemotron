@@ -1,6 +1,6 @@
 # task299_qwen_aime_v11_30b_data_packing_contract_s1 - history log
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -89,3 +89,19 @@
 - Boundary maintained: no training, testing, corrected AIME eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   main push, merge, 30B training, or 8-GPU launch.
+
+## Session 84 - 2026-06-02 UTC - lead-approved self-merge closeout
+
+- Lead approved task299/#365 for exact head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038` after independent review.
+- Pre-merge verification found PR #365 `OPEN`, base `main`, non-draft,
+  `mergeStateStatus=CLEAN`, API `mergeable=true`, `mergeable_state=clean`,
+  and head exactly
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`.
+- Self-merged PR #365 at `2026-06-02T15:29:15Z`; merge commit:
+  `205fc919a643b1478964a9e91793247c5e821a38`.
+- Merged head:
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`.
+- Scope remained data/packing/decontam docs and evidence only. No training,
+  testing, corrected AIME eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, 30B launch, or 8-GPU use occurred.
