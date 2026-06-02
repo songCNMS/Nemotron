@@ -6955,3 +6955,9 @@
   task303. If approved, lead may consider a later separately assigned
   non-AIME canary task against the salvage checkpoint; corrected AIME and any
   promotion/export stay blocked until their own gates.
+- Processed and marked read worker_5 mailbox
+  `7626408b322b4977897abb85feb63f0e`. The official closeout matches #362 head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`: `iter_0000035` is a salvage
+  checkpoint candidate, validation did not complete, lead-cleared SIGTERM
+  produced `train_rc=1`, GPUs/processes were released, and no canary/AIME/
+  export/endpoint/promotion/follow-on 30B work was run or cleared.

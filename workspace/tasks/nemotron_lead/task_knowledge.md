@@ -1482,3 +1482,17 @@
    AIME/task243 eval, export, endpoint, promotion, follow-on 30B work, task255
    reuse, AIME2025 train data, shared deletion, main push, merge, or worker_5
    branch rewrite.
+427. worker_5 mailbox `7626408b322b4977897abb85feb63f0e` is the official
+   task301 closeout matching #362 head
+   `c75c584875afdbdde4130775cbdc83355e7639ea`: final checkpoint candidate
+   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/checkpoints/iter_0000035`,
+   inventory sha `7c7e60b5bf9a5e747e3115e37701da00b6643cd1c895e3336bef175dc6d13261`,
+   full checkpoint checksum manifest sha
+   `c3f2d4b4b5d1c26041d96e5eb8799cf591acef346f75ebfdcdce40a12ec09c03`,
+   train log sha `e832845262135dca009d1373f8eeb04a6f3b18e5079f40a6456f20b999b49863`,
+   and selected artifact hash manifest sha
+   `1b2a767f72c64764cc481735ac1d2ab1825f92adf6e14ec671a61cae01663692`.
+428. worker_5 closeout residual remains: built-in validation did not complete
+   and the wrapper exit is `train_rc=1` after lead-cleared SIGTERM. This is why
+   task303 independent review is required before any later non-AIME canary
+   assignment.
