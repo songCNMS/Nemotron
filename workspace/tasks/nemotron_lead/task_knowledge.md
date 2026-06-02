@@ -1603,3 +1603,8 @@
 456. #367 HOLD comment `4605742037` was left at exact head `a38abd53`; worker_3
    was told not to self-merge or proceed downstream, and worker_4 received a
    delivered task305 refresh peer_send for exact-head review of `a38abd53`.
+457. #367 advanced again to `e5cc49821d39a014756dfd3ce961bab351a4f0fe` after
+   worker_3 recorded lead HOLD bookkeeping. Lead confirmed
+   `a38abd53..e5cc4982` is worker_3 status plus task304 history/task_knowledge
+   only and diff-check clean. task305 review target is now exact head
+   `e5cc4982`, superseding `a38abd53`.

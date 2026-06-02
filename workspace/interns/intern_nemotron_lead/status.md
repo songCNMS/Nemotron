@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: #367 head a38abd53 HOLD; task305 review refreshed |
+| PR | 30B gate: #367 head e5cc4982 HOLD; task305 review refreshed |
 | Session | 85 |

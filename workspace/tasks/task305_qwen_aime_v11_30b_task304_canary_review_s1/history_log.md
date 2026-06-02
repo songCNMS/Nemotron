@@ -45,5 +45,13 @@
 - Lead left #367 HOLD comment `4605742037`, notified worker_3 not to
   self-merge or proceed to any downstream gate, and sent delivered task305
   refresh peer_send to worker_4 superseding the earlier `773aff2c` assignment.
+- After worker_3 recorded the HOLD on the task304 branch, #367 advanced again
+  to `e5cc49821d39a014756dfd3ce961bab351a4f0fe`. Lead checked
+  `a38abd53c897b3c68878abb770cb80f762c20e6f..origin/intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`;
+  it changed only worker_3 status plus task304 history/task_knowledge HOLD
+  bookkeeping, and `git diff --check` passed. GitHub recomputed #367 as
+  OPEN/base `main`/CLEAN/MERGEABLE/non-draft at `e5cc4982`.
+- Task305 review target is refreshed again from `a38abd53` to exact #367 head
+  `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
 - #367 remains HOLD pending task305 approve/request-changes/block for the
   refreshed exact head.

@@ -7123,6 +7123,15 @@
 - Sent delivered peer_send to worker_3 with the same #367 HOLD instruction.
 - Sent delivered task305 refresh peer_send to worker_4, superseding the earlier
   `773aff2c` review target and requiring exact-head review of `a38abd53`.
+- #367 then advanced again to
+  `e5cc49821d39a014756dfd3ce961bab351a4f0fe` after worker_3 recorded the HOLD
+  in status/history/task_knowledge. Lead fetched and checked
+  `a38abd53..e5cc4982`: worker_3 status plus task304 history/task_knowledge
+  HOLD bookkeeping only; `git diff --check` passed. GitHub reports #367
+  OPEN/base `main`/CLEAN/MERGEABLE/non-draft at `e5cc4982`.
+- Refreshed task305 docs again to exact #367 head `e5cc4982`; worker_4 must now
+  verify `d8e58461..e5cc4982`, `773aff2c..a38abd53`, and
+  `a38abd53..e5cc4982`.
 - #367 remains HOLD pending task305 approve/request-changes/block. This does
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or

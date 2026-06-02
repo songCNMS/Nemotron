@@ -8,10 +8,10 @@
    as independently accepted until task305 review returns approve/request-
    changes/block.
 2. The exact #367 head for review is now
-   `a38abd53c897b3c68878abb770cb80f762c20e6f`.
+   `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
 3. The task304 report names evidence source head
    `d8e58461ca1cede2569589f95414c360e0ddd9bc`; reviewers must reconcile the
-   later `d8e58461..a38abd53` PR-head delta.
+   later `d8e58461..e5cc4982` PR-head delta.
 4. Task304 local output root:
    `/work-agents/intern_nemotron_worker_3/outputs/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1/run_20260602T175458Z`.
 5. Task304 remote output root:
@@ -32,4 +32,7 @@
     Lead observed that range changed only worker_3 status and task304 history,
     with diff-check clean; task305 still must verify this independently.
 11. #367 HOLD comment `4605742037` and delivered worker_3/worker_4 peer_sends
-    keep #367 unmerged until task305 reports on exact head `a38abd53`.
+    keep #367 unmerged until task305 reports on exact head `e5cc4982`.
+12. `a38abd53..e5cc4982` changed worker_3 status plus task304 history/
+    task_knowledge HOLD bookkeeping only, with diff-check clean. task305 must
+    verify that final drift independently.
