@@ -1,6 +1,6 @@
 # task274_qwen_aime_v11_data_safety_ready_review_s1 - Data safety readiness review
 
-<!-- METADATA:STATUS=Review,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_1,SESSION=2 -->
 
 ## Background
 
@@ -54,7 +54,8 @@ before training can be considered.
 - Task docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at
   `b7e58017ce2324ef24bf130e7ad84082b5271d1f`.
-- Status: review complete; preparing PR and mailbox closeout.
+- Status: completed; PR #342 merged at approved head
+  `5e96158211a2bac010e9b65107152e2f5ad635a6`.
 - Report:
   `workspace/tasks/task274_qwen_aime_v11_data_safety_ready_review_s1/data_safety_ready_review_report.md`.
 - PR:

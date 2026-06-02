@@ -1,6 +1,6 @@
 # task274_qwen_aime_v11_data_safety_ready_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -17,3 +17,6 @@
    packed data from the task262 V11 blend plan under collision-safe split
    materialization and verify intended/exposed split equality plus no AIME2025
    train leakage.
+6. PR #342 was merged as a data-safety/readiness docs closeout only; the merge
+   does not promote any training artifact or authorize use of stale task253
+   packed data.
