@@ -7,6 +7,7 @@
 - Task: `task281_qwen_aime_v11_canary_aime_eval_plan_hold_s1`.
 - Branch:
   `intern_nemotron_worker_3/task281_qwen_aime_v11_canary_aime_eval_plan_hold_s1`.
+- PR: #345.
 - Base reviewed: `origin/main` at
   `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`.
 - Lead docs source:
