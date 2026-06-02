@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -96,3 +96,8 @@
     This approval is not training clearance, promotion clearance, first
     go/no-go approval, or a replacement for later validation/test distribution
     gates.
+27. At Session 13, official task277 mailbox report
+    `da314e3445424dbd835706f993c4d58a` was sent for #344 exact head
+    `07efab4fa0d8367e96f54af3d2cdc70768d73595`. Current GitHub state showed
+    #344 as `MERGED`, so the report explicitly distinguishes state drift from
+    head drift while preserving the packed-data-evidence-only approval.

@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0 - Assigned
 
@@ -250,3 +250,26 @@
 - This side review does not change task249/#323 gate state, does not grant
   training/promotion/go-no-go clearance, and did not edit task276 artifacts,
   PR files, product code, or run training/eval/export/endpoint/30B actions.
+
+## Session 13 - official task277 mailbox resend
+
+- Received lead follow-up that no official task277 report was visible.
+- Rechecked #344 with `gh pr view`; exact head remained
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`, while current GitHub state
+  showed `MERGED` rather than the lead follow-up's `OPEN/CLEAN` state.
+- Fetched `pull/344/head` to `refs/remotes/origin/pr/344`; `git rev-parse`
+  confirmed the same exact head.
+- Recomputed PR report sha with `git show ... | sha256sum`:
+  `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887`.
+- Rechecked artifact checksums under the task276 run root: evidence manifest
+  sidecar OK and all 48 parquet shard checks OK.
+- Reconfirmed packed evidence markers: `DATA_PREP_RC=0`, `PY_COMPILE_RC=0`,
+  `QWEN_CONTRACT_RC=0`, `QWEN_PACKED_DATA_CONTRACT=PASS`, and
+  `TARGETED_PYTEST_RC=0`; report records targeted pytest 26 passed.
+- Sent official mailbox report `da314e3445424dbd835706f993c4d58a` with
+  APPROVE as packed data/packing evidence only, explicitly noting it is not
+  training, promotion, first go/no-go, live eval, or 30B/8-GPU clearance.
+- Scope remained read-only: no task276/product edits, training, nonzero-LR
+  smoke, live canary, AIME/task243 eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train data use, shared deletion, merge, main push, or
+  30B/8-GPU action was performed.
