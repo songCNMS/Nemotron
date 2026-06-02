@@ -1,6 +1,6 @@
 # task272_qwen_aime_v11_post_bridge_pilot_plan_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - Assigned
 
@@ -59,3 +59,14 @@
 - Boundaries kept: no SFT training, nonzero-LR smoke, live AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, 30B/8-GPU,
   merge/main push, or shared deletion.
+
+## Session 5 - Hook closeout checklist
+
+- Updated worker status to Session 5 for task272 PR #341 closeout tracking.
+- Preserved disposition `PLAN_READY_HOLD_TASK271_LEAD_GATE`; no new technical
+  gate was claimed beyond the existing no-training readiness plan.
+- Confirmed PR #341 remains the review carrier for branch
+  `intern_nemotron_worker_2/task272_qwen_aime_v11_post_bridge_pilot_plan_s1`.
+- No SFT training, nonzero-LR smoke, live AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, 30B/8-GPU, merge/main push, or
+  shared deletion was performed during this closeout update.

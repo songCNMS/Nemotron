@@ -1,6 +1,6 @@
 # task272_qwen_aime_v11_post_bridge_pilot_plan_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -24,3 +24,6 @@
    a fresh accepted V11 packed Qwen root from task262 inputs, run fail-closed
    planner/config preflight with nonzero-LR schedule only after explicit lead
    clearance, then stop for review before training/eval/export.
+7. Session 5 closeout is bookkeeping only: it updates the required checklist
+   state for PR #341 and does not change the technical disposition or authorize
+   any training/eval/export/promotion/scale action.
