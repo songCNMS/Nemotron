@@ -7040,3 +7040,7 @@
   AIME2025/task243, use AIME2025 train data, reuse task255, promote, delete
   shared files, merge/push main, or perform export/endpoint without stopping for
   lead authorization.
+- Sent delivered peer_send assignment to `intern_nemotron_worker_3` for task304
+  with lead branch `b390ac73`, current main `c94216b04bc3d71577391883d0cb76aa8c95e621`,
+  candidate checkpoint path, model/tokenizer path, task291/task292 route
+  references, resource/boundary constraints, and required mailbox report fields.

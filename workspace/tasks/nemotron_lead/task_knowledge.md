@@ -1549,3 +1549,6 @@
 442. task304 may only prove or block checkpoint load and synthetic non-AIME
    completion retention. AIME/task243, export/endpoint, promotion, and FT-vs-base
    claims remain blocked until a later explicit lead task.
+443. task304 assignment peer_send to `intern_nemotron_worker_3` was delivered
+   after lead branch `b390ac73` was pushed. Await worker_3 branch/mailbox
+   evidence; task304 does not authorize AIME/task243 or promotion.
