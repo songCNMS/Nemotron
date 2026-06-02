@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task273_qwen_aime_v11_eval_gate_continuity_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task273_qwen_aime_v11_eval_gate_continuity_s1 |
+| Current Task | none |
 | PR | Pending |
 | Session | 1 |
-| Progress | Accepted task273; performing read-only corrected AIME2025 eval gate continuity review after Session 40 runtime proof. |
+| Progress | Completed task273 continuity review on branch `intern_nemotron_worker_3/task273_qwen_aime_v11_eval_gate_continuity_s1`; report says eval-gate continuity is `APPROVE/PASS`, canonical base remains `11/30`, and global Qwen AIME gate remains `NO-GO/HOLD`. |
