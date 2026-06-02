@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task273_qwen_aime_v11_eval_gate_continuity_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | |
-| PR | #335 |
+| Current Task | task273_qwen_aime_v11_eval_gate_continuity_s1 |
+| PR | Pending |
 | Session | 1 |
-| Progress | Completed task264 V11 canary/retention gate implementation and report in PR #335; awaiting lead gate. No live AIME eval/training/endpoints were run. |
+| Progress | Accepted task273; performing read-only corrected AIME2025 eval gate continuity review after Session 40 runtime proof. |
