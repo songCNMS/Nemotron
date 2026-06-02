@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -90,3 +90,6 @@
     must stay HOLD/no-merge.
 25. If #324 merges and #323 remains CLEAN, self-merge #323 is authorized; if
     #324 makes #323 dirty or stale, refresh docs/status only and report back.
+26. task279 is a read-only gate over task278 no-training preflight evidence.
+    Missing exact task278 branch/head/artifact evidence means HOLD, not
+    approve.
