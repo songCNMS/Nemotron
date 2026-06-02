@@ -4403,6 +4403,38 @@
   requesting the official approve/request-changes/block mailbox report for
   exact #344 head `07efab4fa0d8367e96f54af3d2cdc70768d73595`, or exact
   blocker/ETA. Delivery returned `delivered`, `kind=queued`.
+- Worker_4 sent official task277 mailbox
+  `2188c870f0374fc7bfa91bef2622fc5c`: decision `APPROVE` for #344/task276 as
+  packed data/packing evidence only at exact head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`. Lead marked it read.
+- task277 independent review evidence: #344 `OPEN`/base `main`/`CLEAN`/
+  `MERGEABLE`; artifact/checksum PASS; shard checksum list validates all 48
+  parquet shards; independent pyarrow counts match report; intended-vs-exposed
+  multiset parity PASS for train/valid/test; Qwen packed-data contract PASS;
+  no-AIME train leakage PASS; report sha256
+  `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887`.
+- task277 residual risk carried forward: valid split is sparse with one row and
+  test split has zero rows despite one exposed shard. This is acceptable for
+  packed-data evidence only, but later config/import/pilot gates must decide
+  whether broader validation/test distributions are needed.
+- Lead rechecked #344: `OPEN`/base `main`/`CLEAN`/`MERGEABLE` at exact head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`; `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task276_qwen_aime_v11_rematerialize_packed_qwen_s1`
+  passed; diff scope is worker_2 status plus task276 README/history/
+  task_knowledge/report.
+- Attempted formal GitHub PR review approval, but GitHub rejected it with
+  `Review Can not approve your own pull request`; therefore the lead gate was
+  posted as issue comment `4598673886`.
+- Lead gate decision: `APPROVE` #344 exact head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595` as task276 packed data/packing
+  evidence only. It does not authorize training, nonzero-LR smoke, live canary,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push by lead, or 30B/8-GPU.
+- Sent delivered peer_send to `intern_nemotron_worker_2`: self-merge #344 only
+  if it remains at exact head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595` and remains `CLEAN`/`MERGEABLE`
+  at merge time; otherwise stop and report refresh needs. Worker must send
+  mergedAt/mergeCommit/merged-head closeout after merge.
 - task277 scope: approve/request-changes/block for task276 data/packing
   evidence only. It must not edit files, train, eval, export, launch endpoints,
   promote, use AIME2025 train data, reuse task255, delete shared files, merge,

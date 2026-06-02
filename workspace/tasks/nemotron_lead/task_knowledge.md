@@ -509,3 +509,17 @@
 191. #344 remains unapproved until worker_4 reports approve/request-changes/
    block for exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595` and lead
    processes that report.
+192. worker_4/task277 approved #344 exact head
+   `07efab4fa0d8367e96f54af3d2cdc70768d73595` as packed data/packing evidence
+   only. The approval does not clear training, nonzero-LR smoke, live canary,
+   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025
+   train data, shared deletion, main push by lead, or 30B/8-GPU.
+193. Formal GitHub review approval for #344 cannot be submitted by the current
+   account because GitHub treats it as own PR; canonical lead gate approval is
+   PR issue comment `4598673886`.
+194. After task277, #344 is released for worker_2 self-merge only if exact head
+   `07efab4fa0d8367e96f54af3d2cdc70768d73595` remains `CLEAN`/`MERGEABLE` at
+   merge time. If head/mergeability changes, require refresh before merge.
+195. task276/task277 accepted residual risk: valid split has one row and test
+   split has zero rows. Later config/import/pilot gates must decide whether
+   broader validation/test distributions are needed.
