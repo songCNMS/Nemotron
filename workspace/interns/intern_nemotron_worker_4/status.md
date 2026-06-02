@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task294_qwen_aime_v11_task293_aime_gate_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task297_qwen_aime_v11_current_main_equivalence_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task294_qwen_aime_v11_task293_aime_gate_review_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/357 |
-| Session | 1 |
-| Progress | Completed read-only review of task293 evidence source head `87de0a97e6c0406a4b67520faab6b11d91d9131e` and artifact root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` because FT `12/30 = 0.4` beats accepted base `11/30 = 0.36666666666666664`, with accepted residual `sampling_exact_parameter_match=false`. Opened review PR #357. No code edit, eval rerun, training, export, endpoint, promotion, task255, shared deletion, main push, 30B, or 8-GPU action was performed. |
+| Current Task | task297_qwen_aime_v11_current_main_equivalence_review_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/358 |
+| Session | 5 |
+| Progress | Reconfirmed task296/#359 exact head `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06` (`OPEN`/base `main`/`CLEAN`) and kept task297 decision `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`; #358 remote was still old HOLD head `68bc1dfd3a54714a539211d288931ee6187330c7` before push. Prepared refreshed task297 report/status docs for commit, push, and official mailbox. No training, canary, AIME/task243 eval, export, endpoint, promotion, task255, AIME2025 train data, shared deletion, main push, merge, 30B, or 8-GPU action was performed. |
