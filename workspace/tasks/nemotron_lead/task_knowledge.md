@@ -1025,3 +1025,7 @@
 325. Later read-only task293 poll shows progress `21/30`, correct `9/21`;
    `aime_21_r01` stopped, parsed, and was correct. PID `433268` remains active
    and mailbox remains empty.
+326. Later read-only task293 poll shows progress `22/30`, correct `10/22`;
+   `aime_22_r01` stopped, parsed, and was correct. PID `433268` remains active;
+   artifacts are still manifests only, mailbox remains empty, and no task293 PR
+   is visible.
