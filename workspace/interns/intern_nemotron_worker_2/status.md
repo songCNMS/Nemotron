@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 |
 | PR | #364 |
-| Session | 2 |
-| Last Update | 2026-06-02T14:50:10Z: task298 PR #364 opened with PASS no-training 30B runtime/resource/base-load gate evidence; Qwen3-30B-A3B-Instruct path verified, Bridge config/import preflight passed, task-owned Bridge import iter0 completed, no training/eval/export/endpoint/promotion run. |
+| Session | 3 |
+| Last Update | 2026-06-02T14:57:23Z: Resent official task298/#364 exact-head mailbox for a1bd2af OPEN/CLEAN; holding for task302 review and lead gate, no self-merge or further runtime action. |

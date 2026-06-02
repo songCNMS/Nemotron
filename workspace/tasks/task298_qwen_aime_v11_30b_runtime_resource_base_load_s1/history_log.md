@@ -1,6 +1,6 @@
 # task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -53,3 +53,14 @@
   non-AIME canary, eval run, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, main push, merge, or shared-root
   mutation.
+
+## Session 3 - Exact-head mailbox resend and hold
+
+- Verified PR #364 was `OPEN`, base `main`, `CLEAN`, and at exact head
+  `a1bd2af05aeb6554e7d9130076d9b81a3aa95b85`.
+- Sent official mailbox report for that exact head with commands/env, artifact
+  roots, key checksums, model path, Bridge import proof, resource/parallelism,
+  eval-route decision, residual risks, and boundary confirmation.
+- Mailbox message id: `59ba26de6bd3468aa61c64a61e2cc840`.
+- Holding PR #364 for task302 review and lead gate. No self-merge, training,
+  eval, export, endpoint, promotion, shared deletion, main push, or merge.
