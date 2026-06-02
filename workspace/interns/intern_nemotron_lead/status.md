@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task276 assigned to worker_2 for no-training V11 packed_qwen rematerialization; gate NO-GO/HOLD |
+| PR | task276 assigned/delivered to worker_2 for no-training V11 packed_qwen rematerialization; gate NO-GO/HOLD |
 | Session | 73 |
