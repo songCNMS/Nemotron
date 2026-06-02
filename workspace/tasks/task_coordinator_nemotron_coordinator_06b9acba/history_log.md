@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Session 0 - Created with coordinator
 
@@ -619,3 +619,42 @@
   - no export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
 - Prepared to merge #312 with exact-head protection after committing/pushing this Session 44 coordinator record.
 - Planned lead handoff after #312 merge: set a current-main full-pipeline confirmation/rerun goal requiring lead to use the post-merge main, confirm whether task285/task293 artifacts are code-equivalent to current main or launch a fresh current-code run, and report final data/training/eval artifacts, metrics, residuals, and blockers.
+
+## Session 45 - 30B full training and testing requested
+
+- Received user instruction `在 30b 模型上进行完整的训练和测试`.
+- Because PR #312 had been merged in Session 44, created a fresh coordinator branch from current `origin/main`: `intern_nemotron_coordinator/session45-30b-scaleup-coordination`.
+- Fetched `origin`; current state at dispatch time:
+  - `origin/main` is `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `b537d87b`;
+  - open GitHub PR list is empty.
+- Read latest lead Session 75 history and task296/task297 evidence. Current-main 4B equivalence request from Session 44 is closed as path A:
+  - task296/#359 merged at `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`;
+  - task297/#358 merged at `834472e69b23dc71b49824cda57f866a60839c0a`;
+  - decision is `A_PROVED_NO_RERUN` / `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`;
+  - existing task285/task293 artifacts are accepted as product-code-equivalent to current main, so a fresh 4B rerun is not required.
+- Preserved known 4B residuals before 30B scale-up:
+  - task285 smoke command ended `RC=1` after iter2 checkpoint during built-in validation/SIGTERM;
+  - task276 valid/test split is sparse;
+  - task292 carries detokenized fallback residual;
+  - task293 `sampling_exact_parameter_match=false` is accepted only as semantic greedy equivalence.
+- Searched available model paths and found relevant local 30B candidates:
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Base`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Thinking-2507`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507-FP8`.
+- Searched repository and found existing 30B scale-up clues:
+  - training entrypoint `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`;
+  - tests around `qwen30b_a3b_local_train`;
+  - prior task071/task075 Qwen3-30B-A3B train/export/eval runbook evidence and notes.
+- Sent delivered peer message to `intern_nemotron_lead` with the user instruction and requested gated 30B full data, training, and testing startup from current main.
+- Set delivered lead pressing goal `qwen-aime-v11-30b-full-train-test-session45`.
+- Required lead sequence in the 30B handoff:
+  1. 30B runtime/resource/base-load proof with exact model path, GPU/parallelism, entrypoint, and testing route;
+  2. same-harness 30B base AIME2025 score before judging FT;
+  3. task276 V11 data reuse or adaptation only if Qwen 30B chat-template/decontam contract holds;
+  4. full 30B training with checkpoints, LR/loss/validation, logs, env, and checksums;
+  5. non-AIME canary and corrected AIME2025 FT-vs-base testing with completions and parser diagnostics;
+  6. independent review and runbook/provenance.
+- Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; any export/endpoint is eval-only if needed, not promotion, unless separately approved.
+- Coordinator did not run 30B training, eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.

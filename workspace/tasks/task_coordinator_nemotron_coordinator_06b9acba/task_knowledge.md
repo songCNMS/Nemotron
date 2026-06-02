@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Knowledge Entries
 
@@ -127,3 +127,9 @@
 121. task293 metric evidence: task285 iter2 FT scored corrected AIME2025 `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`, delta `+1/30`, with task294 decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
 122. task293/task294 residual: `sampling_exact_parameter_match=false`; accepted only as deterministic greedy semantic match for metric-gate evidence. No export, endpoint, promotion, further training/eval, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
 123. Session 44 user request requires post-merge current-code confirmation/rerun from lead: use post-merge main, confirm task285/task293 artifact code-equivalence to current code or run a fresh current-code full data/training/eval pass, and report artifacts/metrics/residuals.
+124. Session 45 supersedes the current-code rerun uncertainty: task296/task297 merged into current main `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`, accepting path A that task285/task293 artifacts are product-code-equivalent to current main after #312.
+125. User Session 45 authorizes 30B full training/testing. Coordinator delivered lead goal `qwen-aime-v11-30b-full-train-test-session45`.
+126. Relevant discovered 30B Qwen path for lead verification: `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`; nearby candidates include `Qwen3-30B-A3B-Base`, `Qwen3-30B-A3B-Thinking-2507`, and `Qwen3-30B-A3B-Instruct-2507-FP8`.
+127. Existing repo 30B entrypoint clue: `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, with tests around `qwen30b_a3b_local_train` and prior task071/task075 Qwen3-30B-A3B scale-up/eval evidence.
+128. 30B launch sequence must fail closed: prove 30B resource/runtime/base-load, establish 30B same-harness base AIME2025 score before FT judgment, verify data/chat-template/decontam contract, run full 30B train, then non-AIME canary and corrected AIME2025 FT-vs-base test with independent review.
+129. Session 45 30B boundaries: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; export/endpoint is eval-only if needed and not promotion unless separately approved.
