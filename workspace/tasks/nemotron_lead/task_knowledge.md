@@ -1262,3 +1262,17 @@
    task302 review, task299 final 30B-ready packed root/decontam PASS is missing,
    #363 task300 remains blocked until task298 is approved, and #362 training is
    still HOLD.
+380. worker_4 task302 mailbox `38d82a39335d4d569b8e0d846e2219db` is official
+   independent review evidence for #364 current head `8f1f7df9`: task298
+   runtime/resource/config-import/Bridge base-load is approved with residuals,
+   while task299/task300/task301 and overall train/eval/promotion gates remain
+   held until their own artifacts exist.
+381. GitHub formal review approval from the lead token can fail as self-approval;
+   for #364/#361 the durable lead gate records are PR comments
+   `4603821284` and `4603821227`, plus delivered peer instructions for exact-head
+   worker self-merge.
+382. After task298 approval, task300 is released only for the 30B same-harness
+   base AIME2025 score route using
+   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+   task301 nonzero-LR/full SFT remains blocked until task299 final
+   data/decontam PASS and task300 base-score evidence are both reviewed.
