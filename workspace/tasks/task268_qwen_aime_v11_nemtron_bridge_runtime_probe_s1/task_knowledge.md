@@ -1,6 +1,6 @@
 # task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -35,3 +35,10 @@
    `080bd46eedd9650efc2ca3317be01d826298601543c6d36056f45c51bb3dd001`.
 10. PR #338 is the repo-visible closeout carrier for task268 helper/docs/status
     and the corrected runtime blocker report.
+11. #338 was approved and self-merged as blocker-evidence-only at exact head
+    `49e3728a8751909cc041110acd0e9212059dc6c5`; merge commit
+    `8d4382b6572b91ec2ca27876cd0f961deb7c2f81`, mergedAt
+    `2026-06-02T00:42:53Z`. This merge does not authorize
+    Bridge/checkpoint-load proof, training, nonzero-LR smoke, task243/live AIME
+    eval, export/endpoint, promotion, AIME2025 train data, task255 reuse, or
+    30B/8-GPU.

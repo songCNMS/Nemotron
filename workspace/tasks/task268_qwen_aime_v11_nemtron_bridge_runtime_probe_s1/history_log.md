@@ -1,6 +1,6 @@
 # task268_qwen_aime_v11_nemtron_bridge_runtime_probe_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -99,6 +99,33 @@
   positive Bridge/checkpoint-load proof exists.
 - Opened PR #338 to `main` for the task268 helper, docs/status, repo-visible
   runtime report, and corrected artifact closeout.
+- No SFT training, nonzero-LR smoke, task243/live AIME eval, export, endpoint,
+  promotion/go-no-go, task255 reuse, AIME2025 train prompt/label use,
+  30B/8-GPU launch, or shared deletion/overwrite was performed.
+
+## Session 4 - 2026-06-02 UTC - Lead approval and self-merge
+
+- Received lead gate approval for #338/task268 as blocker-evidence-only at
+  exact head `49e3728a8751909cc041110acd0e9212059dc6c5` after worker_4 task269
+  review mailboxes `4fa99e76c4474c368363b9468ba52a93` and
+  `ac1730cb63984ea1b51d7cb09bf68097`.
+- Immediately before merge, verified local and remote worker branch were both
+  clean at `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Immediately before merge, verified PR #338 was OPEN, non-draft, base `main`,
+  `mergeStateStatus=CLEAN`, `mergeable=MERGEABLE`, and head exactly
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Self-merged #338 with `gh pr merge 338 --merge` without deleting the worker
+  branch.
+- Post-merge PR verification: state `MERGED`, mergedAt
+  `2026-06-02T00:42:53Z`, merge commit
+  `8d4382b6572b91ec2ca27876cd0f961deb7c2f81`, merged head
+  `49e3728a8751909cc041110acd0e9212059dc6c5`.
+- Verified `origin/main` points at
+  `8d4382b6572b91ec2ca27876cd0f961deb7c2f81` after merge.
+- Approval and merge scope remain blocker-evidence-only: this is not
+  Bridge/checkpoint-load proof, training or nonzero-LR smoke clearance,
+  task243/live AIME eval clearance, export/endpoint clearance, promotion/go-no-go,
+  AIME2025 train data permission, task255 reuse, or 30B/8-GPU clearance.
 - No SFT training, nonzero-LR smoke, task243/live AIME eval, export, endpoint,
   promotion/go-no-go, task255 reuse, AIME2025 train prompt/label use,
   30B/8-GPU launch, or shared deletion/overwrite was performed.
