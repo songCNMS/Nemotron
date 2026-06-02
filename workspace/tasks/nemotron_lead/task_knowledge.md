@@ -904,3 +904,10 @@
 294. task292 assignment was delivered to worker_4 after lead branch `744eafcd`
    pushed. worker_2 was separately notified to provide official task291 report
    and PR for head `dfb6ca64...` if final.
+295. task291 PR #354 is open/base main/CLEAN/MERGEABLE at head
+   `2fda1ed46da4c82712a5c22c85bf124c26c6376f`; report evidence source remains
+   `dfb6ca64...`. #354 is on lead HOLD via comment `4600180164` pending task292
+   independent review.
+296. #351/task289 current head `ac85acace556f3861576314fc2684733498074f2` is
+   open/CLEAN but still HOLD via comment `4600180741`; it should refresh only
+   after #354/task292 resolves.

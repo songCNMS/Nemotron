@@ -20,9 +20,13 @@ return `APPROVE_CANARY_ROUTE_PASS`, `REQUEST_CHANGES`, or `BLOCK_REVIEW`.
 
 ## Evidence To Review
 
+- task291 PR:
+  `https://github.com/songCNMS/Nemotron/pull/354`
 - task291 branch:
   `origin/intern_nemotron_worker_2/task291_qwen_aime_v11_no_export_canary_route_unblock_s1`
-- Exact head:
+- Exact PR head to review:
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`
+- Evidence source head:
   `dfb6ca64a5479990be9d4f54defb9f294c09866f`
 - Local artifact root:
   `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`
@@ -69,7 +73,7 @@ Observed hashes:
 ## Scope
 
 - Read-only review only.
-- Review exact branch diff, task291 helper-script changes, artifact paths,
+- Review exact #354 PR head, task291 helper-script changes, artifact paths,
   checksums, command/env, checkpoint-load manifest, prompt provenance, retained
   completion rows, and per-prompt metrics.
 - Determine whether the evidence is sufficient to close task291 as an accepted

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #352/#353 merged BLOCK evidence; #351 HOLD at 7f4a223; task291 head dfb6ca6 read-only PASS observed; task292 review assigned; AIME/export/promotion/30B HOLD |
+| PR | #354 task291 HOLD at 2fda1ed pending task292; #351 HOLD at ac85aca; task291 PASS evidence source dfb6ca6; AIME/export/promotion/30B HOLD |
 | Session | 75 |

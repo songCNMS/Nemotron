@@ -5544,3 +5544,17 @@
 - Sent delivered task291 follow-up to worker_2 requesting official mailbox
   report and PR if final, including commands/env, roots, source head, artifact
   hashes, detokenized fallback explanation, metrics, and boundary confirmation.
+- Fetched task291 PR #354 open/base main/CLEAN/MERGEABLE at current head
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`; the report evidence source head
+  remains `dfb6ca64a5479990be9d4f54defb9f294c09866f`. Delta from `44f96764...`
+  to `2fda1ed...` is PR/mailbox closeout metadata plus adding PR URL to the
+  report.
+- Posted #354 lead HOLD comment `4600180164`: no self-merge until task292
+  independently reviews exact PR head `2fda1ed...` and artifact root
+  `run_20260602T081136Z`.
+- Processed and marked read worker_5 task289 Session 4 mailbox
+  `c44531a5326e4641a57e95ada35a57af`; #351 current head
+  `ac85acace556f3861576314fc2684733498074f2` is open/base main/CLEAN but stale
+  because it predates #354 open/PASS evidence and task292 review assignment.
+- Posted #351 lead `REQUEST-CHANGES/HOLD` comment `4600180741`, requiring #351
+  to stay unmerged and refresh only after #354/task292 gate resolves.

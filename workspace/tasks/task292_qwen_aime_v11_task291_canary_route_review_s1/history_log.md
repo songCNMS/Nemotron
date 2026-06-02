@@ -15,3 +15,7 @@
   explicitly releases the next eval task.
 - Lead branch `744eafcd` was pushed, then the task292 assignment was delivered
   to worker_4 by peer message.
+- task291 PR #354 later opened at current head
+  `2fda1ed46da4c82712a5c22c85bf124c26c6376f`; evidence source head remains
+  `dfb6ca64a5479990be9d4f54defb9f294c09866f`. Lead posted #354 HOLD comment
+  `4600180164` and will send worker_4 a correction to review the exact PR head.
