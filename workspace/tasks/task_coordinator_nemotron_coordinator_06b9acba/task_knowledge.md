@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
 
 ## Knowledge Entries
 
@@ -116,3 +116,8 @@
 110. task275 runbook state: Session 40 clears runtime import/preflight proof only, carries the `artifact_inventory.sha256` self-entry caveat, and keeps downstream live stages held.
 111. Session 42 action: coordinator sent delivered peer instruction and delivered pressing goal `qwen-aime-v11-rematerialized-packed-qwen-next-step` to lead to dispatch/gate the next no-training V11 rematerialized `packed_qwen` task. Required evidence includes task-owned output root, split manifest, counts/checksums, intended-vs-exposed parity, Qwen packed-data contract pass, and no AIME2025 train rows.
 112. Session 42 global gate remains `NO-GO/HOLD`: no training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU is authorized by the no-training packed-data next step.
+113. Session 43 supersedes the pre-task276 blocker: #344/task276 is merged into `origin/main` `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` from head `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+114. Accepted task276 packed Qwen root is `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`; report evidence says parity PASS, Qwen packed-data contract PASS, no-AIME train leakage PASS, train 46 shards/279 packed rows, valid 1 shard/1 packed row, and test 1 exposed shard/0 packed rows.
+115. task276/task277 residual risk must carry into later launch gates: validation is sparse with one packed hard-math row and test is empty. This is acceptable for data/packing evidence only, not an automatic training/eval clearance.
+116. User Session 43 requested a full AIME-focused data/training/eval attempt. Coordinator set delivered lead pressing goal `qwen-aime-v11-full-data-train-eval-start-session43` to start a gated sequence: no-training config/import preflight, bounded Qwen3-4B nonzero-LR SFT smoke if preflight passes, non-AIME canary/completion retention, corrected AIME2025 same-harness FT-vs-base evaluation, and runbook/provenance update.
+117. Session 43 hard boundary remains: AIME2025 prompts/labels are held-out eval/decontam only and must not be used for training; no task255 reuse, shared deletion, export, endpoint, promotion, or 30B/8-GPU until same-harness FT is at least the accepted base `11/30 = 0.36666666666666664` and a later gate authorizes the action.

@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
 
 ## Session 0 - Created with coordinator
 
@@ -566,3 +566,28 @@
 - Sent delivered peer message to `intern_nemotron_lead` instructing the next bounded step: dispatch a no-training V11 data/packing task to produce a fresh collision-safe rematerialized `packed_qwen` train/valid root from task262 V11 blend plan under merged task262 split logic, with output root, split manifest, row/token/supervised-token/shard/source counts, intended-vs-exposed parity, Qwen packed-data contract pass, checksums, proof no AIME2025 prompt/label train rows, and explicit no-training/eval/export/endpoint/promotion/30B/shared-deletion boundaries.
 - Set a delivered pressing goal on `intern_nemotron_lead` with client goal id `qwen-aime-v11-rematerialized-packed-qwen-next-step` for the same bounded no-training packed-Qwen rematerialization dispatch and gate tracking.
 - Confirmed global Qwen AIME remains `NO-GO/HOLD`: the executed coordinator step only routes the next no-training data/packing task; it does not authorize training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint, promotion, AIME2025 train data, task255 reuse, or 30B/8-GPU.
+
+## Session 43 - Full AIME-focused pipeline startup requested
+
+- Received user instruction `尝试启动完整的数据训练和评估流程，聚焦 aime 数据集` and treated it as authorization to attempt the Qwen AIME V11 end-to-end data, training, and evaluation pipeline under existing safety gates.
+- Fetched `origin` and verified current repository state:
+  - `origin/main` is `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `1c25bc697c0bf462fc233cf0ac4b6416b8831764`;
+  - the only open GitHub PR visible is #312 coordinator audit.
+- Verified #344/task276 is merged: mergedAt `2026-06-02T04:19:38Z`, mergeCommit `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`, merged head `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+- Read merged task276 report and lead Session 73 history. Current accepted no-training packed Qwen evidence:
+  - packed root `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`;
+  - train 46 exposed shards, 279 packed rows, 1,024,646 input tokens, and 228,927 supervised tokens;
+  - valid 1 exposed shard, 1 packed row, 1,491 input tokens, and 1,428 supervised tokens;
+  - intended-vs-exposed parity PASS, Qwen packed-data contract PASS, and no AIME prompt/label leakage PASS.
+- Recorded residual task276/task277 risk: valid split is sparse with one packed hard-math row and test has zero rows despite one exposed shard. Lead history treats this as acceptable for packed-data evidence only; later config/import/pilot gates must decide whether to accept or broaden validation/test distribution.
+- Sent delivered peer message to `intern_nemotron_lead` with the user instruction and a gated full-pipeline startup sequence:
+  1. reconcile task276/task277 closeout and sparse valid/test risk;
+  2. assign no-training config/import preflight using task276 packed root and Qwen3-4B path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  3. if preflight passes, assign bounded Qwen3-4B nonzero-LR SFT smoke/training with exact LR, train-step, config, and artifact evidence;
+  4. run non-AIME canary/completion-retention checks before AIME;
+  5. run corrected AIME2025 same-harness FT-vs-base comparison against accepted base `11/30 = 0.36666666666666664`;
+  6. update runbook/provenance.
+- Set delivered pressing goal on `intern_nemotron_lead` with client goal id `qwen-aime-v11-full-data-train-eval-start-session43`.
+- Preserved hard boundaries in the lead instruction and goal: AIME2025 prompts/labels remain held-out eval/decontam only and must not enter training; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; no export, endpoint, promotion, or 30B/8-GPU unless same-harness FT is at least base and a later gate authorizes it.
+- Final light monitor after goal delivery showed no new task277-task280 remote branch and no new open PR beyond #312 yet. This Session started the full-flow attempt by goal/lead dispatch, but did not run training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, shared deletion, or 30B/8-GPU directly from coordinator.
