@@ -622,3 +622,9 @@
 221. As of the post-#347 merge check, no task283 or task284 worker branch is
    visible yet. Their first expected evidence is acceptance branch/head or an
    exact blocker.
+222. task283 acceptance branch
+   `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+   is visible at `c1d988e2a9ef4139b1fa7cf850d3f4552114be56`; the diff is
+   acceptance status/task docs only and there is no PR yet.
+223. task284 remains assigned but no worker_4 branch is visible yet. Its
+   correct current disposition is HOLD until task283 exact evidence exists.

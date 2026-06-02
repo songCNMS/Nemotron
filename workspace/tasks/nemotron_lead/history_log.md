@@ -4769,3 +4769,24 @@
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, lead main push, lead merge, or 30B/8-GPU is
   authorized.
+- Processed worker_2 mailbox
+  `1f3a7bf559ea4fdcb9aac30672f00ad4`: worker_2 accepted task283 and pushed
+  branch
+  `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
+  at `c1d988e2a9ef4139b1fa7cf850d3f4552114be56` from `origin/main`
+  `28039222ad5d4054891713d85d05a15a491d8a96`, with lead docs `641f362`
+  imported and status `InProgress`.
+- Verified task283 acceptance branch diff hygiene: scope is worker_2 status plus
+  task283 README/history/task_knowledge only; `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task283...` passed. No task283
+  PR is visible yet.
+- No task284 worker branch is visible yet. task284 remains assigned to worker_4
+  and should HOLD substantive review until task283 exact branch/head/artifacts
+  or mailbox evidence exists.
+- #348/task282 remains `OPEN`/`CLEAN` at head
+  `4947f18e56bf5ec62ab21d96d599b4e21b769346` pending the requested refresh to
+  current `origin/main` and #347 merged/task283-task284 state.
+- Current next measurable gate is task283 no-training runtime/config/import
+  evidence or exact blocker. Training, live canary, AIME/task243 eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+  lead merge, lead main push, and 30B/8-GPU remain blocked.
