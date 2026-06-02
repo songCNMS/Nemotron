@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #347/task278 approved as blocker docs for worker self-merge; task283/task284 assigned; #348 HOLD refresh; no training/eval released |
+| PR | #347/task278 MERGED blocker docs; task283/task284 assigned awaiting branches; #348 HOLD refresh; no training/eval released |
 | Session | 74 |

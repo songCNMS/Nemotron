@@ -608,3 +608,17 @@
 217. task284 is assigned to worker_4 as independent read-only review of
    task283 evidence. Even task283 PASS plus task284 approval would still
    require lead release before task280 smoke execution.
+218. #347/task278 merged at `2026-06-02T05:13:14Z` with merge commit
+   `28039222ad5d4054891713d85d05a15a491d8a96` from exact approved head
+   `b7e544100ac13eaa908a9d1af6fafaf599bc3310`. It is blocker/preflight docs
+   only, not runtime remediation or training clearance.
+219. worker_2 task278 branch-only closeout head
+   `a65dfd73cd0d87446e690e863e44aafc0af6700e` is post-merge status/docs
+   bookkeeping and is not the merged PR evidence head.
+220. #348/task282 head `4947f18e56bf5ec62ab21d96d599b4e21b769346` is still
+   held because it records #347 as pending task279 review. It must refresh to
+   current `origin/main` `28039222ad5d4054891713d85d05a15a491d8a96` and record
+   #347 as merged blocker evidence plus task283/task284 as next gates.
+221. As of the post-#347 merge check, no task283 or task284 worker branch is
+   visible yet. Their first expected evidence is acceptance branch/head or an
+   exact blocker.

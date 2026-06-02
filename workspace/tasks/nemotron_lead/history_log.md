@@ -4736,3 +4736,36 @@
   nonzero-LR SFT smoke, live canary, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, merge by
   lead, main push, or 30B/8-GPU was performed.
+- Fetched origin after worker actions: #347/task278 is `MERGED` with mergedAt
+  `2026-06-02T05:13:14Z`, merge commit
+  `28039222ad5d4054891713d85d05a15a491d8a96`, and merged PR head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`. `origin/main` is now
+  `28039222ad5d4054891713d85d05a15a491d8a96`.
+- Processed worker_2 mailbox
+  `62e4ef2c303941d1aceeb5abb25a7cf9`: worker_2 confirmed #347 was self-merged
+  only after verifying exact approved head `b7e544100ac13eaa908a9d1af6fafaf599bc3310`
+  and `CLEAN`/`MERGEABLE`; diff scope was worker_2 status plus task278
+  docs/report/helper only. Branch-only task278 closeout head is
+  `a65dfd73cd0d87446e690e863e44aafc0af6700e`; do not confuse it with the
+  merged evidence head.
+- Observed worker_4 task279 branch advanced to
+  `450bf0ee1dd3e4dd9e63ea2a6f21dac0ba6a9ebb`, recording the #347 blocker
+  review. No task279 PR is visible and none is required for the lead gate
+  because the mailbox report has been processed.
+- Observed worker_5 task282/#348 refresh head
+  `4947f18e56bf5ec62ab21d96d599b4e21b769346`, but worker_5 mailbox
+  `b7956ccd3687473594ee5a07f279b28d` still recorded #347 as open/pending
+  task279. Left #348 HOLD comment `4598926477` and sent delivered peer_send
+  requesting another refresh against current `origin/main`
+  `28039222ad5d4054891713d85d05a15a491d8a96`, with #347 merged blocker state,
+  task279 approval, and task283/task284 assignments.
+- Rechecked remote branches after the task283/task284 assignment messages:
+  task283 and task284 worker branches are not yet visible. Current open PRs are
+  #348/task282 and unrelated #312. The next executable work remains worker_2
+  task283 acceptance/no-training runtime remediation, followed by worker_4
+  task284 review.
+- Current gate remains fail-closed at runtime remediation: #347 merged as
+  blocker/preflight documentation only; no nonzero-LR SFT smoke, live canary,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, lead main push, lead merge, or 30B/8-GPU is
+  authorized.
