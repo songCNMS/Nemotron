@@ -1,6 +1,6 @@
 # task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 - NemTron runtime route audit
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Background
 
@@ -43,6 +43,19 @@ environment, or a precise blocker report if no route is available.
 - Boundaries kept: no SFT training, nonzero-LR smoke, task243/live AIME eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, 30B/8-GPU,
   merge/main push, artifact modification, or shared deletion/overwrite.
+
+## Session 2 Closeout
+
+- Lead gate comment `issuecomment-4597793906` approved #339 as
+  blocker-evidence-only closeout for approved head
+  `0d33486748e04c34f33e1a33ead7148779920625`.
+- Current branch changes after the approved head are closeout/status metadata
+  only and do not change `nemtron_runtime_route_audit_report.md`.
+- Final disposition:
+  `NEMTRON_RUNTIME_ROUTE_BLOCKED`.
+- Global Qwen AIME gate remains `NO-GO/HOLD`; no training, eval, endpoint,
+  promotion, AIME2025 train data, task255 reuse, 30B/8-GPU, shared deletion,
+  or direct main push is authorized or performed.
 
 ## Scope
 

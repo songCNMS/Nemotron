@@ -1,6 +1,6 @@
 # task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,7 @@
 11. PR #339 hook correction normalized `history_log.md` to a single Session 1
     section; the runtime audit evidence and `BLOCK` recommendation are
     unchanged.
+12. Lead approved #339 as blocker-evidence-only closeout via
+    `issuecomment-4597793906`; self-merge is allowed only while PR #339 remains
+    OPEN/base `main`/CLEAN/MERGEABLE and any head drift is limited to
+    closeout/status metadata.

@@ -1,14 +1,14 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Working,TASK=task270_qwen_aime_v11_nemtron_runtime_route_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_5 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 |
+| Current Task | |
 | PR | #339 |
-| Session | 1 |
-| Last Update | Normalized task270 history log to a single Session 1 section for PR #339; audit recommendation remains `BLOCK` under current permissions. |
+| Session | 2 |
+| Last Update | Completed task270 closeout for PR #339; final disposition `NEMTRON_RUNTIME_ROUTE_BLOCKED` with global Qwen AIME gate remaining `NO-GO/HOLD`. |

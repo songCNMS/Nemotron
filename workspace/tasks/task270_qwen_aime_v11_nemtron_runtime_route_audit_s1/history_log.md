@@ -1,6 +1,6 @@
 # task270_qwen_aime_v11_nemtron_runtime_route_audit_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0 - Assigned
 
@@ -67,3 +67,21 @@
   to `main`.
 - Initial PR head:
   `8dcb2e1b139a45d11c344ac2d607f5c205e9cc2a`.
+
+## Session 2
+
+- Received lead gate comment `issuecomment-4597793906`: APPROVE as
+  blocker-evidence-only closeout for exact approved head
+  `0d33486748e04c34f33e1a33ead7148779920625`.
+- Verified approved-head drift before closeout: `0d334867...` to
+  `e16ec77289809b57b5e036ccdeeb52dfd8c10c0b` changed only worker status,
+  history, and task knowledge metadata; `nemtron_runtime_route_audit_report.md`
+  was unchanged.
+- Verified PR #339 was OPEN/base `main`/CLEAN/MERGEABLE before writing
+  closeout metadata.
+- Wrote closeout status metadata: task marked Completed, worker status set to
+  Idle, final disposition recorded as `NEMTRON_RUNTIME_ROUTE_BLOCKED`, and
+  global Qwen AIME gate remains `NO-GO/HOLD`.
+- Boundary confirmation remains unchanged: no training, eval, endpoint,
+  promotion, AIME2025 train data, task255 reuse, 30B/8-GPU, shared deletion,
+  or direct main push was performed.
