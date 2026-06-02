@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -82,3 +82,19 @@
     `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG`
     and wait for lead clearance before termination, salvage, restart, eval,
     export, endpoint, promotion, or follow-on work.
+21. Session 15 salvage clearance: lead authorized graceful termination only
+    after final read-only snapshot confirmed no RC/end, no validation progress,
+    `latest_checkpointed_iteration.txt=35`, and `iter_0000035` present.
+22. Session 15 termination result: SIGTERM to torchrun parent PID `1258209`
+    produced wrapper `train_rc.txt=1` and
+    `train_end.txt=2026-06-02T16:58:51Z`; torchrun propagated SIGTERM to ranks
+    `1258278` through `1258285`; no SIGKILL or artifact deletion was used.
+23. Session 15 final disposition:
+    `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+    This is not a training PASS and does not clear eval/export/endpoint or
+    promotion.
+24. Session 15 checkpoint evidence: `iter_0000035` is `399G` with `28` files;
+    inventory manifest sha256 is
+    `7c7e60b5bf9a5e747e3115e37701da00b6643cd1c895e3336bef175dc6d13261`;
+    checksum manifest sha256 is
+    `c3f2d4b4b5d1c26041d96e5eb8799cf591acef346f75ebfdcdce40a12ec09c03`.

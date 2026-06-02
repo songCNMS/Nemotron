@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_5,SESSION=14 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=15 -->
 
 ## Background
 
@@ -270,10 +270,45 @@ and an artifact handoff for review before any eval/export/promotion path.
   rank processes `1258278` through `1258285` are alive with CPU activity and
   `198` TorchInductor compile-worker children were observed.
 - Safe wait threshold is `2026-06-02T16:53:43Z`, 30 minutes after the last log
-  mtime. If no log or return-code progress appears by that threshold, report
+  mtime. The threshold passed at post-threshold snapshot
+  `2026-06-02T16:54:28Z` with no log or return-code progress, so mailbox
+  `345316b7e0ed47d8bcf5908a7fdd41b6` reported
   `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG` and
-  wait for lead clearance before termination, salvage, restart, eval, export,
+  requested lead decision before termination, salvage, restart, eval, export,
   endpoint, promotion, or follow-on work.
 - No kill/restart/terminate, canary, corrected AIME FT eval, task243 eval,
   export, endpoint, promotion, follow-on 30B work, task255 reuse, AIME2025 train
   rows, shared deletion, direct main push, or merge was performed.
+
+## Session 15 Result
+
+- Received lead salvage clearance after the validation quiet threshold was
+  crossed.
+- Took final pre-termination read-only snapshot at `2026-06-02T16:56:37Z`:
+  no `train_rc.txt`, no `train_end.txt`, log unchanged past
+  `Evaluating iter 1/10`, `latest_checkpointed_iteration.txt=35`, and
+  `iter_0000035` present at `399G` with `28` files.
+- Sent SIGTERM only to task301 torchrun parent PID `1258209` at
+  `2026-06-02T16:58:51Z`; torchrun propagated SIGTERM to rank PIDs `1258278`
+  through `1258285`.
+- Wrapper wrote `train_rc.txt=1` and
+  `train_end.txt=2026-06-02T16:58:51Z`; no matching task301 processes remained
+  in the final snapshot, and all 8x H200 GPUs released to `1 MiB` with no
+  compute apps.
+- Generated final disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+  This is not a training PASS.
+- Generated artifact inventory/checksums:
+  `iter_0000035_inventory.tsv` sha256
+  `7c7e60b5bf9a5e747e3115e37701da00b6643cd1c895e3336bef175dc6d13261`,
+  `iter_0000035.sha256` sha256
+  `c3f2d4b4b5d1c26041d96e5eb8799cf591acef346f75ebfdcdce40a12ec09c03`,
+  selected artifact hash manifest sha256
+  `1b2a767f72c64764cc481735ac1d2ab1825f92adf6e14ec671a61cae01663692`, and
+  copied train log sha256
+  `e832845262135dca009d1373f8eeb04a6f3b18e5079f40a6456f20b999b49863`.
+- Local copied manifest bundle:
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/manifests`.
+- No canary, corrected AIME FT eval, task243 eval, export, endpoint,
+  promotion, follow-on 30B work, task255 reuse, AIME2025 train rows, shared
+  deletion, direct main push, or merge was performed.

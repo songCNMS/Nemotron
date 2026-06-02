@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -295,9 +295,52 @@
   `2026-06-02T16:53:43Z`, and rule to report
   `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG` if
   no log or return-code progress appears by that threshold.
-- Recommended next action in the mailbox: do not kill/restart/terminate now;
-  continue read-only monitoring and wait for lead clearance before termination,
-  salvage, restart, eval, export, endpoint, promotion, or follow-on work.
+- Took a post-threshold read-only snapshot at `2026-06-02T16:54:28Z`: no
+  `train_rc.txt`, no `train_end.txt`, unchanged log mtime
+  `2026-06-03 00:23:43.221057699 +0800`, `latest_checkpointed_iteration.txt`
+  `35`, checkpoint `iter_0000035` present, all 8x H200 GPUs at `0%` utilization
+  with memory still allocated, rank CPU activity still visible, and `198`
+  TorchInductor compile-worker children.
+- Sent mailbox `345316b7e0ed47d8bcf5908a7fdd41b6` with classification
+  `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS` / `BLOCKED_VALIDATION_HANG`.
+- Recommended action in the post-threshold mailbox: wait for lead decision on
+  whether to continue waiting, terminate and salvage checkpoint `iter_0000035`,
+  or request runtime/debug escalation.
 - No kill/restart/terminate, canary, corrected AIME FT eval, task243 eval,
   export, endpoint, promotion, follow-on 30B work, task255 reuse, AIME2025 train
   rows, shared deletion, direct main push, or merge was performed.
+
+## Session 15 - 2026-06-02 UTC - validation hang terminated and checkpoint inventoried
+
+- Received lead decision to classify the state as `BLOCKED_VALIDATION_HANG` with
+  checkpoint salvage clearance.
+- Took final pre-termination read-only snapshot at `2026-06-02T16:56:37Z`:
+  no `train_rc.txt`, no `train_end.txt`, no log progress past
+  `Evaluating iter 1/10`, `latest_checkpointed_iteration.txt=35`, no
+  pre-intervention traceback/OOM/rank-exit evidence, and `iter_0000035`
+  present at `399G` with `28` files.
+- Sent SIGTERM only to task301 torchrun parent PID `1258209` at
+  `2026-06-02T16:58:51Z`; no SIGKILL was used and no files were deleted.
+- Torchrun propagated SIGTERM to rank PIDs `1258278` through `1258285`; wrapper
+  wrote `train_rc.txt=1` and `train_end.txt=2026-06-02T16:58:51Z`.
+- Final post-termination snapshot at `2026-06-02T17:06:07Z` showed no matching
+  task301 processes, no GPU compute apps, and all 8x H200 GPUs at `1 MiB`
+  memory.
+- Generated final disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`;
+  this is not a training PASS.
+- Created remote and local artifact manifests:
+  `iter_0000035_inventory.tsv` sha256
+  `7c7e60b5bf9a5e747e3115e37701da00b6643cd1c895e3336bef175dc6d13261`,
+  `iter_0000035.sha256` sha256
+  `c3f2d4b4b5d1c26041d96e5eb8799cf591acef346f75ebfdcdce40a12ec09c03`,
+  selected artifact hash manifest sha256
+  `1b2a767f72c64764cc481735ac1d2ab1825f92adf6e14ec671a61cae01663692`, copied
+  train log sha256
+  `e832845262135dca009d1373f8eeb04a6f3b18e5079f40a6456f20b999b49863`, and
+  copied manifest bundle hash list at
+  `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/manifests/local_salvage_copied_files.sha256`.
+- Preserved all artifacts under the remote run root and local output root.
+- No canary, corrected AIME FT eval, task243 eval, export, endpoint, promotion,
+  follow-on 30B work, task255 reuse, AIME2025 train rows, shared deletion,
+  direct main push, or merge was performed.
