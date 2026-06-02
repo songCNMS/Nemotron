@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=106 -->
+<!-- METADATA:SESSION=107 -->
 
 ## Knowledge Entries
 
@@ -89,3 +89,6 @@
    worker status has no new report, and remote rank event logs for all ranks
    still show `generation_batch_start` at `start_index=4` with no
    `generation_batch_done` for row 5.
+30. Session 107: active run remains in progress after about fifty-nine minutes;
+   no PR, mailbox report, rc, final FT artifacts, or blocker exists. Latest
+   visible progress is still `4/30`.

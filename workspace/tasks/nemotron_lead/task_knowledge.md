@@ -1741,3 +1741,7 @@
    status is still Working/accepted, mailbox and PR are empty, and remote rank
    event logs for ranks 0-7 all show `generation_batch_start` at
    `start_index=4` with no row 5 completion. No rc or final artifacts exist.
+493. Session 107: task306 remains active after about fifty-nine minutes; branch
+   stays `894e2e71`, mailbox unread count is `0`, no PR exists, no rc exists,
+   and no final FT summary/results/completions/parser diagnostics/checksum
+   artifacts exist. Latest visible progress is still `4/30`.
