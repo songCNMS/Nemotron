@@ -1,6 +1,6 @@
 # task249_qwen_aime_v10_live_contam_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0 - Assigned
 
@@ -232,44 +232,3 @@
 - Scope remained review-only: no implementation, training, live eval, endpoint
   launch, shared deletion, direct `main` push, branch rewrite, first go/no-go
   approval, or 30B scale action was performed.
-
-## Session 19 - Hook-required task284 hygiene bookkeeping
-
-- Stop-hook required task249 `history_log.md` and `task_knowledge.md` to carry
-  Session 19 metadata/entry for this worker turn.
-- Remote task284 branch hygiene was cleaned and pushed at
-  `27d28b520e442d71888120d4f1ae2d377636f7b6`; its branch diff against
-  `origin/main` is scoped to worker_4 status plus task284 docs.
-- Lead was notified by mailbox `a135ce2d150c4f9295604cb8bbfab0c1`.
-- Task284 remains HOLD because task283 branch
-  `origin/intern_nemotron_worker_2/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1`
-  at `c1d988e29abafa51a9c3f83a98e21b229135f97e` is acceptance/docs only and
-  no task283 PR or worker output artifact path is visible.
-- This entry is bookkeeping only and does not change task249/#323 gate state or
-  approve task283/task284 runtime readiness.
-
-## Session 20 - Hook-required task284 HOLD update
-
-- Stop-hook required task249 `history_log.md` and `task_knowledge.md` to carry
-  Session 20 metadata/entry for this worker turn.
-- Lead confirmed remote task284 branch
-  `27d28b54342a98a4a336c46661964759f2790619` was clean, and this turn pushed
-  task284 status/docs update `c73568d` while keeping remote branch scope to
-  worker_4 status plus task284 docs.
-- Task284 remains HOLD: task283 has acceptance branch
-  `c1d988e2a9ef4139b1fa7cf850d3f4552114be56`, but no official branch/report
-  beyond acceptance and no accepted task283 runtime artifact evidence.
-- This entry is bookkeeping only and does not change task249/#323 gate state or
-  approve task283/task284 runtime readiness.
-
-## Session 21 - Hook-required task284 review bookkeeping
-
-- Stop-hook required task249 `history_log.md` and `task_knowledge.md` to carry
-  Session 21 metadata/entry for this worker turn.
-- Completed task284 read-only review of task283 PR #349 exact head
-  `2d042cedb0c4cc448c89d57d7b18986d92361349` and mailed lead
-  `39b9dcc257dc43238de471adfe8087a6`.
-- The task284 decision is APPROVE as no-training runtime/config/import
-  preflight evidence only, with residual risks and no execution clearance.
-- This entry is bookkeeping only and does not change task249/#323 gate state or
-  approve task283/task284 training readiness.
