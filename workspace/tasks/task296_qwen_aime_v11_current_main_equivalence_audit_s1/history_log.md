@@ -58,6 +58,8 @@
 - Confirmed current PR state locally as OPEN/base `main`/CLEAN/non-draft.
 - The first official mailbox attempt failed with `content_too_long`; prepared a
   compressed closeout instead.
+- Sent compressed official mailbox closeout successfully:
+  `b7fc615a2255420e8c1e4c46ac8207a7`.
 - No audit evidence changed: decision remains `A_PROVED_NO_RERUN`, with #312
   coordinator-docs-only classification, unchanged task285/task293 source-to-
   current product/eval surfaces, matched artifact checksums, and carried
