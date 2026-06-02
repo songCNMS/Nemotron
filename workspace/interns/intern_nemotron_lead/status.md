@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Session 74 tasks278-282 assigned; task278 active no-training preflight; no training/eval released |
+| PR | task278 branch ead53f2 and task280 branch 522cc23 visible; no PRs; waiting task278 preflight evidence |
 | Session | 74 |

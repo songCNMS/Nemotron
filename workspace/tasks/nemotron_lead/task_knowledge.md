@@ -547,3 +547,7 @@
 202. Session 74 accept-task peer messages are subordinate to task docs. If a
    worker sees duplicate accept-only messages, they do not broaden scope or
    release training/eval.
+203. task278 acceptance branch head is
+   `ead53f2c5c9e4e6ca854f31dc86dc6861dafa57e`; task280 no-run planning HOLD
+   branch head is `522cc23c04429fdfb023efc296cb302d98f9653d`. Neither is
+   preflight/training/eval evidence yet.

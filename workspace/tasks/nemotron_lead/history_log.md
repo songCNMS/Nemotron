@@ -4545,3 +4545,20 @@
   task docs. In particular, no worker received release to train, run live
   canary, run AIME/task243 eval, export, endpoint, promote, reuse task255, use
   AIME2025 train data, delete shared files, push main, merge, or use 30B/8-GPU.
+- Processed worker_2 mailbox `2f911d8cb254444ba09796b6fbbbacef`: task278
+  accepted, branch
+  `intern_nemotron_worker_2/task278_qwen_aime_v11_task276_config_import_preflight_s1`
+  pushed at `ead53f2c5c9e4e6ca854f31dc86dc6861dafa57e`, no PR yet, proceeding
+  with README-bounded no-training config/import preflight only. Lead marked it
+  read.
+- Fetched origin after worker notifications:
+  - task278 branch is visible at
+    `ead53f2c5c9e4e6ca854f31dc86dc6861dafa57e`;
+  - task280 branch is visible at
+    `522cc23c04429fdfb023efc296cb302d98f9653d`;
+  - no task279/task281/task282 remote branches are visible yet;
+  - no task278-task282 PRs are visible.
+- Lead-side branch hygiene only: task278 and task280 diffs versus `origin/main`
+  are worker status plus task docs only, and `git diff --check` passes for both.
+- Current gate remains waiting for task278 preflight evidence or exact blocker.
+  No training/eval action is released.
