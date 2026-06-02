@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task301 validation terminated rc=1; awaiting worker_5 inventory/report |
-| Session | 81 |
+| PR | 30B gate HOLD: #362 task301 salvage candidate awaiting task303 independent review |
+| Session | 82 |

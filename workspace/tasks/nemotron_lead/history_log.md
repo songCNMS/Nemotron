@@ -6927,3 +6927,31 @@
   corrected AIME/task243 eval, export, endpoint, promotion, follow-on 30B work,
   merge, or any task255/AIME2025-train-data use until worker_5 closeout and
   independent artifact review are processed.
+
+## Session 82 - 2026-06-02 UTC - task303 salvage review assignment
+
+- Fetched origin and verified current heads: `origin/main`
+  `e400cea8a1604bc95cc430a194811ff553b99401`, lead branch
+  `c414af5192d253384ab1dc09e357b776fbdf55f6`, and task301 worker_5 branch
+  `c75c584875afdbdde4130775cbdc83355e7639ea`.
+- Verified #362 is still OPEN/base `main`/CLEAN/non-draft at exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea` with no review decision. The
+  diff scope is worker_5 status plus task301 README/history/task_knowledge and
+  `30b_full_sft_training_report.md`; `git diff --check` passed.
+- Carried forward task301 disposition from #362:
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+  The 30B SFT reached `35/35`, skipped `0`, NaN `0`, saved `iter_0000035`,
+  then hung in built-in validation and was lead-terminated with `train_rc=1`.
+- Created task303
+  `task303_qwen_aime_v11_30b_task301_salvage_review_s1` and assigned
+  `intern_nemotron_worker_4` to independently review #362 exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea` plus task301 local/remote salvage
+  artifacts.
+- Task303 scope is read-only artifact/report review only. It does not authorize
+  training, non-AIME canary, corrected AIME/task243 eval, export, endpoint,
+  promotion, follow-on 30B work, task255 reuse, AIME2025 train data, shared
+  deletion, main push, merge, or worker_5 branch rewrite.
+- Gate remains HOLD pending worker_4 approve/request-changes/block report for
+  task303. If approved, lead may consider a later separately assigned
+  non-AIME canary task against the salvage checkpoint; corrected AIME and any
+  promotion/export stay blocked until their own gates.

@@ -1462,3 +1462,23 @@
    exact termination evidence, process/GPU release proof, checkpoint/log/
    manifest checksums, metrics through iter 35, and residual risks. Downstream
    canary/AIME/export/endpoint/promotion remain HOLD.
+423. #362/task301 is now OPEN/base `main`/CLEAN at exact head
+   `c75c584875afdbdde4130775cbdc83355e7639ea`. The PR diff against
+   `origin/main` remains worker_5 status plus task301 docs/report only, and
+   `git diff --check` passes.
+424. task301 final closeout evidence is a salvage candidate, not a clean PASS:
+   training reached `35/35`, saved `iter_0000035`, skipped `0`, NaN `0`, then
+   hung in built-in validation; lead-cleared termination produced `train_rc=1`
+   and `train_end=2026-06-02T16:58:51Z`.
+425. Task303
+   `task303_qwen_aime_v11_30b_task301_salvage_review_s1` is assigned to
+   `intern_nemotron_worker_4` for independent read-only review of #362 exact
+   head `c75c584875afdbdde4130775cbdc83355e7639ea`, the local artifact root
+   `/work-agents/intern_nemotron_worker_5/outputs/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`,
+   and the remote root
+   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`.
+426. Task303 can only return approve/request-changes/block for whether lead may
+   consider a later non-AIME canary assignment. It does not clear training,
+   AIME/task243 eval, export, endpoint, promotion, follow-on 30B work, task255
+   reuse, AIME2025 train data, shared deletion, main push, merge, or worker_5
+   branch rewrite.
