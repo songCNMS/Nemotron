@@ -1,6 +1,6 @@
 # task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -28,3 +28,27 @@
   non-AIME canary, export for promotion, production endpoint, promotion,
   task255 reuse, AIME2025 train prompts/labels, shared deletion, main push, or
   merge.
+
+## Session 2 - Runtime/resource/base-load evidence
+
+- Ran task-owned NemTron no-training preflight under
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z`
+  after syncing the worker branch into the run-local `Nemotron` path.
+- Verified exact 30B model path:
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`;
+  nearby variants exist but were not substituted.
+- Captured model inventory: 57G HF checkpoint, 16 safetensor shards, Qwen3-MoE
+  config, HF config/tokenizer load pass, and safetensor metadata read pass.
+- Built the current-main 30B Qwen3-A3B Bridge recipe with
+  `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`,
+  TP=4, PP=2, EP=4, ETP=1, sequence parallel enabled, GBS=8/MBS=1.
+- Ran task-owned `AutoBridge.import_ckpt` import from the 30B HF path into
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`;
+  it returned `BRIDGE_IMPORT_RC=0`, wrote latest iteration `0`, and produced a
+  57G torch-dist checkpoint with checksum manifest.
+- Disposition recorded in `30b_runtime_resource_base_load_report.md`:
+  `PASS_RUNTIME_RESOURCE_BASE_LOAD_GATE_WITH_TRAINING_LAUNCH_RESIDUALS`.
+- Boundaries held: no SFT training, optimizer step, corrected AIME scoring,
+  non-AIME canary, eval run, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, main push, merge, or shared-root
+  mutation.
