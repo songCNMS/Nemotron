@@ -1,6 +1,6 @@
 # task274_qwen_aime_v11_data_safety_ready_review_s1 - Data safety readiness review
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
+<!-- METADATA:STATUS=Review,ASSIGNEE=intern_nemotron_worker_1,SESSION=1 -->
 
 ## Background
 
@@ -33,7 +33,7 @@ before training can be considered.
 
 - Branch:
   `intern_nemotron_worker_1/task274_qwen_aime_v11_data_safety_ready_review_s1`.
-- PR only if docs/status change; mailbox-only report is acceptable.
+- PR because docs/status changed; mailbox report required.
 - Mailbox report with data readiness disposition, artifact paths/revisions,
   contamination/decontamination checks reviewed, and boundary confirmation.
 
@@ -54,4 +54,9 @@ before training can be considered.
 - Task docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at
   `b7e58017ce2324ef24bf130e7ad84082b5271d1f`.
-- Status: accepted; beginning read-only data safety/readiness review.
+- Status: review complete; preparing PR and mailbox closeout.
+- Report:
+  `workspace/tasks/task274_qwen_aime_v11_data_safety_ready_review_s1/data_safety_ready_review_report.md`.
+- Disposition: source/decontamination evidence is safe, but currently visible
+  packed Qwen data remains blocked for direct pilot use until V11 data is
+  rematerialized with task262 collision-safe split logic.
