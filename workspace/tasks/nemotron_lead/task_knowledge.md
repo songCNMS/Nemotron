@@ -1854,3 +1854,7 @@
    minutes; latest visible stdout progress advanced to `12/30`, with row 12
    length-stopped parsed false/correct false. No PR, mailbox report, local rc,
    final artifacts, or blocker exists.
+522. Session 136: task306 remains active after about one hundred fifty-nine
+   minutes; latest visible stdout progress remains `12/30`, and remote rank
+   logs show `start_index=12` active with no done event. No PR, mailbox report,
+   local/remote rc, final artifacts, or blocker exists.
