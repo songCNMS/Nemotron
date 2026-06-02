@@ -662,3 +662,8 @@
    versions, commands/env, `/root` sync/code revision proof, task276 input
    checksums, config/import/load preflight scope, and no-training/no-eval proof
    before task284 can review.
+233. #348/task282 merged at `2026-06-02T05:36:00Z` with merge commit
+   `3dc19dbd889ac0554e73c51a43b4ecb27b210920` from exact approved head
+   `19024996b9eb1327e0566fa6c16a76b4ba3c1460`. It is docs/runbook provenance
+   only and does not release task283 execution beyond its no-training scope or
+   any task280/task281 live action.

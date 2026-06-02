@@ -4883,3 +4883,17 @@
 - Current state remains fail-closed: task283 official report/PR or exact blocker
   is still missing, task284 substantive review has not started, #348 self-merge
   closeout is pending, and no training/eval/promotion/30B action is released.
+- Fetched origin after #348 release: #348/task282 is now `MERGED` with mergedAt
+  `2026-06-02T05:36:00Z`, merge commit
+  `3dc19dbd889ac0554e73c51a43b4ecb27b210920`, and merged head
+  `19024996b9eb1327e0566fa6c16a76b4ba3c1460`. `origin/main` is now
+  `3dc19dbd889ac0554e73c51a43b4ecb27b210920`.
+- Verified #348 merge scope from
+  `28039222ad5d4054891713d85d05a15a491d8a96..3dc19dbd889ac0554e73c51a43b4ecb27b210920`:
+  worker_5 status, task282 README/history/task_knowledge/report, and task266
+  runbook report only; `git diff --check` passed. No worker_5 post-merge
+  mailbox closeout is visible yet.
+- Current open PR list after #348 merge contains only unrelated #312. The next
+  Qwen AIME V11 gate remains task283 official no-training runtime evidence or
+  exact blocker, followed by task284 review. No training/eval/promotion/30B
+  action is released.
