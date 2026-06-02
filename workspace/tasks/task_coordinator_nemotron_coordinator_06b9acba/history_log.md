@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
 
 ## Session 0 - Created with coordinator
 
@@ -591,3 +591,31 @@
 - Set delivered pressing goal on `intern_nemotron_lead` with client goal id `qwen-aime-v11-full-data-train-eval-start-session43`.
 - Preserved hard boundaries in the lead instruction and goal: AIME2025 prompts/labels remain held-out eval/decontam only and must not enter training; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; no export, endpoint, promotion, or 30B/8-GPU unless same-harness FT is at least base and a later gate authorizes it.
 - Final light monitor after goal delivery showed no new task277-task280 remote branch and no new open PR beyond #312 yet. This Session started the full-flow attempt by goal/lead dispatch, but did not run training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, shared deletion, or 30B/8-GPU directly from coordinator.
+
+## Session 44 - PR merge and current-code pipeline handoff
+
+- Received user instruction `提交并merge pr，然后基于现在的代码跑全量的data training和evaluation pipeline`.
+- Fetched `origin`; current state had advanced substantially after Session 43:
+  - `origin/main` is `5d8b8d850d26e785332f8b707c772d99881a1b5d`;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `2d14816d823d392d81d82725edb0f2584e1a03b3`;
+  - current open PR list contains only #312 coordinator audit, with head `cf1f336c9a59e987dcccaccc90343c64c24a62e2`, base `main`, `MERGEABLE`, and `CLEAN`.
+- Verified #312 scope before merge request handling: coordinator status/history/task_knowledge plus `session16_aime2025_qwen_handoff.md`; no product code or training scripts.
+- Read latest lead Session 74+ history and merged task evidence. The Session 43 full-pipeline attempt did run through the gated route:
+  - #347/task278 recorded an initial config import preflight blocker and merged at `28039222ad5d4054891713d85d05a15a491d8a96`;
+  - #349/task283 and task284 review established a task-owned no-training Qwen3-4B runtime/config import route with residual environment limits;
+  - #350/task285 produced bounded Qwen3-4B SFT smoke evidence from task276 packed data, with retry3 iter2 checkpoint but command `RC=1` after post-train built-in validation/SIGTERM;
+  - #352/task287 recorded a first no-export non-AIME canary blocker, #353/task290 approved that blocker evidence, then #354/task291 and #355/task292 unblocked/approved a no-export canary route;
+  - #356/task293 merged corrected AIME2025 same-harness eval evidence for task285 iter2;
+  - #357/task294 independently approved task293 as `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`;
+  - #351/task289/task295 merged post-AIME runbook/provenance at current `origin/main` `5d8b8d85`.
+- Recorded the key metric from merged evidence: task285 iter2 FT scored `12/30 = 0.4` on corrected AIME2025, above accepted Qwen3-4B base `11/30 = 0.36666666666666664`, delta `+1/30`.
+- Recorded key artifact locations:
+  - task285 checkpoint root `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3`;
+  - task293 local eval root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`;
+  - task293 remote eval root `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`.
+- Recorded residuals that prevent overclaiming:
+  - task285 is bounded smoke evidence, not a clean full training pass, because retry3 completed two optimizer iterations and produced iter2 checkpoint but ended `RC=1` during post-train validation/SIGTERM;
+  - task293/task294 accept `sampling_exact_parameter_match=false` as deterministic greedy semantic match for metric-gate evidence only;
+  - no export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
+- Prepared to merge #312 with exact-head protection after committing/pushing this Session 44 coordinator record.
+- Planned lead handoff after #312 merge: set a current-main full-pipeline confirmation/rerun goal requiring lead to use the post-merge main, confirm whether task285/task293 artifacts are code-equivalent to current main or launch a fresh current-code run, and report final data/training/eval artifacts, metrics, residuals, and blockers.

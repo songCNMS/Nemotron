@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
 
 ## Knowledge Entries
 
@@ -121,3 +121,9 @@
 115. task276/task277 residual risk must carry into later launch gates: validation is sparse with one packed hard-math row and test is empty. This is acceptable for data/packing evidence only, not an automatic training/eval clearance.
 116. User Session 43 requested a full AIME-focused data/training/eval attempt. Coordinator set delivered lead pressing goal `qwen-aime-v11-full-data-train-eval-start-session43` to start a gated sequence: no-training config/import preflight, bounded Qwen3-4B nonzero-LR SFT smoke if preflight passes, non-AIME canary/completion retention, corrected AIME2025 same-harness FT-vs-base evaluation, and runbook/provenance update.
 117. Session 43 hard boundary remains: AIME2025 prompts/labels are held-out eval/decontam only and must not be used for training; no task255 reuse, shared deletion, export, endpoint, promotion, or 30B/8-GPU until same-harness FT is at least the accepted base `11/30 = 0.36666666666666664` and a later gate authorizes the action.
+118. Session 44 current main is `5d8b8d850d26e785332f8b707c772d99881a1b5d`; #312 coordinator PR is the only open PR at the check and is clean/mergeable at head `cf1f336c9a59e987dcccaccc90343c64c24a62e2` before adding the Session 44 record.
+119. The Qwen AIME V11 full-flow attempt has produced merged evidence through current main: task283 runtime/config import route, task285 bounded SFT smoke, task291/task292 no-export canary route pass, task293 corrected AIME eval, task294 independent AIME review, and task295 runbook/provenance.
+120. task285 training evidence is bounded smoke only: retry3 completed two optimizer iterations with nonzero LR and finite losses and produced iter2 checkpoint, but the command ended `RC=1` after post-train built-in validation/SIGTERM. Do not call it a clean full training pass.
+121. task293 metric evidence: task285 iter2 FT scored corrected AIME2025 `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`, delta `+1/30`, with task294 decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
+122. task293/task294 residual: `sampling_exact_parameter_match=false`; accepted only as deterministic greedy semantic match for metric-gate evidence. No export, endpoint, promotion, further training/eval, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
+123. Session 44 user request requires post-merge current-code confirmation/rerun from lead: use post-merge main, confirm task285/task293 artifact code-equivalence to current code or run a fresh current-code full data/training/eval pass, and report artifacts/metrics/residuals.
