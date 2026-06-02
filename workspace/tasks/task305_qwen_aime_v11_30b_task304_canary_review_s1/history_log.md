@@ -53,5 +53,9 @@
   OPEN/base `main`/CLEAN/MERGEABLE/non-draft at `e5cc4982`.
 - Task305 review target is refreshed again from `a38abd53` to exact #367 head
   `e5cc49821d39a014756dfd3ce961bab351a4f0fe`.
+- Pushed lead branch head `b7cf1393` and sent delivered final task305 refresh
+  peer_send to worker_4 for exact head `e5cc4982`.
+- Sent delivered follow-up peer_send to worker_3 asking for no further #367
+  head changes unless lead asks, while #367 remains HOLD for task305 review.
 - #367 remains HOLD pending task305 approve/request-changes/block for the
   refreshed exact head.

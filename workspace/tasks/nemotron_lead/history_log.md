@@ -7132,6 +7132,9 @@
 - Refreshed task305 docs again to exact #367 head `e5cc4982`; worker_4 must now
   verify `d8e58461..e5cc4982`, `773aff2c..a38abd53`, and
   `a38abd53..e5cc4982`.
+- Pushed lead branch head `b7cf1393`, sent delivered final task305 refresh to
+  worker_4 for exact head `e5cc4982`, and sent delivered follow-up to worker_3
+  requesting no further #367 head changes unless lead asks.
 - #367 remains HOLD pending task305 approve/request-changes/block. This does
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or

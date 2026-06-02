@@ -1608,3 +1608,6 @@
    `a38abd53..e5cc4982` is worker_3 status plus task304 history/task_knowledge
    only and diff-check clean. task305 review target is now exact head
    `e5cc4982`, superseding `a38abd53`.
+458. After pushing lead head `b7cf1393`, lead sent delivered final task305
+   refresh to worker_4 for exact head `e5cc4982` and delivered no-churn HOLD
+   follow-up to worker_3.

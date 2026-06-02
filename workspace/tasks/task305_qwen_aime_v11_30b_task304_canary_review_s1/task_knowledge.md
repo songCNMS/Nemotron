@@ -36,3 +36,6 @@
 12. `a38abd53..e5cc4982` changed worker_3 status plus task304 history/
     task_knowledge HOLD bookkeeping only, with diff-check clean. task305 must
     verify that final drift independently.
+13. Final task305 refresh peer_send for exact head `e5cc4982` was delivered to
+    worker_4 after lead branch `b7cf1393` was pushed. worker_3 was also told to
+    stop further #367 head changes unless lead asks.
