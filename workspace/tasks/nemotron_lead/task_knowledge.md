@@ -316,3 +316,7 @@
    promotion, task255 reuse, 30B/8-GPU, or shared deletion authorized.
 141. task268 assignment peer_send was delivered to worker_2; initial check found
    no task268 branch, PR, or mailbox response yet.
+142. task268 worker_2 branch is now visible at
+   `072fee967bdeb5b280e100f606637e2800e5a98f`; its diff is acceptance/status/
+   task-doc copies only, with no PR, mailbox report, output artifacts, Bridge
+   proof, or exact runtime blocker yet.
