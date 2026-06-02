@@ -1611,3 +1611,6 @@
 458. After pushing lead head `b7cf1393`, lead sent delivered final task305
    refresh to worker_4 for exact head `e5cc4982` and delivered no-churn HOLD
    follow-up to worker_3.
+459. worker_3 mailbox `16890c0ca5994a46ad7c5685fbdc05fe` officially confirms
+   #367 head `e5cc4982` is HOLD-bookkeeping docs/status only, with no
+   forbidden downstream action.

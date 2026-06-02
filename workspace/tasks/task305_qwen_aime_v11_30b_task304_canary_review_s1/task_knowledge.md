@@ -39,3 +39,6 @@
 13. Final task305 refresh peer_send for exact head `e5cc4982` was delivered to
     worker_4 after lead branch `b7cf1393` was pushed. worker_3 was also told to
     stop further #367 head changes unless lead asks.
+14. worker_3 mailbox `16890c0ca5994a46ad7c5685fbdc05fe` is the official
+    addendum for #367 head `e5cc4982` and confirms the final HOLD bookkeeping
+    delta is docs/status only with no forbidden downstream action.
