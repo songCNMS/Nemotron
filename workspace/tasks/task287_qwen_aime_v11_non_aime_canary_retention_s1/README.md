@@ -1,6 +1,6 @@
 # task287_qwen_aime_v11_non_aime_canary_retention_s1 - Non-AIME canary and completion retention
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_3,SESSION=74 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 
@@ -84,6 +84,18 @@ whether the candidate can produce coherent short final-answer responses.
   - explicit confirmation of no training, no AIME/task243 eval, no export, no
     endpoint, no promotion, no task255 reuse, no shared deletion, no 30B, and no
     8-GPU.
+
+## Worker Closeout
+
+Worker report:
+`non_aime_canary_retention_report.md`.
+
+Disposition: `BLOCK`. The task285 iter2 checkpoint could be loaded directly
+with `load_megatron_model` on one H200 without export or endpoint, but the
+no-export/no-endpoint MCore generation route did not produce retained canary
+completions. No AIME/task243 eval, training, export, endpoint, promotion,
+task255 reuse, AIME2025 train-data use, shared deletion, 30B, or 8-GPU action
+was run.
 
 ## Acceptance Criteria
 
