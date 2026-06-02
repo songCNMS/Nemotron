@@ -1,6 +1,6 @@
 # task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 - 30B runtime/resource/base-load gate
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 

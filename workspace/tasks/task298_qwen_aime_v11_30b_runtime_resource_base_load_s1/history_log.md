@@ -1,6 +1,6 @@
 # task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -64,3 +64,21 @@
 - Mailbox message id: `59ba26de6bd3468aa61c64a61e2cc840`.
 - Holding PR #364 for task302 review and lead gate. No self-merge, training,
   eval, export, endpoint, promotion, shared deletion, main push, or merge.
+
+## Session 4 - Lead-approved self-merge
+
+- Lead approved task298/#364 as runtime/resource/base-load evidence with
+  residuals at exact head
+  `8f1f7df9d6499eedb150d7e63323df8ee0411f41` after task302 independent
+  review.
+- Rechecked PR #364 immediately before merge: `OPEN`, base `main`, not draft,
+  `CLEAN`, and exact head
+  `8f1f7df9d6499eedb150d7e63323df8ee0411f41`.
+- Self-merged PR #364 at `2026-06-02T15:13:14Z`.
+- Merge commit:
+  `a0235f14dc3c49797c507ab4578536ba2d6ed3ac`.
+- Merged head:
+  `8f1f7df9d6499eedb150d7e63323df8ee0411f41`.
+- Boundary confirmation: no training, testing, export, endpoint, promotion,
+  AIME2025 train data, task255 reuse, shared deletion, shared-root mutation, or
+  main push outside the approved GitHub PR merge occurred.

@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task298_qwen_aime_v11_30b_runtime_resource_base_load_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 |
-| PR | #364 |
-| Session | 3 |
-| Last Update | 2026-06-02T14:57:23Z: Resent official task298/#364 exact-head mailbox for a1bd2af OPEN/CLEAN; holding for task302 review and lead gate, no self-merge or further runtime action. |
+| Current Task | none |
+| PR | #364 merged |
+| Session | 4 |
+| Last Update | 2026-06-02T15:14:01Z: task298/#364 self-merged at approved head 8f1f7df; merge commit a0235f14, no training/testing/export/endpoint/promotion/AIME2025 train data/task255/shared deletion occurred. |
