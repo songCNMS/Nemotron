@@ -4,7 +4,7 @@
 
 ## Knowledge Entries
 
-1. task277 reviews #344 exact head `98d1bded1f365d1f38de1db676ad12f5c6489738`
+1. task277 reviews #344 exact head `07efab4fa0d8367e96f54af3d2cdc70768d73595`
    and must stop if the PR head changes.
 2. task276 reports `PACKED_QWEN_READY_FOR_REVIEW`, not training readiness or
    promotion readiness.

@@ -6,21 +6,21 @@
 
 task276 produced PR #344 with a fresh no-training V11 `packed_qwen` artifact
 report. Lead observed #344 open/clean at exact head
-`98d1bded1f365d1f38de1db676ad12f5c6489738` and a task-owned run root under
+`07efab4fa0d8367e96f54af3d2cdc70768d73595` and a task-owned run root under
 worker_2 outputs. This needs independent review before any later no-training
 config/import preflight task can be considered.
 
 ## Goal
 
 Independently review task276/#344 exact head
-`98d1bded1f365d1f38de1db676ad12f5c6489738` and the referenced artifact paths to
+`07efab4fa0d8367e96f54af3d2cdc70768d73595` and the referenced artifact paths to
 decide whether the fresh V11 packed Qwen root is acceptable as
 reviewed data/packing evidence only.
 
 ## Scope
 
 - Review PR #344 at exact head
-  `98d1bded1f365d1f38de1db676ad12f5c6489738`; if the head changes, stop and
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`; if the head changes, stop and
   report.
 - Review the report:
   `workspace/tasks/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/v11_rematerialized_packed_qwen_report.md`.

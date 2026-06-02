@@ -4355,6 +4355,17 @@
   changed; the task276 report remained unchanged. `git diff --check
   origin/main...origin/intern_nemotron_worker_2/task276_qwen_aime_v11_rematerialize_packed_qwen_s1`
   passed.
+- Lead pushed task277 assignment docs at `4fa43dc96ffab5f7f7c648dede92ce00087b8c74`
+  and delivered the worker_4 peer_send assignment, but #344 advanced again to
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595` during that handoff.
+- Re-fetch confirmed #344 at `07efab4fa0d8367e96f54af3d2cdc70768d73595` is
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE`, non-draft, no checks, blank
+  reviewDecision. The `98d1bded1f365d1f38de1db676ad12f5c6489738..07efab4fa0d8367e96f54af3d2cdc70768d73595`
+  diff is worker_2 status plus task276 history/task_knowledge only; the
+  `v11_rematerialized_packed_qwen_report.md` payload remains unchanged.
+- Updated task277 review target to current exact #344 head
+  `07efab4fa0d8367e96f54af3d2cdc70768d73595`; worker_4 must stop and report if
+  #344 head changes again.
 - task277 scope: approve/request-changes/block for task276 data/packing
   evidence only. It must not edit files, train, eval, export, launch endpoints,
   promote, use AIME2025 train data, reuse task255, delete shared files, merge,

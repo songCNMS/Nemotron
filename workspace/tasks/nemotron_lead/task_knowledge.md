@@ -484,7 +484,7 @@
 184. A worker-local task276 branch with staged task docs is not formal gate
    evidence. Lead should wait for a pushed branch and/or mailbox acceptance,
    then for artifact paths/checksums or exact blocker before assigning review.
-185. task276/#344 at head `98d1bded1f365d1f38de1db676ad12f5c6489738`
+185. task276/#344 at head `07efab4fa0d8367e96f54af3d2cdc70768d73595`
    contains a reviewable packed Qwen artifact report, but it is not approved
    until independent task277 review and lead gate complete.
 186. task276 valid split sparsity is a concrete residual risk: valid has one
@@ -497,3 +497,8 @@
 188. The #344 drift from `afd206e986b11acd67cbd220eb05f6e563d10a4a` to
    `98d1bded1f365d1f38de1db676ad12f5c6489738` is worker_2 status only; the
    task276 report is unchanged and the current exact review head is `98d1bde`.
+189. The later #344 drift from
+   `98d1bded1f365d1f38de1db676ad12f5c6489738` to
+   `07efab4fa0d8367e96f54af3d2cdc70768d73595` is worker_2 status plus task276
+   history/task_knowledge only; the report payload remains unchanged. task277
+   now reviews exact head `07efab4`.
