@@ -50,6 +50,8 @@
 - Recommended next bounded unblock topic: repair/prove the no-export/no-endpoint
   Qwen3-4B task285 iter2 local generation route and retain non-AIME completion
   artifacts before any AIME/task243 release.
+- Opened task290 PR #353:
+  https://github.com/songCNMS/Nemotron/pull/353.
 - No code edit, canary run, training, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train-data use, shared deletion, merge,
   main push, 30B, or 8-GPU action was performed.

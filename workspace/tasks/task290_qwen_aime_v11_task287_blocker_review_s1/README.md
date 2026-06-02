@@ -115,6 +115,8 @@ Key observed fields to verify:
 - Status: accepted; beginning read-only independent review.
 - Report:
   `workspace/tasks/task290_qwen_aime_v11_task287_blocker_review_s1/task287_blocker_review_report.md`.
+- PR:
+  https://github.com/songCNMS/Nemotron/pull/353
 - Reviewed authoritative task287 PR #352 exact head:
   `52834d74c79ab98b5e125434160843752c34d47a`.
 - Decision: `APPROVE_BLOCKER_CLOSEOUT`.
