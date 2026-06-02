@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #347 MERGED; task283 accepted; task284 accepted HOLD with branch cleanup requested; #348 refresh pending; no training/eval |
+| PR | #347 MERGED; task283 in progress with unofficial dep logs; task284 clean HOLD; #348 stale refresh pending; no training/eval |
 | Session | 74 |

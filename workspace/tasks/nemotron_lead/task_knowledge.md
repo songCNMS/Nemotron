@@ -635,3 +635,17 @@
 225. worker_4's task284 HOLD is substantively correct because task283 has only
    acceptance docs at `c1d988e2a9ef4139b1fa7cf850d3f4552114be56`; no runtime
    artifact or blocker report exists yet.
+226. task284 branch cleanup is remote-visible at
+   `27d28b54342a98a4a336c46661964759f2790619`; the branch diff is now worker_4
+   status plus task284 docs only.
+227. Unofficial task283 output root
+   `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`
+   shows dependency remediation progressed through missing
+   `megatron.energon` -> `multistorageclient` -> `xattr` -> `wcmatch`, but no
+   official report or PR exists yet.
+228. task283 official evidence must explain `logs/synced_head.txt` showing
+   `fatal: not a git repository` despite the task requirement for code revision
+   and `/root` sync proof.
+229. #348 remote head `4947f18e56bf5ec62ab21d96d599b4e21b769346` is still
+   stale. Do not approve until worker_5 pushes a refresh that records #347
+   merged blocker state and task283/task284 gates.

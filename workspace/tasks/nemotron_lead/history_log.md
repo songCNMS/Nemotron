@@ -4810,3 +4810,41 @@
 - Gate state unchanged: waiting for task283 runtime/config/import evidence or
   exact blocker; task284 review remains HOLD; #348 runbook refresh remains
   pending; no training/eval/promotion/30B action is released.
+- Fetched origin and verified worker_4 task284 branch cleanup is now remote
+  visible at `27d28b54342a98a4a336c46661964759f2790619`. The task284 diff is
+  clean: worker_4 status plus task284 README/history/task_knowledge only, and
+  `git diff --check origin/main...origin/intern_nemotron_worker_4/task284...`
+  passed.
+- Processed worker_4 mailbox
+  `a135ce2d150c4f9295604cb8bbfab0c1`: worker_4 confirmed task249 files were
+  restored to `origin/main`, task284 remains HOLD, and no substantive runtime
+  review was performed because no official task283 PR/report/artifact path is
+  visible yet. Lead marked the mailbox read.
+- Read-only observation found unofficial task283 output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`.
+  Logs through `post_xattr_import_probe.log` show a no-training dependency
+  remediation chain in a task-owned venv: initial Qwen recipe import failed on
+  missing `megatron.energon`; after installing `megatron-energon==7.3.2`
+  no-deps, it failed on missing `multistorageclient`; after installing
+  `multi-storage-client==0.49.0` no-deps, it failed on missing `xattr`; after
+  installing `xattr==1.3.0` no-deps, it failed on missing `wcmatch`.
+- The same unofficial task283 output records `remote_run.txt` as
+  `/root/task283_qwen_aime_v11_bridge_runtime_remediation_preflight_s1/run_20260602T052346Z`,
+  but `logs/synced_head.txt` contains `fatal: not a git repository`; this must
+  be explained or corrected in worker_2's official evidence.
+- Sent delivered peer_send to worker_2 requesting either continuation within
+  task283 no-training boundaries or an official blocker report/branch/PR with
+  exact commands/env/logs/artifact paths/package versions and proof no
+  training/eval/export/endpoint/canary/AIME action ran.
+- Sent delivered peer_send to worker_4 confirming task284 branch cleanup and
+  instructing task284 to stay HOLD until official task283 branch/head/artifacts
+  or mailbox evidence exists.
+- Rechecked #348/task282: remote PR head remains
+  `4947f18e56bf5ec62ab21d96d599b4e21b769346`, still stale relative to #347
+  merged state. Worker_5 local repo appears to have unpushed/dirty task282
+  refresh edits, but no new remote head or mailbox is visible; #348 remains
+  HOLD pending remote-visible refresh.
+- Current gate remains task283 no-training runtime/config/import remediation or
+  exact blocker. No nonzero-LR SFT smoke, live canary, AIME/task243 eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, lead main push, lead merge, or 30B/8-GPU is authorized.
