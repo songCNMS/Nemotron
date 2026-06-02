@@ -1,6 +1,6 @@
 # task295_qwen_aime_v11_post_aime_pass_runbook_refresh_s1 - post-AIME runbook refresh
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Background
 
@@ -15,9 +15,13 @@ AIME2025 metric pass for task285 Qwen3-4B iter2:
   `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`
 
 The pass does not authorize export, endpoint, promotion, 30B, or 8-GPU.
-Worker_3 official closeout is PR #356, currently OPEN/CLEAN/MERGEABLE at exact
-head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. No task294 independent review
-branch or PR is visible in this refresh.
+Worker_3 official closeout PR #356 is MERGED at `2026-06-02T11:22:34Z` with
+merge commit `31a3e962544202954f0afba211888f7414b38d7c` from exact head
+`672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. Task294 independent review PR
+#357 is MERGED at `2026-06-02T11:16:53Z` with merge commit
+`24268157bd7088fea0f37d149cfc6ec042aa0e5a` from exact head
+`f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1` and decision
+`APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
 
 ## Goal
 
@@ -49,16 +53,30 @@ current post-AIME state, including the remaining gate holds and residual risks.
 - Recorded #355/task292 MERGED at `2026-06-02T08:37:35Z` with merge commit
   `228ffd741bb9fa4eae6abf8d37bc171397151d7a` and decision
   `APPROVE_CANARY_ROUTE_PASS`.
-- Recorded #356/task293 OPEN/base main/CLEAN/MERGEABLE at exact head
+- Recorded the Session 1 pre-merge #356/task293 state at exact head
   `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`.
 - Recorded task293 corrected AIME2025 FT `12/30 = 0.4` versus accepted base
   `11/30 = 0.36666666666666664`, with artifact roots and checksum values.
-- Recorded task294 independent review as pending/not visible after remote PR and
-  branch checks.
+- Recorded that Session 1 predated the merged task294 review evidence.
 - Kept export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, 30B, and 8-GPU blocked.
 - No runtime, training, canary, AIME re-eval, task243 eval, export, endpoint,
   promotion, merge, main push, or artifact mutation action was performed.
+
+## Session 2 Result
+
+- Refreshed existing #351 after lead request-changes comment `4601906134`.
+- Updated against current `origin/main`
+  `31a3e962544202954f0afba211888f7414b38d7c`.
+- Recorded #357/task294 MERGED at `2026-06-02T11:16:53Z` with merge commit
+  `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from exact head
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`.
+- Recorded #356/task293 MERGED at `2026-06-02T11:22:34Z` with merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c` from exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`.
+- Preserved residual risks and no-clearance boundaries: no export, endpoint,
+  promotion, further training/eval, task255 reuse, AIME2025 train data, shared
+  deletion, 30B, or 8-GPU clearance.
 
 ## Required Content
 

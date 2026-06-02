@@ -1,27 +1,29 @@
 # task289 Post-Smoke Runbook Provenance Report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=5 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
 
-Generated: 2026-06-02T11:11:13Z
+Generated: 2026-06-02T11:26:42Z
 
 ## Disposition
 
 Recommendation: `PASS` for docs/runbook provenance only.
 
 The V11 pipeline now has repo-visible packed-data, no-training preflight,
-bounded Qwen3-4B smoke, no-export/no-endpoint route-pass, and corrected
-AIME2025 metric evidence. Since the prior #351 refresh, #354/task291 merged the
-bounded no-export Qwen route pass, #355/task292 merged the independent route
-review, and #356/task293 is OPEN/CLEAN/MERGEABLE with the corrected task285
-iter2 AIME2025 result.
+bounded Qwen3-4B smoke, no-export/no-endpoint route-pass, corrected AIME2025
+metric evidence, and independent AIME gate review evidence. Since the prior
+#351 refresh, #354/task291 merged the bounded no-export Qwen route pass,
+#355/task292 merged the independent route review, #357/task294 merged the
+independent AIME gate review, and #356/task293 merged the corrected task285
+iter2 AIME2025 result into main.
 
 Task293 reports task285 Qwen3-4B iter2 FT `12/30 = 0.4` against the accepted
 task247 Qwen3-4B base comparator `11/30 = 0.36666666666666664`, for delta
 `+1/30` and accuracy delta `+0.03333333333333338`. This is a metric pass for
 the task293 corrected AIME2025 eval gate only. It does not authorize export,
 endpoint launch, promotion, task255 reuse, AIME2025 train-data use, shared
-deletion, main push, 30B, or 8-GPU. #356 is not merged in this refresh, and no
-task294 branch or PR is visible.
+deletion, main push, 30B, or 8-GPU. Task294 independently approved the metric
+gate as `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`; the residual
+`sampling_exact_parameter_match=false` remains visible in gate wording.
 
 ## Provenance
 
@@ -29,7 +31,7 @@ task294 branch or PR is visible.
 |---|---|
 | Worker branch | `intern_nemotron_worker_5/task289_qwen_aime_v11_post_smoke_runbook_provenance_s1` |
 | Branch base | `origin/main` at `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0` |
-| Current refresh base | `origin/main` at `228ffd741bb9fa4eae6abf8d37bc171397151d7a` |
+| Current refresh base | `origin/main` at `31a3e962544202954f0afba211888f7414b38d7c` |
 | Lead docs source | `origin/intern_nemotron_lead/session1-recovery-task-docs` at `70d7aafd0ef4c5073561dcea89cad5fb1d876b6d` |
 | Scope | Read-only docs/runbook provenance refresh for task295 on existing #351 |
 | Accepted base comparator | Qwen3-4B corrected AIME2025 `11/30 = 0.36666666666666664` |
@@ -54,9 +56,9 @@ task294 branch or PR is visible.
 | task290 blocker review | PR #353 MERGED at `2026-06-02T07:52:08Z` as `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; lead approval comment `4599915303` approved exact head as read-only blocker review docs/evidence only | Review report `task287_blocker_review_report.md`; decision `APPROVE_BLOCKER_CLOSEOUT`; reviewed #352 exact head; required hashes matched; no retained completion artifacts found; recommended bounded no-export/no-endpoint route-unblock task | MERGED BLOCKER REVIEW; no AIME/task243 release by itself |
 | task291 route unblock | PR #354 MERGED at `2026-06-02T08:30:04Z` as `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf` from head `2fda1ed46da4c82712a5c22c85bf124c26c6376f` | Artifact root `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`; route `direct_in_process_mcore_static_engine_no_export_no_endpoint_topk1_greedy`; `5` synthetic non-AIME prompts retained; exact matches `5/5`; canary summary sha `dd855c2c32b0b7411ee1cd365311363f1d3338753560107768b684b8fb660d40`; checksum manifest sha `08477bf8be669314a54359edeeca16de4605262ce5d553944e3477e4ff46f97d` | MERGED ROUTE PASS for non-AIME canary route only |
 | task292 route review | PR #355 MERGED at `2026-06-02T08:37:35Z` as `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from head `e519fecc1065bd055a69fdf271bd21994facd13b` | Review report `task291_canary_route_review_report.md`; decision `APPROVE_CANARY_ROUTE_PASS`; recomputed all files listed in task291 checksum manifest and all matched; boundary confirmation recorded no canary rerun, training, AIME/task243 eval, export, endpoint, promotion, task255 reuse, shared deletion, 30B, or 8-GPU action | MERGED INDEPENDENT ROUTE REVIEW; residual detokenized fallback risk carried |
-| task293 corrected AIME2025 eval | PR #356 OPEN/base main/CLEAN/MERGEABLE at head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; report `task285_iter2_same_harness_aime_eval_report.md`; run source head `87de0a97e6c0406a4b67520faab6b11d91d9131e`; run id `run_20260602T085237Z` | Candidate checkpoint `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3/iter_0000002`; base/tokenizer `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; local output root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; FT `12/30 = 0.4`; base `11/30 = 0.36666666666666664`; parsed rows `21/30`; request status `30/30 ok` | PASS for corrected AIME eval metric only; #356 not merged and task294 review not visible |
+| task293 corrected AIME2025 eval | PR #356 MERGED at `2026-06-02T11:22:34Z` as `31a3e962544202954f0afba211888f7414b38d7c` from head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; report `task285_iter2_same_harness_aime_eval_report.md`; run source head `87de0a97e6c0406a4b67520faab6b11d91d9131e`; run id `run_20260602T085237Z` | Candidate checkpoint `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/smoke_checkpoints_retry3/iter_0000002`; base/tokenizer `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`; local output root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; FT `12/30 = 0.4`; base `11/30 = 0.36666666666666664`; parsed rows `21/30`; request status `30/30 ok` | MERGED PASS for corrected AIME eval metric only |
 | task293 artifact hashes | task293 local copied artifacts have recorded sha256 checksums | `artifacts/aime_eval/summary.json` sha `64a378ca54534ec426b92a7b6bc436edb4fddd2ea1ba831f61afeed4e1ad39b7`; `results.jsonl` sha `4cbc2a9543a658df6a3e18e3128c5a5c9a173f9a575372095cfcbe5d6232aca5`; `full_completions.jsonl` sha `5cb1e11ab8d331127c7c12f2cd8c04d83d2e6bd93445a5ebffc62363e2a818b4`; checksum manifest sha `6a47e802433648248658010125db51474d0b4af565dc10c637d004900948e7d4`; prompt manifest sha `93146086fcc2214fc3c866354e23358d320377caddb6d2b5a2bd58954e85b919`; checkpoint load manifest sha `243044f2e548e0c8b1b539e9c11fee17a39b4d45898e1a6601382716e4d90c74`; command env manifest sha `5b128b5cc84159b8603b07fc92475ebc768152b7c0ea0fae0897c6635a502ccf` | Reviewable task293 artifacts recorded |
-| task294 independent review | `gh pr list --state all --search task294` and `git ls-remote --heads origin '*task294*'` found no task294 PR or branch | No repo-visible task294 review report exists in this refresh | HOLD_PENDING_REVIEW |
+| task294 independent review | PR #357 MERGED at `2026-06-02T11:16:53Z` as `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from head `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`; report `task293_aime_gate_review_report.md`; decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` | Reviewed task293 evidence source head `87de0a97e6c0406a4b67520faab6b11d91d9131e` and PR/report head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; recomputed task293 checksum manifest entries; verified FT `12/30 = 0.4` versus base `11/30 = 0.36666666666666664`; accepted `sampling_exact_parameter_match=false` as bounded residual | MERGED INDEPENDENT AIME GATE REVIEW; metric pass with residual only |
 
 ## Stage State
 
@@ -67,8 +69,8 @@ task294 branch or PR is visible.
 | Bounded Qwen3-4B smoke | `PASS_SMOKE_ONLY` | #350/task285 merged two-step nonzero-LR finite-loss checkpoint evidence; task286 approved smoke-only |
 | Non-AIME canary failed route | `BLOCKER_CLOSED` | #352/task287 merged BLOCK and task288/#353-task290 approved blocker closeout as evidence only |
 | No-export local route proof | `PASS_ROUTE_PROOF` | #354/task291 merged retained synthetic non-AIME completions `5/5`; #355/task292 independently approved the pass |
-| Corrected AIME2025 metric | `PASS_EVAL_GATE_ONLY` | #356/task293 reports task285 iter2 FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664` |
-| task293 publication / task294 review | `HOLD_PENDING_REVIEW` | #356 is open and task294 independent review is not repo-visible |
+| Corrected AIME2025 metric | `PASS_EVAL_GATE_WITH_RESIDUAL` | #356/task293 merged task285 iter2 FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`; #357/task294 approved with residual |
+| task293 publication / task294 review | `COMPLETE_FOR_METRIC_GATE` | #356 and #357 are merged; approval is metric-gate evidence only |
 | Promotion / export / endpoint / 30B / 8-GPU | `NO-GO` | no release clearance; task293 pass is not promotion or scale authorization |
 
 ## Read-Only Checks Performed
@@ -83,11 +85,13 @@ git rev-parse origin/main origin/intern_nemotron_lead/session1-recovery-task-doc
 gh pr view 351 --json number,state,baseRefName,headRefName,headRefOid,mergeable,isDraft,title,url
 gh pr view 354 --json number,state,headRefName,headRefOid,mergeCommit,mergedAt,title,url
 gh pr view 355 --json number,state,headRefName,headRefOid,mergeCommit,mergedAt,title,url
-gh pr view 356 --json number,state,baseRefName,headRefName,headRefOid,mergeable,isDraft,title,url
+gh pr view 356 --json number,state,baseRefName,headRefName,headRefOid,mergeCommit,mergedAt,title,url
+gh pr view 357 --json number,state,headRefName,headRefOid,mergeCommit,mergedAt,title,url
 gh pr list --state all --search task294 --json number,state,headRefName,headRefOid,mergeable,title,url,updatedAt --limit 20
 git ls-remote --heads origin '*task294*' '*task292*' '*task293*'
 git show origin/intern_nemotron_worker_3/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1:workspace/tasks/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/task285_iter2_same_harness_aime_eval_report.md
 git show origin/intern_nemotron_worker_4/task292_qwen_aime_v11_task291_canary_route_review_s1:workspace/tasks/task292_qwen_aime_v11_task291_canary_route_review_s1/task291_canary_route_review_report.md
+git show origin/main:workspace/tasks/task294_qwen_aime_v11_task293_aime_gate_review_s1/task293_aime_gate_review_report.md
 ```
 
 These were provenance reads only. No runtime, training, canary execution,
@@ -129,9 +133,10 @@ deletion, merge, main push, 30B, or 8-GPU action was performed.
   used SGLang `/v1/chat/completions`. Prompt tokenization, cache, parser,
   denominator, max-token cap, and deterministic greedy intent match; transport
   and sampling surfaces are not byte-identical.
-- #356/task293 is OPEN/CLEAN/MERGEABLE but not merged in this refresh.
-- No task294 branch or PR is visible, so independent task293 review remains
-  pending/not visible.
+- #356/task293 and #357/task294 are merged, but the merged evidence is bounded
+  to the corrected AIME metric gate. It does not authorize export, endpoint,
+  promotion, task255 reuse, AIME2025 train-data use, shared deletion, 30B, or
+  8-GPU.
 
 ## No-Clearance Statement
 

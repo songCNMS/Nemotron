@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - history log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - 2026-06-02 UTC - assignment
 
@@ -67,9 +67,8 @@
 - Fetched task291 branch; the branch currently resolves to
   `ec099d2e523064640c676e2f682e54f44ccd6098` and includes prior lead-observed
   head `4dffb40caea801503b8c39241f9afbe321887760`.
-- Read worker_2 task291 docs/status and local output directory read-only. At
-  that Session 4 point, a task291 published PR/report was not visible and
-  worker_2 status remained Working.
+- Read worker_2 task291 docs/status and local output directory read-only. That
+  Session 4 snapshot predated #354/#355 publication and review.
 - Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
   worker status, and carried task266 runbook report to hold task291 pending
   worker_2 official report/PR and lead processing.
@@ -113,7 +112,7 @@
   MERGEABLE at head `ac85acace556f3861576314fc2684733498074f2`, with no
   unrelated worktree changes.
 - Fetched current `origin/main`
-  `228ffd741bb9fa4eae6abf8d37bc171397151d7a` and lead docs
+  `31a3e962544202954f0afba211888f7414b38d7c` and lead docs
   `70d7aafd0ef4c5073561dcea89cad5fb1d876b6d`.
 - Verified #354/task291 is MERGED at `2026-06-02T08:30:04Z` with merge commit
   `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf` from head
@@ -121,8 +120,12 @@
 - Verified #355/task292 is MERGED at `2026-06-02T08:37:35Z` with merge commit
   `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from head
   `e519fecc1065bd055a69fdf271bd21994facd13b`.
-- Verified #356/task293 is OPEN/base main/CLEAN/MERGEABLE at exact head
-  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb` and read
+- Verified #357/task294 is MERGED at `2026-06-02T11:16:53Z` with merge commit
+  `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from head
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`.
+- Verified #356/task293 is MERGED at `2026-06-02T11:22:34Z` with merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c` from exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`, and read
   `task285_iter2_same_harness_aime_eval_report.md`.
 - Recorded task293 corrected AIME2025 result: task285 iter2 FT `12/30 = 0.4`
   versus accepted base `11/30 = 0.36666666666666664`, delta `+1/30`.
@@ -131,9 +134,8 @@
   remote root
   `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`,
   and key checksum values in the runbook report.
-- Checked for task294 with `gh pr list --state all --search task294` and
-  `git ls-remote --heads origin '*task294*'`; no task294 PR or branch was
-  visible.
+- Read task294 merged review report and recorded decision
+  `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
 - Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
   worker status, and the carried task266 runbook report. Imported task295 docs
   under `workspace/tasks/task295_qwen_aime_v11_post_aime_pass_runbook_refresh_s1/`.
@@ -141,3 +143,22 @@
   deletion, 30B, and 8-GPU blocked. No runtime, training, canary, AIME re-eval,
   task243 eval, export, endpoint, promotion, merge, main push, or artifact
   mutation action was performed.
+
+## Session 6 - 2026-06-02 UTC - merged task293/task294 refresh
+
+- Refreshed PR #351 after lead request-changes comment `4601906134` for head
+  `6d4b6ac6ab54ef09610c6e6bb49b8ebb4acc0a1c`.
+- Fetched current `origin/main`
+  `31a3e962544202954f0afba211888f7414b38d7c`.
+- Verified #357/task294 is MERGED at `2026-06-02T11:16:53Z` with merge commit
+  `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from exact head
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`.
+- Verified #356/task293 is MERGED at `2026-06-02T11:22:34Z` with merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c` from exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`.
+- Updated the task289 report, README, task knowledge, worker status, carried
+  task266 runbook matrix, and task295 docs to show the AIME metric pass and
+  independent review as merged evidence.
+- Kept residual risks and no-clearance boundaries visible. No runtime, training,
+  canary, AIME re-eval, task243 eval, export, endpoint, promotion, merge, main
+  push, shared deletion, 30B, 8-GPU, or artifact mutation action was performed.

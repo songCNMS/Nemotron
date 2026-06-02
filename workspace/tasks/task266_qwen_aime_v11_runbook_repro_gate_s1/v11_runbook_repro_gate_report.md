@@ -7,8 +7,9 @@
 - Recommendation for task266: PASS as a static V11 runbook/repro gate.
 - Recommendation for V11 execution: HOLD for export, endpoint, promotion,
   task255 reuse, AIME2025 train-data use, shared deletion, 30B, and 8-GPU. The
-  task293 corrected AIME2025 metric now beats the accepted base comparator, but
-  #356/task293 is not merged and task294 independent review is not repo-visible.
+  task293 corrected AIME2025 metric beats the accepted base comparator, #357
+  independently approved it with residual, and #356 merged the metric report
+  into main.
 - Branch:
   `intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1`.
 - Branch creation base: `origin/main` at
@@ -72,10 +73,13 @@
   route-pass evidence; #355/task292 is merged as
   `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from head
   `e519fecc1065bd055a69fdf271bd21994facd13b` with decision
-  `APPROVE_CANARY_ROUTE_PASS`. #356/task293 is OPEN/CLEAN/MERGEABLE at head
+  `APPROVE_CANARY_ROUTE_PASS`. #357/task294 is merged as
+  `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from head
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1` with decision
+  `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`. #356/task293 is merged as
+  `31a3e962544202954f0afba211888f7414b38d7c` from head
   `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb` and reports corrected AIME2025
   FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`.
-  task294 independent review is not repo-visible in the task295 refresh.
 - Boundary kept: no training, eval, export, endpoint launch, merge,
   promotion, 30B/8-GPU authorization, AIME2025 train-data use, shared deletion,
   or worker branch alteration.
@@ -84,10 +88,10 @@ The first measurable V11 corrected AIME result now satisfies:
 
 `task293_qwen3_4b_ft_exact_normalized_accuracy = 12/30 >= 11/30`
 
-under the corrected AIME2025 30x1 harness. This is an eval-metric pass only;
-export, endpoint, promotion, task255 reuse, AIME2025 train-data use, shared
-deletion, 30B, and 8-GPU remain held pending #356 publication, task294
-independent review if assigned, lead processing, and explicit release.
+under the corrected AIME2025 30x1 harness. This is an eval-metric pass with
+accepted residual only; export, endpoint, promotion, task255 reuse, AIME2025
+train-data use, shared deletion, 30B, and 8-GPU remain held pending explicit
+lead release for those actions.
 
 ## Evidence Inventory Checked
 
@@ -110,8 +114,8 @@ independent review if assigned, lead processing, and explicit release.
 | task290 task287 blocker review | PR #353 MERGED at `2026-06-02T07:52:08Z` as `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4` from exact head `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; lead approval comment `4599915303`; report decision `APPROVE_BLOCKER_CLOSEOUT` | MERGED BLOCKER REVIEW; no AIME/task243 release |
 | task291 route unblock | PR #354 MERGED at `2026-06-02T08:30:04Z` as `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf` from exact head `2fda1ed46da4c82712a5c22c85bf124c26c6376f`; artifact root `/work-agents/intern_nemotron_worker_2/outputs/task291_qwen_aime_v11_no_export_canary_route_unblock_s1/run_20260602T081136Z`; retained synthetic non-AIME prompts `5/5`; canary summary sha `dd855c2c32b0b7411ee1cd365311363f1d3338753560107768b684b8fb660d40`; checksum manifest sha `08477bf8be669314a54359edeeca16de4605262ce5d553944e3477e4ff46f97d` | MERGED ROUTE PASS for no-export/no-endpoint synthetic non-AIME route only |
 | task292 route review | PR #355 MERGED at `2026-06-02T08:37:35Z` as `228ffd741bb9fa4eae6abf8d37bc171397151d7a` from exact head `e519fecc1065bd055a69fdf271bd21994facd13b`; report `task291_canary_route_review_report.md`; decision `APPROVE_CANARY_ROUTE_PASS`; all task291 checksum manifest entries recomputed and matched | MERGED INDEPENDENT ROUTE REVIEW; detokenized fallback residual carried |
-| task293 corrected AIME eval | PR #356 OPEN/base main/CLEAN/MERGEABLE at exact head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; report `task285_iter2_same_harness_aime_eval_report.md`; local output root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; remote root `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; FT `12/30 = 0.4`; accepted base `11/30 = 0.36666666666666664`; summary sha `64a378ca54534ec426b92a7b6bc436edb4fddd2ea1ba831f61afeed4e1ad39b7` | PASS for corrected AIME eval metric only; #356 not merged |
-| task294 task293 review | No task294 PR or branch found by PR search or branch ref search in task295 Session 1 | HOLD_PENDING_REVIEW |
+| task293 corrected AIME eval | PR #356 MERGED at `2026-06-02T11:22:34Z` as `31a3e962544202954f0afba211888f7414b38d7c` from exact head `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`; report `task285_iter2_same_harness_aime_eval_report.md`; local output root `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; remote root `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`; FT `12/30 = 0.4`; accepted base `11/30 = 0.36666666666666664`; summary sha `64a378ca54534ec426b92a7b6bc436edb4fddd2ea1ba831f61afeed4e1ad39b7` | MERGED PASS for corrected AIME eval metric only |
+| task294 task293 review | PR #357 MERGED at `2026-06-02T11:16:53Z` as `24268157bd7088fea0f37d149cfc6ec042aa0e5a` from exact head `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`; report `task293_aime_gate_review_report.md`; decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` | MERGED INDEPENDENT AIME GATE REVIEW; residual accepted for metric-gate evidence only |
 | task265 independent review | Remote branch `origin/intern_nemotron_worker_4/task265_qwen_aime_v11_contam_regression_review_s1` is visible at `ca5ea1c405ef142ee51a43fcbab477a2958e48dc`; no PR or repo-visible task265 report exists; worker_4 status records a mailbox-only task265 read-only matrix refresh for #335/#336 with id `7e718a2c0ea746ed81352db5b5b6fe57` | MAILBOX-ONLY EVIDENCE: current repo cannot inspect the full task265 matrix file; final live execution still HOLD |
 | task260 failure forensics | Merged PR #332; report says task255 FT failure is generation degeneration/corruption, not evaluator-only parser failure | Used as V11 canary/retention requirement source |
 | task261 root cause | Merged PR #333; report identifies likely missing Qwen base load, zero LR at only step, and split basename collisions | Used as V11 data/base-load/schedule gate source |
@@ -317,8 +321,8 @@ Expected V11 task output roots:
 | 2. Base-load/import proof ready | task263 report proving Qwen3-4B base weight load or Bridge-approved HF import; positive load line or import manifest; base hashes; abort checks for random-init loss, NaN/Inf, zero LR; nonzero first-step LR schedule; NemTron sync path; task283 no-training preflight accepted | Coordinator Session 40 provides positive no-training Bridge import/preflight proof, and #349/task283 is MERGED with `CONFIG_IMPORT_PREFLIGHT_PASS_NO_TRAINING_NO_CHECKPOINT_SAVE`; #350/task285 also records Bridge base import rc `0` before optimizer execution | NO-TRAINING/BASE IMPORT EVIDENCE PRESENT; training/eval/export still gated |
 | 3. Non-AIME canary ready | task264 canary prompt set with source/hashes; proof prompts are not AIME2025 and not train rows; config/tokenizer parity checks; retention schema for full completions/debug transcript; task287 pass or reviewed route repair | task264 static prompt/retention contract is merged; #352/task287 is MERGED at `ca1ab63588651351b3e669450659abd2ad2c73e8` with `BLOCK`; task288/#353-task290 approved blocker evidence; #354/task291 is MERGED route pass with `5/5` retained synthetic non-AIME completions; #355/task292 approved the route pass | ROUTE PASS PRESENT for no-export/no-endpoint synthetic non-AIME route only |
 | 4. Bounded Qwen3-4B pilot allowed | Stages 1-3 pre-smoke gates, task283 preflight PASS, task286 approval, lead smoke release, Qwen3-4B only, code synced to task-owned `/root` run dir on NemTron, no AIME2025 train data, no task255 reuse | #350/task285 is MERGED and task286 approved it as bounded smoke evidence only: two optimizer iterations, nonzero LR, finite loss, iter2 checkpoint; post-train built-in eval/SIGTERM returned RC=1 | SMOKE EVIDENCE PRESENT ONLY; no clean train/eval pass |
-| 5. Corrected AIME2025 metric evidence | New V11 FT artifact is reviewer-readable with manifest/hash checks, reviewed route evidence, base protocol parity, accepted task247 cache/protocol, and explicit lead release | #356/task293 is OPEN/CLEAN/MERGEABLE at `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb` and reports FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`; task293 `sampling_exact_parameter_match=false` residual is carried; task294 review is not visible | PASS_EVAL_METRIC_PENDING_PUBLICATION_REVIEW |
-| 6. Promotion/non-regression decision | FT exact-normalized AIME25 score `>= 11/30` under corrected 30x1 pilot protocol, full promotion only after lead-defined full protocol, and no 30B/8-GPU without explicit permission | task293 metric beats base by `+1/30`, but #356 is not merged, task294 review is not visible, and no export/endpoint/promotion/scale release exists | HOLD/NO-GO for release, export, endpoint, promotion, 30B, and 8-GPU |
+| 5. Corrected AIME2025 metric evidence | New V11 FT artifact is reviewer-readable with manifest/hash checks, reviewed route evidence, base protocol parity, accepted task247 cache/protocol, and explicit lead release | #356/task293 is MERGED at `31a3e962544202954f0afba211888f7414b38d7c` and reports FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`; #357/task294 accepted task293 `sampling_exact_parameter_match=false` as bounded residual | PASS_EVAL_METRIC_WITH_RESIDUAL |
+| 6. Promotion/non-regression decision | FT exact-normalized AIME25 score `>= 11/30` under corrected 30x1 pilot protocol, full promotion only after lead-defined full protocol, and no 30B/8-GPU without explicit permission | task293 metric beats base by `+1/30`, but no export/endpoint/promotion/scale release exists | HOLD/NO-GO for release, export, endpoint, promotion, 30B, and 8-GPU |
 
 ## Command Templates
 
@@ -822,10 +826,11 @@ is authorized.
 - #354/task291 is the merged route-unblock pass for bounded one-GPU Qwen3-4B
   no-export/no-endpoint local generation with retained synthetic non-AIME
   completions. #355/task292 independently approved that route pass.
-- #356/task293 is the open corrected AIME2025 metric report for task285 iter2:
+- #357/task294 is the merged independent AIME gate review with decision
+  `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
+- #356/task293 is the merged corrected AIME2025 metric report for task285 iter2:
   FT `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`.
-  This is an eval-metric pass only; #356 is not merged and task294 review is
-  not visible.
+  This is an eval-metric pass with accepted residual only.
 - task280 #346 and task281 #345 are merged planning records only; task285
   supplies the bounded smoke evidence but does not release AIME/task243.
 - task263 is visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, but it has
@@ -854,8 +859,8 @@ is authorized.
 | V11 base-load/import ready | TASK283 #349 NO-TRAINING PREFLIGHT PASS plus task285 Bridge import proof |
 | V11 non-AIME route ready | ROUTE PASS PRESENT: #354/task291 is merged route-pass evidence and #355/task292 is merged independent route review |
 | Bounded Qwen3-4B pilot allowed | SMOKE EVIDENCE PRESENT ONLY via #350/#286; no clean train/eval pass |
-| Same-harness AIME metric | PASS_EVAL_METRIC_PENDING_PUBLICATION_REVIEW: #356/task293 reports FT `12/30 = 0.4` versus base `11/30 = 0.36666666666666664`; #356 not merged and task294 not visible |
+| Same-harness AIME metric | PASS_EVAL_METRIC_WITH_RESIDUAL: #356/task293 is merged and reports FT `12/30 = 0.4` versus base `11/30 = 0.36666666666666664`; #357/task294 approved with residual |
 | Promotion, export, endpoint, or 30B/8-GPU | NO-GO/HOLD |
 
-No release stage should move past HOLD until publication/review gaps are closed
-and lead explicitly releases the requested action.
+No release stage should move past HOLD until lead explicitly releases the
+requested action.
