@@ -1,13 +1,13 @@
 # task266 V11 runbook/repro gate report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Summary
 
 - Recommendation for task266: PASS as a static V11 runbook/repro gate.
 - Recommendation for V11 execution: HOLD / NO-GO until the remaining
-  task262-task265 exact artifacts, branch heads, reports, and review decisions
-  clear the stage gates.
+  nonzero-LR training evidence, live canary/candidate artifacts, task265 review,
+  same-harness comparison, and lead clearance clear the stage gates.
 - Branch:
   `intern_nemotron_worker_5/task266_qwen_aime_v11_runbook_repro_gate_s1`.
 - Branch creation base: `origin/main` at
@@ -26,6 +26,12 @@
   `4af57e0e61703a063c1ef42def44119a7eea5cf9`, and task264 PR #335 MERGED
   at `9d9285fd77820a5187440fbc2234dc36eb56942d` with merge commit
   `98e8aad39af9e705feed581e0ff9f8814073e2d8`.
+- Session 40 refresh from task275: coordinator evidence at
+  `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`
+  proves the no-training Qwen3-4B Bridge import/preflight route now passes with
+  `nemo-toolkit==2.7.3`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, and
+  `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`. This clears only the prior runtime
+  route blocker; it does not authorize training/eval/promotion.
 - Boundary kept: no training, eval, export, endpoint launch, merge,
   promotion, 30B/8-GPU authorization, AIME2025 train-data use, shared deletion,
   or worker branch alteration.
@@ -42,13 +48,31 @@ and independent contamination/regression review exist.
 
 | Surface | Visible evidence | Current status |
 |---|---|---|
-| task262 data/packing repair | PR #336 MERGED at head `8fd3ff6065290b850c98db5f7abff91aa6880967`, merge commit `2ca6541c275d1eb64068e665af24147a796c818a`; substantive repair commit `0f825b9357a2a8f7814f693ea4c27027c5fbdd31`; final-answer n-gram decontam evidence commit `5e431f4939799ae52c7d2002682352f2f2df6f3b`; latest head commit is metadata-only reconciliation; report `v11_data_split_sidecar_report.md`; output bundle under `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/` | STATIC MERGED into main as data/packing repair evidence; live packing/training remains HOLD until task263 base-load proof and remaining combined-stage review/candidate evidence clear |
-| task263 base-load planner sanity | Remote branch `origin/intern_nemotron_worker_2/task263_qwen_aime_v11_base_load_planner_sanity_s1` at `4af57e0e61703a063c1ef42def44119a7eea5cf9`; no PR; branch contains task/status docs and records local env blocker: no `megatron`/`megatron.bridge`, so real Bridge proof must run on NemTron/NeMo | HOLD/BLOCK for execution: branch is visible, but no positive base-load/import proof, nonzero-LR schedule artifact, or NemTron smoke manifest exists |
+| task262 data/packing repair | PR #336 MERGED at head `8fd3ff6065290b850c98db5f7abff91aa6880967`, merge commit `2ca6541c275d1eb64068e665af24147a796c818a`; substantive repair commit `0f825b9357a2a8f7814f693ea4c27027c5fbdd31`; final-answer n-gram decontam evidence commit `5e431f4939799ae52c7d2002682352f2f2df6f3b`; latest head commit is metadata-only reconciliation; report `v11_data_split_sidecar_report.md`; output bundle under `/work-agents/intern_nemotron_worker_1/outputs/task262_qwen_aime_v11_data_split_sidecar_s1/` | STATIC MERGED into main as data/packing repair evidence; live packing/training remains HOLD until remaining combined-stage review/candidate evidence clear |
+| task263/runtime base-load planner sanity | task263 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` remains the older local-env blocker record. Coordinator Session 40 at branch `intern_nemotron_coordinator/session1-resume-interrupted-work` head `8c8364101d6adb07f9e67c17fece3e2b2bb280ca` provides newer no-training runtime proof: `nemo=/root/.local/lib/python3.12/site-packages/nemo/__init__.py`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`, remote imported checkpoint root `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/qwen3_4b_bridge_import_iter0`, local evidence root `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z` | RUNTIME PROOF PRESENT for no-training Bridge import/preflight only; live nonzero-LR training evidence and future candidate artifacts remain HOLD |
 | task264 canary/retention gate | PR #335 MERGED at `9d9285fd77820a5187440fbc2234dc36eb56942d`; merged at `2026-06-01T23:00:37Z` as `98e8aad39af9e705feed581e0ff9f8814073e2d8`; official closeout report `v11_canary_retention_report.md`; static canary/retention code/config/tests added | STATIC MERGED into main, but HOLD for live use until a future V11 candidate supplies actual canary pass artifacts and task265 review clears exact inputs |
 | task265 independent review | Remote branch `origin/intern_nemotron_worker_4/task265_qwen_aime_v11_contam_regression_review_s1` is visible at `ca5ea1c405ef142ee51a43fcbab477a2958e48dc`; no PR or repo-visible task265 report exists; worker_4 status records a mailbox-only task265 read-only matrix refresh for #335/#336 with id `7e718a2c0ea746ed81352db5b5b6fe57` | MAILBOX-ONLY EVIDENCE: current repo cannot inspect the full task265 matrix file; final live execution still HOLD |
 | task260 failure forensics | Merged PR #332; report says task255 FT failure is generation degeneration/corruption, not evaluator-only parser failure | Used as V11 canary/retention requirement source |
 | task261 root cause | Merged PR #333; report identifies likely missing Qwen base load, zero LR at only step, and split basename collisions | Used as V11 data/base-load/schedule gate source |
 | task247 accepted base | Merged base artifact: Qwen3-4B exact-normalized AIME2025 `11/30 = 0.36666666666666664` | Fixed comparator for first V11 go/no-go |
+
+Session 40 runtime proof artifacts now recorded:
+
+- local evidence root:
+  `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`;
+- remote run root:
+  `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z`;
+- symbol preflight log sha256:
+  `bfa15c5b26849ef2c802c03b0303d57ada11922c4872068bd17de2c7d0081534`;
+- Bridge import log sha256:
+  `170b51d0c846c374a82badf780d478d64a946d3131cdc7032808d7c53db21756`;
+- fail-closed preflight log sha256:
+  `60db59059560304dc18a6e28498f6be1a08cbc24c26abd6e82241f6e1729c440`;
+- remote checkpoint manifest sha256:
+  `51b4ab937a5be23f1391cddd5c5c1425a3f8860e84fe81827fc5ebdee2afb522`;
+- checkpoint root:
+  `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/qwen3_4b_bridge_import_iter0`
+  with recorded size `7.5G`.
 
 Task262 #336 details now recorded:
 
@@ -200,9 +224,9 @@ Expected V11 task output roots:
 | Stage | Required evidence | Current visible evidence | Gate |
 |---|---|---|---|
 | 1. V11 data/packing ready | task262 report with collision-free split materialization or fail-closed assertion; intended-vs-exposed rows/tokens/shards; hard-math/final-answer sidecar paths, counts, hashes; decontamination evidence; no AIME2025 train rows | task262 PR #336 is MERGED into main as `2ca6541c275d1eb64068e665af24147a796c818a`; static repair/report/output bundle exists, including fail-closed split checks, sidecar plan hashes, and fresh final-answer n-gram decontamination evidence from `5e431f4939799ae52c7d2002682352f2f2df6f3b` | STATIC MERGED; live packing/training remains HOLD |
-| 2. Base-load/import proof ready | task263 report proving Qwen3-4B base weight load or Bridge-approved HF import; positive load line or import manifest; base hashes; abort checks for random-init loss, NaN/Inf, zero LR; nonzero first-step LR schedule; NemTron sync path | task263 branch `4af57e0e61703a063c1ef42def44119a7eea5cf9` is visible and documents the exact local blocker: no `megatron`/`megatron.bridge`; no PR, no NemTron/NeMo proof, no schedule artifact | HOLD/BLOCK: no checkpoint/export may be accepted |
+| 2. Base-load/import proof ready | task263 report proving Qwen3-4B base weight load or Bridge-approved HF import; positive load line or import manifest; base hashes; abort checks for random-init loss, NaN/Inf, zero LR; nonzero first-step LR schedule; NemTron sync path | Coordinator Session 40 provides positive no-training Bridge import/preflight proof: `nemo-toolkit==2.7.3`, `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`, and imported checkpoint root `/root/task_coordinator_nemotron_coordinator_06b9acba/session40_nemo_install_probe_20260602T015146Z/qwen3_4b_bridge_import_iter0` | RUNTIME PROOF PRESENT for import/preflight only; nonzero-LR training evidence and candidate checkpoint/export remain HOLD |
 | 3. Non-AIME canary ready | task264 canary prompt set with source/hashes; proof prompts are not AIME2025 and not train rows; config/tokenizer parity checks; retention schema for full completions/debug transcript | task264 PR #335 is MERGED into `origin/main` as `98e8aad39af9e705feed581e0ff9f8814073e2d8`; static canary prompt set and retention schema exist with hashes and focused tests | STATIC MERGED; live AIME remains HOLD until a future candidate passes the canary and task265 review clears exact inputs |
-| 4. Bounded Qwen3-4B pilot allowed | Stages 1-3 PASS, lead clearance, Qwen3-4B only, code synced to task-owned `/root` run dir on NemTron, no AIME2025 train data, no task255 reuse | missing stages 1-3 | NO-GO |
+| 4. Bounded Qwen3-4B pilot allowed | Stages 1-3 PASS, lead clearance, Qwen3-4B only, code synced to task-owned `/root` run dir on NemTron, no AIME2025 train data, no task255 reuse | runtime import/preflight proof exists, but no lead clearance, no nonzero-LR smoke/training artifact, no live canary pass, and no candidate artifact | NO-GO |
 | 5. Same-harness AIME comparison allowed | New V11 FT artifact is reviewer-readable with manifest/hash checks, canary pass, base protocol parity, task265 review not blocking; use accepted task247 cache/protocol | no V11 FT candidate exists | NO-GO |
 | 6. Promotion/non-regression decision | FT exact-normalized AIME25 score `>= 11/30` under same 30x1 pilot protocol, and full promotion only after lead-defined full protocol; no 30B/8-GPU without explicit permission | no V11 same-harness result exists | NO-GO/HOLD |
 
@@ -383,9 +407,12 @@ Current #336 static evidence:
 
 Required before stage 2 PASS:
 
-- task263 branch/head/PR or blocker; current visible branch is
-  `4af57e0e61703a063c1ef42def44119a7eea5cf9` with no PR and a local
+- task263 branch/head/PR or blocker; current visible task263 branch remains
+  `4af57e0e61703a063c1ef42def44119a7eea5cf9` with no PR and the older local
   `megatron`/`megatron.bridge` environment blocker;
+- Session 40 coordinator runtime proof now supplies the missing no-training
+  Bridge import/preflight evidence:
+  `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`;
 - Qwen3-4B base file hashes;
 - import/checkpoint-load proof log;
 - abort-check script/config and log;
@@ -427,9 +454,10 @@ Required before stages 4-6 PASS:
 - task262 #336 is now merged into main with static data/packing repair evidence,
   fresh final-answer n-gram decontamination evidence, and a readable output
   bundle, but no new V11 packed training root has been produced.
-- task263 is now visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, but it
-  has no PR and explicitly lacks a local `megatron`/`megatron.bridge`
-  environment for real Bridge load proof.
+- task263 is visible at `4af57e0e61703a063c1ef42def44119a7eea5cf9`, but it has
+  no PR and still records the older local runtime blocker. Coordinator Session
+  40 supersedes that blocker for no-training Bridge import/preflight proof, but
+  does not provide nonzero-LR training evidence or a future candidate artifact.
 - task264 static canary/retention evidence from #335 is merged into main at
   `98e8aad39af9e705feed581e0ff9f8814073e2d8`, but no future V11 candidate has
   produced canary pass artifacts.
@@ -448,7 +476,7 @@ Required before stages 4-6 PASS:
 |---|---|
 | task266 runbook/repro gate | PASS as static documentation |
 | V11 data/packing ready | STATIC MERGED via #336; live packing/training HOLD |
-| V11 base-load/import ready | HOLD/BLOCK |
+| V11 base-load/import ready | RUNTIME PROOF PRESENT via coordinator Session 40; live training/candidate HOLD |
 | V11 non-AIME canary ready | STATIC MERGED via #335; live use HOLD |
 | Bounded Qwen3-4B pilot allowed | NO-GO |
 | Same-harness AIME comparison allowed | NO-GO |
