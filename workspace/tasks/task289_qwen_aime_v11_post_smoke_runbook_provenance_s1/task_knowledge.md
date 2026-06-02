@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - task knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 1. #350/task285 is bounded smoke evidence only: it does not create a clean
    end-to-end train/eval pass and does not clear export, endpoint, promotion,
@@ -53,3 +53,9 @@
 14. task255 remains discarded and must not be reused.
 15. Export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
     deletion, 30B, and 8-GPU remain blocked.
+16. #351 merged at `2026-06-02T11:35:48Z` with merge commit
+    `5d8b8d850d26e785332f8b707c772d99881a1b5d` from approved head
+    `c2c217231c9d377430171166c85d1165ac75db69`. The merge was
+    docs/provenance only and did not authorize export, endpoint, promotion,
+    further training/eval, task255 reuse, AIME2025 train data, shared deletion,
+    30B, or 8-GPU.

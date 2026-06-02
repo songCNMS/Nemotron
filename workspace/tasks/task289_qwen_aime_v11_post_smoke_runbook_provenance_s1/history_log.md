@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - history log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - 2026-06-02 UTC - assignment
 
@@ -162,3 +162,21 @@
 - Kept residual risks and no-clearance boundaries visible. No runtime, training,
   canary, AIME re-eval, task243 eval, export, endpoint, promotion, merge, main
   push, shared deletion, 30B, 8-GPU, or artifact mutation action was performed.
+
+## Session 7 - 2026-06-02 UTC - lead-approved self-merge closeout
+
+- Received lead gate APPROVE/HOLD-LIFT for exact PR #351 head
+  `c2c217231c9d377430171166c85d1165ac75db69`.
+- Verified #351 was OPEN/base `main`/CLEAN/MERGEABLE at exact head
+  `c2c217231c9d377430171166c85d1165ac75db69` immediately before merge.
+- Self-merged #351 with the guarded command
+  `gh pr merge 351 --merge --match-head-commit c2c217231c9d377430171166c85d1165ac75db69`.
+- Verified #351 is MERGED at `2026-06-02T11:35:48Z` with merge commit
+  `5d8b8d850d26e785332f8b707c772d99881a1b5d` from merged head
+  `c2c217231c9d377430171166c85d1165ac75db69`.
+- Fetched `origin/main` after merge; it advanced to
+  `5d8b8d850d26e785332f8b707c772d99881a1b5d`.
+- Marked worker status Idle/Completed for this task on the worker branch.
+- No runtime, training, canary, AIME re-eval, task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, direct main
+  push, 30B, 8-GPU, or artifact mutation action was performed.
