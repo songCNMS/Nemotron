@@ -1,14 +1,14 @@
 # intern_nemotron_worker_5 - status
 
-<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task275_qwen_aime_v11_session40_runbook_update_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_5 |
-| Status | Idle |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | |
-| PR | #339 |
-| Session | 2 |
-| Last Update | Completed task270 closeout for PR #339; final disposition `NEMTRON_RUNTIME_ROUTE_BLOCKED` with global Qwen AIME gate remaining `NO-GO/HOLD`. |
+| Current Task | task275_qwen_aime_v11_session40_runbook_update_s1 |
+| PR | |
+| Session | 1 |
+| Last Update | Completed task275 Session 40 runbook/provenance update; report recommends PASS for import/preflight proof update while global V11 gate remains `NO-GO/HOLD`. |

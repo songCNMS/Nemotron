@@ -1,6 +1,6 @@
 # task266_qwen_aime_v11_runbook_repro_gate_s1 - V11 runbook and reproducibility gate
 
-<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
 
 ## Background
 
@@ -49,6 +49,19 @@ stage moves forward.
 - Boundaries kept: no training, eval, export, endpoint launch, merge,
   promotion, 30B/8-GPU authorization, AIME2025 train-data use, worker branch
   alteration, or shared deletion.
+
+## Session 2 Provenance Update
+
+- task275 updated the runbook after coordinator Session 40 produced positive
+  no-training Qwen3-4B Bridge import/preflight proof.
+- Session 40 evidence root:
+  `/work-agents/intern_nemotron_coordinator/outputs/session40_nemtron_nemo_install_probe_20260602T015146Z`.
+- The prior task270 runtime-route blocker is cleared only for import/preflight
+  proof: logs contain `TASK270_RUNTIME_SYMBOL_PREFLIGHT=PASS`, `IMPORT_DONE`,
+  `BRIDGE_IMPORT_RC=0`, and `TASK270_FAIL_CLOSED_PREFLIGHT=PASS`.
+- V11 execution remains `NO-GO/HOLD` because nonzero-LR training evidence, live
+  canary pass, candidate FT artifacts, task265 review, same-harness comparison,
+  promotion clearance, and 30B/8-GPU permission are still absent.
 
 ## Scope
 
