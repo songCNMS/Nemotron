@@ -5754,3 +5754,8 @@
   complete and final artifacts/worker report are absent. Remote artifacts still
   only include manifests and mailbox remains empty. This remains non-gating
   partial evidence.
+- Follow-up read-only live observation: PID `433268` remains active at about
+  101 minutes elapsed. Log reached `26/30`; rows `aime_25_r01` and
+  `aime_26_r01` stopped, parsed, and were incorrect. Current partial total
+  remains `11/26` correct. Remote artifacts still only include manifests and
+  mailbox remains empty. This remains non-gating partial evidence.

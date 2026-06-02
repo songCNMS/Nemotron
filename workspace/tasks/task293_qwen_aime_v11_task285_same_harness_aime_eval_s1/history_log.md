@@ -97,3 +97,7 @@
   stopped, parsed, and correct. This matches the accepted base numerator but is
   still non-gating pending all 30 rows plus final artifacts and official
   worker report. No final artifacts, official report, or PR exists yet.
+- Follow-up read-only poll: PID `433268` still active at about 101 minutes
+  elapsed; progress reached `26/30`, correct `11/26`, with `aime_25_r01` and
+  `aime_26_r01` stopped, parsed, and incorrect. No final artifacts, official
+  report, or PR exists yet.
