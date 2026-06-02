@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Knowledge Entries
 
@@ -17,3 +17,6 @@
    at `c1d988e29abafa51a9c3f83a98e21b229135f97e` is docs/acceptance-only for
    task284 purposes until a PR, artifact path, or mailbox evidence provides
    substantive runtime/config/import proof.
+7. An unofficial task283 output root is not accepted task284 review evidence;
+   wait for worker_2's official branch/head/artifacts or mailbox report before
+   substantive review.

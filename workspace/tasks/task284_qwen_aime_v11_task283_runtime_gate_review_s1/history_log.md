@@ -1,6 +1,6 @@
 # task284_qwen_aime_v11_task283_runtime_gate_review_s1 - History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0 - Assigned
 
@@ -24,6 +24,22 @@
   and no task283 worker artifact path outside lead docs.
 - Disposition is HOLD for substantive review until exact task283
   branch/head/artifacts or worker mailbox evidence exists.
+- Boundaries preserved: no edits outside task/status docs, training,
+  nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data use, shared deletion, merge,
+  main push, or 30B/8-GPU action.
+
+## Session 20 - Lead processed hygiene; HOLD remains
+
+- Lead processed the branch hygiene closeout and confirmed remote task284 branch
+  `27d28b54342a98a4a336c46661964759f2790619` is clean with scope worker_4
+  status plus task284 docs only.
+- Lead reports task283 still has no official branch/report beyond acceptance
+  `c1d988e2a9ef4139b1fa7cf850d3f4552114be56`.
+- An unofficial task283 output root with dependency-remediation logs is not
+  accepted review evidence for task284.
+- Current task284 disposition remains HOLD until worker_2 sends official
+  task283 branch/head/artifacts or mailbox report.
 - Boundaries preserved: no edits outside task/status docs, training,
   nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data use, shared deletion, merge,
