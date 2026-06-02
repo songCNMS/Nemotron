@@ -1,6 +1,6 @@
 # task297_qwen_aime_v11_current_main_equivalence_review_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 75 - 2026-06-02 UTC - assignment
 
@@ -49,3 +49,47 @@
 - Scope remained read-only: no training, canary, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   main push, merge, 30B, or 8-GPU action was performed.
+
+## Session 4 - final current-main equivalence review refresh
+
+- Refreshed against task296/#359 exact current head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`; #359 was `OPEN`, base `main`,
+  and merge state `CLEAN`.
+- Confirmed the substantive task296 audit report introduced at
+  `b45308e99db75620dd421c4cdc44560cdcda8eec` is unchanged through
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`; intervening changes are only
+  worker_1 status plus task296 history/task_knowledge metadata, and
+  `git diff --check` was clean.
+- Independently checked current main `2d84ec75960fb51ba9091427638b00083625e137`
+  and PR #312 metadata; the post-#351 main delta is coordinator documentation
+  only.
+- Independently checked task285 source head
+  `c53095a639f0ccf8ce34afcec1bdf302cf45add6` and task293 source head
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e` against current main over scoped
+  runner, `src`, `tests`, and task directories. `src`/`tests` diffs were zero,
+  task285 Qwen runner/config had no diff, task293 AIME runner had no diff, and
+  remaining scoped diffs were task docs/reports.
+- Recomputed representative task285 and task293 artifact hashes, inspected
+  task285 pre-optimizer/smoke evidence, and inspected task293 summary/command
+  manifests. Evidence supports current-main no-rerun equivalence with residuals.
+- Updated `current_main_equivalence_review_report.md` decision to
+  `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`.
+- Scope remained review-only apart from task297/status docs: no training,
+  canary, AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, main push, merge, 30B, or 8-GPU action
+  was performed.
+
+## Session 5 - push and official report requested
+
+- Reconfirmed task296/#359 exact current head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`; #359 was `OPEN`, base `main`,
+  and merge state `CLEAN`.
+- Reconfirmed task297/#358 remote was still at prior HOLD head
+  `68bc1dfd3a54714a539211d288931ee6187330c7`, `OPEN`, base `main`, and
+  `CLEAN` before this push.
+- Kept the Session 4 substantive review decision unchanged:
+  `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS` for #359 head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`.
+- This session is bookkeeping/push/mailbox only; no training, canary,
+  AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push, merge, 30B, or 8-GPU action was performed.
