@@ -54,6 +54,8 @@
   `lg-cmc-b7r201-n09u29-cpu-000191`.
 - Disposition:
   `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`.
+- Opened PR #347:
+  `https://github.com/songCNMS/Nemotron/pull/347`.
 - No training loop, optimizer step, checkpoint save from training, export,
   endpoint, live canary, AIME/task243 eval, promotion, task255 reuse,
   AIME2025 train data, shared deletion, main push, merge, or 30B/8-GPU action

@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task278_qwen_aime_v11_task276_config_import_preflight_s1 |
-| PR | N/A |
+| PR | #347 |
 | Session | 2 |
-| Last Update | 2026-06-02T04:50:43Z: Produced task278 no-training preflight evidence; local data/Qwen contracts pass, blocked at missing local NeMo/Megatron-Bridge runtime. |
+| Last Update | 2026-06-02T04:52:29Z: Opened PR #347 for task278 no-training preflight evidence; local data/Qwen contracts pass, blocked at missing local NeMo/Megatron-Bridge runtime. |
