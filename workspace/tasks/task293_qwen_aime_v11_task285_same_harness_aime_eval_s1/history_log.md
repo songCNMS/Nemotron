@@ -116,3 +116,28 @@
   `12/29`, with `aime_29_r01` length-stopped, unparsed, and incorrect. Remote
   artifacts still only contain prompt/checkpoint-load/command-env manifests. No
   final summary/results/checksums, official worker report, or PR exists yet.
+- Final read-only artifact observation at `2026-06-02T10:57:43Z`: the NemTron
+  process exited, log reached `30/30`, and the runner printed
+  `TASK293_DISPOSITION=PASS`.
+- Artifact roots:
+  `/work-agents/intern_nemotron_worker_3/outputs/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z`
+  and
+  `/root/task293_qwen_aime_v11_task285_same_harness_aime_eval_s1/run_20260602T085237Z/artifacts`.
+- Summary metrics: FT `12/30 = 0.4`; accepted base `11/30 =
+  0.36666666666666664`; delta `+1/30`; parsed `21/30`; finish reasons length
+  `9`, stop `21`; total requests `30`; disposition reason says FT
+  exact-normalized score is greater than or equal to accepted base.
+- Artifacts: `aime_eval/results.jsonl` 30 rows, `aime_eval/full_completions.jsonl`
+  30 rows, `aime_eval/summary.json`, prompt/checkpoint-load/command-env
+  manifests, and checksum manifest. Local synced artifacts pass checksum
+  validation via manifest relative paths; explicit NemTron `sha256sum` values
+  match the manifest.
+- Same-harness proof claims prompt-token match with task247 base, same AIME score
+  cache, same 30-row denominator, same max tokens, same prompt variant, and same
+  corrected parser/normalizer. Residual: `sampling_exact_parameter_match=false`;
+  task293 claims deterministic greedy semantic match between task247 endpoint
+  temperature-zero decode and local MCore top-k-1 decode.
+- Boundary confirmations are true for Qwen3-4B only, no AIME2025 train prompts
+  or labels, no task255 reuse, no export/conversion, no endpoint, no promotion,
+  no shared deletion, no 30B, no 8-GPU, one GPU, and no training/optimizer
+  steps. Worker_3 official mailbox report and PR are still pending.

@@ -10,3 +10,14 @@
   candidate.
 - No export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, 30B, or 8-GPU is authorized.
+- Final read-only task293 artifacts from `run_20260602T085237Z` show FT
+  `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`, with
+  disposition `PASS`. This is an AIME metric pass, not a promotion or scale-up
+  authorization.
+- Residual review risk: `sampling_exact_parameter_match=false`; task293 asserts
+  deterministic greedy semantic match between task247 endpoint temperature-zero
+  decoding and local MCore `top_k=1` decoding. This needs task294 independent
+  review before final lead gate wording.
+- Worker_3 official closeout/PR is still pending. Until it lands and task294
+  reviews exact head `87de0a97...`, keep export, endpoint, promotion, 30B, and
+  8-GPU on HOLD.

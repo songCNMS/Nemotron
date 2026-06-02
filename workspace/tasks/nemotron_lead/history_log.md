@@ -5778,3 +5778,41 @@
   partial total is `12/29` correct. Remote artifacts still only include the
   three manifests, mailbox remains empty, and no task293 PR is visible. This is
   still non-gating partial evidence.
+- Final read-only task293 artifact observation at `2026-06-02T10:57:43Z`:
+  NemTron PID `433268` exited, log reached `30/30`, and the runner printed
+  `TASK293_DISPOSITION=PASS`. Local and remote artifact roots now contain
+  `aime_eval/results.jsonl`, `aime_eval/full_completions.jsonl`,
+  `aime_eval/summary.json`, and `manifests/checksum_manifest.json`.
+- Preliminary artifact metrics from `summary.json`: FT `12/30 = 0.4`; accepted
+  base `11/30 = 0.36666666666666664`; delta `+1/30`; parsed `21/30`; finish
+  reasons length `9`, stop `21`; total requests `30`; disposition `PASS`
+  because FT exact-normalized score is greater than or equal to accepted base.
+- Preliminary protocol/boundary proof from task293 artifacts: prompt tokens
+  match task247 base, same AIME score cache, same 30-row denominator, same max
+  tokens, same prompt variant, same corrected parser/normalizer, Qwen3-4B only,
+  no AIME2025 train prompts/labels, no task255 reuse, no export, no endpoint,
+  no promotion, no shared deletion, no 30B, no 8-GPU, and one GPU
+  `CUDA_VISIBLE_DEVICES=0`.
+- Residual protocol risk: `sampling_exact_parameter_match=false` because task247
+  base used endpoint `temperature=0/top_p=1e-5`, while task293 used local MCore
+  in-process `top_k=1`, `temperature=1`, `top_p=0`. The artifact claims
+  deterministic greedy semantic match. This must be independently reviewed
+  before any gate language is strengthened beyond "artifact-level AIME metric
+  PASS, release/promotion/scale HOLD".
+- Checksum verification: local synced artifacts pass `sha256sum -c` using
+  manifest `relative_path`; explicit NemTron `sha256sum` values match manifest:
+  full completions `5cb1e11a...`, results `4cbc2a95...`, summary
+  `64a378ca...`, prompt manifest `93146086...`, checkpoint-load manifest
+  `243044f2...`, command/env manifest `5b128b5c...`.
+- Worker_3 official mailbox report and task293 PR are still absent. Sent
+  delivered peer message requesting official closeout for exact head
+  `87de0a97e6c0406a4b67520faab6b11d91d9131e`, including command/env,
+  artifacts, checksums, same-harness proof, and explicit handling of the
+  sampling semantic-match residual.
+- Assigned task294 to worker_4 for independent read-only review of exact task293
+  head `87de0a97...` and run `run_20260602T085237Z`, with decision
+  `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`, `REQUEST_CHANGES`, or `BLOCK_REVIEW`.
+- Assigned task295 to worker_5 for post-AIME runbook/provenance refresh. #351 is
+  still stale/HOLD at `ac85acace556f3861576314fc2684733498074f2`; worker_5 may
+  reuse #351 only after refreshing it to include task293/task294 current state,
+  otherwise create a new task295 PR. No promotion/export/endpoint/30B clearance.

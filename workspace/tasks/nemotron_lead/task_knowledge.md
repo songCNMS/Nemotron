@@ -1053,3 +1053,21 @@
    `aime_29_r01` length-stopped, did not parse, and was incorrect. PID `433268`
    remains active; artifacts are still manifests only, mailbox remains empty,
    and no task293 PR is visible. This is still not final gate evidence.
+333. task293 read-only final artifacts show `TASK293_DISPOSITION=PASS` and
+   corrected AIME2025 FT `12/30 = 0.4` versus accepted base `11/30 =
+   0.36666666666666664`, delta `+1/30`. Results/full completions both have
+   30 rows; summary reports parsed `21/30`, length stops `9`, stop `21`, and
+   boundary confirmations all true for no training, no AIME train data, no
+   task255, no export/endpoint/promotion, no shared deletion, no 30B/8-GPU.
+334. task293 protocol proof has strong same-harness evidence for prompt tokens,
+   AIME score cache, parser/normalizer, row denominator, prompt variant, and max
+   tokens, but `sampling_exact_parameter_match=false`; artifact claims semantic
+   deterministic greedy match between task247 endpoint temperature-zero decode
+   and task293 local MCore top-k-1 decode. Treat as residual review risk.
+335. task293 artifacts are preliminary lead read-only evidence until worker_3
+   official closeout/PR arrives and task294 independent review processes exact
+   head `87de0a97...`. Even after metric PASS, export, endpoint, promotion,
+   30B, and 8-GPU remain HOLD pending later explicit authorization.
+336. task294 is assigned to worker_4 for independent artifact/protocol review;
+   task295 is assigned to worker_5 for runbook/provenance refresh. #351 remains
+   stale/HOLD until refreshed with task293/task294 current state or superseded.
