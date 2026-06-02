@@ -1165,3 +1165,8 @@
 360. #358/task297 remains at old HOLD head `68bc1dfd...`; it has not yet reviewed
    substantive #359 head `b9c1af29...`, so path A is not accepted and path B is
    not triggered.
+361. worker_4 local workspace currently contains an unpushed task297
+   `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS` report for #359 head
+   `b9c1af29...`, but remote #358 remains old HOLD `68bc1dfd...` and no mailbox
+   has arrived. Treat the local approval as observation only, not gate evidence,
+   until pushed and reported.

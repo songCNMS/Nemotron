@@ -6030,3 +6030,17 @@
   unchanged-report finding. Latest poll after that message: no unread mailbox,
   #359 remains OPEN/CLEAN at `b9c1af29...`, and #358 remains OPEN/CLEAN at old
   HOLD head `68bc1dfd...`.
+- Local read-only observation from worker_4 workspace after the follow-up:
+  worker_4 has updated task297 status/report locally with decision
+  `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS` for #359 head
+  `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06`, but the worker_4 repo still has
+  uncommitted changes and remote #358 remains at old HOLD head `68bc1dfd...`.
+  This is not official gate evidence until worker_4 pushes the #358 refresh and
+  sends mailbox closeout.
+- Sent worker_4 a delivered peer follow-up asking to push refreshed #358 and
+  send official mailbox with exact reviewed #359 head, #358 head/PR state,
+  commands/checks, decision, residuals, and boundary confirmation.
+- Follow-up poll after that message: no unread mailbox; #359 remains
+  OPEN/CLEAN/MERGEABLE at `b9c1af29...`; #358 remains OPEN/CLEAN/MERGEABLE at
+  `68bc1dfd...`. Current gate remains: task296 has plausible path-A evidence,
+  but path A is not accepted until task297 is official; path B is not triggered.
