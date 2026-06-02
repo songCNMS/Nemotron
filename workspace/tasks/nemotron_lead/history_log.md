@@ -7008,3 +7008,22 @@
   not clear #362, non-AIME canary, corrected AIME/task243 eval, export,
   endpoint, promotion, follow-on 30B, task255 reuse, AIME2025 train data, shared
   deletion, or any direct main push.
+- Verified #366 MERGED at `2026-06-02T17:32:38Z` with merge commit
+  `d59161cb01f23d48446dcfee3e65b1266b402c19` from exact approved head
+  `24157f3c7534845a6959b4760c2cdcec245b3253`. Processed and marked read
+  worker_4 closeout mailbox `60bbb0a90d13491b9daa1fa6ef95c0c1`, which matched
+  the PR metadata and confirmed no direct main push or scope expansion.
+- Fetched origin/main after #366; main advanced to
+  `d59161cb01f23d48446dcfee3e65b1266b402c19`. Rechecked #362/task301: still
+  OPEN/base `main`/CLEAN/MERGEABLE/non-draft at exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`, worker_5 status plus task301
+  docs/report only, and `git diff --check` passed.
+- Left #362 lead approval comment `4605235881` and sent delivered peer_send to
+  worker_5 allowing self-merge only if #362 remains exact head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`, base `main`, CLEAN/MERGEABLE,
+  and non-draft at merge time.
+- #362 approval is salvage closeout only:
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+  It is not a clean training PASS and does not clear non-AIME canary, corrected
+  AIME/task243 eval, export, endpoint, promotion, follow-on 30B, task255 reuse,
+  AIME2025 train data, shared deletion, or direct main push.

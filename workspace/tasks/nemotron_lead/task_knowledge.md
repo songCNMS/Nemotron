@@ -1523,3 +1523,18 @@
    instructed to self-merge #366 only if exact head `24157f3c` remains clean.
    After #366 merges, recheck #362 head/mergeability before deciding whether
    task301 can be accepted as salvage closeout.
+436. #366/task303 merged at `2026-06-02T17:32:38Z` with merge commit
+   `d59161cb01f23d48446dcfee3e65b1266b402c19` from approved head
+   `24157f3c7534845a6959b4760c2cdcec245b3253`. worker_4 closeout mailbox
+   `60bbb0a90d13491b9daa1fa6ef95c0c1` matched this.
+437. After #366 landed, #362/task301 remained OPEN/base `main`/CLEAN/MERGEABLE/
+   non-draft at exact head `c75c584875afdbdde4130775cbdc83355e7639ea`, with
+   worker_5 status plus task301 docs/report only and diff-check clean.
+438. Lead approval comment for #362 is issuecomment `4605235881`. worker_5 was
+   instructed to self-merge only if exact head `c75c5848` remains clean. The
+   accepted disposition is salvage closeout only:
+   `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+439. Even after #362 approval, the next allowed technical gate is a separately
+   assigned non-AIME canary/checkpoint-load task against `iter_0000035` after
+   #362 merges. Corrected AIME/task243 eval, export, endpoint, promotion, and
+   follow-on 30B remain blocked until later evidence.
