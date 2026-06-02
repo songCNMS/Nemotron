@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
 
 ## Session 0 - Created with team lead
 
@@ -4480,3 +4480,52 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`: task276 evidence, even if
   independently approved, can only unblock a later no-training config/import
   preflight review.
+
+## Session 74 - 2026-06-02 UTC - gate-driven full pipeline attempt dispatch
+
+- Received coordinator Session 43 instruction to attempt the full Qwen AIME V11
+  data-to-training-to-evaluation pipeline from current `origin/main`
+  `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea`, focusing AIME while preserving
+  hard fail-closed gates.
+- Read lead mailbox first; unread count was `0`.
+- Reconciled task276/task277 closeout:
+  - #344/task276 is merged at `2026-06-02T04:19:38Z` with merge commit
+    `793e7dfa73ed1c5bdc8b7b98df5f31ffdd5e38ea` from exact approved head
+    `07efab4fa0d8367e96f54af3d2cdc70768d73595`;
+  - accepted packed root is
+    `/work-agents/intern_nemotron_worker_2/outputs/task276_qwen_aime_v11_rematerialize_packed_qwen_s1/run_20260602T034648Z/packed_qwen`;
+  - task276 report sha256 on `origin/main` is
+    `c6b761ccb404b8c75ef467f6b2a1b4ce117c878888fbe83f7198ae82d3b6e887`;
+  - sparse valid/test risk is carried: valid split has one packed row, and test
+    split has one exposed shard with zero rows.
+- Created standard worker task docs:
+  - `task278_qwen_aime_v11_task276_config_import_preflight_s1` assigned to
+    `intern_nemotron_worker_2` for the currently released no-training
+    config/import preflight using task276 packed root and Qwen3-4B path
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507`;
+  - `task279_qwen_aime_v11_task278_preflight_gate_review_s1` assigned to
+    `intern_nemotron_worker_4` for independent read-only review of task278
+    evidence after it exists;
+  - `task280_qwen_aime_v11_sft_smoke_plan_hold_s1` assigned to
+    `intern_nemotron_worker_1` as no-run planning HOLD only; it is not the
+    training execution task and cannot run nonzero-LR smoke;
+  - `task281_qwen_aime_v11_canary_aime_eval_plan_hold_s1` assigned to
+    `intern_nemotron_worker_3` as no-run canary/AIME evaluation planning HOLD
+    only;
+  - `task282_qwen_aime_v11_runbook_provenance_pipeline_s1` assigned to
+    `intern_nemotron_worker_5` for runbook/provenance update.
+- Gate sequence recorded:
+  1. task278 no-training config/import preflight;
+  2. task279 independent review;
+  3. only if task278+task279 pass and lead releases it, assign/run bounded
+     Qwen3-4B nonzero-LR SFT smoke with exact LR/train-step/config proof;
+  4. only after candidate FT artifact exists, run non-AIME canary/completion
+     retention before AIME;
+  5. run corrected AIME2025 same-harness FT-vs-base comparison against accepted
+     base `11/30 = 0.36666666666666664`;
+  6. update runbook/provenance through task282 and later closeouts.
+- Boundaries preserved for this lead turn: no product/source code edits,
+  implementation PRs, implementation tests/verification by lead, merge,
+  training, nonzero-LR smoke, live canary, AIME/task243 eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, main push, or
+  30B/8-GPU action by lead.

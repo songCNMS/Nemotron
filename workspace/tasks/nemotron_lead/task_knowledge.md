@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
 
 ## Knowledge Entries
 
@@ -530,3 +530,17 @@
 197. worker_2 branch-only post-merge closeout head for task276 is
    `c6a9368d6f094c36527da6dc6f8496c791f57121`; do not confuse it with the
    merged PR evidence head `07efab4fa0d8367e96f54af3d2cdc70768d73595`.
+198. Coordinator Session 43 authorizes attempting the Qwen AIME V11 full
+   data-to-training-to-evaluation pipeline, but execution remains sequential
+   and fail-closed. The immediate release is only task278 no-training
+   config/import preflight.
+199. Sparse valid/test risk from task276/task277 must be carried into task278:
+   valid split has one packed row and test split has zero rows. This is not a
+   blocker for preflight by itself, but later training/eval gates must decide
+   whether broader validation/test distributions are needed.
+200. The actual bounded Qwen3-4B nonzero-LR SFT smoke must not be run or
+   assigned for execution until task278 preflight passes, task279 review is
+   lead-processed, and lead explicitly releases a training task.
+201. task280 and task281 are no-run planning HOLD tasks; they do not authorize
+   training, live canary, AIME/task243 eval, export, endpoint, promotion, or
+   30B/8-GPU.
