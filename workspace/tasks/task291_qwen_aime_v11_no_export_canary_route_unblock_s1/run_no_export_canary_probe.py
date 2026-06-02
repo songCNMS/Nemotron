@@ -323,6 +323,14 @@ def main() -> int:
             model_config.attention_backend = AttnBackend.auto
         attention_backend_after = repr(getattr(model_config, "attention_backend", None))
 
+        padded_vocab_size = (
+            getattr(model_config, "padded_vocab_size", None)
+            or getattr(model_config, "vocab_size", None)
+            or getattr(tokenizer, "vocab_size", None)
+        )
+        if padded_vocab_size is None:
+            raise RuntimeError("could not resolve padded vocab size from model config or tokenizer")
+
         checkpoint_manifest = {
             "schema_version": 1,
             "task_id": TASK_ID,
@@ -345,7 +353,8 @@ def main() -> int:
             "num_attention_heads": getattr(model_config, "num_attention_heads", None),
             "seq_length": getattr(model_config, "seq_length", None),
             "params_dtype": str(getattr(model_config, "params_dtype", None)),
-            "padded_vocab_size": getattr(model_config, "padded_vocab_size", None),
+            "padded_vocab_size": padded_vocab_size,
+            "raw_tokenizer_vocab_size": getattr(tokenizer, "vocab_size", None),
             "tokenizer_type": f"{type(tokenizer).__module__}.{type(tokenizer).__qualname__}",
             "tokenizer_vocab_size": getattr(tokenizer, "vocab_size", None),
             "tokenizer_eod": getattr(tokenizer, "eod", None),
@@ -368,7 +377,7 @@ def main() -> int:
             inference_batch_times_seqlen_threshold=int(
                 getattr(model_config, "inference_batch_times_seqlen_threshold", 512)
             ),
-            padded_vocab_size=int(getattr(model_config, "padded_vocab_size")),
+            padded_vocab_size=int(padded_vocab_size),
             inference_max_requests=len(prompts),
             inference_max_seq_length=inference_max_seq_length,
             fp32_residual_connection=bool(
