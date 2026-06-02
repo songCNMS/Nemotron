@@ -62,3 +62,9 @@ release later if task278/task279 pass.
   `origin/intern_nemotron_lead/session1-recovery-task-docs` at
   `be45766c6fc127b0ba00e784d84810a378b3e8e4`.
 - Status: accepted; preparing no-run bounded SFT smoke plan.
+- Report:
+  `workspace/tasks/task280_qwen_aime_v11_sft_smoke_plan_hold_s1/qwen3_4b_v11_sft_smoke_plan_hold_report.md`.
+- Disposition: `PLAN_READY_HOLD_TASK278_TASK279_RELEASE`.
+- Execution remains HOLD until task278 no-training preflight is approved,
+  task279 independent review is processed, and lead explicitly releases a
+  nonzero-LR Qwen3-4B smoke execution task.

@@ -23,3 +23,15 @@
 - Boundaries acknowledged: no training, nonzero-LR smoke, live canary,
   AIME/task243 eval, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, shared deletion, merge, main push, or 30B/8-GPU.
+- Reviewed task276 merged packed-root evidence, task278/task279 lead docs,
+  Qwen SFT entrypoints, training config, Qwen contract checks, and prior
+  post-Bridge plan evidence.
+- Wrote no-run planning report
+  `workspace/tasks/task280_qwen_aime_v11_sft_smoke_plan_hold_s1/qwen3_4b_v11_sft_smoke_plan_hold_report.md`.
+- Disposition: `PLAN_READY_HOLD_TASK278_TASK279_RELEASE`.
+- Planned future smoke shape: Qwen3-4B only, task276 packed data staged into a
+  task280-owned run root, `qwen_local_train.py`, 2 GPUs, 3 max train steps,
+  global batch 2, micro batch 1, sequence length 4096, LR `1e-6`, no export,
+  no live eval, and fail-closed release gates.
+- Execution remains held because task278/task279 approval evidence is not yet
+  visible on main or in PR search.
