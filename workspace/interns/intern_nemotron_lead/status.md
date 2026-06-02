@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: #363 task300 base 15/30 lead-approved pending self-merge; #362 training HOLD |
+| PR | 30B gate live: #363 merged; task301 30B SFT launch cleared; awaiting training artifacts |
 | Session | 76 |

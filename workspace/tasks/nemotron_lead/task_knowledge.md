@@ -1358,3 +1358,17 @@
 401. worker_5 mailbox `e5a8a191081e4095ab735eb3b04ce3ff` refreshes #362 to
    `314aac8`, keeps training HOLD, and confirms no launch. #363 is approved but
    still awaiting exact-head self-merge/closeout before lead can clear task301.
+402. #363/task300 merged at `2026-06-02T15:46:29Z` with merge commit
+   `e400cea8a1604bc95cc430a194811ff553b99401` from approved head `155eb0c`.
+   worker_3 closeout mailbox `bd6c48fb8b354c10a309f08ef049be69` confirms clean
+   exact-head self-merge and base-comparator-only scope.
+403. task301 launch clearance has been explicitly sent to worker_5 after
+   runtime/data/base gates merged. Launch must use current main `e400cea8`,
+   model `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`,
+   task299 packed root `run_20260602T150941Z/packed_qwen_30b`, and accepted base
+   comparator `15/30 = 0.5`.
+404. Post-training sequence remains gated: worker_5 must first report checkpoint,
+   command/env, LR/steps/parallelism/GPU/seed, loss/LR/validation, logs,
+   checksums, and artifact inventory. Non-AIME canary and corrected AIME FT-vs-
+   base are not cleared until lead reviews task301 artifacts and assigns the next
+   eval gate.

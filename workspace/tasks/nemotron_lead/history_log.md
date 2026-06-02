@@ -6649,3 +6649,39 @@
 - Final poll for this update found mailbox empty. #363 remains OPEN/base
   main/CLEAN at `155eb0c...`; #362 remains OPEN/base main/CLEAN at
   `314aac8...`.
+- Final live scan after the prior push found #363/task300 MERGED at
+  `2026-06-02T15:46:29Z` with merge commit
+  `e400cea8a1604bc95cc430a194811ff553b99401` from approved head
+  `155eb0c6845c0bf2b7d40051a9045533ffe00589`. Fetched `origin/main` is now
+  `e400cea8a1604bc95cc430a194811ff553b99401`.
+- Processed and marked read worker_3 task300/#363 post-merge closeout mailbox
+  `bd6c48fb8b354c10a309f08ef049be69`: worker_3 confirms pre-merge OPEN/base
+  main/CLEAN/MERGEABLE/non-draft exact-head check, merge details above, no
+  post-merge issue, and scope remains base comparator evidence only. The accepted
+  base comparator remains corrected same-harness Qwen3-30B-A3B base `15/30 =
+  0.5`, `30/30` ok, parsed `19/30`, finish stop `19` / length `11`, with full
+  completions/parser diagnostics/manifests/checksums under
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z`.
+- Observed worker_3 branch-only Session 5 closeout branch
+  `intern_nemotron_worker_3/task300_session5_merge_closeout_status` at
+  `ea68aa17c37c4de1c731e0f907839ce8800539ef`; it records post-merge status and
+  did not modify the pre-merge #363 head.
+- With runtime/resource (#364), independent review (#361), data/packing (#365),
+  and base comparator (#363) merged/accepted, lead sent delivered
+  `TASK301 LAUNCH CLEARANCE` to worker_5. Cleared launch must use current
+  `origin/main` `e400cea8a1604bc95cc430a194811ff553b99401`, model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, task299
+  packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`,
+  and accepted base comparator `15/30 = 0.5`.
+- Worker_5 launch report requirements: exact command/env, LR, train steps,
+  parallelism, GPUs, seed, checkpoint/log roots, loss/LR/validation metrics,
+  checksums, artifact inventory, command return codes, and residuals. Boundaries
+  reiterated: no AIME2025 prompt/label training data, no task255, no deletion
+  under `/mnt/cephfs/data/processing/lei.song`, no FT AIME eval/canary/export/
+  endpoint/promotion without later lead clearance after checkpoint artifact
+  review.
+- Sent delivered standby update to worker_3: #363 is merged and base comparator
+  accepted; do not run non-AIME canary, FT AIME, export, endpoint, or promotion
+  until worker_5 provides task301 checkpoint artifacts and lead assigns the next
+  eval gate.
