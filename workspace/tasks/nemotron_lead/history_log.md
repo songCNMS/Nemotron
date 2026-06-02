@@ -5581,3 +5581,16 @@
   sent delivered worker_2 self-merge release for exact head only. This approval
   does not authorize AIME/task243, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, 30B, or 8-GPU.
+- Follow-up reconciliation found #354 merged at `2026-06-02T08:30:04Z` with
+  merge commit `34de04ff06cc2921ef1c65cde347b1f6e1b54bcf` from exact approved
+  head `2fda1ed46da4c82712a5c22c85bf124c26c6376f`; `origin/main` advanced to
+  `34de04ff...`.
+- Fetched worker_4 task292 branch
+  `origin/intern_nemotron_worker_4/task292_qwen_aime_v11_task291_canary_route_review_s1`
+  at `ee821322...`; branch diff is worker_4 status plus task292 docs/report and
+  `git diff --check` passes. The report matches the mailbox approval.
+- Created task293 for worker_3: corrected AIME2025 same-harness FT-vs-base eval
+  or precise fail-closed blocker for task285 iter2 checkpoint, using accepted
+  task247 base `11/30` only if protocol equivalence is proven. No export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, 30B,
+  or 8-GPU is authorized.

@@ -925,3 +925,9 @@
    only if #354 remains exact head `2fda1ed...` and CLEAN/MERGEABLE at merge
    time. AIME/task243 remains blocked until #354 merge closeout and next task
    assignment.
+301. #354 merged at `2026-06-02T08:30:04Z`, merge commit `34de04ff...`, from
+   exact approved head `2fda1ed...`. task291 no-export/no-endpoint canary route
+   pass evidence is now merged.
+302. task293 is assigned to worker_3 for corrected AIME2025 FT-vs-base eval or
+   fail-closed blocker. Accepted base is task247 `11/30`; worker_3 must prove
+   same corrected protocol before judging FT. No export/endpoint/promotion/30B.

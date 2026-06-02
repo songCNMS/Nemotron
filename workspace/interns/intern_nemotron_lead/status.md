@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #354 approved for exact-head self-merge; #351 HOLD at ac85aca; task292 approved canary route pass; AIME/export/promotion/30B HOLD |
+| PR | #354 merged; task293 AIME FT-vs-base assigned to worker_3; #351 HOLD at ac85aca; export/promotion/30B HOLD |
 | Session | 75 |
