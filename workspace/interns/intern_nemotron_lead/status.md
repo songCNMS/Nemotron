@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #350/task285 MERGED; task287 worker_3 active; task288 branch 2c64e1d HOLD; AIME/export/promotion/30B still HOLD |
+| PR | #350 merged; task287 unofficial BLOCK artifact pending report; task288 HOLD; AIME/export/promotion/30B HOLD |
 | Session | 75 |

@@ -811,3 +811,11 @@
 271. As of lead branch `24cd4fff...`, task287 has no PR or official report, and
    task288 remains HOLD. Do not release AIME/task243 until task287 official
    evidence and task288 review are processed.
+272. Unofficial task287 `run_20260602T070403Z` now contains a stronger blocker
+   artifact: checkpoint load reaches `LOAD_MEGATRON_MODEL=PASS` and
+   `MODEL_EVAL_SET=PASS`, but the direct no-export/no-endpoint canary route
+   blocks on `ImportError: cannot import name 'get_model_config' from
+   megatron.core.transformer.module`; no completions exist. Official worker_3
+   report is still required before task288 review/gate action.
+273. worker_5 has accepted task289 locally and is editing runbook/provenance,
+   but no task289 remote branch/PR is visible yet.

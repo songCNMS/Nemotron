@@ -5320,3 +5320,28 @@
   exact task287 evidence head, and the current task287 branch is still
   acceptance/docs only with no task287 PR or official mailbox artifact report.
   Remote task288 branch remains `2c64e1da...`; no task288 PR is visible.
+- Session 75 continuation: fetched origin and saw worker_4/task288 branch
+  advance to `e62fad1da9a4279869e939a34604c4f1ce13827b`; diff remains scoped
+  to worker_4 status plus task288 docs, `git diff --check` passes, and the
+  branch still records HOLD pending official task287 evidence.
+- Worker_5 local status shows task289 accepted and Working on branch
+  `intern_nemotron_worker_5/task289_qwen_aime_v11_post_smoke_runbook_provenance_s1`;
+  local edits include task266 runbook report updates and task289 docs/report,
+  but no task289 remote branch or PR is visible yet.
+- Read-only task287 artifact poll found new canary blocker files under
+  `/work-agents/intern_nemotron_worker_3/outputs/task287_qwen_aime_v11_non_aime_canary_retention_s1/run_20260602T070403Z/canary/qwen4b_task285_iter2_non_aime_canary_20260602T071900Z`.
+  `checkpoint_load_manifest.json` records Qwen3-4B base, task285 checkpoint
+  root, latest iteration `2`, prompt file sha
+  `150ee11dc6e8efd3c865a8e9ed8a9ab8ce4f5ee032bed383c73a6cea34f52f1c`, no
+  export/endpoint, and boundary confirmations. `remote_single_gpu_checkpoint_load_probe.log`
+  shows `LOAD_MEGATRON_MODEL=PASS`, `MODEL_EVAL_SET=PASS`, one visible H200,
+  and no canary completions.
+- The task287 `canary_blocker.json` reports `status=BLOCK` for route
+  `direct_in_process_mcore_static_engine_no_endpoint_no_export` with
+  `ImportError: cannot import name 'get_model_config' from
+  'megatron.core.transformer.module'`. This is still unofficial because worker_3
+  has not sent a mailbox report, branch update, or PR.
+- Sent delivered follow-up to worker_3 requesting official task287 blocker
+  report/branch/PR or mailbox evidence, including blocker/checkpoint/prompt/log
+  checksums and boundary confirmations, and asking worker_3 not to continue
+  workaround probing outside task287 bounds.
