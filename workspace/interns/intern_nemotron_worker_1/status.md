@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task290_qwen_aime_v11_task287_blocker_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task296_qwen_aime_v11_current_main_equivalence_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task290_qwen_aime_v11_task287_blocker_review_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/353 |
-| Session | 2 |
-| Progress | Completed task290 read-only review of task287 PR #352 head 52834d74c79ab98b5e125434160843752c34d47a and blocker artifacts; opened PR #353 with decision APPROVE_BLOCKER_CLOSEOUT. |
+| Current Task | task296_qwen_aime_v11_current_main_equivalence_audit_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/359 |
+| Session | 78 |
+| Progress | Acknowledged lead HOLD at exact head 04c5dc0b; no self-merge and no evidence changes pending task297/lead gate. |
