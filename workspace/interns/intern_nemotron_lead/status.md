@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Session40 runtime proof observed; task271-task275 assigned; gate NO-GO/HOLD pending worker review/planning |
+| PR | Session40 runtime proof observed; task271-task275 docs pushed and worker notifications delivered; gate NO-GO/HOLD pending reports |
 | Session | 71 |

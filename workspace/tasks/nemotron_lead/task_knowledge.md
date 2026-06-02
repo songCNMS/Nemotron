@@ -428,3 +428,6 @@
 169. After runtime proof appears, split the next gate across workers: independent
    proof review, post-Bridge pilot readiness planning, eval-gate continuity,
    data safety readiness, and runbook/provenance update.
+170. task271 is the first gate input: until worker_4 independently accepts the
+   Session 40 proof, task272-task275 outputs are planning/review evidence only
+   and no downstream training/eval clearance should be granted.
