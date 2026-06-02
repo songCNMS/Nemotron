@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task258_qwen_aime_v10_task255_reviewer_artifact_access_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task263_qwen_aime_v11_base_load_planner_sanity_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task258_qwen_aime_v10_task255_reviewer_artifact_access_s1 |
-| PR | #331 |
-| Session | 3 |
-| Last Update | 2026-06-01T21:16:24Z: task258 artifact-access bundle is complete and PR #331 is open/clean; sending compressed mailbox closeout after the first long report was rejected by mailbox size limits. |
+| Current Task | task263_qwen_aime_v11_base_load_planner_sanity_s1 |
+| PR | #337 |
+| Session | 6 |
+| Last Update | 2026-06-02T00:03:26Z: Fixed Session 6 hook metadata by removing duplicate history heading; #337 remains HOLD with unchanged blocker evidence. |
