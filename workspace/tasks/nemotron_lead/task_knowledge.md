@@ -1425,3 +1425,26 @@
    official mailbox classification: still-running validation vs validation/
    teardown blocker or hang. Worker_5 was instructed not to kill/restart or run
    canary/AIME/export/endpoint/promotion/follow-on work without lead clearance.
+416. worker_5 mailboxes `3bf90a62cca94a939f8e55321fdaea1c` and
+   `a8351925601040fa91d7862479201ff8` are official validation-watch evidence:
+   no `train_rc.txt`/`train_end.txt`, log unchanged at built-in validation
+   `Evaluating iter 1/10`, latest checkpoint marker `35`, `iter_0000035`
+   present, GPUs idle with memory allocated, ranks alive with CPU activity, and
+   safe wait threshold `2026-06-02T16:53:43Z`.
+417. #362/task301 current head after worker_5 publish/correction is
+   `aaffbf330c9964b437c77f86cb86bd7a9fd7d7de`, OPEN/base main/CLEAN. The report
+   at that head is `STILL_RUNNING_VALIDATION_WATCH`, not a training PASS or
+   completed checkpoint handoff.
+418. worker_5 mailbox `345316b7e0ed47d8bcf5908a7fdd41b6` is official
+   post-threshold blocker evidence:
+   `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS / BLOCKED_VALIDATION_HANG`.
+   The threshold passed with no log/RC/end progress and the same alive-process,
+   GPU-memory-held validation state.
+419. Lead sent delivered `TASK301 LEAD DECISION AFTER THRESHOLD`: worker_5 is
+   cleared to take a final read-only snapshot, gracefully terminate only the
+   stuck task301 validation/training process tree if unchanged, preserve all
+   artifacts, verify process/GPU release, compute inventories/checksums, and
+   report
+   `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+   This is not clearance for canary, AIME/task243 eval, export, endpoint,
+   promotion, follow-on 30B work, or merge.

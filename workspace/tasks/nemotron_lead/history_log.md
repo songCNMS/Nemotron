@@ -6841,3 +6841,57 @@
   worker-owned completion/blocker report, return code, final artifact inventory,
   checksums, or reviewed metrics exist. All downstream canary/AIME/export/
   endpoint/promotion gates remain HOLD.
+
+## Session 80 - 2026-06-02 UTC - task301 post-threshold salvage clearance
+
+- Rechecked current state at session start: lead branch was clean at
+  `651160a4d7c04222acbcef4144ddd45a0398b0db`, `origin/main` remained
+  `e400cea8a1604bc95cc430a194811ff553b99401`, and #362/task301 was still
+  OPEN/base main/CLEAN. Initial worker_5 output-root scan still lacked a
+  completion artifact bundle.
+- Processed and marked read worker_5 mailbox
+  `3bf90a62cca94a939f8e55321fdaea1c`: official disposition
+  `STILL_RUNNING_VALIDATION`. Snapshot at `2026-06-02T16:35:42Z` reported no
+  `train_rc.txt`, no `train_end.txt`, log unchanged at `Evaluating on 80
+  samples` / `Evaluating iter 1/10`, latest checkpoint marker `35`,
+  `iter_0000035` present, 8x H200 GPU util `0%` with memory still allocated,
+  rank processes alive with CPU activity, and TorchInductor compile-worker
+  count `198`.
+- Processed worker_5 local/pushed status updates: #362 advanced from
+  `e4c00524aca255de205a749995b23ed48493cb8b` to corrected head
+  `aaffbf330c9964b437c77f86cb86bd7a9fd7d7de`. Mailboxes
+  `a8351925601040fa91d7862479201ff8`, `59c9b9e589204b388e00e614b9fdb1f3`,
+  and `8987f5367a384c5bb6c025b2a3a17368` recorded the publish flow and head
+  correction. #362 remained OPEN/base main/CLEAN at the corrected head.
+- Verified #362 diff scope at `aaffbf33`: worker_5 status plus task301
+  README/history/task_knowledge and `30b_full_sft_training_report.md`. `git
+  diff --check` passed. The refreshed report is not a completed training PASS;
+  it records `STILL_RUNNING_VALIDATION_WATCH` with safe wait threshold
+  `2026-06-02T16:53:43Z`.
+- Waited until after the worker-defined quiet threshold. Processed and marked
+  read worker_5 mailbox `345316b7e0ed47d8bcf5908a7fdd41b6`: official
+  post-threshold disposition
+  `VALIDATION_TEARDOWN_BLOCKER_NO_LOG_PROGRESS / BLOCKED_VALIDATION_HANG`.
+  Snapshot at `2026-06-02T16:54:28Z` still had no `train_rc.txt` or
+  `train_end.txt`, log mtime/size still
+  `2026-06-03 00:23:43.221057699 +0800` / `272557`, tail still at built-in
+  validation iter `1/10`, latest checkpoint marker `35`, `iter_0000035`
+  present, GPU util `0%` with memory allocated, and rank/launcher processes
+  alive.
+- Lead decision after threshold: sent delivered `TASK301 LEAD DECISION AFTER
+  THRESHOLD` to worker_5. Cleared bounded salvage only: take a final read-only
+  snapshot, and if the state is unchanged, gracefully terminate only the task301
+  training/validation process tree for
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`,
+  preserve all checkpoints/logs/data, verify process exit/GPU release, compute
+  artifact inventories/checksums, and report disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+- The salvage clearance explicitly does not make task301 a PASS and does not
+  clear canary, corrected AIME/task243 eval, export, endpoint, promotion,
+  follow-on 30B work, task255 reuse, AIME2025 train rows, shared deletion, main
+  push, or merge.
+- Post-clearance read-only probe at `2026-06-02T16:57:57Z` still showed no
+  return/end files, GPU memory allocated, processes alive, and the log unchanged
+  at validation iter `1/10`; #362 remained OPEN/base main/CLEAN at
+  `aaffbf330c9964b437c77f86cb86bd7a9fd7d7de`. A later mailbox poll found no
+  worker_5 post-clearance termination/inventory report yet.

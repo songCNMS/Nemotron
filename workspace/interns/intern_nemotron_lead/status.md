@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task301 reached 35/35; built-in validation/teardown not exited; waiting worker_5 status |
-| Session | 79 |
+| PR | 30B gate live: task301 validation hang; salvage clearance sent; awaiting worker_5 termination/inventory report |
+| Session | 80 |
