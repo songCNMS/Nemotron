@@ -5558,3 +5558,13 @@
   because it predates #354 open/PASS evidence and task292 review assignment.
 - Posted #351 lead `REQUEST-CHANGES/HOLD` comment `4600180741`, requiring #351
   to stay unmerged and refresh only after #354/task292 gate resolves.
+- Processed and marked read worker_2 official task291 mailbox
+  `873c201daf7a47e1aeaaffcc1a032776`. It confirms #354 open/base
+  main/CLEAN at PR head `2fda1ed46da4c82712a5c22c85bf124c26c6376f`, evidence
+  source head `dfb6ca64a5479990be9d4f54defb9f294c09866f`, PASS metrics
+  `5/5` retained/exact, rc `0`, one visible H200, no-export/no-endpoint, and
+  no boundary violations. Residual risk remains detokenized fallback for
+  `synthetic_word_completion_ready_set`.
+- Sent delivered worker_4 task292 correction: review exact #354 PR head
+  `2fda1ed...` with evidence source `dfb6ca64...`, using updated lead branch
+  `bc2f197c`.

@@ -911,3 +911,10 @@
 296. #351/task289 current head `ac85acace556f3861576314fc2684733498074f2` is
    open/CLEAN but still HOLD via comment `4600180741`; it should refresh only
    after #354/task292 resolves.
+297. worker_2 official task291 mailbox
+   `873c201daf7a47e1aeaaffcc1a032776` was processed and marked read. It matches
+   #354 head `2fda1ed...`, evidence source `dfb6ca64...`, PASS metrics, and
+   boundary confirmations.
+298. worker_4 received delivered task292 correction to review exact #354 PR
+   head `2fda1ed...`; AIME/task243 remains blocked pending task292 decision and
+   lead processing.
