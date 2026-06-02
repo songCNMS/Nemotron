@@ -1,6 +1,6 @@
 # task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -78,3 +78,18 @@
   `87de0a97e6c0406a4b67520faab6b11d91d9131e`; report-packaging branch head
   before PR-number bookkeeping was
   `5ace7c74e83cddb8a622775cb70f4d3a5be63fcd`.
+
+## Session 4 - 2026-06-02 UTC - merged
+
+- Lead approved #356 at exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb` after #357/task294 merged and
+  GitHub reported #356 `CLEAN`/`MERGEABLE`.
+- Verified #356 remained `OPEN`, base `main`, exact head
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`, `mergeStateStatus=CLEAN`, and
+  `mergeable=MERGEABLE` at merge time.
+- Self-merged #356 through GitHub at `2026-06-02T11:22:34Z`; merge commit:
+  `31a3e962544202954f0afba211888f7414b38d7c`.
+- Merged head was `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. Scope remained
+  task293 evidence/report closeout only. No export, endpoint, promotion,
+  further training/eval, task255 reuse, AIME2025 train data, shared deletion,
+  30B, or 8-GPU was run.

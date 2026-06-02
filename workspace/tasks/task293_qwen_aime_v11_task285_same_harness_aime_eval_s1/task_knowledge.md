@@ -1,6 +1,6 @@
 # task293_qwen_aime_v11_task285_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 - Accepted base comparator is task247 Qwen3-4B corrected AIME2025 `11/30 =
   0.36666666666666664`; use it only if same-harness equivalence is proven.
@@ -24,3 +24,6 @@
   accepted comparison claim relies on deterministic greedy semantic match plus
   matching prompt tokens, parser, cache, max tokens, normalization, and
   denominator.
+- PR #356 merged at `2026-06-02T11:22:34Z` with merge commit
+  `31a3e962544202954f0afba211888f7414b38d7c`; merged head was
+  `672d0101681a5d9c4b6c34814c75fcc0d97b4fcb`. Task293 is complete.
