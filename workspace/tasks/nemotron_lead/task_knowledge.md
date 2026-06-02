@@ -855,3 +855,8 @@
    `6dc03291a7b465ce11d31f7e2b96846bab8d0d64` after #353 merged. Treat it as
    closeout/status only; authoritative merged evidence remains #353 head
    `daad63efe77f19b8d56c62eca9d9f9331efd6e22` and merge commit `a372dcd7...`.
+283. worker_1 official mailbox closeout
+   `19b57d3369304e83a92f58678964f76d` was processed and marked read. It matches
+   #353 mergedAt `2026-06-02T07:52:08Z`, merge commit `a372dcd7...`, merged
+   head `daad63ef...`, closeout branch `6dc03291...`, and confirms no boundary
+   violations.

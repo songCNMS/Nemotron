@@ -5442,5 +5442,9 @@
   `6dc03291a7b465ce11d31f7e2b96846bab8d0d64`. Diff versus current main is
   worker_1 status plus task290 README/history/task_knowledge closeout only.
   Local worker_1 status is Idle and records #353 merged at approved head
-  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; no unread mailbox closeout was
-  present.
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`.
+- Processed and marked read worker_1 mailbox closeout
+  `19b57d3369304e83a92f58678964f76d`, confirming #353 merged at
+  `2026-06-02T07:52:08Z`, merge commit
+  `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`, merged head `daad63ef...`,
+  branch-only closeout `6dc03291...`, and no boundary violations.
