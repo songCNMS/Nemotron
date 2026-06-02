@@ -1396,3 +1396,18 @@
    no non-AIME canary, corrected AIME FT eval, export, endpoint, promotion, or
    30B follow-on work is cleared until lead reviews worker_5 checkpoint/log/
    checksum artifacts and assigns the next gate.
+410. worker_5 mailbox `52490ddfe520455ca406e4c8b0ee1652` is official
+   `LAUNCH_STARTED` evidence for task301: branch #362 head `e4c00524`, current
+   main sync `e400cea8`, remote run root
+   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`,
+   log root `logs/train_30b_sft.log`, checkpoint root `checkpoints`, and active
+   process observed while loading the task298 checkpoint.
+411. task301 launch parameters reported by worker_5: Qwen3-30B-A3B-Instruct-2507
+   model/tokenizer, task299 remote mirror splits, task298 imported checkpoint,
+   torch distributed 8x H200, 35 train iters, GBS=8, MBS=1, LR `5e-7`, min LR
+   `1e-7`, warmup `4`, decay `35`, seed `5678`, save interval `5`, TP=4, PP=2,
+   EP=4, ETP=1, sequence parallel enabled.
+412. task301 is not complete after `LAUNCH_STARTED`: no return code, checkpoint
+   inventory, loss/LR/validation metrics, artifact checksums, canary result, or
+   corrected AIME FT-vs-base result exists yet. #362 PR docs remain pre-launch
+   until worker_5 pushes a refresh or sends completion/blocker closeout.

@@ -6750,3 +6750,46 @@
   no non-AIME canary, corrected AIME FT eval, export, endpoint, promotion, or
   30B follow-on work until lead reviews task301 checkpoint artifacts and gives
   the next gate clearance.
+
+## Session 78 - 2026-06-02 UTC - task301 launch-start mailbox
+
+- Processed and marked read worker_5 mailbox
+  `52490ddfe520455ca406e4c8b0ee1652`: task301 status
+  `LAUNCH_STARTED` from branch
+  `intern_nemotron_worker_5/task301_qwen_aime_v11_30b_full_sft_training_s1` at
+  #362 head `e4c00524aca255de205a749995b23ed48493cb8b`.
+- worker_5 reports code synced to current accepted 30B main
+  `e400cea8a1604bc95cc430a194811ff553b99401`; remote run root is
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z`,
+  train log is
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/logs/train_30b_sft.log`,
+  and checkpoint root is
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/checkpoints`.
+- Accepted training data root in use is the task-owned remote mirror
+  `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/input/task299_packed_qwen_30b_deref_mirror/splits`.
+  worker_5 reports `391` files, `0` symlinks, and source-vs-remote dereferenced
+  manifest sha256
+  `d80241a9c659c2546591c27941e7c24c32717983250df38c0254113cd28bfc6c`.
+- Launch command/env reported by worker_5: `CUDA_VISIBLE_DEVICES=0..7`,
+  `PYTHONPATH=/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/Nemotron/src`,
+  Qwen model/tokenizer
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, packed dir
+  `<mirror>/splits`, pretrained checkpoint
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`,
+  and SFT save root above; entrypoint is `torch.distributed.run
+  --nproc_per_node=8 qwen3_30b_a3b_local_train.py`.
+- Reported overrides: `train_iters=35`, global batch `8`, micro batch `1`,
+  `eval_interval=1000`, `lr=5e-7`, `min_lr=1e-7`, warmup `4`, decay `35`,
+  `log_interval=1`, seed `5678`, `save_interval=5`, and `load=null`.
+  Parallelism is TP=4, PP=2, EP=4, ETP=1, `sequence_parallel=true` on 8x H200.
+- Current worker_5 status: process active, TP/PP initialized, seed `5678` set,
+  and task298 checkpoint loading observed. No return code, completed checkpoint
+  inventory, loss/LR/validation metrics, or checksums have been reported yet.
+- #362 remains OPEN/base main/CLEAN at head `e4c00524aca255de205a749995b23ed48493cb8b`.
+  Its PR docs are still the pre-launch report head; launch-start evidence is
+  mailbox-only until worker_5 pushes a refreshed branch/report or sends a
+  completion/blocker mailbox.
+- Boundaries held per worker_5: no AIME2025 train rows, no task255 reuse, no
+  shared deletion, and no FT eval/canary/export/endpoint/promotion. Lead gate
+  remains HOLD for every downstream testing step until task301 completion
+  artifacts are reviewed.
