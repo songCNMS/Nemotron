@@ -988,3 +988,7 @@
 315. Later read-only task293 poll shows progress `9/30`, correct `5/9`; row
    `aime_09_r01` stopped on length and did not parse. PID `433268` remains
    active; artifacts are still manifests only and mailbox remains empty.
+316. Later read-only task293 poll shows progress `10/30`, correct `5/10`; rows
+   `aime_09_r01` and `aime_10_r01` stopped on length and did not parse. PID
+   `433268` remains active; artifacts are still manifests only and mailbox
+   remains empty.
