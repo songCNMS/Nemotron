@@ -71,3 +71,4 @@
   Bridge import proof, retry3 script/log hashes, checkpoint root/size/latest
   iteration/checksum manifest, two-step LR/loss/skipped/nan evidence, and the
   post-train built-in validation SIGTERM/RC=1 residual risk.
+- Opened PR #350 to `main` for task285 report/status docs only.
