@@ -241,11 +241,13 @@ def main() -> int:
 
         from transformers import AutoTokenizer
 
+        import torch.distributed as dist
         from megatron.bridge.training.model_load_save import (
             load_megatron_model,
             load_model_config,
             load_tokenizer,
         )
+        from megatron.core import parallel_state
         from megatron.core.inference.contexts import StaticInferenceContext
         from megatron.core.inference.engines.static_engine import StaticInferenceEngine
         from megatron.core.inference.model_inference_wrappers.gpt.gpt_inference_wrapper import (
@@ -311,9 +313,54 @@ def main() -> int:
         prompt_manifest_path = manifests_dir / "canary_prompt_manifest.json"
         write_json(prompt_manifest_path, prompt_manifest)
 
+        distributed_manifest: dict[str, Any] = {
+            "dist_was_initialized_before_probe": dist.is_initialized(),
+            "model_parallel_was_initialized_before_probe": parallel_state.model_parallel_is_initialized(),
+            "backend": "nccl",
+            "world_size": 1,
+            "rank": 0,
+            "tensor_model_parallel_size": 1,
+            "pipeline_model_parallel_size": 1,
+        }
+        if not dist.is_initialized():
+            torch.cuda.set_device(0)
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(("127.0.0.1", 0))
+                _, port = s.getsockname()
+            init_method = f"tcp://127.0.0.1:{port}"
+            dist.init_process_group(
+                backend="nccl",
+                init_method=init_method,
+                world_size=1,
+                rank=0,
+            )
+            distributed_manifest["process_group_initialized_by_script"] = True
+            distributed_manifest["init_method"] = init_method
+        else:
+            distributed_manifest["process_group_initialized_by_script"] = False
+        if not parallel_state.model_parallel_is_initialized():
+            parallel_state.initialize_model_parallel(
+                tensor_model_parallel_size=1,
+                pipeline_model_parallel_size=1,
+                context_parallel_size=1,
+                expert_model_parallel_size=1,
+            )
+            distributed_manifest["model_parallel_initialized_by_script"] = True
+        else:
+            distributed_manifest["model_parallel_initialized_by_script"] = False
+        try:
+            from megatron.core.tensor_parallel import model_parallel_cuda_manual_seed
+
+            model_parallel_cuda_manual_seed(args.random_seed)
+            distributed_manifest["model_parallel_cuda_manual_seed"] = args.random_seed
+        except Exception as seed_exc:  # noqa: BLE001
+            distributed_manifest["model_parallel_cuda_manual_seed_error"] = repr(seed_exc)
+        command_manifest["distributed"] = distributed_manifest
+        write_json(command_manifest_path, jsonable(command_manifest))
+
         cfg, mlm_args = load_model_config(str(checkpoint_iter_dir))
         tokenizer = load_tokenizer(str(checkpoint_iter_dir))
-        model = load_megatron_model(str(checkpoint_iter_dir))
+        model = load_megatron_model(str(checkpoint_iter_dir), skip_temp_dist_context=True)
         model_obj = model[0] if isinstance(model, list) else model
         model_obj.eval()
         unwrapped_model = unwrap_model(model_obj)[0] if isinstance(unwrap_model(model_obj), list) else unwrap_model(model_obj)
