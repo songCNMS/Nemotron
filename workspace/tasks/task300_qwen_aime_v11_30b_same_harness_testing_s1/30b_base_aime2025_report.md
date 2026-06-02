@@ -1,6 +1,6 @@
 # task300 30B base AIME2025 report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
 
 ## Summary
 

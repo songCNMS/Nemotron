@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -18,3 +18,6 @@
 6. read-only proof: the candidate 30B model path exists on NemTron and eight
    H200s were idle, but this is not a substitute for task298's required
    runtime/eval route PASS.
+7. session2 follow-up: lead explicitly reiterated that 30B base AIME must not
+   run until task298 official route PASS is processed; task300 remains blocked
+   on that route proof.

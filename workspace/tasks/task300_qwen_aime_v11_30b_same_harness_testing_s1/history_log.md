@@ -1,6 +1,6 @@
 # task300_qwen_aime_v11_30b_same_harness_testing_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -35,3 +35,16 @@
 - Wrote `30b_base_aime2025_report.md` with disposition
   `BLOCK_UPSTREAM_TASK298_ROUTE_MISSING`. No base completions, parser
   diagnostics, numerator, denominator, or score were produced.
+- Opened PR #363 for the task300 blocked base-gate report at branch head
+  `d0b6e46e`.
+
+## Session 2 - 2026-06-02 UTC - blocker report publication
+
+- Lead follow-up requested branch/PR or mailbox evidence for the local
+  `30b_base_aime2025_report.md` blocker and reiterated not to run 30B base
+  AIME until task298 official route PASS is processed.
+- Confirmed PR #363 is the task300 blocker PR. Prepared to push PR-number
+  bookkeeping plus this Session 2 status update before sending mailbox.
+- Boundary state unchanged: no 30B base AIME eval, endpoint, export, training,
+  canary, FT judgment, task255 reuse, AIME2025 train data, shared deletion,
+  promotion, main push, or merge was run.
