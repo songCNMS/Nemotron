@@ -1,6 +1,6 @@
 # task287_qwen_aime_v11_non_aime_canary_retention_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 1. #350/task285 merged at `2026-06-02T06:53:14Z` with merge commit
    `5d32f07698249d9d352e7ba6da9c6d3bd88eb3f0` from exact head
@@ -36,3 +36,8 @@
 9. task287 remains a `BLOCK`, not a canary PASS. Corrected AIME2025 comparison
    remains blocked until lead creates a new release and a valid non-AIME
    canary with retained completions exists.
+10. task287/#352 merged at `2026-06-02T07:39:18Z` with merge commit
+    `ca1ab63588651351b3e669450659abd2ad2c73e8` from exact approved head
+    `52834d74c79ab98b5e125434160843752c34d47a`. Merge preserved blocker-only
+    scope; it does not authorize canary pass, AIME release, promotion, export,
+    endpoint, training, 30B, or 8-GPU work.

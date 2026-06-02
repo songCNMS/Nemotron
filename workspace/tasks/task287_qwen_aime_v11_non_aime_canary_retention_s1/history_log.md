@@ -1,6 +1,6 @@
 # task287_qwen_aime_v11_non_aime_canary_retention_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 74 - 2026-06-02 UTC - assignment
 
@@ -50,3 +50,20 @@
   training/additional optimizer steps, no AIME/task243 eval, no AIME2025 train
   data, no task255 reuse, no export, no endpoint, no promotion, no shared
   deletion, no 30B, no 8-GPU, no main push, and no merge.
+
+## Session 2 - 2026-06-02 UTC - Approved blocker closeout merged
+
+- Lead approved task287/#352 blocker closeout at exact head
+  `52834d74c79ab98b5e125434160843752c34d47a` with disposition
+  `APPROVE_BLOCKER_CLOSEOUT`: `BLOCK`, not `PASS`.
+- Verified before merge that PR #352 was open, base `main`, exact approved
+  head `52834d74c79ab98b5e125434160843752c34d47a`,
+  `mergeStateStatus=CLEAN`, and `mergeable=MERGEABLE`.
+- Self-merged PR #352 at `2026-06-02T07:39:18Z`; merge commit:
+  `ca1ab63588651351b3e669450659abd2ad2c73e8`.
+- Post-merge `origin/main` advanced to
+  `ca1ab63588651351b3e669450659abd2ad2c73e8`.
+- No post-merge issue observed. Scope remained blocker docs/evidence only:
+  no canary pass, no AIME/task243 eval or release, no export, no endpoint, no
+  promotion, no training/additional optimizer step, no task255 reuse, no
+  AIME2025 train data, no shared deletion, no 30B, and no 8-GPU.

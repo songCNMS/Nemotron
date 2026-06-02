@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task287_qwen_aime_v11_non_aime_canary_retention_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task287_qwen_aime_v11_non_aime_canary_retention_s1 |
+| Current Task | none |
 | PR | #352 |
-| Session | 1 |
-| Progress | PR #352 reports task287 BLOCK; corrected history metadata/session format after hook validation. |
+| Session | 2 |
+| Progress | task287/#352 merged at 2026-06-02T07:39:18Z with merge commit `ca1ab63588651351b3e669450659abd2ad2c73e8`; blocker closeout complete. |

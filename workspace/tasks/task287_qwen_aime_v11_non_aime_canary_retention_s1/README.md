@@ -1,6 +1,6 @@
 # task287_qwen_aime_v11_non_aime_canary_retention_s1 - Non-AIME canary and completion retention
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
 
 ## Background
 
@@ -96,6 +96,10 @@ no-export/no-endpoint MCore generation route did not produce retained canary
 completions. No AIME/task243 eval, training, export, endpoint, promotion,
 task255 reuse, AIME2025 train-data use, shared deletion, 30B, or 8-GPU action
 was run.
+
+PR #352 merged at `2026-06-02T07:39:18Z` with merge commit
+`ca1ab63588651351b3e669450659abd2ad2c73e8` from head
+`52834d74c79ab98b5e125434160843752c34d47a`.
 
 ## Acceptance Criteria
 
