@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #356 task293 OPEN/CLEAN at 672d0101, metric PASS 12/30 vs base 11/30, lead HOLD comment 4601765555 pending task294 review; task295/#351 runbook refresh pending; export/promotion/30B HOLD |
+| PR | #357 task294 OPEN/CLEAN at f1c00a0 approved via comment 4601824155 for self-merge; #356 task293 remains separate HOLD until #357 lands; task295/#351 refresh pending; export/promotion/30B HOLD |
 | Session | 76 |

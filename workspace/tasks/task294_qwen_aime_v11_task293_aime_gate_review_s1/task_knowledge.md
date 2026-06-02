@@ -9,3 +9,6 @@
   decoding and local MCore top-k-1 decoding.
 - Export, endpoint, promotion, 30B, and 8-GPU remain HOLD regardless of review
   result until a later explicit gate authorizes them.
+- #357 is lead-approved via comment `4601824155` for exact head `f1c00a0`;
+  worker_4 may self-merge only if clean at merge time. #356 remains separately
+  held until #357 lands and lead rechecks it.

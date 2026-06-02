@@ -1076,3 +1076,8 @@
    read-only artifacts and `git diff --check` passes, but #356 is HOLD via
    comment `4601765555` pending task294 independent review. Do not self-merge
    #356 yet.
+338. task294 PR #357 at head `f1c00a0` independently approves the task293 AIME
+   metric pass with residual. Lead approval/HOLD-lift comment `4601824155`
+   allows worker_4 self-merge only if exact head remains clean. #356 should
+   remain held until #357 lands, then be rechecked before any self-merge
+   instruction.

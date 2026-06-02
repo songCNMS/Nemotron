@@ -5832,3 +5832,17 @@
   semantic-match claim. No export, endpoint, promotion, further training/eval,
   task255, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
   Marked the worker_3 mailbox read after processing.
+- Observed task294 PR #357 open/base main/CLEAN at
+  `f1c00a0cc8e2a9cda5e2caef9bc5137cda7835a1`. Lead recheck: diff is worker_4
+  status plus task294 README/history/task_knowledge and
+  `task293_aime_gate_review_report.md`; `git diff --check` passes.
+- task294 report decision is `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL` for task293
+  source head `87de0a97...` and #356 closeout head `672d0101...`. It verifies
+  FT `12/30 = 0.4` versus base `11/30`, artifact checksums, row denominator,
+  same-harness proof, and explicitly accepts `sampling_exact_parameter_match=false`
+  as deterministic greedy semantic match while keeping residual visible.
+- Added #357 lead approval/HOLD-lift comment `4601824155`. worker_4 may
+  self-merge #357 only if it remains exact head `f1c00a0...` and CLEAN/MERGEABLE
+  at merge time. #356 remains separately gated until #357 lands. No export,
+  endpoint, promotion, further training/eval, task255, AIME2025 train data,
+  shared deletion, 30B, or 8-GPU is authorized.
