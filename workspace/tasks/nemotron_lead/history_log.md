@@ -5108,3 +5108,30 @@
   continuing pre-optimizer progress, BLOCKED before optimizer, or PASS smoke
   with unseen artifacts. Also asked worker_2 to keep any task285 PR scoped or
   explicitly justify task283 closeout edits.
+- Subsequent read-only artifact check of the same task285 output root found new
+  base-import and dependency-remediation evidence but still no official mailbox
+  report or task285 PR.
+- `bridge_import_base_proof.log` records Qwen3-4B HF import from
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-4B-Instruct-2507` to remote
+  Bridge checkpoint root
+  `/root/task285_qwen_aime_v11_bounded_qwen4b_sft_smoke_s1/run_20260602T061036Z/qwen3_4b_bridge_import_iter0`,
+  with `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, iteration `0`, and remote size
+  `7.5G`. Local log sha256 is
+  `cb1523fffcd97d2b9e5e3b76141624d0d67ad9d2fb1d061e150f15fc7fbf66e6`.
+- `post_defusedxml_train_import_probe.log` records `defusedxml`,
+  `nvidia_resiliency_ext.inprocess`,
+  `nemotron.recipes.super3.stage1_sft.train`,
+  `megatron.bridge.training.finetune`, and `hydra` imports PASS. `lightning`
+  and `nemo.collections.llm` still fail on missing `lightning`. Local log
+  sha256 is `55e8ddbd2adffe6172bac337585217b4054b1443f8b6f09eed71fc7c64b02ddf`.
+- Smoke launch scripts now exist under task285 `scripts/`, including
+  `run_bounded_qwen4b_sft_smoke_retry1.sh` with Qwen3-4B, task276 packed
+  splits, two GPUs, `train_iters=2`, `global_batch_size=2`,
+  `micro_batch_size=1`, LR `5e-7`, min LR `1e-7`, warmup `0`, decay `2`,
+  `checkpoint.pretrained_checkpoint` pointing to the Bridge import root, and
+  export disabled. Script sha256 is
+  `b03cef11a2c1949cbf545a630e302dbfaf0969c327e335663669be8c102b1119`.
+- Current local checks still found no smoke training log, no first-step LR
+  proof, no finite train loss, no local smoke checkpoint artifact, no task285
+  PR, no unread mailbox, and no local `task285`/`qwen_local_train` process.
+  task286 remains HOLD for official task285 evidence.

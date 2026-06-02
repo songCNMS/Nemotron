@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task285 branch c53095a/output pre-optimizer only; no PR/official report/smoke checkpoint yet; task286 HOLD; no AIME/export/promotion/30B |
+| PR | task285 c53095a has read-only Bridge import proof but no official report/PR/smoke checkpoint; task286 HOLD; no AIME/export/promotion/30B |
 | Session | 74 |

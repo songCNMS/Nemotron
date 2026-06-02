@@ -734,3 +734,14 @@
    bounds but still shows missing `hydra`, `lightning`, and
    `nvidia_resiliency_ext`; lead requested worker_2 official classification
    before task286 substantive review can begin.
+252. Later task285 read-only artifacts show positive Qwen3-4B Bridge HF import
+   proof: `IMPORT_DONE`, `BRIDGE_IMPORT_RC=0`, remote checkpoint root
+   `qwen3_4b_bridge_import_iter0`, size `7.5G`, iteration `0`. This is still
+   unofficial until worker_2 reports it.
+253. task285 dependency remediation progressed: `stage1_sft.train`,
+   `megatron.bridge.training.finetune`, `hydra`, `defusedxml`, and
+   `nvidia_resiliency_ext.inprocess` import PASS after remediation; `lightning`
+   remains missing, affecting `nemo.collections.llm`.
+254. task285 still has no reviewable smoke result: no official report/PR, no
+   first-step nonzero LR proof, no finite loss, and no smoke checkpoint visible.
+   task286 must remain HOLD.
