@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task297_qwen_aime_v11_current_main_equivalence_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task302_qwen_aime_v11_30b_independent_review_runbook_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task297_qwen_aime_v11_current_main_equivalence_review_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/358 |
-| Session | 5 |
-| Progress | Reconfirmed task296/#359 exact head `b9c1af2986f5cdfec20c7091ffa2bc6c0b246f06` (`OPEN`/base `main`/`CLEAN`) and kept task297 decision `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`; #358 remote was still old HOLD head `68bc1dfd3a54714a539211d288931ee6187330c7` before push. Prepared refreshed task297 report/status docs for commit, push, and official mailbox. No training, canary, AIME/task243 eval, export, endpoint, promotion, task255, AIME2025 train data, shared deletion, main push, merge, 30B, or 8-GPU action was performed. |
+| Current Task | task302_qwen_aime_v11_30b_independent_review_runbook_s1 |
+| PR | pending |
+| Session | 1 |
+| Progress | Accepted task302 from lead docs commit `676d8556` on branch `intern_nemotron_worker_4/task302_qwen_aime_v11_30b_independent_review_runbook_s1` based on `origin/main` `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`. Created initial 30B independent review runbook and confirmed no task298-task301 PRs/remote heads are visible yet; holding pending exact upstream evidence. No training/testing/export/endpoint/promotion/main push/merge/task255/AIME2025 train data/shared deletion action was performed. |
