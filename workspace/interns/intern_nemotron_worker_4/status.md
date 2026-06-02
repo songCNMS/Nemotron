@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task302_qwen_aime_v11_30b_independent_review_runbook_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/361 |
-| Session | 1 |
-| Progress | Accepted task302 from lead docs commit `676d8556` on branch `intern_nemotron_worker_4/task302_qwen_aime_v11_30b_independent_review_runbook_s1` based on `origin/main` `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`; opened PR #361. Created initial 30B independent review runbook and confirmed no task298-task301 PRs/remote heads are visible yet; holding pending exact upstream evidence. No training/testing/export/endpoint/promotion/main push/merge/task255/AIME2025 train data/shared deletion action was performed. |
+| Session | 2 |
+| Progress | Rechecked task302 PR #361: current exact head `1c56762f0a7f19117fbfa1ebbb23db918043dc95`, base `main`, state `OPEN`, merge state `CLEAN`. #361 is initial acceptance/runbook scaffolding only, with runbook disposition `HOLD_WAITING_TASK298_TASK301_EVIDENCE`; no task298-task301 gate is approved. No training/testing/export/endpoint/promotion/main push/merge/task255/AIME2025 train data/shared deletion action was performed. |
