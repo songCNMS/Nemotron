@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate HOLD: #362 task301 salvage candidate awaiting task303 independent review |
-| Session | 82 |
+| PR | 30B gate: #362/#366 merged; task304 non-AIME canary assigned |
+| Session | 83 |

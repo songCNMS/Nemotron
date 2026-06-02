@@ -7027,3 +7027,16 @@
   It is not a clean training PASS and does not clear non-AIME canary, corrected
   AIME/task243 eval, export, endpoint, promotion, follow-on 30B, task255 reuse,
   AIME2025 train data, shared deletion, or direct main push.
+- Verified #362 MERGED at `2026-06-02T17:35:53Z` with merge commit
+  `c94216b04bc3d71577391883d0cb76aa8c95e621` from exact approved head
+  `c75c584875afdbdde4130775cbdc83355e7639ea`. origin/main advanced to
+  `c94216b04bc3d71577391883d0cb76aa8c95e621`.
+- Created task304
+  `task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1` and assigned
+  `intern_nemotron_worker_3` to run or block a bounded 30B non-AIME
+  checkpoint-load/completion-retention canary for task301 `iter_0000035`.
+- task304 is the next allowed technical gate only. It may use the minimum
+  necessary resources up to task301's 8x H200 route, but must not train, run
+  AIME2025/task243, use AIME2025 train data, reuse task255, promote, delete
+  shared files, merge/push main, or perform export/endpoint without stopping for
+  lead authorization.

@@ -1538,3 +1538,14 @@
    assigned non-AIME canary/checkpoint-load task against `iter_0000035` after
    #362 merges. Corrected AIME/task243 eval, export, endpoint, promotion, and
    follow-on 30B remain blocked until later evidence.
+440. #362/task301 merged at `2026-06-02T17:35:53Z` with merge commit
+   `c94216b04bc3d71577391883d0cb76aa8c95e621` from approved head
+   `c75c584875afdbdde4130775cbdc83355e7639ea`.
+441. task304 is assigned to worker_3 for bounded 30B salvage non-AIME canary.
+   Candidate checkpoint:
+   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/checkpoints/iter_0000035`.
+   Model/tokenizer:
+   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+442. task304 may only prove or block checkpoint load and synthetic non-AIME
+   completion retention. AIME/task243, export/endpoint, promotion, and FT-vs-base
+   claims remain blocked until a later explicit lead task.
