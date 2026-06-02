@@ -298,6 +298,8 @@
    `0333ddae511a7924846a3e47b1b9f658eda26fef` in mailbox
    `3ac66fef3f364ae78262560fd0be1361`, and extended approval to
    `7149ae924108bc3a1ecc7997bb23fb81697f8d17` in mailbox
-   `03959e3364d94ea2a2a6b22b89ce3175`, but #337 remains on `HOLD` pending
-   refreshed exact-head confirmation for
-   `2b661ac38360b5a8a957359a59ffa63923928845`.
+   `03959e3364d94ea2a2a6b22b89ce3175`, then approved exact current head
+   `2b661ac38360b5a8a957359a59ffa63923928845` in mailbox
+   `7c65f9c53d58492892cba28f29e260d4`; lead approved #337 as
+   blocker-evidence-only with self-merge allowed only if exact head remains
+   `OPEN`/base `main`/`CLEAN`.

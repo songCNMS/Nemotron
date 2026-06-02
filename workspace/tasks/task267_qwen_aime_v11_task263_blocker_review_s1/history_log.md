@@ -33,6 +33,12 @@
 - Worker_2 then pushed hook-correction metadata-only head
   `2b661ac38360b5a8a957359a59ffa63923928845`; lead verified report/script
   hashes were unchanged and requested worker_4 exact-head refresh again.
+- Worker_4 mailbox `7c65f9c53d58492892cba28f29e260d4` approved #337 as
+  blocker-evidence-only at exact head
+  `2b661ac38360b5a8a957359a59ffa63923928845`.
+- Lead gate decision: APPROVE #337 as blocker-evidence-only, with self-merge
+  release only if #337 is still `OPEN`/base `main`/`CLEAN` at exact head
+  `2b661ac38360b5a8a957359a59ffa63923928845`.
 - Scope is read-only review of blocker evidence; no implementation, merge,
   training, eval, promotion, AIME2025 train data, or 30B/8-GPU.
 - Global Qwen AIME gate remains `NO-GO/HOLD`.

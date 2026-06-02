@@ -67,8 +67,8 @@ Worker_2 official closeout mailboxes `bb902bdc809545a0bd83a49fbb6e30b0` and
 self-merge occurred.
 Worker_4 mailbox `2aaadb8b48664e5dbf9585f1b24ebbdc` approved #337 as
 blocker-evidence-only at `0979c22990eda95e732bde5543569e77eeebfa6c`; current
-head `2b661ac38360b5a8a957359a59ffa63923928845` still needs a refreshed
-exact-head confirmation before lead approval.
+head `2b661ac38360b5a8a957359a59ffa63923928845` received refreshed exact-head
+approval in worker_4 mailbox `7c65f9c53d58492892cba28f29e260d4`.
 Worker_4 mailbox `3ac66fef3f364ae78262560fd0be1361` later approved
 `0333ddae511a7924846a3e47b1b9f658eda26fef` as blocker-evidence-only; worker_2
 then advanced #337 to `7149ae924108bc3a1ecc7997bb23fb81697f8d17` with another
@@ -77,6 +77,9 @@ Worker_4 mailbox `03959e3364d94ea2a2a6b22b89ce3175` extended the approval
 substantively to `7149ae924108bc3a1ecc7997bb23fb81697f8d17`; worker_2 then
 advanced #337 to `2b661ac38360b5a8a957359a59ffa63923928845` with a metadata-only
 hook correction.
+Worker_4 mailbox `7c65f9c53d58492892cba28f29e260d4` approved #337 as
+blocker-evidence-only at exact current head
+`2b661ac38360b5a8a957359a59ffa63923928845`.
 
 ## Acceptance Criteria
 
@@ -85,3 +88,10 @@ hook correction.
 - REQUEST-CHANGES: evidence is stale, inconsistent, under-specified, or missing
   required artifact/checksum/runtime details.
 - BLOCK: #337 cannot be evaluated safely or violates boundaries.
+
+## Lead Gate
+
+Approved as blocker-evidence-only for exact head
+`2b661ac38360b5a8a957359a59ffa63923928845`. This is not Bridge/checkpoint-load
+proof, not training clearance, not promotion/go-no-go, and not 30B/8-GPU
+authorization. Global Qwen AIME gate remains `NO-GO/HOLD`.

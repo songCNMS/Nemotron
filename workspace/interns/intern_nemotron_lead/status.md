@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #337 OPEN/CLEAN @2b661ac pending task267 refresh; #334/#335/#336 MERGED; gate NO-GO/HOLD |
+| PR | #337 OPEN/CLEAN @2b661ac APPROVE blocker-evidence-only; release self-merge only if exact head remains clean; gate NO-GO/HOLD |
 | Session | 69 |

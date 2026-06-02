@@ -3832,3 +3832,13 @@
 - Updated task267 docs to current exact head
   `2b661ac38360b5a8a957359a59ffa63923928845`; #337 remains `HOLD` pending
   worker_4 refreshed exact-head confirmation for that head.
+- Received and marked read worker_4 final task267 mailbox
+  `7c65f9c53d58492892cba28f29e260d4`, approving #337 as blocker-evidence-only
+  at exact current head `2b661ac38360b5a8a957359a59ffa63923928845`.
+- Rechecked GitHub: #337 is `OPEN`/base `main`/`CLEAN` at exact head
+  `2b661ac38360b5a8a957359a59ffa63923928845`.
+- Lead decision: APPROVE #337 as blocker-evidence-only; worker_2 may self-merge
+  only if #337 remains `OPEN`/base `main`/`CLEAN` at exact head
+  `2b661ac38360b5a8a957359a59ffa63923928845`. This does not authorize
+  Bridge/checkpoint-load proof claims, training, live AIME/task243 eval,
+  promotion/go-no-go, AIME2025 train data, 30B/8-GPU, or shared deletion.

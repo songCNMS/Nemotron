@@ -32,3 +32,7 @@
    in mailbox `03959e3364d94ea2a2a6b22b89ce3175`; worker_2 then advanced to
    `2b661ac38360b5a8a957359a59ffa63923928845` with a metadata-only hook
    correction.
+9. Worker_4 approved #337 as blocker-evidence-only at exact head
+   `2b661ac38360b5a8a957359a59ffa63923928845` in mailbox
+   `7c65f9c53d58492892cba28f29e260d4`; this is not Bridge/checkpoint-load
+   proof, training clearance, promotion/go-no-go, or 30B/8-GPU authorization.
