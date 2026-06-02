@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - 30B full SFT training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=9 -->
 
 ## Background
 
@@ -19,13 +19,14 @@ checksums, and an artifact handoff for task300 testing.
 
 - Carry task298 runtime route lead approval with residuals; do not treat it as
   sufficient for launch by itself.
-- Wait for task299/#365 lead-approved 30B data/decontam proof to merge or
-  otherwise close out.
+- Carry task299/#365 merged 30B data/decontam proof at merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38`.
 - Wait for task300 BASE_PASS same-harness 30B base AIME2025 score before any
   FT judgment; do not claim training success as eval success.
 - Wait for explicit lead sequence clearance before launch.
-- Use exact current main `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7` or report
-  if a newer main changes relevant code and requires lead decision.
+- Current observed `origin/main` is
+  `205fc919a643b1478964a9e91793247c5e821a38` after task299/#365 merge; launch
+  still requires task300 and lead clearance.
 - Run full 30B SFT with documented model path, packed root, LR, train steps,
   optimizer, parallelism, GPU count/type, validation settings, seed, resume
   policy, output/checkpoint roots, and logs.
@@ -67,7 +68,8 @@ checksums, and an artifact handoff for task300 testing.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_5`
-- Current main: `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`
+- Original assignment main: `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`
+- Current observed main: `205fc919a643b1478964a9e91793247c5e821a38`
 - Related tasks: task276, task298, task299, task300
 
 ## Session 1 Result
@@ -145,6 +147,34 @@ checksums, and an artifact handoff for task300 testing.
   `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and no accepted same-harness
   30B base AIME score artifact is available to task301.
 - Kept launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`.
+- Did not launch training. Did not use task255, AIME2025 train data, shared
+  deletion, export, endpoint, promotion, main push, merge, 30B training, or
+  8-GPU execution.
+
+## Session 8 Result
+
+- Recorded lead gate update: task299/#365 is MERGED into `main` at
+  `205fc919a643b1478964a9e91793247c5e821a38`.
+- Runtime and data gates are now carried for task301 status purposes.
+- Verified task300 remains a launch blocker: PR #363 is OPEN/CLEAN at
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and no accepted same-harness
+  30B base AIME score artifact is available to task301.
+- Kept launch disposition `BLOCKED_UPSTREAM_GATES_MISSING`.
+- Did not launch training. Did not use task255, AIME2025 train data, shared
+  deletion, export, endpoint, promotion, main push, merge, 30B training, or
+  8-GPU execution.
+
+## Session 9 Result
+
+- Refreshed #362 docs/status for the lead exact-head request after #362 head
+  `efc9aef71c97e53e71eccb3f26416cd479adf1f2` still recorded #365 as
+  open/pending.
+- Carried task299/#365 as MERGED into `main` at
+  `2026-06-02T15:29:15Z` with merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38` from head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`.
+- Preserved training HOLD until task300 provides an accepted same-harness 30B
+  base AIME score artifact and lead gives explicit launch clearance.
 - Did not launch training. Did not use task255, AIME2025 train data, shared
   deletion, export, endpoint, promotion, main push, merge, 30B training, or
   8-GPU execution.

@@ -1,8 +1,8 @@
 # task301 30B Full SFT Training Report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=9 -->
 
-Generated: 2026-06-02T15:28:36Z
+Generated: 2026-06-02T15:35:12Z
 
 ## Disposition
 
@@ -12,15 +12,15 @@ Task301 was accepted, but no 30B full SFT training was launched. Current lead
 gate state requires all of the following before launch:
 
 - task298 runtime route lead approval with residuals carried;
-- task299/#365 final 30B data/decontam approval merged or otherwise closed out;
+- task299/#365 final 30B data/decontam approval merged and carried;
 - task300 30B same-harness base-score artifact before any FT judgment;
 - explicit lead sequence clearance.
 
-At the Session 7 refresh, lead reports task299/#365 has lead approval with
-residuals, pending worker_1 exact-head self-merge. Task301 remains HOLD until
-#365 is merged/closed out, task300 provides an accepted same-harness 30B base
-AIME score artifact, and lead gives explicit launch clearance. The safe action
-is to hold launch and report the remaining blocker.
+At the Session 9 refresh, lead reports task299/#365 is merged into `main` at
+`205fc919a643b1478964a9e91793247c5e821a38`; runtime and data gates are carried.
+Task301 remains HOLD until task300 provides an accepted same-harness 30B base
+AIME score artifact and lead gives explicit launch clearance. The safe action is
+to hold launch and report the remaining blocker.
 
 ## Branch And Sources
 
@@ -29,6 +29,7 @@ is to hold launch and report the remaining blocker.
 | Worker branch | `intern_nemotron_worker_5/task301_qwen_aime_v11_30b_full_sft_training_s1` |
 | PR | #362 `https://github.com/songCNMS/Nemotron/pull/362` |
 | Branch base | `origin/main` `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7` |
+| Current observed `origin/main` | `205fc919a643b1478964a9e91793247c5e821a38` after task299/#365 merge |
 | Lead docs source | `origin/intern_nemotron_lead/session1-recovery-task-docs` `676d85563e00dfb665b6a911995bd47b4932c370` |
 | Task docs path | `workspace/tasks/task301_qwen_aime_v11_30b_full_sft_training_s1/` |
 | Intended report path | `workspace/tasks/task301_qwen_aime_v11_30b_full_sft_training_s1/30b_full_sft_training_report.md` |
@@ -38,7 +39,7 @@ is to hold launch and report the remaining blocker.
 | Gate | Required evidence | Visibility result | Launch decision |
 |---|---|---|---|
 | task298 | Runtime/resource/base-load route for 30B | Lead update reports runtime route approved with residuals; not an active launch blocker after Session 6 | CARRIED |
-| task299 | Lead-approved final 30B data/decontam proof merged or otherwise closed out | PR #365 is OPEN/base `main`/CLEAN/MERGEABLE at head `b8b760fb8f46cda8f302adbea106f19cc234e038`; lead reports approval with residuals pending worker_1 exact-head self-merge | BLOCK until merge/closeout |
+| task299 | Lead-approved final 30B data/decontam proof merged or otherwise closed out | PR #365 is MERGED from head `b8b760fb8f46cda8f302adbea106f19cc234e038` with merge commit `205fc919a643b1478964a9e91793247c5e821a38` | CARRIED |
 | task300 | Accepted 30B same-harness base AIME score artifact before any FT judgment | PR #363 is OPEN at head `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`; branch report remains blocked and no accepted base-score artifact is available to task301 | BLOCK |
 | lead clearance | Explicit sequence clearance for task301 launch | Not granted; lead states full 30B SFT remains HOLD | BLOCK |
 
@@ -79,7 +80,9 @@ lead launch clearance are absent:
 
 - runtime/model route: task298 approved with residuals, but not enough for
   launch by itself;
-- 30B packed root: blocked pending task299/#365 merge or closeout;
+- 30B packed root: task299/#365 is carried by merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38`, but launch command binding still
+  waits on task300 and lead clearance;
 - base comparator artifact: blocked pending task300;
 - LR, train steps, optimizer, parallelism, GPU count/type, validation settings,
   seed, resume policy, checkpoint root, and log root: blocked pending the
@@ -92,7 +95,7 @@ created by this session.
 
 ## Boundary Confirmation
 
-Confirmed through Session 7:
+Confirmed through Session 9:
 
 - no task255 reuse;
 - no AIME2025 prompts or labels as trainable data;
@@ -106,12 +109,9 @@ Confirmed through Session 7:
 
 ## Blockers
 
-1. task299/#365 is lead-approved with residuals but remains open at
-   `b8b760fb8f46cda8f302adbea106f19cc234e038`; task301 launch must wait for
-   merge or closeout.
-2. task300 30B same-harness base AIME score artifact is not accepted; task300
+1. task300 30B same-harness base AIME score artifact is not accepted; task300
    PR #363 is open at `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5` and its
    branch report remains blocked.
-3. Lead has not cleared the task301 launch sequence.
-4. Without the above exact gate refs, artifacts, and lead clearance, training
+2. Lead has not cleared the task301 launch sequence.
+3. Without the above exact gate refs, artifacts, and lead clearance, training
    launch would violate the task301 fail-closed contract.

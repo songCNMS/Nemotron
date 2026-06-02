@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - task knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Knowledge Entries
 
@@ -41,3 +41,13 @@
     blocked until #365 is merged/closed out, task300 provides an accepted
     same-harness 30B base AIME score artifact, and lead gives explicit launch
     clearance.
+12. Session 8 lead gate: task299/#365 is merged into `main` at
+    `205fc919a643b1478964a9e91793247c5e821a38`, so runtime and data gates are
+    carried. Task301 launch remains blocked until task300 provides an accepted
+    same-harness 30B base AIME score artifact and lead gives explicit launch
+    clearance.
+13. Session 9 exact-head refresh: #362 head
+    `efc9aef71c97e53e71eccb3f26416cd479adf1f2` was stale because it still
+    recorded #365 open/pending. Refresh #362 to carry #365 merged at
+    `205fc919a643b1478964a9e91793247c5e821a38` while keeping task301 HOLD on
+    task300 accepted base artifact plus explicit lead launch clearance.

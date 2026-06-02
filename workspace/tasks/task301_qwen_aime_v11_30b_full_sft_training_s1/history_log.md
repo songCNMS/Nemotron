@@ -1,6 +1,6 @@
 # task301_qwen_aime_v11_30b_full_sft_training_s1 - history log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 76 - 2026-06-02 UTC - assignment
 
@@ -130,6 +130,39 @@
 - Updated report, README, status, and task knowledge to keep launch on HOLD
   until #365 is merged/closed out, task300 provides the accepted base artifact,
   and lead gives explicit sequence clearance.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 8 - 2026-06-02 UTC - task299 merged and carried
+
+- Received lead update that task299/#365 is merged into `main` at
+  `205fc919a643b1478964a9e91793247c5e821a38`.
+- Verified #365 state: MERGED from head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`, `mergedAt`
+  `2026-06-02T15:29:15Z`, merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38`.
+- Verified task300 remains unresolved for task301 launch: PR #363 is
+  OPEN/CLEAN at `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, and no accepted
+  same-harness 30B base AIME score artifact is available to task301.
+- Updated report, README, status, and task knowledge to record runtime and data
+  gates carried while keeping launch on HOLD until task300 provides the accepted
+  base artifact and lead gives explicit sequence clearance.
+- No training, task255 reuse, AIME2025 train data, shared deletion,
+  export-promotion, endpoint-promotion, main push, merge, 30B training, or
+  8-GPU execution was performed.
+
+## Session 9 - 2026-06-02 UTC - exact-head #365 merge refresh
+
+- Received lead exact-head refresh request: #362 was OPEN/base `main`/CLEAN at
+  head `efc9aef71c97e53e71eccb3f26416cd479adf1f2`, but the report at that head
+  still recorded #365 as open/pending.
+- Refreshed #362 docs/status to carry task299/#365 as MERGED at
+  `2026-06-02T15:29:15Z` with merge commit
+  `205fc919a643b1478964a9e91793247c5e821a38` from head
+  `b8b760fb8f46cda8f302adbea106f19cc234e038`.
+- Preserved task301 HOLD until task300 provides an accepted same-harness 30B
+  base AIME score artifact and lead gives explicit launch clearance.
 - No training, task255 reuse, AIME2025 train data, shared deletion,
   export-promotion, endpoint-promotion, main push, merge, 30B training, or
   8-GPU execution was performed.
