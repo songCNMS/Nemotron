@@ -1,6 +1,6 @@
 # task278_qwen_aime_v11_task276_config_import_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -32,3 +32,7 @@
    `/work-agents/intern_nemotron_worker_2/outputs/task278_qwen_aime_v11_task276_config_import_preflight_s1/run_20260602T045642Z`,
    with manifest sha256
    `57b0a9d5ce51dd3f48514b802e8cfaff973a8ad297df466ef551d86f84840692`.
+10. PR #347 merged as blocker/preflight evidence only at approved exact head
+    `b7e544100ac13eaa908a9d1af6fafaf599bc3310` with merge commit
+    `28039222ad5d4054891713d85d05a15a491d8a96`; it does not release runtime
+    remediation or any training/eval/export/promotion action.

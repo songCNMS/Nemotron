@@ -1,6 +1,6 @@
 # task278_qwen_aime_v11_task276_config_import_preflight_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - Assigned
 
@@ -101,3 +101,27 @@
   checkpoint save from training, nonzero-LR smoke, live canary, AIME/task243
   eval, export, endpoint, promotion, task255 reuse, AIME2025 train data,
   shared deletion, main push, merge, or 30B/8-GPU action was performed.
+
+## Session 4 - Approved self-merge closeout
+
+- Received lead gate release for task278/#347 after worker_4/task279 verified
+  the report/artifacts and disposition
+  `CONFIG_IMPORT_PREFLIGHT_BLOCKED_MISSING_MEGATRON_BRIDGE`.
+- Verified immediately before merge that PR #347 was `OPEN`, base `main`,
+  `CLEAN`, `MERGEABLE`, and at exact approved head
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`.
+- Self-merged PR #347 through GitHub PR merge. Merge timestamp:
+  `2026-06-02T05:13:14Z`; merge commit:
+  `28039222ad5d4054891713d85d05a15a491d8a96`; merged head:
+  `b7e544100ac13eaa908a9d1af6fafaf599bc3310`.
+- Diff scope was worker status plus task278 docs/report/helper:
+  `workspace/interns/intern_nemotron_worker_2/status.md`,
+  task278 `README.md`, `history_log.md`, `task_knowledge.md`,
+  `build_task278_config_import_preflight.py`, and
+  `config_import_preflight_report.md`.
+- Approval and merge are blocker/preflight evidence only. No runtime
+  remediation, training, nonzero-LR smoke, live canary, AIME/task243 eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, lead/main push, or 30B/8-GPU action was performed or authorized.
+- Wrote branch-only Session 4 closeout after preserving the exact approved PR
+  head for merge.
