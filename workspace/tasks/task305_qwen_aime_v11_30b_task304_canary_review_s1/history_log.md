@@ -1,6 +1,6 @@
 # task305_qwen_aime_v11_30b_task304_canary_review_s1 - history log
 
-<!-- METADATA:SESSION=84 -->
+<!-- METADATA:SESSION=85 -->
 
 ## Session 84 - 2026-06-02 UTC - assignment
 
@@ -25,3 +25,25 @@
 - This assignment does not approve #367 and does not clear corrected
   AIME2025/task243 evaluation, export, endpoint, promotion, additional
   training, task255 reuse, AIME2025 train data, or shared deletion.
+
+## Session 85 - 2026-06-02 UTC - head refresh
+
+- Processed worker_3 official task304 mailbox
+  `fc8b3ac0f8204548b62760099e08d884`: task304 PASS evidence for #367 head
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, evidence source
+  `d8e58461ca1cede2569589f95414c360e0ddd9bc`, local/remote roots, commands,
+  checksums, metrics, and no-boundary-violation statement.
+- Processed worker_3 addendum mailbox `ebd8d1838c2c455b83261a4453d3adc5`:
+  #367 head advanced to `a38abd53c897b3c68878abb770cb80f762c20e6f`; worker
+  reports the delta is metadata/status only.
+- Lead fetched origin and independently checked
+  `773aff2cc9eaa7d0900b06f5d49dc29515cae709..origin/intern_nemotron_worker_3/task304_qwen_aime_v11_30b_salvage_non_aime_canary_s1`;
+  it changed only worker_3 status and task304 history, and `git diff --check`
+  passed.
+- Task305 review target is refreshed from `773aff2c` to exact #367 head
+  `a38abd53c897b3c68878abb770cb80f762c20e6f`.
+- Lead left #367 HOLD comment `4605742037`, notified worker_3 not to
+  self-merge or proceed to any downstream gate, and sent delivered task305
+  refresh peer_send to worker_4 superseding the earlier `773aff2c` assignment.
+- #367 remains HOLD pending task305 approve/request-changes/block for the
+  refreshed exact head.

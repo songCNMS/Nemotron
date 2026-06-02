@@ -7096,6 +7096,33 @@
   `773aff2cc9eaa7d0900b06f5d49dc29515cae709`, artifact roots, read-only review
   scope, and the no-training/no-AIME/no-export/no-endpoint/no-promotion/no-merge
   boundaries.
+- Processed and marked read worker_3 task304 mailbox
+  `fc8b3ac0f8204548b62760099e08d884`. Official closeout matches task304 PASS
+  evidence at #367 head `773aff2cc9eaa7d0900b06f5d49dc29515cae709` with
+  evidence source `d8e58461ca1cede2569589f95414c360e0ddd9bc`, local/remote
+  run roots, command/env, TP4/PP2/EP4/ETP1 checkpoint-load proof, `5/5`
+  retained and exact synthetic non-AIME completions, key hashes, and explicit
+  no-training/no-AIME/no-export/no-endpoint/no-promotion/no-shared-deletion
+  boundary confirmations.
+- Processed and marked read worker_3 addendum mailbox
+  `ebd8d1838c2c455b83261a4453d3adc5`: #367 advanced to
+  `a38abd53c897b3c68878abb770cb80f762c20e6f`; worker_3 reports the delta is
+  status/history metadata only and canary evidence remains unchanged.
+- GitHub and fetch confirmed #367 current state as OPEN/base `main`/CLEAN/
+  MERGEABLE/non-draft at `a38abd53c897b3c68878abb770cb80f762c20e6f`.
+  Lead checked `773aff2c..a38abd53`: only worker_3 status and task304 history
+  changed; `git diff --check` passed.
+- Refreshed task305 docs from #367 head `773aff2c` to exact current head
+  `a38abd53c897b3c68878abb770cb80f762c20e6f`. task305 now must verify both
+  `d8e58461..a38abd53` and `773aff2c..a38abd53`.
+- Left #367 HOLD comment `4605742037` at head
+  `a38abd53c897b3c68878abb770cb80f762c20e6f`, explicitly blocking self-merge
+  and any corrected AIME/task243, export, endpoint, promotion, additional
+  training, task255 reuse, AIME2025 train data, shared deletion, or main push
+  until task305 returns a gate decision and lead releases the next step.
+- Sent delivered peer_send to worker_3 with the same #367 HOLD instruction.
+- Sent delivered task305 refresh peer_send to worker_4, superseding the earlier
+  `773aff2c` review target and requiring exact-head review of `a38abd53`.
 - #367 remains HOLD pending task305 approve/request-changes/block. This does
   not clear corrected AIME2025/task243 evaluation, export, endpoint, promotion,
   additional training, task255 reuse, AIME2025 train data, shared deletion, or

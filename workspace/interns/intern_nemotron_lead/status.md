@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: #367 OPEN/CLEAN; task305 independent canary review assigned |
-| Session | 84 |
+| PR | 30B gate: #367 head a38abd53 HOLD; task305 review refreshed |
+| Session | 85 |

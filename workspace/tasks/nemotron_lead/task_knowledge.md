@@ -1588,3 +1588,18 @@
 452. task305 assignment peer_send to `intern_nemotron_worker_4` was delivered
    after lead branch `53daa627` was pushed. Await worker_4 branch/PR/mailbox
    evidence before approving #367 or assigning any corrected AIME/task243 work.
+453. worker_3 official task304 closeout mailbox
+   `fc8b3ac0f8204548b62760099e08d884` reports #367 head `773aff2c`, evidence
+   source `d8e58461`, task304 PASS metrics (`5/5` retained completions and
+   exact matches), key hashes, and boundary confirmations.
+454. worker_3 addendum mailbox `ebd8d1838c2c455b83261a4453d3adc5` reports #367
+   head drift to `a38abd53c897b3c68878abb770cb80f762c20e6f` with status/history
+   hygiene only. Lead fetched and confirmed `773aff2c..a38abd53` changed only
+   worker_3 status plus task304 history and diff-check passed.
+455. task305 review target is refreshed to #367 exact head
+   `a38abd53c897b3c68878abb770cb80f762c20e6f`; the previous delivered
+   `773aff2c` assignment is superseded and worker_4 needs refreshed instruction
+   before review/approval.
+456. #367 HOLD comment `4605742037` was left at exact head `a38abd53`; worker_3
+   was told not to self-merge or proceed downstream, and worker_4 received a
+   delivered task305 refresh peer_send for exact-head review of `a38abd53`.
