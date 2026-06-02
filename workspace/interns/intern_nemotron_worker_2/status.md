@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task272_qwen_aime_v11_post_bridge_pilot_plan_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=None,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task272_qwen_aime_v11_post_bridge_pilot_plan_s1 |
-| PR | #341 |
-| Session | 5 |
-| Last Update | 2026-06-02T02:17:21Z: Session 5 closeout updated for PR #341 task272 no-training post-Bridge Qwen3-4B V11 pilot readiness plan; disposition remains `PLAN_READY_HOLD_TASK271_LEAD_GATE`. |
+| Current Task | None |
+| PR | #341 merged |
+| Session | 6 |
+| Last Update | 2026-06-02T02:25:25Z: Self-merged PR #341 for task272 no-training readiness-plan docs at head `1a09de7b0bd25f21819effbd7920e62450a37a59`; merge commit `83a3c669bd294da941740581e6a2b77e2ea03c88`; worker status returned to Idle. |

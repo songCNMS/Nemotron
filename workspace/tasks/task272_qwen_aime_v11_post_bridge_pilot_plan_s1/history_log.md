@@ -1,6 +1,6 @@
 # task272_qwen_aime_v11_post_bridge_pilot_plan_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - Assigned
 
@@ -70,3 +70,20 @@
 - No SFT training, nonzero-LR smoke, live AIME/task243 eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, 30B/8-GPU, merge/main push, or
   shared deletion was performed during this closeout update.
+
+## Session 6 - Approved self-merge closeout
+
+- Lead approved #341 at exact head
+  `1a09de7b0bd25f21819effbd7920e62450a37a59` as no-training readiness-plan docs
+  only.
+- Rechecked #341 before merge: `OPEN`, base `main`, head
+  `1a09de7b0bd25f21819effbd7920e62450a37a59`,
+  `mergeStateStatus=CLEAN`, `mergeable=MERGEABLE`.
+- Self-merged #341 through GitHub merge; merged at `2026-06-02T02:25:09Z` with
+  merge commit `83a3c669bd294da941740581e6a2b77e2ea03c88`.
+- Updated worker status to `Idle` after the approved docs-only merge.
+- Gate scope remains unchanged: next executable route is fresh V11 packed Qwen
+  root plus no-training config/import preflight after lead clearance, not
+  training.
+- No eval/task243, export, endpoint, promotion, AIME2025 train data, task255
+  reuse, shared deletion, or 30B/8-GPU action was performed.

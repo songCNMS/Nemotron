@@ -1,6 +1,6 @@
 # task272_qwen_aime_v11_post_bridge_pilot_plan_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -27,3 +27,7 @@
 7. Session 5 closeout is bookkeeping only: it updates the required checklist
    state for PR #341 and does not change the technical disposition or authorize
    any training/eval/export/promotion/scale action.
+8. PR #341 merged at `2026-06-02T02:25:09Z` with merge commit
+   `83a3c669bd294da941740581e6a2b77e2ea03c88`; it carries docs-only no-training
+   readiness planning and does not authorize training, eval, export, promotion,
+   task255 reuse, AIME2025 train data, shared deletion, or 30B/8-GPU.
