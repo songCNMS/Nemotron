@@ -1227,3 +1227,14 @@
    PASS for Qwen3-30B-A3B-Instruct on 8x H200 with `tp=4/pp=2/ep=4`, and
    task300 local blocker report exists, but lead must keep task300/task301 held
    pending official task298 and task300 reports.
+373. worker_3 official task300/#363 mailbox `0cccabc2bb2f40d09c18d5623b1f57a5`
+   confirms head `a54fb96e`, disposition `BLOCK_UPSTREAM_TASK298_ROUTE_MISSING`,
+   no 30B base AIME score/completions/parser diagnostics, and no endpoint/export
+   launch. It does provide read-only route context: NemTron has 8 H200 GPUs, the
+   30B Instruct/Base/Thinking/FP8 paths exist, common imports pass, and no common
+   endpoint is listening.
+374. worker_4 task302/#361 refresh head `6e2ed56b` records
+   `HOLD_REQUEST_CHANGES_MISSING_UPSTREAM_ARTIFACT_EVIDENCE`; #361 remains a
+   runbook/status PR, not approval for task298-task301. task301/#362 has advanced
+   to `82cb4067` and still needs exact-head mailbox before lead can reconcile
+   the blocker report.

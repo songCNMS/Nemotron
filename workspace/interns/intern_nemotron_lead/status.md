@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate live: task298 local preflight observed pending official report; task299 not final; task300 blocker unpushed; #361/#362 CLEAN; training HOLD |
+| PR | 30B gate live: task298 official report pending; task299 not final; #363 task300 BLOCK missing task298 route; #361 HOLD; #362 refreshed mailbox pending; training HOLD |
 | Session | 76 |

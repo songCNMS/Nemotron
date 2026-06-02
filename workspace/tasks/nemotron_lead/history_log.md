@@ -6227,3 +6227,42 @@
   or mailbox the task300 blocker report and not run 30B base AIME before task298
   official route PASS; worker_5 must clarify PR evidence hash versus refreshed
   local output hash. Mailbox remained unread `0` after dispatch.
+- Processed and marked read worker_4 task302/#361 refresh mailbox
+  `4728a26667ba44d3aa09344d1f932370`: #361 refreshed to exact head
+  `6e2ed56b9947d4f64ffb6ff3a69a6ff8d69ac5a0`, OPEN/base main/CLEAN, runbook
+  disposition `HOLD_REQUEST_CHANGES_MISSING_UPSTREAM_ARTIFACT_EVIDENCE`.
+  Worker_4 recorded current visibility for task298 `7d24b929...`, task299
+  `ff30fad8...`, task300 `85a5ba13...`, and task301/#362 `b8e42b3e...`; no
+  task298-task301 gate was approved and no forbidden actions were performed.
+- Fetched after that mailbox: #363 worker_3/task300 appeared OPEN/base
+  main/CLEAN. Initial fetched head `d0b6e46e...` advanced to current head
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`; diff from `d0b6e46e...` to
+  current did not change `30b_base_aime2025_report.md`.
+- Processed and marked read worker_3 task300/#363 official mailbox
+  `0cccabc2bb2f40d09c18d5623b1f57a5`: #363 exact head
+  `a54fb96e3159ce1a1bc16d2b2c52cf12d553fbe5`, OPEN/base main/CLEAN,
+  disposition `BLOCK_UPSTREAM_TASK298_ROUTE_MISSING`. No 30B base AIME2025 score
+  was produced; no completions, parser diagnostics, numerator, or denominator
+  exist. Artifact root is
+  `/work-agents/intern_nemotron_worker_3/outputs/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T144005Z`.
+  Read-only probes found NemTron host
+  `lg-cmc-b7r201-f08u26-h200-000126`, Python `3.12.3`, 8 idle H200 GPUs,
+  candidate path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, nearby
+  Base/Thinking/FP8 paths, imports `sglang 0.5.8`, `torch 2.9.1+cu129`,
+  `transformers 4.57.1`, `megatron`, `megatron.core 0.16.0rc0`, no common local
+  endpoint on probed ports, and task247 corrected AIME cache available for a
+  later route-approved base run.
+- Worker_3 #363 checksums recorded in mailbox:
+  `github_pr_probe.json` `36a8e3a31f63ccf4d8d98cd42716874479ffcf96d265fc5e0005def390d2f5e0`,
+  `nemtron_30b_path_gpu_probe.log` `fbbe50534398b9afa075a331247eb7acb744bdb04fd915437968880491f7ae09`,
+  `nemtron_endpoint_probe.log` `d0eb0295776fd2be5bdecd9a4f52344c3fdbb0cbe5c039072966c992b47966d0`,
+  `nemtron_import_probe.log` `4bbb37ae63fb964931aa896f94aa07c1e818fa1c40d07aac59c5b741400ec06d`,
+  and `remote_branch_probe.log` `baa3860ec8779ed1c71e19de234e4789dfc9b8b52b90fa50e6d64905729298b4`.
+  Boundaries confirmed: no 30B base AIME eval, endpoint, export, canary,
+  FT judgment, training, task255, AIME2025 train data, shared deletion,
+  promotion, main push, or merge.
+- Current task301/#362 head is `82cb4067e3dad6d2f8da8d94c3251e46263ff3db`,
+  CLEAN. Sent delivered worker_5 follow-up requesting official mailbox for this
+  exact refreshed head and clarification of PR report hash versus refreshed local
+  output copy hash. Training remains HOLD.
