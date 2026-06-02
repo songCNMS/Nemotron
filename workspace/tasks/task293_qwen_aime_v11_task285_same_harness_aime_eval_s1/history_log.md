@@ -164,3 +164,7 @@
   repo-visible evidence/report merge. worker_3 branch later advanced to
   `94baef7d...` for merge closeout/status bookkeeping; official closeout
   mailbox is not yet visible.
+- Processed worker_3 closeout mailbox
+  `626570d1055b477eb3057622350e5039`; it matches observed GitHub state and
+  confirms branch-only status closeout head
+  `94baef7d20935b7563e27dc71dcbf084d7546f96`. Boundary confirmations unchanged.

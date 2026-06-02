@@ -5880,3 +5880,12 @@
   `24268157...` and #356 merge `31a3e962...`, keep residual risks visible, and
   preserve the no-clearance statement. Sent worker_5 a delivered peer follow-up.
   #351 must not self-merge until refreshed and re-gated.
+- Processed worker_3 #356 merge closeout mailbox
+  `626570d1055b477eb3057622350e5039`: worker_3 confirms pre-merge #356 was exact
+  approved head `672d0101...`, CLEAN/MERGEABLE, merged at
+  `2026-06-02T11:22:34Z` with merge commit `31a3e962...`, and pushed
+  branch-only status closeout head `94baef7d20935b7563e27dc71dcbf084d7546f96`.
+  Boundary confirmations remain unchanged. Marked the mailbox read.
+- Follow-up PR state check: #351 remains open/base main/CLEAN/MERGEABLE at stale
+  head `6d4b6ac6...` after the request-changes comment; no worker_5 refresh or
+  mailbox is visible yet.

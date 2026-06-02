@@ -31,3 +31,5 @@
 - #356 merged at `2026-06-02T11:22:34Z`, merge commit `31a3e962...`, from
   approved head `672d0101...`. task293 evidence is now merged; release/scale
   boundaries remain HOLD.
+- worker_3 merge closeout mailbox `626570d...` confirms #356 merge details and
+  branch-only status closeout head `94baef7d...`.

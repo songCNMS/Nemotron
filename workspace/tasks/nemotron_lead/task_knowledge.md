@@ -1095,3 +1095,8 @@
    because the refreshed runbook is stale: it records #356 open and task294 not
    visible even though #357 and #356 are both merged. Await worker_5 refresh
    against current main `31a3e962...`.
+342. worker_3 #356 merge closeout mailbox `626570d...` confirms mergedAt
+   `2026-06-02T11:22:34Z`, merge commit `31a3e962...`, merged head
+   `672d0101...`, and branch-only status closeout head `94baef7d...`.
+343. #351 remains open/CLEAN at stale head `6d4b6ac` after request-changes; no
+   worker_5 refresh is visible yet.
