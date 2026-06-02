@@ -35,3 +35,5 @@
   no live eval, and fail-closed release gates.
 - Execution remains held because task278/task279 approval evidence is not yet
   visible on main or in PR search.
+- Opened PR #346:
+  https://github.com/songCNMS/Nemotron/pull/346.
