@@ -9219,3 +9219,36 @@
   visible yet.
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
+
+## Session 167 - 2026-06-02 UTC - task306 active run still row21
+
+- Rechecked current gate state after fetching origin:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch was
+    `819c4fbedd76631fa4895858c2228a7c082a1846` before this tracking update;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`;
+  - worker_3 local status remains Working on task306 with PR `N/A`, and
+    `/work-agents/intern_nemotron_worker_3/report.md` has no closeout.
+- The worker-owned NemTron task306 process remains active after about two
+  hundred sixty-eight minutes. Local and remote rc files remain absent.
+- Latest visible stdout progress remains `20/30`: rows 1-4, 6, 8, 16, 17, 18,
+  and 19 are parsed true/correct true; row 5 length-stopped parsed
+  false/correct false; row 7 parsed true/correct false; row 9 length-stopped
+  parsed false/correct false; row 10 parsed true/correct false; rows 11-15
+  length-stopped parsed false/correct false; row 20 parsed true/correct false.
+  This remains partial unofficial progress only, not a final FT score.
+- Remote rank event logs still show `start_index=20` active after all ranks
+  completed `start_index=19`; no completion event or stdout progress for row
+  21 is visible yet.
+- The only summary/results/full-completion/parser/checksum files found under
+  the task306 local and remote roots are task300 base input artifacts, not
+  task306 FT output artifacts.
+- No task306 FT aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 FT artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
