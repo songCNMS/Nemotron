@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Session 0 - Created with team lead
 
@@ -6082,3 +6082,30 @@
   `sampling_exact_parameter_match=false` accepted only as semantic greedy
   equivalence. Still no export, endpoint, promotion, fresh training/eval,
   task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU clearance.
+
+## Session 76 - 2026-06-02 UTC - 30B Qwen AIME V11 scale-up assignment
+
+- Coordinator relayed the user request to run full training/testing on the 30B
+  model from current origin/main
+  `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`, after task296/task297 accepted
+  current-main equivalence for the 4B run.
+- Lead checked mailbox before assignment; unread count was `0`.
+- Created task298 for worker_2: 30B runtime/resource/base-load proof, exact
+  model path, GPUs, parallelism, entrypoint, and eval-route/export-route
+  decision. Candidate path:
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+- Created task299 for worker_1: 30B data/packing contract gate using accepted
+  task276 V11 split semantics only if Qwen3-30B-A3B tokenizer/chat-template and
+  decontamination contract hold.
+- Created task300 for worker_3: 30B same-harness base AIME2025 score first, then
+  after task301 checkpoint non-AIME canary and corrected AIME2025 FT-vs-base
+  testing with full completions and parser diagnostics.
+- Created task301 for worker_5: full 30B SFT training, gated on task298 PASS,
+  task299 PASS, and task300 30B base-score artifact before FT judgment.
+- Created task302 for worker_4: independent review/runbook for task298-task301
+  evidence, artifacts, commands, metrics, residuals, and gate disposition.
+- Global boundaries preserved: AIME2025 prompts/labels are held-out eval/decontam
+  only; no task255 reuse; no shared
+  `/mnt/cephfs/data/processing/lei.song` deletion; eval-only export/endpoint is
+  allowed only if required for testing and is not promotion; no promotion or
+  release claim without later explicit approval.

@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Knowledge Entries
 
@@ -1194,3 +1194,9 @@
    task292 detokenized fallback residual, task293 semantic-greedy sampling
    residual, and all holds on export, endpoint, promotion, fresh training/eval,
    task255 reuse, AIME2025 train data, shared deletion, 30B, and 8-GPU.
+367. User has now authorized attempting 30B Qwen AIME V11 full
+   data/training/testing from current main `31137bc1...`, but this is
+   fail-closed: task298 runtime/resource/base-load, task299 data/packing,
+   task300 30B base score/testing, task301 training, and task302 independent
+   review/runbook gates must preserve AIME2025 held-out-only, no task255, no
+   shared deletion, and no promotion without later explicit approval.

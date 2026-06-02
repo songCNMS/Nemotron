@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #358/#359 MERGED; path A accepted A_PROVED_NO_RERUN, no fresh current-main rerun needed; task293 FT 12/30 vs base 11/30; export/promotion/30B HOLD |
-| Session | 75 |
+| PR | 30B V11 scale-up assigned: task298 runtime, task299 data, task300 same-harness testing, task301 training, task302 review/runbook; fail-closed gates active |
+| Session | 76 |
