@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B V11 scale-up assigned: task298 runtime, task299 data, task300 same-harness testing, task301 training, task302 review/runbook; fail-closed gates active |
+| PR | 30B V11 scale-up task docs pushed and peer-delivered: task298 w2, task299 w1, task300 w3, task301 w5, task302 w4; awaiting worker mailbox/branches |
 | Session | 76 |

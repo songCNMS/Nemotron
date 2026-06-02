@@ -1200,3 +1200,7 @@
    task300 30B base score/testing, task301 training, and task302 independent
    review/runbook gates must preserve AIME2025 held-out-only, no task255, no
    shared deletion, and no promotion without later explicit approval.
+368. Session 76 dispatch mapping is worker_2/task298 runtime-resource-base-load,
+   worker_1/task299 data-packing contract, worker_3/task300 same-harness
+   testing, worker_5/task301 gated 30B SFT training, and worker_4/task302
+   independent review/runbook.
