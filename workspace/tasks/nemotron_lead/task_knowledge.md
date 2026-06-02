@@ -851,3 +851,7 @@
    `e75e0097d7a4771f0ee07c69bec5f50304e67a3f`, based on current main
    `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`. It remains docs/status only
    with no PR and no output root; final route evidence is still pending.
+282. worker_1 task290 branch-only closeout is visible at
+   `6dc03291a7b465ce11d31f7e2b96846bab8d0d64` after #353 merged. Treat it as
+   closeout/status only; authoritative merged evidence remains #353 head
+   `daad63efe77f19b8d56c62eca9d9f9331efd6e22` and merge commit `a372dcd7...`.

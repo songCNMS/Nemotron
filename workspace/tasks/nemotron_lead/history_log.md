@@ -5438,3 +5438,9 @@
   `e75e0097d7a4771f0ee07c69bec5f50304e67a3f`; it is now based on current
   `origin/main` `a372dcd7cd866dc02951f4f1c86eaf05a4c885b4`, with only
   acceptance/status/task-doc diffs, no PR, and no task291 output root visible.
+- Final fetch also found worker_1 task290 branch-only closeout at
+  `6dc03291a7b465ce11d31f7e2b96846bab8d0d64`. Diff versus current main is
+  worker_1 status plus task290 README/history/task_knowledge closeout only.
+  Local worker_1 status is Idle and records #353 merged at approved head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; no unread mailbox closeout was
+  present.
