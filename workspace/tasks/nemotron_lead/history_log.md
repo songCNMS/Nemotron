@@ -5315,3 +5315,8 @@
   including exact allowed next step or blocker, and reiterating no export,
   endpoint, AIME/task243 eval, training, task255 reuse, shared deletion,
   promotion, 30B, or 8-GPU.
+- Processed worker_4 correction acknowledgement mailbox and marked it read.
+  worker_4 confirmed task288 remains HOLD, future review will use the eventual
+  exact task287 evidence head, and the current task287 branch is still
+  acceptance/docs only with no task287 PR or official mailbox artifact report.
+  Remote task288 branch remains `2c64e1da...`; no task288 PR is visible.
