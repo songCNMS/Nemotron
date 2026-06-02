@@ -1,13 +1,13 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 1. #350/task285 is bounded smoke evidence only: it does not create a clean
    end-to-end train/eval pass and does not clear AIME/task243 eval.
-2. #352/task287 is the current non-AIME canary blocker gate; task288 and task290
-   are its independent review gates. Corrected AIME2025 same-harness FT-vs-base
-   comparison remains blocked until the blocker is resolved and processed by
-   lead.
+2. #352/task287 is the merged non-AIME canary blocker record; task288 and
+   #353/task290 approve the blocker closeout as evidence only. Corrected
+   AIME2025 same-harness FT-vs-base comparison remains blocked until task291
+   resolves the route blocker and lead releases the gate.
 3. The accepted same-harness base comparator remains Qwen3-4B `11/30 =
    0.36666666666666664`.
 4. #349/task283 merged at `2026-06-02T06:03:58Z` with merge commit
@@ -24,9 +24,10 @@
    it cannot be used as a clean train/eval pass, quality claim, AIME release,
    export release, endpoint release, promotion release, 30B release, or 8-GPU
    release.
-7. #352/task287 is OPEN/base main/CLEAN at exact head
-   `52834d74c79ab98b5e125434160843752c34d47a` with disposition `BLOCK`.
-   It passed checkpoint load proof (`LOAD_MEGATRON_MODEL=PASS`) but retained no
+7. #352/task287 is MERGED at `2026-06-02T07:39:18Z` with merge commit
+   `ca1ab63588651351b3e669450659abd2ad2c73e8` from exact head
+   `52834d74c79ab98b5e125434160843752c34d47a` with disposition `BLOCK`. It
+   passed checkpoint load proof (`LOAD_MEGATRON_MODEL=PASS`) but retained no
    completions, wrote no `canary_summary.json`, recorded retained completion
    rows `0`, and had correct canary answers `0/5`.
 8. task287 output root is
@@ -36,8 +37,14 @@
    blocker json sha is
    `aa451bfb364e1c44b67f6a0beb2612a2f331582555909445099c228c480aab2e`.
 9. task288 current fetched branch head is
-   `e62fad1da9a4279869e939a34604c4f1ce13827b`; no task288 PR was visible in
-   this refresh.
-10. task290 current fetched branch head is
-   `dab9a8bb87315bed529af0f00e3c843b1f910d0e`; no task290 PR was visible in
-   this refresh.
+   `a4afc814554f92039d886548a8979cf847e6265e`; Session 27 records
+   `APPROVE_BLOCKER_CLOSEOUT` for #352 exact head and mailbox
+   `a7667e01d0cb4188aa0e5dc222ae7da0`.
+10. #353/task290 is OPEN/base main/CLEAN/MERGEABLE at exact head
+   `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; lead approval comment
+   `4599915303` approves read-only blocker review evidence only. The task290
+   report decision is `APPROVE_BLOCKER_CLOSEOUT`.
+11. task291 current fetched branch head is
+   `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0`; it is the active bounded
+   no-export/no-endpoint route-unblock assignment for worker_2. AIME/task243,
+   export, endpoint, promotion, 30B, and 8-GPU remain blocked.

@@ -1,6 +1,6 @@
 # task289_qwen_aime_v11_post_smoke_runbook_provenance_s1 - history log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - 2026-06-02 UTC - assignment
 
@@ -48,6 +48,35 @@
 - Updated `post_smoke_runbook_provenance_report.md` and the carried task266
   runbook report so task287 is no longer described as missing a PR or merely
   active.
+- Kept AIME/task243 eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, merge, main push, 30B, and 8-GPU
+  blocked. No runtime, training, canary, eval, export, endpoint, promotion, or
+  artifact mutation action was performed.
+
+## Session 3 - 2026-06-02 UTC - #352 merged and #353 approved refresh
+
+- Refreshed PR #351 again after lead HOLD for current task287/task290/task291
+  state.
+- Fetched current `origin/main`
+  `ca1ab63588651351b3e669450659abd2ad2c73e8` and lead docs
+  `dfefee765c094b528db96f17d04613de660f0963`.
+- Verified #352/task287 is MERGED at `2026-06-02T07:39:18Z` with merge commit
+  `ca1ab63588651351b3e669450659abd2ad2c73e8` from exact head
+  `52834d74c79ab98b5e125434160843752c34d47a`; disposition remains `BLOCK`,
+  with no retained completions and no accepted canary pass.
+- Verified #353/task290 is OPEN/base main/CLEAN/MERGEABLE at exact head
+  `daad63efe77f19b8d56c62eca9d9f9331efd6e22`; lead approval comment
+  `4599915303` approves the read-only blocker review docs/evidence only.
+- Recorded task288 branch
+  `a4afc814554f92039d886548a8979cf847e6265e` as blocker-closeout approval
+  evidence only, based on Session 27 mailbox decision
+  `a7667e01d0cb4188aa0e5dc222ae7da0`.
+- Fetched task291 branch
+  `63c5715cefc7a19d7cfcc46fbfa9bcd767a113b0`; task291 is assigned to worker_2
+  for bounded one-GPU Qwen3-4B no-export/no-endpoint route unblock or precise
+  blocker.
+- Updated `post_smoke_runbook_provenance_report.md`, README, task knowledge,
+  worker status, and the carried task266 runbook report.
 - Kept AIME/task243 eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, merge, main push, 30B, and 8-GPU
   blocked. No runtime, training, canary, eval, export, endpoint, promotion, or
