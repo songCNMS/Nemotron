@@ -5212,3 +5212,13 @@
   for #350 exact head `fc379240c8517de10e37a5438f87b6b0994399f0`, with focus on
   whether the RC=1 post-train eval/SIGTERM residual risk still permits
   accepting retry3 as bounded smoke evidence only.
+- Processed worker_2 official mailbox report for task285 and marked it read.
+  #350 remains open/clean at exact head
+  `fc379240c8517de10e37a5438f87b6b0994399f0`; the official report matches the
+  PR evidence and keeps disposition
+  `PASS_SMOKE_EVIDENCE_WITH_POST_TRAIN_EVAL_RC1_RISK`.
+- Rechecked worker_4/task286 branch `39ae82a...`: it is acceptance/status/task
+  docs only and still contains the earlier pre-#350 HOLD observation, with no
+  substantive review report or PR. Sent a delivered follow-up to worker_4
+  requiring an official approve/request-changes/block mailbox report for exact
+  #350 head `fc379240...` before any #350 approval or later canary release.

@@ -774,3 +774,7 @@
    built-in eval/SIGTERM is acceptable as bounded smoke evidence only. Even if
    approved, it does not authorize canary, AIME/task243 eval, export, endpoint,
    promotion, 30B, or 8-GPU.
+263. worker_4/task286 branch `39ae82a...` currently contains acceptance/status/
+   task-doc evidence only, not the substantive #350 review. #350 remains HOLD
+   until worker_4 sends an official mailbox report reviewing exact head
+   `fc379240c8517de10e37a5438f87b6b0994399f0`.
