@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/380 |
-| Session | 95 |
-| Progress | Lead approved task320/#381 at head 4131915f as APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE and carried task314/#380 at fc93290a. No self-merge authorized; awaiting coordinator/authorized non-author path. |
+| Session | 96 |
+| Progress | Received task324 MMLU-aware blend design assignment. Task314/#380 and task320/#381 remain docs/no-action-release with no self-merge; starting task324 from current origin/main. |

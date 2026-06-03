@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Knowledge Entries
 
@@ -29,3 +29,7 @@
 11. Lead accepted task320/#381 at head `4131915f` as
     `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`, and carried task314/#380 at
     `fc93290a`; neither PR has self-merge authorization.
+12. Lead assigned task324 to design an MMLU-aware all-SFT blend using
+    task319/task320/task314; task324 remains docs/analysis only with no data
+    materialization, packing, training, eval, export, endpoint, promotion, main
+    push, merge, or self-merge authorization.

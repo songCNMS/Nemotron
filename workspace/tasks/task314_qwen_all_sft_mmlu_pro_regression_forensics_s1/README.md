@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Qwen all-SFT MMLU-Pro regression forensics
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=95 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=96 -->
 
 ## Background
 

@@ -1,6 +1,6 @@
 # task314 MMLU-Pro regression forensics report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=95 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=96 -->
 
 Generated: 2026-06-03T19:20:00Z
 

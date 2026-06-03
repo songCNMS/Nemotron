@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -98,3 +98,14 @@
   merge, or self-merge is authorized.
 - Awaiting coordinator or authorized non-author merge path if any; no
   self-merge performed.
+
+## Session 96 - 2026-06-03 UTC - New task324 handoff recorded
+
+- Received lead assignment for
+  `task324_qwen_all_sft_mmlu_aware_blend_design_s1`.
+- Task324 scope is docs/analysis only: use task319/task320/task314 to design
+  an MMLU-aware all-SFT blend and later packed-contract/eval constraints.
+- Task314/#380 and task320/#381 remain docs/no-action-release with no
+  self-merge authorization.
+- Recorded handoff before creating task324 branch from current `origin/main`;
+  task314 report findings and output artifact checksums are unchanged.
