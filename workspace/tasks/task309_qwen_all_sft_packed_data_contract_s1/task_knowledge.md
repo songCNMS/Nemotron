@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -25,3 +25,6 @@
 8. After the Session 3 constrained-pass refresh, #372 remains hold/no-self-merge
    until lead completes task312 independent review and explicitly releases the
    exact current head.
+9. Lead approved #372 at `4e26317adc536afc896377da9225913ca567135b`, but the
+   merge is sequenced after #374 lands; if the #372 head changes before #374
+   merges, the exact-head approval no longer applies without a refreshed gate.

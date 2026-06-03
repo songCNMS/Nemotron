@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -100,4 +100,24 @@
 - No self-merge or main push was performed.
 - Boundaries held: no training, eval, export, endpoint, promotion, task255
   reuse, AIME2025 train rows, shared deletion, product-code edits, main push,
+  or merge.
+
+## Session 5 - Lead approval sequenced after task308 merge
+
+- Received lead gate approval for task309/#372 at head
+  `4e26317adc536afc896377da9225913ca567135b` as
+  `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
+- Lead sequence condition: self-merge #372 only after #374 lands, and only if
+  #372 remains `OPEN`, base `main`, `CLEAN`, and exact head
+  `4e26317adc536afc896377da9225913ca567135b`.
+- Checked GitHub before merge action: #374 is still `OPEN`, base `main`,
+  `CLEAN`, not draft, at head `a238cacb1f28fb96df58d3a10641a2b7325f61b7`;
+  #372 is still `OPEN`, base `main`, `CLEAN`, not draft, at approved head
+  `4e26317adc536afc896377da9225913ca567135b`.
+- Did not merge #372 because prerequisite #374 has not landed.
+- Approval scope remains constrained V11/task299 packed seed only: train `46`
+  shards / `279` rows / `1024646` input tokens / `228927` supervised tokens,
+  valid `1` row, test `0` rows. Generic `stage1_sft/data_blend_raw` remains
+  no-go.
+- Boundaries held: no training, eval, export, endpoint, promotion, main push,
   or merge.
