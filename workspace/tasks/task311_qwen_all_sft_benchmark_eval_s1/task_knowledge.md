@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,7 @@
     refresh task311 from current main after accepted task310 checkpoint handoff,
     run checkpoint-load/non-AIME canary first, then run corrected same-harness
     benchmark eval only if that canary passes.
+11. Lead confirmed prerequisites #374/#372/#375 are merged and task310 is
+    released to worker_5, but task311 remains HOLD until an official task310
+    checkpoint handoff is accepted; stale #371 must not be self-merged or used
+    to run canary/benchmarks.
