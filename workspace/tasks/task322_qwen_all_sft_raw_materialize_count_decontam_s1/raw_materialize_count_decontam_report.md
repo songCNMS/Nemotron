@@ -1,6 +1,6 @@
 # task322_qwen_all_sft_raw_materialize_count_decontam_s1 - Raw materialize/count/decontam report
 
-<!-- METADATA:STATUS=ReadyForPR,DISPOSITION=PARTIAL_PASS_WITH_EXCLUSIONS,SESSION=78 -->
+<!-- METADATA:STATUS=Working,DISPOSITION=PARTIAL_PASS_WITH_EXCLUSIONS,SESSION=4 -->
 
 ## Disposition
 

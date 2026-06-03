@@ -1,6 +1,6 @@
 # task322_qwen_all_sft_raw_materialize_count_decontam_s1 - Raw all-SFT materialize/count/decontam
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=78 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=4 -->
 
 ## Background
 
