@@ -11159,3 +11159,32 @@
   endpoint route before judging FT.
 - Still HOLD: training/optimizer, AIME2025 train rows, task255 reuse, shared
   deletion, promotion, non-eval export/endpoint, self-merge, and main push.
+
+### Task311 export pass observed, awaiting official report
+
+- Rechecked after releasing the eval-only export/endpoint benchmark phase.
+  Lead mailbox remained empty and #371 remained OPEN/CLEAN/non-draft at
+  `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`.
+- Read-only remote inspection of worker_3 task-owned NemTron run
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z` showed
+  eval-only HF export evidence for task310 `iter_0000035`: manifest
+  `eval_only_hf_export_manifest.json` reports `disposition=EXPORT_PASS`,
+  `export_ckpt=PASS`, `hf_export_file_count=26`, `hf_export_total_bytes=61084232276`,
+  and `elapsed_seconds=183.892`.
+- Remote HF export path observed:
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`.
+  The run wrote 16 safetensor shards plus tokenizer/config files under that
+  path. The worker pane also reported 16/16 shards, rc `0`, and manifest
+  `EXPORT_PASS`.
+- Local worker output root currently has only
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/logs/export_command.txt`;
+  worker_3 pane indicates they are generating remote inventory/checksum
+  evidence and preparing endpoint/runner preflight.
+- This is not yet accepted closeout evidence for the export or any benchmark:
+  no official worker mailbox, pushed report, endpoint health proof, base-vs-FT
+  comparison, benchmark completions, parser diagnostics, or unavailable-row
+  closeout has arrived.
+- Gate remains as released: eval-only export/endpoint and same-harness
+  benchmarks may continue under task311, but training/optimizer, AIME2025 train
+  rows, task255 reuse, shared deletion, promotion, non-eval endpoint/export,
+  self-merge, and main push remain HOLD.

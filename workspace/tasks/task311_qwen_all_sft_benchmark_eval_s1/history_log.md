@@ -118,3 +118,20 @@
   corrected benchmark/M1 execution only with same-harness base evidence before
   FT judgment. Fail closed on export, endpoint, input, launcher, or base
   evidence blockers.
+
+## Session 78 - 2026-06-03 UTC - Export pass observed read-only
+
+- Lead read-only poll of NemTron task311 run
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z` observed
+  `eval_only_hf_export_manifest.json` with `disposition=EXPORT_PASS`,
+  `export_ckpt=PASS`, `hf_export_file_count=26`, `hf_export_total_bytes=61084232276`,
+  and `elapsed_seconds=183.892`.
+- Observed remote HF export path:
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`,
+  including 16 safetensor shards plus tokenizer/config files.
+- Worker_3 pane reports the wrapper exited cleanly and they are preparing
+  remote inventory/checksum evidence plus endpoint/runner preflight.
+- No official worker mailbox or pushed export report has arrived; local
+  evidence currently has only `logs/export_command.txt`. Export acceptance,
+  endpoint release beyond the already bounded eval-only phase, benchmark
+  metrics, and any FT judgment remain pending official evidence.

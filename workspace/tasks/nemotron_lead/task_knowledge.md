@@ -2396,3 +2396,13 @@
    evidence is mandatory before each FT judgment; training, AIME2025 train
    rows, task255, shared deletion, promotion, non-eval endpoint/export,
    self-merge, and main push remain HOLD.
+625. Session 78: read-only NemTron observation shows task311 run
+   `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z`
+   eval-only HF export reached `EXPORT_PASS` for task310 `iter_0000035`, with
+   `hf_export_file_count=26`, `hf_export_total_bytes=61084232276`, 16
+   safetensor shards, and elapsed `183.892s`. This is not accepted closeout
+   evidence until worker_3 sends official mailbox/pushed docs with checksums.
+626. Session 78: as of the export observation, local evidence only includes the
+   export launch command and no official endpoint health proof, benchmark
+   metrics, full completions, parser diagnostics, same-harness base-vs-FT
+   comparison, or unavailable-row closeout.

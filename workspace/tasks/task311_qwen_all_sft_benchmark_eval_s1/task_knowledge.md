@@ -51,3 +51,10 @@
     benchmark execution at current head `1ce85c63`. Same-harness base evidence
     is mandatory before judging FT; fail closed on export/endpoint/input/
     launcher/base blockers.
+16. Read-only observation of NemTron run `run_20260603T180911Z` shows eval-only
+    HF export `EXPORT_PASS` for task310 `iter_0000035`, producing 26 HF files
+    and 16 safetensor shards totaling `61084232276` bytes. This remains
+    unofficial until worker_3 provides mailbox/pushed report/checksums.
+17. No endpoint health proof, benchmark completions, parser diagnostics,
+    same-harness base-vs-FT metrics, or unavailable-row closeout has been
+    accepted after the export observation.

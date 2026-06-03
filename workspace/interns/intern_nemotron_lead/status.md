@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task311 route gate accepted at #371 1ce85c63; eval-only export/endpoint + same-harness benchmark phase released |
+| PR | all-SFT gate: task311 eval-only export PASS observed read-only; official export/endpoint/benchmark report pending |
 | Session | 78 |
