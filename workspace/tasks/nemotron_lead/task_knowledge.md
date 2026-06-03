@@ -2126,3 +2126,8 @@
    artifacts, PR, mailbox report, local/remote rc, or blocker exists. Gate
    remains HOLD pending official worker_3 report and final same-harness FT
    artifacts.
+585. Session 199: task306 remains active after about three hundred ninety-one
+   minutes; latest visible stdout progress remains `28/30`, with
+   row29/start_index28 active about ten minutes. No task306 FT final artifacts,
+   PR, mailbox report, local/remote rc, or blocker exists. Gate remains HOLD
+   pending official worker_3 report and final same-harness FT artifacts.
