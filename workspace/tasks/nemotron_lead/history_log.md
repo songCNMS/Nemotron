@@ -10820,3 +10820,36 @@
   still no official task310 mailbox closeout, no local synced preflight summary,
   no training log, no checkpoint, no validation/loss artifact, no task311
   release, and no benchmark/canary result accepted by lead.
+
+### Task310 live training progress report
+
+- Processed and marked read worker_5 task310 live progress mailbox
+  `46ed4123513947698ece61b20edb9c6c`.
+- Worker_5 confirmed task310 local branch is at
+  `11651f8ada734e813198bc9c0ccdaa473f26939f` after merging current
+  `origin/main` `004870e7d790778b5cdae5cc574257fdc19ec755`; PR #373 remains
+  remote-visible at stale head `a85b192e7632bd2da0e117fdaf994d8c70e16549`
+  pending refresh after a stable run endpoint/status.
+- Official progress details reported:
+  - constrained task299 packed root mirrored dereferenced to
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/input/task299_packed_qwen_30b_deref_mirror`;
+  - source and remote deref manifests match with `391` files, `0` symlinks, and
+    sha256 manifest hash
+    `d80241a9c659c2546591c27941e7c24c32717983250df38c0254113cd28bfc6c`;
+  - preflight PASS summary at
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/manifests/preflight_summary.json`
+    with sha256 `cff95dc1c07325b9192677670d68fe3b64a54759919879c5ce5db0b82d1b10b3`;
+  - training launched `2026-06-03T15:52:15Z` on 8x H200 with
+    `CUDA_VISIBLE_DEVICES=0-7`, `torchrun nproc_per_node=8`, TP4/PP2/EP4/ETP1,
+    `train_iters=35`, global batch `8`, micro batch `1`, lr `5e-7`, min lr
+    `1e-7`, warmup `4`, decay `35`, seed `5678`, save interval `5`, eval
+    interval `1000`;
+  - live status at `2026-06-03T15:57:08Z`: iteration `10/35` reached,
+    `iter_0000005` checkpoint saved, `iter_0000010` save started, losses
+    finite, skipped `0`, NaN `0` through iteration 10.
+- This remains in-progress training, not a completed task310 handoff. There is
+  no `train_rc`/`train_end`, final checkpoint, synced local training report,
+  PR refresh, independent review, task311 release, canary, or benchmark eval
+  yet. Boundaries remain held: no generic stage1 raw, no AIME2025 train rows,
+  no task255, no shared deletion, no silent downgrade, no export/endpoint/
+  promotion, and no benchmark eval/canary handoff.

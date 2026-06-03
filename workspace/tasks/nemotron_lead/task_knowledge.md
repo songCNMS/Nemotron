@@ -2276,3 +2276,10 @@
    EP4. This is not accepted checkpoint evidence: no official mailbox report,
    synced preflight summary, training log, checkpoint, validation/loss artifact,
    task311 release, canary, or benchmark result exists yet.
+603. Session 78: worker_5 official live task310 progress mail `46ed4123`
+   reports preflight PASS sha `cff95dc1`, training launch at
+   `2026-06-03T15:52:15Z` on 8x H200 with TP4/PP2/EP4/ETP1 and 35 train iters,
+   finite losses/skipped=0/NaN=0 through iter 10/35, `iter_0000005`
+   checkpoint saved, and `iter_0000010` save started. This is not a completed
+   handoff: no train_rc/train_end, final checkpoint, synced report, PR refresh,
+   independent review, task311 release, canary, or benchmark eval yet.
