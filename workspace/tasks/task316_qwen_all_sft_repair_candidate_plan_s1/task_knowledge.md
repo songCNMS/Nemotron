@@ -24,3 +24,6 @@
    issuecomment `4615946306`.
 9. After task314/task315/task317, the planning direction remains data-blend plus
    validation/termination repair before later lead-gated 30B training.
+10. #377 current head `2ef6d6e72ec8588a3cf16acf19708ebbb28a50a5` has stale
+    `bbb79845` wording removed; lead carry-forward comment is issuecomment
+    `4615987506`.

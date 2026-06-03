@@ -34,3 +34,13 @@
   but #377 is `HOLD_NOT_MERGE_READY` because current docs still reference
   `bbb79845` as the current head while actual PR head is `cf1decab`.
 - No action release and no self-merge.
+
+## Session 78 - 2026-06-03 UTC - Exact-head wording refreshed
+
+- Worker_5 mailbox `cbc8709b54684118a44baeccbba13412` reported #377 current
+  head `2ef6d6e72ec8588a3cf16acf19708ebbb28a50a5` after refreshing stale
+  `bbb79845` wording.
+- Lead posted #377 issuecomment `4615987506`, carrying forward
+  `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE` to current head.
+- Plan remains documentation only and releases no training/eval/packing/export/
+  endpoint/promotion action.

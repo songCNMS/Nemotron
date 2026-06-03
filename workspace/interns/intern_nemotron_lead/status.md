@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #371 ready for authorized evidence merge; #314/#315/#317 gates posted; #377 held on docs residual |
+| PR | #371/#377/#379/#380 current-head gates refreshed; #378 approved; awaiting authorized non-self merges |
 | Session | 78 |

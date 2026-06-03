@@ -267,3 +267,13 @@
   `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED` to current head.
   Merge remains coordinator/authorized non-author only; no self-merge or
   promotion is authorized.
+
+## Session 78 - 2026-06-03 UTC - Current head ready for authorized docs merge
+
+- #371 advanced to
+  `fc85b866ede0cdc95f31b6fcd6d61b817ceb2de8` with post-review
+  merge-readiness bookkeeping only.
+- Lead posted #371 issuecomment `4615987162`, carrying forward the docs-only
+  evidence closeout gate to current head.
+- #371 remains evidence/fail-closeout documentation only; no promotion or new
+  training/eval/export/endpoint action is authorized.

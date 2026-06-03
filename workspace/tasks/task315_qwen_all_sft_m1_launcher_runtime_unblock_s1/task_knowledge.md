@@ -15,3 +15,6 @@
    exact mappings exist for 14 rows but 0 are runnable now.
 6. Lead gate comment is #379 issuecomment `4615943606`; no benchmark row
    execution is authorized.
+7. #379 current head `e781b1849e764c9d347cb13a6259f65c700006ed` carries the
+   same blocker-docs disposition; lead refresh comment is issuecomment
+   `4615987811`.

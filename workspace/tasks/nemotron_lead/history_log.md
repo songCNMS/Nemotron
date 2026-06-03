@@ -11404,3 +11404,32 @@
   endpoint/promotion is authorized.
 - Delivered worker notifications to worker_1, worker_2, worker_3, worker_4,
   and worker_5. All returned `delivered`.
+
+### Current-head refresh after worker acknowledgements
+
+- Processed and marked read worker_5 mailbox
+  `6889d950ebde4cfca81351afeecd9d17`, worker_2 mailboxes
+  `48bfaea1dcee4735803c1a5d8c76becb`, `74ca0595ba4f4bae924e515b3d22ac8a`,
+  and `727aadb2da504c6cbcf0e1b6f38fb22a`, worker_1 mailbox
+  `eb2e1e26da354ac99ac3a09aa62b95bb`, and worker_4 mailbox
+  `1e987c24a13c4f1fbc41bfeb50dbcc20`.
+- Processed and marked read worker_5 mailbox
+  `cbc8709b54684118a44baeccbba13412`, which refreshed #377 exact-head wording.
+- #371 advanced to `fc85b866ede0cdc95f31b6fcd6d61b817ceb2de8` with
+  status/history/task_knowledge post-review merge-readiness bookkeeping only.
+  Lead posted #371 issuecomment `4615987162`, carrying forward docs-only
+  evidence closeout readiness for coordinator/authorized non-author merge.
+- #377 advanced to `2ef6d6e72ec8588a3cf16acf19708ebbb28a50a5`; worker_5
+  removed the stale `bbb79845` wording. Lead posted #377 issuecomment
+  `4615987506`, carrying forward `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE`.
+- #379 advanced to `e781b1849e764c9d347cb13a6259f65c700006ed` with
+  status/history/task_knowledge acknowledgement only; blocker report unchanged.
+  Lead posted #379 issuecomment `4615987811`, carrying forward
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`.
+- #380 advanced to `c6e3edfd9ab7755b8eb76327ddda136827a4e473` with
+  session/status metadata cleanup only; forensics content unchanged. Lead
+  posted #380 issuecomment `4615988092`, carrying forward
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
+- All current PRs remain documentation/evidence only. No promotion, training,
+  new eval, packing, export, endpoint, task255 reuse, AIME2025 train data,
+  shared deletion, main push, or self-merge is authorized.

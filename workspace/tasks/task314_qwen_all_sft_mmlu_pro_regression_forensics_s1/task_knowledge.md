@@ -14,3 +14,6 @@
    90 gains for net `-2`, with no row-alignment/parser/protocol artifact found.
 6. Lead gate comment is #380 issuecomment `4615943272`; no action beyond docs
    forensics is authorized.
+7. #380 current head `c6e3edfd9ab7755b8eb76327ddda136827a4e473` carries the
+   same forensics disposition; lead refresh comment is issuecomment
+   `4615988092`.

@@ -21,3 +21,11 @@
   `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
 - Accepted finding: task311 MMLU-Pro `-2` is real answer-choice drift under the
   same corrected-Qwen protocol, not evaluator/protocol artifact.
+
+## Session 78 - 2026-06-03 UTC - Current head refreshed
+
+- #380 advanced to current head
+  `c6e3edfd9ab7755b8eb76327ddda136827a4e473` with session/status metadata
+  cleanup only; substantive forensics content is unchanged.
+- Lead posted #380 issuecomment `4615988092`, carrying forward
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE` to current head.

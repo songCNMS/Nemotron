@@ -2528,3 +2528,15 @@
 657. Session 78: global gate remains no promotion/no new
    training/eval/packing/export/endpoint; next actionable direction is a later
    lead-gated validation/data-blend repair plan after closeout docs are handled.
+658. Session 78: current-head refresh comments posted after worker
+   acknowledgements: #371 `fc85b866` issuecomment `4615987162`; #377
+   `2ef6d6e7` issuecomment `4615987506`; #379 `e781b184` issuecomment
+   `4615987811`; #380 `c6e3edfd` issuecomment `4615988092`.
+659. Session 78: #377 stale `bbb79845` wording was removed by worker_5; #377
+   now carries `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE` at current head
+   `2ef6d6e7`.
+660. Session 78: #371 current head `fc85b866` remains ready for
+   coordinator/authorized non-author merge as evidence/fail-closeout docs only.
+661. Session 78: no PR in this set authorizes implementation, training, eval,
+   export/endpoint, promotion, task255 reuse, AIME2025 train data, shared
+   deletion, main push, or self-merge.

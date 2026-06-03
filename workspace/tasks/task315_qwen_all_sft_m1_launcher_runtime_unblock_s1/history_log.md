@@ -20,3 +20,11 @@
   `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`.
 - Accepted finding: zero M1 rows are runnable now; a later runtime remediation
   task is required before any M1 launcher benchmark row may run.
+
+## Session 78 - 2026-06-03 UTC - Current head refreshed
+
+- #379 advanced to current head
+  `e781b1849e764c9d347cb13a6259f65c700006ed` with status/history/
+  task_knowledge acknowledgement only.
+- Lead posted #379 issuecomment `4615987811`, carrying forward
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME` to current head.

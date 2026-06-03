@@ -115,3 +115,6 @@
     regression forensics, task315 for M1 launcher runtime route/blocker,
     task316 for all-SFT repair candidate planning, and task317 for independent
     #371 closeout review.
+36. #371 current head `fc85b866ede0cdc95f31b6fcd6d61b817ceb2de8` is ready for
+    coordinator/authorized non-author merge as evidence/fail-closeout docs only;
+    lead carry-forward comment is issuecomment `4615987162`.
