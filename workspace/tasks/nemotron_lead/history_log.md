@@ -10877,3 +10877,36 @@
   accepts a task310 handoff. Task311 remains blocked; no checkpoint-load,
   canary, benchmark eval, export, endpoint, promotion, AIME2025 training row,
   task255 reuse, silent downgrade, or shared deletion is authorized.
+
+### Task310 official blocker report and salvage decision
+
+- Processed and marked read worker_5 official task310 Session 6 report
+  `1b6a7710020c4136933d9a110a539a27`.
+- Verified #373 is OPEN/base `main`/CLEAN at refreshed head
+  `982db4b355c183bc53a4b97ab71e8d9aeeacc2e3`; diff from current main is
+  docs/status only for worker_5 status and task310 README/report/history/
+  task_knowledge.
+- Worker_5 report disposition:
+  `TRAINING_LOOP_COMPLETE__VALIDATION_NO_LOG_PROGRESS_PENDING_LEAD_DECISION__CHECKPOINT_CANDIDATE`,
+  explicitly not `PASS_TRAINING`.
+- Reported checkpoint candidate:
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`,
+  `399G`, `28` files, inventory sha
+  `b30d83f641118da8d7a24438e6c379ba9a5e8e03793ef5ff26514d751d9fa676`.
+- Reported blocker state: validation stuck at `Evaluating on 80 samples` /
+  `Evaluating iter 1/10`; no `train_rc.txt`/`train_end.txt`; log mtime
+  unchanged since `2026-06-03T16:10:22Z`; wrapper/torchrun/ranks alive; GPUs
+  retained about `81-86GiB` with `0%` utilization; no traceback/OOM/rank-exit
+  evidence.
+- Lead decision sent to worker_5: proceed with fail-closed checkpoint-salvage
+  handling, not PASS. Worker_5 must take a final status snapshot, gracefully
+  terminate only the task310 validation/train process tree, record signal/rc/
+  timestamps/process state, preserve the `iter_0000035` checkpoint candidate,
+  sync final logs/snapshots/manifests to the local task310 output root, update
+  #373 docs/report/status, and send final mailbox.
+- Boundaries in the salvage instruction: no deletion of shared/checkpoint files,
+  no task311 canary, benchmark eval, AIME/task243 eval, export, endpoint,
+  promotion, generic raw-stage data, AIME2025 train rows, task255 reuse,
+  shared deletion, product-code edit, direct main push, or merge.
+- Task311 remains HOLD until lead reviews worker_5's final salvage report and
+  explicitly releases checkpoint-load/non-AIME canary.

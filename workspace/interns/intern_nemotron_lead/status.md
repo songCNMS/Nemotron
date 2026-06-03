@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task310 iter35 checkpoint candidate reported; validation running; task311 HOLD |
+| PR | all-SFT gate: task310 validation no-progress; worker_5 instructed fail-closed checkpoint salvage; task311 HOLD |
 | Session | 78 |

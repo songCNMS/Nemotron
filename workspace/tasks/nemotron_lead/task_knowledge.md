@@ -2291,3 +2291,12 @@
    `9.114`. Disposition remains `VALIDATION_RUNNING_WATCH`, not PASS:
    train_rc/train_end absent, processes alive, and built-in validation has
    entered `Evaluating on 80 samples` / `Evaluating iter 1/10`.
+605. Session 78: worker_5 official task310 blocker report `1b6a7710` refreshed
+   #373 to `982db4b3` with docs/status-only evidence. Final checkpoint
+   candidate `iter_0000035` is 399G/28 files with inventory sha `b30d83f`, but
+   validation has no log progress past `Evaluating iter 1/10`, train_rc/
+   train_end are absent, processes remain alive, and GPUs retain memory at 0%
+   util. Lead instructed worker_5 to perform fail-closed checkpoint salvage:
+   final snapshot, graceful task-owned process termination, rc/signal recording,
+   checkpoint preservation, final artifact sync, docs update, and mailbox.
+   Task311 remains HOLD until final salvage report is accepted.
