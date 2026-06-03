@@ -1,11 +1,11 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task315_qwen_all_sft_m1_launcher_runtime_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task315_qwen_all_sft_m1_launcher_runtime_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | ReadyForPR |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
 | Current Task | task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 |
