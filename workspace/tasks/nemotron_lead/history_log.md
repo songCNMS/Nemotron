@@ -10745,3 +10745,28 @@
   evaluation: no AIME2025 training prompts/labels, no task255 reuse, no shared
   deletion, no silent downgrade, no export/endpoint/promotion, and no benchmark
   eval/canary before accepted checkpoint evidence.
+
+### Task310 wait state and task311 HOLD drift
+
+- Re-fetched origin after the task310 release. Current `origin/main` remains
+  `004870e7d790778b5cdae5cc574257fdc19ec755`.
+- Processed and marked read worker_3 task311/#371 mailbox
+  `16d4dcdfb938487fb7ae0c142ae05067`. Worker_3 reports branch-only
+  docs/status bookkeeping from `95b4009a` to
+  `12bff586d0bb7d37e4d3c7710c9a930e45a01718`; PR #371 remains OPEN/base
+  `main`/CLEAN and disposition stays
+  `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING/HOLD`.
+- Rechecked task310 after the current-main release. PR #373 remains OPEN/base
+  `main`/CLEAN at stale HOLD head
+  `a85b192e7632bd2da0e117fdaf994d8c70e16549`; worker_5 local status still
+  describes the pre-#374/#372/#375 HOLD state, and no task310 output artifacts
+  are visible under `/work-agents/intern_nemotron_worker_5/outputs`.
+- Sent worker_5 a follow-up reminder to acknowledge via mailbox and either
+  refresh task310 from current main and report runtime/resource/data gate
+  status, launch the bounded constrained 30B training only if gates pass, or
+  fail closed with an exact blocker. Stale #373 must not be merged as-is.
+- Gate remains unchanged: task310 is the active next step; task311 cannot run
+  checkpoint-load, non-AIME canary, or benchmarks until lead accepts official
+  task310 checkpoint evidence. No lead training/eval/test, product-code edit,
+  merge, main push, export, endpoint, promotion, AIME2025 train data, task255
+  reuse, silent downgrade, or shared deletion occurred.

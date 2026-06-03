@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #374/#372/#375 merged; task310 released for current-main constrained 30B gate; task311 HOLD |
+| PR | all-SFT gate: #374/#372/#375 merged; waiting worker_5 task310 current-main refresh; task311 HOLD |
 | Session | 78 |

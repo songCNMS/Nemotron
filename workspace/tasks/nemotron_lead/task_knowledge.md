@@ -2257,3 +2257,9 @@
    task310 checkpoint handoff is accepted. No checkpoint-load, non-AIME canary,
    benchmark eval, export, endpoint, promotion, AIME2025 train data, task255
    reuse, silent downgrade, or shared deletion is authorized before that gate.
+600. Session 78: worker_3 task311/#371 advanced by docs/status-only HOLD
+   bookkeeping to `12bff586`; disposition remains
+   `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`. Worker_5 task310 has not yet
+   refreshed after current main `004870e7`; #373 remains stale HOLD head
+   `a85b192e` and no task310 output artifacts are visible. Worker_5 was
+   reminded to refresh/report or fail closed; stale #373 must not be merged.
