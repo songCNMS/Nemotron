@@ -18,3 +18,5 @@
 5. Task308 checksum-backed seed for task309 is the task299 30B-ready V11
    packed root plus task262/task276/task246 decontam evidence; task253 and
    task255 remain excluded.
+6. PR #374 carries the task308 report:
+   `https://github.com/songCNMS/Nemotron/pull/374`.

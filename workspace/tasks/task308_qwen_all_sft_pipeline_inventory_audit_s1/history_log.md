@@ -40,6 +40,8 @@
   Qwen packed root and task262/task276/task246 decontam evidence are
   checksum-backed; generic `stage1_sft/data_blend_raw` sources remain blocked
   for task309 until materialized, counted, decontam-scanned, and Qwen-packed.
+- Opened PR #374:
+  `https://github.com/songCNMS/Nemotron/pull/374`.
 - Boundaries maintained: no training, final packing, benchmark eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   product-code edits, main push, or merge.
