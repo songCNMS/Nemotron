@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -59,3 +59,14 @@
   history Session 90 heading is resolved.
 - This is a docs/status metadata-only branch update; the task314 forensics
   report findings and output artifact checksums are unchanged.
+
+## Session 93 - 2026-06-03 UTC - New task handoff recorded
+
+- Received lead assignment for
+  `task320_qwen_all_sft_mmlu_data_repair_linkage_s1`.
+- Task314/#380 remains approved as `APPROVE_FORENSICS_DOCS /
+  NO_ACTION_RELEASE` and no self-merge is authorized unless a coordinator or
+  authorized non-author path is explicitly provided.
+- Recorded handoff in task314 metadata before starting task320 from current
+  `origin/main`; task314 report findings and output artifact checksums are
+  unchanged.
