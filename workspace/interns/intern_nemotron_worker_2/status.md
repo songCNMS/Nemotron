@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task309_qwen_all_sft_packed_data_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task322_qwen_all_sft_raw_materialize_count_decontam_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
-| PR | #372 |
-| Session | 5 |
-| Last Update | 2026-06-03T15:18:00Z: task309/#372 lead-approved at 4e26317a but sequenced after #374; #374 still OPEN/CLEAN so no merge performed, constrained V11/task299 seed only, generic raw SFT no-go, no training/eval/export/endpoint/promotion/main push/merge. |
+| Current Task | task322_qwen_all_sft_raw_materialize_count_decontam_s1 |
+| PR | Pending |
+| Session | 78 |
+| Last Update | 2026-06-03T20:41:57Z: task322 raw materialize/count/decontam report ready. Disposition PARTIAL_PASS_WITH_EXCLUSIONS: 12/12 sources resolved, 2 included/pass with 23997 rows and zero task246 decontam hits, 10 excluded as EXCLUDED_SIZE_GT_1GB. No final packing/training/eval/export/endpoint/promotion/task255/AIME2025 train data/shared mutation/main push/merge. |
