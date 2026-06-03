@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -122,3 +122,17 @@
 - Task314/#380 remains approved docs/no-action-release only; no self-merge,
   promotion, new eval, training, export, endpoint, main push, or artifact
   mutation is authorized.
+
+## Session 98 - 2026-06-03 UTC - Task325 blocker gate recorded
+
+- Received lead gate result for task325/#387 at head `e6c5e1f`:
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`.
+- Recorded accepted blocker: current M1 runnable rows remain `0/19`, and no
+  M1 benchmark row execution is authorized.
+- Lead noted later remediation requires a separate lead-gated eval-only
+  runtime/container/scheduler/credential proof.
+- Boundaries remain unchanged: no eval, endpoint, export, training, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, main push, merge, or
+  self-merge is authorized.
+- Task314/#380 remains approved docs/no-action-release only; task314 report
+  findings and output artifact checksums are unchanged.

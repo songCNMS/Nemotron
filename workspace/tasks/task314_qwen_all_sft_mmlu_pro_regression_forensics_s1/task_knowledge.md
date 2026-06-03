@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
 
 ## Knowledge Entries
 
@@ -36,3 +36,7 @@
 13. Task324 was completed as PR #386 at head `8c4f7aa7` from a separate
     worktree, with recommendation `APPROVE_BLEND_DESIGN`; task314 remains the
     active primary branch metadata task and is still not self-merged.
+14. Lead accepted task325/#387 at head `e6c5e1f` as
+    `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`: current M1 runnable rows
+    remain `0/19`, so any M1 benchmark row execution remains blocked until a
+    separate lead-gated runtime/container/scheduler/credential proof exists.
