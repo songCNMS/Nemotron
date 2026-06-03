@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,11 @@
    `https://github.com/songCNMS/Nemotron/pull/383`.
 10. No materialization or packing is authorized by task319; the report is
     source/decontam feasibility evidence only.
+11. Lead gate for task319/#383 accepted
+    `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE` at head
+    `4775bc17f2792430508eb15aa7669ac2562071f6`; this does not authorize
+    materialization, packing, training, eval, export, endpoint, promotion,
+    task255 reuse, AIME2025 train data, shared mutation/deletion, main push,
+    merge, or self-merge.
+12. Await coordinator or authorized non-author merge path before any #383 merge
+    action.

@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -37,5 +37,20 @@
   have a concrete lead-gated materialize/count/decontam route, but are not
   packing-ready now.
 - No materialization, final packing, training, optimizer step, benchmark eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  mutation, shared deletion, main push, merge, or self-merge was performed.
+
+## Session 3 - Lead gate acknowledged
+
+- Lead gate for task319/#383 accepted
+  `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE` at head
+  `4775bc17f2792430508eb15aa7669ac2562071f6`.
+- Acceptance is feasibility evidence only; no materialization, final packing,
+  training, eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared mutation/deletion, main push, merge, or self-merge is
+  authorized.
+- Awaiting coordinator or authorized non-author merge path if one is provided.
+- Session 3 update is status/history/knowledge acknowledgement only; no
+  materialization, final packing, training, optimizer step, benchmark eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   mutation, shared deletion, main push, merge, or self-merge was performed.
