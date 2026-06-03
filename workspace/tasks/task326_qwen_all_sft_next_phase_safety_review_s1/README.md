@@ -67,9 +67,11 @@ assignment.
   `workspace/tasks/task326_qwen_all_sft_next_phase_safety_review_s1/next_phase_safety_review_report.md`.
 - Worker PR: #389.
 - Disposition: `APPROVE_SAFETY_REVIEW`.
-- task323/#385, task324/#386, and task325/#387 are visible with worker-reported
-  dispositions but no lead gate at review time; task322 has no visible
-  branch/PR.
+- task322/#388, task323/#385, task324/#386, and task325/#387 are visible with
+  lead gate comments at refreshed review time.
+- task322/#388 is accepted only as partial evidence with exclusions: 2 included
+  sources / 23,997 rows, while 10 large sources remain fail-closed blockers for
+  full all-SFT packed/training handoff.
 - Safety ordering: task322 materialize/count/decontam and task324 blend design
   before any packed repair contract; accepted packed data plus lead-gated
   task323 validation-skip/exit proof before optimizer launch; task325 route

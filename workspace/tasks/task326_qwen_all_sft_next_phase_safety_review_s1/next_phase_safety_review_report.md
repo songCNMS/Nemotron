@@ -10,13 +10,16 @@ It does not approve any data materialization result, packed contract, optimizer
 launch, benchmark/eval row, export, endpoint, promotion, merge, self-merge,
 direct main push, task255 reuse, AIME2025 train-data use, or shared deletion.
 
-At this snapshot task323, task324, and task325 have visible PRs with
-substantive worker evidence, but no lead gate comments yet. No task322 worker
-branch or PR is visible. task322 remains pending substantive evidence.
+At this snapshot task322, task323, task324, and task325 all have visible PRs
+with lead gate comments. task322 is accepted only as partial evidence with
+explicit exclusions: two sources are materialized/decontaminated, while ten
+large sources remain fail-closed blockers for full all-SFT packed/training
+handoff. task323, task324, and task325 are accepted as preflight/design/blocker
+docs only, with no runtime action released.
 
 ## Review Snapshot
 
-Observed at `2026-06-03T20:50:20Z`.
+Observed at `2026-06-03T21:10:31Z`.
 
 | Item | Exact state reviewed |
 | --- | --- |
@@ -34,21 +37,22 @@ Observed at `2026-06-03T20:50:20Z`.
 | task321 #382 | `a908b81dd6583976b08896c8193ca302909c52ff` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_RUNBOOK / NO_ACTION_RELEASE`. Accepted order: support docs, #371 evidence closeout, #377 plan, then #384/#383/#381 repair docs by coordinator/authorized non-author merge only. |
 | task319 #383 | `802a796d77144a7fdfc56477fdd001b574e90568` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE`; current drift from lead-refreshed `99713578` is task322 handoff metadata only. Twelve raw sources are feasible candidates, but 0/12 have exact local row counts, supervised-token counts, row manifests, decontam output, or split exposure proof. |
 | task318 #384 | `1c3048b96301b87e91fbcfa03649220c7a773e61` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING`; current drift from lead-refreshed `9689b22b` is task323 handoff metadata only. Future optimizer launch requires Route A validation-skip proof or Route B bounded validation proof. |
-| task323 #385 | `de480248b1ad7abe16a620729e62fa397443228d` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `PASS_ROUTE_A_PREFLIGHT`; no lead gate comment visible. Drift from `edb26535` is worker status plus task323 history/task_knowledge metadata only and the preflight report is unchanged. Current PR is substantive worker evidence, pending lead review, not training clearance. |
-| task324 #386 | `8c4f7aa72f07e69e400789fced12acb17cf80cb7` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `APPROVE_BLEND_DESIGN`; no lead gate comment visible. Design is docs-only and depends on task322 materialized/decontaminated sources before any packed contract. |
-| task325 #387 | `e07ee3f9268b33658e18881c25a3d221bf2136ee` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `BLOCK_RUNTIME_CONFIRMED`; no lead gate comment visible. Current drift from first report head `e6c5e1f` is worker status/history/task_knowledge metadata only and the blocker report is unchanged. It confirms 0/19 M1 rows runnable now and proposes only a later lead-gated eval-only remediation route. |
+| task322 #388 | `adf1a02f3cd5da11d04d2a4d167bdb8d1573e79f` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_PARTIAL_EVIDENCE_WITH_EXCLUSIONS / HOLD_FULL_ALL_SFT_PACK_TRAIN`. 12/12 candidates resolved to exact HF metadata; 2 included sources have 23,997 rows, parse errors 0, and heldout/decontam hits 0/0/0; 10 sources are fail-closed `EXCLUDED_SIZE_GT_1GB` blockers. This is partial docs/evidence and exact blocker record only. |
+| task323 #385 | `de480248b1ad7abe16a620729e62fa397443228d` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`. Current-head carry-forward accepted: drift from `edb26535` is worker status plus task323 history/task_knowledge metadata only and `validation_skip_preflight_report.md` is unchanged. This is not optimizer/training/eval/export/endpoint/promotion clearance. |
+| task324 #386 | `8c4f7aa72f07e69e400789fced12acb17cf80cb7` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_BLEND_DESIGN_DOCS / NO_ACTION_RELEASE`. Design is docs-only and depends on accepted materialized/decontaminated sources before any packed contract; no data materialization/final packing/training/eval/export/endpoint/promotion is authorized. |
+| task325 #387 | `e07ee3f9268b33658e18881c25a3d221bf2136ee` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`. Current-head carry-forward accepted from `e6c5e1f`; 0/19 M1 rows are runnable now and no benchmark row execution/model eval is authorized. |
 
-All reviewed diffs for #381/#382/#383/#384 are limited to worker status plus
+All reviewed diffs for #388/#385/#386/#387 are limited to worker status plus
 task-specific docs/reports and pass `git diff --check`.
 
-## Pending Task Matrix
+## Current Next-Phase Gate Matrix
 
 | Task | Visibility | Required output before downstream use | Current safety disposition |
 | --- | --- | --- | --- |
-| task322 raw materialize/count/decontam | No branch or PR visible | Source-by-source materialization matrix, exact local row counts, file and row-manifest checksums, parse status, heldout/decontam results, split exposure proof, no task255 reuse, no AIME2025 prompt/label train rows. | `HOLD_PENDING_TASK322_EVIDENCE`. No raw source can enter a packed contract yet. |
-| task323 validation-skip preflight | PR #385 visible at `de480248`, no lead gate visible | Train-only/dereferenced root proof, `valid` exposure count `0`, `do_validation=false`, `packed_val_data_path=null`, source checksums, no shared mutation, explicit same-harness eval handoff, rc/checkpoint/timeout/teardown policy. Worker report claims these pass on constrained task299/task310 seed. | `HOLD_PENDING_TASK323_LEAD_GATE`. No optimizer launch can use Route A until lead accepts #385 and a later launch task is assigned. |
-| task324 MMLU-aware blend design | PR #386 visible at `8c4f7aa7`, no lead gate visible | Bucket mapping from task319/task322 sources to MMLU retention buckets, source inclusion/exclusion criteria, rows/input tokens/supervised tokens/splits/decontam minimums, later same-harness metrics. Worker report claims design is concrete but still depends on task322. | `HOLD_PENDING_TASK324_LEAD_GATE_AND_TASK322`. No materialized sources can be converted into a packed blend from design alone. |
-| task325 M1 launcher remediation route | PR #387 visible at `e07ee3f9`, no lead gate visible | Exact runtime/container/module/credential route or blocker, row-by-row M1 availability matrix, safe import/version probes only, no benchmark row execution. Worker report confirms `BLOCK_RUNTIME_CONFIRMED`. | `HOLD_PENDING_TASK325_LEAD_GATE`. No M1 rows can be run. |
+| task322 raw materialize/count/decontam | PR #388 at `adf1a02f`, lead gate `APPROVE_PARTIAL_EVIDENCE_WITH_EXCLUSIONS / HOLD_FULL_ALL_SFT_PACK_TRAIN` | 2 included sources may be considered only as lead-scoped partial evidence; 10 large sources need a successor resource-approved materialization/count/decontam task plus supervised-token counts, split exposure parity, Qwen chat-template packing proof, and full decontam contract. | `PARTIAL_EVIDENCE_ONLY`. No full all-SFT packed/training handoff. |
+| task323 validation-skip preflight | PR #385 at `de480248`, lead gate `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING` | Train-only/dereferenced root proof, `valid` exposure count `0`, `do_validation=false`, `packed_val_data_path=null`, source checksums, no shared mutation, explicit same-harness eval handoff, rc/checkpoint/timeout/teardown policy. | `PREFLIGHT_DOCS_ONLY`. No optimizer launch until a separate lead-gated launch task re-proves runtime sync/LR/steps/checkpoint/process policy. |
+| task324 MMLU-aware blend design | PR #386 at `8c4f7aa7`, lead gate `APPROVE_BLEND_DESIGN_DOCS / NO_ACTION_RELEASE` | Bucket mapping from task319/task322 sources to MMLU retention buckets, source inclusion/exclusion criteria, rows/input tokens/supervised tokens/splits/decontam minimums, later same-harness metrics. | `DESIGN_DOCS_ONLY`. Design can guide a later task, but cannot materialize, pack, train, or eval. |
+| task325 M1 launcher remediation route | PR #387 at `e07ee3f9`, lead gate `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED` | Exact runtime/container/module/credential route or blocker, row-by-row M1 availability matrix, safe import/version probes only, no benchmark row execution. | `BLOCK_RUNTIME_CONFIRMED`. No M1 rows can be run. |
 
 ## Evidence Gates
 
@@ -76,6 +80,19 @@ contract, task322 or a successor must prove all of the following:
 Stop condition: any source lacking exact row count, local checksum, row
 manifest, decontam proof, or split exposure proof must be excluded or block the
 packed-contract handoff.
+
+Current task322 gate effect: #388 accepts only a partial subset. The included
+sources are `instruction-following-structured` with 4,969 rows and
+`agentic-interactive` with 19,028 rows, totaling 543,322,912 bytes and 23,997
+rows. Both have parse errors 0 and heldout/decontam hits 0 prompt-hash, 0
+normalized-prompt, and 0 13-word ngram rows. The other 10 selected files total
+the remaining large-source blocker surface and are excluded as
+`EXCLUDED_SIZE_GT_1GB`; total selected payload across all candidates is
+243,316,402,226 bytes. Therefore a later task may consume #388 only as partial
+docs/evidence or a lead-scoped small repair seed. Full all-SFT packed/training
+handoff still requires a successor resource-approved pass over the 10 excluded
+large files plus supervised-token counts, split exposure parity, Qwen
+chat-template packing proof, and full decontam contract.
 
 ### Validation-Skip Root To Optimizer Launch
 
@@ -143,50 +160,55 @@ containers, keep `BLOCK_RUNTIME_CONFIRMED`.
 1. Keep #381/#382/#383/#384 as docs/no-action evidence. Merge, if desired,
    only through coordinator/authorized non-author paths and only while exact
    heads remain clean/mergeable.
-2. task322 and task324 may proceed as read-only/task-owned data planning work,
-   but no final packing can be assigned until task322 passes or blocks with
-   exact included/excluded source evidence.
-3. task323/#385 now provides worker-reported Route A preflight evidence for
-   the accepted constrained task299/task310 packed root, but it still needs
-   lead gate review. If any later launch wants to use task322 raw outputs, it
-   must wait for an accepted task322 handoff and a later packed contract.
-4. task324/#386 now provides worker-reported blend design evidence, but it
-   still needs lead gate review and cannot become a packed contract until
-   task322 produces accepted source evidence.
-5. task325/#387 now provides worker-reported M1 blocker evidence, but it still
-   needs lead gate review. It must not run benchmark rows.
-6. A later packed-data repair contract requires accepted task322 evidence plus
-   task324 blend constraints. It must still be a separate lead-gated task.
+2. Treat #388/task322 as accepted partial evidence and an exact exclusion
+   blocker. The two included sources can only be used if lead explicitly scopes
+   a small repair seed; full all-SFT packing/training remains held until the 10
+   excluded large files are handled by a successor resource-approved task.
+3. Treat #386/task324 as approved design docs/no-action release. It can guide
+   bucket requirements, but no source can be packed from the design alone.
+4. Treat #385/task323 as approved Route A preflight docs/HOLD training. Any
+   later optimizer launch must be a separate lead-gated task with runtime sync,
+   exact LR/steps/checkpoint paths, process/teardown policy, and same-harness
+   eval handoff re-proven at launch time.
+5. Treat #387/task325 as approved blocker docs/runtime-block confirmed. No M1
+   benchmark row can run until a separate lead-gated eval-only runtime route
+   proves launcher/container/scheduler/credential readiness.
+6. A later packed-data repair contract requires accepted #388 subset or
+   successor full task322 evidence plus #386 blend constraints. It must still
+   be a separate lead-gated task.
 7. A later optimizer launch requires accepted packed data plus accepted task323
    validation-skip/exit contract. task318/task323 do not themselves authorize
    training.
 8. A later benchmark/eval phase requires a clean checkpoint/canary handoff plus
-   accepted same-harness protocol and, for M1 rows, accepted task325 route.
+   accepted same-harness protocol and, for M1 rows, a successor to task325.
 
 ## Residual Risk Matrix
 
 | Risk | Current control | Residual state |
 | --- | --- | --- |
-| Raw source contamination or unknown counts | task319 feasibility plus task322 required materialization/decontam gate | High until task322 report exists. |
-| Repeating task310 validation hang | task318 Route A/Route B requirements plus task323/#385 worker preflight | Medium until lead gates #385; still no optimizer launch without a separate launch task. |
-| Math gains masking broad MMLU-Pro regression | task320 linkage and task324/#386 worker blend design | Medium until lead gates #386 and a later packed contract emits bucket counts. |
+| Raw source contamination or unknown counts | #388 partial materialize/decontam gate for 2 sources plus explicit 10-source exclusion blocker | High for full all-SFT; controlled only for the two included sources. |
+| Repeating task310 validation hang | task318 Route A/Route B requirements plus #385 approved Route A preflight docs | Medium; still no optimizer launch without a separate launch task. |
+| Math gains masking broad MMLU-Pro regression | task320 linkage and #386 approved blend design docs | Medium until a later packed contract emits real bucket counts from accepted sources. |
 | Premature packing/training from feasibility docs | Explicit no-pack/no-train gates on #383/#382/#384 | Controlled if lead keeps later tasks separate. |
-| M1 rows remain unrunnable | task315 blocker plus task325/#387 worker blocker report | High for M1 eval until lead gates #387 and any later remediation route is separately authorized. |
-| Stale metadata heads on #383/#384/#385 | Latest drift checked as handoff/status metadata only | Low for safety review; recheck exact heads before merge. |
+| M1 rows remain unrunnable | task315 blocker plus #387 approved blocker docs/runtime-block confirmed | High for M1 eval until a later remediation route is separately authorized. |
+| Partial task322 evidence overread as full readiness | #388 gate explicitly says partial docs/evidence and exact blocker record only | High if downstream skips the 10 excluded large-file task or supervised-token/split/Qwen-pack proofs. |
+| Stale metadata heads on #383/#384/#385/#387 | Latest drift checked as handoff/status metadata only | Low for safety review; recheck exact heads before merge. |
 
 ## Commands And Checks
 
 ```bash
 git fetch origin main intern_nemotron_lead/session1-recovery-task-docs
+git fetch origin main +pull/388/head:refs/remotes/origin/pr/388 +pull/385/head:refs/remotes/origin/pr/385 +pull/386/head:refs/remotes/origin/pr/386 +pull/387/head:refs/remotes/origin/pr/387 +pull/389/head:refs/remotes/origin/pr/389
 git checkout origin/intern_nemotron_lead/session1-recovery-task-docs -- workspace/tasks/task326_qwen_all_sft_next_phase_safety_review_s1
 git ls-remote --heads origin '*task322*' '*task323*' '*task324*' '*task325*'
 gh pr list --state all --search "task322 OR task323 OR task324 OR task325 in:title" --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,title,url
 git fetch origin +pull/381/head:refs/remotes/origin/pr/381 +pull/382/head:refs/remotes/origin/pr/382 +pull/383/head:refs/remotes/origin/pr/383 +pull/384/head:refs/remotes/origin/pr/384
 for pr in 381 382 383 384; do gh pr view "$pr" --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,url,title; done
+gh pr view 388 --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,url,title
 gh pr view 385 --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,url,title
 gh pr view 386 --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,url,title
 gh pr view 387 --json number,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,mergeable,url,title
-for pr in 381 382 383 384; do git diff --name-status origin/main...origin/pr/$pr; git diff --check origin/main...origin/pr/$pr; done
+for pr in 388 385 386 387; do git diff --name-status origin/main...origin/pr/$pr; git diff --check origin/main...origin/pr/$pr; done
 git diff --name-status 99713578c19a971683348128d7120f5822801337..origin/pr/383
 git diff --check 99713578c19a971683348128d7120f5822801337..origin/pr/383
 git diff --name-status 9689b22bf0e198cbf6f7ca7cbdc30f05bdbe751c..origin/pr/384
@@ -196,6 +218,7 @@ git diff --name-status cb177fd997940267d5a9d6a45990d968ba7c2ec0..origin/pr/385
 git diff --check cb177fd997940267d5a9d6a45990d968ba7c2ec0..origin/pr/385
 git diff --name-status edb265351b9f369698f561527cd27f2978f649ba..origin/pr/385
 git diff --check edb265351b9f369698f561527cd27f2978f649ba..origin/pr/385
+gh api repos/songCNMS/Nemotron/issues/388/comments --jq '<lead gate filter>'
 gh api repos/songCNMS/Nemotron/issues/385/comments --jq '<lead gate filter>'
 gh api repos/songCNMS/Nemotron/issues/386/comments --jq '<lead gate filter>'
 gh api repos/songCNMS/Nemotron/issues/387/comments --jq '<lead gate filter>'
@@ -207,6 +230,7 @@ git show origin/intern_nemotron_lead/session1-recovery-task-docs:workspace/tasks
 git show origin/intern_nemotron_lead/session1-recovery-task-docs:workspace/tasks/task323_qwen_all_sft_validation_skip_preflight_s1/README.md
 git show origin/intern_nemotron_lead/session1-recovery-task-docs:workspace/tasks/task324_qwen_all_sft_mmlu_aware_blend_design_s1/README.md
 git show origin/intern_nemotron_lead/session1-recovery-task-docs:workspace/tasks/task325_qwen_all_sft_m1_launcher_remediation_route_s1/README.md
+git show origin/pr/388:workspace/tasks/task322_qwen_all_sft_raw_materialize_count_decontam_s1/raw_materialize_count_decontam_report.md
 git show origin/pr/385:workspace/tasks/task323_qwen_all_sft_validation_skip_preflight_s1/validation_skip_preflight_report.md
 git show origin/pr/386:workspace/tasks/task324_qwen_all_sft_mmlu_aware_blend_design_s1/mmlu_aware_blend_design_report.md
 git show origin/pr/387:workspace/tasks/task325_qwen_all_sft_m1_launcher_remediation_route_s1/m1_launcher_remediation_route_report.md

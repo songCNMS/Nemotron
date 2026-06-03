@@ -8,21 +8,22 @@
 2. Later training/eval requires accepted evidence from raw materialization,
    validation-skip preflight, blend design, and M1 route/blocker tasks.
 3. This task does not authorize runtime action or merge.
-4. At review time task323/#385 was visible at head
-   `de480248b1ad7abe16a620729e62fa397443228d` with worker-reported
-   `PASS_ROUTE_A_PREFLIGHT`, but no lead gate comment. Treat it as pending
-   lead review, not training clearance. Drift from `edb26535` was worker status
-   plus task323 history/task_knowledge metadata only.
-5. At review time task324/#386 was visible at head
-   `8c4f7aa72f07e69e400789fced12acb17cf80cb7` with worker-reported
-   `APPROVE_BLEND_DESIGN`, but no lead gate comment. Treat it as pending lead
-   review and still blocked on task322 before any packed contract.
-6. At review time task325/#387 was visible at head
-   `e07ee3f9268b33658e18881c25a3d221bf2136ee` with worker-reported
-   `BLOCK_RUNTIME_CONFIRMED`, but no lead gate comment. Treat M1 eval rows as
-   held. Drift from first report head `e6c5e1f` is metadata-only.
-7. At review time task322 had no visible branch or PR and remains pending
-   substantive evidence.
+4. Current task322/#388 head
+   `adf1a02f3cd5da11d04d2a4d167bdb8d1573e79f` has lead gate
+   `APPROVE_PARTIAL_EVIDENCE_WITH_EXCLUSIONS / HOLD_FULL_ALL_SFT_PACK_TRAIN`.
+   Two sources are included/materialized with 23,997 rows and 0/0/0 decontam
+   hits; 10 large sources remain fail-closed `EXCLUDED_SIZE_GT_1GB` blockers.
+5. Current task323/#385 head
+   `de480248b1ad7abe16a620729e62fa397443228d` has lead current-head
+   carry-forward `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`. It is not
+   optimizer/training/eval/export/endpoint/promotion clearance.
+6. Current task324/#386 head
+   `8c4f7aa72f07e69e400789fced12acb17cf80cb7` has lead gate
+   `APPROVE_BLEND_DESIGN_DOCS / NO_ACTION_RELEASE`. Treat as design docs only.
+7. Current task325/#387 head
+   `e07ee3f9268b33658e18881c25a3d221bf2136ee` has lead gate
+   `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`. M1 runnable rows remain
+   `0/19`.
 8. task319/#383 is accepted only as feasibility docs/no pack-train release;
    task322 must provide exact materialized rows/checksums/decontam/split proof
    before any packed contract.
@@ -36,3 +37,7 @@
 11. task315/task325 keep M1 rows held until a launcher runtime route is proven
     or `BLOCK_RUNTIME_CONFIRMED` is fully documented.
 12. Worker PR for task326 is #389.
+13. Full all-SFT packed/training handoff remains blocked until the 10 excluded
+    task322 large files plus supervised-token counts, split exposure parity,
+    Qwen chat-template packing proof, and full decontam contract are accepted
+    in a later resource-approved task.
