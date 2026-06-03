@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task324_qwen_all_sft_mmlu_aware_blend_design_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/386 |
 | Session | 96 |
-| Progress | Drafted docs-only MMLU-aware all-SFT blend design report using task314/task320/task319 evidence; preparing PR and mailbox closeout. |
+| Progress | Opened PR #386 with docs-only MMLU-aware all-SFT blend design report; preparing mailbox closeout and holding for lead gate. |
