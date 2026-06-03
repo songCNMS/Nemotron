@@ -11846,3 +11846,8 @@
   first progress line: 100,000 rows / 5,248.7 MiB at `2026-06-03T22:22:54Z`
   with rate 9.32 MiB/s. This remains live in-progress evidence only and does
   not release packing/training.
+- Continued read-only monitoring showed `competitive-cpp-01` reached 200,000
+  rows / 10,568.1 MiB at `2026-06-03T22:32:22Z` with rate 9.34 MiB/s. The
+  worker process remained active, no task327 final rc/report/PR existed, and
+  the completed-source matrix still contained only `instruction-following-chat`
+  and `competitive-cpp-00`, both `BLOCKED_DECONTAM_HIT`.

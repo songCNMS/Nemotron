@@ -2651,3 +2651,6 @@
    5,248.7 MiB at `2026-06-03T22:22:54Z`; process still active, no official
    worker report/PR/final disposition, and completed sources remain
    decontam-blocked.
+697. Session 79: task327 `competitive-cpp-01` reached 200,000 rows /
+   10,568.1 MiB at `2026-06-03T22:32:22Z`; still live in-progress, no final
+   disposition/report/PR, no packing/training release.
