@@ -24,3 +24,13 @@
   `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE`. This accepts the planning direction
   but does not authorize training/eval/packing/export/endpoint/promotion.
   task314, task315, and task317 remain pending inputs.
+
+## Session 78 - 2026-06-03 UTC - Head drift hold
+
+- #377 advanced to current head
+  `cf1decab95339935dfbc41cc50cacd3f5381d805` after session-numbering and hold
+  bookkeeping.
+- Lead posted #377 issuecomment `4615946306`: plan direction remains accepted,
+  but #377 is `HOLD_NOT_MERGE_READY` because current docs still reference
+  `bbb79845` as the current head while actual PR head is `cf1decab`.
+- No action release and no self-merge.

@@ -10,3 +10,13 @@
 - Scope is runtime/launcher route audit and dry-run/import probes only.
 - No benchmark execution, training, export, endpoint, promotion, merge, main
   push, task255 reuse, AIME2025 train data, or shared deletion is authorized.
+
+## Session 78 - 2026-06-03 UTC - Runtime blocker gate processed
+
+- Worker_2 opened #379 at head
+  `bd0f3202d8597189048cb84b5edcc3c19ddd3519` with disposition
+  `BLOCK_RUNTIME`.
+- Lead reviewed the report and posted #379 issuecomment `4615943606`:
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`.
+- Accepted finding: zero M1 rows are runnable now; a later runtime remediation
+  task is required before any M1 launcher benchmark row may run.

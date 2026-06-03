@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #377 task316 plan approved as docs/no-action; #371 held; task314/task315/task317 pending |
+| PR | #371 ready for authorized evidence merge; #314/#315/#317 gates posted; #377 held on docs residual |
 | Session | 78 |

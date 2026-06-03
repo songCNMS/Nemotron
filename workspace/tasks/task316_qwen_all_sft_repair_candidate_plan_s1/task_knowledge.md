@@ -19,3 +19,8 @@
 7. The plan is conditional: task314 MMLU-Pro forensics, task315 M1 launcher
    runtime route/blocker, and task317 independent #371 closeout review remain
    pending.
+8. #377 current head `cf1decab95339935dfbc41cc50cacd3f5381d805` is held as
+   not merge-ready because docs mention stale head `bbb79845`; lead comment is
+   issuecomment `4615946306`.
+9. After task314/task315/task317, the planning direction remains data-blend plus
+   validation/termination repair before later lead-gated 30B training.

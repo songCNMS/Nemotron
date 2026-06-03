@@ -11377,3 +11377,30 @@
   data, shared deletion, main push, or self-merge.
 - Residuals still pending: task314 MMLU-Pro forensics, task315 M1 launcher
   runtime route/blocker, and task317 independent #371 closeout review.
+
+### Task314, task315, task317 gates processed
+
+- Task317 worker_4 mailbox `7f5f8a2c57ce4a678b78732564b5da60` reported
+  #378 at head `df561ea93e696d8e704d4e969e2da83b719185f7` with
+  `APPROVE_DOCS_CLOSEOUT` for #371/task311 evidence/fail-closeout docs only.
+  Lead marked the mailbox read and posted #378 issuecomment `4615942838`.
+- Task314 #380 reached head `d3bd97331932ba4263a1516c8f93c599d860046d` with
+  `APPROVE_FORENSICS`: MMLU-Pro -2 is real answer-choice drift, not row
+  alignment, prompt hash, parser, endpoint protocol, status, stop-reason, or
+  checksum artifact. Lead posted #380 issuecomment `4615943272`.
+- Task315 #379 reached head `bd0f3202d8597189048cb84b5edcc3c19ddd3519` with
+  `BLOCK_RUNTIME`: no safe current local/NemTron/LTP M1 launcher route; runtime
+  remediation is required before M1 rows. Lead posted #379 issuecomment
+  `4615943606`.
+- Lead posted #371 issuecomment `4615943944`: after task317 independent review,
+  task314 forensics, and task315 runtime audit, #371 current head
+  `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` is ready for
+  coordinator/authorized non-author merge as evidence/fail-closeout docs only.
+- Task316 #377 advanced to current head
+  `cf1decab95339935dfbc41cc50cacd3f5381d805`. Lead reviewed drift and posted
+  issuecomment `4615946306`: plan direction remains accepted, but #377 is
+  `HOLD_NOT_MERGE_READY` because docs still reference `bbb79845` as the current
+  head while actual head is `cf1decab`. No training/eval/packing/export/
+  endpoint/promotion is authorized.
+- Delivered worker notifications to worker_1, worker_2, worker_3, worker_4,
+  and worker_5. All returned `delivered`.

@@ -2507,3 +2507,24 @@
 651. Session 78: no new training/eval/packing/export/endpoint/promotion is
    authorized by task316; #377 should not be self-merged under current
    boundary.
+652. Session 78: task317/#378 at
+   `df561ea93e696d8e704d4e969e2da83b719185f7` independently approves #371 as
+   evidence/fail-closeout docs only; lead posted #378 issuecomment
+   `4615942838`.
+653. Session 78: task314/#380 at
+   `d3bd97331932ba4263a1516c8f93c599d860046d` confirms MMLU-Pro -2 is real
+   answer-choice drift, not evaluator/protocol artifact; lead posted #380
+   issuecomment `4615943272`.
+654. Session 78: task315/#379 at
+   `bd0f3202d8597189048cb84b5edcc3c19ddd3519` confirms M1 launcher rows remain
+   `BLOCK_RUNTIME`; lead posted #379 issuecomment `4615943606`.
+655. Session 78: lead posted #371 issuecomment `4615943944`, making #371
+   current head `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` ready for
+   coordinator/authorized non-author merge as evidence/fail-closeout docs only.
+656. Session 78: task316/#377 current head
+   `cf1decab95339935dfbc41cc50cacd3f5381d805` remains
+   `HOLD_NOT_MERGE_READY` due a docs residual referencing stale head
+   `bbb79845`; lead posted #377 issuecomment `4615946306`.
+657. Session 78: global gate remains no promotion/no new
+   training/eval/packing/export/endpoint; next actionable direction is a later
+   lead-gated validation/data-blend repair plan after closeout docs are handled.
