@@ -8985,6 +8985,31 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 205 - 2026-06-03 UTC - task306 mailbox closeout and head drift
+
+- Read worker_3 official task306 closeout mailbox
+  `ae6fd1db7a894003a952469e4705ab07`: branch
+  `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`,
+  head `1255f2356cb014cd1adbe58c7af297f291b222f3`, PR #369 OPEN/base
+  `main`/CLEAN/MERGEABLE, eval source head
+  `894e2e71e72f09926128e37f22000802804522bc`, remote/local roots, command/env,
+  artifact hashes, checks, and boundary confirmations.
+- Read worker_3 addendum `094b16ec7ba14650b53bcd9e69306256`: #369 advanced
+  to `8201b3943db2d6ed4427c42518736c41f77d67bd` by docs/status-only metadata
+  correction; metrics unchanged.
+- Current #369 state after fetch: OPEN/base `main`/CLEAN/MERGEABLE/non-draft,
+  head `8201b3943db2d6ed4427c42518736c41f77d67bd`.
+- Lead diff check for `1255f235..8201b394` shows only worker_3 status and
+  task306 README/report/history/task_knowledge metadata updates; `git diff
+  --check` passes. The task306 result remains FAIL `14/30` versus base `15/30`.
+- Refreshed task307 docs to review exact #369 head `8201b394`, eval source head
+  `894e2e7`, and both drift ranges `894e2e7..1255f235` and
+  `1255f235..8201b394`.
+- Gate remains FAIL/HOLD pending worker_4 task307 review. #369 is not approved
+  for merge yet; no self-merge, lead merge, promotion, export, endpoint, new
+  training, AIME2025 train data, task255 reuse, shared deletion, main push, or
+  further 30B/8-GPU work is authorized.
+
 ## Session 204 - 2026-06-03 UTC - task306 official PR appeared
 
 - Post-push sanity check after task307 assignment observed task306 PR #369:

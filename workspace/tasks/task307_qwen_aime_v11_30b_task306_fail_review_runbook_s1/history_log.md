@@ -30,3 +30,14 @@
 - Preliminary lead diff check shows `894e2e7..1255f235` is worker_3
   status plus task306 report/history/knowledge/README closeout for the completed
   run. Worker_4 must independently verify this.
+
+## Session 205 - 2026-06-03 UTC - review target refreshed to #369 latest head
+
+- Worker_3 official mailbox closeout `ae6fd1db7a894003a952469e4705ab07`
+  reported #369 head `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+- Worker_3 addendum `094b16ec7ba14650b53bcd9e69306256` reported #369 advanced
+  to `8201b3943db2d6ed4427c42518736c41f77d67bd` for status/session/PR metadata
+  correction only.
+- Lead refreshed task307 to review exact #369 head
+  `8201b3943db2d6ed4427c42518736c41f77d67bd`, plus both drift ranges
+  `894e2e7..1255f235` and `1255f235..8201b394`.

@@ -1127,6 +1127,23 @@
   checksum manifest, blocker file, or official report is visible. Gate remains
   HOLD pending completion and official worker report.
 
+## Session 205 - 2026-06-03 UTC - mailbox closeout reconciled
+
+- Worker_3 official closeout mailbox
+  `ae6fd1db7a894003a952469e4705ab07` reported #369 head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3`, artifact roots, command/env,
+  task306 FAIL metrics, checks, and boundary confirmations.
+- Worker_3 addendum `094b16ec7ba14650b53bcd9e69306256` reported #369 head
+  advanced to `8201b3943db2d6ed4427c42518736c41f77d67bd` for docs/status-only
+  metadata correction.
+- Current #369 remains OPEN/base `main`/CLEAN/MERGEABLE/non-draft at
+  `8201b3943db2d6ed4427c42518736c41f77d67bd`; `1255f235..8201b394` changes
+  only worker_3 status and task306 metadata/session/PR-number closeout, with
+  unchanged FAIL metric.
+- Lead refreshed task307 to review exact #369 head `8201b394`, eval source head
+  `894e2e7`, and both drift ranges. Gate remains FAIL/HOLD pending task307; no
+  merge or promotion is authorized.
+
 ## Session 204 - 2026-06-03 UTC - worker closeout PR visible
 
 - Worker_3 task306 official closeout PR #369 appeared after the lead recorded

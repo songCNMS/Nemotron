@@ -13,3 +13,8 @@
    `1255f2356cb014cd1adbe58c7af297f291b222f3`. The eval source head remains
    `894e2e71e72f09926128e37f22000802804522bc`; worker_4 must compare the
    delta and verify it is closeout/report/status docs only.
+4. Session 205 update: task306 PR #369 advanced to
+   `8201b3943db2d6ed4427c42518736c41f77d67bd`. Worker_3 mailbox closeout ids
+   are `ae6fd1db7a894003a952469e4705ab07` and addendum
+   `094b16ec7ba14650b53bcd9e69306256`. Worker_4 must review exact head
+   `8201b394` and verify `1255f235..8201b394` is metadata/status-only.

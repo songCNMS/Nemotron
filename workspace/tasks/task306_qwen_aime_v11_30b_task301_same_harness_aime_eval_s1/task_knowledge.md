@@ -461,3 +461,8 @@
    Preliminary lead diff from eval source head `894e2e7` to PR head `1255f235`
    is status/task306 docs/report closeout only, and diff-check passes. Task307
    review target was refreshed to exact PR #369 head plus eval source head.
+120. Session 205: worker_3 mailbox closeout and addendum were reconciled.
+   Current #369 head is `8201b3943db2d6ed4427c42518736c41f77d67bd`; diff
+   `1255f235..8201b394` is metadata/status-only with unchanged FAIL metrics.
+   Task307 now reviews exact #369 head `8201b394`; #369 remains unapproved
+   pending independent review.

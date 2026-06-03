@@ -14,12 +14,15 @@ Current lead-observed state:
   `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`.
 - task306 source head:
   `894e2e71e72f09926128e37f22000802804522bc`.
-- task306 PR #369 later appeared after the initial task307 assignment:
-  OPEN, base `main`, CLEAN, non-draft, head
-  `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+- task306 PR #369 later appeared after the initial task307 assignment and is
+  currently OPEN, base `main`, CLEAN, non-draft, head
+  `8201b3943db2d6ed4427c42518736c41f77d67bd`.
 - The task306 eval source head remains `894e2e71e72f09926128e37f22000802804522bc`;
-  PR #369 head `1255f2356cb014cd1adbe58c7af297f291b222f3` adds worker_3
-  official closeout/report/status docs for that run.
+  PR #369 first reached `1255f2356cb014cd1adbe58c7af297f291b222f3`, then
+  advanced to `8201b3943db2d6ed4427c42518736c41f77d67bd` with worker_3
+  session/status/PR metadata closeout. Worker_3 official mailbox reports are
+  `ae6fd1db7a894003a952469e4705ab07` and addendum
+  `094b16ec7ba14650b53bcd9e69306256`.
 - task306 local output root:
   `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
 - task306 remote run root:
@@ -65,12 +68,15 @@ request changes instead.
 ## Scope
 
 - Review exact PR #369 head
-  `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+  `8201b3943db2d6ed4427c42518736c41f77d67bd`.
 - Confirm the task306 eval source head
   `894e2e71e72f09926128e37f22000802804522bc`.
 - Compare `894e2e71e72f09926128e37f22000802804522bc..1255f2356cb014cd1adbe58c7af297f291b222f3`
   and state whether it is only worker_3 official report/status/task-doc
   closeout for the completed run.
+- Compare `1255f2356cb014cd1adbe58c7af297f291b222f3..8201b3943db2d6ed4427c42518736c41f77d67bd`
+  and state whether it is only worker_3 session/status/PR metadata closeout
+  with unchanged task306 metrics.
 - Confirm whether task306 branch/PR/head changed after this assignment.
 - Review the task306 local output root and remote root read-only.
 - Verify `remote_no_export_aime_eval.rc=0`.
@@ -126,7 +132,7 @@ request changes instead.
   - task306 metrics and accepted-base comparison;
   - protocol continuity and sampling-residual assessment;
   - boundary verification;
-  - worker_3 closeout/report/PR status;
+  - worker_3 closeout/report/PR status and mailbox message ids;
   - approve/request-changes/block decision for lead closeout;
   - final runbook/provenance wording for FAIL/no promotion/no further 30B
     scale-up authorization.

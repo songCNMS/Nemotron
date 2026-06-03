@@ -2166,3 +2166,11 @@
    task307 to review exact PR #369 head `1255f235` plus eval source head
    `894e2e7`. Gate remains FAIL/HOLD pending task307 review; no promotion or
    further 30B work is authorized.
+591. Session 205: worker_3 official mailbox closeout ids
+   `ae6fd1db7a894003a952469e4705ab07` and
+   `094b16ec7ba14650b53bcd9e69306256` were reconciled. #369 advanced to head
+   `8201b394`; lead diff `1255f235..8201b394` is worker_3 status plus task306
+   metadata/session/PR-number closeout and diff-check passes. Refreshed task307
+   to review exact #369 head `8201b394`, eval source `894e2e7`, and both drift
+   ranges. Gate remains FAIL/HOLD pending task307; #369 is not approved or
+   merge-cleared yet.
