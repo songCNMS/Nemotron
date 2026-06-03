@@ -2283,3 +2283,11 @@
    checkpoint saved, and `iter_0000010` save started. This is not a completed
    handoff: no train_rc/train_end, final checkpoint, synced report, PR refresh,
    independent review, task311 release, canary, or benchmark eval yet.
+604. Session 78: worker_5 official live task310 progress mail `2f1860c8`
+   reports training reached iter 35/35 and final checkpoint candidate
+   `iter_0000035` exists at 399G/28 files with latest checkpoint marker 35.
+   Metrics through iter 35 are finite with skipped=0 and NaN=0; final iter 35
+   lm loss is `8.339980E-01`, load-balancing loss `1.434514E+00`, grad norm
+   `9.114`. Disposition remains `VALIDATION_RUNNING_WATCH`, not PASS:
+   train_rc/train_end absent, processes alive, and built-in validation has
+   entered `Evaluating on 80 samples` / `Evaluating iter 1/10`.

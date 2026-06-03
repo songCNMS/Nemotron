@@ -10853,3 +10853,27 @@
   yet. Boundaries remain held: no generic stage1 raw, no AIME2025 train rows,
   no task255, no shared deletion, no silent downgrade, no export/endpoint/
   promotion, and no benchmark eval/canary handoff.
+
+### Task310 final-checkpoint validation watch
+
+- Processed and marked read worker_5 task310 live progress mailbox
+  `2f1860c820e948f6a08bf5526a3422df`.
+- Worker_5 reported bounded 30B all-SFT training reached iteration `35/35` and
+  saved final checkpoint candidate:
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+  The checkpoint marker
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/latest_checkpointed_iteration.txt`
+  reads `35`; `iter_0000035` is reported as `399G` with `28` files.
+- Worker_5 reported finite metrics through iteration 35 with skipped `0` and
+  NaN `0`. Final iter-35 log line: lr `1.000000E-07`, lm loss
+  `8.339980E-01`, load-balancing loss `1.434514E+00`, grad norm `9.114`.
+- Current worker_5 disposition is `VALIDATION_RUNNING_WATCH`, not PASS:
+  `train_rc.txt` and `train_end.txt` are still absent, torchrun/rank processes
+  remain alive, GPUs retain training memory with 0% util in the validation
+  watch snapshot, and the log has entered built-in validation at
+  `Evaluating on 80 samples` / `Evaluating iter 1/10`.
+- Gate remains HOLD. The iter-35 checkpoint is a candidate only until worker_5
+  reports validation/exit status, syncs artifacts, refreshes #373, and lead
+  accepts a task310 handoff. Task311 remains blocked; no checkpoint-load,
+  canary, benchmark eval, export, endpoint, promotion, AIME2025 training row,
+  task255 reuse, silent downgrade, or shared deletion is authorized.
