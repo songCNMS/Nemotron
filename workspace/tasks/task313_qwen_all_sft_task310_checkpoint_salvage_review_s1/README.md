@@ -19,18 +19,22 @@ release check, artifact sync, docs update, and PR #373 refresh.
 
 ## Goal
 
-Independently review whether PR #373 exact head
-`7561a578f5f624cf1d3b85bef0dd8abb5c787533` and the task310 artifacts are
+Independently review whether PR #373 current exact head
+`0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` and the task310 artifacts are
 internally consistent salvage evidence, and recommend whether the preserved
 `iter_0000035` checkpoint candidate may be released only to task311
 checkpoint-load plus non-AIME canary, or must remain blocked.
 
 ## Scope
 
-- Review PR #373 exact head
-  `7561a578f5f624cf1d3b85bef0dd8abb5c787533`; check that the diff is
+- Review PR #373 current exact head
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`; check that the diff is
   docs/status-only and that task310 report wording is not a clean
   `PASS_TRAINING`.
+- Also review drift range
+  `7561a578f5f624cf1d3b85bef0dd8abb5c787533..0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`;
+  lead observed it as worker_5 status plus task310 history/task_knowledge
+  bookkeeping only, with `all_sft_30b_full_training_report.md` unchanged.
 - Review worker_5 mailbox closeout records:
   - `081adfd36b6741c0af3137bd1bb32d22` is superseded by typo-corrected
     mailbox `b3768110fba243bda67737fa88d3923b`;
@@ -107,7 +111,9 @@ checkpoint-load plus non-AIME canary, or must remain blocked.
 - Worker: `intern_nemotron_worker_4`
 - Current main: `004870e7d790778b5cdae5cc574257fdc19ec755`
 - Review target PR: #373
-- Review target head: `7561a578f5f624cf1d3b85bef0dd8abb5c787533`
+- Review target head: `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`
+- Prior evidence head: `7561a578f5f624cf1d3b85bef0dd8abb5c787533`
+- Drift to review: `7561a578..0cbcb3c5` bookkeeping-only claim
 - Upstream task: task310
 - Downstream task: task311
 - Gate state: task311 remains HOLD until lead accepts this review and sends an

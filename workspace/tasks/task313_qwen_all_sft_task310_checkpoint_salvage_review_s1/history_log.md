@@ -14,4 +14,15 @@
   export, endpoint, promotion, additional training, task255 reuse, AIME2025
   train data, shared deletion, merge, or main push.
 
+## Session 78 - 2026-06-03 UTC - Review target refreshed after bookkeeping drift
+
+- Worker_5 pushed #373 from `7561a578f5f624cf1d3b85bef0dd8abb5c787533` to
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` after the lead HOLD notice.
+- Lead reviewed the drift and worker_5 mailbox
+  `af65680192fd41fa9c25036c8b613e97`: changed files are worker_5 status plus
+  task310 history/task_knowledge bookkeeping only; task310 training report and
+  artifact/checksum content are unchanged.
+- Task313 review target is refreshed to current #373 head `0cbcb3c5`; worker_4
+  must also verify the `7561a578..0cbcb3c5` drift range.
+
 ---

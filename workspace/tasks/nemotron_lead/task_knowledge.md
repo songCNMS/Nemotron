@@ -2314,3 +2314,14 @@
 608. Session 78: worker_4 task313 assignment, worker_5 #373 HOLD, and worker_3
    #371 HOLD peer sends all returned `delivered`; lead posted HOLD comments at
    #373 issuecomment `4614837163` and #371 issuecomment `4614837183`.
+609. Session 78: #373 advanced after HOLD from `7561a578` to `0cbcb3c5`.
+   Worker_5 mailbox `af656801` and lead diff review classify the drift as
+   worker_5 status plus task310 history/task_knowledge bookkeeping only, with
+   task310 report/artifact/checksum content unchanged. Task313 target is
+   refreshed to current #373 head `0cbcb3c5`; worker_4 must verify this drift.
+610. Session 78: #371 advanced after HOLD from `12bff586` to `c2a8209`.
+   Worker_3 mailbox `3991efb5` and lead diff review classify the drift as
+   task311 status/metadata/report-header/history/task_knowledge HOLD
+   bookkeeping only. #371 remains HOLD pending task313 and explicit lead
+   release; no checkpoint-load, canary, benchmark/AIME eval, export, endpoint,
+   promotion, or merge was performed.

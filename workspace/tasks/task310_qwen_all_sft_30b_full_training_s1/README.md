@@ -88,9 +88,13 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Current Lead Disposition
 
-Worker_5 refreshed PR #373 to exact head
+Worker_5 refreshed PR #373 to final salvage evidence head
 `7561a578f5f624cf1d3b85bef0dd8abb5c787533` and reported
 `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+After the lead HOLD notice, #373 advanced to
+`0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` with worker_5 status plus task310
+history/task_knowledge bookkeeping only; the training report content is
+expected to remain unchanged pending task313 verification.
 
 The bounded run reached training iter `35/35`, recorded finite training losses,
 and preserved checkpoint candidate

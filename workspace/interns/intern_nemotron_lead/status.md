@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #373/#371 HOLD comments posted; task313 review assigned to worker_4; task311 HOLD |
+| PR | all-SFT gate: #373 head 0cbcb3c and #371 head c2a8209 are HOLD/bookkeeping; task313 review target refreshed |
 | Session | 78 |

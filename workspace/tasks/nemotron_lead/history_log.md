@@ -10949,6 +10949,23 @@
   #373 `https://github.com/songCNMS/Nemotron/pull/373#issuecomment-4614837163`
   and #371
   `https://github.com/songCNMS/Nemotron/pull/371#issuecomment-4614837183`.
+- After the HOLD notice, fetched #373 head drift from `7561a578` to
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` and processed worker_5 mailbox
+  `af65680192fd41fa9c25036c8b613e97`. Lead diff review found the drift touched
+  only worker_5 status plus task310 history/task_knowledge bookkeeping, with
+  task310 training report/artifact/checksum content unchanged.
+- Refreshed task313 target to current #373 head `0cbcb3c5` and required
+  worker_4 to verify the `7561a578..0cbcb3c5` drift range as part of the
+  independent review.
+- Processed and marked read worker_3 task311/#371 HOLD acknowledgement mailbox
+  `3991efb5f7a84521bb68ec930c9d2d8f`. #371 advanced from `12bff586` to
+  `c2a8209adade5d4381b7929c9119683bcc6c50a8`; lead diff review found worker_3
+  status, task311 metadata/report headers, history, and task_knowledge HOLD
+  bookkeeping only. `git diff --check
+  origin/main...origin/intern_nemotron_worker_3/task311_qwen_all_sft_benchmark_eval_s1`
+  passes, and no checkpoint-load, canary, benchmark/AIME eval, export,
+  endpoint, promotion, merge, task255 reuse, AIME2025 train data, shared
+  deletion, or product-code edit was performed.
 - Lead gate decision: #373 remains HOLD pending task313 review; task311/#371
   remains HOLD. No checkpoint-load, canary, benchmark eval, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
