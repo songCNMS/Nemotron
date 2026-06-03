@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Qwen all-SFT benchmark evaluation gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=2 -->
 
 ## Background
 
@@ -17,7 +17,9 @@ reasons.
 
 ## Scope
 
-- Use current `origin/main` `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Use current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
+  Lead verified this is a docs-only advance from product-code baseline
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
 - Before any benchmark eval, verify task310 checkpoint-load and run non-AIME
   canary/completion-retention.
 - Establish or reuse only valid same-harness base artifacts for the same target
@@ -76,7 +78,8 @@ reasons.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_3`
-- Current main: `ecb14173a820df377270273b9f7d9d92cb5076d2`
+- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependency: task310 checkpoint handoff
 - Review dependency: task312
 - Gate state: benchmark eval waits for task310 usable checkpoint; base-vs-FT
