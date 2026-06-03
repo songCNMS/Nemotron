@@ -53,5 +53,6 @@
 - Recommendation for task310: `NO_GO_HOLD` until task308 `PASS_AUDIT`
   inventory is available and task309 is rerun or updated with all-eligible-SFT
   packed contract evidence.
+- Opened PR #372 to main with the blocker report and status/task metadata.
 - Boundaries held: no training, eval, export, endpoint, promotion, task255
   reuse, product-code edits, shared deletion, main push, or merge.

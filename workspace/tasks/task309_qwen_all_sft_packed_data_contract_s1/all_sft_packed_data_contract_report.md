@@ -19,6 +19,8 @@ Task310 recommendation: `NO_GO_HOLD`.
 
 - Worker branch:
   `intern_nemotron_worker_2/task309_qwen_all_sft_packed_data_contract_s1`
+- PR: #372
+  `https://github.com/songCNMS/Nemotron/pull/372`
 - Evidence source head:
   `d054925b1792a5365738247eeb8bdec462e1e6c6`
 - Current branch base:
