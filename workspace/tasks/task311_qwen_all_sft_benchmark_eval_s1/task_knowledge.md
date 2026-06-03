@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Knowledge Entries
 
@@ -108,3 +108,31 @@
     non-draft, `CLEAN`, and `MERGEABLE`.
 27. No benchmark/export/endpoint row may run until lead processes the official
     route-gate mailbox and explicitly releases the next gate.
+28. Lead processed official mailbox `7f3481c90ee447cc80f3fe3a9516f995` and
+    accepted #371 head `1ce85c6382d0587a35ab02830c0d08b7c874c5b3` for
+    route-gate processing, carrying forward release for eval-only
+    export/endpoint preflight and same-harness benchmark execution.
+29. Session 12 eval-only HF export passed for task310 iter 35:
+    `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`,
+    26 files, 16 safetensor shards, `61084232276` bytes. Export manifest
+    sha256 is
+    `74524dcf284beb655b154e4d043a8742248353ef85cb040f7de1e6ca6660fc42`;
+    HF export checksum manifest sha256 is
+    `45db4797ed0a2c833fc8a2278210431d56a4e332017ada9cbff0ca3cbff798b5`.
+30. Session 12 corrected-Qwen metrics under eval-only SGLang endpoint route:
+    AIME2025 FT `16/30` versus accepted task300 base `15/30`; HMMT FT
+    `11/30` versus same-route base `9/30`; MMLU-Pro FT `6756/12032` versus
+    same-route base `6758/12032`.
+31. Corrected-Qwen disposition is
+    `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; this is eval evidence only
+    and does not authorize promotion.
+32. Session 12 consolidated artifact summary is
+    `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/manifests/session12_benchmark_summary.json`
+    with sha256
+    `67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`.
+33. Current local and NemTron probes show `nemo-evaluator-launcher`,
+    `nemo-evaluator`, Docker, Slurm, and relevant benchmark modules are absent;
+    remaining M1 launcher rows are blocked as
+    `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`.
+34. All Session 12 eval-only endpoints were stopped after use; final port
+    `13231` was free and GPUs were idle.

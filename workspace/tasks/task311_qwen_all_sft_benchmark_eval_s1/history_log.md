@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -209,6 +209,54 @@
 - No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
   optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
   promotion, direct main push, merge, or self-merge occurred.
+
+## Session 12 - 2026-06-03 UTC - eval-only export and corrected benchmark run
+
+- Lead processed official mailbox `7f3481c90ee447cc80f3fe3a9516f995` and
+  accepted #371 head `1ce85c6382d0587a35ab02830c0d08b7c874c5b3` for route
+  processing because `34ffa587..1ce85c63` was bookkeeping-only. Lead released
+  eval-only export/endpoint preflight and same-harness benchmark execution.
+- Ran eval-only HF export on NemTron from task310 Megatron checkpoint
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+  using source metadata/tokenizer
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+  Export disposition `EXPORT_PASS`; output
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`;
+  26 files, 16 safetensor shards, `61084232276` bytes.
+- Export manifest sha256:
+  `74524dcf284beb655b154e4d043a8742248353ef85cb040f7de1e6ca6660fc42`.
+  HF export checksum manifest sha256:
+  `45db4797ed0a2c833fc8a2278210431d56a4e332017ada9cbff0ca3cbff798b5`.
+- Added task-owned endpoint benchmark runner
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/run_task311_endpoint_benchmark.py`
+  and verified it with `python3 -m py_compile`.
+- Materialized task-owned inputs under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/input`
+  and synced them to NemTron. Input manifest sha256:
+  `c645afcdbd88a43b447b6e3d1585df77d1c19b442a6256b1c0a2630a2f9cb053`.
+- Ran eval-only SGLang endpoints sequentially on NemTron port `13231` with
+  `CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7`, tensor parallel size `4`, data
+  parallel size `2`, context length `16384`, and `/v1/chat/completions`.
+  Endpoints were stopped after use; final port check was free and GPUs idle.
+- Corrected Qwen results:
+  AIME2025 FT `16/30 = 0.5333333333333333` versus accepted task300 base
+  `15/30 = 0.5`; HMMT FT `11/30 = 0.36666666666666664` versus same-route base
+  `9/30 = 0.3`; MMLU-Pro FT `6756/12032 = 0.5615026595744681` versus
+  same-route base `6758/12032 = 0.5616688829787234`.
+- Corrected-Qwen disposition:
+  `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`. This is eval evidence only,
+  not promotion.
+- M1 launcher rows were not executed. Current local and NemTron probes show no
+  `nemo-evaluator-launcher`, no `nemo-evaluator`, no Docker, no Slurm, and no
+  relevant benchmark modules. M1 disposition:
+  `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`.
+- Consolidated artifact summary:
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/manifests/session12_benchmark_summary.json`,
+  sha256
+  `67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`.
+- No training, optimizer step, AIME2025 train-row use, task255 reuse, shared
+  deletion, non-eval endpoint/export, promotion, product-code edit, direct main
+  push, merge, or self-merge occurred.
 
 ## Session 11 - 2026-06-03 UTC - remote head verified for mailbox report
 

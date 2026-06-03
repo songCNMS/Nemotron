@@ -1,51 +1,90 @@
 # task311 M1 benchmark availability report
 
-<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_3,SESSION=10 -->
+<!-- METADATA:STATUS=Block,ASSIGNEE=intern_nemotron_worker_3,SESSION=12 -->
 
 ## Summary
 
-- Status: `HOLD_ROUTE_REPORTED_BEFORE_EXPORT_ENDPOINT`
-- Blocking precondition: lead processing of the Session 9 route report before
-  any M1 row that needs eval-only export/endpoint is launched.
-- No M1 benchmark launcher command was executed.
-- No M1 benchmark row was evaluated.
+- Status: `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`.
+- Corrected Qwen MMLU-Pro/AIME2025/HMMT rows were evaluated through the
+  task311 endpoint runner and are reported in
+  `all_sft_corrected_qwen_benchmark_report.md`.
+- No `nemo-evaluator-launcher` M1 row was executed in Session 12.
+- Exact current blocker: neither the local worker environment nor NemTron has
+  `nemo-evaluator-launcher`, `nemo-evaluator`, Docker, Slurm, or the required
+  benchmark Python modules installed.
 
-Lead accepted the task311 canary and released benchmark-eval phase work, then
-clarified that rows requiring export or endpoint need an eval-only
-route/blocker report before execution. The M1 launcher mapping has exact
-launcher tasks for 14 rows and missing exact tasks for 5 rows; no row was
-launched in Session 9.
+This report is fail-closed for M1 launcher rows. The task311 corrected-Qwen
+runner supplies same-harness evidence for MMLU-Pro/AIME2025/HMMT, but it is not
+the launcher harness for the M1 basket rows.
 
-## Availability Matrix
+## Runtime Probe
 
-| Basket area | Status | Exact blocker |
-|---|---|---|
-| M1 launcher-available benchmark basket | `HOLD_NOT_RUN` | task310 is a Megatron checkpoint; launcher rows require eval-only HF export/endpoint or a task-owned direct runner plus same-route base rerun |
-| Full-basket unavailable rows | `PARTIALLY_ENUMERATED` | exact missing launcher rows recorded in Session 9 route report |
+Local worker probe:
 
-This report intentionally does not claim launcher availability or absence for
-individual runnable metrics. It records route availability and exact blockers
-before endpoint/export execution.
+- `which nemo-evaluator-launcher`: not found.
+- `which nemo-evaluator`: not found.
+- Python modules absent: `nemo_evaluator`, `lm_eval`, `simple_evals`,
+  `nemo_skills`, `bfcl_eval`, `tau2_bench`.
+
+NemTron probe:
+
+- `which nemo-evaluator-launcher`: not found.
+- `which nemo-evaluator`: not found.
+- `which docker`: not found.
+- `which sbatch`: not found.
+- `which srun`: not found.
+- Python modules absent: `nemo_evaluator`, `lm_eval`, `simple_evals`,
+  `nemo_skills`, `bfcl_eval`, `tau2_bench`.
+
+The established task071 notes also warn that launcher non-dry execution needs a
+launcher/container runtime; current NemTron lacks Docker/Slurm. Session 12
+rechecked that this blocker still applies.
+
+## M1 Row Matrix
+
+| Basket row | Launcher mapping | Session 12 status | Exact blocker or evidence |
+|---|---|---|---|
+| `mmlu_pro` | `lm-evaluation-harness.mmlu_pro` | `CORRECTED_QWEN_RUN_NOT_LAUNCHER_RUN` | Task311 corrected runner produced same-harness base `6758/12032` and FT `6756/12032`, but launcher row not run because launcher runtime is absent |
+| `aime25` | `simple_evals.AIME_2025` | `CORRECTED_QWEN_RUN_NOT_LAUNCHER_RUN` | Task311 corrected runner produced FT `16/30` versus accepted task300 base `15/30`, but launcher row not run because launcher runtime is absent |
+| `hmmt` | `nemo_skills.ns_hmmt_feb2025` | `CORRECTED_QWEN_RUN_NOT_LAUNCHER_RUN` | Task311 corrected runner produced same-harness base `9/30` and FT `11/30`, but launcher row not run because launcher runtime is absent |
+| `gpqa` | `simple_evals.gpqa_diamond` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `hle` | `hle.hle` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `livecodebench` | `livecodebench.codegeneration_release_latest` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `scicode` | `scicode.scicode` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `ifbench` | `ifbench.ifbench` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `ruler_256k` | `ruler.ruler-256k-chat` | `BLOCK_NOT_RUN` | Launcher runtime absent and task311 endpoint context is `16384`, not 256k |
+| `aa_lcr` | `AA-LCR.aa_lcr` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `taubench_airline` | `tau2_bench.tau2_bench_airline` | `BLOCK_NOT_RUN` | Launcher runtime absent; module absent; no task311 same-harness base artifact under launcher route |
+| `bfcl` | `bfcl.bfclv3` | `BLOCK_NOT_RUN` | Launcher runtime absent; module absent; executable scoring may require external API credentials; no task311 same-harness base artifact under launcher route |
+| `mmlu_prox` | `lm-evaluation-harness.mmlu_prox_chat` | `BLOCK_NOT_RUN` | Launcher runtime absent; no task311 same-harness base artifact under launcher route |
+| `wmt24pp` | `nemo_skills.ns_wmt24pp` | `BLOCK_NOT_RUN` | Launcher runtime absent; `nemo_skills` absent; no task311 same-harness base artifact under launcher route |
+| `multichallenge` | missing | `UNAVAILABLE_EXACT_TASK_MISSING` | No exact launcher task; `mtbench.mtbench-cor1` is not equivalent |
+| `terminalbench` | missing | `UNAVAILABLE_EXACT_TASK_MISSING` | Only contamination-detection candidate `codec.terminalbench`; not an equivalent benchmark substitute |
+| `mcp_mark` | missing | `UNAVAILABLE_EXACT_TASK_MISSING` | No launcher task found |
+| `tool_decathlon` | missing | `UNAVAILABLE_EXACT_TASK_MISSING` | `tooltalk.tooltalk` and `bfcl.bfclv3_ast_prompting` are not equivalent |
+| `swe_bench_verified` | missing | `UNAVAILABLE_EXACT_TASK_MISSING` | Only contamination-detection candidate `codec.swebench_test`; not an equivalent benchmark substitute |
 
 ## Artifacts
 
-No M1 completions, parser diagnostics, benchmark results, or benchmark checksum
-manifests were produced.
+Corrected-Qwen benchmark artifacts:
 
-Task-owned canary artifact root:
+`/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/`
 
-`/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`
+Consolidated Session 12 artifact summary:
 
-Canary summary sha256:
+`/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/manifests/session12_benchmark_summary.json`
 
-`5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`
+sha256:
 
-Session 9 route report:
-
-`workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`
+`67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`
 
 ## Boundary Confirmation
 
-No M1 basket enumeration, benchmark eval, AIME/task243 eval, training,
-AIME2025 train-row creation, task255 reuse, shared deletion, export, endpoint,
-promotion, product-code edit, direct main push, merge, or self-merge occurred.
+- No M1 launcher row was run.
+- No benchmark substitution was made for missing exact M1 rows.
+- No training or optimizer step.
+- No AIME2025 train-row creation.
+- No task255 reuse.
+- No shared deletion.
+- Eval-only endpoints were stopped after corrected-Qwen evaluation.
+- No promotion, product-code edit, direct main push, merge, or self-merge.

@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Qwen all-SFT benchmark evaluation gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=11 -->
+<!-- METADATA:STATUS=FailMixed,ASSIGNEE=intern_nemotron_worker_3,SESSION=12 -->
 
 ## Background
 
@@ -88,7 +88,11 @@ reasons.
 - Gate state: checkpoint-load plus synthetic non-AIME
   canary/completion-retention was released and passed under
   `run_20260603T173607Z`; lead accepted that canary at exact head
-  `2ffbe8c4d9f833980d64d756965e909bf3260f20`. Benchmark route analysis is
-  recorded in `all_sft_benchmark_route_gate_report.md`. Any row requiring
-  eval-only export or endpoint remains held until lead processes the route
-  report; no benchmark metrics have been generated in Session 9.
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20`. Lead later accepted the route
+  gate and released eval-only export/endpoint benchmark execution. Session 12
+  generated corrected-Qwen evidence under `run_20260603T180911Z`: AIME2025 FT
+  `16/30` versus accepted task300 base `15/30`, HMMT FT `11/30` versus
+  same-route base `9/30`, and MMLU-Pro FT `6756/12032` versus same-route base
+  `6758/12032`. Overall corrected-Qwen disposition is
+  `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; M1 launcher rows remain
+  blocked by missing launcher runtime.
