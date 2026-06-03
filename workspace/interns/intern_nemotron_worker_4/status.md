@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task307_qwen_aime_v11_30b_task306_fail_review_runbook_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | Idle |
+| Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
-| Current Task | none |
-| PR | task305 branch pending final review PR |
+| Current Task | task307_qwen_aime_v11_30b_task306_fail_review_runbook_s1 |
+| PR | task307 branch pending PR |
 | Session | 1 |
-| Progress | Completed task305 read-only review of task304/#367 exact head `1f23d8339c123702eaa9336c1fe2b25afcd6122a` after refreshed lead docs `e39bc08b6f00bfaf21bd68da989fac32e2eb439a`. Decision: `APPROVE_TASK304_NON_AIME_CANARY_PASS_WITH_RESIDUALS` for task304 as bounded synthetic non-AIME checkpoint-load/completion-retention canary evidence only. Verified PR state/diff, `d8e58461..1f23d833`, `773aff2c..a38abd53`, `a38abd53..e5cc4982`, `e5cc4982..1f23d833`, local artifact checksums/metrics/prompt provenance/checkpoint-load proof/boundaries, plus remote root key artifacts. No training, AIME/task243/corrected AIME/eval rerun, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, main push, merge, direct #367 approval, or product-code modification was performed. |
+| Progress | Completed task307 independent read-only review/runbook for task306/#369 exact head `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` and eval source head `894e2e71e72f09926128e37f22000802804522bc`. Decision: `APPROVE_FAIL_CLOSEOUT` as corrected AIME2025 FAIL/no-promotion evidence only. Verified PR state/scope, drift ranges `894e2e7..1255f235`, `1255f235..8201b394`, `8201b394..6ad9778`, local and remote artifact roots, key hashes, full checksum-manifest replay, `remote_no_export_aime_eval.rc=0`, 30-row JSONL retention, checkpoint-load manifests, prompt/cache continuity, FT `14/30` vs accepted base `15/30`, sampling residual, and boundaries. No training, eval rerun, canary, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, product-code edit, direct #369 approval, merge, or main push was performed. |
