@@ -2629,3 +2629,7 @@
    raw-source evidence only and not a completed gate.
 690. Session 79: task326/#389 refreshed head `6f235120` is accepted as
    safety/runbook docs with `APPROVE_SAFETY_REVIEW / NO_RUNTIME_RELEASE`.
+691. Session 79: task327 live run observed `instruction-following-chat` as
+   `BLOCKED_DECONTAM_HIT`: 426,009 rows, parse errors 0, sha matched, but
+   13-word ngram hits 7; source is not train-ready pending official worker
+   report and any lead-reviewed false-positive/filtering contract.

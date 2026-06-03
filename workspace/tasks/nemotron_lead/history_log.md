@@ -11781,3 +11781,24 @@
   It authorizes no data materialization, packing, optimizer/training, benchmark
   eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, merge, self-merge, or main push from task326.
+
+### Task327 live read-only progress
+
+- Read-only live observation of task327 run
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`
+  showed first source `instruction-following-chat` completed at
+  `2026-06-03T21:28:48Z` with status `BLOCKED_DECONTAM_HIT`.
+- Observed metrics for `instruction-following-chat`: expected/file bytes
+  7,000,317,929; expected/file sha256
+  `37f9ecc3c41dc5e97cfd6fca962a94afbc8713349900ea6f413c040df549ddb8`;
+  row count 426,009; parse errors 0; row manifest sha256
+  `3041bcdced4919c76e457fb5145ba38495e21771fe0c28fa308cedb19d148efe`;
+  prompt-hash hits 0, normalized-prompt hits 0, 13-word ngram hits 7.
+- Split exposure was reported as
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+  This source is not train-ready and must remain blocked unless a later
+  lead-reviewed false-positive manifest or filtering contract is produced.
+- The task327 process continued to `competitive-cpp-00`; this remains live
+  in-progress evidence only pending worker_2 official report/PR. It does not
+  authorize packing, training, eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, merge, self-merge, or main push.
