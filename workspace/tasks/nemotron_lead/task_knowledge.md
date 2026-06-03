@@ -2660,3 +2660,9 @@
 699. Session 79: task327 `competitive-cpp-01` reached 400,000 rows /
    21,326.7 MiB at `2026-06-03T22:50:58Z`; still no source-level result/final
    rc/report/PR and no packing/training release.
+700. Session 79: task327 `competitive-cpp-01` completed
+   `BLOCKED_DECONTAM_HIT`: 466,006 rows, parse errors 0, sha matched,
+   row-manifest sha `da40247d1680d0b70d5b8a27221aa64606d7133ecb54dec69bf276d67ae9ffb2`,
+   prompt/normalized hits 0/0, 13-word ngram hits 818; task327 then started
+   `competitive-python-00`. Three completed large sources are all
+   decontam-blocked.

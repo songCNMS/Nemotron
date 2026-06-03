@@ -11859,3 +11859,16 @@
   rows / 21,326.7 MiB at `2026-06-03T22:50:58Z` with rate 9.49 MiB/s. The
   source remained in progress with no source-level result or final rc/report/PR
   yet, and the release gate stayed HOLD.
+- `competitive-cpp-01` completed at `2026-06-03T22:57:00Z` with status
+  `BLOCKED_DECONTAM_HIT`, and task327 immediately started
+  `competitive-python-00`. Verified cpp01 expected/file bytes 25,921,457,397;
+  expected/file sha256
+  `4500b6db059765aa6146d3c3247fdde1ce8b5cc762a7687ff4355b45e1701afa`; row
+  count 466,006; parse errors 0; row manifest sha256
+  `da40247d1680d0b70d5b8a27221aa64606d7133ecb54dec69bf276d67ae9ffb2`;
+  prompt-hash hits 0, normalized-prompt hits 0, 13-word ngram hits 818; split
+  exposure remains
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+- The task327 matrix now has three completed sources and all three are
+  `BLOCKED_DECONTAM_HIT`. There is still no final rc, official worker_2
+  report, task327 PR, or release to packing/training/eval.
