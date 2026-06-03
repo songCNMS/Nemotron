@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #371/#377/#379/#380 current-head gates refreshed; #378 approved; awaiting authorized non-self merges |
+| PR | #371/#377/#378/#379/#380 current-head gates processed; task318-task321 repair preflight/runbook tasks assigned; awaiting worker branches/reports and authorized non-self merges |
 | Session | 78 |

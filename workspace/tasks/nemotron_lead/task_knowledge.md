@@ -2540,3 +2540,9 @@
 661. Session 78: no PR in this set authorizes implementation, training, eval,
    export/endpoint, promotion, task255 reuse, AIME2025 train data, shared
    deletion, main push, or self-merge.
+662. Session 78: task318-task321 split the accepted repair direction into
+   validation/exit preflight, raw all-SFT blend/decontam feasibility,
+   MMLU-Pro data-repair linkage, and closeout merge/runbook sequencing.
+663. Session 78: task318-task321 are lead-assigned no-training/no-eval
+   repair-planning tasks only. Later training or packing requires fresh lead
+   gate evidence, not these assignments alone.

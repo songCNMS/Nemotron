@@ -11433,3 +11433,22 @@
 - All current PRs remain documentation/evidence only. No promotion, training,
   new eval, packing, export, endpoint, task255 reuse, AIME2025 train data,
   shared deletion, main push, or self-merge is authorized.
+
+### Repair preflight task conversion assigned
+
+- Converted the accepted task316 next-step direction into four bounded worker
+  tasks:
+  - task318 assigned to worker_5 for no-training validation/exit repair
+    preflight before any future 30B optimizer launch;
+  - task319 assigned to worker_2 for raw all-eligible SFT blend and decontam
+    feasibility before any future final packing;
+  - task320 assigned to worker_1 for mapping task314 MMLU-Pro answer-choice
+    drift into concrete data-repair constraints;
+  - task321 assigned to worker_4 for closeout merge/runbook sequencing across
+    #371/#377/#378/#379/#380 and the new repair tasks.
+- The new tasks do not authorize training, optimizer steps, benchmark eval,
+  final packing, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push, merge, or self-merge.
+- Current gate remains fail-mixed/no-promotion: task311 AIME25 and HMMT pass
+  same-harness base-vs-FT, but MMLU-Pro regresses by 2 rows and M1 launcher
+  rows remain runtime-blocked.
