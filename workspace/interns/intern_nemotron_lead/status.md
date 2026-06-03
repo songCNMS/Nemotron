@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | Assigned task308-task312 all-SFT pipeline gates; waiting worker acceptance/evidence |
+| PR | task308-task312 assigned; origin/main 172cd0e7 docs-only drift recorded; waiting worker reports |
 | Session | 77 |

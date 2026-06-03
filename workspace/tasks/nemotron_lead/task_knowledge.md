@@ -50,6 +50,10 @@
    runnable M1 launcher basket rows require same-harness base-vs-FT evidence
    before judging any fine-tuned checkpoint; unavailable benchmark rows need
    exact blocker reasons.
+38. After the all-SFT task split, `origin/main` advanced to `172cd0e7` via a
+   generated task310 docs-only commit. Workers should branch from `172cd0e7`,
+   while product-code equivalence remains `ecb14173` unless a later fetch shows
+   product/source-code changes.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.

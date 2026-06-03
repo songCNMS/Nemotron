@@ -16,7 +16,9 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Scope
 
-- Use current `origin/main` `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Use current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
+  Lead verified this is a docs-only task310 task-doc advance from product-code
+  baseline `ecb14173a820df377270273b9f7d9d92cb5076d2`.
 - Prioritize target model path:
   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
 - Before training, verify:
@@ -77,7 +79,8 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_5`
-- Current main: `ecb14173a820df377270273b9f7d9d92cb5076d2`
+- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependencies: task308, task309, prior 30B runtime/resource evidence
 - Downstream tasks: task311, task312
 - Gate state: full training is HOLD until upstream evidence is accepted.

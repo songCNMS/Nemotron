@@ -10517,3 +10517,20 @@
 - Preserved hard boundaries: no AIME2025 training prompts/labels, no task255
   reuse, no shared deletion, no product/source-code edits by lead, no tests or
   evals run by lead, no export/endpoint/promotion, no main push, and no merge.
+
+## Session 77 - 2026-06-03 UTC - all-SFT current-main drift reconciliation
+
+- Fetched origin after task308-task312 assignment. `origin/main` advanced from
+  `ecb14173a820df377270273b9f7d9d92cb5076d2` to
+  `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
+- Read-only diff showed `172cd0e7` only adds generated task310 task docs:
+  `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/README.md`,
+  `history_log.md`, and `task_knowledge.md`; `git diff --check` passes and no
+  product/source code changed.
+- Updated task308-task312 README assignment docs to use `172cd0e7` as current
+  branch base while preserving `ecb14173` as the product-code baseline.
+- No task308-task312 worker branch or PR was visible yet, and lead mailbox had
+  no unread reports.
+- Lead did not train, pack, evaluate, export, endpoint, promote, modify product
+  code, push main, merge, reuse task255, use AIME2025 train data, or delete
+  shared files.

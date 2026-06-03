@@ -5,8 +5,12 @@
 ## Background
 
 Coordinator requested a new gate-driven all-SFT pipeline review/run from current
-`origin/main` `ecb14173a820df377270273b9f7d9d92cb5076d2` after the 30B AIME
-V11 fail closeout:
+`origin/main` after the 30B AIME V11 fail closeout. The original coordinator
+baseline was `ecb14173a820df377270273b9f7d9d92cb5076d2`; current `origin/main`
+is `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`, which lead verified as a
+docs-only task310 task-doc commit. Treat `172cd0e7` as the branch base and
+`ecb14173` as the product-code baseline unless newer product-code changes
+appear.
 
 - task300 accepted Qwen3-30B-A3B base AIME2025 score: `15/30 = 0.5`.
 - task306 evaluated task301 FT checkpoint `iter_0000035` at `14/30 =
@@ -24,7 +28,8 @@ attempt.
 
 ## Scope
 
-- Inspect current `origin/main` `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Inspect current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`;
+  product code is unchanged from `ecb14173a820df377270273b9f7d9d92cb5076d2`.
 - Map current pipeline stages and entrypoints:
   - data prep and source registry;
   - packing / `packed_qwen` materialization;
@@ -86,7 +91,8 @@ attempt.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_1`
-- Current main: `ecb14173a820df377270273b9f7d9d92cb5076d2`
+- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Downstream tasks: task309, task310, task311, task312
 - Gate state: no training starts until task308 and task309 produce acceptable
   evidence.

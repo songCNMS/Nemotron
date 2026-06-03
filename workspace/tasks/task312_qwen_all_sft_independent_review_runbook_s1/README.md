@@ -63,7 +63,8 @@ block decision.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_4`
-- Current main: `ecb14173a820df377270273b9f7d9d92cb5076d2`
+- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Review targets: task308, task309, task310, task311
 - Gate state: no promotion/export/endpoint/further scale decision is authorized
   by this assignment.
