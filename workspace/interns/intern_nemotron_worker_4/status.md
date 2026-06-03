@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task313_qwen_all_sft_task310_checkpoint_salvage_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task326_qwen_all_sft_next_phase_safety_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task313_qwen_all_sft_task310_checkpoint_salvage_review_s1 |
-| PR | #376 |
+| Current Task | task326_qwen_all_sft_next_phase_safety_review_s1 |
+| PR | pending |
 | Session | 1 |
-| Progress | Refreshed task313 review for #373 exact head `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` using lead docs `c085e1693a4fca9e4444fb64a85ab0193b03d3ce`. Completed read-only artifact/checksum/termination review and updated #376 report with disposition `APPROVE_SALVAGE_HANDOFF_TO_TASK311_LOAD_CANARY_ONLY`: full remote `iter_0000035` payload checksum passed for all 28 files, key local/remote manifests matched, training log shows 35 finite iterations with skipped/nan 0, and SIGTERM/rc=1 validation-hang residuals are documented. This is not `PASS_TRAINING` and authorizes no benchmark/AIME eval, export, endpoint, promotion, additional training, task255, AIME2025 train data, shared deletion, merge, or main push. |
+| Progress | Produced task326 read-only next-phase safety/runbook review from lead docs `7055dac63c772ac8a317454bffead4a469a0112f` and current `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`. Reviewed accepted gate context #381 `4131915`, #382 `a908b81`, #383 `802a796`, #384 `1c3048b`, plus visible task323/#385 `edb2653` worker `PASS_ROUTE_A_PREFLIGHT`, task324/#386 `8c4f7aa` worker `APPROVE_BLEND_DESIGN`, and task325/#387 `e07ee3f` worker `BLOCK_RUNTIME_CONFIRMED`; no lead gate comments visible for #385/#386/#387. task322 has no visible branch or PR. Disposition `APPROVE_SAFETY_REVIEW`: task322 must prove materialized rows/checksums/decontam/splits before packed contract; task323 needs lead gate and later launch re-proof before optimizer launch; task324 needs lead gate and task322 evidence before packed blend handoff; task325 needs lead gate before M1 route conclusions can be accepted. No merge, self-merge, main push, data materialization, packing, training, eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, or shared deletion. |
