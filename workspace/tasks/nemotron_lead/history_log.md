@@ -11617,3 +11617,9 @@
   branches yet. Worker_1 still appeared on task314 and worker_4 still appeared
   on old task302 with uncommitted old files; lead sent delivered reminders to
   worker_1/task324 and worker_4/task326.
+- Later remote branch check found task323 branch
+  `420bcc527a4a0a70ab10517cb396bc24d14e2147` with #385 OPEN/base main/CLEAN
+  and task324 branch `d5da6aa4609b62986bbbb2d81be33bca105b72b1` with no PR
+  visible. Lead diff-check passed for both branches; both are still pending
+  official mailbox/report gate. No task322/task325/task326 remote branches were
+  visible at this check.

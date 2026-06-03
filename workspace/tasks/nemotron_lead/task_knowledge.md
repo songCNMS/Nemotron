@@ -2592,3 +2592,6 @@
 678. Session 78: local observation found worker_2/3/5 had accepted task322,
    task325, and task323 respectively, while worker_1/task324 and worker_4/task326
    still needed reminders; both reminders were delivered.
+679. Session 78: task323/#385 is visible OPEN/CLEAN at `420bcc52` and task324
+   branch is visible at `d5da6aa4`, but both still need official worker mailbox
+   closeout before lead gate.
