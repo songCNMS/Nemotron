@@ -73,6 +73,8 @@
 - Combined all-SFT gate remains HOLD/NO-GO until task309 refreshes from #374
   and downstream task310/task311 refresh from accepted packed/checkpoint
   evidence.
+- Opened worker_4 task312 review PR #375:
+  `https://github.com/songCNMS/Nemotron/pull/375`.
 - Boundaries maintained: no training, packing, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, merge, or worker branch rewrites.
