@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task311 read-only AIME/HMMT non-regress and MMLU-Pro -2 regression observed; official worker report pending |
+| PR | #371 task311 evidence closeout gate commented; fail-mixed metrics accepted, awaiting authorized/non-self merge |
 | Session | 78 |

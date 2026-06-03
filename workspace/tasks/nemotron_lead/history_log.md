@@ -11303,3 +11303,27 @@
   Worker_3 pane says endpoint shutdown, evidence mirroring, and M1
   launcher-row disposition are in progress. No merge/promotion/training gate
   changes.
+
+### Task311 official benchmark closeout processed
+
+- Worker_3 official mailbox `0c36911294ba409ebdd90710bae9dd1d` reported
+  #371 head `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9`, OPEN/CLEAN, with
+  Session 12 eval-only export/endpoint and corrected-Qwen benchmark evidence.
+  Lead marked the mailbox read.
+- Lead verified #371 diff scope is task311 docs/status plus task-owned runner
+  `run_task311_endpoint_benchmark.py`; `git diff --check` passed and no product
+  code changed.
+- Lead independent read-only verification matched reported hashes and metrics:
+  AIME25 FT 16/30 vs accepted task300 base 15/30; HMMT FT 11/30 vs same-route
+  base 9/30; MMLU-Pro FT 6756/12032 vs same-route base 6758/12032. Session 12
+  consolidated summary sha is
+  `67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`.
+- Endpoint cleanup verified on NemTron: port 13231 free, no
+  `sglang.launch_server`, no compute apps, GPUs at 1 MiB/0%.
+- Lead gate decision posted on #371 as issuecomment `4615730412`:
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`. The PR is acceptable as
+  evidence/fail-closeout documentation only, but it does not authorize
+  promotion, further training, AIME2025 train data, task255 reuse, shared
+  deletion, or non-eval export/endpoint. GitHub would not accept a formal
+  approve review from the shared account, so merge must be handled by
+  coordinator/authorized non-author under the no self-merge boundary.

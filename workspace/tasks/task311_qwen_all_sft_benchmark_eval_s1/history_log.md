@@ -226,3 +226,29 @@
   Worker_3 pane says endpoint shutdown/evidence mirroring and M1
   launcher-row disposition are still in progress. No official benchmark gate
   decision has been made.
+
+## Session 78 - 2026-06-03 UTC - Official Session 12 gate processed
+
+- Worker_3 official mailbox `0c36911294ba409ebdd90710bae9dd1d` reported #371
+  head `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` with Session 12 corrected
+  Qwen and M1 availability closeout. Lead marked the mailbox read.
+- #371 is OPEN/CLEAN and non-draft at `2e4482ea`. Diff scope is task311
+  docs/status plus task-owned runner `run_task311_endpoint_benchmark.py`;
+  `git diff --check` passed and no product-code files changed.
+- Lead read-only verification matched the report hashes and metrics:
+  AIME25 FT 16/30 vs accepted task300 base 15/30; HMMT FT 11/30 vs same-route
+  base 9/30; MMLU-Pro FT 6756/12032 vs same-route base 6758/12032.
+- Session 12 consolidated summary sha verified:
+  `67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`.
+  Export manifest sha `74524dcf284beb655b154e4d043a8742248353ef85cb040f7de1e6ca6660fc42`,
+  input manifest sha `c645afcdbd88a43b447b6e3d1585df77d1c19b442a6256b1c0a2630a2f9cb053`,
+  and all five benchmark summary shas matched the report.
+- Endpoint cleanup verified on NemTron: port 13231 free, no
+  `sglang.launch_server`, no compute apps, and GPUs idle at 1 MiB/0%.
+- Lead gate comment #371 issuecomment `4615730412` records
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`. This accepts the PR as
+  evidence/fail-closeout documentation only. It does not authorize promotion,
+  further training, AIME2025 train data, task255 reuse, shared deletion, or
+  non-eval export/endpoint. Because GitHub blocked formal same-account approval
+  and current instructions say no self-merge, #371 remains awaiting
+  coordinator/authorized non-author merge.

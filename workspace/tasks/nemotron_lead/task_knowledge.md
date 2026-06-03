@@ -2454,3 +2454,24 @@
    untracked, and lead mailbox is empty. Worker_3 pane says endpoint shutdown,
    evidence mirroring, and M1 launcher-row disposition are in progress. No
    merge/promotion/training gate changes.
+638. Session 78: worker_3 official mailbox
+   `0c36911294ba409ebdd90710bae9dd1d` reported #371 head
+   `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9`; lead marked it read and
+   verified #371 OPEN/CLEAN.
+639. Session 78: lead review of #371 head `2e4482ea` found task311
+   docs/status plus task-owned benchmark runner only; `git diff --check`
+   passed; no product-code edits.
+640. Session 78: independent artifact verification matched worker_3 report:
+   AIME25 FT 16/30 vs task300 base 15/30, HMMT FT 11/30 vs same-route base
+   9/30, and MMLU-Pro FT 6756/12032 vs same-route base 6758/12032. Corrected
+   Qwen disposition is `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`.
+641. Session 78: M1 launcher rows remain fail-closed as
+   `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`; no M1 launcher row
+   was run and no benchmark substitution was accepted.
+642. Session 78: endpoint cleanup independently verified: NemTron port 13231
+   free, no `sglang.launch_server`, no compute apps, GPUs idle at 1 MiB/0%.
+643. Session 78: lead posted #371 issuecomment `4615730412` with
+   `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`. GitHub blocked formal
+   approval from the shared account, and the current no self-merge boundary
+   means #371 should wait for coordinator/authorized non-author merge rather
+   than worker self-merge.

@@ -92,3 +92,19 @@
     runner/report push, artifact roots/checksum manifests, full completions and
     parser-diagnostics references, M1 runnable/unavailable-row matrix, exact
     command/env/protocol proof, and explicit benchmark disposition.
+29. Worker_3 official mailbox `0c36911294ba409ebdd90710bae9dd1d` and #371
+    head `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` provide the official
+    Session 12 benchmark closeout.
+30. Lead verified #371 `2e4482ea` diff scope and artifacts: task311 docs/status
+    plus task-owned runner only, `git diff --check` clean, hashes/metrics match,
+    and no product-code edits.
+31. Accepted evidence disposition is
+    `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`: AIME25 and HMMT pass
+    vs base, MMLU-Pro fails vs base by 2 rows, and M1 launcher rows remain
+    blocked by missing runtime.
+32. Endpoint cleanup is verified: no port 13231 listener, no SGLang process, no
+    compute apps, and GPUs idle. Eval-only endpoints/export remain evidence
+    artifacts only, not promotion.
+33. #371 should not be worker self-merged under current no self-merge boundary;
+    lead posted issuecomment `4615730412` and awaits coordinator/authorized
+    non-author merge or further instruction.
