@@ -2353,3 +2353,8 @@
    merged at `292c5bfa` from `0cbcb3c5`; worker branch-only closeout commit
    `5fb213d` is status/task310 README/history/task_knowledge only and
    diff-check clean.
+617. Session 78: #371 force-updated to `d2e275e3` and is OPEN/CLEAN. Lead diff
+   review sees a task311 no-export canary wrapper plus stale upstream-missing
+   blocker docs/status, with no official worker_3 canary mailbox yet. Lead sent
+   a delivered worker_3 follow-up requiring current-main refresh and official
+   checkpoint-load/non-AIME canary artifacts or exact blocker.

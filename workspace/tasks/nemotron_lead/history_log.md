@@ -11027,6 +11027,13 @@
   `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
   Release comment: #371 issuecomment `4615080053`; peer send to worker_3
   returned `delivered`.
+- A final fetch found #371 force-updated from `c2a8209` to
+  `d2e275e3ec775cd8f73f7bdeeb0bd7f07b44c372` and recomputed to OPEN/CLEAN.
+  Lead diff review found a task311 no-export canary wrapper added plus stale
+  upstream-missing blocker docs/status; no mailbox report had arrived and no
+  canary result was visible. Sent worker_3 a follow-up asking for official
+  release acknowledgement, current-main refresh, and either checkpoint-load plus
+  non-AIME canary artifacts or exact blocker. Peer send returned `delivered`.
 - Still HOLD: benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval,
   export, endpoint, promotion, additional training, task255 reuse, AIME2025
   train data, shared deletion, self-merge, direct main push, and any claim that

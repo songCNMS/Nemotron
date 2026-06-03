@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #376/#373 merged; task311 released for checkpoint-load + non-AIME canary only |
+| PR | all-SFT gate: #376/#373 merged; task311 canary-only release sent; #371 d2e275e needs official canary report |
 | Session | 78 |
