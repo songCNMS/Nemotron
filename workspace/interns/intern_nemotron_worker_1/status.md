@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task320_qwen_all_sft_mmlu_data_repair_linkage_s1 |
-| PR | pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/381 |
 | Session | 93 |
-| Progress | Accepted task320 and completed docs-only MMLU-Pro data-repair linkage report. Preparing PR; no data materialization, packing, training, eval, export, endpoint, promotion, main push, merge, or self-merge. |
+| Progress | Completed docs-only MMLU-Pro data-repair linkage report and opened PR #381. Recommendation: APPROVE_LINKAGE with raw blend packing/training blocked pending task319 source/decontam feasibility; no self-merge. |
