@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task323_qwen_all_sft_validation_skip_preflight_s1 |
 | PR | #385 |
-| Session | 4 |
-| Last Update | Corrected task323 bookkeeping to Session 4 after hook validation. PR #385 remains open with the same Route A validation-skip preflight report and artifacts; only status/history/task_knowledge metadata changed. No training, optimizer steps, benchmark eval, export, endpoint, promotion, final packing, product-code edit, task255 reuse, AIME2025 train data, shared deletion, main push, merge, or self-merge performed. |
+| Session | 5 |
+| Last Update | Lead gate accepted task323/#385 at head `edb26535` as `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`. Keeping PR #385 open and task status `Working`; no coordinator/non-author merge path has been provided and no self-merge is authorized. No training, optimizer steps, eval, export, endpoint, promotion, final packing, product-code edit, task255 reuse, AIME2025 train data, shared deletion, main push, merge, or self-merge performed. |

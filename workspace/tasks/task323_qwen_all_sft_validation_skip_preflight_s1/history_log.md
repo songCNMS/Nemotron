@@ -1,6 +1,6 @@
 # task323_qwen_all_sft_validation_skip_preflight_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -30,6 +30,19 @@
 - No training, optimizer steps, benchmark eval, export, endpoint, promotion,
   final packing, product-code edit, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or self-merge performed.
+
+## Session 5 - 2026-06-03 UTC - Lead gate recorded
+
+- Received lead gate for task323/#385 at current head `edb26535`:
+  `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`.
+- Recorded that approval is preflight evidence only and does not authorize
+  training, optimizer steps, eval, export, endpoint, promotion, final packing,
+  product-code edit, task255 reuse, AIME2025 train data, shared deletion, main
+  push, merge, or self-merge.
+- Kept task status `Working` because #385 is open and lead said to await a
+  coordinator or authorized non-author merge path if any.
+- Did not change `validation_skip_preflight_report.md` or task-owned output
+  artifacts.
 
 ## Session 4 - 2026-06-03 UTC - Hook session metadata cleanup
 

@@ -1,6 +1,6 @@
 # task323_qwen_all_sft_validation_skip_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,7 @@
    training/checkpoint review; task323 does not authorize eval or training.
 8. Hook validation expects task323 bookkeeping at Session 4; status, history,
    and task knowledge metadata should use Session 4 while #385 remains open.
+9. Lead gate for task323/#385 accepted head `edb26535` as
+   `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`; this remains preflight
+   evidence only and does not authorize self-merge or any runtime/training/eval
+   action.
