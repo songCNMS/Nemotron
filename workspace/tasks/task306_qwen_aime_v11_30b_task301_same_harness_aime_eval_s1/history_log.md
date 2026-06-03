@@ -1127,6 +1127,26 @@
   checksum manifest, blocker file, or official report is visible. Gate remains
   HOLD pending completion and official worker report.
 
+## Session 204 - 2026-06-03 UTC - worker closeout PR visible
+
+- Worker_3 task306 official closeout PR #369 appeared after the lead recorded
+  final artifacts:
+  - PR #369: OPEN, base `main`, CLEAN/MERGEABLE, non-draft;
+  - head `1255f2356cb014cd1adbe58c7af297f291b222f3`;
+  - title `task306: report 30B task301 AIME eval failure`.
+- PR #369 body/report agree with lead-observed final evidence: FT `14/30`,
+  accepted base `15/30`, delta `-1`, disposition `FAIL`, `remote_no_export_aime_eval.rc=0`,
+  30 retained results/completions/parser diagnostics, parsed `17/30`, finish
+  reasons `stop=17`, `length=13`.
+- Preliminary lead diff `894e2e7..1255f235` is worker_3 status plus task306
+  README/history/task_knowledge/report closeout. `git diff --check` passes.
+- Lead refreshed task307 so worker_4 independently reviews exact PR #369 head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3` and the original eval source head
+  `894e2e71e72f09926128e37f22000802804522bc`.
+- Gate remains FAIL/HOLD pending task307. No promotion, export, endpoint, merge,
+  new training, task255 reuse, AIME train data, shared deletion, or further 30B
+  work is authorized.
+
 ## Session 203 - 2026-06-03 UTC - final artifacts fail below base
 
 - The task306 NemTron run completed naturally after the prior active-run

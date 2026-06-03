@@ -18,3 +18,15 @@
 - Boundaries for worker_4: read-only review/runbook docs only; no training,
   rerun, AIME eval, export, endpoint, promotion, task255 reuse, shared deletion,
   main push, merge, or product-code edits.
+
+## Session 204 - 2026-06-03 UTC - review target refreshed to PR #369
+
+- After task307 was assigned, worker_3 opened task306 PR #369:
+  OPEN/base `main`/CLEAN/non-draft, head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+- Lead refreshed the task307 target to review exact PR #369 head plus the
+  original task306 eval source head
+  `894e2e71e72f09926128e37f22000802804522bc`.
+- Preliminary lead diff check shows `894e2e7..1255f235` is worker_3
+  status plus task306 report/history/knowledge/README closeout for the completed
+  run. Worker_4 must independently verify this.

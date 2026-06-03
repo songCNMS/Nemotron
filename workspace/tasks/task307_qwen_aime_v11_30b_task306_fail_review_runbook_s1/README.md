@@ -14,7 +14,12 @@ Current lead-observed state:
   `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`.
 - task306 source head:
   `894e2e71e72f09926128e37f22000802804522bc`.
-- No task306 PR is visible as of the lead assignment.
+- task306 PR #369 later appeared after the initial task307 assignment:
+  OPEN, base `main`, CLEAN, non-draft, head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+- The task306 eval source head remains `894e2e71e72f09926128e37f22000802804522bc`;
+  PR #369 head `1255f2356cb014cd1adbe58c7af297f291b222f3` adds worker_3
+  official closeout/report/status docs for that run.
 - task306 local output root:
   `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
 - task306 remote run root:
@@ -59,8 +64,13 @@ request changes instead.
 
 ## Scope
 
-- Review exact task306 source head
+- Review exact PR #369 head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3`.
+- Confirm the task306 eval source head
   `894e2e71e72f09926128e37f22000802804522bc`.
+- Compare `894e2e71e72f09926128e37f22000802804522bc..1255f2356cb014cd1adbe58c7af297f291b222f3`
+  and state whether it is only worker_3 official report/status/task-doc
+  closeout for the completed run.
 - Confirm whether task306 branch/PR/head changed after this assignment.
 - Review the task306 local output root and remote root read-only.
 - Verify `remote_no_export_aime_eval.rc=0`.
@@ -109,7 +119,7 @@ request changes instead.
 - Review/runbook report:
   `workspace/tasks/task307_qwen_aime_v11_30b_task306_fail_review_runbook_s1/task306_fail_review_runbook_report.md`.
 - Mailbox report to lead with:
-  - exact task306 head and artifact root reviewed;
+  - exact #369 PR head, task306 eval source head, and artifact root reviewed;
   - branch/head/PR or mailbox-only status;
   - commands used and output summary;
   - artifact paths, line counts, and checksum verification results;
@@ -141,6 +151,7 @@ request changes instead.
 - Related tasks: task298, task299, task300, task301, task303, task304, task305,
   task306
 - Related PRs: #362, #363, #364, #365, #366, #367, #368
+- Review target PR: #369
 - Current gate: global Qwen AIME 30B gate remains FAIL/HOLD for closeout
   review. No promotion, export, endpoint, new 30B training, or additional
   30B/8-GPU work is authorized.

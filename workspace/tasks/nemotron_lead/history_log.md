@@ -8985,6 +8985,31 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 204 - 2026-06-03 UTC - task306 official PR appeared
+
+- Post-push sanity check after task307 assignment observed task306 PR #369:
+  OPEN, base `main`, CLEAN/MERGEABLE, non-draft, head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3`, title
+  `task306: report 30B task301 AIME eval failure`.
+- PR #369 body matches the lead-observed final result: task301 Qwen3-30B-A3B
+  `iter_0000035` corrected AIME2025 FT `14/30 = 0.4666666666666667` versus
+  accepted task300 base `15/30 = 0.5`, disposition `FAIL`, `30/30` retained
+  results/completions/parser diagnostics, parsed `17/30`, finish reasons
+  `stop=17`, `length=13`, `remote_no_export_aime_eval.rc=0`.
+- PR #369 records protocol proof and the residual
+  `sampling_exact_parameter_match=false`; task306 used the no-export MCore
+  greedy substitute while task300 base used SGLang endpoint transport.
+- Preliminary lead diff check:
+  `894e2e71e72f09926128e37f22000802804522bc..1255f2356cb014cd1adbe58c7af297f291b222f3`
+  changes worker_3 status plus task306 README/history/task_knowledge and adds
+  `30b_task301_same_harness_aime_eval_report.md`. `git diff --check` passes.
+- Refreshed task307 docs to require worker_4 independent review of exact PR
+  #369 head `1255f2356cb014cd1adbe58c7af297f291b222f3` plus original eval
+  source head `894e2e71e72f09926128e37f22000802804522bc`.
+- Gate remains FAIL/HOLD pending task307 review. No self-merge, lead merge,
+  promotion, export, endpoint, new training, AIME2025 train data, task255 reuse,
+  shared deletion, main push, or further 30B/8-GPU work is authorized.
+
 ## Session 203 - 2026-06-03 UTC - task306 final artifacts fail below base
 
 - Rechecked task306 after the active worker-owned NemTron run completed:

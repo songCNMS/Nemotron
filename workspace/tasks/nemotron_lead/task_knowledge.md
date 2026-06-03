@@ -2158,3 +2158,11 @@
    independent review/runbook closeout. Gate remains FAIL/HOLD pending task307
    and worker_3 official task306 closeout reconciliation; no promotion or
    further 30B work is authorized.
+590. Session 204: worker_3 opened task306 PR #369 after the task307 assignment.
+   PR #369 is OPEN/base `main`/CLEAN/non-draft at head `1255f235`; body reports
+   the same FAIL metric, artifacts, boundary confirmations, and sampling
+   residual. Preliminary lead diff `894e2e7..1255f235` is worker_3
+   status/task306 docs/report closeout and `git diff --check` passes. Refreshed
+   task307 to review exact PR #369 head `1255f235` plus eval source head
+   `894e2e7`. Gate remains FAIL/HOLD pending task307 review; no promotion or
+   further 30B work is authorized.

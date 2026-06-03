@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: task306 final FAIL 14/30 below base 15/30; task307 review/runbook assigned; awaiting worker closeout/review |
-| Session | 203 |
+| PR | 30B gate: task306 #369 open/CLEAN head 1255f235, FAIL 14/30 below base 15/30; task307 review/runbook pending |
+| Session | 204 |

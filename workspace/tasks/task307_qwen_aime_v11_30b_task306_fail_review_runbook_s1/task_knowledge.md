@@ -8,3 +8,8 @@
    denominator continuity, but sampling exact-parameter match is false while
    semantic greedy match is claimed. Worker_4 must explicitly decide whether
    this supports FAIL closeout or requires HOLD/request-changes.
+3. Session 204 update: task306 PR #369 is now the review target: OPEN/base
+   `main`/CLEAN/non-draft at head
+   `1255f2356cb014cd1adbe58c7af297f291b222f3`. The eval source head remains
+   `894e2e71e72f09926128e37f22000802804522bc`; worker_4 must compare the
+   delta and verify it is closeout/report/status docs only.
