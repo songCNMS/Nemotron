@@ -36,3 +36,26 @@
   no shared deletion, no promotion, no production endpoint, no main push, no
   merge/self-merge, and no export/endpoint unless stopped for lead
   authorization.
+
+## Session 1 - 2026-06-03 UTC - evaluation complete
+
+- Added no-export/no-endpoint MCore static-engine corrected AIME2025 runner and
+  executed the task301 Qwen3-30B-A3B `iter_0000035` checkpoint on NemTron with
+  8x H200, `TP=4`, `PP=2`, `EP=4`, `ETP=1`, `CP=1`.
+- Run root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`;
+  remote root:
+  `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Remote return code: `0`.
+- Result: `FAIL` versus accepted task300 base. FT exact-normalized AIME2025
+  score was `14/30 = 0.4666666666666667` versus base `15/30 = 0.5`.
+- Retained `30/30` results, full completions, and parser diagnostics. Parsed
+  rows: `17/30`; finish reasons: `stop=17`, `length=13`.
+- Protocol proof: same corrected AIME cache, same original prompts, same
+  30-row all-request denominator, same parser/normalizer, same max tokens,
+  prompt token mismatch count `0`. Residual:
+  `sampling_exact_parameter_match=false` for no-export MCore greedy route
+  versus task300 SGLang endpoint transport.
+- Boundaries upheld: no training/optimizer, no AIME train data, no task255, no
+  export/conversion, no endpoint, no promotion, no shared deletion, no main
+  push, and no merge/self-merge.

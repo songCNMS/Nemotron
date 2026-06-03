@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - 30B corrected AIME FT-vs-base gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
 
 ## Background
 
@@ -121,6 +121,25 @@ accepted base `15/30 = 0.5` under the same corrected evaluator/protocol.
   - explicit confirmation that no training, AIME train data, task255 reuse,
     shared deletion, promotion, production endpoint, main push, or merge
     occurred.
+
+## Worker Result
+
+- Report:
+  `workspace/tasks/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/30b_task301_same_harness_aime_eval_report.md`.
+- Local artifacts:
+  `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Remote artifacts:
+  `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Disposition: `FAIL`.
+- FT score: `14/30 = 0.4666666666666667`.
+- Accepted base comparator: task300 `15/30 = 0.5`.
+- Delta: `-1/30`, `-0.033333333333333326`.
+- Evidence is complete for the no-export/no-endpoint same-harness route:
+  `30/30` results, full completions, and parser diagnostics retained; `17/30`
+  parsed; finish reasons `stop=17`, `length=13`.
+- Residual: `sampling_exact_parameter_match=false` because task306 used the
+  accepted no-export MCore greedy substitute while task300 base used SGLang
+  `/v1/chat/completions`.
 
 ## Acceptance Criteria
 
