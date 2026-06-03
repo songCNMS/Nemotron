@@ -11456,3 +11456,31 @@
   worker_1/task320, and worker_4/task321. Immediate remote branch check found
   no task318-task321 worker branches yet; next lead action is to wait for
   worker mailbox/branch/PR or blocker reports.
+
+### Current-head drift after repair task dispatch
+
+- Fetched origin after task318-task321 dispatch. #371 and #378 stayed at their
+  previously gated heads. #377 advanced to
+  `c1b053b518137769b9b423d08d9590d8ae481a2e`; #379 advanced to
+  `89cc7f74a737f174f4b8dbf9129c712fabbafa95`; #380 advanced to
+  `9e57390bb33365157b73a8c93264b9dd57a2d489`.
+- Lead diff review classified #377 drift as worker_5 status plus task316
+  history/task_knowledge acknowledging task318, with task316 report content
+  unchanged. Posted #377 issuecomment `4616104670`, carrying forward
+  `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE`.
+- Lead diff review classified #379 drift as worker_2 status plus task315
+  history/task_knowledge acknowledging task319, with blocker report content
+  unchanged. Posted #379 issuecomment `4616104667`, carrying forward
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`.
+- Lead diff review classified #380 drift as worker_1 status plus task314
+  metadata/history/task_knowledge handoff to task320; the report change was
+  metadata session only and findings/checksums remain unchanged. Posted #380
+  issuecomment `4616104668`, carrying forward
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
+- No dedicated task318, task319, task320, or task321 remote branch was visible
+  after the fetch. Worker_1 local status shows task320 handoff; worker_4 local
+  status still lagged, so lead sent a delivered non-interrupt reminder for
+  task321.
+- Global gate is unchanged: fail-mixed/no-promotion, no new
+  training/eval/packing/export/endpoint/task255/AIME2025 train data/shared
+  deletion/main push/merge/self-merge authorization.

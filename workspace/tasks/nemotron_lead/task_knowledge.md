@@ -2549,3 +2549,9 @@
 664. Session 78: peer_send delivered task318-task321 assignments to
    worker_5/worker_2/worker_1/worker_4; no remote task318-task321 branches were
    visible immediately after dispatch.
+665. Session 78: #377/#379/#380 advanced after repair-task dispatch, but drift
+   was limited to worker status/task history/knowledge handoff bookkeeping
+   except task314 report metadata session text. Gate was carried forward at
+   #377 `c1b053b5`, #379 `89cc7f74`, and #380 `9e57390b`.
+666. Session 78: worker_4 received a delivered task321 reminder because local
+   status and remote branch search still showed no task321 acceptance branch.
