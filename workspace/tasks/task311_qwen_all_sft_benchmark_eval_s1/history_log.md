@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -163,3 +163,49 @@
 - No training, optimizer step, AIME2025 train-row use, task255 reuse, shared
   deletion, export, endpoint, promotion, product-code edit, direct main push,
   merge, or self-merge occurred.
+
+## Session 9 - 2026-06-03 UTC - benchmark route gate before endpoint/export
+
+- Lead accepted task311 non-AIME canary at exact PR #371 head
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20` and released corrected benchmark
+  evaluation phase work.
+- Lead follow-up clarified that any row requiring export or endpoint must first
+  be reported as an eval-only route/blocker before running it.
+- Verified branch remains based on current `origin/main`
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`.
+- Probed NemTron host `lg-cmc-b7r201-f08u26-h200-000126`: eight H200 GPUs were
+  idle at probe time and candidate task-owned ports `13231`-`13234` were free.
+- Reviewed established corrected benchmark routes:
+  task300 accepted AIME base uses eval-only SGLang endpoint; task071 corrected
+  MMLU-Pro and math runners are endpoint-based; task306 direct no-export AIME
+  route exists but has backend/sampling residual against task300 endpoint base
+  and therefore cannot reuse task300 base as exact same-harness evidence.
+- Identified task298 imported base Megatron checkpoint
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`
+  as the candidate base input if lead prefers a direct no-export base rerun.
+- Verified AIME cache exists locally and on NemTron; verified HMMT February 2025
+  JSONL exists locally but not at the probed NemTron cache path; verified
+  `TIGER-Lab/MMLU-Pro` test split can be materialized locally with 12032 rows.
+- Added `all_sft_benchmark_route_gate_report.md`, updated corrected-Qwen and
+  M1 reports to reflect `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.
+- No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
+  optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
+  promotion, product-code edit, direct main push, merge, or self-merge occurred.
+
+## Session 10 - 2026-06-03 UTC - route gate formalized for lead processing
+
+- Received lead follow-up that the local Session 9 route-gate draft must be
+  formalized through #371 and mailbox before any eval-only export, endpoint, or
+  benchmark row is launched.
+- Included new route-gate report
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`.
+- Updated corrected Qwen and M1 benchmark reports to point to the route-gate
+  disposition:
+  `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.
+- Updated task README metadata, task knowledge, and worker status for Session
+  10.
+- Diff scope is docs/status only under task311 plus worker_3 status; no product
+  code changed.
+- No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
+  optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
+  promotion, direct main push, merge, or self-merge occurred.

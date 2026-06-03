@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Knowledge Entries
 
@@ -77,3 +77,28 @@
 19. Benchmark reports remain `HOLD_NOT_RUN` because the authorized task311
     action stopped after checkpoint-load and non-AIME canary. No corrected Qwen
     benchmark, AIME/task243 eval, HMMT, MMLU-Pro, or M1 basket row was run.
+20. Lead accepted task311 non-AIME canary at exact #371 head
+    `2ffbe8c4d9f833980d64d756965e909bf3260f20`, then clarified that any
+    benchmark row requiring eval-only export or endpoint must be reported as an
+    eval-only route/blocker before execution.
+21. Established corrected Qwen benchmark routes are endpoint-based for
+    MMLU-Pro/AIME2025/HMMT through task071/task300 evidence. Task310 is a
+    Megatron checkpoint, so that route requires eval-only HF export plus
+    eval-only SGLang endpoint before FT endpoint metrics can be collected.
+22. Accepted task300 AIME base `15/30 = 0.5` can be reused only for an endpoint
+    FT run matching model family, route, evaluator, prompt variant, sampling,
+    parser, normalizer, and all-request denominator. Direct no-export runs
+    cannot claim exact same-harness reuse of that endpoint base.
+23. Direct no-export alternative for AIME/HMMT/MMLU-Pro would need same-route
+    base rerun from task298 imported Megatron checkpoint
+    `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`
+    and FT run from task310 `iter_0000035`, with identical evaluator, prompts,
+    sampling, parser, selected-rank policy, and denominator.
+24. M1 launcher mapping has 14 exact launcher-available rows and 5 exact-missing
+    rows. Missing rows are `multichallenge`, `terminalbench`, `mcp_mark`,
+    `tool_decathlon`, and `swe_bench_verified`; listed candidate tasks are not
+    equivalent substitutes.
+25. Session 10 formal route-gate report is
+    `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`;
+    disposition remains
+    `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.

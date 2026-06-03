@@ -1,30 +1,31 @@
 # task311 M1 benchmark availability report
 
-<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_3,SESSION=8 -->
+<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_3,SESSION=10 -->
 
 ## Summary
 
-- Status: `HOLD_NOT_ENUMERATED_CANARY_ONLY_RELEASED`
-- Blocking precondition: explicit lead release for M1 benchmark availability and
-  benchmark execution after the task311 non-AIME canary report is processed.
+- Status: `HOLD_ROUTE_REPORTED_BEFORE_EXPORT_ENDPOINT`
+- Blocking precondition: lead processing of the Session 9 route report before
+  any M1 row that needs eval-only export/endpoint is launched.
 - No M1 benchmark launcher command was executed.
 - No M1 benchmark row was evaluated.
 
-Lead released only checkpoint-load plus synthetic non-AIME
-canary/completion-retention for the task310 salvage checkpoint. The canary has
-passed, but benchmark and M1 basket enumeration remain outside the current
-release. This report intentionally records no-run status for M1 rows.
+Lead accepted the task311 canary and released benchmark-eval phase work, then
+clarified that rows requiring export or endpoint need an eval-only
+route/blocker report before execution. The M1 launcher mapping has exact
+launcher tasks for 14 rows and missing exact tasks for 5 rows; no row was
+launched in Session 9.
 
 ## Availability Matrix
 
 | Basket area | Status | Exact blocker |
 |---|---|---|
-| M1 launcher-available benchmark basket | `HOLD_NOT_ENUMERATED` | lead released canary only; M1 basket enumeration awaits explicit post-canary benchmark gate |
-| Full-basket unavailable rows | `HOLD_NOT_ENUMERATED` | row-level launcher/model-route validation awaits explicit post-canary benchmark gate |
+| M1 launcher-available benchmark basket | `HOLD_NOT_RUN` | task310 is a Megatron checkpoint; launcher rows require eval-only HF export/endpoint or a task-owned direct runner plus same-route base rerun |
+| Full-basket unavailable rows | `PARTIALLY_ENUMERATED` | exact missing launcher rows recorded in Session 9 route report |
 
 This report intentionally does not claim launcher availability or absence for
-individual basket rows. It records that the current authorized work stopped
-after checkpoint-load and non-AIME canary.
+individual runnable metrics. It records route availability and exact blockers
+before endpoint/export execution.
 
 ## Artifacts
 
@@ -38,6 +39,10 @@ Task-owned canary artifact root:
 Canary summary sha256:
 
 `5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`
+
+Session 9 route report:
+
+`workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`
 
 ## Boundary Confirmation
 

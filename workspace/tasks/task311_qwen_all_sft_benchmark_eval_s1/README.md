@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Qwen all-SFT benchmark evaluation gate
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=8 -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_3,SESSION=10 -->
 
 ## Background
 
@@ -53,6 +53,7 @@ reasons.
 - Worker branch:
   `intern_nemotron_worker_3/task311_qwen_all_sft_benchmark_eval_s1`.
 - Reports:
+  - `all_sft_benchmark_route_gate_report.md`;
   - `all_sft_non_aime_canary_report.md`;
   - `all_sft_corrected_qwen_benchmark_report.md`;
   - `all_sft_m1_benchmark_availability_report.md`.
@@ -86,8 +87,8 @@ reasons.
   `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
 - Gate state: checkpoint-load plus synthetic non-AIME
   canary/completion-retention was released and passed under
-  `run_20260603T173607Z`. Benchmark eval, AIME/task243 eval,
-  MMLU-Pro/HMMT/M1 basket eval, export, endpoint, promotion, additional
-  training, task255 reuse, AIME2025 train data, shared deletion, self-merge,
-  and main push remain HOLD pending explicit lead release after the canary
-  report is processed.
+  `run_20260603T173607Z`; lead accepted that canary at exact head
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20`. Benchmark route analysis is
+  recorded in `all_sft_benchmark_route_gate_report.md`. Any row requiring
+  eval-only export or endpoint remains held until lead processes the route
+  report; no benchmark metrics have been generated in Session 9.
