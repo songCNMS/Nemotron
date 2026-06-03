@@ -3002,7 +3002,7 @@
 - Awaiting worker mailbox acceptance and read-only reports. Global Qwen AIME
   gate remains `NO-GO/HOLD`; no promotion, no 30B/8-GPU.
 
-## Session 77 - 2026-06-01 UTC - task260/task261 acceptance branches observed
+## Archived 2026-06-01 UTC - task260/task261 acceptance branches observed
 
 - Rechecked lead mailbox; unread count was `0`.
 - Fetched origin and observed new worker acceptance branches:
@@ -6713,7 +6713,7 @@
   and exact blocker if any. Reiterated no AIME2025 train data, task255, shared
   deletion, FT eval, canary, export, endpoint, or promotion outside clearance.
 
-## Session 77 - 2026-06-02 UTC - task301 remote mirror launch continuation
+## Archived 2026-06-02 UTC - task301 remote mirror launch continuation
 
 - Scanned lead state after compaction: lead branch
   `intern_nemotron_lead/session1-recovery-task-docs` was clean at
@@ -10487,7 +10487,7 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
-## Session 77 - 2026-06-03 UTC - all-SFT pipeline gate split
+## Session 77 - 2026-06-03 UTC - all-SFT pipeline coordination
 
 - Processed six unread closeout mailbox reports from task306/task307 and marked
   them read. The reports matched already merged #369/#370 state: task306 final
@@ -10518,7 +10518,7 @@
   reuse, no shared deletion, no product/source-code edits by lead, no tests or
   evals run by lead, no export/endpoint/promotion, no main push, and no merge.
 
-## Session 77 - 2026-06-03 UTC - all-SFT current-main drift reconciliation
+### Current-main drift reconciliation
 
 - Fetched origin after task308-task312 assignment. `origin/main` advanced from
   `ecb14173a820df377270273b9f7d9d92cb5076d2` to
@@ -10535,7 +10535,7 @@
   code, push main, merge, reuse task255, use AIME2025 train data, or delete
   shared files.
 
-## Session 77 - 2026-06-03 UTC - all-SFT worker acceptance sweep
+### Worker acceptance sweep
 
 - Processed and marked read two new mailbox reports:
   - worker_4 accepted task312, branch
