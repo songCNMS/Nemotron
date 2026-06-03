@@ -11623,3 +11623,45 @@
   visible. Lead diff-check passed for both branches; both are still pending
   official mailbox/report gate. No task322/task325/task326 remote branches were
   visible at this check.
+
+### Task323, task324, task325 gates
+
+- Processed and marked read worker_5 task323 mailboxes
+  `e55b76dfd3d24a38afda4626dfdea1da` and
+  `52997bee3cb74de0a7eb69f1d83cb2aa`, worker_1 task324 mailbox
+  `0787d6aa296a49b0b925fcbbe81de8ac`, and worker_3 task325 mailbox
+  `8b23d778f0a7452cb40645d61fe78d50`.
+- #385 task323 current head
+  `edb265351b9f369698f561527cd27f2978f649ba` was OPEN/base main/CLEAN/
+  non-draft. Lead verified diff scope, metadata-only drift from `420bcc52`,
+  report sha `f996e90ac8b75171ab0c7ca7d3fcc59354ad338075d8b1a229e6513a07f5917c`,
+  and key artifact hashes. Posted issuecomment `4616544268`:
+  `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`.
+- Accepted task323 evidence: task-owned train-only root has train=46, valid=0,
+  test=0, symlinks=0, source-vs-mirror hash parity 46/46, rows 279, input
+  tokens 1,024,646, supervised tokens 228,927, `do_validation=false`,
+  `packed_val_data_path=null`, and same-harness eval handoff required. This is
+  preflight evidence only, not training clearance.
+- #386 task324 at `8c4f7aa72f07e69e400789fced12acb17cf80cb7` was OPEN/base
+  main/CLEAN/non-draft. Lead verified diff scope, report sha
+  `0b51629cfe78cb9ecd69575b03163b2d78530616f35c5ec8a6a8a403fd8047fa`, and
+  task319 source matrix sha `894b2d6821094530ecded233bf9e54567f120df4c3c1ac024c978f2678eebe79`.
+  Posted issuecomment `4616544271`: `APPROVE_BLEND_DESIGN_DOCS /
+  NO_ACTION_RELEASE`.
+- Accepted task324 design: task299/V11 seed is continuity only; future all-SFT
+  blend must add materialized/decontaminated/Qwen-rendered non-math retention
+  coverage across physical sciences, bio-health, humanities/social,
+  technical/coding, math, and broad instruction/other. Task322 remains a
+  dependency and raw sources remain 0/12 packing-ready.
+- #387 task325 at `e6c5e1fc8dc1036c2fa494d3349682a95b7a69cf` was OPEN/base
+  main/CLEAN/non-draft. Lead verified diff scope, report sha
+  `e9c6489a0a552d6b3e86bb06ca322fcf715e28c2bc1b654e356daee2bc162118`, and
+  task-owned artifact checksum manifest passed. Posted issuecomment
+  `4616544252`: `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`.
+- Accepted task325 blocker: current worker runtime still has 0/19 runnable M1
+  rows; 14/19 have exact launcher mappings, 5 remain exact missing/unavailable,
+  and later M1 execution requires separate eval-only runtime/container/
+  scheduler/credential proof. No benchmark row execution is authorized.
+- No final packing, training, optimizer steps, benchmark eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
+  edits, main push, merge, or self-merge was authorized.

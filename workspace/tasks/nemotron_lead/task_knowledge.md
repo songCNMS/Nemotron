@@ -2595,3 +2595,12 @@
 679. Session 78: task323/#385 is visible OPEN/CLEAN at `420bcc52` and task324
    branch is visible at `d5da6aa4`, but both still need official worker mailbox
    closeout before lead gate.
+680. Session 78: task323/#385 is accepted as Route A validation-skip preflight
+   docs at current head `edb26535`; it proves a task-owned train-only root and
+   `do_validation=false` but does not release training.
+681. Session 78: task324/#386 is accepted as MMLU-aware blend design docs at
+   `8c4f7aa7`; task322 materialization/decontam remains required before any
+   packed contract.
+682. Session 78: task325/#387 is accepted as M1 blocker docs at `e6c5e1fc`;
+   current M1 runnable rows remain 0/19 until a separate eval-only runtime
+   route is proven.

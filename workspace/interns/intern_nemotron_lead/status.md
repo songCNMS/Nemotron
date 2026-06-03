@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #385/task323 open clean; task324 branch visible; task322/task325/task326 pending remote/report |
+| PR | #385/#386/#387 approved docs/no-action; task322/task326 still pending remote/report |
 | Session | 78 |
