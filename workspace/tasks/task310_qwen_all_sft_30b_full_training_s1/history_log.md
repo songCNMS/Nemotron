@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -71,3 +71,27 @@
 - Did not launch training, self-merge, silently downgrade, use AIME2025 train
   rows, use task255, delete shared files, export, endpoint, promote, edit
   product code, push main, or merge.
+
+## Session 5 - 2026-06-03 UTC - Pre-merge hold before runtime refresh
+
+- Lead instructed not to self-merge the current #373 blocker and to proceed
+  only after #374, #372, and #375 merge.
+- Verified current `origin/main` remains
+  `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
+- Verified task310 PR #373 is open/base main/CLEAN at
+  `f10804b6c28b0dd59f54775b49328a637ac780fc`.
+- Verified prerequisite PRs are not merged:
+  #374 open/CLEAN at `a238cacb1f28fb96df58d3a10641a2b7325f61b7`,
+  #372 open/CLEAN at `4e26317adc536afc896377da9225913ca567135b`, and
+  #375 open/CLEAN at `a8a9ade370269daea0c38331c601dc38012b09be`.
+- Kept task310 HOLD because the "after #374/#372/#375 merge" precondition is
+  not satisfied; did not refresh runtime/resources or launch training.
+- Carried lead's constrained next-step scope: if the prerequisite merges and
+  lead authorizes task310, use only the constrained V11/task299 packed seed at
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+  with model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`; generic
+  `stage1_sft/data_blend_raw` remains NO-GO.
+- Did not self-merge, train, silently downgrade, use AIME2025 train rows, use
+  task255, delete shared files, export, endpoint, promote, edit product code,
+  push main, or merge.

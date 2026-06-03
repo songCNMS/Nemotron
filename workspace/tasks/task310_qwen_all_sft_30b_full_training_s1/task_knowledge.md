@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -43,3 +43,16 @@
 11. If task309 is accepted, task310 scope is constrained to the reviewed
     V11/task299 seed; generic `stage1_sft/data_blend_raw` remains NO-GO unless
     a separate materialized/count/decontam/Qwen-packing proof is accepted.
+12. As of Session 5, task310 must not self-merge current #373 and must not
+    refresh runtime/resources or launch training until #374, #372, and #375 are
+    merged and lead authorizes the task310 next step.
+13. As of Session 5, #374 is open/CLEAN at
+    `a238cacb1f28fb96df58d3a10641a2b7325f61b7`, #372 is open/CLEAN at
+    `4e26317adc536afc896377da9225913ca567135b`, and #375 is open/CLEAN at
+    `a8a9ade370269daea0c38331c601dc38012b09be`; the required post-merge
+    precondition is not met.
+14. The constrained packed root for any lead-authorized task310 runtime refresh
+    is
+    `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+    with model
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
