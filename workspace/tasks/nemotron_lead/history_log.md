@@ -8985,6 +8985,29 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 178 - 2026-06-03 UTC - task306 active run progress 24/30
+
+- Follow-up check after Session 177 push observed stdout progress advanced to
+  `24/30`, so the prior `23/30` tracking record was immediately superseded.
+- The worker-owned NemTron task306 process remains active after about three
+  hundred five minutes. Local and remote rc files remain absent.
+- Latest visible stdout progress is now `24/30`: rows 1-4, 6, 8, 16, 17, 18,
+  19, 21, 22, 23, and 24 are parsed true/correct true; row 5 length-stopped
+  parsed false/correct false; row 7 parsed true/correct false; row 9
+  length-stopped parsed false/correct false; row 10 parsed true/correct false;
+  rows 11-15 length-stopped parsed false/correct false; row 20 parsed
+  true/correct false. This remains partial unofficial progress only, not a
+  final FT score.
+- Remote rank event logs show all ranks completed `start_index=23` with latency
+  about 652 seconds and started `start_index=24`; no completion event or stdout
+  progress for row 25 is visible yet.
+- No task306 FT aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 FT artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
+
 ## Session 177 - 2026-06-03 UTC - task306 active run still 23/30
 
 - Rechecked current gate state after fetching origin:
