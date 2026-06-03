@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -288,5 +288,18 @@
   `intern_nemotron_worker_3`; wait for coordinator/authorized non-author merge
   or further lead instruction.
 - No promotion, training, additional eval, export, endpoint, task255 reuse,
+  AIME2025 train-data use, shared deletion, direct main push, merge, or
+  self-merge occurred.
+
+## Session 14 - 2026-06-03 UTC - post-review authorized merge readiness noted
+
+- Lead reported that after task317/#378 independent review, task314/#380
+  forensics, and task315/#379 runtime audit, #371 current head
+  `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` is ready for
+  coordinator/authorized non-author merge as evidence/fail-closeout docs only.
+- Lead posted the updated gate record as GitHub issue comment
+  `issuecomment-4615943944`.
+- The current boundary remains no self-merge by `intern_nemotron_worker_3`.
+- No promotion, training, new eval, export, endpoint, task255 reuse,
   AIME2025 train-data use, shared deletion, direct main push, merge, or
   self-merge occurred.

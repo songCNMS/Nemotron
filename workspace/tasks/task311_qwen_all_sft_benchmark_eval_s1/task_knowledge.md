@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Knowledge Entries
 
@@ -142,3 +142,10 @@
     GitHub `issuecomment-4615730412`; no self-merge is allowed under the
     current boundary, and the branch must wait for coordinator/authorized
     non-author merge or further instruction.
+36. After task317/#378 independent review, task314/#380 forensics, and
+    task315/#379 runtime audit, lead posted GitHub
+    `issuecomment-4615943944` and marked #371 head
+    `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` ready for
+    coordinator/authorized non-author merge as evidence/fail-closeout docs
+    only; no self-merge or downstream promotion/training/eval/export/endpoint
+    action is authorized.
