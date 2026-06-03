@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Qwen all-SFT 30B full training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_5,SESSION=9 -->
 
 ## Background
 
@@ -87,7 +87,7 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Current Worker Disposition
 
-Session 7 disposition:
+Session 9 final disposition:
 `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
 
 After #374/task308, #372/task309, and #375/task312 merged, task310 was refreshed
@@ -110,6 +110,11 @@ task310 training processes and all eight H200s released to `1 MiB` / `0%`.
 The checkpoint candidate is fully inventoried and checksummed, but this is not
 a clean training PASS and does not release task311 canary/eval/export/endpoint
 or promotion.
+
+Lead approved and #373 was self-merged as salvage evidence only after task313
+review merged. Merge details: `mergedAt=2026-06-03T17:30:08Z`, merge commit
+`292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`, merged head
+`0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`.
 
 Report:
 `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/all_sft_30b_full_training_report.md`.

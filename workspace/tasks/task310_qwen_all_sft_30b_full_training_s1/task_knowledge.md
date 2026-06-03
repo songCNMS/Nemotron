@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Knowledge Entries
 
@@ -106,3 +106,12 @@
     artifact/checksum questions without running follow-on task311 canary/eval,
     export, endpoint, promotion, shared deletion, task255 reuse, or AIME2025
     train-row work.
+28. In Session 9, after #376/task313 merged, lead approved #373 exact head
+    `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`; #373 was verified open/base
+    main/non-draft/CLEAN/MERGEABLE at that head and self-merged through GitHub
+    at `2026-06-03T17:30:08Z` with merge commit
+    `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`.
+29. The merged task310 record is salvage evidence only, not `PASS_TRAINING`;
+    it does not authorize task311, benchmark/AIME/task243 eval, export,
+    endpoint, promotion, additional training, shared deletion, task255 reuse,
+    or AIME2025 train rows.

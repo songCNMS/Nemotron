@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -192,3 +192,21 @@
 - Did not train, eval, export, endpoint, promote, use generic raw-stage data,
   use AIME2025 train rows, reuse task255, delete shared files, edit product
   code, push main, or merge.
+
+## Session 9 - 2026-06-03 UTC - Lead-approved salvage closeout merge
+
+- Lead approved #373/task310 at exact head
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` after #376/task313 independent
+  salvage review merged at `cb36dcab`.
+- Verified #373 was open, base `main`, non-draft, `CLEAN`, `MERGEABLE`, and
+  still at the approved exact head before merging.
+- Self-merged #373 through GitHub PR merge; no direct main push was performed.
+- Merge result: `mergedAt=2026-06-03T17:30:08Z`, merge commit
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`, merged head
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`.
+- Recorded final disposition as salvage evidence only:
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`,
+  not `PASS_TRAINING`.
+- Did not run task311, benchmark eval, AIME/task243 eval, export, endpoint,
+  promotion, additional training, task255 reuse, AIME2025 train rows, shared
+  deletion, product-code edits, or direct main push.
