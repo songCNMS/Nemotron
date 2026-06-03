@@ -8985,6 +8985,37 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 190 - 2026-06-03 UTC - task306 active run still 26/30
+
+- Rechecked current gate state after fetching origin:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch was
+    `1a4a43d59f079ac9b2a91f2236627ed1cc09179a` before this tracking update;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`;
+  - worker_3 local status remains Working on task306 with PR `N/A`.
+- The worker-owned NemTron task306 process remains active after about three
+  hundred fifty-one minutes. Local and remote rc files remain absent.
+- Latest visible stdout progress remains `26/30`: rows 1-4, 6, 8, 16, 17, 18,
+  19, 21, 22, 23, and 24 are parsed true/correct true; rows 25 and 26
+  length-stopped parsed false/correct false; row 5 length-stopped parsed
+  false/correct false; row 7 parsed true/correct false; row 9 length-stopped
+  parsed false/correct false; row 10 parsed true/correct false; rows 11-15
+  length-stopped parsed false/correct false; row 20 parsed true/correct false.
+  This remains partial unofficial progress only, not a final FT score.
+- Remote rank event logs still show `start_index=26` active after all ranks
+  completed `start_index=25`; the active row was about eight minutes old at
+  this check, below the worker-set 240 minute timeout. No completion event or
+  stdout progress for row 27 is visible yet.
+- No task306 FT aggregate `summary.json`, `results.jsonl`,
+  `full_completions.jsonl`, `parser_diagnostics.jsonl`,
+  `checksum_manifest.json`, blocker file, PR, or official worker_3 report is
+  visible yet.
+- Gate remains HOLD pending complete task306 FT artifacts and official worker_3
+  report. Lead did not interrupt the active worker-owned eval.
+
 ## Session 189 - 2026-06-03 UTC - task306 active run still 26/30
 
 - Rechecked current gate state after fetching origin:
