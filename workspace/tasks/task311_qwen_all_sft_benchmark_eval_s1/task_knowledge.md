@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -21,3 +21,8 @@
    with sha256
    `7b90155bc4f31bea4ccb5a67472d0c5d703c5607b0ec0a20d0523bdadc179ed8`.
 7. PR #371 records the task311 blocker/status docs for lead review.
+8. Lead verified PR #371 at head
+   `37a76caea59a2ca27c5d4cbc5d2e98d46d100420` and kept task311 on HOLD pending
+   task312 independent review plus upstream task309/task310 refresh; canary and
+   benchmarks remain prohibited until an accepted task310 checkpoint handoff
+   exists.
