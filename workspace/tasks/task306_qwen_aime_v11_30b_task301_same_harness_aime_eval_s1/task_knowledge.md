@@ -448,3 +448,11 @@
    row30/start_index29 active about six minutes. No task306 FT final artifacts,
    blocker, PR, local/remote rc, mailbox report, or official report exists;
    gate remains HOLD pending final same-harness artifacts.
+118. Session 203: final artifacts appeared and `remote_no_export_aime_eval.rc=0`.
+   Corrected AIME2025 comparison is FAIL: FT `14/30 = 0.4666666666666667`
+   versus accepted base `15/30 = 0.5`, delta `-1`. FT results/parser/full
+   completions are complete at `30` rows each. Boundary confirmations are true
+   for no AIME train data, no task255, no task306 training, no export/endpoint,
+   no promotion, no shared deletion, and no main push/merge. Lead assigned
+   task307 to worker_4 for independent review/runbook closeout and retained
+   FAIL/HOLD pending that review plus worker_3 official closeout reconciliation.

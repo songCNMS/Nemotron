@@ -1127,6 +1127,36 @@
   checksum manifest, blocker file, or official report is visible. Gate remains
   HOLD pending completion and official worker report.
 
+## Session 203 - 2026-06-03 UTC - final artifacts fail below base
+
+- The task306 NemTron run completed naturally after the prior active-run
+  checks; lead did not interrupt or modify the worker-owned process.
+- Final run state:
+  - worker branch `894e2e71e72f09926128e37f22000802804522bc`;
+  - local output root
+    `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`;
+  - remote run root
+    `/root/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`;
+  - `remote_no_export_aime_eval.rc=0`;
+  - no task306 PR or official worker_3 mailbox report is visible yet.
+- Final corrected AIME2025 comparison: FT `14/30 = 0.4666666666666667`;
+  accepted base `15/30 = 0.5`; delta `-1`; summary disposition `FAIL`.
+- Completed artifact line counts: FT results, parser diagnostics, and full
+  completions each have `30` rows; task300 base comparator input results,
+  parser diagnostics, and full completions each have `30` rows.
+- Key artifact shas:
+  - summary `a3e046e3d5417095bd2d1072609dcdaf90ad17620015062efaac561e028ab947`;
+  - results `46a702b31208661633b6b783e48f8fac3d6b60e06da3fdb9c3972a51cfa3f827`;
+  - full completions `32bb1e75f653711961b052a1008e53c668eb3787b8c5e3ea1369ed7ba8373704`;
+  - parser diagnostics `7c185fca5dc94105ff77aca48e70cfdeef8d5560a7b790682bdc312b2e807354`;
+  - checksum manifest `a82f55bc0d9de7adb28aa28812a5d9b8d557a580ac6709cd7483452e3a8f02cd`.
+- Summary boundary confirmations are true for no AIME2025 train prompts/labels,
+  no task255 reuse, no task306 training, no export/conversion, no endpoint, no
+  promotion, no shared deletion, and no main push/merge.
+- Lead created task307 for worker_4 independent review/runbook closeout. Gate
+  remains FAIL/HOLD pending task307 and worker_3 official closeout
+  reconciliation; no promotion or further 30B work is authorized.
+
 ## Session 202 - 2026-06-03 UTC - active run still 29/30
 
 - Worker branch remains `894e2e71e72f09926128e37f22000802804522bc`; no task306

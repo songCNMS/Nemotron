@@ -8985,6 +8985,51 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 203 - 2026-06-03 UTC - task306 final artifacts fail below base
+
+- Rechecked task306 after the active worker-owned NemTron run completed:
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - lead branch was
+    `d34a7f3b5d91e31a3c78c2342e1992d099db1279` before this tracking update;
+  - worker_3 task306 branch remains
+    `894e2e71e72f09926128e37f22000802804522bc`;
+  - GitHub PR search for task306 returned none;
+  - lead mailbox unread count `0`.
+- The task306 remote run naturally completed without lead interruption:
+  `remote_no_export_aime_eval.rc=0`, final aggregate artifacts are present
+  locally and remotely, and the final rank00 event records
+  `generation_batch_done` for `start_index=29`.
+- Final task306 corrected AIME2025 FT result is FAIL against accepted base:
+  FT `14/30 = 0.4666666666666667`, base `15/30 = 0.5`, delta `-1`.
+- Artifact checks observed:
+  - `summary.json` sha256
+    `a3e046e3d5417095bd2d1072609dcdaf90ad17620015062efaac561e028ab947`;
+  - `results.jsonl` sha256
+    `46a702b31208661633b6b783e48f8fac3d6b60e06da3fdb9c3972a51cfa3f827`;
+  - `full_completions.jsonl` sha256
+    `32bb1e75f653711961b052a1008e53c668eb3787b8c5e3ea1369ed7ba8373704`;
+  - `parser_diagnostics.jsonl` sha256
+    `7c185fca5dc94105ff77aca48e70cfdeef8d5560a7b790682bdc312b2e807354`;
+  - `checksum_manifest.json` sha256
+    `a82f55bc0d9de7adb28aa28812a5d9b8d557a580ac6709cd7483452e3a8f02cd`.
+- Line counts are complete: FT results, parser diagnostics, and full
+  completions each have `30` rows; base comparator input results, parser
+  diagnostics, and full completions each have `30` rows.
+- Summary boundary confirmations are true for no AIME2025 train prompts/labels,
+  no task255 reuse, no task306 training/optimizer steps, no export/conversion,
+  no endpoint, no promotion, no shared deletion, and no main push/merge.
+- Residual carried to review: task306 reports prompt tokens match task300 base
+  and parser/normalizer continuity, but `sampling_exact_parameter_match=false`
+  with semantic deterministic greedy match. This does not permit promotion; it
+  is assigned for independent review/runbook closeout.
+- Created task307 for worker_4:
+  `task307_qwen_aime_v11_30b_task306_fail_review_runbook_s1`. Scope is
+  read-only independent review plus 30B FAIL runbook/provenance closeout.
+- Global gate remains FAIL/HOLD pending worker_4 task307 review and worker_3
+  official task306 closeout reconciliation. No promotion, export, endpoint, new
+  30B training, task255 reuse, AIME2025 train data, shared deletion, main push,
+  merge, or further 30B/8-GPU work is authorized.
+
 ## Session 202 - 2026-06-03 UTC - task306 active run still 29/30
 
 - Rechecked current gate state after fetching origin:
