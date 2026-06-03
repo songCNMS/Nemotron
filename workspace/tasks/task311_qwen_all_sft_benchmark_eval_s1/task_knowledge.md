@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Knowledge Entries
 
@@ -102,3 +102,9 @@
     `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`;
     disposition remains
     `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.
+26. Session 11 remote verification before mailbox: #371 remote head
+    `34ffa587b47b43fed103e41bd3f1cb8661b02288` was visible via
+    `git ls-remote` and GitHub reported PR #371 `OPEN`, base `main`,
+    non-draft, `CLEAN`, and `MERGEABLE`.
+27. No benchmark/export/endpoint row may run until lead processes the official
+    route-gate mailbox and explicitly releases the next gate.

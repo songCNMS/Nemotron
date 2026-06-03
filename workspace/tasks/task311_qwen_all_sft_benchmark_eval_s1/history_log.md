@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -206,6 +206,22 @@
   10.
 - Diff scope is docs/status only under task311 plus worker_3 status; no product
   code changed.
+- No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
+  optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
+  promotion, direct main push, merge, or self-merge occurred.
+
+## Session 11 - 2026-06-03 UTC - remote head verified for mailbox report
+
+- Received lead follow-up that #371 must be pushed and an official mailbox
+  report sent before any benchmark/export/endpoint work.
+- Verified `git ls-remote` and GitHub PR #371 both show remote head
+  `34ffa587b47b43fed103e41bd3f1cb8661b02288` before this bookkeeping update.
+- GitHub reported #371 `OPEN`, base `main`, non-draft, `CLEAN`, and
+  `MERGEABLE` at that head.
+- Added Session 11 status/history/task-knowledge bookkeeping so the pushed
+  branch explicitly records the official route-gate reporting state.
+- Disposition remains
+  `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.
 - No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
   optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
   promotion, direct main push, merge, or self-merge occurred.
