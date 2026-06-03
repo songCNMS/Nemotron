@@ -33,6 +33,8 @@ confirms the current exact #373 head for review, or confirms that the
 
 | Check | Result |
 |---|---|
+| Worker branch | `intern_nemotron_worker_4/task313_qwen_all_sft_task310_checkpoint_salvage_review_s1` |
+| Worker PR | #376 |
 | Target PR | #373 |
 | Assigned exact head | `7561a578f5f624cf1d3b85bef0dd8abb5c787533` |
 | Current PR head observed | `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` |
@@ -104,6 +106,8 @@ or use task255. I did not approve task311 release.
 ## Residual risks
 
 - Current #373 head differs from the assigned exact review head.
+- PR #376 is a docs/status-only blocker snapshot, not a task310 salvage
+  approval.
 - No full checksum validation has been performed by task313 yet.
 - No checkpoint-load or non-AIME canary should be released from this report.
 - The task310 evidence still carries the known `train_rc.txt=1`, validation

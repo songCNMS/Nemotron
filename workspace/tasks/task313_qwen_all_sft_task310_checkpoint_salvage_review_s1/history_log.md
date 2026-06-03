@@ -33,6 +33,7 @@
 - Recorded `REQUEST_CHANGES_HEAD_MISMATCH`; task311 checkpoint-load plus
   non-AIME canary remains HOLD pending lead confirmation of the exact review
   head.
+- Opened worker_4 PR #376 for the task313 docs/status-only blocker snapshot.
 - Boundary confirmation: no training, eval, export, endpoint, promotion,
   merge, main push, worker branch rewrite, shared deletion, AIME2025 train data,
   or task255 reuse.
