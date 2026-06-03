@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #381/#382/#383/#384 approved docs/no-action; task322-task326 dispatched to workers; awaiting branches/reports |
+| PR | #380/#383/#384 handoff drift re-gated; task322-task326 dispatched; awaiting worker branches/reports |
 | Session | 78 |

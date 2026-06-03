@@ -11589,3 +11589,26 @@
   worker_1/task324, worker_3/task325, and worker_4/task326. Next lead action is
   to wait for worker branch/mailbox/PR or blocker reports, then gate exact
   heads and artifacts.
+
+### Handoff drift after next-phase dispatch
+
+- Fetched origin after task322-task326 dispatch. #380 advanced to
+  `8760ddb515324db6625d7f3a36069d6e0c064029`; lead verified drift from
+  `6d43e0e7` is worker_1 status plus task314 task324 handoff/metadata only,
+  with task314 report changing only METADATA session. Posted #380 issuecomment
+  `4616482582`, carrying forward `APPROVE_FORENSICS_DOCS /
+  NO_ACTION_RELEASE`.
+- #383 advanced to `802a796d77144a7fdfc56477fdd001b574e90568`; lead verified
+  drift from `99713578` is worker_2 status plus task319 task322 handoff only,
+  with the feasibility report unchanged. Posted #383 issuecomment
+  `4616482499`, carrying forward `APPROVE_FEASIBILITY_DOCS /
+  NO_PACK_OR_TRAIN_RELEASE`.
+- #384 advanced to `1c3048b96301b87e91fbcfa03649220c7a773e61`; lead verified
+  drift from `9689b22b` is worker_5 status plus task318 task323 handoff only,
+  with the preflight report unchanged. Posted #384 issuecomment `4616482497`,
+  carrying forward `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED /
+  HOLD_TRAINING`.
+- Immediate remote branch search found no task322-task326 branches yet.
+  Mailbox unread count was 0. Current gate remains no final packing, training,
+  eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, main push, merge, or self-merge.

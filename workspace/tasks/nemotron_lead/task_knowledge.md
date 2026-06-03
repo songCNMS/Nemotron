@@ -2584,3 +2584,8 @@
 675. Session 78: peer_send delivered task322-task326 assignments to
    worker_2/worker_5/worker_1/worker_3/worker_4; worker branches/reports are
    pending.
+676. Session 78: #380 current `8760ddb5`, #383 current `802a796d`, and #384
+   current `1c3048b9` are accepted as handoff/status metadata drift after
+   task324/task322/task323 assignment; substantive reports are unchanged.
+677. Session 78: no task322-task326 remote branches were visible immediately
+   after next-phase dispatch and handoff drift refresh.
