@@ -2381,3 +2381,18 @@
    the accepted endpoint protocol or direct no-export base rerun from task298
    imported Megatron checkpoint before FT judgment. Lead asked worker_3 to
    commit/push/mailbox before any further release.
+622. Session 78: accepted task311 route-gate report as route analysis at #371
+   head `34ffa587`; route-gate sha
+   `4d3e7da79da922167a7d8f5bacc990ed9201ee8cd2953fcf57c07b9cdae52412`,
+   corrected-Qwen report sha `37b6768e`, and M1 availability report sha
+   `88596030`. No benchmark/export/endpoint/training occurred in the report.
+623. Session 78: worker_3 bookkeeping drift `34ffa587..1ce85c63` only updates
+   status/README/history/task_knowledge; route report sha is unchanged and
+   #371 is OPEN/CLEAN at `1ce85c63`. Mailbox
+   `7f3481c90ee447cc80f3fe3a9516f995` was processed and marked read.
+624. Session 78: released next bounded task311 phase at current #371 head
+   `1ce85c63`: eval-only HF export/endpoint preflight and corrected
+   benchmark execution only if the route proves valid. Same-harness base
+   evidence is mandatory before each FT judgment; training, AIME2025 train
+   rows, task255, shared deletion, promotion, non-eval endpoint/export,
+   self-merge, and main push remain HOLD.

@@ -39,3 +39,15 @@
     task310, while direct no-export judgment needs task298 base Megatron reruns
     before FT comparison. The draft is not lead-accepted until #371 is
     refreshed and a mailbox report is processed.
+12. Lead accepted the route-gate report at #371 head `34ffa587` as route
+    analysis only, with route report sha
+    `4d3e7da79da922167a7d8f5bacc990ed9201ee8cd2953fcf57c07b9cdae52412`.
+13. Worker_3 official mailbox `7f3481c90ee447cc80f3fe3a9516f995` confirmed
+    no benchmark/export/endpoint/training at the accepted route-gate head and
+    was marked read by lead.
+14. Current #371 head `1ce85c63` is bookkeeping-only drift from `34ffa587`;
+    route report sha is unchanged and #371 is OPEN/CLEAN.
+15. Lead released only eval-only export/endpoint preflight plus same-harness
+    benchmark execution at current head `1ce85c63`. Same-harness base evidence
+    is mandatory before judging FT; fail closed on export/endpoint/input/
+    launcher/base blockers.

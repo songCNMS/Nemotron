@@ -95,3 +95,26 @@
   or sent a mailbox report. Lead sent a delivered follow-up requiring
   commit/push/mailbox formalization and did not release export/endpoint or
   benchmark execution.
+
+## Session 78 - 2026-06-03 UTC - Route gate accepted; endpoint phase released
+
+- Worker_3 pushed the route-gate report at #371 head
+  `34ffa587b47b43fed103e41bd3f1cb8661b02288`; lead verified #371
+  OPEN/CLEAN/non-draft and diff-check clean.
+- Accepted route-gate disposition as route analysis only:
+  `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`. This is not
+  benchmark completion and not merge/promotion approval.
+- Official mailbox `7f3481c90ee447cc80f3fe3a9516f995` was processed and
+  marked read. It confirmed no benchmark eval, eval-only export, endpoint,
+  AIME/task243 eval, training/optimizer, AIME2025 train rows, task255 reuse,
+  shared deletion, promotion, main push, merge, or self-merge at the accepted
+  route-gate head.
+- Worker_3 then pushed bookkeeping-only head
+  `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`; lead verified
+  `34ffa587..1ce85c63` only updates status/README/history/task_knowledge and
+  leaves the route-gate report sha unchanged.
+- Release carried forward to current #371 head `1ce85c63`: eval-only HF export
+  of task310 checkpoint, eval-only task-owned endpoint as needed, and
+  corrected benchmark/M1 execution only with same-harness base evidence before
+  FT judgment. Fail closed on export, endpoint, input, launcher, or base
+  evidence blockers.

@@ -11113,3 +11113,49 @@
   worker status, commit/push #371, and send a mailbox report with disposition,
   exact head, diff scope, commands/probes, artifact paths/checksums, and
   boundaries. Lead did not release eval-only export/endpoint or benchmark rows.
+
+### Task311 route gate accepted and endpoint benchmark phase released
+
+- Worker_3 pushed #371 route-gate report at
+  `34ffa587b47b43fed103e41bd3f1cb8661b02288`; lead verified PR #371 was
+  OPEN/CLEAN/non-draft and `git diff --check
+  origin/main...origin/intern_nemotron_worker_3/task311_qwen_all_sft_benchmark_eval_s1`
+  passed.
+- PR diff scope at the route-gate head is task311 docs/status plus the
+  task-owned no-export canary wrapper and new
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`;
+  no product-code edit, benchmark run, eval-only export, endpoint, training,
+  optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
+  promotion, direct main push, merge, or self-merge was present.
+- Accepted the route-gate report as route analysis only, not benchmark
+  completion or merge approval. Key pushed report shas: route-gate
+  `4d3e7da79da922167a7d8f5bacc990ed9201ee8cd2953fcf57c07b9cdae52412`,
+  corrected-Qwen report
+  `37b6768e55afd9697034861e40284e1e491d1f28b619e160c4e639ed091c2d17`,
+  and M1 availability report
+  `885960304d5eb9d87e256e838210a12d4298530fb9922d02e1d602925c4cc014`.
+- Posted #371 release comment
+  `https://github.com/songCNMS/Nemotron/pull/371#issuecomment-4615361221`
+  and sent worker_3 a delivered peer release for eval-only HF export/endpoint
+  preflight plus same-harness benchmark execution if the route proves valid.
+- Worker_3 then pushed bookkeeping-only head
+  `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`; lead verified
+  `34ffa587..1ce85c63` changes only worker_3 status, task311 README,
+  history, and task_knowledge, with the route-gate report sha unchanged.
+  GitHub reports #371 OPEN/CLEAN/non-draft at `1ce85c63`.
+- Processed and marked read worker_3 official mailbox
+  `7f3481c90ee447cc80f3fe3a9516f995`, then posted #371 refresh comment
+  `https://github.com/songCNMS/Nemotron/pull/371#issuecomment-4615376177`
+  and sent a delivered peer refresh carrying the release forward to current
+  head `1ce85c63`.
+- Released next bounded phase only: eval-only HF export of task310 checkpoint
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+  using Qwen3-30B-A3B-Instruct tokenizer/source metadata, eval-only
+  task-owned SGLang/OpenAI-compatible endpoint as needed, then corrected Qwen
+  MMLU-Pro/AIME2025/HMMT and runnable M1 rows with same-harness base evidence
+  before each FT judgment. Prior base reuse is allowed only for exact
+  model-path, route, evaluator, prompt, sampling, parser/normalizer, and
+  denominator matches; otherwise worker_3 must rerun base under the same
+  endpoint route before judging FT.
+- Still HOLD: training/optimizer, AIME2025 train rows, task255 reuse, shared
+  deletion, promotion, non-eval export/endpoint, self-merge, and main push.
