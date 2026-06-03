@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 
@@ -30,3 +30,7 @@
    `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`; task309/#372 refreshed
    constrained PASS, but task310 still has no accepted checkpoint handoff and
    no task311 canary/benchmark action is authorized.
+10. Lead gate update for Session 5 reiterates the required future order:
+    refresh task311 from current main after accepted task310 checkpoint handoff,
+    run checkpoint-load/non-AIME canary first, then run corrected same-harness
+    benchmark eval only if that canary passes.
