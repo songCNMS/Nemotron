@@ -66,6 +66,11 @@
    counted, decontam-scanned, Qwen-packed, and supervised-token counted. task309
    refreshed to a constrained task299 packed contract at #372 `fe1bb38`, but it
    requires current independent task312 review before task310 can proceed.
+41. Current all-SFT heads after Session 78 bookkeeping drift are #374
+   `a238cacb`, #372 `4e26317a`, #373 `f10804b6`, #371 `e6918669`, and #375
+   `48f92f3`. The first four drifts were reported as metadata/bookkeeping only
+   with substantive dispositions unchanged; #375 is stale and must refresh over
+   these heads before lead approval or self-merge direction.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.

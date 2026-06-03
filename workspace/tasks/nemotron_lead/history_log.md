@@ -10620,3 +10620,28 @@
   - If #372 is later accepted, task310 may only proceed on the constrained
     V11/task299 seed; generic raw stage1 SFT remains NO-GO without a separate
     materialization/decontam/packing proof.
+
+### Post-push head drift reconciliation
+
+- Processed and marked read additional HOLD/bookkeeping mailbox reports:
+  - #374/task308 advanced to
+    `a238cacb1f28fb96df58d3a10641a2b7325f61b7`, reported by worker_1 as
+    metadata-only with unchanged
+    `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+  - #372/task309 advanced to
+    `4e26317adc536afc896377da9225913ca567135b`, reported by worker_2 as
+    hold/status metadata only with unchanged constrained packed-contract report.
+  - #373/task310 advanced to
+    `f10804b6c28b0dd59f54775b49328a637ac780fc`, reported by worker_5 as
+    HOLD bookkeeping only; no training launch or checkpoint.
+  - #371/task311 advanced to
+    `e69186699d929c213d16150e113357ee453d59a3`, reported by worker_3 as
+    HOLD bookkeeping only; no canary or benchmark run.
+- GitHub reports #371, #372, #373, #374, and #375 remain OPEN/base `main`/
+  CLEAN/non-draft. #375 remains at
+  `48f92f3126cd334022249728d64a862e99593f5b` and is stale relative to the
+  current #371/#372/#373/#374 heads.
+- Lead gate is unchanged: all-SFT remains HOLD pending task312 refresh over
+  current heads and lead decision. No self-merge, training, canary, benchmark
+  eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, product-code edit, main push, or merge is authorized.

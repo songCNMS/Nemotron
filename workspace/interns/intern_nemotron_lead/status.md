@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate HOLD: #372 constrained PASS pending task312 refresh; #373/#371 blocked |
+| PR | all-SFT gate HOLD: #372 constrained PASS; waiting task312 refresh over current heads |
 | Session | 78 |
