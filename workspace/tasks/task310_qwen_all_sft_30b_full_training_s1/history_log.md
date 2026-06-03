@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -141,3 +141,39 @@
   export, endpoint, promotion, generic raw-stage data, AIME2025 train rows,
   task255 reuse, shared deletion, product-code edits, direct main push, or
   merge.
+
+## Session 7 - 2026-06-03 UTC - Lead-cleared fail-closed checkpoint salvage
+
+- Received lead decision to proceed with fail-closed checkpoint-salvage
+  handling, not `PASS_TRAINING`, after validation had no log progress past
+  `Evaluating iter 1/10`.
+- Captured final pre-termination snapshot
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/snapshots/final_pre_termination_snapshot_20260603T163524Z.txt`
+  with sha256
+  `700f72dd76ebc1b179da38ed711d7e7651cef862ff2aadaf2d7b722661f20b25`;
+  it showed no `train_rc.txt`/`train_end.txt`, latest checkpoint `35`, final
+  checkpoint present, log unchanged at validation, processes alive, and GPU
+  memory retained.
+- Sent `SIGTERM` to task310 torchrun parent PID `1389032` at
+  `2026-06-03T16:36:35Z`; kill return code was `0`.
+- Torchrun propagated SIGTERM to rank PIDs `1389104` through `1389111`; no
+  SIGKILL was used.
+- Wrapper wrote `train_rc.txt=1` and
+  `train_end.txt=2026-06-03T16:36:36Z`; final post-check showed `0` matching
+  task310 training processes and all eight H200s at `1 MiB` / `0%`.
+- Preserved checkpoint candidate
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+  (`399G`, `28` files) and computed full payload checksum manifest
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/manifests/iter_0000035.sha256`
+  with `28` entries and manifest sha256
+  `8cb4e7856f379bc7f1d63d407582bd63981b61c9f346455aa40fb389ef73cbe8`.
+- Synced final logs, snapshots, marker files, checkpoint inventory, and
+  checksum manifests to the local output root; final copied evidence manifest
+  sha256 is
+  `ab102b7647ab30498ea7f482dd7a7582d6139f1c8b8ee0709cc2ded12de1f189`.
+- Updated task310 report, README, task knowledge, and worker status with
+  disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+- Did not run task311 canary, benchmark eval, AIME/task243 eval, export,
+  endpoint, promotion, generic raw-stage data, AIME2025 train rows, task255
+  reuse, shared deletion, product-code edits, direct main push, or merge.

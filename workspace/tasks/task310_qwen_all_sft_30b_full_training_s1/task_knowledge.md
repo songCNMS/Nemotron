@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -79,3 +79,21 @@
     at `Evaluating on 80 samples` / `Evaluating iter 1/10`, no `train_rc.txt`
     or `train_end.txt` existed as of `2026-06-03T16:26:54Z`, and processes
     remained alive. Lead decision is needed before termination/salvage handling.
+21. In Session 7, lead cleared fail-closed checkpoint-salvage handling, not
+    `PASS_TRAINING`. SIGTERM was sent only to task310 torchrun PID `1389032`
+    at `2026-06-03T16:36:35Z`; torchrun propagated SIGTERM to rank PIDs
+    `1389104` through `1389111`, no SIGKILL was used, and the wrapper wrote
+    `train_rc.txt=1` plus `train_end.txt=2026-06-03T16:36:36Z`.
+22. After Session 7 termination, a fresh process/GPU check showed `0` matching
+    task310 training processes and all eight H200s at `1 MiB` / `0%`.
+23. The checkpoint candidate
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+    is preserved as `399G`, `28` files; inventory sha256 is
+    `b30d83f641118da8d7a24438e6c379ba9a5e8e03793ef5ff26514d751d9fa676`.
+24. Full checkpoint payload checksum manifest
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/manifests/iter_0000035.sha256`
+    has `28` entries and manifest sha256
+    `8cb4e7856f379bc7f1d63d407582bd63981b61c9f346455aa40fb389ef73cbe8`.
+25. Task311 canary, benchmark eval, AIME/task243 eval, export, endpoint, and
+    promotion remain HOLD until lead reviews the task310 salvage report and
+    explicitly releases a checkpoint-load/canary path.

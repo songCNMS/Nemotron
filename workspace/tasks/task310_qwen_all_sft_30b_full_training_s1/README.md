@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Qwen all-SFT 30B full training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
 
 ## Background
 
@@ -87,8 +87,8 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Current Worker Disposition
 
-Session 6 disposition:
-`TRAINING_LOOP_COMPLETE__VALIDATION_NO_LOG_PROGRESS_PENDING_LEAD_DECISION__CHECKPOINT_CANDIDATE`.
+Session 7 disposition:
+`TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
 
 After #374/task308, #372/task309, and #375/task312 merged, task310 was refreshed
 from current main and launched using only the constrained task299 packed root:
@@ -100,10 +100,16 @@ The training loop reached `35/35`, saved checkpoint candidate
 `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
 (`399G`, `28` files), and logged skipped/NaN iterations `0` through iteration
 35. It then entered built-in validation and had no log progress past
-`Evaluating on 80 samples` / `Evaluating iter 1/10`; no `train_rc.txt` or
-`train_end.txt` existed in the final Session 6 snapshot, and processes remained
-alive. This is not a clean training PASS and needs lead decision for continued
-wait versus termination/salvage handling.
+`Evaluating on 80 samples` / `Evaluating iter 1/10`.
+
+After lead salvage clearance, I sent `SIGTERM` to torchrun PID `1389032`.
+Torchrun propagated SIGTERM to rank PIDs `1389104` through `1389111`; the
+wrapper wrote `train_rc.txt=1` and
+`train_end.txt=2026-06-03T16:36:36Z`. A fresh post-check showed zero matching
+task310 training processes and all eight H200s released to `1 MiB` / `0%`.
+The checkpoint candidate is fully inventoried and checksummed, but this is not
+a clean training PASS and does not release task311 canary/eval/export/endpoint
+or promotion.
 
 Report:
 `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/all_sft_30b_full_training_report.md`.

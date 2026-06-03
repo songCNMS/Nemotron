@@ -1,28 +1,29 @@
 # task310 Qwen all-SFT 30B full training report
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=7 -->
 
-Generated: 2026-06-03T16:28:00Z
+Generated: 2026-06-03T16:45:00Z
 
 ## Disposition
 
 Recommendation:
-`TRAINING_LOOP_COMPLETE__VALIDATION_NO_LOG_PROGRESS_PENDING_LEAD_DECISION__CHECKPOINT_CANDIDATE`.
+`TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
 
-This is not a clean `PASS_TRAINING`. After lead clearance and after the
-task308/task309/task312 prerequisite docs merged, I refreshed task310 from
-current `origin/main` and launched the bounded Qwen3-30B-A3B all-SFT training
-attempt using only the constrained V11/task299 packed seed. The training loop
-reached `35/35` iterations, logged finite loss at every iteration, recorded
-skipped iterations `0` and NaN iterations `0`, and saved `iter_0000035`.
+This is not a clean `PASS_TRAINING` and does not clear task311 canary,
+benchmark eval, AIME/task243 eval, export, endpoint, or promotion. After lead
+clearance, I refreshed task310 from current main and launched the bounded
+Qwen3-30B-A3B all-SFT training attempt using only the constrained V11/task299
+packed seed. The training loop reached `35/35` iterations, logged finite loss
+at every iteration, recorded skipped iterations `0` and NaN iterations `0`,
+and saved `iter_0000035`.
 
 The harness then entered built-in validation at `Evaluating on 80 samples` /
-`Evaluating iter 1/10`. As of the final read-only snapshot at
-`2026-06-03T16:26:54Z`, there was no `train_rc.txt`, no `train_end.txt`, no log
-progress since `2026-06-03T16:10:22Z`, and the task310 torchrun/rank process
-tree remained alive with GPU memory retained. I did not kill, restart, export,
-evaluate, or promote anything. Lead decision is needed for continued wait
-versus checkpoint-salvage termination.
+`Evaluating iter 1/10` and made no further log progress. After lead salvage
+clearance, I took a final read-only snapshot and sent `SIGTERM` only to the
+task310 torchrun parent PID `1389032`. Torchrun propagated `SIGTERM` to rank
+PIDs `1389104` through `1389111`; the wrapper wrote `train_rc.txt=1` and
+`train_end.txt=2026-06-03T16:36:36Z`. A fresh post-check showed no matching
+task310 training processes and all eight H200s released to `1 MiB` / `0%`.
 
 ## Checked revisions
 
@@ -35,10 +36,8 @@ versus checkpoint-salvage termination.
   `004870e7d790778b5cdae5cc574257fdc19ec755`.
 - Task310 worker branch:
   `intern_nemotron_worker_5/task310_qwen_all_sft_30b_full_training_s1`.
-- Local refreshed branch head before this report commit:
-  `11651f8ada734e813198bc9c0ccdaa473f26939f`.
-- Task310 PR #373 remote head before this refresh:
-  `a85b192e7632bd2da0e117fdaf994d8c70e16549`.
+- Previous PR #373 head before Session 7:
+  `982db4b355c183bc53a4b97ab71e8d9aeeacc2e3`.
 
 ## Artifact roots
 
@@ -52,7 +51,6 @@ versus checkpoint-salvage termination.
 | Packed source root | `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b` |
 | Packed dereferenced mirror used for training | `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/input/task299_packed_qwen_30b_deref_mirror` |
 | Training log | `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/logs/train_30b_sft.log` |
-| Local copied log | `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/logs/train_30b_sft.log` |
 | Checkpoints | `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints` |
 | Final checkpoint candidate | `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035` |
 
@@ -138,14 +136,19 @@ All logged iterations had skipped iterations `0` and NaN iterations `0`.
 | 35 | `1.000000E-07` | `8.339980E-01` | `1.434514E+00` | `9.114` | `0` | `0` |
 
 No validation metric is available because validation did not progress past
-`Evaluating iter 1/10` during the watch window.
+`Evaluating iter 1/10` before lead-cleared salvage termination.
 
-## Current blocker evidence
+## Termination evidence
 
-Final read-only snapshot:
-`/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/snapshots/validation_no_log_progress_snapshot_20260603T162618Z.txt`.
+Lead cleared fail-closed checkpoint-salvage handling after validation had no
+log progress. Final pre-termination snapshot:
 
-Snapshot findings:
+- local:
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/snapshots/final_pre_termination_snapshot_20260603T163524Z.txt`
+- sha256:
+  `700f72dd76ebc1b179da38ed711d7e7651cef862ff2aadaf2d7b722661f20b25`
+
+Pre-termination state:
 
 - `train_rc.txt`: missing.
 - `train_end.txt`: missing.
@@ -153,13 +156,50 @@ Snapshot findings:
 - `iter_0000035`: present, `399G`, `28` files.
 - Training log mtime/size:
   `2026-06-04 00:10:22.278145960 +0800`, `272450` bytes.
-- Log tail remains at `Evaluating on 80 samples` / `Evaluating iter 1/10`.
-- Process tree remains alive under wrapper PID `1389026`, torchrun PID
-  `1389032`, and rank PIDs `1389104` through `1389111`.
+- Log tail remained at `Evaluating on 80 samples` / `Evaluating iter 1/10`.
+- Process tree alive under wrapper PID `1389026`, torchrun PID `1389032`, and
+  rank PIDs `1389104` through `1389111`.
 - GPU snapshot retained approximately `81-86 GiB` per H200 with `0%` GPU util.
-- Traceback/OOM/rank-exit scan found no crash evidence; the only matched lines
-  were config fields `error_injection_rate` and `error_injection_type`.
-- No termination signal was sent.
+
+Signal command:
+
+```bash
+ssh NemTron "REMOTE_RUN=/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z ..."
+kill -TERM 1389032
+```
+
+Signal details:
+
+- timestamp: `2026-06-03T16:36:35Z`.
+- signal: `SIGTERM`.
+- target PID: `1389032`.
+- target role: torchrun parent for the task310 run.
+- wrapper/root PID: `1389026`.
+- kill return code: `0`.
+- torchrun propagated SIGTERM to rank PIDs `1389104` through `1389111`.
+- no SIGKILL was used.
+- no checkpoint, log, data, shared, or `/mnt/cephfs/data/processing/lei.song`
+  file was deleted or overwritten.
+
+Post-termination state:
+
+- `train_rc.txt`: `1`.
+- `train_end.txt`: `2026-06-03T16:36:36Z`.
+- `latest_checkpointed_iteration.txt`: `35`.
+- final local post snapshot:
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/snapshots/final_post_termination_snapshot_20260603T163840Z.txt`.
+- post snapshot sha256:
+  `dfdf8e0feb97cb0ff23e6ec868acb049e6eea8e91df5e7a7e7c98a117d1b622d`.
+- fresh process check after snapshot: `0` matching task310 training processes.
+- GPU release proof after snapshot: `1 MiB` and `0%` util on all eight H200s.
+- termination log:
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/termination_signal_log.txt`.
+- termination log sha256:
+  `81428d3b12cab8a465344d416e3e818af260deafee4c87cff6bcc6279c761643`.
+
+The final training log includes the expected torchrun SIGTERM traceback after
+lead-cleared termination. That traceback is the result of the explicit
+salvage signal, not evidence of a pre-signal training crash.
 
 ## Checkpoint inventory and checksums
 
@@ -175,44 +215,55 @@ Inventory:
 - Inventory manifest sha256:
   `b30d83f641118da8d7a24438e6c379ba9a5e8e03793ef5ff26514d751d9fa676`.
 
+Full checkpoint payload checksum manifest:
+
+- remote:
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/manifests/iter_0000035.sha256`.
+- local:
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/manifests/iter_0000035.sha256`.
+- entries: `28`.
+- checksum manifest sha256:
+  `8cb4e7856f379bc7f1d63d407582bd63981b61c9f346455aa40fb389ef73cbe8`.
+
 Selected copied evidence hashes:
 
 | Artifact | sha256 |
 |---|---|
-| `logs/train_30b_sft.log` | `506d4d8f24ee9cac592929b89a43aac251da4d959e69799081792a26884b0786` |
+| `logs/train_30b_sft.log` | `e74eeec901731a7417e8151f04d1c9f67099906772eae611f2a027b7f48f5858` |
+| `markers/train_rc.txt` | `4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865` |
+| `markers/train_end.txt` | `9dee99d2689ad79d441482a577c2ad69ad1deac65e4c90823de9b3382c460662` |
+| `markers/latest_checkpointed_iteration.txt` | `9f14025af0065b30e47e23ebb3b491d39ae8ed17d33739e5ff3827ffb3634953` |
 | `manifests/preflight_summary.json` | `cff95dc1c07325b9192677670d68fe3b64a54759919879c5ce5db0b82d1b10b3` |
 | `manifests/launch_command.txt` | `c50bdeca383359aa6656884df707089321813efbf36bd01933e2b58389910777` |
-| `launch_train.sh` | `714a0452e5cf938bf91376db5421b2164d386c48547f2bc295bef01122e576b6` |
-| `snapshots/validation_no_log_progress_snapshot_20260603T162618Z.txt` | `cef2c3bd063217eda593f998f92b71378c297a2e96c81e1bed06898c4100a20e` |
-| `manifests/local_copied_evidence.sha256` | `1117b04041f22b72f659be6479a9a23dc0f17472168fa04ac2733a6f80c2d2db` |
-
-The 399G checkpoint payload hash manifest is intentionally not computed yet
-because validation processes are still alive and no lead decision has cleared
-termination/salvage handling. The lightweight inventory is complete.
+| `termination_signal_log.txt` | `81428d3b12cab8a465344d416e3e818af260deafee4c87cff6bcc6279c761643` |
+| `manifests/final_local_copied_evidence.sha256` | `ab102b7647ab30498ea7f482dd7a7582d6139f1c8b8ee0709cc2ded12de1f189` |
+| `manifests/final_local_artifact_inventory.tsv` | `aeca23bafc6cb70590d60437dafe633dbafacee482b27dbd1fc831b930581242` |
 
 ## Boundary confirmation
 
-Confirmed for Session 6:
+Confirmed for Session 7:
 
+- no task311 canary or benchmark eval;
+- no AIME/task243 eval;
 - no generic `stage1_sft/data_blend_raw` inclusion;
 - no AIME2025 prompts or labels as train rows;
 - no task255 reuse;
 - no deletion under `/mnt/cephfs/data/processing/lei.song`;
+- no checkpoint/log/data deletion;
 - no silent model downgrade;
 - no export;
 - no endpoint;
 - no promotion;
-- no benchmark eval, canary, or task311 handoff run;
 - no product-code edit;
 - no direct `main` push;
 - no merge.
 
-## Residual risks and requested lead action
+## Residual risks
 
-1. The training loop reached 35/35 and produced a checkpoint candidate, but the
-   harness has not exited cleanly and has no `train_rc.txt` or `train_end.txt`.
-2. Built-in validation has no log progress past `Evaluating iter 1/10`, so no
-   validation metric is available.
-3. The final checkpoint is only a candidate until lead decides whether to keep
-   waiting or explicitly authorize termination/salvage inventory.
+1. The training loop reached 35/35 and produced a fully inventoried/checksummed
+   checkpoint candidate, but the harness did not exit cleanly; it exited only
+   after lead-cleared SIGTERM and recorded `train_rc=1`.
+2. Built-in validation did not complete, so no validation metric is available.
+3. Checkpoint `iter_0000035` is a salvage candidate only until lead reviews
+   this report and explicitly releases any checkpoint-load/canary path.
 4. No eval/export/endpoint/promotion path is cleared by this report.
