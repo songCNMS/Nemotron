@@ -1,6 +1,6 @@
 # task325_qwen_all_sft_m1_launcher_remediation_route_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,7 @@
    route requiring lead-gated task-owned evaluator runtime plus working
    Docker/Slurm/alternate container backend or revalidated vm4vpn-style route,
    plus row-specific credentials/context proof.
+9. Session 15 metadata correction did not change the report findings or
+   artifacts. PR #387 remains the task325 docs/report vehicle; worker status
+   must use allowed status values only, so the open-PR state is recorded as
+   `Working` rather than `ReadyForPR`.

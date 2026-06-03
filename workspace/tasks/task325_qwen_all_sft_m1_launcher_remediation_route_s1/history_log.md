@@ -1,6 +1,6 @@
 # task325_qwen_all_sft_m1_launcher_remediation_route_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -31,6 +31,18 @@
 - Disposition: `BLOCK_RUNTIME_CONFIRMED`; 14 exact launcher mappings exist, 5
   exact tasks remain unavailable, and 0/19 rows are runnable now under current
   worker/task315 evidence.
+- No benchmark rows, model eval, training, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, system/shared env
+  mutation, main push, merge, or self-merge was performed.
+
+## Session 15 - Hook metadata correction
+
+- Corrected worker status metadata to allowed `STATUS=Working` while PR #387 is
+  open and awaiting lead/coordinator review.
+- Updated status/session bookkeeping to Session 15 for
+  `task325_qwen_all_sft_m1_launcher_remediation_route_s1`.
+- Preserved task325 report content and `BLOCK_RUNTIME_CONFIRMED` disposition;
+  this is a metadata-only follow-up after PR creation and mailbox closeout.
 - No benchmark rows, model eval, training, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, system/shared env
   mutation, main push, merge, or self-merge was performed.
