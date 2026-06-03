@@ -26,6 +26,8 @@
   `/work-agents/intern_nemotron_worker_3/outputs/task325_qwen_all_sft_m1_launcher_remediation_route_s1/run_20260603T203449Z`.
 - Added
   `workspace/tasks/task325_qwen_all_sft_m1_launcher_remediation_route_s1/m1_launcher_remediation_route_report.md`.
+- Opened PR #387:
+  `https://github.com/songCNMS/Nemotron/pull/387`.
 - Disposition: `BLOCK_RUNTIME_CONFIRMED`; 14 exact launcher mappings exist, 5
   exact tasks remain unavailable, and 0/19 rows are runnable now under current
   worker/task315 evidence.
