@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
 
 ## Knowledge Entries
 
@@ -60,6 +60,12 @@
    branch-only docs/status evidence, and task310 has no visible worker_5 branch.
    Keep training HOLD until task308/task309 reports and task310 runtime/data
    gates are processed.
+40. In Session 78, task308/#374 reached `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`
+   with checksum-backed V11/task299 sources usable for a constrained path, while
+   generic `stage1_sft/data_blend_raw` remains excluded until materialized,
+   counted, decontam-scanned, Qwen-packed, and supervised-token counted. task309
+   refreshed to a constrained task299 packed contract at #372 `fe1bb38`, but it
+   requires current independent task312 review before task310 can proceed.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.

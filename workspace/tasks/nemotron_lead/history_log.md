@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
 
 ## Session 0 - Created with team lead
 
@@ -3017,7 +3017,7 @@
 - Global Qwen AIME gate remains `NO-GO/HOLD`; task255 FT remains below base
   and non-promotable; no 30B/8-GPU.
 
-## Session 78 - 2026-06-01 UTC - Coordinator updated on acceptance state
+## Archived 2026-06-01 UTC - Coordinator updated on acceptance state
 
 - Pushed lead branch at `b9bc40c` after recording task260/task261 acceptance.
 - Rechecked lead mailbox before coordinator contact; unread count was `0`.
@@ -6751,7 +6751,7 @@
   30B follow-on work until lead reviews task301 checkpoint artifacts and gives
   the next gate clearance.
 
-## Session 78 - 2026-06-02 UTC - task301 launch-start mailbox
+## Archived 2026-06-02 UTC - task301 launch-start mailbox
 
 - Processed and marked read worker_5 mailbox
   `52490ddfe520455ca406e4c8b0ee1652`: task301 status
@@ -10570,3 +10570,53 @@
 - Current first gate remains HOLD pending task308 official inventory report,
   task309 packed/decontam contract, task310 acceptance/runtime/data gates, and
   downstream task311/task312 evidence.
+
+## Session 78 - 2026-06-03 UTC - all-SFT PR blocker and constrained-pass reconciliation
+
+- Resumed after an interrupted turn and re-fetched current external state.
+  Current `origin/main` remains
+  `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`; product-code baseline remains
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Processed and marked read worker mailbox reports for task308, task309,
+  task310, task311, and task312.
+- Current PR/branch state:
+  - #374/task308 is OPEN/base `main`/CLEAN at
+    `b798fdfcfc3144111dd0a6e0f80505df031bcc5e`. Worker reports drift from
+    earlier heads is status/history metadata only; report/artifact unchanged.
+    Disposition carried:
+    `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+  - #372/task309 is OPEN/base `main`/CLEAN at
+    `fe1bb38c55545b54dc017647ae9f299ee1a5ac02`. Refreshed disposition:
+    `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
+    It uses existing reviewed task299 Qwen3-30B packed root with train `46`
+    shards / `279` rows / `1024646` input tokens / `228927` supervised tokens,
+    valid `1` row, and test `0` rows. Generic `stage1_sft/data_blend_raw`
+    remains excluded pending materialized counts, decontam, Qwen packing, and
+    supervised-token proof.
+  - #373/task310 is OPEN/base `main`/CLEAN at
+    `7000f3714442c39fd78e40249d9d5ed69528d9eb`. Disposition remains
+    `BLOCK_PRETRAINING_GATE/HOLD`; no training launch, GPU allocation,
+    checkpoint, LR/loss/validation, export, endpoint, or promotion occurred.
+  - #371/task311 is OPEN/base `main`/CLEAN at
+    `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`. Disposition remains
+    `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING/HOLD`; no canary, benchmark eval,
+    completions, parser diagnostics, or M1 row enumeration occurred.
+  - #375/task312 is OPEN/base `main`/CLEAN at
+    `48f92f3126cd334022249728d64a862e99593f5b`, but its report reviewed stale
+    upstream heads before #372 refreshed to `fe1bb38`.
+- Static lead checks:
+  - `git diff --check origin/main...origin/pr/<371-375>` passed.
+  - PR diffs are workspace docs/status/report only.
+  - No product/source-code changes, implementation tests, training, packing,
+    eval, export, endpoint, promotion, main push, merge, task255 reuse,
+    AIME2025 train data, or shared deletion were performed by lead.
+- Gate decision:
+  - Keep combined all-SFT gate HOLD/NO-GO.
+  - Do not allow #371/#372/#373/#374/#375 self-merge yet.
+  - Requested worker_4 refresh task312 over exact current heads:
+    #374 `b798fdf`, #372 `fe1bb38`, #373 `7000f37`, and #371 `6981a65`.
+  - Requested worker_2, worker_5, worker_3, and worker_1 hold self-merge and
+    avoid downstream work until refreshed independent review and lead gate.
+  - If #372 is later accepted, task310 may only proceed on the constrained
+    V11/task299 seed; generic raw stage1 SFT remains NO-GO without a separate
+    materialization/decontam/packing proof.

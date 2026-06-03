@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task308/309/311/312 branches visible, task310 missing; waiting worker evidence |
-| Session | 77 |
+| PR | all-SFT gate HOLD: #372 constrained PASS pending task312 refresh; #373/#371 blocked |
+| Session | 78 |
