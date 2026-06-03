@@ -65,3 +65,10 @@
 19. Worker_3 pane reports a successful FT endpoint content probe and ongoing
     benchmark input/runner preparation. No base-vs-FT benchmark judgment has
     been accepted.
+20. Read-only AIME25 FT summary reports 16/30 (`0.5333333333333333`) vs the
+    referenced accepted task300 base 15/30 under aligned endpoint payload,
+    original prompts, max_tokens 8192, temperature 0, top_p 1e-5, parser, and
+    all-request denominator. Treat as unofficial until mailbox/pushed docs.
+21. Worker_3 has started same-route base work for HMMT/MMLU-Pro: base endpoint
+    PID `2791357`, model `qwen3-30b-a3b-instruct-2507-base-task311`, port
+    `13231`, max context `16384`; HMMT base run started but no summary yet.

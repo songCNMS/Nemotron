@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task311 eval-only endpoint ready observed read-only; official benchmark/base-vs-FT report pending |
+| PR | all-SFT gate: task311 AIME FT 16/30 observed read-only; HMMT/MMLU base-vs-FT report pending |
 | Session | 78 |

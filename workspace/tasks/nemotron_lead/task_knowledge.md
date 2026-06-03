@@ -2415,3 +2415,14 @@
    benchmark input preparation is underway; no official benchmark completions,
    parser diagnostics, same-harness base-vs-FT metrics, or unavailable-row
    closeout has been received.
+629. Session 78: read-only AIME25 FT output under task311 run
+   `run_20260603T180911Z/eval/corrected_qwen/ft_aime25_task310_20260603T181900Z`
+   reports 16/30 exact-normalized accuracy `0.5333333333333333`, 30/30
+   successful responses, 19 parsed rows, and 12 length finishes. It references
+   accepted task300 base summary 15/30 with original prompts, max_tokens 8192,
+   temperature 0, top_p 1e-5, parser/denominator aligned. This remains
+   unofficial until worker_3 mailbox/pushed docs.
+630. Session 78: worker_3 started same-route base endpoint PID `2791357` on
+   NemTron port `13231` for Qwen3-30B-A3B-Instruct-2507 and began HMMT base
+   run `base_hmmt_task311_20260603T183100Z`; HMMT/MMLU-Pro base-vs-FT
+   judgments remain pending.

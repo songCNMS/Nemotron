@@ -149,3 +149,28 @@
 - No official mailbox or pushed report yet proves endpoint health, same-harness
   base-vs-FT metrics, benchmark completions, parser diagnostics, or
   unavailable-row closeout.
+
+## Session 78 - 2026-06-03 UTC - AIME FT observed; HMMT base started
+
+- Worker_3 local branch contains untracked task-owned benchmark runner
+  `run_task311_endpoint_benchmark.py`; pane output says it compiles and is
+  being used for retained completions, parser diagnostics, row manifests,
+  endpoint manifests, and checksums.
+- Task-owned inputs were materialized for AIME25, HMMT, and MMLU-Pro under run
+  `20260603T180911Z`, including AIME cache, HMMT JSONL, and 12032-row
+  MMLU-Pro JSONL.
+- Read-only AIME25 FT summary at
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/ft_aime25_task310_20260603T181900Z/summary.json`
+  reports 30 rows, 16 correct, exact-normalized accuracy
+  `0.5333333333333333`, 30 successful responses, 19 parsed rows, 12 length
+  finishes, original prompts, max_tokens 8192, temperature 0, top_p `1e-5`,
+  and all-request denominator.
+- The AIME output retained full completions, parser diagnostics, results, row,
+  command, endpoint, and checksum manifests. It references the accepted task300
+  base summary path with base 15/30. Lead has not accepted this as final gate
+  evidence because no official worker mailbox/pushed benchmark report has
+  arrived.
+- Worker_3 stopped the FT endpoint, started same-route base endpoint PID
+  `2791357`, and began HMMT base evaluation under
+  `base_hmmt_task311_20260603T183100Z`. HMMT and MMLU-Pro base-vs-FT
+  comparisons remain pending.

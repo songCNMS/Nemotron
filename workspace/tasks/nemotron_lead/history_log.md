@@ -11211,3 +11211,42 @@
   `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`. No official endpoint health
   report, same-harness base-vs-FT comparison, benchmark completions, parser
   diagnostics, metrics, or unavailable-row closeout has arrived.
+
+### Task311 AIME FT result observed and same-route base work started
+
+- Read-only poll found worker_3 had added a local untracked task-owned runner
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/run_task311_endpoint_benchmark.py`.
+  Pane output says it `py_compile`d cleanly, materialized task-owned inputs
+  for AIME25, HMMT, and MMLU-Pro, and synced them to NemTron under
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/input`.
+- Observed input files include AIME cache, HMMT JSONL, and MMLU-Pro test JSONL
+  with `12032` rows. Local mirrored files are under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/input`.
+- Read-only AIME25 FT run output:
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/ft_aime25_task310_20260603T181900Z`.
+  Summary reports 30 requested rows, 30 successful responses, 16 correct rows,
+  exact-normalized accuracy `0.5333333333333333`, parsed rows `19`, parsed
+  rate `0.6333333333333333`, finish reasons `stop=18` and `length=12`, and
+  all-request denominator. It retained `full_completions.jsonl`,
+  `parser_diagnostics.jsonl`, `results.jsonl`, row/command/endpoint manifests,
+  and `checksum_manifest.json`.
+- The AIME run used endpoint
+  `http://127.0.0.1:13231/v1/chat/completions`, model
+  `task310-qwen3-30b-a3b-all-sft-iter0000035`, source head `1ce85c63`,
+  prompt variant `original`, `max_tokens=8192`, `temperature=0.0`,
+  `top_p=1e-5`, and comparison base summary
+  `/root/task300_qwen_aime_v11_30b_same_harness_testing_s1/run_20260602T152008Z/eval/qwen30b_base_aime2025_30x1_20260602T152351Z/summary.json`.
+  Worker pane characterizes this as same payload/parser/denominator as task300
+  and above accepted base `15/30`; lead still treats this as unofficial until
+  mailbox/pushed report is received.
+- Worker_3 stopped the FT endpoint, started same-port base endpoint PID
+  `2791357` for `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`,
+  and `/v1/models` reports served model
+  `qwen3-30b-a3b-instruct-2507-base-task311` with max context `16384`.
+  HMMT same-route base run
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/base_hmmt_task311_20260603T183100Z`
+  has started and written command/endpoint/row manifests, but no HMMT summary
+  or FT comparison is available yet.
+- No official worker mailbox, PR refresh, accepted benchmark disposition,
+  MMLU-Pro metrics, HMMT metrics, M1 basket row results, or unavailable-row
+  final matrix has arrived. No promotion/merge/training gate changes.
