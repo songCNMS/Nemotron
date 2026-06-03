@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -54,3 +54,20 @@
   training, silently downgrade the model, use AIME2025 train rows, use task255,
   delete shared files, export, endpoint, promote, edit product code, push main,
   or merge.
+
+## Session 4 - 2026-06-03 UTC - HOLD after constrained task309 refresh
+
+- Lead reported task309 PR #372 refreshed to
+  `fe1bb38c55545b54dc017647ae9f299ee1a5ac02` with constrained V11/task299
+  PASS evidence, but not lead-accepted until task312 refreshes review.
+- Verified #372 is open/base main/CLEAN at
+  `fe1bb38c55545b54dc017647ae9f299ee1a5ac02`; its report disposition is
+  `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
+- Recorded that task310 remains HOLD with no self-merge or training launch
+  until lead explicitly accepts #372 and authorizes the task310 next step.
+- Carried the future scope constraint: if accepted, task310 training scope is
+  constrained V11/task299 seed only; generic `stage1_sft/data_blend_raw`
+  remains NO-GO.
+- Did not launch training, self-merge, silently downgrade, use AIME2025 train
+  rows, use task255, delete shared files, export, endpoint, promote, edit
+  product code, push main, or merge.

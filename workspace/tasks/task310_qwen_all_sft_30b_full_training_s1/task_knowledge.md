@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -36,3 +36,10 @@
    `998ebce439164af2cc0e026575de32cd356acaa0`, but its report still records
    `BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING`; task310 remains HOLD until
    task309 refreshes from #374 and receives accepted `PASS_PACKED_CONTRACT`.
+10. As of Session 4, task309 PR #372 is open/CLEAN at
+    `fe1bb38c55545b54dc017647ae9f299ee1a5ac02` with report disposition
+    `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`,
+    but lead has not accepted it pending task312 refreshed review.
+11. If task309 is accepted, task310 scope is constrained to the reviewed
+    V11/task299 seed; generic `stage1_sft/data_blend_raw` remains NO-GO unless
+    a separate materialized/count/decontam/Qwen-packing proof is accepted.
