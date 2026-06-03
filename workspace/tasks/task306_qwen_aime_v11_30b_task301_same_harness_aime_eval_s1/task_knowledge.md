@@ -408,3 +408,9 @@
    task300 base input artifacts. No task306 FT final artifacts, blocker, PR,
    local/remote rc, mailbox report, or official report exists; gate remains
    HOLD pending final same-harness artifacts.
+111. Session 196: active run remains in progress after about three hundred
+   seventy-eight minutes. Latest visible stdout progress remains `27/30`, with
+   row28/start_index27 active about sixteen minutes. Remote rc is absent,
+   worker-owned eval processes remain active, and no task306 FT final
+   artifacts, blocker, PR, local/remote rc, mailbox report, or official report
+   exists; gate remains HOLD pending final same-harness artifacts.
