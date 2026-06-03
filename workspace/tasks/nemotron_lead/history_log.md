@@ -10966,6 +10966,19 @@
   passes, and no checkpoint-load, canary, benchmark/AIME eval, export,
   endpoint, promotion, merge, task255 reuse, AIME2025 train data, shared
   deletion, or product-code edit was performed.
+- Processed and marked read worker_4 task313 mailbox
+  `dd83fb17adcf4a63be0694b2921b46a1`. Worker_4 opened #376 at head
+  `1a05dda17a6d1fe6b2ebb85ca7662d5d7d1f4fb7` with disposition
+  `REQUEST_CHANGES_HEAD_MISMATCH/HOLD`, because the original task313 docs
+  targeted #373 head `7561a578` while current #373 is `0cbcb3c5`. Worker_4
+  independently confirmed the `7561a578..0cbcb3c5` drift is status/history/
+  task_knowledge bookkeeping only and #376 diff-check is clean, but did not
+  run full checksum validation or approve salvage handoff.
+- Sent worker_4 refreshed task313 instruction after lead docs commit `9526c4a3`:
+  review current #373 exact head `0cbcb3c5`, include the `7561a578..0cbcb3c5`
+  drift range, and complete full read-only artifact/checksum/termination review
+  before recommending task311 checkpoint-load plus non-AIME canary or continued
+  HOLD. Peer send returned `delivered`.
 - Lead gate decision: #373 remains HOLD pending task313 review; task311/#371
   remains HOLD. No checkpoint-load, canary, benchmark eval, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #373 head 0cbcb3c and #371 head c2a8209 are HOLD/bookkeeping; task313 review target refreshed |
+| PR | all-SFT gate: #376 task313 mismatch report received; worker_4 asked to refresh review for #373 head 0cbcb3c |
 | Session | 78 |

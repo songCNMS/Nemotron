@@ -2325,3 +2325,9 @@
    bookkeeping only. #371 remains HOLD pending task313 and explicit lead
    release; no checkpoint-load, canary, benchmark/AIME eval, export, endpoint,
    promotion, or merge was performed.
+611. Session 78: worker_4 opened #376 at `1a05dda` with
+   `REQUEST_CHANGES_HEAD_MISMATCH/HOLD`; worker_4 verified the #373
+   `7561a578..0cbcb3c5` drift is bookkeeping-only but stopped before full
+   checksum review because original task313 target was stale. Lead refreshed
+   task313 docs to #373 head `0cbcb3c5` and sent worker_4 a delivered refresh
+   instruction to complete full read-only review.
