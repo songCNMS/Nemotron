@@ -2367,3 +2367,9 @@
    launcher-available rows, with same-harness base evidence required before
    each FT judgment; no promotion/training/task255/AIME2025 train data/shared
    deletion/self-merge/main push.
+620. Session 78: post-release recheck found mailbox empty and #371 unchanged at
+   `2ffbe8c4` OPEN/CLEAN. Worker_3 has only pane-level benchmark route
+   exploration visible; no official benchmark metrics or blockers are
+   lead-acceptable yet. A delivered worker_3 follow-up restated the required
+   same-harness base-vs-FT evidence, benchmark scope, artifact/checksum/
+   completion/parser diagnostics, and unavailable-row blocker reporting.

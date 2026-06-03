@@ -61,3 +61,18 @@
 - Still HOLD: AIME2025 train data, training/optimizer steps, task255 reuse,
   shared deletion, export/endpoint except eval-only if required and documented,
   promotion, self-merge, and main push.
+
+## Session 78 - 2026-06-03 UTC - Benchmark report pending
+
+- Lead rechecked mailbox and #371 after benchmark release: no unread mailbox
+  report, no PR head drift, and #371 remains OPEN/CLEAN at
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20`.
+- Worker_3 local status remains at the accepted canary-only state. Pane-only
+  notes show benchmark route exploration, but no official same-harness
+  base-vs-FT metrics, pushed benchmark report, or unavailable-row closeout is
+  available for gate review.
+- Lead sent a delivered follow-up requiring either official benchmark evidence
+  or exact blockers for corrected Qwen MMLU-Pro/AIME2025/HMMT and runnable M1
+  basket rows.
+- Task311 remains in progress. Same-harness base evidence is still required
+  before any FT benchmark judgment.

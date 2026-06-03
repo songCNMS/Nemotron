@@ -29,3 +29,8 @@
 9. Same-harness base evidence is mandatory before judging FT for each benchmark;
    prior base can be reused only when model path, route, evaluator, prompt
    protocol, sampling, parser, and denominator match exactly.
+10. Post-release recheck found no official worker_3 benchmark report and no
+    #371 head drift beyond `2ffbe8c4`; pane-only benchmark exploration is not
+    gate evidence. Lead follow-up was delivered requiring official metrics or
+    blockers with commands/env, artifact roots, checksums, completions, parser
+    diagnostics, and same-harness base proof.

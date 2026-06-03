@@ -11062,3 +11062,25 @@
 - Still HOLD: AIME2025 training prompts/labels, training/optimizer steps,
   task255 reuse, shared deletion, export/endpoint except eval-only if required
   and documented, promotion, self-merge, and main push.
+
+### Task311 benchmark phase follow-up while awaiting report
+
+- Rechecked lead mailbox after the benchmark release; unread mailbox count was
+  `0`.
+- Fetched origin and verified #371 remains OPEN/CLEAN/non-draft at exact head
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20`, with no new worker_3 PR head
+  and no benchmark report comment after lead release issuecomment `4615233015`.
+- Read-only worker_3 checks show local branch still clean at `2ffbe8c4` and
+  status still records the accepted non-AIME canary only. Pane activity contains
+  exploratory benchmark-route notes, including direct no-export AIME/HMMT/MMLU-
+  Pro feasibility checks, but no official mailbox report, pushed benchmark
+  artifacts, or lead-acceptable benchmark metrics yet.
+- Sent worker_3 a delivered follow-up requiring the released benchmark-eval
+  report or exact blockers: same-harness base evidence before each FT judgment,
+  corrected Qwen MMLU-Pro/AIME2025/HMMT, runnable M1 rows or unavailable-row
+  blockers, commands/env, artifact roots, checksums, completions, parser
+  diagnostics, metrics, and residuals.
+- Gate state unchanged: task311 benchmark evaluation remains in progress;
+  promotion, training/optimizer steps, task255 reuse, AIME2025 train data,
+  shared deletion, non-eval export/endpoint, self-merge, and main push remain
+  HOLD.
