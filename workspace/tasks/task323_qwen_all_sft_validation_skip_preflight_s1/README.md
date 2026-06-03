@@ -78,6 +78,7 @@ proofs and an explicit same-harness eval handoff.
 
 - Branch:
   `intern_nemotron_worker_5/task323_qwen_all_sft_validation_skip_preflight_s1`.
+- PR: #385.
 - Report:
   `workspace/tasks/task323_qwen_all_sft_validation_skip_preflight_s1/validation_skip_preflight_report.md`.
 - Output root:

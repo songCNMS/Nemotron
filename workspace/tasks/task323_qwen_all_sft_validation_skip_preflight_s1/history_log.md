@@ -26,6 +26,7 @@
   `228,927` supervised tokens.
 - Produced `validation_skip_preflight_report.md` with decision
   `PASS_ROUTE_A_PREFLIGHT`.
+- Opened PR #385 against `main`.
 - No training, optimizer steps, benchmark eval, export, endpoint, promotion,
   final packing, product-code edit, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or self-merge performed.
