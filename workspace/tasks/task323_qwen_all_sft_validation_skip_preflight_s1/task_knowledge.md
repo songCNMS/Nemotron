@@ -1,6 +1,6 @@
 # task323_qwen_all_sft_validation_skip_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,5 @@
    source-vs-mirror hash parity `46/46`, and `do_validation=false`.
 7. Same-harness eval handoff remains mandatory after any later lead-gated
    training/checkpoint review; task323 does not authorize eval or training.
+8. Hook validation expects task323 bookkeeping at Session 4; status, history,
+   and task knowledge metadata should use Session 4 while #385 remains open.

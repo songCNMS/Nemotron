@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task323_qwen_all_sft_validation_skip_preflight_s1 |
 | PR | #385 |
-| Session | 1 |
-| Last Update | Accepted task323 and produced no-optimizer Route A validation-skip preflight. Output root `run_20260603T203404Z` has a dereferenced task-owned train-only root with `46` train parquets, `0` valid/test parquets, `0` symlinks, `do_validation=false`, and same-harness eval handoff required. No training, optimizer steps, benchmark eval, export, endpoint, promotion, final packing, product-code edit, task255 reuse, AIME2025 train data, shared deletion, main push, merge, or self-merge performed. |
+| Session | 4 |
+| Last Update | Corrected task323 bookkeeping to Session 4 after hook validation. PR #385 remains open with the same Route A validation-skip preflight report and artifacts; only status/history/task_knowledge metadata changed. No training, optimizer steps, benchmark eval, export, endpoint, promotion, final packing, product-code edit, task255 reuse, AIME2025 train data, shared deletion, main push, merge, or self-merge performed. |
