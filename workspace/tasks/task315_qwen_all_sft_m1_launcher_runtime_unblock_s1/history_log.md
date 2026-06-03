@@ -43,5 +43,7 @@
   current task315 evidence.
 - Added
   `workspace/tasks/task315_qwen_all_sft_m1_launcher_runtime_unblock_s1/m1_launcher_runtime_unblock_report.md`.
+- Opened PR #379:
+  `https://github.com/songCNMS/Nemotron/pull/379`.
 - Did not run benchmark rows, training, eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, main push, or merge.

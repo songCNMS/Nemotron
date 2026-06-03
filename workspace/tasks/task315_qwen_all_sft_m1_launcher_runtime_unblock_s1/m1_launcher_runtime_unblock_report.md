@@ -31,7 +31,8 @@ credentials. No benchmark row should run from this report alone.
 
 - Worker branch:
   `intern_nemotron_worker_2/task315_qwen_all_sft_m1_launcher_runtime_unblock_s1`
-- PR: to be opened from this branch.
+- PR: #379
+  `https://github.com/songCNMS/Nemotron/pull/379`
 - Branch base:
   `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`
 - Acceptance head:
