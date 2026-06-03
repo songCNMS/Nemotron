@@ -2406,3 +2406,12 @@
    export launch command and no official endpoint health proof, benchmark
    metrics, full completions, parser diagnostics, same-harness base-vs-FT
    comparison, or unavailable-row closeout.
+627. Session 78: read-only endpoint observation shows task311 FT SGLang
+   endpoint PID `2768408` on NemTron port `13231`, served model
+   `task310-qwen3-30b-a3b-all-sft-iter0000035`, max context `16384`, using
+   exported HF path under run `20260603T180911Z`. This remains unofficial until
+   worker_3 reports endpoint health artifacts/checksums.
+628. Session 78: worker_3 pane reports endpoint content probe succeeded and
+   benchmark input preparation is underway; no official benchmark completions,
+   parser diagnostics, same-harness base-vs-FT metrics, or unavailable-row
+   closeout has been received.

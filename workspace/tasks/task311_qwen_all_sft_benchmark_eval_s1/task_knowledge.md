@@ -58,3 +58,10 @@
 17. No endpoint health proof, benchmark completions, parser diagnostics,
     same-harness base-vs-FT metrics, or unavailable-row closeout has been
     accepted after the export observation.
+18. Read-only endpoint observation shows SGLang PID `2768408` serving
+    `task310-qwen3-30b-a3b-all-sft-iter0000035` on NemTron port `13231` with
+    `/v1/models` max context `16384`; this is unofficial until worker_3 reports
+    endpoint health evidence.
+19. Worker_3 pane reports a successful FT endpoint content probe and ongoing
+    benchmark input/runner preparation. No base-vs-FT benchmark judgment has
+    been accepted.

@@ -11188,3 +11188,26 @@
   benchmarks may continue under task311, but training/optimizer, AIME2025 train
   rows, task255 reuse, shared deletion, promotion, non-eval endpoint/export,
   self-merge, and main push remain HOLD.
+
+### Task311 endpoint readiness observed, benchmark evidence pending
+
+- Additional read-only poll found worker_3 mirrored lightweight export evidence
+  locally under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z`,
+  including export logs, `eval_only_hf_export_manifest.json`, and
+  `hf_export_checksum_manifest.json`. The large HF safetensor payload remains
+  on NemTron for serving.
+- Worker_3 started an eval-only task-owned SGLang endpoint on NemTron port
+  `13231`, PID `2768408`, using exported FT path
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`.
+- Read-only endpoint poll returned `/v1/models` for served model
+  `task310-qwen3-30b-a3b-all-sft-iter0000035` with `max_model_len=16384`,
+  matching the released endpoint preflight shape. Worker_3 pane also reports
+  FT endpoint content probe succeeded.
+- Worker_3 is preparing task311-owned benchmark runners/input materialization
+  for AIME2025, HMMT, and MMLU-Pro. Pane notes say HMMT and MMLU-Pro are
+  available in local HF cache; no official metrics are available yet.
+- Lead mailbox remained empty and #371 remained OPEN/CLEAN at
+  `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`. No official endpoint health
+  report, same-harness base-vs-FT comparison, benchmark completions, parser
+  diagnostics, metrics, or unavailable-row closeout has arrived.

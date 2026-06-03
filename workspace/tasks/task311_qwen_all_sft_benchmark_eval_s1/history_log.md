@@ -135,3 +135,17 @@
   evidence currently has only `logs/export_command.txt`. Export acceptance,
   endpoint release beyond the already bounded eval-only phase, benchmark
   metrics, and any FT judgment remain pending official evidence.
+
+## Session 78 - 2026-06-03 UTC - Endpoint ready observed read-only
+
+- Worker_3 mirrored lightweight export logs/manifests locally and kept the
+  large exported HF payload on NemTron for serving.
+- Lead read-only poll observed eval-only SGLang endpoint PID `2768408` on
+  NemTron port `13231`, serving
+  `task310-qwen3-30b-a3b-all-sft-iter0000035` from the task311 export path with
+  `/v1/models` reporting `max_model_len=16384`.
+- Worker_3 pane reports endpoint content probe succeeded and benchmark input
+  materialization/runner preparation is in progress for corrected Qwen rows.
+- No official mailbox or pushed report yet proves endpoint health, same-harness
+  base-vs-FT metrics, benchmark completions, parser diagnostics, or
+  unavailable-row closeout.
