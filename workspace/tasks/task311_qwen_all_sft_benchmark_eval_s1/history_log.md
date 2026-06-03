@@ -76,3 +76,22 @@
   basket rows.
 - Task311 remains in progress. Same-harness base evidence is still required
   before any FT benchmark judgment.
+
+## Session 78 - 2026-06-03 UTC - Unofficial route-gate draft observed
+
+- Read-only worker_3 repo inspection found local uncommitted task311 route-gate
+  docs: edited corrected-Qwen and M1 reports plus untracked
+  `all_sft_benchmark_route_gate_report.md`.
+- Draft disposition is
+  `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`; it reports no
+  benchmark run, eval-only export, endpoint, training, optimizer, promotion,
+  task255 reuse, shared deletion, AIME2025 train-row use, product-code edit,
+  direct main push, merge, or self-merge.
+- Draft route analysis says endpoint-based corrected Qwen runners cannot judge
+  task310 directly without eval-only HF export/endpoint, while direct no-export
+  benchmark judgment would require same-route base reruns from task298 imported
+  Megatron checkpoint.
+- This is not accepted gate evidence yet because the worker has not pushed #371
+  or sent a mailbox report. Lead sent a delivered follow-up requiring
+  commit/push/mailbox formalization and did not release export/endpoint or
+  benchmark execution.

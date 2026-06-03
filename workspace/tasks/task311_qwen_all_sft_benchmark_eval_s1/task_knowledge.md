@@ -34,3 +34,8 @@
     gate evidence. Lead follow-up was delivered requiring official metrics or
     blockers with commands/env, artifact roots, checksums, completions, parser
     diagnostics, and same-harness base proof.
+11. Worker_3 later had an unofficial uncommitted Session 9 route-gate draft:
+    corrected Qwen endpoint runners need eval-only HF export/endpoint for
+    task310, while direct no-export judgment needs task298 base Megatron reruns
+    before FT comparison. The draft is not lead-accepted until #371 is
+    refreshed and a mailbox report is processed.

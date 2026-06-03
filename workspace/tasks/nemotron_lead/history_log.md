@@ -11084,3 +11084,32 @@
   promotion, training/optimizer steps, task255 reuse, AIME2025 train data,
   shared deletion, non-eval export/endpoint, self-merge, and main push remain
   HOLD.
+
+### Task311 unofficial route-gate draft observed
+
+- Rechecked worker_3 local repo read-only after #371 remained unchanged.
+  Worker_3 has uncommitted edits to
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_corrected_qwen_benchmark_report.md`
+  and
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_m1_benchmark_availability_report.md`,
+  plus untracked
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`.
+- Draft route-gate disposition is
+  `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`: no benchmark
+  command, eval-only export, endpoint, training, optimizer step, promotion,
+  task255 reuse, shared deletion, AIME2025 train-row use, product-code edit,
+  direct main push, merge, or self-merge was launched in Session 9.
+- Draft content says the established corrected Qwen MMLU-Pro/AIME2025/HMMT
+  route is endpoint-based, while task310 is a Megatron checkpoint. Therefore
+  exact same-harness benchmark judgment requires either an eval-only HF export
+  and endpoint route matching the prior base protocol, or a task-owned direct
+  no-export route with base rerun from task298 imported Megatron checkpoint
+  before judging FT.
+- Draft M1 basket matrix enumerates 14 launcher-available rows and 5 rows with
+  missing exact launcher tasks, but this remains unofficial because it is not
+  pushed and no mailbox report exists.
+- Sent worker_3 a delivered follow-up requiring standard formalization:
+  include the untracked route report, update task311 history/task_knowledge and
+  worker status, commit/push #371, and send a mailbox report with disposition,
+  exact head, diff scope, commands/probes, artifact paths/checksums, and
+  boundaries. Lead did not release eval-only export/endpoint or benchmark rows.

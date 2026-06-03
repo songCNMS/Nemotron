@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task311 benchmark eval pending; #371 still 2ffbe8c OPEN/CLEAN; worker_3 follow-up delivered for same-harness report or blockers |
+| PR | all-SFT gate: task311 route-gate draft observed locally; official #371 refresh/mailbox still pending; no export/endpoint released |
 | Session | 78 |

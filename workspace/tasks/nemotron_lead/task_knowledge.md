@@ -2373,3 +2373,11 @@
    lead-acceptable yet. A delivered worker_3 follow-up restated the required
    same-harness base-vs-FT evidence, benchmark scope, artifact/checksum/
    completion/parser diagnostics, and unavailable-row blocker reporting.
+621. Session 78: worker_3 local repo contains an unofficial task311 Session 9
+   route-gate draft with disposition
+   `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`, but #371 remains
+   at `2ffbe8c4` and no mailbox report exists. Draft says task310 Megatron
+   checkpoint benchmark rows require either eval-only HF export/endpoint under
+   the accepted endpoint protocol or direct no-export base rerun from task298
+   imported Megatron checkpoint before FT judgment. Lead asked worker_3 to
+   commit/push/mailbox before any further release.
