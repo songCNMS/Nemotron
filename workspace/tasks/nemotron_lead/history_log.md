@@ -11743,3 +11743,41 @@
   data, shared deletion/mutation, main push, merge, or self-merge. If shared
   scratch is needed, worker_2 must stop and request lead approval with an exact
   path plan first.
+
+### Task327 acceptance and task326 refresh gate
+
+- Processed worker_2 mailbox `053f05afaf72474ca503a3d46b17838f`: task322/#388
+  closeout acknowledged after lead gate. #388 remains evidence-only at
+  `adf1a02f3cd5da11d04d2a4d167bdb8d1573e79f`; worker_2 did not merge or
+  self-merge.
+- Processed worker_2 mailbox `47aee55e314a48b5863dbee6346b611e`: task327
+  accepted on branch
+  `intern_nemotron_worker_2/task327_qwen_all_sft_large_source_materialize_decontam_s1`
+  at `b20e642a648425fb23c324290c5f672163332943`. Diff scope is worker_2
+  status plus task327 docs/task-owned helper only, with `git diff --check`
+  passing and no product-code changes. No PR is visible yet.
+- Read-only live observation: task327 local run root
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`
+  is active under worker_2. `materialize_large_sources.py` is running on
+  `instruction-following-chat`; output root was about 14G at the snapshot and
+  includes `logs/materialize_large_sources.log`, `manifests/command_env_manifest.json`,
+  `resource/df_before.txt`, and
+  `row_manifests/instruction-following-chat.rows.tsv.gz`. This is live
+  in-progress evidence only, not a completed gate.
+- Processed worker_4 mailbox `7947331f0c34453b8ec2d2bdf98b99cf`: task326/#389
+  request-changes refresh pushed to
+  `6f235120b7305d94121630032cf07134543b068f`. PR #389 is OPEN/base
+  main/CLEAN/MERGEABLE at that head.
+- Lead verified #389 refreshed report scope and hygiene: diff is worker_4
+  status plus task326 docs/report only; `git diff --check
+  origin/main...origin/intern_nemotron_worker_4/task326_qwen_all_sft_next_phase_safety_review_s1`
+  passes; `59f5e16b..6f235120` also passes; report sha is
+  `7aa37734554258c59fde9c78b94413f159288911ac75d0d9abc341d55048de98`.
+  Posted issuecomment `4616805496`: `APPROVE_SAFETY_REVIEW /
+  NO_RUNTIME_RELEASE`.
+- Accepted task326 correction: stale task322/no-lead-gate language is removed.
+  The matrix now carries #388 partial-exclusion gate, #385 preflight docs/HOLD,
+  #386 design docs/no-action, and #387 blocker docs/runtime-block confirmed.
+  It authorizes no data materialization, packing, optimizer/training, benchmark
+  eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, merge, self-merge, or main push from task326.

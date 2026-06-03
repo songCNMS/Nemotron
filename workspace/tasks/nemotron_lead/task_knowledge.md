@@ -2624,3 +2624,8 @@
 688. Session 79: task327 is assigned to worker_2 to handle only the 10
    task322-excluded large raw sources; it is no-packing/no-training raw
    materialize/count/decontam evidence or exact blocker only.
+689. Session 79: worker_2 accepted task327 at branch head `b20e642a` and
+   launched task-owned run `run_20260603T211508Z`; this is in-progress live
+   raw-source evidence only and not a completed gate.
+690. Session 79: task326/#389 refreshed head `6f235120` is accepted as
+   safety/runbook docs with `APPROVE_SAFETY_REVIEW / NO_RUNTIME_RELEASE`.
