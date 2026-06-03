@@ -2581,3 +2581,6 @@
 674. Session 78: task322-task326 still do not authorize final packing,
    training, model eval, export/endpoint, promotion, task255 reuse, AIME2025
    train rows, shared deletion, main push, merge, or self-merge.
+675. Session 78: peer_send delivered task322-task326 assignments to
+   worker_2/worker_5/worker_1/worker_3/worker_4; worker branches/reports are
+   pending.

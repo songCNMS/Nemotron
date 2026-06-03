@@ -11585,3 +11585,7 @@
   self-merge.
 - Current main remains `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`; the earlier
   objective's `ecb14173` baseline is superseded by current remote state.
+- Peer assignments were delivered to worker_2/task322, worker_5/task323,
+  worker_1/task324, worker_3/task325, and worker_4/task326. Next lead action is
+  to wait for worker branch/mailbox/PR or blocker reports, then gate exact
+  heads and artifacts.
