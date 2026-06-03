@@ -51,3 +51,28 @@
 - Continued read-only boundary: no training, packing, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, merge, or worker branch rewrites.
+
+## Session 81 - 2026-06-03 UTC - refreshed against #374/#372/#373/#371
+
+- Refreshed read-only review against:
+  - #374/task308 current head
+    `f57384f6a298500f240a9367c3598cd5f9a59638`; requested head
+    `4a46c9b5995d5cebe6624a5241d5543d48bee93c` drifted by worker_1
+    status/history only;
+  - #372/task309 exact head
+    `998ebce439164af2cc0e026575de32cd356acaa0`;
+  - #373/task310 exact head
+    `1cd3eb17fc686b281da7a9a0791ea09fbe614664`;
+  - #371/task311 exact head
+    `37a76caea59a2ca27c5d4cbc5d2e98d46d100420`.
+- Decisions:
+  - #374: `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`;
+  - #372: `REQUEST_CHANGES_REFRESH_FROM_TASK308_374`;
+  - #373: `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`;
+  - #371: `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`.
+- Combined all-SFT gate remains HOLD/NO-GO until task309 refreshes from #374
+  and downstream task310/task311 refresh from accepted packed/checkpoint
+  evidence.
+- Boundaries maintained: no training, packing, eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
+  edits, main push, merge, or worker branch rewrites.

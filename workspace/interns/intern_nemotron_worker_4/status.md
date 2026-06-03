@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=Working,TASK=task312_qwen_all_sft_independent_review_runbook_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task312_qwen_all_sft_independent_review_runbook_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | Working |
+| Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
 | Current Task | task312_qwen_all_sft_independent_review_runbook_s1 |
-| PR | none - HOLD waiting upstream evidence |
+| PR | pending refreshed task312 review PR |
 | Session | 1 |
-| Progress | Task312 is HOLD waiting upstream evidence, not final PR/closeout. Lead baseline clarification applied: use `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122` as current main / branch base and `ecb14173a820df377270273b9f7d9d92cb5076d2` as unchanged product-code baseline. Initial read-only snapshot reviewed task308 branch `348cba44c02043cd6310a36ec722a68278288db2`, task309 branch `d054925b1792a5365738247eeb8bdec462e1e6c6`, task310 task-creation docs on `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`, and task311 branch `dd59d5448c44ba9d04facd2af2ddc4a02b54f899`; task308/task309/task311 were acceptance-only and task310 had no visible worker branch/report/artifacts. No training, packing, eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, product-code edits, main push, merge, or worker branch rewrites were performed. |
+| Progress | Completed task312 refreshed read-only review against #374/#372/#373/#371. Decisions: #374 current head `f57384f6a298500f240a9367c3598cd5f9a59638` `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS` with requested `4a46c9b` drift verified as worker_1 status/history-only; #372 exact head `998ebce439164af2cc0e026575de32cd356acaa0` `REQUEST_CHANGES_REFRESH_FROM_TASK308_374`; #373 exact head `1cd3eb17fc686b281da7a9a0791ea09fbe614664` `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`; #371 exact head `37a76caea59a2ca27c5d4cbc5d2e98d46d100420` `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`. Combined all-SFT gate remains HOLD/NO-GO. No training, packing, eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, product-code edits, main push, merge, or worker branch rewrites were performed. |
