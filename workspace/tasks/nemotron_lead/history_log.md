@@ -11269,3 +11269,20 @@
 - Global holds remain unchanged: no training/optimizer, no AIME2025 train rows,
   no task255 reuse, no shared deletion, no promotion, no self-merge, and no
   main push.
+
+### Task311 MMLU-Pro base completed, FT endpoint restarting
+
+- Read-only worker pane showed MMLU-Pro base progressed through the full
+  12032-row run and completed with 6758 correct rows, exact-normalized accuracy
+  `0.5616688829787234`, parsed 12032/12032, and all `stop` finishes. This is
+  same-route base evidence only; no MMLU-Pro FT result or comparison has been
+  reported.
+- Worker_3 stopped the base endpoint PID `2791357`, waited for GPUs to return
+  idle, then relaunched the exported task310 FT endpoint on the same port. The
+  FT restart process is PID `2808912` under endpoint directory
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/endpoint/task310_ft_13231_restart`.
+- Worker_3 pane says the next intended order is HMMT FT followed by MMLU-Pro
+  FT. Lead mailbox remains empty, #371 remains OPEN/CLEAN at `1ce85c63`, and
+  the task-owned benchmark runner is still local/untracked in worker_3's repo.
+- No official worker report, PR refresh, accepted HMMT/MMLU-Pro base-vs-FT
+  comparisons, M1 basket final matrix, or unavailable-row closeout exists yet.

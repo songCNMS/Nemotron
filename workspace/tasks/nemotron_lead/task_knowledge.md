@@ -2433,3 +2433,9 @@
 632. Session 78: worker_3 began full 12032-row MMLU-Pro base run with
    answer-only JSON prompting and max_tokens 64; no MMLU-Pro summary or
    base-vs-FT judgment exists yet.
+633. Session 78: read-only MMLU-Pro base completed with 6758/12032 accuracy
+   `0.5616688829787234`, parsed 12032/12032, all stop finishes. MMLU-Pro FT
+   comparison remains missing.
+634. Session 78: worker_3 stopped base endpoint and restarted exported task310
+   FT endpoint as PID `2808912` for pending HMMT FT and MMLU-Pro FT runs; no
+   official mailbox/PR refresh yet.

@@ -187,3 +187,13 @@
   comparison is available.
 - Worker_3 pane reports the full MMLU-Pro base run is starting with 12032 rows,
   answer-only JSON prompting, and max_tokens 64.
+
+## Session 78 - 2026-06-03 UTC - MMLU-Pro base observed complete
+
+- Worker_3 pane reports MMLU-Pro base completed at 6758/12032
+  (`0.5616688829787234`), parsed 12032/12032, all stop finishes.
+- This is base evidence only; no MMLU-Pro FT comparison is available.
+- Worker_3 stopped the base endpoint, waited for idle GPUs, and restarted the
+  exported task310 FT endpoint as PID `2808912` for HMMT FT and MMLU-Pro FT
+  runs.
+- No official worker mailbox or PR refresh has arrived.

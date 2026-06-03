@@ -76,3 +76,8 @@
     14 length finishes. HMMT FT and base-vs-FT comparison are still missing.
 23. MMLU-Pro base run has been started at full 12032-row scale, but no summary
     or comparison is available.
+24. Read-only MMLU-Pro base completed with 6758/12032
+    (`0.5616688829787234`), parsed 12032/12032, all stop finishes; MMLU-Pro FT
+    comparison remains missing.
+25. Exported task310 FT endpoint restart PID `2808912` is intended for HMMT FT
+    and MMLU-Pro FT runs; official worker report is still pending.
