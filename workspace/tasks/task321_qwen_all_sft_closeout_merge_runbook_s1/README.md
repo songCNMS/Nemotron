@@ -66,6 +66,7 @@ and the next lead-gated repair tasks, without merging or changing PR branches.
 ## Worker Closeout Snapshot
 
 - Report: `workspace/tasks/task321_qwen_all_sft_closeout_merge_runbook_s1/closeout_merge_runbook_report.md`.
+- Worker PR: #382.
 - Disposition: `APPROVE_RUNBOOK`.
 - Current PR sequencing recommendation: support docs #378/#380/#379, then #371
   evidence/fail-closeout docs, then #377 repair plan docs, all through

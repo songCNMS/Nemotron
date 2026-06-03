@@ -16,6 +16,7 @@ Observed at `2026-06-03T19:44:34Z`.
 | Item | Exact state reviewed |
 | --- | --- |
 | Worker branch | `intern_nemotron_worker_4/task321_qwen_all_sft_closeout_merge_runbook_s1` |
+| Worker PR | #382 |
 | Branch base | `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb` |
 | Lead docs | `origin/intern_nemotron_lead/session1-recovery-task-docs` `479fe4c1df950ad441c2c6431792be06a7cc3ef6` |
 | PR scope | docs/runbook review only |

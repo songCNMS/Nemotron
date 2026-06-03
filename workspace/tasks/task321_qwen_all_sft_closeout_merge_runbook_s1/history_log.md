@@ -32,6 +32,7 @@
 - Checked task318-task320 visibility: no remote worker branches or PRs were
   visible; lead assignment docs exist on the lead branch.
 - Added `closeout_merge_runbook_report.md` with disposition `APPROVE_RUNBOOK`.
+- Opened worker PR #382 for task321 docs/status review.
 - Did not merge, self-merge, push main, train, evaluate, pack, export, launch
   endpoint, promote, reuse task255, use AIME2025 train data, or delete shared
   files.

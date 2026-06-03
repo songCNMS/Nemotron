@@ -25,3 +25,4 @@
 7. task318-task320 were visible only as lead assignment docs at review time.
    Allowed next actions are validation/termination preflight, raw
    blend/decontam feasibility, and MMLU data-repair linkage analysis only.
+8. Worker PR for task321 is #382.
