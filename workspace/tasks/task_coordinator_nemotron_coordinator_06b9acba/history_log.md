@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Session 0 - Created with coordinator
 
@@ -659,3 +659,37 @@
   6. independent review and runbook/provenance.
 - Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; any export/endpoint is eval-only if needed, not promotion, unless separately approved.
 - Coordinator did not run 30B training, eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.
+
+## Session 46 - All-SFT full pipeline and available benchmark evaluation requested
+
+- Received user instruction `review the the current pipeline and start a full pipeline on all sft data and finally conduct an evaluation on benchmarks that are available`.
+- Fetched `origin`; current state at review time:
+  - `origin/main` is `ecb14173` after merged task306/task307 30B AIME fail closeout;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `4bee7ad5`;
+  - coordinator PR #360 remains the only open PR and is `CLEAN`/`MERGEABLE`.
+- Reviewed latest lead/task evidence for the previous 30B AIME-focused run:
+  - task300 accepted Qwen3-30B-A3B base corrected AIME2025 comparator `15/30 = 0.5`;
+  - task301 full 30B SFT reached `35/35` and produced checkpoint `iter_0000035`, but built-in validation hung and termination produced `train_rc=1`, so it remains a salvage candidate rather than a clean training pass;
+  - task304/task305 accepted a bounded synthetic non-AIME canary only;
+  - task306 corrected AIME2025 FT-vs-base result is `14/30 = 0.4666666666666667`, below base `15/30`;
+  - task307 independently approved task306 as `APPROVE_FAIL_CLOSEOUT`, with no promotion/export/endpoint/further 30B authorization.
+- Reviewed benchmark registry surfaces:
+  - M1 v0 basket includes `mmlu_pro`, `aime25`, `gpqa`, `livecodebench`, `ifbench`, `multichallenge`, `ruler_256k`, and `taubench_airline`;
+  - M1 full basket adds `hmmt`, `hle`, `scicode`, `terminalbench`, `swe_bench_verified`, `aa_lcr`, `mmlu_prox`, `wmt24pp`, `bfcl`, `mcp_mark`, and `tool_decathlon`;
+  - Qwen corrected improvement subset is `mmlu_pro`, `aime25`, and `hmmt`;
+  - launcher-available rows should be separated from unavailable rows with exact runtime/blocker reasons.
+- Reviewed all-SFT data/pipeline clues:
+  - baseline SFT configs include `src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json`;
+  - current Qwen V11 packed data evidence is task276/task299 lineage, with known sparse valid/test residuals;
+  - repo evidence points to M1 agentic, math sidecar/final-answer, and hard-math SFT sources that require fresh inventory before an all-SFT launch.
+- Sent delivered peer message to `intern_nemotron_lead` requesting a new gate-driven all-SFT pipeline review/run, not a promotion claim.
+- Set delivered lead pressing goal `qwen-all-sft-full-pipeline-benchmarks-session46`.
+- Required lead sequence in the Session 46 handoff:
+  1. audit current data prep, packing, training, eval stages, blockers, and exact trainable SFT data inventory;
+  2. produce all-eligible-SFT packed-data/decontam contract or exact blocker;
+  3. run full training on selected Qwen target(s), prioritizing the current 30B path if runtime/resources pass and failing closed rather than silently downgrading;
+  4. run non-AIME checkpoint-load/completion canary before benchmark eval;
+  5. evaluate available benchmarks, including corrected Qwen `mmlu_pro`/`aime25`/`hmmt` same-harness base-vs-FT plus runnable M1 basket rows;
+  6. document unavailable full-basket rows, independent review, and runbook/provenance.
+- Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only and cannot enter trainable SFT data; no task255 reuse; no shared deletion; export/endpoint only if needed for evaluation and not promotion.
+- Coordinator did not run data packing, training, benchmark eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.

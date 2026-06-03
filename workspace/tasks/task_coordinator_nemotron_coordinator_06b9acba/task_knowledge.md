@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Knowledge Entries
 
@@ -133,3 +133,8 @@
 127. Existing repo 30B entrypoint clue: `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, with tests around `qwen30b_a3b_local_train` and prior task071/task075 Qwen3-30B-A3B scale-up/eval evidence.
 128. 30B launch sequence must fail closed: prove 30B resource/runtime/base-load, establish 30B same-harness base AIME2025 score before FT judgment, verify data/chat-template/decontam contract, run full 30B train, then non-AIME canary and corrected AIME2025 FT-vs-base test with independent review.
 129. Session 45 30B boundaries: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; export/endpoint is eval-only if needed and not promotion unless separately approved.
+130. Session 46 current 30B closeout: task300 base `15/30 = 0.5`; task301 checkpoint `iter_0000035` is salvage-only after validation hang and `train_rc=1`; task306 FT `14/30 = 0.4666666666666667`; task307 decision `APPROVE_FAIL_CLOSEOUT`. This is a 30B AIME fail, not promotion evidence.
+131. Available benchmark surfaces for the new all-SFT request: M1 v0 basket has 8 rows; M1 full basket has 19 rows; Qwen corrected improvement subset is `mmlu_pro`, `aime25`, and `hmmt`; launcher-available rows must be separated from unavailable rows with exact blockers.
+132. Session 46 all-SFT request requires a fresh trainable SFT data inventory before launch. Candidate sources include stage1 SFT `data_blend_raw.json`, task276/task299 packed Qwen lineage, M1 agentic rows, math sidecar/final-answer rows, and hard-math rows. Held-out eval/decontam rows are excluded.
+133. Coordinator delivered lead goal `qwen-all-sft-full-pipeline-benchmarks-session46`: review current pipeline, produce all-eligible-SFT packed/decontam contract, run full training on selected Qwen target(s), run non-AIME canary, then evaluate corrected Qwen subset plus runnable M1 benchmark rows.
+134. Session 46 boundaries: no AIME2025 training, no task255 reuse, no shared deletion, and no promotion. Export/endpoint may be used only as an evaluation route if lead gates it and must not be framed as deployment or release.
