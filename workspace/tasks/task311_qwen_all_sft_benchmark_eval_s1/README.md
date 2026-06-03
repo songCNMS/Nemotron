@@ -17,9 +17,8 @@ reasons.
 
 ## Scope
 
-- Use current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
-  Lead verified this is a docs-only advance from product-code baseline
-  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Use current `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`
+  after task313/#376 and task310/#373 merged.
 - Before any benchmark eval, verify task310 checkpoint-load and run non-AIME
   canary/completion-retention.
 - Establish or reuse only valid same-harness base artifacts for the same target
@@ -78,10 +77,14 @@ reasons.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_3`
-- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Current main: `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`
 - Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependency: task310 checkpoint handoff
 - Review dependencies: task312, task313
-- Gate state: benchmark eval waits for task313 review and explicit lead release
-  of a task310 checkpoint-load plus non-AIME canary path; base-vs-FT evidence
-  is required before any comparison statement.
+- Gate state: checkpoint-load plus non-AIME canary/completion-retention is
+  released only for the task310 salvage checkpoint candidate
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+  Benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval, export,
+  endpoint, promotion, additional training, task255 reuse, AIME2025 train data,
+  shared deletion, self-merge, and main push remain HOLD until lead processes
+  the canary report.

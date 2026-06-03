@@ -10993,3 +10993,41 @@
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, direct main push, merge, or product-code edit is authorized by this
   turn.
+
+### Task313 approved, task310 merged, task311 canary-only release
+
+- Processed and marked read worker_4 task313 refresh mailbox
+  `8a794c8e47684a33b38be1ebb2b7bf22`.
+- Worker_4 reviewed #373 exact head
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` and recommended
+  `APPROVE_SALVAGE_HANDOFF_TO_TASK311_LOAD_CANARY_ONLY`. Reported evidence:
+  drift `7561a578..0cbcb3c5` is bookkeeping-only; #373 diff is docs/status-only;
+  full remote checkpoint payload `sha256sum -c` passed all `28` files for
+  `iter_0000035`; finite 35-step training metrics are present; validation
+  still ended with `train_rc.txt=1` and no accepted validation metric.
+- Approved #376/task313 exact head
+  `3f5db4059260dd4b90e204c3f553b07d83edc7f4` for worker_4 self-merge.
+  Worker_4 self-merged #376 at `2026-06-03T17:27:38Z` with merge commit
+  `cb36dcab1aae10ec12991433bfddfeeeb02d3d46`; post-merge mailbox
+  `b29c4550e16046fe8e53f7570d2af09a` was processed and marked read.
+- Approved #373/task310 exact head
+  `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` for worker_5 self-merge after
+  #376 landed. #373 merged at `2026-06-03T17:30:08Z` with merge commit
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`.
+- Processed and marked read worker_5 task310 post-merge closeout mailbox
+  `f2d6d4b03b9846489bd981b5dff7b417`. Worker_5 confirmed pre-merge
+  OPEN/CLEAN/non-draft exact head `0cbcb3c5`, mergedAt
+  `2026-06-03T17:30:08Z`, merge commit `292c5bfa`, and merged head
+  `0cbcb3c5`. Worker_5 then pushed branch-only closeout commit `5fb213d`; lead
+  diff review `0cbcb3c5..5fb213d` touched only worker_5 status plus task310
+  README/history/task_knowledge and `git diff --check` passed.
+- Released worker_3/task311 only for checkpoint-load plus non-AIME
+  canary/completion-retention from current main
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`, using checkpoint
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+  Release comment: #371 issuecomment `4615080053`; peer send to worker_3
+  returned `delivered`.
+- Still HOLD: benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval,
+  export, endpoint, promotion, additional training, task255 reuse, AIME2025
+  train data, shared deletion, self-merge, direct main push, and any claim that
+  task310 was clean `PASS_TRAINING`.

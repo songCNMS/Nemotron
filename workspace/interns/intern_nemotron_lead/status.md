@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #376 still mismatch/HOLD at 1a05dda; second worker_4 refresh delivered; task311 HOLD |
+| PR | all-SFT gate: #376/#373 merged; task311 released for checkpoint-load + non-AIME canary only |
 | Session | 78 |

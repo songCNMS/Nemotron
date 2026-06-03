@@ -2335,3 +2335,21 @@
    empty. Lead sent a second delivered task313 refresh follow-up to worker_4
    and posted #376 issuecomment `4614975363`. #373/#371/#376 all remain
    OPEN/CLEAN but HOLD; task311 is not released.
+613. Session 78: worker_4 refreshed task313 and #376 to `3f5db405` with
+   `APPROVE_SALVAGE_HANDOFF_TO_TASK311_LOAD_CANARY_ONLY`; full remote
+   checkpoint payload verification passed all `28` files for task310
+   `iter_0000035`, with residuals `train_rc=1`, no accepted validation metric,
+   and local copied-evidence manifest self-entry quirk.
+614. Session 78: #376 merged at `2026-06-03T17:27:38Z` as `cb36dcab` from head
+   `3f5db405`; #373 merged at `2026-06-03T17:30:08Z` as `292c5bfa` from head
+   `0cbcb3c5`.
+615. Session 78: worker_3/task311 is released only for checkpoint-load plus
+   non-AIME canary/completion-retention from current main `292c5bfa`, using
+   `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+   Benchmark/AIME/task243/MMLU-Pro/HMMT/M1 basket eval, export, endpoint,
+   promotion, additional training, task255, AIME2025 train data, shared
+   deletion, self-merge, and main push remain HOLD pending canary evidence.
+616. Session 78: worker_5 post-merge closeout mail `f2d6d4b0` confirms #373
+   merged at `292c5bfa` from `0cbcb3c5`; worker branch-only closeout commit
+   `5fb213d` is status/task310 README/history/task_knowledge only and
+   diff-check clean.
