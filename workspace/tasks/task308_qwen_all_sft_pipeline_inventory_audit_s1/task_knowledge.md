@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,7 @@
 8. Lead accepted head `b798fdfcfc3144111dd0a6e0f80505df031bcc5e` as
    metadata-only drift; task312 must refresh review over current heads before
    any #374 self-merge gate.
+9. PR #374 was lead-approved at exact head
+   `a238cacb1f28fb96df58d3a10641a2b7325f61b7` and self-merged at
+   `2026-06-03T15:28:23Z`; merge commit
+   `eb05e6b324c3159b01070cb575c2be363e773cac`.

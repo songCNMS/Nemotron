@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - History Log
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -77,3 +77,23 @@
 - Boundaries maintained: no packing, training, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train rows, shared deletion, product-code
   edits, main push, or merge.
+
+## Session 89 - 2026-06-03 UTC - Lead-approved self-merge closeout
+
+- Lead approved task308/#374 for exact head
+  `a238cacb1f28fb96df58d3a10641a2b7325f61b7` as
+  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+- Pre-merge verification found PR #374 `OPEN`, base `main`, non-draft,
+  `mergeStateStatus=CLEAN`, API `mergeable=true`, `mergeable_state=clean`,
+  and head exactly
+  `a238cacb1f28fb96df58d3a10641a2b7325f61b7`.
+- Self-merged PR #374 at `2026-06-03T15:28:23Z`; merge commit:
+  `eb05e6b324c3159b01070cb575c2be363e773cac`.
+- Merged head:
+  `a238cacb1f28fb96df58d3a10641a2b7325f61b7`.
+- Carried disposition remains unchanged: task308 supports task309 using the
+  checksum-backed V11/task299 seed; generic `stage1_sft/data_blend_raw`
+  remains excluded unless separately materialized/count/decontam/Qwen-packed.
+- Boundaries maintained: no product-code changes, packing, training, eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train rows, shared
+  deletion, main push, or unauthorized merge.

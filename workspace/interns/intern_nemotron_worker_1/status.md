@@ -1,14 +1,14 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task308_qwen_all_sft_pipeline_inventory_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_1 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task308_qwen_all_sft_pipeline_inventory_audit_s1 |
+| Current Task |  |
 | PR | https://github.com/songCNMS/Nemotron/pull/374 |
-| Session | 88 |
-| Progress | Lead received current head b798fdfc as metadata-only drift; #374 remains on HOLD pending task312 refresh, with unchanged task309 fail-closed disposition for unmaterialized generic stage1_sft raw sources. |
+| Session | 89 |
+| Progress | Self-merged PR #374 at 2026-06-03T15:28:23Z with merge commit eb05e6b324c3159b01070cb575c2be363e773cac; task308 closeout metadata recorded. |
