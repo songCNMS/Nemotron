@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -122,3 +122,44 @@
   training, AIME2025 train-row use, task255 reuse, shared deletion, export,
   endpoint, promotion, product-code edit, direct main push, merge, or
   self-merge occurred.
+
+## Session 8 - 2026-06-03 UTC - checkpoint-load and non-AIME canary pass
+
+- Fetched current `origin/main`
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb` after task313/#376 and
+  task310/#373 merged, and refreshed the task311 branch from that base.
+- Lead released only checkpoint-load plus synthetic non-AIME
+  canary/completion-retention for task310 checkpoint candidate
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+- Added task311 wrapper
+  `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/run_30b_no_export_canary_probe.py`,
+  delegating to the accepted task304 no-export canary runner while stamping
+  task311 artifact metadata.
+- Ran the no-export/no-endpoint direct MCore route on NemTron with 8 H200s,
+  TP=4, PP=2, EP=4, ETP=1, top-k=1 greedy branch. Source head captured in the
+  run artifacts:
+  `d2e275e3ec775cd8f73f7bdeeb0bd7f07b44c372`.
+- Artifact roots:
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z` and
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`.
+- Checkpoint-load proof rank0: `load_megatron_model=PASS`, model type
+  `Float16Module`, unwrapped `GPTModel`, device `cuda:0`, dtype
+  `torch.bfloat16`, eval mode true, hidden size 2048, 48 layers, 32 attention
+  heads, sequence length 4096, padded vocab size 151936.
+- Canary result: `PASS`, remote rc `0`, 5/5 completions retained, 5/5
+  non-empty responses, 5/5 exact expected-answer matches, zero empty,
+  mixed-script, or degeneration counts, and decision status `pass`.
+- Key hashes recorded in `all_sft_non_aime_canary_report.md`, including
+  canary summary
+  `5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`,
+  full completions
+  `fd86644308d690340545be0fb308912dac87ddd8c3b499e2af4556635c3409f7`,
+  prompt manifest
+  `3838d39a779bd28df90ced9a1f9ba99f61bdb3dd747083450be0334cdf52c0b2`,
+  and checksum manifest
+  `cc0f2be1d99e4b1caad4e5eb4e4e7d6f6a3bf99be2d28ff0c9e9b2beb23307d4`.
+- Updated benchmark reports to `HOLD_NOT_RUN` because lead released canary only.
+  No MMLU-Pro, AIME2025, HMMT, or M1 basket benchmark command was launched.
+- No training, optimizer step, AIME2025 train-row use, task255 reuse, shared
+  deletion, export, endpoint, promotion, product-code edit, direct main push,
+  merge, or self-merge occurred.

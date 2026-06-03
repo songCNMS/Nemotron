@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Knowledge Entries
 
@@ -42,3 +42,38 @@
     `7561a578` with `train_rc=1` after validation hang; task313 review is now
     required before lead may release task311 checkpoint-load plus non-AIME
     canary.
+13. After task313/#376 and task310/#373 merged, lead released only
+    checkpoint-load plus synthetic non-AIME canary/completion-retention for
+    task310 checkpoint
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`;
+    benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval, export,
+    endpoint, promotion, additional training, task255 reuse, AIME2025 train
+    data, shared deletion, self-merge, and main push remained held.
+14. Task311 canary run `run_20260603T173607Z` used local artifact root
+    `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`
+    and remote artifact root
+    `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`.
+15. The no-export/no-endpoint route was
+    `direct_in_process_mcore_static_engine_no_export_no_endpoint_30b_tp4_pp2_ep4_etp1_topk1_greedy`
+    with 8 H200s, TP=4, PP=2, EP=4, ETP=1, source head
+    `d2e275e3ec775cd8f73f7bdeeb0bd7f07b44c372`.
+16. Checkpoint-load proof rank0 for task310 iter 35 passed:
+    `load_megatron_model=PASS`, model `Float16Module`, unwrapped `GPTModel`,
+    dtype `torch.bfloat16`, eval true, hidden size 2048, 48 layers, 32
+    attention heads, sequence length 4096, padded vocab size 151936.
+17. Canary disposition is `PASS_NON_AIME_CANARY_ONLY`: 5 prompts requested,
+    5 completions retained, 5 non-empty responses, 5 exact expected-answer
+    matches, zero empty/mixed-script/degeneration counts, remote rc `0`.
+18. Key canary hashes: summary
+    `5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`,
+    decision
+    `7678a8f8f3445882a1e5ea575169d37aae7f7ad9ead14b4f5d788fa5c5cb3ba5`,
+    full completions
+    `fd86644308d690340545be0fb308912dac87ddd8c3b499e2af4556635c3409f7`,
+    prompt manifest
+    `3838d39a779bd28df90ced9a1f9ba99f61bdb3dd747083450be0334cdf52c0b2`,
+    checksum manifest
+    `cc0f2be1d99e4b1caad4e5eb4e4e7d6f6a3bf99be2d28ff0c9e9b2beb23307d4`.
+19. Benchmark reports remain `HOLD_NOT_RUN` because the authorized task311
+    action stopped after checkpoint-load and non-AIME canary. No corrected Qwen
+    benchmark, AIME/task243 eval, HMMT, MMLU-Pro, or M1 basket row was run.

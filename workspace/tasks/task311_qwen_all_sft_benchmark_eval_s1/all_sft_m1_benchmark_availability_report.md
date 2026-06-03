@@ -1,44 +1,46 @@
 # task311 M1 benchmark availability report
 
-<!-- METADATA:STATUS=Blocker,ASSIGNEE=intern_nemotron_worker_3,SESSION=7 -->
+<!-- METADATA:STATUS=Hold,ASSIGNEE=intern_nemotron_worker_3,SESSION=8 -->
 
 ## Summary
 
-- Status: `NOT_ENUMERATED_UPSTREAM_TASK310_HANDOFF_MISSING`
-- Blocking precondition: task310 usable checkpoint handoff and non-AIME canary.
+- Status: `HOLD_NOT_ENUMERATED_CANARY_ONLY_RELEASED`
+- Blocking precondition: explicit lead release for M1 benchmark availability and
+  benchmark execution after the task311 non-AIME canary report is processed.
 - No M1 benchmark launcher command was executed.
 - No M1 benchmark row was evaluated.
 
-Task311 requires checkpoint-load and non-AIME canary before any benchmark
-execution. Because no usable task310 checkpoint handoff is visible, the M1
-launcher-available basket cannot be enumerated into runnable FT rows without
-violating the task order.
+Lead released only checkpoint-load plus synthetic non-AIME
+canary/completion-retention for the task310 salvage checkpoint. The canary has
+passed, but benchmark and M1 basket enumeration remain outside the current
+release. This report intentionally records no-run status for M1 rows.
 
 ## Availability Matrix
 
 | Basket area | Status | Exact blocker |
 |---|---|---|
-| M1 launcher-available benchmark basket | `BLOCKED_NOT_ENUMERATED` | task310 checkpoint path/run root/artifact manifest missing; checkpoint-load/non-AIME canary not passed |
-| Full-basket unavailable rows | `BLOCKED_NOT_ENUMERATED` | same upstream task310 handoff blocker prevents row-level launcher/model-route validation |
+| M1 launcher-available benchmark basket | `HOLD_NOT_ENUMERATED` | lead released canary only; M1 basket enumeration awaits explicit post-canary benchmark gate |
+| Full-basket unavailable rows | `HOLD_NOT_ENUMERATED` | row-level launcher/model-route validation awaits explicit post-canary benchmark gate |
 
 This report intentionally does not claim launcher availability or absence for
-individual basket rows. It records that the required upstream model artifact is
-missing, so row-level M1 evaluation is blocked before launch.
+individual basket rows. It records that the current authorized work stopped
+after checkpoint-load and non-AIME canary.
 
 ## Artifacts
 
-No M1 completions, parser diagnostics, benchmark results, or checksum manifests
-were produced.
+No M1 completions, parser diagnostics, benchmark results, or benchmark checksum
+manifests were produced.
 
-Task-owned blocker artifact:
+Task-owned canary artifact root:
 
-`/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T143618Z/manifests/blocker_manifest.json`
+`/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`
 
-Blocker manifest sha256:
+Canary summary sha256:
 
-`7b90155bc4f31bea4ccb5a67472d0c5d703c5607b0ec0a20d0523bdadc179ed8`
+`5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`
 
 ## Boundary Confirmation
 
-No training, AIME2025 train-row creation, task255 reuse, shared deletion, export,
-endpoint, promotion, product-code edit, direct main push, or merge occurred.
+No M1 basket enumeration, benchmark eval, AIME/task243 eval, training,
+AIME2025 train-row creation, task255 reuse, shared deletion, export, endpoint,
+promotion, product-code edit, direct main push, merge, or self-merge occurred.
