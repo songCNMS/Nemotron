@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task308_qwen_all_sft_pipeline_inventory_audit_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/374 |
-| Session | 86 |
-| Progress | Opened PR #374 and sent official mailbox closeout 848eddb8b21d45e49976bc75ad281530; task309 recommendation is fail-closed for unmaterialized generic stage1_sft raw sources. |
+| Session | 87 |
+| Progress | Lead received task308/#374 and placed self-merge on HOLD pending task312 review; no packing/training/eval/export/endpoint, and disposition remains task309 fail-closed for unmaterialized generic stage1_sft raw sources. |

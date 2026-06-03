@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - History Log
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -45,5 +45,21 @@
 - Sent official mailbox closeout:
   `848eddb8b21d45e49976bc75ad281530`.
 - Boundaries maintained: no training, final packing, benchmark eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
+  product-code edits, main push, or merge.
+
+## Session 87 - 2026-06-03 UTC - Lead HOLD acknowledged
+
+- Lead received task308/#374 and verified the report disposition
+  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+- Lead placed PR #374 on HOLD pending task312 independent review; no
+  self-merge is authorized.
+- Lead carried disposition: task308 supports task309 using the
+  checksum-backed V11/task299 seed, while generic `stage1_sft/data_blend_raw`
+  remains blocked until materialized/count/decontam/packing proof exists.
+- Current GitHub state checked after mailbox/status metadata drift: PR #374 is
+  open on base `main`, non-draft, clean, at head
+  `f57384f6a298500f240a9367c3598cd5f9a59638`.
+- Boundaries maintained: no packing, training, benchmark eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   product-code edits, main push, or merge.

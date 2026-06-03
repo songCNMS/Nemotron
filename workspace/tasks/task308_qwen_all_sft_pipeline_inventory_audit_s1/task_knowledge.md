@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,6 @@
    task255 remain excluded.
 6. PR #374 carries the task308 report:
    `https://github.com/songCNMS/Nemotron/pull/374`.
+7. Lead HOLD after task308 receipt: do not self-merge #374 until lead gate
+   after task312 independent review; no packing/training/eval/export/endpoint
+   is authorized.
