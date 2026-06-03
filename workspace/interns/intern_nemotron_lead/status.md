@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task308-task312 assigned; origin/main 172cd0e7 docs-only drift recorded; waiting worker reports |
+| PR | all-SFT gate: task308/309/311/312 branches visible, task310 missing; waiting worker evidence |
 | Session | 77 |

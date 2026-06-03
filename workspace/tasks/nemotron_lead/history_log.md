@@ -10534,3 +10534,39 @@
 - Lead did not train, pack, evaluate, export, endpoint, promote, modify product
   code, push main, merge, reuse task255, use AIME2025 train data, or delete
   shared files.
+
+## Session 77 - 2026-06-03 UTC - all-SFT worker acceptance sweep
+
+- Processed and marked read two new mailbox reports:
+  - worker_4 accepted task312, branch
+    `intern_nemotron_worker_4/task312_qwen_all_sft_independent_review_runbook_s1`
+    at `21bfe2045ec5270775239eecf9474f6044272e7c`, based on current
+    `origin/main` `172cd0e7`, imported lead docs from `3e715c73`, no PR yet.
+  - worker_2 accepted task309, branch
+    `intern_nemotron_worker_2/task309_qwen_all_sft_packed_data_contract_s1`
+    at `d054925b1792a5365738247eeb8bdec462e1e6c6`, based on current
+    `origin/main` `172cd0e7`, imported lead docs from `3e715c73`, no PR yet.
+- Fetched worker branches and observed:
+  - task308 worker_1 branch visible at
+    `348cba44c02043cd6310a36ec722a68278288db2`, acceptance/status/task-docs
+    only, no official mailbox acceptance yet.
+  - task309 worker_2 branch visible at
+    `d054925b1792a5365738247eeb8bdec462e1e6c6`, acceptance/status/task-docs
+    only.
+  - task311 worker_3 branch visible at
+    `dd59d5448c44ba9d04facd2af2ddc4a02b54f899`, acceptance/status/task-docs
+    only, no official mailbox acceptance yet.
+  - task312 worker_4 branch visible at
+    `21bfe2045ec5270775239eecf9474f6044272e7c`, acceptance/status/task-docs
+    only.
+  - task310 worker_5 branch not visible yet.
+- `git diff --check origin/main...<branch>` passed for visible task308,
+  task309, task311, and task312 branches. GitHub PR search returned no
+  task308-task312 PRs.
+- Sent follow-up peer messages to all workers with lead docs `5f4167dc`,
+  current branch base `172cd0e7`, product-code baseline `ecb14173`, and
+  unchanged boundaries. Worker_5 was specifically asked to accept task310 or
+  report exact blocker.
+- Current first gate remains HOLD pending task308 official inventory report,
+  task309 packed/decontam contract, task310 acceptance/runtime/data gates, and
+  downstream task311/task312 evidence.
