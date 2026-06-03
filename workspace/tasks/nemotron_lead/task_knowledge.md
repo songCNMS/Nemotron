@@ -2635,3 +2635,6 @@
    report and any lead-reviewed false-positive/filtering contract.
 692. Session 79: task327 live run later observed `competitive-cpp-00` in
    progress at 100,000 rows / 5,234.4 MiB; no source-level decision yet.
+693. Session 79: task327 `competitive-cpp-00` later reached 300,000 rows /
+   15,671.3 MiB with process still active; still no source-level decision or
+   official worker report.

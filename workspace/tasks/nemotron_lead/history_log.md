@@ -11806,3 +11806,7 @@
   rows and 5,234.4 MiB processed at `2026-06-03T21:38:37Z`, with process still
   active and output root size about 40G. No source-level pass/block result or
   worker official report exists yet for `competitive-cpp-00`.
+- Subsequent read-only check showed `competitive-cpp-00` reached 300,000 rows
+  and 15,671.3 MiB processed at `2026-06-03T21:57:14Z`; process remained
+  active and output root remained about 40G. No source-level pass/block result
+  or worker official report exists yet for this source.

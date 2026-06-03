@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 running on second large source; first source decontam-blocked; full all-SFT pack/train HOLD |
+| PR | task327 running: competitive-cpp-00 at 300k rows; full all-SFT pack/train HOLD |
 | Session | 79 |
