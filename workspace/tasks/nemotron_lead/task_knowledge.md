@@ -2654,3 +2654,6 @@
 697. Session 79: task327 `competitive-cpp-01` reached 200,000 rows /
    10,568.1 MiB at `2026-06-03T22:32:22Z`; still live in-progress, no final
    disposition/report/PR, no packing/training release.
+698. Session 79: task327 `competitive-cpp-01` reached 300,000 rows /
+   15,855.8 MiB at `2026-06-03T22:41:43Z`; no source-level result/final
+   disposition/report/PR yet.

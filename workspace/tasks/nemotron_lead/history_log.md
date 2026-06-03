@@ -11851,3 +11851,7 @@
   worker process remained active, no task327 final rc/report/PR existed, and
   the completed-source matrix still contained only `instruction-following-chat`
   and `competitive-cpp-00`, both `BLOCKED_DECONTAM_HIT`.
+- Later read-only monitoring showed `competitive-cpp-01` reached 300,000 rows /
+  15,855.8 MiB at `2026-06-03T22:41:43Z` with rate 9.37 MiB/s. No source-level
+  result for `competitive-cpp-01`, final rc, official worker report, or task327
+  PR existed yet; global all-SFT pack/train/eval remains HOLD.
