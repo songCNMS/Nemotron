@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 |
 | PR | #379 |
-| Session | 3 |
-| Last Update | 2026-06-03T19:22:20Z: lead processed task315/#379 gate as APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME at head bd0f3202 with comment issuecomment-4615943606; no benchmark execution or new action authorized; do not self-merge unless coordinator/authorized non-author path is explicitly provided. |
+| Session | 4 |
+| Last Update | 2026-06-03T19:37:35Z: task315/#379 remains open/unmerged with lead gate APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME and no self-merge authorization; accepted new lead assignment task319 on a separate branch path, with no M1 benchmark/runtime action authorized under task315. |

@@ -1,6 +1,6 @@
 # task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,5 @@
    authorizes no benchmark execution or new action.
 10. Do not self-merge #379 unless a coordinator/authorized non-author path is
     explicitly provided.
+11. Session 4 received new task319 assignment; task315 remains open/unmerged
+    and no additional task315 action is authorized.
