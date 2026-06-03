@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -177,3 +177,18 @@
 - Did not run task311 canary, benchmark eval, AIME/task243 eval, export,
   endpoint, promotion, generic raw-stage data, AIME2025 train rows, task255
   reuse, shared deletion, product-code edits, direct main push, or merge.
+
+## Session 8 - 2026-06-03 UTC - HOLD after final salvage closeout
+
+- Lead confirmed receipt of the task310 final salvage closeout and marked the
+  mailbox read.
+- Lead stated PR #373 at exact head
+  `7561a578f5f624cf1d3b85bef0dd8abb5c787533` remains HOLD, not approved, and
+  not self-merge cleared.
+- Lead created task313 for worker_4 independent salvage review.
+- Recorded that #373 should remain stable unless lead requests a refresh; I am
+  standing by for artifact/checksum questions after task313 review.
+- Did not modify the task310 training report or artifacts.
+- Did not train, eval, export, endpoint, promote, use generic raw-stage data,
+  use AIME2025 train rows, reuse task255, delete shared files, edit product
+  code, push main, or merge.

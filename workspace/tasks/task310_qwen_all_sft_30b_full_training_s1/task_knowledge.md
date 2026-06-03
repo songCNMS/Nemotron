@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Knowledge Entries
 
@@ -97,3 +97,12 @@
 25. Task311 canary, benchmark eval, AIME/task243 eval, export, endpoint, and
     promotion remain HOLD until lead reviews the task310 salvage report and
     explicitly releases a checkpoint-load/canary path.
+26. As of Session 8, lead has received and marked read the task310 final
+    salvage closeout mailbox, but PR #373 exact head
+    `7561a578f5f624cf1d3b85bef0dd8abb5c787533` remains HOLD and is not
+    approved for self-merge.
+27. Lead created task313 for worker_4 independent salvage review; worker_5
+    should keep #373 stable unless asked to refresh and be ready to answer
+    artifact/checksum questions without running follow-on task311 canary/eval,
+    export, endpoint, promotion, shared deletion, task255 reuse, or AIME2025
+    train-row work.
