@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Knowledge Entries
 
@@ -20,3 +20,6 @@
    manifest-sized prefix; prefix hashes match and suffixes equal `summary.json`.
 8. Forensics recommendation is `APPROVE_FORENSICS`, but task311 gate remains
    `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS` with no promotion claim.
+9. Lead accepted task314/#380 at head `d3bd9733` as
+   `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`; no self-merge is authorized
+   without an explicit coordinator/authorized non-author path.

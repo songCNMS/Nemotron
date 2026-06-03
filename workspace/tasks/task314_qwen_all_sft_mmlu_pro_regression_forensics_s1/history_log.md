@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -26,7 +26,7 @@
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, or merge.
 
-## Session 90 - 2026-06-03 UTC - Forensics complete
+## Session 91 - 2026-06-03 UTC - Forensics complete
 
 - Completed read-only MMLU-Pro base-vs-FT forensics over task311 artifacts
   under
@@ -44,3 +44,18 @@
 - Recommendation: `APPROVE_FORENSICS` while preserving task311 disposition
   `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; no promotion or new
   training/eval authorized.
+
+## Session 92 - 2026-06-03 UTC - Lead gate accepted and metadata cleanup
+
+- Lead processed task314/#380 gate at head
+  `d3bd97331932ba4263a1516c8f93c599d860046d` as
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE` and accepted the finding that
+  MMLU-Pro `-2` is real answer-choice drift, not an evaluator artifact.
+- Lead confirmed no promotion or new training/eval is authorized and instructed
+  not to self-merge unless a coordinator/authorized non-author path is
+  explicitly provided.
+- Applied hook-required metadata cleanup: worker `status.md` remains
+  `Working`, task/session metadata now records Session 92, and the duplicate
+  history Session 90 heading is resolved.
+- This is a docs/status metadata-only branch update; the task314 forensics
+  report findings and output artifact checksums are unchanged.
