@@ -11877,3 +11877,13 @@
   100,000 rows / 4,810.0 MiB at `2026-06-03T23:07:05Z` with rate 9.23 MiB/s.
   The process remained active; no python00 source-level result, task327 final
   rc/report/PR, or release to packing/training/eval existed yet.
+- Resume monitor found no unread lead mailbox messages, no task327 PR, and
+  task327 branch still at `b20e642a648425fb23c324290c5f672163332943`.
+  Read-only artifact observation showed `competitive-python-00.rows.tsv.gz`
+  updated at `2026-06-03T23:13:24Z`; the last complete row-manifest line seen
+  was row 174,925, with the next partial read at row 174,926 while the file was
+  still being written. Output root was about 106G and the
+  `materialize_large_sources.py` process remained active. This is live
+  in-progress evidence only: no python00 source-level disposition, final rc,
+  official worker_2 report, task327 PR, or release to packing/training/eval
+  existed yet.

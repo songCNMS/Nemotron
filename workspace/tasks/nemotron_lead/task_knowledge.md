@@ -2669,3 +2669,9 @@
 701. Session 79: task327 `competitive-python-00` source file materialized and
    scan reached 100,000 rows / 4,810.0 MiB at `2026-06-03T23:07:05Z`; still
    live in-progress with no source-level result/final report/PR.
+702. Session 79 resume: no unread mailbox and no task327 PR; task327 branch
+   remains `b20e642a`. Live read-only artifact observation shows
+   `competitive-python-00` row manifest has advanced past 174k rows
+   (`competitive-python-00.rows.tsv.gz` mtime `2026-06-03T23:13:24Z`) while
+   process remains active. This is not a completed gate and does not release
+   packing/training/eval.
