@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - 30B corrected AIME FT-vs-base gate
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=5 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=6 -->
 
 ## Background
 

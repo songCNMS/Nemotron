@@ -1,6 +1,6 @@
 # task306 30B task301 same-harness AIME evaluation report
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=5 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=6 -->
 
 ## Summary
 

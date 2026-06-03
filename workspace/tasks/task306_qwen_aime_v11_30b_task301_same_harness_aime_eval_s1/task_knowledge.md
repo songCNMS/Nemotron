@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,6 @@
     `sampling_exact_parameter_match=false` because task306 used the accepted
     no-export MCore greedy substitute while task300 base used SGLang endpoint
     transport.
+13. Session 6 lead follow-up referenced an obsolete acceptance-only branch
+    observation; current task306 evidence is in PR #369 and retains the same
+    `FAIL` result without any additional eval or artifact mutation.

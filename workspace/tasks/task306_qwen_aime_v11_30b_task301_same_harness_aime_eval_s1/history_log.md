@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -62,3 +62,21 @@
 - PR #369 was opened at head
   `1255f2356cb014cd1adbe58c7af297f291b222f3` and the official mailbox report
   was sent to lead as message `ae6fd1db7a894003a952469e4705ab07`.
+
+## Session 6 - 2026-06-03 UTC - queued follow-up answered
+
+- Received a queued lead follow-up that referenced an obsolete acceptance-only
+  branch observation at `2ef5515ed81bbf35712e57b2c91cfcc1726f46b5`.
+- Verified the current task306 branch already contains the completed
+  no-export/no-endpoint same-harness corrected AIME2025 evaluation report and
+  PR #369 evidence.
+- Reconfirmed PR #369 state before this status update: open, non-draft, base
+  `main`, head `8201b3943db2d6ed4427c42518736c41f77d67bd`,
+  `CLEAN/MERGEABLE`.
+- Reconfirmed retained artifact root:
+  `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
+- Result unchanged: task301 Qwen3-30B-A3B `iter_0000035` scored
+  `14/30 = 0.4666666666666667` versus accepted task300 base `15/30 = 0.5`,
+  so disposition remains `FAIL` with no promotion.
+- No rerun, training, AIME train-data use, task255 reuse, export, endpoint,
+  shared deletion, promotion, direct main push, merge, or self-merge occurred.
