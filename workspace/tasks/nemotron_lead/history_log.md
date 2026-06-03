@@ -8985,6 +8985,26 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 206 - 2026-06-03 UTC - task306 follow-up head drift to 6ad9778
+
+- Observed #369 head advanced from
+  `8201b3943db2d6ed4427c42518736c41f77d67bd` to
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` while worker_3 was processing an
+  older queued visibility follow-up.
+- Current #369 state after fetch: OPEN/base `main`/CLEAN/MERGEABLE/non-draft,
+  head `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
+- Lead diff check for `8201b394..6ad9778` shows only worker_3 status and
+  task306 README/report/history/task_knowledge session/status follow-up; `git
+  diff --check` passes. The task306 result remains FAIL `14/30` versus base
+  `15/30`.
+- Refreshed task307 docs to review exact #369 head `6ad9778`, eval source head
+  `894e2e7`, and drift ranges `894e2e7..1255f235`, `1255f235..8201b394`, and
+  `8201b394..6ad9778`.
+- Gate remains FAIL/HOLD pending worker_4 task307 review. #369 is still not
+  merge-cleared; no promotion, export, endpoint, new training, AIME2025 train
+  data, task255 reuse, shared deletion, main push, merge, or further 30B/8-GPU
+  work is authorized.
+
 ## Session 205 - 2026-06-03 UTC - task306 mailbox closeout and head drift
 
 - Read worker_3 official task306 closeout mailbox

@@ -41,3 +41,15 @@
 - Lead refreshed task307 to review exact #369 head
   `8201b3943db2d6ed4427c42518736c41f77d67bd`, plus both drift ranges
   `894e2e7..1255f235` and `1255f235..8201b394`.
+
+## Session 206 - 2026-06-03 UTC - review target refreshed after queued follow-up
+
+- PR #369 advanced again to
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` after worker_3 answered a queued
+  lead follow-up.
+- Lead diff check showed `8201b394..6ad9778` is worker_3 status plus task306
+  README/report/history/task_knowledge session/status closeout only; task306
+  FAIL metrics remain unchanged.
+- Lead refreshed task307 to review exact #369 head `6ad9778`, eval source head
+  `894e2e7`, and drift ranges `894e2e7..1255f235`, `1255f235..8201b394`, and
+  `8201b394..6ad9778`.

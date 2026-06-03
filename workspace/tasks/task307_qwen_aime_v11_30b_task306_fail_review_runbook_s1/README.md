@@ -16,13 +16,16 @@ Current lead-observed state:
   `894e2e71e72f09926128e37f22000802804522bc`.
 - task306 PR #369 later appeared after the initial task307 assignment and is
   currently OPEN, base `main`, CLEAN, non-draft, head
-  `8201b3943db2d6ed4427c42518736c41f77d67bd`.
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
 - The task306 eval source head remains `894e2e71e72f09926128e37f22000802804522bc`;
   PR #369 first reached `1255f2356cb014cd1adbe58c7af297f291b222f3`, then
   advanced to `8201b3943db2d6ed4427c42518736c41f77d67bd` with worker_3
-  session/status/PR metadata closeout. Worker_3 official mailbox reports are
-  `ae6fd1db7a894003a952469e4705ab07` and addendum
-  `094b16ec7ba14650b53bcd9e69306256`.
+  session/status/PR metadata closeout, then advanced to
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` with a queued-follow-up/status
+  closeout. Worker_3 official mailbox reports are
+  `ae6fd1db7a894003a952469e4705ab07`, addendum
+  `094b16ec7ba14650b53bcd9e69306256`, and the lead-observed session 6
+  follow-up in PR #369.
 - task306 local output root:
   `/work-agents/intern_nemotron_worker_3/outputs/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1/run_20260602T190432Z`.
 - task306 remote run root:
@@ -68,7 +71,7 @@ request changes instead.
 ## Scope
 
 - Review exact PR #369 head
-  `8201b3943db2d6ed4427c42518736c41f77d67bd`.
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
 - Confirm the task306 eval source head
   `894e2e71e72f09926128e37f22000802804522bc`.
 - Compare `894e2e71e72f09926128e37f22000802804522bc..1255f2356cb014cd1adbe58c7af297f291b222f3`
@@ -77,6 +80,9 @@ request changes instead.
 - Compare `1255f2356cb014cd1adbe58c7af297f291b222f3..8201b3943db2d6ed4427c42518736c41f77d67bd`
   and state whether it is only worker_3 session/status/PR metadata closeout
   with unchanged task306 metrics.
+- Compare `8201b3943db2d6ed4427c42518736c41f77d67bd..6ad9778ebed758cbcd72ee30ea71d9520a297ac7`
+  and state whether it is only worker_3 queued-follow-up/status metadata
+  closeout with unchanged task306 metrics and no additional eval.
 - Confirm whether task306 branch/PR/head changed after this assignment.
 - Review the task306 local output root and remote root read-only.
 - Verify `remote_no_export_aime_eval.rc=0`.

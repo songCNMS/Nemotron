@@ -18,3 +18,7 @@
    are `ae6fd1db7a894003a952469e4705ab07` and addendum
    `094b16ec7ba14650b53bcd9e69306256`. Worker_4 must review exact head
    `8201b394` and verify `1255f235..8201b394` is metadata/status-only.
+5. Session 206 update: task306 PR #369 advanced again to
+   `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` after a queued worker_3 follow-up.
+   Lead diff `8201b394..6ad9778` is status/session metadata only with unchanged
+   FAIL metrics. Worker_4 must review exact head `6ad9778`.

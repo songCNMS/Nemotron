@@ -2174,3 +2174,9 @@
    to review exact #369 head `8201b394`, eval source `894e2e7`, and both drift
    ranges. Gate remains FAIL/HOLD pending task307; #369 is not approved or
    merge-cleared yet.
+592. Session 206: #369 advanced to `6ad9778` from worker_3 queued follow-up
+   handling. Lead diff `8201b394..6ad9778` is status/session metadata only,
+   with unchanged task306 FAIL metric `14/30` versus base `15/30`; diff-check
+   passes. Refreshed task307 to review exact #369 head `6ad9778` and all three
+   drift ranges. Gate remains FAIL/HOLD pending task307; #369 is not merge-
+   cleared.

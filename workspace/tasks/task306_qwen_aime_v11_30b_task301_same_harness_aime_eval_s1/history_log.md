@@ -1127,6 +1127,20 @@
   checksum manifest, blocker file, or official report is visible. Gate remains
   HOLD pending completion and official worker report.
 
+## Session 206 - 2026-06-03 UTC - queued follow-up head reconciled
+
+- PR #369 advanced from `8201b3943db2d6ed4427c42518736c41f77d67bd` to
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` after worker_3 answered a queued
+  lead visibility follow-up.
+- Current #369 remains OPEN/base `main`/CLEAN/MERGEABLE/non-draft at
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`; `8201b394..6ad9778` changes only
+  worker_3 status and task306 session/status metadata, with unchanged FAIL
+  metric.
+- Lead refreshed task307 to review exact #369 head `6ad9778`, eval source head
+  `894e2e7`, and drift ranges through the latest head.
+- Gate remains FAIL/HOLD pending task307. No merge, promotion, export, endpoint,
+  new training, or further 30B work is authorized.
+
 ## Session 205 - 2026-06-03 UTC - mailbox closeout reconciled
 
 - Worker_3 official closeout mailbox
