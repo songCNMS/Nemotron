@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task309_qwen_all_sft_packed_data_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task327_qwen_all_sft_large_source_materialize_decontam_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
-| PR | #372 |
-| Session | 5 |
-| Last Update | 2026-06-03T15:18:00Z: task309/#372 lead-approved at 4e26317a but sequenced after #374; #374 still OPEN/CLEAN so no merge performed, constrained V11/task299 seed only, generic raw SFT no-go, no training/eval/export/endpoint/promotion/main push/merge. |
+| Current Task | task327_qwen_all_sft_large_source_materialize_decontam_s1 |
+| PR | Pending |
+| Session | 1 |
+| Last Update | 2026-06-03T21:05:00Z: accepted task327 on worker branch from origin/main. Scope is only the 10 task322 EXCLUDED_SIZE_GT_1GB sources; preparing task-owned materialize/count/checksum/row-manifest/decontam evidence or exact blockers. No packing/training/eval/export/endpoint/promotion/task255/AIME2025 train data/shared deletion/main push/merge/self-merge. |
