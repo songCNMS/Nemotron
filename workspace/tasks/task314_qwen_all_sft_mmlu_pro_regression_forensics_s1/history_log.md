@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -70,3 +70,16 @@
 - Recorded handoff in task314 metadata before starting task320 from current
   `origin/main`; task314 report findings and output artifact checksums are
   unchanged.
+
+## Session 94 - 2026-06-03 UTC - Task320 visibility follow-up
+
+- Lead sent a task320 follow-up after the handoff note, reporting that task320
+  branch/files were not yet visible from the lead side.
+- Verified task320 was completed in a separate clean worktree on branch
+  `intern_nemotron_worker_1/task320_qwen_all_sft_mmlu_data_repair_linkage_s1`
+  at head `4131915f14acb4ff551ae6cf3f2325a67cf89945`.
+- Verified task320 PR #381 is `OPEN`, base `main`, non-draft,
+  `CLEAN/MERGEABLE`, with report
+  `workspace/tasks/task320_qwen_all_sft_mmlu_data_repair_linkage_s1/mmlu_data_repair_linkage_report.md`.
+- Task314/#380 remains approved docs/no-action-release and not self-merged;
+  task314 report findings and output artifact checksums are unchanged.

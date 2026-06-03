@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,6 @@
 9. Lead accepted task314/#380 at head `d3bd9733` as
    `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`; no self-merge is authorized
    without an explicit coordinator/authorized non-author path.
+10. Task320 follow-up visibility was addressed by verifying PR #381 at head
+    `4131915f14acb4ff551ae6cf3f2325a67cf89945`, `OPEN`/base `main`/
+    `CLEAN/MERGEABLE`; task314 remains unmerged pending authorized path.
