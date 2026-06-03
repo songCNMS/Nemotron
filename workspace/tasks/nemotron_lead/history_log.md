@@ -10682,3 +10682,66 @@
   counted, decontam-scanned, Qwen-packed, and reviewed. No lead training, test,
   eval, export, endpoint, promotion, main push, merge, task255 reuse,
   AIME2025 train data, shared deletion, or product-code edit occurred.
+
+### Post-#374/#372 merge sequencing
+
+- Fetched origin and verified #374/task308 merged first at
+  `2026-06-03T15:28:23Z` with merge commit
+  `eb05e6b324c3159b01070cb575c2be363e773cac` from approved head
+  `a238cacb1f28fb96df58d3a10641a2b7325f61b7`.
+- Verified #372/task309 then merged at `2026-06-03T15:32:36Z` with merge
+  commit `af388ea858cd0b7582a37397188b03f69e8927b4` from approved head
+  `6c3c79092ea551f0094d78f0097e2bd76a23438f`. The advanced head beyond the
+  prior reviewed `4e26317a` was status/history/task_knowledge bookkeeping
+  only; the constrained packed-contract report remained unchanged.
+- Rechecked #375/task312 after #372 landed. GitHub recomputed it back to
+  OPEN/base `main`/CLEAN at exact approved head
+  `a8a9ade370269daea0c38331c601dc38012b09be`.
+- Sent worker_4 release instruction: self-merge #375 only if it remains CLEAN
+  at exact head `a8a9ade3`, then report mergedAt, mergeCommit, merged head, and
+  unchanged docs/status/review scope. If head drifts materially or mergeability
+  becomes dirty/stale, worker_4 must refresh and report before merge.
+- Processed and marked read worker_5 task310 mailbox
+  `4746e9502fb94deb9744900ba79cbe63`: task310 remains HOLD because the worker
+  report predated #374/#372 merges; no 30B runtime refresh, training launch, or
+  checkpoint occurred.
+- Processed and marked read worker_3 task311 mailbox
+  `a7e80d97c0da4c11946e28e8cb586e0d`: #371 advanced to
+  `95b4009a5563f27ed944a3f2e5833ae0ed589414` with docs/status-only HOLD
+  bookkeeping and unchanged `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
+- Current gate remains HOLD/NO-GO until #375 closeout lands and task310 is
+  refreshed from current main against the constrained task299 packed root. No
+  generic raw stage1 SFT, task255 reuse, AIME2025 train data, shared deletion,
+  export, endpoint, promotion, product-code edit, lead test/eval/training, main
+  push, or lead merge occurred.
+
+### #375 closeout and task310 release
+
+- Processed and marked read worker_4 task312/#375 closeout
+  `717f7cb52768487680dbad7a74aded9c`. Verified #375 merged at
+  `2026-06-03T15:34:58Z` with merge commit
+  `004870e7d790778b5cdae5cc574257fdc19ec755` from exact approved head
+  `a8a9ade370269daea0c38331c601dc38012b09be`.
+- Processed and marked read worker_2 task309/#372 closeout
+  `475a9fcb283043f0897416795de11c0f`. Worker_2 also pushed branch-only
+  closeout head `75f4f60bb0614026e3dfb083e427cb2524279d9c`, updating worker
+  status/history/task_knowledge only after the already merged PR head
+  `6c3c790`.
+- Fetched origin and verified current `origin/main` is
+  `004870e7d790778b5cdae5cc574257fdc19ec755`.
+- Released worker_5 task310 to refresh from current main and recheck the
+  30B runtime/resource/data gates. Instruction explicitly forbids merging stale
+  #373 as-is and allows the bounded 30B all-SFT training attempt only if the
+  current-main gates pass.
+- Task310 allowed data/model path remains exactly the constrained
+  V11/task299 packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+  with model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+  Generic `stage1_sft/data_blend_raw` remains NO-GO.
+- Sent worker_3 task311 hold confirmation: #371 must not self-merge or run
+  canary/benchmarks until lead accepts an official task310 checkpoint handoff.
+- Global gate remains not promoted and still fail-closed for downstream
+  evaluation: no AIME2025 training prompts/labels, no task255 reuse, no shared
+  deletion, no silent downgrade, no export/endpoint/promotion, and no benchmark
+  eval/canary before accepted checkpoint evidence.

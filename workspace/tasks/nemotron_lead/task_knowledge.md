@@ -2233,3 +2233,27 @@
    0.4666666666666667` below accepted base `15/30 = 0.5`. No promotion,
    export, endpoint, further 30B training/eval, task255 reuse, AIME2025 train
    data, or shared deletion is authorized.
+595. Session 78: #374/task308 merged at `2026-06-03T15:28:23Z` as
+   `eb05e6b324c3159b01070cb575c2be363e773cac` from approved head `a238cacb`.
+   #372/task309 merged at `2026-06-03T15:32:36Z` as
+   `af388ea858cd0b7582a37397188b03f69e8927b4` from approved head `6c3c790`.
+   The constrained packed contract remains the task299 seed only; generic raw
+   `stage1_sft/data_blend_raw` stays NO-GO.
+596. Session 78: #375/task312 recomputed CLEAN on base `main` at approved head
+   `a8a9ade3` after #372 landed. Worker_4 is released to self-merge only if
+   that exact head remains CLEAN at merge time; otherwise refresh/report before
+   merge.
+597. Session 78: task310/task311 stay HOLD. Worker_5's task310 report
+   `4746e950` predates #374/#372 landing and did not refresh 30B runtime or
+   launch training; worker_3's task311 report `a7e80d97` is docs/status-only
+   HOLD at `95b4009a`. Task310 may refresh only after #374/#372/#375 are
+   merged, using the constrained task299 packed root and Qwen3-30B-A3B model.
+598. Session 78: #375/task312 merged at `2026-06-03T15:34:58Z` as
+   `004870e7d790778b5cdae5cc574257fdc19ec755` from exact approved head
+   `a8a9ade3`. With #374/#372/#375 merged, worker_5 task310 was released to
+   refresh from current main `004870e7` and proceed only through the constrained
+   runtime/resource/data gate; stale #373 must not be merged as-is.
+599. Session 78: worker_3 task311 was told to keep #371 HOLD until an official
+   task310 checkpoint handoff is accepted. No checkpoint-load, non-AIME canary,
+   benchmark eval, export, endpoint, promotion, AIME2025 train data, task255
+   reuse, silent downgrade, or shared deletion is authorized before that gate.

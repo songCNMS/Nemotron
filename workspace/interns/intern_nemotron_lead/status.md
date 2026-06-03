@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: approved #374/#372/#375 sequence; task310 constrained refresh pending |
+| PR | all-SFT gate: #374/#372/#375 merged; task310 released for current-main constrained 30B gate; task311 HOLD |
 | Session | 78 |
