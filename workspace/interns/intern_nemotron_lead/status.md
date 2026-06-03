@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #376/#373 merged; task311 canary-only release sent; #371 d2e275e needs official canary report |
+| PR | all-SFT gate: task311 canary accepted at #371 2ffbe8c; benchmark eval phase released |
 | Session | 78 |

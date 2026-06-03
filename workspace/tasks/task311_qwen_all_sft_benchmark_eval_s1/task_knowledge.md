@@ -20,3 +20,12 @@
    endpoint, promotion, additional training, task255 reuse, AIME2025 train data,
    shared deletion, self-merge, and main push remain HOLD until canary evidence
    is reported and lead releases the next gate.
+7. Worker_3 official canary mailbox `f4666ec4` and #371 head `2ffbe8c4`
+   establish `PASS_NON_AIME_CANARY_ONLY`: checkpoint load passed, remote rc `0`,
+   5/5 completions retained, 5/5 exact expected-answer matches, and no
+   empty/mixed-script/degeneration failures.
+8. Lead released corrected benchmark evaluation only after accepting the canary:
+   MMLU-Pro, AIME2025, HMMT, and runnable M1 launcher-available basket rows.
+9. Same-harness base evidence is mandatory before judging FT for each benchmark;
+   prior base can be reused only when model path, route, evaluator, prompt
+   protocol, sampling, parser, and denominator match exactly.

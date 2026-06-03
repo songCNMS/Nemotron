@@ -40,3 +40,24 @@
   endpoint, promotion, additional training, task255 reuse, AIME2025 train data,
   shared deletion, self-merge, and main push remain HOLD pending canary report
   and explicit lead release.
+
+## Session 78 - 2026-06-03 UTC - Canary accepted and benchmark eval released
+
+- Worker_3 reported official task311 canary-only closeout for #371 head
+  `2ffbe8c4d9f833980d64d756965e909bf3260f20`; lead marked mailbox
+  `f4666ec4159546c0986f67be3f528c0f` read.
+- Canary result accepted: `PASS_NON_AIME_CANARY_ONLY`, remote rc `0`,
+  checkpoint load `PASS`, 5/5 completions retained, 5/5 non-empty, 5/5 exact
+  expected-answer matches, empty/mixed-script/degeneration counts all `0`.
+- Lead released corrected benchmark evaluation only, on #371, for checkpoint
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
+- Required benchmark gate: establish same-harness base evidence before judging
+  FT for each benchmark; reuse prior base only if model path, route, evaluator,
+  prompt protocol, sampling, parser, and denominator match exactly, otherwise
+  rerun base.
+- Released benchmark scope: corrected Qwen MMLU-Pro, AIME2025, HMMT, plus
+  runnable M1 launcher-available basket rows; unavailable rows must record exact
+  blockers.
+- Still HOLD: AIME2025 train data, training/optimizer steps, task255 reuse,
+  shared deletion, export/endpoint except eval-only if required and documented,
+  promotion, self-merge, and main push.

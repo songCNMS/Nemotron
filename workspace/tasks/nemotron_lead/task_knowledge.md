@@ -2358,3 +2358,12 @@
    blocker docs/status, with no official worker_3 canary mailbox yet. Lead sent
    a delivered worker_3 follow-up requiring current-main refresh and official
    checkpoint-load/non-AIME canary artifacts or exact blocker.
+618. Session 78: worker_3 official canary mailbox `f4666ec4` and #371 head
+   `2ffbe8c4` establish `PASS_NON_AIME_CANARY_ONLY`: checkpoint load PASS,
+   remote rc `0`, 5/5 completions retained, 5/5 exact expected-answer matches,
+   and zero empty/mixed-script/degeneration counts.
+619. Session 78: lead released corrected benchmark evaluation on #371 after
+   accepting the canary. Scope is MMLU-Pro, AIME2025, HMMT, and runnable M1
+   launcher-available rows, with same-harness base evidence required before
+   each FT judgment; no promotion/training/task255/AIME2025 train data/shared
+   deletion/self-merge/main push.

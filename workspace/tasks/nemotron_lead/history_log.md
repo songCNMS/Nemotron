@@ -11038,3 +11038,27 @@
   export, endpoint, promotion, additional training, task255 reuse, AIME2025
   train data, shared deletion, self-merge, direct main push, and any claim that
   task310 was clean `PASS_TRAINING`.
+
+### Task311 non-AIME canary accepted and benchmark phase released
+
+- Processed and marked read worker_3 official task311 canary-only closeout
+  mailbox `f4666ec4159546c0986f67be3f528c0f`.
+- Accepted #371 head `2ffbe8c4d9f833980d64d756965e909bf3260f20` as canary-pass
+  evidence. PR #371 is OPEN/CLEAN/non-draft; diff is task311 docs/status plus
+  task-owned no-export canary wrapper, and `git diff --check` passed.
+- Canary evidence: local root
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`,
+  remote root `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`,
+  checkpoint load `PASS`, remote rc `0`, 5/5 completions retained, 5/5 exact
+  expected-answer matches, empty/mixed-script/degeneration counts `0`, summary
+  sha `5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`.
+- Released worker_3/task311 next phase on #371: corrected benchmark evaluation
+  only, with same-harness base evidence required before judging FT for each row.
+  Release comment: #371 issuecomment `4615233015`; peer send returned
+  `delivered`.
+- Benchmark scope released: corrected Qwen MMLU-Pro, AIME2025, HMMT, plus
+  runnable M1 launcher-available basket rows with exact unavailable-row
+  blockers.
+- Still HOLD: AIME2025 training prompts/labels, training/optimizer steps,
+  task255 reuse, shared deletion, export/endpoint except eval-only if required
+  and documented, promotion, self-merge, and main push.

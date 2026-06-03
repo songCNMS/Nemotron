@@ -81,10 +81,10 @@ reasons.
 - Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependency: task310 checkpoint handoff
 - Review dependencies: task312, task313
-- Gate state: checkpoint-load plus non-AIME canary/completion-retention is
-  released only for the task310 salvage checkpoint candidate
-  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`.
-  Benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval, export,
-  endpoint, promotion, additional training, task255 reuse, AIME2025 train data,
-  shared deletion, self-merge, and main push remain HOLD until lead processes
-  the canary report.
+- Gate state: checkpoint-load plus non-AIME canary/completion-retention passed
+  at #371 head `2ffbe8c4d9f833980d64d756965e909bf3260f20`. Lead released
+  corrected benchmark evaluation for the task310 salvage checkpoint candidate
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`,
+  with same-harness base evidence required before judging FT on every benchmark.
+  Promotion, training/optimizer steps, task255 reuse, AIME2025 train data,
+  shared deletion, self-merge, and main push remain HOLD.
