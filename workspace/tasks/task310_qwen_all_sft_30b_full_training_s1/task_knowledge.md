@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,11 @@
    `ecb14173a820df377270273b9f7d9d92cb5076d2`; current lead docs head
    `9f838e94feccd0aad4b916dc8f29a6e4d0c80133` contains no additional task310
    file changes beyond that commit.
+8. As of Session 3, task308 PR #374 is open/CLEAN at
+   `f57384f6a298500f240a9367c3598cd5f9a59638` with
+   `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`, which still requires a
+   task309 packed-contract refresh before task310 launch.
+9. As of Session 3, task309 PR #372 is open/CLEAN at
+   `998ebce439164af2cc0e026575de32cd356acaa0`, but its report still records
+   `BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING`; task310 remains HOLD until
+   task309 refreshes from #374 and receives accepted `PASS_PACKED_CONTRACT`.

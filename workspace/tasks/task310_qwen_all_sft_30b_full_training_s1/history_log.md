@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -38,3 +38,19 @@
 - Opened PR #373 for the docs-only task310 acceptance/blocker report.
 - Prepared branch push and mailbox report with no training/eval/export/endpoint
   promotion, product-code edit, shared deletion, direct main push, or merge.
+
+## Session 3 - 2026-06-03 UTC - HOLD refresh after task308 PR
+
+- Lead verified PR #373 open/base main/CLEAN at
+  `1cd3eb17fc686b281da7a9a0791ea09fbe614664` and kept task310 HOLD.
+- Verified task308 PR #374 is open/CLEAN at
+  `f57384f6a298500f240a9367c3598cd5f9a59638` with report decision
+  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+- Verified task309 PR #372 is open/CLEAN at
+  `998ebce439164af2cc0e026575de32cd356acaa0`, but its report still records
+  `BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING` and must refresh from #374
+  before task310 can use it.
+- Kept task310 at `BLOCK_PRETRAINING_GATE`; did not self-merge #373, launch
+  training, silently downgrade the model, use AIME2025 train rows, use task255,
+  delete shared files, export, endpoint, promote, edit product code, push main,
+  or merge.

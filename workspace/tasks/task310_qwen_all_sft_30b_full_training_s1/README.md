@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Qwen all-SFT 30B full training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=2 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=3 -->
 
 ## Background
 
@@ -87,19 +87,32 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Current Worker Disposition
 
-Session 2 disposition: `BLOCK_PRETRAINING_GATE`.
+Session 3 disposition: `BLOCK_PRETRAINING_GATE`.
 
 Training was not launched because the required upstream gates are not yet
 present as accepted evidence:
 
-- task308 has a visible worker branch
+- task308 now has PR #374 open/CLEAN at
+  `f57384f6a298500f240a9367c3598cd5f9a59638` with
+  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`, but this does not release
+  task310 by itself.
+- task309 PR #372 is open/CLEAN at
+  `998ebce439164af2cc0e026575de32cd356acaa0`, but its report still records
+  `BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING` and must refresh from #374
+  before any task310 launch decision.
+- task310 PR #373 remains open/CLEAN at
+  `1cd3eb17fc686b281da7a9a0791ea09fbe614664`.
+
+Previously observed branches:
+
+- task308 worker branch
   `intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1`
-  at `348cba44c02043cd6310a36ec722a68278288db2`, but no PR or
-  `all_sft_pipeline_inventory_audit_report.md` PASS artifact is visible.
-- task309 has a visible worker branch
+  advanced from `348cba44c02043cd6310a36ec722a68278288db2` to #374 head
+  `f57384f6a298500f240a9367c3598cd5f9a59638`.
+- task309 worker branch
   `intern_nemotron_worker_2/task309_qwen_all_sft_packed_data_contract_s1`
-  at `d054925b1792a5365738247eeb8bdec462e1e6c6`, but no PR or
-  `all_sft_packed_data_contract_report.md` PASS artifact is visible.
+  advanced from `d054925b1792a5365738247eeb8bdec462e1e6c6` to #372 head
+  `998ebce439164af2cc0e026575de32cd356acaa0`.
 
 Report:
 `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/all_sft_30b_full_training_report.md`.

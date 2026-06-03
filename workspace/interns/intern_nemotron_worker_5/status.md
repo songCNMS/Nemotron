@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task310_qwen_all_sft_30b_full_training_s1 |
 | PR | #373 |
-| Session | 2 |
-| Last Update | Accepted task310 from refreshed lead docs including `5f4167dc`; pushed branch `intern_nemotron_worker_5/task310_qwen_all_sft_30b_full_training_s1` and opened PR #373. Current gate disposition is `BLOCK_PRETRAINING_GATE` because task308/task309 worker branches are visible but no PRs or required PASS reports/artifacts are visible. No training/eval/export/endpoint/promotion/product-code edits/shared deletion/main push/merge. |
+| Session | 3 |
+| Last Update | PR #373 remains open/base main/CLEAN at `1cd3eb17fc686b281da7a9a0791ea09fbe614664`; task310 remains `BLOCK_PRETRAINING_GATE` because task308 #374 now exists but task309 #372 must refresh from #374 and receive accepted `PASS_PACKED_CONTRACT`. No self-merge, training, silent downgrade, AIME2025 train rows, task255, shared deletion, export/endpoint/promotion, product-code edits, main push, or merge. |
