@@ -11820,3 +11820,22 @@
   summary/matrix still containing only the `instruction-following-chat`
   `BLOCKED_DECONTAM_HIT` row. No source-level decision, worker official report,
   PR, or release to packing/training exists yet.
+- Continued read-only monitoring showed `competitive-cpp-00` reached 400,000
+  rows / 20,991.7 MiB at `2026-06-03T22:06:46Z`, then completed at
+  `2026-06-03T22:12:54Z` with status `BLOCKED_DECONTAM_HIT`; the task327
+  process immediately started `competitive-cpp-01`.
+- Verified `competitive-cpp-00` artifact details from
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`:
+  expected/file bytes 25,608,786,180; expected/file sha256
+  `1081e0a650ecdc02df1b4b8b4fecf4b3d39828908874b4bf1a4015e638005c62`;
+  row count 466,006; parse errors 0; row manifest sha256
+  `06417e0445200472fa37889cabd2b93f511471be3f45f49291aef9f420e16a39`;
+  prompt-hash hits 0, normalized-prompt hits 0, 13-word ngram hits 842.
+  Split exposure remains
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+- Because both completed task327 sources currently have decontam hits, they are
+  not train-ready without a later lead-reviewed false-positive/filtering
+  contract. There is still no official worker_2 report/PR, no run rc/final
+  disposition, and no release to packing, training, eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, merge,
+  self-merge, or main push.

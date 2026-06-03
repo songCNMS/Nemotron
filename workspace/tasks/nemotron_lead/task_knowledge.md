@@ -2642,3 +2642,8 @@
    Follow-up gate check found no unread mailbox, no task327 PR, task327 branch
    still at `b20e642a`, diff-check pass, and active worker process still
    pending a `competitive-cpp-00` source decision.
+695. Session 79: task327 `competitive-cpp-00` completed
+   `BLOCKED_DECONTAM_HIT`: 466,006 rows, parse errors 0, sha matched,
+   row-manifest sha `06417e0445200472fa37889cabd2b93f511471be3f45f49291aef9f420e16a39`,
+   prompt/normalized hits 0/0, 13-word ngram hits 842; task327 then started
+   `competitive-cpp-01`. No official report/PR or packing/training release.
