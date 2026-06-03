@@ -2491,3 +2491,19 @@
    lead later releases a bounded action; no new eval/training/export/endpoint,
    AIME2025 train data, task255 reuse, shared deletion, promotion, main push,
    merge, or self-merge is authorized.
+648. Session 78: task314 branch
+   `fa72ab0b8d83c0ae45aa018ace13885140c361a1` and task315 branch
+   `14d90bc3784c4564259339910fb3507979583897` are visible remotely as
+   acceptance/docs-status branches; no task314/task315 PR or mailbox closeout
+   yet.
+649. Session 78: task316 #377 is OPEN/CLEAN at
+   `7261b5fb60190f5522c05c5ae49451828f979126`; worker_5 mailbox
+   `a4dce7f3f2ce4a999d4dd1d207d7ffd8` was processed and marked read.
+650. Session 78: lead accepted #377 as `APPROVE_PLAN_DOCS /
+   NO_ACTION_RELEASE` in issuecomment `4615905391`. The plan direction is
+   repair data blend plus validation/termination before any more 30B training,
+   but it is conditional planning evidence only because task314/task315/task317
+   are still pending.
+651. Session 78: no new training/eval/packing/export/endpoint/promotion is
+   authorized by task316; #377 should not be self-merged under current
+   boundary.

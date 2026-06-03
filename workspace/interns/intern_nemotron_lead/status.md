@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #371 current head 9361e6da gate carried forward; task314-task317 follow-ups assigned for MMLU/M1/repair/review |
+| PR | #377 task316 plan approved as docs/no-action; #371 held; task314/task315/task317 pending |
 | Session | 78 |

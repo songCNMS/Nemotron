@@ -11352,3 +11352,28 @@
 - All follow-ups keep the global boundaries: no new training/eval/export/
   endpoint, no AIME2025 train data, no task255 reuse, no shared deletion, no
   promotion, no main push, no merge/self-merge.
+
+### Task316 plan gate processed
+
+- Remote task314 branch appeared at
+  `fa72ab0b8d83c0ae45aa018ace13885140c361a1`; diff is worker_1 status plus
+  task314 docs/acceptance, and `git diff --check` passed.
+- Remote task315 branch appeared at
+  `14d90bc3784c4564259339910fb3507979583897`; diff is worker_2 status plus
+  task315 docs/acceptance, and `git diff --check` passed.
+- Worker_5 opened #377 for task316 at head
+  `7261b5fb60190f5522c05c5ae49451828f979126`, OPEN/CLEAN/non-draft. Worker
+  mailbox `a4dce7f3f2ce4a999d4dd1d207d7ffd8` reported recommendation
+  `APPROVE_PLAN__REPAIR_DATA_AND_VALIDATION_BEFORE_ANY_MORE_30B_TRAINING`;
+  lead marked the mailbox read.
+- Lead verified #377 scope is worker_5 status plus task316 docs/report only;
+  `git diff --check` passed. The substantive plan report hash stayed unchanged
+  across PR-number bookkeeping drift from `67fe82bd` to `7261b5fb`.
+- Lead posted #377 issuecomment `4615905391` with
+  `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE`. Accepted planning direction:
+  freeze/accept task311 evidence, repair validation/termination, and repair
+  data blend before any later 30B training. This does not authorize training,
+  eval, packing, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion, main push, or self-merge.
+- Residuals still pending: task314 MMLU-Pro forensics, task315 M1 launcher
+  runtime route/blocker, and task317 independent #371 closeout review.
