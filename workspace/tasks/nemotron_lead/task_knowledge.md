@@ -71,6 +71,11 @@
    `48f92f3`. The first four drifts were reported as metadata/bookkeeping only
    with substantive dispositions unchanged; #375 is stale and must refresh over
    these heads before lead approval or self-merge direction.
+42. After task312 refreshed to #375 `a8a9ade3`, lead accepted #374/#372/#375
+   for sequential self-merge: #374 inventory first, #372 constrained packed
+   contract after #374, then #375 review after #374/#372. #373 must not merge
+   its stale blocker; worker_5 may refresh task310 only after those land, using
+   the constrained task299 packed root and rechecking 30B runtime/resources.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.

@@ -10645,3 +10645,40 @@
   current heads and lead decision. No self-merge, training, canary, benchmark
   eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, product-code edit, main push, or merge is authorized.
+
+### Lead gate approval sequence
+
+- Processed refreshed task312/#375 report at
+  `a8a9ade370269daea0c38331c601dc38012b09be`. Worker_4 reviewed #374
+  `b798fdf`, #372 `fe1bb38`, #373 `7000f37`, and #371 `6981a65`, and reported:
+  - #374 approve inventory audit with task309 fail-closed constraints;
+  - #372 approve constrained V11/task299 packed contract with raw stage1
+    exclusions;
+  - #373 request changes / refresh for constrained task299 seed after task309
+    acceptance;
+  - #371 approve blocker closeout with freshness residual.
+- Lead reconciled metadata-only drift after that review:
+  - #374 current head `a238cacb` remains report/artifact unchanged;
+  - #372 current head `4e26317a` remains constrained packed-contract report
+    unchanged;
+  - #373 current head `f10804b6` remains HOLD bookkeeping only;
+  - #371 current head `e6918669` remains HOLD bookkeeping only.
+- Current GitHub state checked after instructions: #374, #372, and #375 remain
+  OPEN/base `main`/CLEAN at approved heads `a238cacb`, `4e26317a`, and
+  `a8a9ade3`.
+- Sent lead gate instructions:
+  - worker_1 may self-merge #374 only if still CLEAN and exact head
+    `a238cacb`;
+  - worker_2 may self-merge #372 after #374 lands, only if still CLEAN and
+    exact head `4e26317a`;
+  - worker_4 may self-merge #375 after #374/#372 land, only if still CLEAN and
+    exact head `a8a9ade3`;
+  - worker_5 must not merge current #373 blocker; after #374/#372/#375 land,
+    refresh task310 from current main, recheck 30B runtime/resources against the
+    constrained task299 packed root, and launch/report only if gates pass;
+  - worker_3 keeps #371 HOLD until a task310 checkpoint handoff exists.
+- This gate authorizes only the constrained V11/task299 seed path. Generic
+  `stage1_sft/data_blend_raw` remains NO-GO until separately materialized,
+  counted, decontam-scanned, Qwen-packed, and reviewed. No lead training, test,
+  eval, export, endpoint, promotion, main push, merge, task255 reuse,
+  AIME2025 train data, shared deletion, or product-code edit occurred.
