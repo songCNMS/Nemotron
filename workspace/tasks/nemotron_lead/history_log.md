@@ -11531,3 +11531,36 @@
   and worker_5. No merge, self-merge, main push, implementation, training,
   eval, packing, export, endpoint, promotion, task255 reuse, AIME2025 train
   data, or shared deletion was authorized.
+
+### Repair preflight current-head refresh
+
+- Processed and marked read follow-up mailboxes from worker_2
+  `9dbbd55ad36c4be59da7590627532da8` and
+  `4bba62bc0ea840f9a139926e4dd6d120`, worker_1
+  `4a5b5e58c8544f42b246b7f4a259f4e1` and
+  `e7b9a2b0a26243449a600fd36aa52375`, worker_5
+  `750c9f3a6b35462bbaa55ed84522d333` and
+  `86372ae1273741deb23edc3325175f91`, and worker_4
+  `a36602fc201c4179871a87f9aa21c5f4`.
+- #380 advanced to `6d43e0e7091f42af13a435c882f4ab035ca2c4c5`; lead
+  verified drift from `fc93290a` is status/history/task_knowledge plus
+  task314 report metadata session only. Posted issuecomment `4616379854`,
+  carrying forward `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
+- #383 advanced to `99713578c19a971683348128d7120f5822801337`; lead verified
+  drift from accepted `4775bc17` is worker_2 status plus task319
+  history/task_knowledge gate acknowledgement only; the feasibility report is
+  unchanged. Posted issuecomment `4616379894`, carrying forward
+  `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE`.
+- #384 advanced to `9689b22bf0e198cbf6f7ca7cbdc30f05bdbe751c`; lead
+  verified drift from accepted `2cdf39fd` is worker_5 status plus task318
+  history/task_knowledge gate acknowledgement only; the preflight report is
+  unchanged. Posted issuecomment `4616379899`, carrying forward
+  `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING`.
+- #382 advanced to `a908b81dd6583976b08896c8193ca302909c52ff`; worker_4
+  refreshed the runbook matrix to include #381/#383/#384 and current drift
+  states. Lead verified the refreshed report and posted issuecomment
+  `4616379848`: `APPROVE_RUNBOOK / NO_ACTION_RELEASE`.
+- Current accepted docs/evidence PR heads: #371 `fc85b866`, #377 `c1b053b5`,
+  #378 `df561ea9`, #379 `89cc7f74`, #380 `6d43e0e7`, #381 `4131915f`,
+  #382 `a908b81d`, #383 `99713578`, #384 `9689b22b`. All remain docs/evidence
+  only; no runtime action or self-merge is authorized.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #381/#383/#384 approved docs/no-action; #382 request-changes for stale runbook; #380 refreshed; no runtime or merge release |
+| PR | #381/#382/#383/#384 approved docs/no-action at current heads; #380 refreshed; awaiting authorized non-self merge path |
 | Session | 78 |

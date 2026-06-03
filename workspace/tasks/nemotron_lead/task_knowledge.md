@@ -2568,3 +2568,10 @@
    not only preserve math gains.
 670. Session 78: task321/#382 is request-changes because its runbook matrix is
    stale after #381/#383/#384 appeared; it must refresh before approval.
+671. Session 78: task321/#382 refreshed at `a908b81d` and was approved as
+   runbook docs/no-action release; its merge sequence is support docs
+   #378/#380/#379, then #371, then #377, then #384/#383/#381, all only by
+   coordinator/authorized non-author merge if exact heads remain clean.
+672. Session 78: #380 current `6d43e0e7`, #383 current `99713578`, and #384
+   current `9689b22b` are accepted as metadata/status drift over their prior
+   gated heads; substantive reports are unchanged.
