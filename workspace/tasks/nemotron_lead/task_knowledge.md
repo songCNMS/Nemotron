@@ -2053,3 +2053,9 @@
    minutes; latest visible stdout progress remains `25/30`, with
    row26/start_index25 still active. No task306 FT final artifacts, PR,
    mailbox report, local/remote rc, or blocker exists.
+573. Session 187: task306 remains active after about three hundred thirty-eight
+   minutes; latest visible stdout progress remains `25/30`, with
+   row26/start_index25 active about fifteen minutes. No task306 FT final
+   artifacts, PR, mailbox report, local/remote rc, or blocker exists. Gate
+   remains HOLD pending official worker_3 report and final same-harness FT
+   artifacts.
