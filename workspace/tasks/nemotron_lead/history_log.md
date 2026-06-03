@@ -11855,3 +11855,7 @@
   15,855.8 MiB at `2026-06-03T22:41:43Z` with rate 9.37 MiB/s. No source-level
   result for `competitive-cpp-01`, final rc, official worker report, or task327
   PR existed yet; global all-SFT pack/train/eval remains HOLD.
+- Continued read-only monitoring showed `competitive-cpp-01` reached 400,000
+  rows / 21,326.7 MiB at `2026-06-03T22:50:58Z` with rate 9.49 MiB/s. The
+  source remained in progress with no source-level result or final rc/report/PR
+  yet, and the release gate stayed HOLD.
