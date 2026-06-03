@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,7 @@
    task312 independent review plus upstream task309/task310 refresh; canary and
    benchmarks remain prohibited until an accepted task310 checkpoint handoff
    exists.
+9. Lead later confirmed task311/#371 remains HOLD at head
+   `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`; task309/#372 refreshed
+   constrained PASS, but task310 still has no accepted checkpoint handoff and
+   no task311 canary/benchmark action is authorized.

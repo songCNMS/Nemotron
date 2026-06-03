@@ -1,6 +1,6 @@
 # task311 all-SFT non-AIME canary report
 
-<!-- METADATA:STATUS=Blocker,ASSIGNEE=intern_nemotron_worker_3,SESSION=3 -->
+<!-- METADATA:STATUS=Blocker,ASSIGNEE=intern_nemotron_worker_3,SESSION=4 -->
 
 ## Summary
 

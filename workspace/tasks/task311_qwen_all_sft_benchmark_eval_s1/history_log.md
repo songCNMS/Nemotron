@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -59,6 +59,21 @@
 - Current task disposition remains `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`;
   no task310 accepted checkpoint handoff is available to start checkpoint-load
   or non-AIME canary.
+- No self-merge, checkpoint-load canary, benchmark eval, training,
+  AIME2025 train-row use, task255 reuse, shared deletion, export, endpoint,
+  promotion, product-code edit, direct main push, or merge occurred.
+
+## Session 4 - 2026-06-03 UTC - HOLD carried after task309 refresh
+
+- Lead confirmed task311/#371 remains on HOLD at current head
+  `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`.
+- Lead reported task309/#372 has refreshed constrained PASS, but task310 has
+  not produced an accepted checkpoint handoff and lead has not authorized
+  training.
+- The blocker remains carried pending task312 refresh over current heads.
+- Current task disposition remains `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`;
+  canary and benchmark work remain prohibited until an accepted task310
+  checkpoint handoff exists.
 - No self-merge, checkpoint-load canary, benchmark eval, training,
   AIME2025 train-row use, task255 reuse, shared deletion, export, endpoint,
   promotion, product-code edit, direct main push, or merge occurred.
