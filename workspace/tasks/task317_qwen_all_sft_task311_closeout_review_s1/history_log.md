@@ -34,3 +34,4 @@
 - Disposition: `APPROVE_DOCS_CLOSEOUT` with residuals for mixed performance,
   AIME/HMMT length finishes, stale `logs/run.log` checksum manifest entries,
   partial local HF-export copy, and blocked M1 launcher rows.
+- Opened worker_4 PR #378 for task317 docs/status review evidence.

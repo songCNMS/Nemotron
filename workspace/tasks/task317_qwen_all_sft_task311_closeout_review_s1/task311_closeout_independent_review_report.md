@@ -26,6 +26,7 @@ shared deletion, main push, self-merge, or worker_4 merge of #371.
 | State | `OPEN`, base `main`, non-draft, `CLEAN/MERGEABLE` |
 | Lead comment `4615730412` | `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED` at `2e4482ea` |
 | Lead comment `4615769907` | carries approval to current head `9361e6da` after bookkeeping-only drift |
+| Worker review PR | #378 |
 | Worker_4 decision | `APPROVE_DOCS_CLOSEOUT` with residuals |
 
 Current #371 diff versus `origin/main` contains worker_3 status, task311 docs,
