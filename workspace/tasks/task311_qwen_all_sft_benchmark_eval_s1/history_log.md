@@ -63,21 +63,6 @@
   AIME2025 train-row use, task255 reuse, shared deletion, export, endpoint,
   promotion, product-code edit, direct main push, or merge occurred.
 
-## Session 5 - 2026-06-03 UTC - gate HOLD reiterated
-
-- Lead gate update keeps task311/#371 on HOLD and explicitly forbids
-  self-merge, canary, and benchmark execution before task310 produces an
-  accepted constrained checkpoint handoff.
-- Once an accepted task310 checkpoint handoff exists and lead releases task311,
-  the required order is: refresh task311 from current main, run checkpoint-load
-  and non-AIME canary first, then run corrected same-harness benchmark eval only
-  if the canary passes.
-- AIME2025 remains held-out eval/decontam only.
-- Current disposition remains `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
-- No checkpoint-load canary, benchmark eval, training, AIME2025 train-row use,
-  task255 reuse, shared deletion, export, endpoint, promotion, product-code
-  edit, direct main push, merge, or self-merge occurred.
-
 ## Session 4 - 2026-06-03 UTC - HOLD carried after task309 refresh
 
 - Lead confirmed task311/#371 remains on HOLD at current head
@@ -92,3 +77,18 @@
 - No self-merge, checkpoint-load canary, benchmark eval, training,
   AIME2025 train-row use, task255 reuse, shared deletion, export, endpoint,
   promotion, product-code edit, direct main push, or merge occurred.
+
+## Session 5 - 2026-06-03 UTC - gate HOLD reiterated
+
+- Lead gate update keeps task311/#371 on HOLD and explicitly forbids
+  self-merge, canary, and benchmark execution before task310 produces an
+  accepted constrained checkpoint handoff.
+- Once an accepted task310 checkpoint handoff exists and lead releases task311,
+  the required order is: refresh task311 from current main, run checkpoint-load
+  and non-AIME canary first, then run corrected same-harness benchmark eval only
+  if the canary passes.
+- AIME2025 remains held-out eval/decontam only.
+- Current disposition remains `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
+- No checkpoint-load canary, benchmark eval, training, AIME2025 train-row use,
+  task255 reuse, shared deletion, export, endpoint, promotion, product-code
+  edit, direct main push, merge, or self-merge occurred.
