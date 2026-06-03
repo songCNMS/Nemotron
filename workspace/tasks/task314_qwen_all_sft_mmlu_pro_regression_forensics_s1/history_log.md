@@ -25,3 +25,22 @@
 - Boundaries acknowledged: no training, new eval, packing, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, or merge.
+
+## Session 90 - 2026-06-03 UTC - Forensics complete
+
+- Completed read-only MMLU-Pro base-vs-FT forensics over task311 artifacts
+  under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z`.
+- Produced report
+  `workspace/tasks/task314_qwen_all_sft_mmlu_pro_regression_forensics_s1/mmlu_pro_regression_forensics_report.md`.
+- Produced worker-owned output tables under
+  `/work-agents/intern_nemotron_worker_1/outputs/task314_qwen_all_sft_mmlu_pro_regression_forensics_s1/run_20260603T191500Z`.
+- Row transition counts: `92` base-correct to FT-wrong, `90` base-wrong to
+  FT-correct, `6666` both-correct, `5184` both-wrong.
+- Category deltas show net `-2` despite math `+13`; largest losses were
+  physics `-6`, health `-4`, chemistry `-3`, history `-2`, and other `-2`.
+- No row-alignment, prompt-hash, expected-answer, parser, endpoint-protocol,
+  status, stop-reason, or result-bearing checksum issue was found.
+- Recommendation: `APPROVE_FORENSICS` while preserving task311 disposition
+  `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; no promotion or new
+  training/eval authorized.

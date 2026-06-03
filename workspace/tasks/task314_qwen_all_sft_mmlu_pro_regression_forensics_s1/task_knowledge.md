@@ -10,3 +10,13 @@
 3. Row-level transitions are required before deciding whether the issue is
    model behavior, parser/prompt artifact, or an evaluator/protocol mismatch.
 4. New evaluation or endpoint launch is not authorized by this task.
+5. Task314 row comparison found `92` base-correct to FT-wrong rows and `90`
+   base-wrong to FT-correct rows, producing the net MMLU-Pro `-2`.
+6. Parser/protocol evidence is clean: both runs have `12032/12032` parsed rows,
+   `ok` status, `stop` finish reason, valid compact JSON answer responses, and
+   identical protocol/input sha.
+7. Result-bearing source files match task311 checksum manifests. Direct
+   `logs/run.log` hashes differ because `summary.json` was appended after the
+   manifest-sized prefix; prefix hashes match and suffixes equal `summary.json`.
+8. Forensics recommendation is `APPROVE_FORENSICS`, but task311 gate remains
+   `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS` with no promotion claim.
