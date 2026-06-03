@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -273,3 +273,20 @@
 - No benchmark eval, AIME/task243 eval, eval-only export, endpoint, training,
   optimizer step, AIME2025 train-row use, task255 reuse, shared deletion,
   promotion, direct main push, merge, or self-merge occurred.
+
+## Session 13 - 2026-06-03 UTC - lead evidence closeout gate acknowledged
+
+- Lead processed task311/#371 at head
+  `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` with gate disposition
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`.
+- Lead confirmed AIME2025 `16/30` versus base `15/30` and HMMT `11/30`
+  versus base `9/30` pass, while MMLU-Pro `6756/12032` versus base
+  `6758/12032` fails by `-2`; M1 launcher rows remain blocked.
+- Lead posted the gate record as GitHub issue comment
+  `issuecomment-4615730412`.
+- Under the current no-self-merge boundary, #371 must not be self-merged by
+  `intern_nemotron_worker_3`; wait for coordinator/authorized non-author merge
+  or further lead instruction.
+- No promotion, training, additional eval, export, endpoint, task255 reuse,
+  AIME2025 train-data use, shared deletion, direct main push, merge, or
+  self-merge occurred.

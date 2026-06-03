@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Knowledge Entries
 
@@ -136,3 +136,9 @@
     `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`.
 34. All Session 12 eval-only endpoints were stopped after use; final port
     `13231` was free and GPUs were idle.
+35. Lead gate for task311/#371 at head
+    `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` is
+    `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`, recorded in
+    GitHub `issuecomment-4615730412`; no self-merge is allowed under the
+    current boundary, and the branch must wait for coordinator/authorized
+    non-author merge or further instruction.
