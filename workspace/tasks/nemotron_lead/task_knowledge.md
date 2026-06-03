@@ -2555,3 +2555,16 @@
    #377 `c1b053b5`, #379 `89cc7f74`, and #380 `9e57390b`.
 666. Session 78: worker_4 received a delivered task321 reminder because local
    status and remote branch search still showed no task321 acceptance branch.
+667. Session 78: task319/#383 is accepted as feasibility evidence only:
+   raw all-SFT sources are feasible candidates but not packing-ready; exact row
+   counts, supervised-token counts, local row manifests, decontam, split
+   exposure, and Qwen packing proof are still missing.
+668. Session 78: task318/#384 is accepted as validation/exit preflight
+   evidence with implementation required; future 30B optimizer launch remains
+   HOLD until train-only validation skip plus eval handoff or bounded built-in
+   validation controls are proven in a separate lead-gated task.
+669. Session 78: task320/#381 is accepted as MMLU-Pro data-repair linkage
+   evidence: future repair must protect non-math aggregate and loss buckets,
+   not only preserve math gains.
+670. Session 78: task321/#382 is request-changes because its runbook matrix is
+   stale after #381/#383/#384 appeared; it must refresh before approval.

@@ -11484,3 +11484,50 @@
 - Global gate is unchanged: fail-mixed/no-promotion, no new
   training/eval/packing/export/endpoint/task255/AIME2025 train data/shared
   deletion/main push/merge/self-merge authorization.
+
+### Repair preflight PR gates
+
+- Fetched origin and processed task318-task321 worker evidence. Current PRs:
+  #381 task320 at `4131915f14acb4ff551ae6cf3f2325a67cf89945`, #382 task321
+  at `2864c69e12bb999588a0e8b9e25050870ff8b585`, #383 task319 at
+  `4775bc17f2792430508eb15aa7669ac2562071f6`, and #384 task318 at
+  `2cdf39fd91ae0e6d686f98ff08b175ec10970e53`. All were OPEN/base main/CLEAN/
+  non-draft at review time and `git diff --check` passed.
+- Processed worker_1 mailbox `5a9949fe66da472c8ba09b0bbf4a17e2`,
+  worker_4 mailbox `1316082ca15d4bd291bf4dc15e9e693f`, and worker_5 mailbox
+  `2feef392f09e477eac5dd0b2c444decc`; marked all three read.
+- #383 task319 accepted as `APPROVE_FEASIBILITY_DOCS /
+  NO_PACK_OR_TRAIN_RELEASE` in issuecomment `4616195892`. Lead independently
+  verified the task319 task-owned artifact checksum file:
+  `artifact_checksums.sha256` passed for commands.log, missing_categories,
+  run_identity, run_manifest, source_matrix JSON, and source_matrix TSV.
+  Accepted finding: 12 raw sources are feasible candidates, but exact local
+  row counts are 0/12, supervised-token counts are 0/12, and no materialized
+  row manifests/decontam/split exposure/Qwen packing proof exists yet.
+- #384 task318 accepted as
+  `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING` in
+  issuecomment `4616195815`. Lead verified reported task310 hashes for
+  launch_command, launch_train, preflight_summary, and train log; markers
+  confirm `train_rc=1`, `train_end=2026-06-03T16:36:36Z`, and latest
+  checkpoint marker `35`. Accepted direction: later lead-gated task must prove
+  either train-only validation skip plus same-harness eval handoff, or bounded
+  built-in validation with timeout/heartbeat/rc/checkpoint/teardown controls.
+- #381 task320 accepted as `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE` in
+  issuecomment `4616195887`. Lead verified task314 hashes for summary,
+  category_deltas, row_transitions, and output manifest. Accepted linkage:
+  task314 MMLU-Pro -2 is a real data-repair constraint; math gained +13 but
+  non-math aggregate was -15 and 86/92 losses were outside math. Residual:
+  report snapshot says no task319 PR was visible, while #383 is now visible
+  and gated; this does not materially contradict the linkage.
+- #382 task321 received `REQUEST_CHANGES / REFRESH_RUNBOOK_MATRIX` in
+  issuecomment `4616195922` because the current report says no task318-task320
+  branches/PRs were visible, which is now contradicted by #381/#383/#384. Lead
+  notified worker_4 to refresh #382.
+- #380 task314 advanced to
+  `fc93290a58e412eacf3c4371490f88149ad69aa7`; lead refreshed the current-head
+  gate in issuecomment `4616198455`, carrying forward
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
+- Delivered gate-result peer notifications to worker_1, worker_2, worker_4,
+  and worker_5. No merge, self-merge, main push, implementation, training,
+  eval, packing, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, or shared deletion was authorized.
