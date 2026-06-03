@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #374/#372/#375 merged; worker_5 task310 current-main refresh in progress; task311 HOLD |
+| PR | all-SFT gate: task310 pane-only preflight pass/training launch observed; awaiting official worker_5 artifacts; task311 HOLD |
 | Session | 78 |

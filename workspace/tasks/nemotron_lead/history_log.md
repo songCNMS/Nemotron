@@ -10797,3 +10797,26 @@
   visible yet. Worker_5's next reported step is no-training config/resource
   preflight; bounded 30B training is allowed only if that gate passes, otherwise
   fail closed with exact blocker.
+
+### Task310 pane-only preflight progress
+
+- Continued read-only monitoring after worker_5 acknowledgement. No new
+  mailbox report arrived and the local task310 output root still only has the
+  initial setup manifests synced locally.
+- Worker_5 tmux pane shows active task310 preflight remediation in a
+  task-owned remote run root. Observed pane-only failures/remediations included:
+  a missing task-owned venv dependency (`defusedxml`), generated preflight
+  driver string/name bugs, a scheduler field rename from `cfg.lr_scheduler` to
+  `cfg.scheduler`, and JSON serialization of a Bridge `MultiStoragePath`
+  object. These are not recorded as final gate evidence until worker_5 reports
+  and syncs artifacts.
+- Latest pane observation: the no-training preflight completed far enough to
+  report PASS with current main synced, constrained task299 mirror validated,
+  Bridge `.npy` files built, target model/base checkpoint present, and 8 H200s
+  idle. Worker_5 then began launching bounded 30B training with `35` train
+  iterations and the reported TP4/PP2/EP4 profile under task310-owned
+  checkpoint/log roots.
+- This is pane-only progress, not an accepted checkpoint handoff. There is
+  still no official task310 mailbox closeout, no local synced preflight summary,
+  no training log, no checkpoint, no validation/loss artifact, no task311
+  release, and no benchmark/canary result accepted by lead.

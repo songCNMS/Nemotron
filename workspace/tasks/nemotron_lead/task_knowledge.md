@@ -2270,3 +2270,9 @@
    source vs remote dereferenced task299 packed manifests compare equal across
    `391` entries with empty symlink manifests. No preflight, training,
    checkpoint, or eval handoff artifact exists yet.
+602. Session 78: pane-only task310 progress shows no-training preflight
+   eventually reported PASS after task-owned remote preflight script/dependency
+   remediations, then worker_5 began a bounded 35-step 30B launch with TP4/PP2/
+   EP4. This is not accepted checkpoint evidence: no official mailbox report,
+   synced preflight summary, training log, checkpoint, validation/loss artifact,
+   task311 release, canary, or benchmark result exists yet.
