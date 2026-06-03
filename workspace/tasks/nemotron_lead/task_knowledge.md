@@ -2666,3 +2666,6 @@
    prompt/normalized hits 0/0, 13-word ngram hits 818; task327 then started
    `competitive-python-00`. Three completed large sources are all
    decontam-blocked.
+701. Session 79: task327 `competitive-python-00` source file materialized and
+   scan reached 100,000 rows / 4,810.0 MiB at `2026-06-03T23:07:05Z`; still
+   live in-progress with no source-level result/final report/PR.

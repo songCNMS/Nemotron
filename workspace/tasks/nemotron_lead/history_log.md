@@ -11872,3 +11872,8 @@
 - The task327 matrix now has three completed sources and all three are
   `BLOCKED_DECONTAM_HIT`. There is still no final rc, official worker_2
   report, task327 PR, or release to packing/training/eval.
+- `competitive-python-00` materialized its 44,531,003,881-byte source file by
+  `2026-06-03T22:58:24Z` and started row-manifest/decontam scanning. It reached
+  100,000 rows / 4,810.0 MiB at `2026-06-03T23:07:05Z` with rate 9.23 MiB/s.
+  The process remained active; no python00 source-level result, task327 final
+  rc/report/PR, or release to packing/training/eval existed yet.
