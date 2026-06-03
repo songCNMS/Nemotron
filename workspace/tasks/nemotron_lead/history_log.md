@@ -8985,6 +8985,43 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 208 - 2026-06-03 UTC - 30B scale-up fail closeout merged
+
+- Final 30B Qwen AIME V11 gate state after fetching origin:
+  - `origin/main` is
+    `ecb14173a820df377270273b9f7d9d92cb5076d2`;
+  - #370/task307 is MERGED at `2026-06-03T02:48:40Z`, merge commit
+    `10376646edcf807ca1e3ac60c7bc65985651c788`, merged head
+    `5e29bf3f36f58afdca35f3d44369e736a26e8eb3`;
+  - #369/task306 is MERGED at `2026-06-03T02:53:23Z`, merge commit
+    `ecb14173a820df377270273b9f7d9d92cb5076d2`, merged head
+    `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`;
+  - lead mailbox total `253`, unread `0`.
+- Worker_4 task307 closeout `b1035e7e7c8f488dbcbe593ad2809efe` confirmed #370
+  self-merge through PR only after pre-merge exact-head/CLEAN checks. Scope
+  remained task307 review/docs/status only.
+- Worker_3 task306 closeout `83b806a047ab4ec69c6eec4f81d27fcc` confirmed #369
+  self-merge through PR only after pre-merge exact-head/CLEAN checks. A
+  branch-only post-merge worker status closeout head
+  `1e84816a69da9fc9ce6436afaba4f0932d3dfb36` does not change merged evidence.
+- Final metric/disposition remains: task301 Qwen3-30B-A3B `iter_0000035` FT
+  corrected AIME2025 score `14/30 = 0.4666666666666667`, accepted task300 30B
+  base `15/30 = 0.5`, delta `-1/30`, disposition FAIL/no-promotion.
+- Required 30B workstream gates are now closed in main:
+  - task298/#364 runtime/resource/base-load proof;
+  - task299/#365 data/packing contract;
+  - task300/#363 same-harness base AIME score `15/30`;
+  - task301/#362 full 30B training artifact salvage checkpoint;
+  - task303/#366 salvage review;
+  - task304/#367 non-AIME canary;
+  - task305/#368 canary review;
+  - task306/#369 corrected AIME FT-vs-base final FAIL;
+  - task307/#370 independent fail review/runbook closeout.
+- Boundaries remain closed: no promotion, export, endpoint, additional 30B
+  training/eval, 30B/8-GPU work, task255 reuse, AIME2025 train prompts/labels,
+  shared deletion, direct main push, or further worker action is authorized by
+  this closeout.
+
 ## Session 207 - 2026-06-03 UTC - task307 dispatched and waiting
 
 - Post-dispatch status:

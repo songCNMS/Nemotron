@@ -2186,3 +2186,12 @@
    branch/PR/mailbox report is visible yet. Worker_3 was told #369 remains HOLD
    and must not self-merge or advance head. #369 remains OPEN/CLEAN at
    `6ad9778`.
+594. Session 208: final 30B Qwen AIME V11 closeout is merged into main.
+   #370/task307 merged at `2026-06-03T02:48:40Z` as
+   `10376646edcf807ca1e3ac60c7bc65985651c788` from head `5e29bf3f`; #369/
+   task306 merged at `2026-06-03T02:53:23Z` as
+   `ecb14173a820df377270273b9f7d9d92cb5076d2` from head `6ad9778`. Final
+   result remains FAIL/no-promotion: task301 30B FT `14/30 =
+   0.4666666666666667` below accepted base `15/30 = 0.5`. No promotion,
+   export, endpoint, further 30B training/eval, task255 reuse, AIME2025 train
+   data, or shared deletion is authorized.

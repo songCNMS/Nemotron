@@ -470,3 +470,7 @@
    `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` due to queued follow-up/status
    metadata only. Task306 result remains FAIL `14/30` versus base `15/30`.
    Task307 now reviews exact #369 head `6ad9778`.
+122. Session 208: #369 merged at `2026-06-03T02:53:23Z` with merge commit
+   `ecb14173a820df377270273b9f7d9d92cb5076d2` from exact approved head
+   `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`. Final disposition remains
+   FAIL/no-promotion: FT `14/30` below base `15/30`.

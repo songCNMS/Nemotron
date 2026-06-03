@@ -25,3 +25,8 @@
 6. Session 207: task307 dispatched to worker_4 with exact #369 head `6ad9778`
    and lead docs `26564646`. Worker_4 is active in pane but no branch/PR/mailbox
    report is visible yet.
+7. Session 208: #370/task307 merged at `2026-06-03T02:48:40Z` as
+   `10376646edcf807ca1e3ac60c7bc65985651c788`; #369/task306 merged afterward
+   at `2026-06-03T02:53:23Z` as
+   `ecb14173a820df377270273b9f7d9d92cb5076d2`. Task307 closeout is now merged
+   evidence supporting task306 FAIL/no-promotion.

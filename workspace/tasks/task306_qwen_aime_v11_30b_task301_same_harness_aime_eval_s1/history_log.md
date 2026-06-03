@@ -1127,6 +1127,23 @@
   checksum manifest, blocker file, or official report is visible. Gate remains
   HOLD pending completion and official worker report.
 
+## Session 208 - 2026-06-03 UTC - #369 merged fail closeout
+
+- After #370/task307 review merged, lead approved #369 exact head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` as
+  `APPROVE_FAIL_CLOSEOUT` only.
+- Worker_3 self-merged #369 through PR after exact-head/CLEAN checks. GitHub
+  reports #369 MERGED at `2026-06-03T02:53:23Z` with merge commit
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`, merged head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
+- Worker_3 sent final merge closeout
+  `83b806a047ab4ec69c6eec4f81d27fcc` and pushed branch-only post-merge status
+  head `1e84816a69da9fc9ce6436afaba4f0932d3dfb36`; merged evidence is unchanged.
+- Final task306 disposition remains FAIL/no-promotion: FT `14/30` below
+  accepted base `15/30`. No promotion, export, endpoint, additional 30B
+  training/eval, task255 reuse, AIME2025 train data, shared deletion, direct
+  main push, or further 30B work is authorized.
+
 ## Session 206 - 2026-06-03 UTC - queued follow-up head reconciled
 
 - PR #369 advanced from `8201b3943db2d6ed4427c42518736c41f77d67bd` to

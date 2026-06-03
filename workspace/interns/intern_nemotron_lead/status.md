@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: task306 #369 HOLD open/CLEAN head 6ad9778; task307 dispatched to worker_4, awaiting branch/report |
-| Session | 207 |
+| PR | 30B closeout: #370/#369 merged; task306 FAIL 14/30 below base 15/30; no promotion/further 30B |
+| Session | 208 |

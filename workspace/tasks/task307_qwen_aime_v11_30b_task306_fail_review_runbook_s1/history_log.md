@@ -54,6 +54,21 @@
   `894e2e7`, and drift ranges `894e2e7..1255f235`, `1255f235..8201b394`, and
   `8201b394..6ad9778`.
 
+## Session 208 - 2026-06-03 UTC - #370 and #369 merged
+
+- Lead approved #370 exact head
+  `5e29bf3f36f58afdca35f3d44369e736a26e8eb3`; worker_4 self-merged #370
+  through PR only. GitHub reports #370 MERGED at `2026-06-03T02:48:40Z` with
+  merge commit `10376646edcf807ca1e3ac60c7bc65985651c788`.
+- After #370 landed, lead approved #369 exact head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` as
+  `APPROVE_FAIL_CLOSEOUT`; worker_3 self-merged #369 through PR only. GitHub
+  reports #369 MERGED at `2026-06-03T02:53:23Z` with merge commit
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Task307 closeout remains: task306/#369 is accepted as FAIL/no-promotion
+  evidence only. No promotion, export, endpoint, further 30B work, task255,
+  AIME2025 train data, or shared deletion is authorized.
+
 ## Session 207 - 2026-06-03 UTC - dispatched to worker_4
 
 - Lead sent worker_4 the superseding task307 assignment for lead docs
