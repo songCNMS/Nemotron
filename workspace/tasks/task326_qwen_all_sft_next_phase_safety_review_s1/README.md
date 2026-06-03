@@ -65,6 +65,7 @@ assignment.
 
 - Report:
   `workspace/tasks/task326_qwen_all_sft_next_phase_safety_review_s1/next_phase_safety_review_report.md`.
+- Worker PR: #389.
 - Disposition: `APPROVE_SAFETY_REVIEW`.
 - task323/#385, task324/#386, and task325/#387 are visible with worker-reported
   dispositions but no lead gate at review time; task322 has no visible

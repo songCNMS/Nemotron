@@ -9,9 +9,10 @@
    validation-skip preflight, blend design, and M1 route/blocker tasks.
 3. This task does not authorize runtime action or merge.
 4. At review time task323/#385 was visible at head
-   `edb265351b9f369698f561527cd27f2978f649ba` with worker-reported
+   `de480248b1ad7abe16a620729e62fa397443228d` with worker-reported
    `PASS_ROUTE_A_PREFLIGHT`, but no lead gate comment. Treat it as pending
-   lead review, not training clearance.
+   lead review, not training clearance. Drift from `edb26535` was worker status
+   plus task323 history/task_knowledge metadata only.
 5. At review time task324/#386 was visible at head
    `8c4f7aa72f07e69e400789fced12acb17cf80cb7` with worker-reported
    `APPROVE_BLEND_DESIGN`, but no lead gate comment. Treat it as pending lead
@@ -33,4 +34,5 @@
    non-math MMLU-Pro retention; task324 must express bucket/source constraints
    before any packed blend handoff.
 11. task315/task325 keep M1 rows held until a launcher runtime route is proven
-   or `BLOCK_RUNTIME_CONFIRMED` is fully documented.
+    or `BLOCK_RUNTIME_CONFIRMED` is fully documented.
+12. Worker PR for task326 is #389.

@@ -16,11 +16,12 @@ branch or PR is visible. task322 remains pending substantive evidence.
 
 ## Review Snapshot
 
-Observed at `2026-06-03T20:41:50Z`.
+Observed at `2026-06-03T20:50:20Z`.
 
 | Item | Exact state reviewed |
 | --- | --- |
 | Worker branch | `intern_nemotron_worker_4/task326_qwen_all_sft_next_phase_safety_review_s1` |
+| Worker PR | #389 |
 | Branch base | `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb` |
 | Lead docs | `origin/intern_nemotron_lead/session1-recovery-task-docs` `7055dac63c772ac8a317454bffead4a469a0112f` |
 | Task scope | docs/runbook safety review only |
@@ -33,7 +34,7 @@ Observed at `2026-06-03T20:41:50Z`.
 | task321 #382 | `a908b81dd6583976b08896c8193ca302909c52ff` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_RUNBOOK / NO_ACTION_RELEASE`. Accepted order: support docs, #371 evidence closeout, #377 plan, then #384/#383/#381 repair docs by coordinator/authorized non-author merge only. |
 | task319 #383 | `802a796d77144a7fdfc56477fdd001b574e90568` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE`; current drift from lead-refreshed `99713578` is task322 handoff metadata only. Twelve raw sources are feasible candidates, but 0/12 have exact local row counts, supervised-token counts, row manifests, decontam output, or split exposure proof. |
 | task318 #384 | `1c3048b96301b87e91fbcfa03649220c7a773e61` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING`; current drift from lead-refreshed `9689b22b` is task323 handoff metadata only. Future optimizer launch requires Route A validation-skip proof or Route B bounded validation proof. |
-| task323 #385 | `edb265351b9f369698f561527cd27f2978f649ba` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `PASS_ROUTE_A_PREFLIGHT`; no lead gate comment visible. Current PR is substantive worker evidence, pending lead review, not training clearance. |
+| task323 #385 | `de480248b1ad7abe16a620729e62fa397443228d` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `PASS_ROUTE_A_PREFLIGHT`; no lead gate comment visible. Drift from `edb26535` is worker status plus task323 history/task_knowledge metadata only and the preflight report is unchanged. Current PR is substantive worker evidence, pending lead review, not training clearance. |
 | task324 #386 | `8c4f7aa72f07e69e400789fced12acb17cf80cb7` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `APPROVE_BLEND_DESIGN`; no lead gate comment visible. Design is docs-only and depends on task322 materialized/decontaminated sources before any packed contract. |
 | task325 #387 | `e07ee3f9268b33658e18881c25a3d221bf2136ee` | `OPEN`, base `main`, non-draft, `CLEAN`, `MERGEABLE` | Worker-reported `BLOCK_RUNTIME_CONFIRMED`; no lead gate comment visible. Current drift from first report head `e6c5e1f` is worker status/history/task_knowledge metadata only and the blocker report is unchanged. It confirms 0/19 M1 rows runnable now and proposes only a later lead-gated eval-only remediation route. |
 
@@ -45,7 +46,7 @@ task-specific docs/reports and pass `git diff --check`.
 | Task | Visibility | Required output before downstream use | Current safety disposition |
 | --- | --- | --- | --- |
 | task322 raw materialize/count/decontam | No branch or PR visible | Source-by-source materialization matrix, exact local row counts, file and row-manifest checksums, parse status, heldout/decontam results, split exposure proof, no task255 reuse, no AIME2025 prompt/label train rows. | `HOLD_PENDING_TASK322_EVIDENCE`. No raw source can enter a packed contract yet. |
-| task323 validation-skip preflight | PR #385 visible at `edb26535`, no lead gate visible | Train-only/dereferenced root proof, `valid` exposure count `0`, `do_validation=false`, `packed_val_data_path=null`, source checksums, no shared mutation, explicit same-harness eval handoff, rc/checkpoint/timeout/teardown policy. Worker report claims these pass on constrained task299/task310 seed. | `HOLD_PENDING_TASK323_LEAD_GATE`. No optimizer launch can use Route A until lead accepts #385 and a later launch task is assigned. |
+| task323 validation-skip preflight | PR #385 visible at `de480248`, no lead gate visible | Train-only/dereferenced root proof, `valid` exposure count `0`, `do_validation=false`, `packed_val_data_path=null`, source checksums, no shared mutation, explicit same-harness eval handoff, rc/checkpoint/timeout/teardown policy. Worker report claims these pass on constrained task299/task310 seed. | `HOLD_PENDING_TASK323_LEAD_GATE`. No optimizer launch can use Route A until lead accepts #385 and a later launch task is assigned. |
 | task324 MMLU-aware blend design | PR #386 visible at `8c4f7aa7`, no lead gate visible | Bucket mapping from task319/task322 sources to MMLU retention buckets, source inclusion/exclusion criteria, rows/input tokens/supervised tokens/splits/decontam minimums, later same-harness metrics. Worker report claims design is concrete but still depends on task322. | `HOLD_PENDING_TASK324_LEAD_GATE_AND_TASK322`. No materialized sources can be converted into a packed blend from design alone. |
 | task325 M1 launcher remediation route | PR #387 visible at `e07ee3f9`, no lead gate visible | Exact runtime/container/module/credential route or blocker, row-by-row M1 availability matrix, safe import/version probes only, no benchmark row execution. Worker report confirms `BLOCK_RUNTIME_CONFIRMED`. | `HOLD_PENDING_TASK325_LEAD_GATE`. No M1 rows can be run. |
 
@@ -171,7 +172,7 @@ containers, keep `BLOCK_RUNTIME_CONFIRMED`.
 | Math gains masking broad MMLU-Pro regression | task320 linkage and task324/#386 worker blend design | Medium until lead gates #386 and a later packed contract emits bucket counts. |
 | Premature packing/training from feasibility docs | Explicit no-pack/no-train gates on #383/#382/#384 | Controlled if lead keeps later tasks separate. |
 | M1 rows remain unrunnable | task315 blocker plus task325/#387 worker blocker report | High for M1 eval until lead gates #387 and any later remediation route is separately authorized. |
-| Stale metadata heads on #383/#384 | Latest drift checked as handoff metadata only | Low for safety review; recheck exact heads before merge. |
+| Stale metadata heads on #383/#384/#385 | Latest drift checked as handoff/status metadata only | Low for safety review; recheck exact heads before merge. |
 
 ## Commands And Checks
 
@@ -193,6 +194,8 @@ git diff --check 9689b22bf0e198cbf6f7ca7cbdc30f05bdbe751c..origin/pr/384
 git fetch origin +pull/385/head:refs/remotes/origin/pr/385
 git diff --name-status cb177fd997940267d5a9d6a45990d968ba7c2ec0..origin/pr/385
 git diff --check cb177fd997940267d5a9d6a45990d968ba7c2ec0..origin/pr/385
+git diff --name-status edb265351b9f369698f561527cd27f2978f649ba..origin/pr/385
+git diff --check edb265351b9f369698f561527cd27f2978f649ba..origin/pr/385
 gh api repos/songCNMS/Nemotron/issues/385/comments --jq '<lead gate filter>'
 gh api repos/songCNMS/Nemotron/issues/386/comments --jq '<lead gate filter>'
 gh api repos/songCNMS/Nemotron/issues/387/comments --jq '<lead gate filter>'

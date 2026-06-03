@@ -21,17 +21,20 @@
   and task321/#382, including current PR states and lead gate comments.
 - Checked task322-task325 visibility with `git ls-remote` and `gh pr list`.
   task323/#385 became visible at head
-  `edb265351b9f369698f561527cd27f2978f649ba` with worker-reported
+  `de480248b1ad7abe16a620729e62fa397443228d` with worker-reported
   `PASS_ROUTE_A_PREFLIGHT`; task324/#386 became visible at head
   `8c4f7aa72f07e69e400789fced12acb17cf80cb7` with worker-reported
   `APPROVE_BLEND_DESIGN`; task325/#387 became visible at head
   `e07ee3f9268b33658e18881c25a3d221bf2136ee` with worker-reported
   `BLOCK_RUNTIME_CONFIRMED`. No lead gate comments were visible for #385/#386/#387.
   task322 remained without visible branch or PR. #387 drift from first report
-  head `e6c5e1f` to `e07ee3f9` was metadata-only.
+  head `e6c5e1f` to `e07ee3f9` was metadata-only. #385 drift from
+  `edb26535` to `de480248` was worker status plus task323
+  history/task_knowledge metadata-only and the preflight report was unchanged.
 - Added `next_phase_safety_review_report.md` with disposition
   `APPROVE_SAFETY_REVIEW`, fail-closed evidence gates, sequencing, and residual
   risks.
+- Opened worker PR #389.
 - Did not merge, self-merge, push main, materialize data, pack, train, run
   eval, export, launch endpoint, promote, reuse task255, use AIME2025 train
   data, or delete shared files.
