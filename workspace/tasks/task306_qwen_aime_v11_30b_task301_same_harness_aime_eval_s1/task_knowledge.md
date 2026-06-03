@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Knowledge Entries
 

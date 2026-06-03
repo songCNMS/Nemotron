@@ -1,13 +1,13 @@
 # task306 30B task301 same-harness AIME evaluation report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_3,SESSION=1 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_3,SESSION=5 -->
 
 ## Summary
 
 - Task: `task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`
 - Branch:
   `intern_nemotron_worker_3/task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1`
-- PR: `N/A` at report-writing time
+- PR: `#369`
 - Eval source head: `894e2e71e72f09926128e37f22000802804522bc`
 - Candidate checkpoint:
   `/root/task301_qwen_aime_v11_30b_full_sft_training_s1/run_20260602T155725Z/checkpoints/iter_0000035`

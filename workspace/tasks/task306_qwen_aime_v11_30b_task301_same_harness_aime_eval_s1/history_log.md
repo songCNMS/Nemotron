@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -37,7 +37,7 @@
   merge/self-merge, and no export/endpoint unless stopped for lead
   authorization.
 
-## Session 1 - 2026-06-03 UTC - evaluation complete
+## Session 5 - 2026-06-03 UTC - evaluation complete and PR report
 
 - Added no-export/no-endpoint MCore static-engine corrected AIME2025 runner and
   executed the task301 Qwen3-30B-A3B `iter_0000035` checkpoint on NemTron with
@@ -59,3 +59,6 @@
 - Boundaries upheld: no training/optimizer, no AIME train data, no task255, no
   export/conversion, no endpoint, no promotion, no shared deletion, no main
   push, and no merge/self-merge.
+- PR #369 was opened at head
+  `1255f2356cb014cd1adbe58c7af297f291b222f3` and the official mailbox report
+  was sent to lead as message `ae6fd1db7a894003a952469e4705ab07`.
