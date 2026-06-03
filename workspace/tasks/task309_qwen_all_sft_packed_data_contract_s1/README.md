@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - Qwen all-eligible-SFT packed data contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
@@ -15,7 +15,9 @@ return an exact fail-closed blocker.
 
 ## Scope
 
-- Use current `origin/main` `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Use current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
+  Lead verified this is a docs-only advance from product-code baseline
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
 - Consume task308 inventory when available; before that, perform preparatory
   static/data-source checks only.
 - Build or identify the all-eligible-SFT blend using only sources task308 marks
@@ -69,7 +71,8 @@ return an exact fail-closed blocker.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_2`
-- Current main: `ecb14173a820df377270273b9f7d9d92cb5076d2`
+- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependency: task308
 - Downstream tasks: task310, task311, task312
 - Gate state: task310 full training remains HOLD until task309 is accepted.
