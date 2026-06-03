@@ -2633,3 +2633,5 @@
    `BLOCKED_DECONTAM_HIT`: 426,009 rows, parse errors 0, sha matched, but
    13-word ngram hits 7; source is not train-ready pending official worker
    report and any lead-reviewed false-positive/filtering contract.
+692. Session 79: task327 live run later observed `competitive-cpp-00` in
+   progress at 100,000 rows / 5,234.4 MiB; no source-level decision yet.

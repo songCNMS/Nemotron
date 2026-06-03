@@ -11802,3 +11802,7 @@
   in-progress evidence only pending worker_2 official report/PR. It does not
   authorize packing, training, eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion, merge, self-merge, or main push.
+- Later read-only progress check showed `competitive-cpp-00` reached 100,000
+  rows and 5,234.4 MiB processed at `2026-06-03T21:38:37Z`, with process still
+  active and output root size about 40G. No source-level pass/block result or
+  worker official report exists yet for `competitive-cpp-00`.
