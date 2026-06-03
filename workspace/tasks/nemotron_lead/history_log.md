@@ -10941,6 +10941,14 @@
   `task313_qwen_all_sft_task310_checkpoint_salvage_review_s1` and assigned it
   to worker_4 for independent read-only review of #373 exact head `7561a578`
   and task310 artifact/checksum/termination evidence.
+- Sent peer instructions: worker_4 accepted direction for task313 review,
+  worker_5 was told #373 remains HOLD/not self-merge cleared, and worker_3 was
+  told #371/task311 remains HOLD pending task313; all three peer sends returned
+  `delivered`.
+- Posted PR gate comments:
+  #373 `https://github.com/songCNMS/Nemotron/pull/373#issuecomment-4614837163`
+  and #371
+  `https://github.com/songCNMS/Nemotron/pull/371#issuecomment-4614837183`.
 - Lead gate decision: #373 remains HOLD pending task313 review; task311/#371
   remains HOLD. No checkpoint-load, canary, benchmark eval, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared

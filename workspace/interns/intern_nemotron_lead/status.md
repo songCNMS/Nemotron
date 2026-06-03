@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #373 task310 salvage candidate received at 7561a578; task313 review assigned; task311 HOLD |
+| PR | all-SFT gate: #373/#371 HOLD comments posted; task313 review assigned to worker_4; task311 HOLD |
 | Session | 78 |

@@ -2311,3 +2311,6 @@
    #373 exact head `7561a578` and task310 artifact/checksum/termination
    evidence. Task311 remains HOLD until lead accepts task313 and explicitly
    releases checkpoint-load plus non-AIME canary only.
+608. Session 78: worker_4 task313 assignment, worker_5 #373 HOLD, and worker_3
+   #371 HOLD peer sends all returned `delivered`; lead posted HOLD comments at
+   #373 issuecomment `4614837163` and #371 issuecomment `4614837183`.
