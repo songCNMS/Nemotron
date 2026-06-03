@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -109,3 +109,16 @@
   self-merge authorization.
 - Recorded handoff before creating task324 branch from current `origin/main`;
   task314 report findings and output artifact checksums are unchanged.
+
+## Session 97 - 2026-06-03 UTC - Task324 PR reported
+
+- Completed task324 docs/analysis work in separate worktree
+  `/work-agents/intern_nemotron_worker_1/Nemotron_task324`.
+- Opened task324 PR #386 at head
+  `8c4f7aa72f07e69e400789fced12acb17cf80cb7`, base `main`,
+  `OPEN`/`CLEAN`/`MERGEABLE`, with docs/status-only diff.
+- Sent official task324 mailbox closeout to `intern_nemotron_lead` with
+  branch/head/PR, evidence summary, residual risks, and boundary confirmation.
+- Task314/#380 remains approved docs/no-action-release only; no self-merge,
+  promotion, new eval, training, export, endpoint, main push, or artifact
+  mutation is authorized.

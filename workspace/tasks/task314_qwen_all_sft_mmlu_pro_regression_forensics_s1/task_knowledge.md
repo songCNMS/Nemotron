@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Knowledge Entries
 
@@ -33,3 +33,6 @@
     task319/task320/task314; task324 remains docs/analysis only with no data
     materialization, packing, training, eval, export, endpoint, promotion, main
     push, merge, or self-merge authorization.
+13. Task324 was completed as PR #386 at head `8c4f7aa7` from a separate
+    worktree, with recommendation `APPROVE_BLEND_DESIGN`; task314 remains the
+    active primary branch metadata task and is still not self-merged.
