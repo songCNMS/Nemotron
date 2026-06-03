@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - task knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -37,3 +37,7 @@
 13. Session 6 lead follow-up referenced an obsolete acceptance-only branch
     observation; current task306 evidence is in PR #369 and retains the same
     `FAIL` result without any additional eval or artifact mutation.
+14. PR #369 was lead-approved as `APPROVE_FAIL_CLOSEOUT` and self-merged at
+    `2026-06-03T02:53:23Z` with merge commit
+    `ecb14173a820df377270273b9f7d9d92cb5076d2` from approved head
+    `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.

@@ -1,6 +1,6 @@
 # task306_qwen_aime_v11_30b_task301_same_harness_aime_eval_s1 - history log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 88 - 2026-06-02 UTC - assignment
 
@@ -80,3 +80,21 @@
   so disposition remains `FAIL` with no promotion.
 - No rerun, training, AIME train-data use, task255 reuse, export, endpoint,
   shared deletion, promotion, direct main push, merge, or self-merge occurred.
+
+## Session 7 - 2026-06-03 UTC - lead-approved fail closeout merged
+
+- Received lead `APPROVE_FAIL_CLOSEOUT` for PR #369/task306 after task307
+  independent review merged at
+  `10376646edcf807ca1e3ac60c7bc65985651c788`.
+- Verified PR #369 immediately before merge: open, non-draft, base `main`,
+  head `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`, and `CLEAN/MERGEABLE`.
+- Self-merged PR #369 with a head-SHA guard for exact approved head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
+- Merge result: merged at `2026-06-03T02:53:23Z` with merge commit
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Final task306 disposition remains `FAIL`: task301 Qwen3-30B-A3B
+  `iter_0000035` scored `14/30 = 0.4666666666666667` versus accepted task300
+  base `15/30 = 0.5`; this is no-promotion evidence only.
+- No additional 30B training/eval, export, endpoint, promotion, task255 reuse,
+  AIME train-data use, shared deletion, direct main push, or unapproved 30B/8GPU
+  work occurred.
