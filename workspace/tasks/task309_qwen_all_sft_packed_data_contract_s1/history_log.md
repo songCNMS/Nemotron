@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -121,3 +121,23 @@
   no-go.
 - Boundaries held: no training, eval, export, endpoint, promotion, main push,
   or merge.
+
+## Session 6 - Lead-approved self-merge
+
+- Lead refreshed the task309/#372 gate after #374 merged and approved exact head
+  `6c3c79092ea551f0094d78f0097e2bd76a23438f`.
+- Rechecked PR #372 immediately before merge: `OPEN`, base `main`, not draft,
+  `CLEAN`, and exact head
+  `6c3c79092ea551f0094d78f0097e2bd76a23438f`.
+- Self-merged PR #372 at `2026-06-03T15:32:36Z`.
+- Merge commit:
+  `af388ea858cd0b7582a37397188b03f69e8927b4`.
+- Merged head:
+  `6c3c79092ea551f0094d78f0097e2bd76a23438f`.
+- Approval scope remains constrained V11/task299 packed seed only: train `46`
+  shards / `279` rows / `1024646` input tokens / `228927` supervised tokens,
+  valid `1` row, test `0` rows. Generic `stage1_sft/data_blend_raw` remains
+  no-go.
+- Boundary confirmation: no training, eval, export, endpoint, promotion, main
+  push outside the approved GitHub PR merge, task255 reuse, AIME2025 train
+  rows, shared deletion, or product-code edits occurred.

@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,7 @@
 9. Lead approved #372 at `4e26317adc536afc896377da9225913ca567135b`, but the
    merge is sequenced after #374 lands; if the #372 head changes before #374
    merges, the exact-head approval no longer applies without a refreshed gate.
+10. #372 was self-merged at refreshed approved head
+    `6c3c79092ea551f0094d78f0097e2bd76a23438f` after #374 landed. The merge
+    approves only the constrained V11/task299 packed seed; generic raw SFT
+    remains no-go.
