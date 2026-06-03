@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; python-00 row manifest >174k rows; completed large sources decontam-blocked; all-SFT pack/train HOLD |
+| PR | task327 active; python-00 reached 200k rows; completed large sources decontam-blocked; all-SFT pack/train HOLD |
 | Session | 79 |

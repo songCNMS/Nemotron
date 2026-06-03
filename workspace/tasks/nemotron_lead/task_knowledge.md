@@ -2675,3 +2675,8 @@
    (`competitive-python-00.rows.tsv.gz` mtime `2026-06-03T23:13:24Z`) while
    process remains active. This is not a completed gate and does not release
    packing/training/eval.
+703. Session 79: task327 checkpoint for `competitive-python-00` reached
+   200,000 rows / 9,447.0 MiB at `2026-06-03T23:15:26Z`; row manifest was
+   still actively being written and had advanced past 211k rows in read-only
+   tail. No source-level result/final rc/worker report/PR exists, so the
+   all-SFT pack/train/eval gate remains HOLD.

@@ -11887,3 +11887,25 @@
   in-progress evidence only: no python00 source-level disposition, final rc,
   official worker_2 report, task327 PR, or release to packing/training/eval
   existed yet.
+- Follow-up read-only check after fetch found lead branch clean at
+  `acfc4b36ee6c7efb64815b870186c312954f4af2`, origin/main
+  `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`, no unread lead mailbox
+  messages, no task327 PR, and task327 branch still at
+  `b20e642a648425fb23c324290c5f672163332943`. Worker_2 status remained
+  `Working` / PR `Pending`.
+- task327 branch hygiene remained unchanged: diff versus origin/main is
+  worker_2 status plus task327 README/history/task_knowledge and
+  `materialize_large_sources.py`; `git diff --check
+  origin/main...origin/intern_nemotron_worker_2/task327_qwen_all_sft_large_source_materialize_decontam_s1`
+  passed.
+- `competitive-python-00` reached the stable log checkpoint
+  `2026-06-03T23:15:26Z PROGRESS competitive-python-00 rows=200000
+  mib=9447.0 rate_mib_s=9.24`. The row manifest was still being written and
+  had reached about 211,917 complete rows at the read-only snapshot. The output
+  root remained about 106G and the worker process remained active.
+- This remains in-progress evidence only. The completed large-source matrix
+  still contains only `instruction-following-chat`, `competitive-cpp-00`, and
+  `competitive-cpp-01`, all `BLOCKED_DECONTAM_HIT`; there is still no
+  `competitive-python-00` source-level disposition, final rc, official
+  worker_2 report, or task327 PR. Full all-SFT packing/training/eval/export/
+  endpoint/promotion remains HOLD.
