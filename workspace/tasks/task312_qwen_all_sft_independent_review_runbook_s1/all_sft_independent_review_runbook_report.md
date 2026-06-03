@@ -1,24 +1,29 @@
 # task312 Qwen all-SFT independent review runbook report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=81 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=82 -->
 
 ## Decision
 
-Overall decision: `REQUEST_CHANGES_HOLD`.
+Overall decision: `APPROVE_CONSTRAINED_TASK309_WITH_HOLD_FOR_DOWNSTREAM`.
 
 Current upstream PR decisions:
 
-| PR | Task | Current reviewed head | Decision |
+| PR | Task | Exact reviewed head | Decision |
 |---|---|---|---|
-| #374 | task308 | `f57384f6a298500f240a9367c3598cd5f9a59638` | `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS` |
-| #372 | task309 | `998ebce439164af2cc0e026575de32cd356acaa0` | `REQUEST_CHANGES_REFRESH_FROM_TASK308_374` |
-| #373 | task310 | `1cd3eb17fc686b281da7a9a0791ea09fbe614664` | `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL` |
-| #371 | task311 | `37a76caea59a2ca27c5d4cbc5d2e98d46d100420` | `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL` |
+| #374 | task308 | `b798fdfcfc3144111dd0a6e0f80505df031bcc5e` | `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS` |
+| #372 | task309 | `fe1bb38c55545b54dc017647ae9f299ee1a5ac02` | `APPROVE_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS` |
+| #373 | task310 | `7000f3714442c39fd78e40249d9d5ed69528d9eb` | `REQUEST_CHANGES_REFRESH_FOR_CONSTRAINED_TASK299_SEED_AFTER_TASK309_ACCEPTANCE` |
+| #371 | task311 | `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77` | `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL` |
 
-Combined all-SFT gate remains HOLD/NO-GO. task308 now supplies an approvable
-inventory audit, but task309 has not refreshed from that audit into a current
-packed-data contract, task310 has no usable checkpoint, and task311 has no
-canary or benchmark artifacts.
+Gate conclusion:
+
+- task310 may proceed only after lead accepts #372 and only on the constrained
+  V11/task299 Qwen3-30B packed seed.
+- Generic `stage1_sft/data_blend_raw` remains blocked from the training input
+  unless it is separately materialized, counted, decontam-scanned, Qwen-packed,
+  and reviewed.
+- No benchmark/canary/AIME/task243 release follows from this review. task311
+  remains blocked until task310 produces a usable checkpoint handoff.
 
 This review does not authorize training, packing, eval, export, endpoint,
 promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
@@ -30,25 +35,17 @@ edits, main push, merge, or worker-branch rewrite.
   `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
 - Product-code baseline:
   `ecb14173a820df377270273b9f7d9d92cb5076d2`.
-- Lead docs branch was fetched during this task at `9f838e94`; task312
-  baseline reconciliation was recorded by lead commit `5f4167dc`.
-- #374/task308 requested head was
-  `4a46c9b5995d5cebe6624a5241d5543d48bee93c`; current GitHub head at review
-  time was `f57384f6a298500f240a9367c3598cd5f9a59638`.
-- #372/#373/#371 matched the requested exact heads.
-
-PR state at review time:
-
-- #374: OPEN, base `main`, CLEAN/MERGEABLE, non-draft.
-- #372: OPEN, base `main`, CLEAN/MERGEABLE, non-draft.
-- #373: OPEN, base `main`, CLEAN/MERGEABLE, non-draft.
-- #371: OPEN, base `main`, CLEAN/MERGEABLE, non-draft.
-
-Diff scope:
-
+- #374/#372/#373/#371 were all OPEN, base `main`, CLEAN/MERGEABLE, and
+  non-draft at review time.
 - All four PR diffs are docs/status-only and pass `git diff --check`.
-- `4a46c9b..f57384f6` for #374 changes only worker_1 status and task308
-  history. The task308 report and artifact manifest are unchanged.
+- Drift from previous task312 review:
+  - #374 `f57384f6..b798fdfc`: worker_1 status/history/task_knowledge only.
+  - #372 `998ebce4..fe1bb38c`: substantive task309 constrained-contract report
+    refresh.
+  - #373 `1cd3eb17..7000f371`: task310 HOLD/report/status refresh, but still
+    stale relative to #372 `fe1bb38c`.
+  - #371 `37a76cae..6981a654`: task311 HOLD/report/status refresh, but still no
+    checkpoint handoff.
 
 ## Commands And Checks
 
@@ -58,9 +55,9 @@ Static review commands used:
 - `git fetch origin main pull/371/head:refs/remotes/origin/pr/371 pull/372/head:refs/remotes/origin/pr/372 pull/373/head:refs/remotes/origin/pr/373 pull/374/head:refs/remotes/origin/pr/374`
 - `git diff --name-status origin/main...origin/pr/<pr>`
 - `git diff --check origin/main...origin/pr/<pr>`
-- `git diff --name-status 4a46c9b5995d5cebe6624a5241d5543d48bee93c..origin/pr/374`
+- `git diff --name-status/check` for previous-head to current-head PR ranges.
 - `git show origin/pr/<pr>:workspace/tasks/.../<report>.md`
-- `sha256sum` and `sha256sum -c` over named task308/task309/task311 artifacts.
+- `sha256sum` and `sha256sum -c` over task308/task309/task311 artifacts.
 - Python/JQ read-only inspection of task308/task309/task311 manifests.
 - Read-only task310 output-root search under
   `/work-agents/intern_nemotron_worker_5/outputs`, `/root`, and `/work-agents`.
@@ -73,25 +70,23 @@ mutation of upstream artifacts/branches was performed.
 Report:
 `workspace/tasks/task308_qwen_all_sft_pipeline_inventory_audit_s1/all_sft_pipeline_inventory_audit_report.md`
 
-Task-owned artifact root:
+Artifact root:
 `/work-agents/intern_nemotron_worker_1/outputs/task308_qwen_all_sft_pipeline_inventory_audit_s1/run_20260603T144136Z`
 
-Inventory manifest:
-`all_sft_inventory_manifest.json`
-
-Manifest sha256 verified:
+Inventory manifest sha256 verified:
 `4f629e015d4e7a8965899f1fb6c1a5e22e4e666fff28c5bfa69d9d9b31f97a61`.
 
-Verified manifest fields:
+Decision: `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
 
-- decision: `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`;
+Verified facts:
+
 - current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`;
 - product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`;
 - boundary flags are false for training, final packing, benchmark eval, export,
   endpoint, promotion claim, task255 reuse, AIME2025 train rows, shared
   deletion, product-code edits, and main push/merge.
 
-Checksum-backed M1/V11 source checks:
+Checksum-backed M1/V11 raw sources verified locally:
 
 | Source | Rows | sha256 | Local check |
 |---|---:|---|---|
@@ -99,93 +94,126 @@ Checksum-backed M1/V11 source checks:
 | `m1-agentic-sft-v11-math-final-answer` | 200 | `0e5485eae86bf716d0c2e04e8e02595564b38a949d71d31a42874d6e87ef1731` | rows/hash match |
 | `m1-agentic-sft-v11-math-hard-verified-full-solution` | 8 | `2039b67b2bcf5cf74b576a640f1f3a198d675e3fbd64a886da4be5753ad515d9` | rows/hash match |
 
-Task299 packed Qwen3-30B seed evidence carried by task308:
-
-- packed root:
-  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`;
-- top manifest sha:
-  `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`;
-- train rows/input tokens/supervised tokens: `279` / `1024646` / `228927`;
-- valid rows: `1`; test rows: `0`;
-- tokenizer equivalence and decontam status carried as PASS.
-
-Generic `stage1_sft/data_blend_raw` coverage:
+Generic `stage1_sft/data_blend_raw` remains constrained:
 
 - 12 HF source files are inventoried with repo/file hashes and weights.
-- Every generic entry is explicitly
-  `BLOCKED_FOR_TASK309_UNTIL_MATERIALIZED_COUNTED_DECONTAM_SCANNED`.
-- Missing for those generic sources: exact row counts, trainable prompt-hash or
-  n-gram decontam, Qwen chat-template packing, and supervised-token counts.
+- Exact row counts, trainable prompt-hash/ngram decontam, Qwen chat-template
+  packing, and supervised-token counts are not materialized.
+- Those raw sources must remain excluded from task309/task310 unless a later
+  task supplies the missing proof.
 
-Decision for #374: approve as inventory audit with task309 fail-closed
-constraints. This approval does not approve packing, training, eval, export,
-endpoint, promotion, or use of generic stage1 sources without the missing
-materialization/decontam/packing proof.
+Decision for #374: approve as inventory audit. This does not approve packing,
+training, eval, export, endpoint, promotion, or generic raw-stage1 inclusion.
 
 ## task309 / #372
 
 Report:
 `workspace/tasks/task309_qwen_all_sft_packed_data_contract_s1/all_sft_packed_data_contract_report.md`
 
-Task-owned artifact root:
-`/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T143700Z`
+Artifact root:
+`/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T145300Z`
 
-Disposition in #372:
-`BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING`.
+Constrained contract manifest:
+`manifests/task309_constrained_packed_contract_manifest.json`
 
-Review finding: request changes / refresh required.
+Manifest sha256 verified:
+`f33a14d05ab911779a8f43b5af138c6f4fa815191af3305820480a27fed47a14`.
 
-Reasons:
+Full task309 artifact checksum manifest sha256 verified:
+`b794bf3b96b6811d409b903b4b2ed2d95536b8ed655a4da44d9cf380143d6615`.
 
-- #372 predates current task308/#374 and says task308 inventory was missing.
-  That is stale now that #374 provides a pass audit with explicit constraints.
-- #372 produced no new packed root and cannot serve as the current
-  all-eligible-SFT packed contract.
-- Named key hashes for the blocker artifacts match local files, but replaying
-  `manifests/task309_artifact_checksums.sha256` from the artifact root fails for
-  three generated files:
-  - `manifests/task309_artifact_checksums.sha256`;
-  - `manifests/task309_file_inventory.txt`;
-  - `manifests/task309_file_inventory.txt.sha256`.
+`sha256sum -c manifests/task309_artifact_checksums.sha256` passed.
+Qwen3-30B model asset hashes passed for `config.json`, `tokenizer.json`,
+`tokenizer_config.json`, `vocab.json`, and `merges.txt`.
 
-Required refresh:
+Disposition:
+`PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
 
-1. Consume #374 as the upstream task308 inventory.
-2. Decide fail-closed whether to pack only checksum-backed V11/M1 sources or to
-   first materialize/count/decontam generic stage1 SFT sources.
-3. If packing, publish a fresh packed root, split/source manifests,
-   row/token/supervised-token/shard counts, intended-vs-exposed parity,
-   Qwen3-30B tokenizer/chat-template proof, checksum manifest, and no-AIME2025
-   train proof.
-4. If blocking, publish a current blocker tied to #374, not the old
-   task308-missing state.
+The constrained contract identifies the previously reviewed task299 Qwen3-30B
+packed root as the training seed:
 
-Task310 remains `NO_GO_HOLD` until this is fixed.
+`/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+
+Referenced original task299 artifacts were rehashed from their original paths
+and matched the manifest:
+
+- `manifest.json`:
+  `59ee4432b5ddf776f82ee5dff6f45f1a9c1f8f9c7ad99a29d8fcfb96c7e50f3d`;
+- `contract_validation.json`:
+  `75265f68621676c846551ba12022cb3d6f383b4f65e3bc7fb9773a197434d0b2`;
+- `split_counts_parity.json`:
+  `f4c335e651cc7777ecf326ed2fa3e46791c3de7286d7dee86042d941db2be70d`;
+- `decontam_proof.json`:
+  `e5b73a79ae8d1cd35b3188bd0f6bda60570f37c21831ac16d126a006d7fd56bc`;
+- `tokenizer_chat_template_equivalence_probe.json`:
+  `f31d5229da06ef1ff7c5457acfd66a7b4b4c91e92c61d7ae00f4492b476000ec`;
+- `packed_qwen_30b_shard_checksums.json`:
+  `444aef9230129d689c27be295ff054fc1dc4800fae52827280a5c289408fed11`.
+
+Constrained packed split counts:
+
+| Split | Shards | Rows | Input tokens | Supervised tokens |
+|---|---:|---:|---:|---:|
+| train | 46 | 279 | 1024646 | 228927 |
+| valid | 1 | 1 | 1491 | 1428 |
+| test | 1 | 0 | 0 | 0 |
+
+Train source counts:
+
+| Source | Shards | Rows | Input tokens | Supervised tokens |
+|---|---:|---:|---:|---:|
+| `m1-agentic-sft-v11-from-m0` | 16 | 244 | 942062 | 167555 |
+| `m1-agentic-sft-v11-math-final-answer` | 16 | 28 | 75305 | 54821 |
+| `m1-agentic-sft-v11-math-hard-verified-full-solution` | 14 | 7 | 7279 | 6551 |
+
+Contract results:
+
+- Qwen packed/training contract validation: PASS.
+- Intended-vs-exposed multiset parity: PASS.
+- Decontam/no-AIME2025-train proof: PASS.
+- Tokenizer-native Qwen chat-template/API equivalence: PASS.
+- Task255 reuse: false.
+- No new task309 packing run was executed; #372 identifies and checksums the
+  existing reviewed task299 root as the constrained seed.
+
+Decision for #372: approve for constrained V11/task299 seed only. Generic
+stage1 raw SFT remains excluded. This approval does not approve promotion,
+export, endpoint, benchmark comparison, or generic all-raw-SFT inclusion.
 
 ## task310 / #373
 
 Report:
 `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/all_sft_30b_full_training_report.md`
 
-Disposition in #373:
+Disposition:
 `BLOCK_PRETRAINING_GATE`.
 
-Review finding: approve blocker closeout with freshness residual.
+Review finding:
+`REQUEST_CHANGES_REFRESH_FOR_CONSTRAINED_TASK299_SEED_AFTER_TASK309_ACCEPTANCE`.
 
-Evidence:
+No training launch, optimizer step, GPU allocation, loss/validation, checkpoint,
+or checksum artifact was produced. Read-only output search found no task310
+training artifact root under `/work-agents/intern_nemotron_worker_5/outputs`,
+`/root`, or `/work-agents`.
 
-- No training launch, optimizer step, GPU allocation, loss/validation,
-  checkpoint, or checksum artifact was produced.
-- Read-only output search found no task310 training artifact root under
-  `/work-agents/intern_nemotron_worker_5/outputs`, `/root`, or `/work-agents`.
-- The blocker remains valid because there is still no accepted current
-  `PASS_PACKED_CONTRACT` from task309 and no all-SFT checkpoint handoff.
+The no-training HOLD was correct before #372 refreshed. However #373 at
+`7000f371` still says task309 #372 must refresh from #374 and still refers to
+old #372 head `998ebce4`. Because current #372 at `fe1bb38c` is approvable as
+a constrained packed contract, task310 should now refresh its gate after lead
+accepts #372.
 
-Freshness residual:
+Task310 may proceed only under these constraints:
 
-- #373 predates #374/#372 and says task308/task309 had no visible PR/report.
-  That upstream visibility is stale, but the no-training blocker remains
-  correct because #372 still does not provide a current packed contract.
+- Lead accepts #374 and #372.
+- The input packed root is exactly the constrained task299 root carried by
+  #372.
+- Generic `stage1_sft/data_blend_raw` remains excluded.
+- Runtime/resource assumptions are refreshed against current main and exact
+  packed root before launch.
+- No promotion/export/endpoint/AIME or benchmark claim is made by launch.
+
+Current #373 should not be treated as a launch plan or as generic all-SFT
+clearance.
 
 ## task311 / #371
 
@@ -195,7 +223,7 @@ Reports:
 - `all_sft_corrected_qwen_benchmark_report.md`
 - `all_sft_m1_benchmark_availability_report.md`
 
-Task-owned artifact root:
+Artifact root:
 `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T143618Z`
 
 Blocker manifest:
@@ -207,15 +235,13 @@ Blocker manifest sha256 verified:
 Disposition:
 `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
 
-Review finding: approve blocker closeout with freshness residual.
+Review finding:
+`APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`.
 
-Evidence:
-
-- No checkpoint-load canary, non-AIME generation, corrected Qwen benchmark,
-  AIME, HMMT, MMLU-Pro, or M1 benchmark command was launched.
-- No completions, parser diagnostics, benchmark summaries, or benchmark
-  checksum manifests were produced.
-- The blocker remains valid because #373 has no usable checkpoint handoff.
+No checkpoint-load canary, non-AIME generation, corrected Qwen benchmark, AIME,
+HMMT, MMLU-Pro, or M1 benchmark command was launched. No completions, parser
+diagnostics, benchmark summaries, or benchmark checksum manifests were
+produced.
 
 Unavailable benchmark rows:
 
@@ -226,11 +252,9 @@ Unavailable benchmark rows:
 | HMMT | `BLOCKED_NOT_RUN` | task310 usable checkpoint handoff missing; checkpoint-load/non-AIME canary not passed |
 | M1 basket | `BLOCKED_NOT_ENUMERATED` | checkpoint path/run root/artifact manifest missing; canary not passed |
 
-Freshness residual:
-
-- #371 predates #373 and says no task310 PR exists. #373 now exists, but it is
-  itself a pretraining-gate blocker and provides no checkpoint, so the task311
-  no-canary/no-eval blocker remains correct.
+Freshness residual: #371 still claims no task310 PR/branch was visible at probe
+time, but #373 now exists as a HOLD/blocker PR and still provides no usable
+checkpoint. Therefore the task311 blocker remains true.
 
 ## Boundary Review
 
@@ -238,7 +262,7 @@ Across the reviewed evidence, I found no indication that any upstream task ran
 forbidden work:
 
 - no training or optimizer steps;
-- no packing run by task309;
+- no new task309 packing run;
 - no benchmark eval or canary run;
 - no export or endpoint;
 - no promotion claim;
@@ -255,14 +279,13 @@ implementation tests or live workloads.
 
 Recommended lead wording:
 
-`APPROVE #374 as PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS at current head f57384f6, noting requested 4a46c9b advanced by status/history-only drift. REQUEST_CHANGES for #372: refresh/rerun task309 from #374 and do not treat the old task308-missing blocker as current. APPROVE #373 and #371 as blocker closeouts with freshness residuals: #373 correctly did not train because no current packed contract/checkpoint exists, and #371 correctly did not canary/eval because no task310 checkpoint handoff exists. Combined all-SFT gate remains HOLD/NO-GO: no promotion, export, endpoint, benchmark comparison, further scale decision, training continuation, or merge authorization until task309 produces current accepted packed-contract evidence and downstream task310/task311 refresh from it.`
+`APPROVE #374 at b798fdfc as PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS. APPROVE #372 at fe1bb38c as PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS: task310 may proceed only after lead acceptance and only using the constrained task299 packed root; generic stage1_sft/data_blend_raw remains excluded unless separately materialized, decontam-scanned, Qwen-packed, and reviewed. REQUEST_CHANGES/REFRESH #373 at 7000f371 before any launch because it still reflects the pre-fe1bb38 #372 state; it may refresh to a constrained-seed launch gate after #372 is accepted. APPROVE #371 at 6981a654 as BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING/HOLD because no task310 checkpoint exists. No promotion, export, endpoint, benchmark comparison, generic raw-SFT inclusion, task255 reuse, or AIME2025 train-data use is authorized.`
 
 Residual risks:
 
-- #374 current head differs from the originally requested `4a46c9b`; I verified
-  the drift to `f57384f6` is worker_1 status/history-only.
-- #372 checksum-manifest replay has self/inventory mismatches and is stale
-  relative to #374.
-- #371/#373 blocker reports have stale upstream visibility, but their core
-  blockers remain true because no current task309 packed contract or task310
-  checkpoint handoff exists.
+- The constrained packed root has sparse valid/test splits: valid `1`, test `0`.
+- #372 did not run new packing; it identifies and checksums the existing
+  reviewed task299 root as the constrained seed.
+- task310 runtime/resource assumptions still need refresh before any launch.
+- task311 has no benchmark row-level evidence because no checkpoint handoff
+  exists.

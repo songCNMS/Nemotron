@@ -78,3 +78,27 @@
 - Boundaries maintained: no training, packing, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, merge, or worker branch rewrites.
+
+## Session 82 - 2026-06-03 UTC - refreshed after constrained task309 contract
+
+- Refreshed read-only review against:
+  - #374/task308 exact head
+    `b798fdfcfc3144111dd0a6e0f80505df031bcc5e`;
+  - #372/task309 exact head
+    `fe1bb38c55545b54dc017647ae9f299ee1a5ac02`;
+  - #373/task310 exact head
+    `7000f3714442c39fd78e40249d9d5ed69528d9eb`;
+  - #371/task311 exact head
+    `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`.
+- Decisions:
+  - #374: `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`;
+  - #372: `APPROVE_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`;
+  - #373: `REQUEST_CHANGES_REFRESH_FOR_CONSTRAINED_TASK299_SEED_AFTER_TASK309_ACCEPTANCE`;
+  - #371: `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`.
+- Key gate wording: task310 may proceed only after lead accepts #372 and only
+  on the constrained V11/task299 packed root; generic `stage1_sft/data_blend_raw`
+  remains excluded unless separately materialized, decontam-scanned,
+  Qwen-packed, and reviewed.
+- Boundaries maintained: no training, packing, eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
+  edits, main push, merge, or worker branch rewrites.

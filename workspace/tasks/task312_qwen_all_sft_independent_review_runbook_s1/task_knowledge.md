@@ -30,3 +30,9 @@
    #371/task311 at `37a76cae` are approved as blocker closeouts with freshness
    residuals because no current task309 packed contract or task310 checkpoint
    handoff exists.
+8. Session 82 refresh: #372/task309 at `fe1bb38c` is approved only as
+   `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
+   Task310 may proceed only after lead accepts #372, only using the constrained
+   task299 packed root, and only after refreshing task310 runtime/resource
+   assumptions. Generic `stage1_sft/data_blend_raw` remains excluded until it is
+   materialized, counted, decontam-scanned, Qwen-packed, and reviewed.
