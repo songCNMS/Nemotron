@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -54,3 +54,17 @@
   materialization, final packing, training, optimizer step, benchmark eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   mutation, shared deletion, main push, merge, or self-merge was performed.
+
+## Session 4 - New task322 assignment acknowledged
+
+- Received new lead assignment
+  `task322_qwen_all_sft_raw_materialize_count_decontam_s1`.
+- Task319/#383 remains open and unmerged; lead gate remains
+  `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE` with no self-merge
+  authorization.
+- Task322 work is separated onto its own worker branch from current
+  `origin/main`.
+- No task319 materialization, final packing, training, optimizer step,
+  benchmark eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared mutation, shared deletion, main push, merge, or self-merge was
+  performed.

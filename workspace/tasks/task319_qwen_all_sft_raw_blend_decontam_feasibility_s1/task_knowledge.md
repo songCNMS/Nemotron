@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -34,3 +34,6 @@
     merge, or self-merge.
 12. Await coordinator or authorized non-author merge path before any #383 merge
     action.
+13. Session 4 received task322 assignment for raw materialize/count/decontam on
+    a separate branch; task319 remains open/unmerged and authorizes no
+    additional action.
