@@ -2647,3 +2647,7 @@
    row-manifest sha `06417e0445200472fa37889cabd2b93f511471be3f45f49291aef9f420e16a39`,
    prompt/normalized hits 0/0, 13-word ngram hits 842; task327 then started
    `competitive-cpp-01`. No official report/PR or packing/training release.
+696. Session 79: task327 `competitive-cpp-01` reached 100,000 rows /
+   5,248.7 MiB at `2026-06-03T22:22:54Z`; process still active, no official
+   worker report/PR/final disposition, and completed sources remain
+   decontam-blocked.

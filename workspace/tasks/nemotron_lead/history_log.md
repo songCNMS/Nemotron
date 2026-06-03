@@ -11839,3 +11839,10 @@
   disposition, and no release to packing, training, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, merge,
   self-merge, or main push.
+- Follow-up read-only monitor at `2026-06-03T22:23:31Z` found no unread lead
+  mailbox messages and no task327 PR. The task327 process remained active,
+  summary/matrix still contained only the two completed
+  `BLOCKED_DECONTAM_HIT` sources above, and `competitive-cpp-01` reached its
+  first progress line: 100,000 rows / 5,248.7 MiB at `2026-06-03T22:22:54Z`
+  with rate 9.32 MiB/s. This remains live in-progress evidence only and does
+  not release packing/training.
