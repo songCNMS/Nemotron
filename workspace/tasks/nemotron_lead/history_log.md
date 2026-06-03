@@ -11677,3 +11677,53 @@
   forensics report unchanged and mergeability CLEAN after recompute. Posted
   issuecomments `4616568738` and `4616574564`, carrying forward
   `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.
+
+### Task322, task323, task326 follow-up gates
+
+- After lead drift push, `git fetch --all --prune` found new task322 and
+  task326 remote branches plus task323 drift. #388 task322 is OPEN/base
+  main/CLEAN at `adf1a02f3cd5da11d04d2a4d167bdb8d1573e79f`; #389 task326 is
+  OPEN/base main/CLEAN at `59f5e16b5254b8b3e8fb71cdbfd0a3851b9d7492`; #385
+  task323 is OPEN/base main/CLEAN at
+  `de480248b1ad7abe16a620729e62fa397443228d`.
+- #385 task323 current-head drift from `edb26535` to `de480248` is worker_5
+  status plus task323 history/task_knowledge metadata only. The preflight
+  report is unchanged with sha
+  `f996e90ac8b75171ab0c7ca7d3fcc59354ad338075d8b1a229e6513a07f5917c`;
+  `git diff --check` passes. Posted issuecomment `4616643065`, carrying
+  forward `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`.
+- #388 task322 diff scope is worker_2 status plus task322 docs/report only,
+  with `git diff --check` passing and no product-code changes. Lead verified
+  task-owned output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task322_qwen_all_sft_raw_materialize_count_decontam_s1/run_20260603T203100Z`;
+  `sha256sum -c manifests/artifact_checksums.sha256` passed. Report sha is
+  `92f77fd4868c8fb761aff70a24609f51edbc96cd309ad17c48d0ae8436bc7b65`.
+  Posted issuecomment `4616646965`: `APPROVE_PARTIAL_EVIDENCE_WITH_EXCLUSIONS
+  / HOLD_FULL_ALL_SFT_PACK_TRAIN`.
+- Accepted task322 evidence: 12/12 task319 raw candidates resolved to exact HF
+  file metadata. Two sources were included/materialized:
+  `instruction-following-structured` with 4,969 rows and
+  `agentic-interactive` with 19,028 rows, for 23,997 included rows and
+  543,322,912 included bytes. Both included sources have parse errors 0 and
+  heldout/decontam hits 0 for prompt-hash, normalized-prompt, and 13-word
+  ngram checks.
+- Task322 exclusion blocker remains material: 10 sources are
+  `EXCLUDED_SIZE_GT_1GB`; total selected payload across all 12 candidates is
+  243,316,402,226 bytes. This is accepted as partial docs/evidence and exact
+  blocker record only. It does not unlock final all-eligible-SFT packed data,
+  training, eval, export, endpoint, or promotion. A successor
+  resource-approved task is still required for the 10 excluded large files plus
+  supervised-token counts, split exposure parity, Qwen chat-template packing
+  proof, and full decontam contract.
+- #389 task326 diff scope is worker_4 status plus task326 docs/report only and
+  `git diff --check` passes, but the safety matrix is stale relative to
+  current gate state: it still says no task322 branch/PR is visible and no
+  lead gate comments are visible for #385/#386/#387. Posted issuecomment
+  `4616650155`: `REQUEST_CHANGES_STALE_SAFETY_MATRIX /
+  HOLD_NEXT_PHASE_RUNBOOK`. Worker_4 must refresh exact heads/comments and
+  carry task322 partial-exclusion blocker before #389 can be accepted.
+- tmux notifications were sent to worker_2 (#388 partial approval/HOLD),
+  worker_4 (#389 request-changes/HOLD), and worker_5 (#385 current-head
+  carry-forward/HOLD). No final packing, optimizer/training, benchmark eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, main push, merge, or self-merge was authorized.

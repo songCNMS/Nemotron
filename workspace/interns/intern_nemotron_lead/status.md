@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #385/#386/#387 approved docs/no-action; #380 current-head refreshed; task322/task326 pending |
-| Session | 78 |
+| PR | #385/#388 approved docs/HOLD; #389 request-changes stale safety matrix; full all-SFT pack/train HOLD |
+| Session | 79 |

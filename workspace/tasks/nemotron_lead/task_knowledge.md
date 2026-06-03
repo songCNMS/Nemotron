@@ -2608,3 +2608,16 @@
    metadata-only drift over the approved blocker report; task314/#380 current
    head `c58097dc` is accepted as metadata-only drift over the approved
    forensics report.
+684. Session 79: task323/#385 current head `de480248` is accepted as
+   metadata-only drift over the approved Route A validation-skip preflight
+   report; training remains HOLD.
+685. Session 79: task322/#388 current head `adf1a02f` is accepted only as
+   partial raw materialize/decontam evidence: 12/12 sources resolved, 2 sources
+   included with 23,997 rows and zero decontam hits, 10 sources excluded as
+   `EXCLUDED_SIZE_GT_1GB`.
+686. Session 79: task322 does not unlock full all-SFT packing or training; a
+   successor resource-approved task is required for the 10 excluded large files,
+   supervised-token counts, split exposure parity, Qwen chat-template packing,
+   and full decontam contract.
+687. Session 79: task326/#389 current head `59f5e16b` is request-changes/HOLD
+   because its safety matrix is stale for current #388 and lead gate comments.
