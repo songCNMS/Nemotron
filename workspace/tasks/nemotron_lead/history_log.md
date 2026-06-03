@@ -11943,3 +11943,11 @@
   unchanged with only the three completed `BLOCKED_DECONTAM_HIT` sources. This
   is in-progress evidence only and does not release all-SFT packing/training/
   eval/export/endpoint/promotion.
+- Bounded read-only poll caught the next stable checkpoint:
+  `2026-06-03T23:57:06Z PROGRESS competitive-python-00 rows=700000
+  mib=32646.5 rate_mib_s=9.27`. The row manifest was still being written and
+  had reached row 700,313 in the immediate tail. There was still no final rc,
+  no official worker_2 report, no task327 PR, and the summary matrix remained
+  unchanged with only the three completed `BLOCKED_DECONTAM_HIT` sources. This
+  is in-progress evidence only and does not release all-SFT packing/training/
+  eval/export/endpoint/promotion.
