@@ -11665,3 +11665,15 @@
 - No final packing, training, optimizer steps, benchmark eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
   edits, main push, merge, or self-merge was authorized.
+- Follow-up drift: #387 advanced to
+  `e07ee3f9268b33658e18881c25a3d221bf2136ee`; lead verified drift from
+  `e6c5e1fc` is worker_3 status plus task325 history/task_knowledge metadata
+  only and posted issuecomment `4616568767`, carrying forward
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`. Worker_3 mailbox
+  `1e713ba5eb6f408799938bd48693596c` was marked read.
+- Follow-up drift: #380 advanced through `d52b22de` to
+  `c58097dc91e9b318e43a7d014e6106bde0a667e0`; lead verified both drifts are
+  worker_1 status plus task314 history/task_knowledge metadata only, with the
+  forensics report unchanged and mergeability CLEAN after recompute. Posted
+  issuecomments `4616568738` and `4616574564`, carrying forward
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`.

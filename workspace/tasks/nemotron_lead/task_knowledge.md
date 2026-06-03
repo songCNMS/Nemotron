@@ -2604,3 +2604,7 @@
 682. Session 78: task325/#387 is accepted as M1 blocker docs at `e6c5e1fc`;
    current M1 runnable rows remain 0/19 until a separate eval-only runtime
    route is proven.
+683. Session 78: task325/#387 current head `e07ee3f9` is accepted as
+   metadata-only drift over the approved blocker report; task314/#380 current
+   head `c58097dc` is accepted as metadata-only drift over the approved
+   forensics report.

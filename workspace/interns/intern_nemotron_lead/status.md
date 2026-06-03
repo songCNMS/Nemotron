@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #385/#386/#387 approved docs/no-action; task322/task326 still pending remote/report |
+| PR | #385/#386/#387 approved docs/no-action; #380 current-head refreshed; task322/task326 pending |
 | Session | 78 |
