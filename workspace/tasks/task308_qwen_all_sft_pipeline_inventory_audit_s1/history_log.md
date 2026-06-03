@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - History Log
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -63,3 +63,17 @@
 - Boundaries maintained: no packing, training, benchmark eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   product-code edits, main push, or merge.
+
+## Session 88 - 2026-06-03 UTC - Current-head HOLD carried
+
+- Lead received PR #374 current head
+  `b798fdfcfc3144111dd0a6e0f80505df031bcc5e` as metadata-only drift with
+  unchanged disposition `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+- Lead instructed to hold self-merge until task312 refreshes review over
+  current heads.
+- Carried disposition remains: task308 supports task309 using the
+  checksum-backed V11/task299 seed, while generic `stage1_sft/data_blend_raw`
+  remains blocked until materialized/count/decontam/packing proof exists.
+- Boundaries maintained: no packing, training, eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train rows, shared deletion, product-code
+  edits, main push, or merge.

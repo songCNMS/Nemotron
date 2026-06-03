@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Knowledge Entries
 
@@ -23,3 +23,6 @@
 7. Lead HOLD after task308 receipt: do not self-merge #374 until lead gate
    after task312 independent review; no packing/training/eval/export/endpoint
    is authorized.
+8. Lead accepted head `b798fdfcfc3144111dd0a6e0f80505df031bcc5e` as
+   metadata-only drift; task312 must refresh review over current heads before
+   any #374 self-merge gate.
