@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Knowledge Entries
 
@@ -38,3 +38,7 @@
     released to worker_5, but task311 remains HOLD until an official task310
     checkpoint handoff is accepted; stale #371 must not be self-merged or used
     to run canary/benchmarks.
+12. Task310 produced only a salvage checkpoint candidate at PR #373 head
+    `7561a578` with `train_rc=1` after validation hang; task313 review is now
+    required before lead may release task311 checkpoint-load plus non-AIME
+    canary.

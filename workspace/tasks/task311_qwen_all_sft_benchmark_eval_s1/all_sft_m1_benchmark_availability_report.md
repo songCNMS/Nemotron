@@ -1,6 +1,6 @@
 # task311 M1 benchmark availability report
 
-<!-- METADATA:STATUS=Blocker,ASSIGNEE=intern_nemotron_worker_3,SESSION=6 -->
+<!-- METADATA:STATUS=Blocker,ASSIGNEE=intern_nemotron_worker_3,SESSION=7 -->
 
 ## Summary
 

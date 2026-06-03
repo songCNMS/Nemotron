@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -106,3 +106,19 @@
 - No self-merge, checkpoint-load canary, benchmark eval, training,
   AIME2025 train-row use, task255 reuse, shared deletion, export, endpoint,
   promotion, product-code edit, direct main push, merge, or self-merge occurred.
+
+## Session 7 - 2026-06-03 UTC - HOLD after task310 salvage candidate
+
+- Lead confirmed task311/#371 remains on HOLD.
+- Task310 produced only a salvage checkpoint candidate at PR #373 head
+  `7561a578` with `train_rc=1` after validation hang; it is not an accepted
+  checkpoint handoff for task311.
+- Lead assigned task313 to worker_4 for independent review.
+- Task311 must not run checkpoint-load, canary, benchmarks, AIME/task243 eval,
+  export, endpoint, promotion, or merge until lead explicitly releases
+  checkpoint-load plus non-AIME canary after task313.
+- Current disposition remains `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
+- No self-merge, checkpoint-load canary, benchmark eval, AIME/task243 eval,
+  training, AIME2025 train-row use, task255 reuse, shared deletion, export,
+  endpoint, promotion, product-code edit, direct main push, merge, or
+  self-merge occurred.
