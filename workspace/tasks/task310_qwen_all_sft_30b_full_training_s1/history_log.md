@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -95,3 +95,49 @@
 - Did not self-merge, train, silently downgrade, use AIME2025 train rows, use
   task255, delete shared files, export, endpoint, promote, edit product code,
   push main, or merge.
+
+## Session 6 - 2026-06-03 UTC - Current-main launch and validation no-progress blocker
+
+- Lead released task310 after #374/task308 merged at
+  `eb05e6b324c3159b01070cb575c2be363e773cac`, #372/task309 merged at
+  `af388ea858cd0b7582a37397188b03f69e8927b4`, and #375/task312 merged at
+  `004870e7d790778b5cdae5cc574257fdc19ec755`.
+- Merged current `origin/main`
+  `004870e7d790778b5cdae5cc574257fdc19ec755` into the task310 branch and
+  refreshed runtime/data gates for only the constrained V11/task299 packed
+  root; generic `stage1_sft/data_blend_raw` remained NO-GO.
+- Created run root
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z` and
+  local evidence root
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z`.
+- Mirrored task299 packed data into the task-owned dereferenced remote mirror
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/input/task299_packed_qwen_30b_deref_mirror`;
+  source and remote manifests matched with `391` files, `0` symlinks, and
+  sha256 `d80241a9c659c2546591c27941e7c24c32717983250df38c0254113cd28bfc6c`.
+- Ran preflight successfully with 8x H200, model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, and
+  task298 checkpoint
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`;
+  preflight summary sha256
+  `cff95dc1c07325b9192677670d68fe3b64a54759919879c5ce5db0b82d1b10b3`.
+- Launched bounded all-SFT training at `2026-06-03T15:52:15Z` with
+  `train_iters=35`, `global_batch_size=8`, `micro_batch_size=1`, `lr=5e-7`,
+  `min_lr=1e-7`, `seed=5678`, TP `4`, PP `2`, EP `4`, ETP `1`, and
+  `checkpoint.save_interval=5`.
+- Training reached `35/35`, saved
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+  (`399G`, `28` files), and logged skipped/NaN iterations `0` through
+  iteration 35.
+- Built-in validation then stopped making log progress at
+  `Evaluating on 80 samples` / `Evaluating iter 1/10`; as of the final
+  snapshot at `2026-06-03T16:26:54Z`, there was no `train_rc.txt`, no
+  `train_end.txt`, log mtime remained `2026-06-03T16:10:22Z`, and processes
+  remained alive.
+- Recorded disposition
+  `TRAINING_LOOP_COMPLETE__VALIDATION_NO_LOG_PROGRESS_PENDING_LEAD_DECISION__CHECKPOINT_CANDIDATE`;
+  this is not a clean training PASS and needs lead decision for continued wait
+  versus termination/salvage handling.
+- Did not terminate/restart, run canary, benchmark eval, AIME/task243 eval,
+  export, endpoint, promotion, generic raw-stage data, AIME2025 train rows,
+  task255 reuse, shared deletion, product-code edits, direct main push, or
+  merge.

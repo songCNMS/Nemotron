@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Qwen all-SFT 30B full training gate
 
-<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=3 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=6 -->
 
 ## Background
 
@@ -16,9 +16,8 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 
 ## Scope
 
-- Use current `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`.
-  Lead verified this is a docs-only task310 task-doc advance from product-code
-  baseline `ecb14173a820df377270273b9f7d9d92cb5076d2`.
+- Use current `origin/main` `004870e7d790778b5cdae5cc574257fdc19ec755`
+  after prerequisite merges #374, #372, and #375.
 - Prioritize target model path:
   `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
 - Before training, verify:
@@ -79,40 +78,32 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_5`
-- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Current main: `004870e7d790778b5cdae5cc574257fdc19ec755`
 - Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependencies: task308, task309, prior 30B runtime/resource evidence
 - Downstream tasks: task311, task312
-- Gate state: full training is HOLD until upstream evidence is accepted.
+- Gate state: prerequisite gates passed for the constrained V11/task299 seed
+  and the bounded task310 launch was attempted.
 
 ## Current Worker Disposition
 
-Session 3 disposition: `BLOCK_PRETRAINING_GATE`.
+Session 6 disposition:
+`TRAINING_LOOP_COMPLETE__VALIDATION_NO_LOG_PROGRESS_PENDING_LEAD_DECISION__CHECKPOINT_CANDIDATE`.
 
-Training was not launched because the required upstream gates are not yet
-present as accepted evidence:
+After #374/task308, #372/task309, and #375/task312 merged, task310 was refreshed
+from current main and launched using only the constrained task299 packed root:
+`/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
 
-- task308 now has PR #374 open/CLEAN at
-  `f57384f6a298500f240a9367c3598cd5f9a59638` with
-  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`, but this does not release
-  task310 by itself.
-- task309 PR #372 is open/CLEAN at
-  `998ebce439164af2cc0e026575de32cd356acaa0`, but its report still records
-  `BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING` and must refresh from #374
-  before any task310 launch decision.
-- task310 PR #373 remains open/CLEAN at
-  `1cd3eb17fc686b281da7a9a0791ea09fbe614664`.
-
-Previously observed branches:
-
-- task308 worker branch
-  `intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1`
-  advanced from `348cba44c02043cd6310a36ec722a68278288db2` to #374 head
-  `f57384f6a298500f240a9367c3598cd5f9a59638`.
-- task309 worker branch
-  `intern_nemotron_worker_2/task309_qwen_all_sft_packed_data_contract_s1`
-  advanced from `d054925b1792a5365738247eeb8bdec462e1e6c6` to #372 head
-  `998ebce439164af2cc0e026575de32cd356acaa0`.
+The run root is
+`/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z`.
+The training loop reached `35/35`, saved checkpoint candidate
+`/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+(`399G`, `28` files), and logged skipped/NaN iterations `0` through iteration
+35. It then entered built-in validation and had no log progress past
+`Evaluating on 80 samples` / `Evaluating iter 1/10`; no `train_rc.txt` or
+`train_end.txt` existed in the final Session 6 snapshot, and processes remained
+alive. This is not a clean training PASS and needs lead decision for continued
+wait versus termination/salvage handling.
 
 Report:
 `workspace/tasks/task310_qwen_all_sft_30b_full_training_s1/all_sft_30b_full_training_report.md`.
