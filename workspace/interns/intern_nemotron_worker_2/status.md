@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task315_qwen_all_sft_m1_launcher_runtime_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task315_qwen_all_sft_m1_launcher_runtime_unblock_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
 | Current Task | task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 |
-| PR | N/A |
-| Session | 1 |
-| Last Update | 2026-06-03T15:40:00Z: accepted task315 on branch intern_nemotron_worker_2/task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 from origin/main 292c5bfa; starting M1 launcher runtime/dry-run audit only, no benchmark rows/training/eval/export/endpoint/promotion/main push/merge. |
+| PR | Pending |
+| Session | 2 |
+| Last Update | 2026-06-03T19:13:03Z: completed task315 runtime/dry-run audit report with disposition BLOCK_RUNTIME; task-owned artifacts at /work-agents/intern_nemotron_worker_2/outputs/task315_qwen_all_sft_m1_launcher_runtime_unblock_s1/run_20260603T190821Z; 14 exact mapped rows remain blocked by launcher/container/module runtime, 5 rows remain exact-task unavailable; no benchmark rows/training/eval/export/endpoint/promotion/main push/merge. |

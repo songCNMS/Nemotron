@@ -1,6 +1,6 @@
 # task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 - Qwen all-SFT M1 launcher runtime unblock
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 
