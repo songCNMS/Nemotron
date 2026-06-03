@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
 | PR | #372 |
-| Session | 3 |
-| Last Update | 2026-06-03T15:00:00Z: task309/#372 refreshed against task308/#374 PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS; disposition is PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS, generic raw SFT excluded, no training/eval/export/endpoint/promotion/shared deletion/main merge. |
+| Session | 4 |
+| Last Update | 2026-06-03T15:08:00Z: task309/#372 hold recorded after lead acknowledged refreshed constrained pass at fe1bb38c; waiting for task312 independent review/lead gate, no self-merge/training/eval/export/endpoint/promotion/task255/AIME2025 train rows/shared deletion/product-code edits/main push. |

@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,6 @@
    are available.
 7. Task310 should be framed as conditional on the constrained V11/task299 seed;
    it is still no-go for including generic raw SFT registry sources.
+8. After the Session 3 constrained-pass refresh, #372 remains hold/no-self-merge
+   until lead completes task312 independent review and explicitly releases the
+   exact current head.

@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -83,4 +83,21 @@
   inclusion.
 - Boundaries held: no training, eval, export, endpoint, promotion, task255
   reuse, AIME2025 train rows, product-code edits, shared deletion, main push,
+  or merge.
+
+## Session 4 - Lead hold pending task312 review
+
+- Received lead acknowledgement for task309/#372 refreshed head
+  `fe1bb38c55545b54dc017647ae9f299ee1a5ac02`.
+- Lead directed worker_2 to hold self-merge while task312 refreshes independent
+  review over the new constrained pass.
+- Carried interpretation remains: constrained V11/task299 seed may become
+  task310 input only after lead accepts #372; generic
+  `stage1_sft/data_blend_raw` remains excluded/no-go without materialized
+  counts, decontam, Qwen packing, and supervised-token evidence.
+- Verified #372 is `OPEN`, base `main`, `CLEAN`, not draft, at head
+  `fe1bb38c55545b54dc017647ae9f299ee1a5ac02` before recording this hold.
+- No self-merge or main push was performed.
+- Boundaries held: no training, eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train rows, shared deletion, product-code edits, main push,
   or merge.
