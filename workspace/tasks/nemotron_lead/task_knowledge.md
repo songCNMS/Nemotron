@@ -2638,3 +2638,7 @@
 693. Session 79: task327 `competitive-cpp-00` later reached 300,000 rows /
    15,671.3 MiB with process still active; still no source-level decision or
    official worker report.
+694. Session 79 resume: lead commit `1914191b` pushed the 300k progress record.
+   Follow-up gate check found no unread mailbox, no task327 PR, task327 branch
+   still at `b20e642a`, diff-check pass, and active worker process still
+   pending a `competitive-cpp-00` source decision.

@@ -11810,3 +11810,13 @@
   and 15,671.3 MiB processed at `2026-06-03T21:57:14Z`; process remained
   active and output root remained about 40G. No source-level pass/block result
   or worker official report exists yet for this source.
+- Resume check after lead commit/push `1914191b` found no unread lead mailbox
+  messages, no task327 PR, and task327 worker branch still at
+  `b20e642a648425fb23c324290c5f672163332943`. The branch diff remains worker
+  status plus task327 docs/helper only and `git diff --check` passes.
+- Read-only artifact/process check still showed task327 process active, with
+  `competitive-cpp-00.rows.tsv.gz` updated at `2026-06-03T22:02:38Z`, Python
+  process CPU about 105%, log mtime still `2026-06-03T21:57:14Z`, and
+  summary/matrix still containing only the `instruction-following-chat`
+  `BLOCKED_DECONTAM_HIT` row. No source-level decision, worker official report,
+  PR, or release to packing/training exists yet.

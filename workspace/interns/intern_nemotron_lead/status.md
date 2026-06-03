@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 running: competitive-cpp-00 at 300k rows; full all-SFT pack/train HOLD |
+| PR | task327 active; no PR/report; competitive-cpp-00 source decision pending; all-SFT pack/train HOLD |
 | Session | 79 |
