@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -27,3 +27,15 @@
 - Did not train, run optimizer steps, final-pack, benchmark eval, export,
   endpoint, promote, reuse task255, use AIME2025 train data, mutate large
   shared datasets, delete shared files, push main, merge, or self-merge.
+
+## Session 2 - PR opened and official report prepared
+
+- Opened PR #383:
+  `https://github.com/songCNMS/Nemotron/pull/383`.
+- Updated report and worker status with PR metadata.
+- Current official disposition remains `PASS_FEASIBILITY_PLAN`: raw sources
+  have a concrete lead-gated materialize/count/decontam route, but are not
+  packing-ready now.
+- No materialization, final packing, training, optimizer step, benchmark eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  mutation, shared deletion, main push, merge, or self-merge was performed.

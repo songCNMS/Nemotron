@@ -25,7 +25,8 @@ to a separate Qwen packed-data contract task.
 
 - Worker branch:
   `intern_nemotron_worker_2/task319_qwen_all_sft_raw_blend_decontam_feasibility_s1`
-- PR: to be opened from this branch.
+- PR: #383
+  `https://github.com/songCNMS/Nemotron/pull/383`
 - Branch base:
   `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`
 - Lead docs:

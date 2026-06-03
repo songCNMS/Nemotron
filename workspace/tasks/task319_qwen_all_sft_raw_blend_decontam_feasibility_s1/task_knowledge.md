@@ -1,6 +1,6 @@
 # task319_qwen_all_sft_raw_blend_decontam_feasibility_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Knowledge Entries
 
@@ -22,3 +22,7 @@
    the 12 source files, pins splits/file paths, emits local checksums and row
    manifests, runs heldout/decontam scans, and then produces Qwen tokenizer
    supervised-token counts.
+9. PR #383 carries the official task319 report:
+   `https://github.com/songCNMS/Nemotron/pull/383`.
+10. No materialization or packing is authorized by task319; the report is
+    source/decontam feasibility evidence only.
