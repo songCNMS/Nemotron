@@ -11452,3 +11452,7 @@
 - Current gate remains fail-mixed/no-promotion: task311 AIME25 and HMMT pass
   same-harness base-vs-FT, but MMLU-Pro regresses by 2 rows and M1 launcher
   rows remain runtime-blocked.
+- Peer assignments were delivered to worker_5/task318, worker_2/task319,
+  worker_1/task320, and worker_4/task321. Immediate remote branch check found
+  no task318-task321 worker branches yet; next lead action is to wait for
+  worker mailbox/branch/PR or blocker reports.

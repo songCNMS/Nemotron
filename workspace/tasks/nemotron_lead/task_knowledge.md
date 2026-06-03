@@ -2546,3 +2546,6 @@
 663. Session 78: task318-task321 are lead-assigned no-training/no-eval
    repair-planning tasks only. Later training or packing requires fresh lead
    gate evidence, not these assignments alone.
+664. Session 78: peer_send delivered task318-task321 assignments to
+   worker_5/worker_2/worker_1/worker_4; no remote task318-task321 branches were
+   visible immediately after dispatch.
