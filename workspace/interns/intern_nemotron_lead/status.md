@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B gate: task306 active run ~378m; progress 27/30; row28/start_index27 active ~16m; awaiting task306 rc/results/report |
-| Session | 196 |
+| PR | 30B gate: task306 active run ~383m; progress 28/30; row29/start_index28 active; awaiting task306 rc/results/report |
+| Session | 197 |
