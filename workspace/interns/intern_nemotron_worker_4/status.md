@@ -1,6 +1,6 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task313_qwen_all_sft_task310_checkpoint_salvage_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task317_qwen_all_sft_task311_closeout_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task313_qwen_all_sft_task310_checkpoint_salvage_review_s1 |
-| PR | #376 |
+| Current Task | task317_qwen_all_sft_task311_closeout_review_s1 |
+| PR | pending |
 | Session | 1 |
-| Progress | Refreshed task313 review for #373 exact head `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8` using lead docs `c085e1693a4fca9e4444fb64a85ab0193b03d3ce`. Completed read-only artifact/checksum/termination review and updated #376 report with disposition `APPROVE_SALVAGE_HANDOFF_TO_TASK311_LOAD_CANARY_ONLY`: full remote `iter_0000035` payload checksum passed for all 28 files, key local/remote manifests matched, training log shows 35 finite iterations with skipped/nan 0, and SIGTERM/rc=1 validation-hang residuals are documented. This is not `PASS_TRAINING` and authorizes no benchmark/AIME eval, export, endpoint, promotion, additional training, task255, AIME2025 train data, shared deletion, merge, or main push. |
+| Progress | Completed task317 independent read-only review of #371/task311 exact head `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` and lead comments `4615730412`/`4615769907`. Disposition `APPROVE_DOCS_CLOSEOUT`: mergeable as evidence/fail-closeout docs only, no promotion. Verified drift `2e4482ea..9361e6da` is bookkeeping-only, canary hashes/metrics pass, corrected-Qwen metrics are AIME `16/30` vs base `15/30`, HMMT `11/30` vs base `9/30`, MMLU-Pro `6756/12032` vs base `6758/12032`, live endpoint cleanup is clean, M1 launcher rows remain blocked. Residuals: mixed performance, AIME/HMMT length finishes, stale `logs/run.log` entries in corrected-run checksum manifests, partial local HF-export copy. No training/eval rerun/export/endpoint/promotion/task255/AIME2025 train data/shared deletion/main push/merge/self-merge/rewrite performed. |
