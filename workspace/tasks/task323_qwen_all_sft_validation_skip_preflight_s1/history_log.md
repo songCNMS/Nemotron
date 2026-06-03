@@ -31,6 +31,17 @@
   final packing, product-code edit, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or self-merge performed.
 
+## Session 4 - 2026-06-03 UTC - Hook session metadata cleanup
+
+- Corrected task323 bookkeeping to active Session 4 after the stop hook reported
+  a reply/session mismatch.
+- Kept PR #385, `validation_skip_preflight_report.md`, and task-owned output
+  artifacts unchanged; the task323 decision remains `PASS_ROUTE_A_PREFLIGHT`.
+- Updated status and task knowledge session metadata to Session 4.
+- No training, optimizer steps, benchmark eval, export, endpoint, promotion,
+  final packing, product-code edit, task255 reuse, AIME2025 train data, shared
+  deletion, main push, merge, or self-merge performed.
+
 ## Session 5 - 2026-06-03 UTC - Lead gate recorded
 
 - Received lead gate for task323/#385 at current head `edb26535`:
@@ -43,14 +54,3 @@
   coordinator or authorized non-author merge path if any.
 - Did not change `validation_skip_preflight_report.md` or task-owned output
   artifacts.
-
-## Session 4 - 2026-06-03 UTC - Hook session metadata cleanup
-
-- Corrected task323 bookkeeping to active Session 4 after the stop hook reported
-  a reply/session mismatch.
-- Kept PR #385, `validation_skip_preflight_report.md`, and task-owned output
-  artifacts unchanged; the task323 decision remains `PASS_ROUTE_A_PREFLIGHT`.
-- Updated status and task knowledge session metadata to Session 4.
-- No training, optimizer steps, benchmark eval, export, endpoint, promotion,
-  final packing, product-code edit, task255 reuse, AIME2025 train data, shared
-  deletion, main push, merge, or self-merge performed.
