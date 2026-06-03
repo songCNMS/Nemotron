@@ -11917,3 +11917,13 @@
   active and the completed-source matrix still contained only the three
   completed `BLOCKED_DECONTAM_HIT` sources above. This does not release
   packing/training/eval/export/endpoint/promotion.
+- Follow-up read-only polling confirmed no unread lead mailbox messages, no
+  task327 PR, no final rc, and worker_2 still `Working` / PR `Pending` on
+  branch `b20e642a648425fb23c324290c5f672163332943`. `competitive-python-00`
+  reached the stable task log checkpoint `2026-06-03T23:32:20Z PROGRESS
+  competitive-python-00 rows=400000 mib=18859.4 rate_mib_s=9.26`; the row
+  manifest was still being written and had reached row 401,962 in the immediate
+  tail. Completed-source matrix remained unchanged with only
+  `instruction-following-chat`, `competitive-cpp-00`, and `competitive-cpp-01`
+  as `BLOCKED_DECONTAM_HIT`. No source-level result for python00 or downstream
+  release exists yet.
