@@ -11286,3 +11286,20 @@
   the task-owned benchmark runner is still local/untracked in worker_3's repo.
 - No official worker report, PR refresh, accepted HMMT/MMLU-Pro base-vs-FT
   comparisons, M1 basket final matrix, or unavailable-row closeout exists yet.
+
+### Task311 HMMT/MMLU-Pro FT observed, official report pending
+
+- Read-only HMMT FT summary completed under task311 run
+  `run_20260603T180911Z`: FT 11/30 exact-normalized accuracy
+  `0.36666666666666664`, parsed 19/30, finish reasons stop 18 and length 12,
+  compared to same-route base 9/30. This appears non-regressing but remains
+  unofficial until worker_3 mailbox/pushed docs.
+- Read-only MMLU-Pro FT summary completed under the same run: FT 6756/12032
+  accuracy `0.5615026595744681`, parsed 12032/12032, all stop finishes,
+  compared to same-route base 6758/12032 accuracy `0.5616688829787234`. This is
+  a 2-row regression and must be surfaced in task311 gate review.
+- #371 remains OPEN/CLEAN at `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`,
+  worker_3 local runner is still untracked, and lead mailbox is empty.
+  Worker_3 pane says endpoint shutdown, evidence mirroring, and M1
+  launcher-row disposition are in progress. No merge/promotion/training gate
+  changes.

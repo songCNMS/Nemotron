@@ -197,3 +197,32 @@
   exported task310 FT endpoint as PID `2808912` for HMMT FT and MMLU-Pro FT
   runs.
 - No official worker mailbox or PR refresh has arrived.
+
+## Session 78 - 2026-06-03 UTC - HMMT/MMLU-Pro FT observed read-only
+
+- Read-only HMMT FT summary at
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/ft_hmmt_task310_20260603T183800Z/summary.json`
+  reports 30 rows, 11 correct, exact-normalized accuracy
+  `0.36666666666666664`, 30 successful responses, parsed rows `19`, finish
+  reasons `stop=18` and `length=12`, original prompt, max_tokens 8192,
+  temperature 0, top_p `1e-5`, and all-request denominator.
+- The HMMT FT summary references the same-route base summary
+  `base_hmmt_task311_20260603T183100Z/summary.json`, where base was 9/30. This
+  appears non-regressing but remains unofficial until worker_3 sends mailbox and
+  pushed report/checksum evidence.
+- Read-only MMLU-Pro FT summary at
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/ft_mmlu_pro_task310_20260603T184300Z/summary.json`
+  reports 12032 rows, 6756 correct, exact-normalized accuracy
+  `0.5615026595744681`, parsed rows `12032`, all `stop` finishes, answer-only
+  JSON prompting, max_tokens 64, temperature 0, top_p `1e-5`, and all-request
+  denominator.
+- The MMLU-Pro FT summary references the same-route base summary
+  `base_mmlu_pro_task311_20260603T183600Z/summary.json`, where base was
+  6758/12032 (`0.5616688829787234`). This is a 2-row regression and must be
+  treated as a gate residual or request-changes point, not hidden by AIME/HMMT
+  improvements.
+- Lead mailbox remains empty, #371 remains OPEN/CLEAN at `1ce85c63`, and the
+  task-owned benchmark runner is still untracked in worker_3's local repo.
+  Worker_3 pane says endpoint shutdown/evidence mirroring and M1
+  launcher-row disposition are still in progress. No official benchmark gate
+  decision has been made.

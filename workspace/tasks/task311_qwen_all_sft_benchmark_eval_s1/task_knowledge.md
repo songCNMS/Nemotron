@@ -81,3 +81,14 @@
     comparison remains missing.
 25. Exported task310 FT endpoint restart PID `2808912` is intended for HMMT FT
     and MMLU-Pro FT runs; official worker report is still pending.
+26. Read-only HMMT FT completed at 11/30 (`0.36666666666666664`) vs
+    same-route base 9/30, with 19/30 parsed and 12 length finishes. Treat as
+    unofficial until worker_3 provides mailbox/pushed docs/checksums.
+27. Read-only MMLU-Pro FT completed at 6756/12032 (`0.5615026595744681`) vs
+    same-route base 6758/12032 (`0.5616688829787234`), with 12032/12032 parsed
+    and all stop finishes. This is a 2-row regression and must be surfaced in
+    gate disposition.
+28. Task311 still needs official worker closeout before lead approval:
+    runner/report push, artifact roots/checksum manifests, full completions and
+    parser-diagnostics references, M1 runnable/unavailable-row matrix, exact
+    command/env/protocol proof, and explicit benchmark disposition.

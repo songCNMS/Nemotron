@@ -2439,3 +2439,18 @@
 634. Session 78: worker_3 stopped base endpoint and restarted exported task310
    FT endpoint as PID `2808912` for pending HMMT FT and MMLU-Pro FT runs; no
    official mailbox/PR refresh yet.
+635. Session 78: read-only HMMT FT summary completed under task311 run
+   `run_20260603T180911Z`: FT 11/30 exact-normalized accuracy
+   `0.36666666666666664`, parsed 19/30, finish reasons stop 18 and length 12,
+   compared to same-route base 9/30. Treat as unofficial until worker_3
+   mailbox/pushed docs.
+636. Session 78: read-only MMLU-Pro FT summary completed under task311 run
+   `run_20260603T180911Z`: FT 6756/12032 accuracy `0.5615026595744681`,
+   parsed 12032/12032, all stop finishes, compared to same-route base
+   6758/12032 accuracy `0.5616688829787234`. This is a 2-row regression and
+   must be called out in task311 gate review; official report is still pending.
+637. Session 78: #371 remains OPEN/CLEAN at
+   `1ce85c6382d0587a35ab02830c0d08b7c874c5b3`, worker_3 local runner is still
+   untracked, and lead mailbox is empty. Worker_3 pane says endpoint shutdown,
+   evidence mirroring, and M1 launcher-row disposition are in progress. No
+   merge/promotion/training gate changes.

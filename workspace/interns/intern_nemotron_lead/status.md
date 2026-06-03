@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: task311 MMLU base 6758/12032 observed read-only; HMMT/MMLU FT comparisons pending |
+| PR | all-SFT gate: task311 read-only AIME/HMMT non-regress and MMLU-Pro -2 regression observed; official worker report pending |
 | Session | 78 |
