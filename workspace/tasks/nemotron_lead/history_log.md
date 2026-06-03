@@ -11909,3 +11909,11 @@
   `competitive-python-00` source-level disposition, final rc, official
   worker_2 report, or task327 PR. Full all-SFT packing/training/eval/export/
   endpoint/promotion remains HOLD.
+- Continued read-only monitoring found no official task327 worker report or PR
+  and no final rc. `competitive-python-00` reached the stable task log
+  checkpoint `2026-06-03T23:24:07Z PROGRESS competitive-python-00 rows=300000
+  mib=14274.9 rate_mib_s=9.25`; the row manifest was still being written and
+  had reached row 300,469 in the immediate tail. The task327 process remained
+  active and the completed-source matrix still contained only the three
+  completed `BLOCKED_DECONTAM_HIT` sources above. This does not release
+  packing/training/eval/export/endpoint/promotion.

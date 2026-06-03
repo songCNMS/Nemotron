@@ -2680,3 +2680,7 @@
    still actively being written and had advanced past 211k rows in read-only
    tail. No source-level result/final rc/worker report/PR exists, so the
    all-SFT pack/train/eval gate remains HOLD.
+704. Session 79: task327 `competitive-python-00` reached 300,000 rows /
+   14,274.9 MiB at `2026-06-03T23:24:07Z`; still no source-level
+   disposition/final rc/worker report/PR, so the all-SFT pack/train/eval gate
+   remains HOLD.
