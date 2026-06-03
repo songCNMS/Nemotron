@@ -53,3 +53,12 @@
 - Lead refreshed task307 to review exact #369 head `6ad9778`, eval source head
   `894e2e7`, and drift ranges `894e2e7..1255f235`, `1255f235..8201b394`, and
   `8201b394..6ad9778`.
+
+## Session 207 - 2026-06-03 UTC - dispatched to worker_4
+
+- Lead sent worker_4 the superseding task307 assignment for lead docs
+  `265646463c2bbac805a5765f14be508c1cc46fad` and exact #369 head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`.
+- Worker_4 pane shows active read-only artifact review, but no task307 remote
+  branch, PR, or mailbox report is visible yet.
+- #369 remains OPEN/CLEAN at `6ad9778`; task307 remains pending.

@@ -2180,3 +2180,9 @@
    passes. Refreshed task307 to review exact #369 head `6ad9778` and all three
    drift ranges. Gate remains FAIL/HOLD pending task307; #369 is not merge-
    cleared.
+593. Session 207: task307 was dispatched to worker_4 with exact #369 head
+   `6ad9778`, lead docs `26564646`, eval source `894e2e7`, and all drift
+   ranges. Worker_4 pane shows active read-only artifact review, but no task307
+   branch/PR/mailbox report is visible yet. Worker_3 was told #369 remains HOLD
+   and must not self-merge or advance head. #369 remains OPEN/CLEAN at
+   `6ad9778`.

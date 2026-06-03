@@ -8985,6 +8985,28 @@
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
 
+## Session 207 - 2026-06-03 UTC - task307 dispatched and waiting
+
+- Post-dispatch status:
+  - lead branch is pushed at
+    `265646463c2bbac805a5765f14be508c1cc46fad`;
+  - `origin/main` remains `7a93a6cea16e45284a58287b91c0069b7416fa99`;
+  - #369 remains OPEN/base `main`/CLEAN/non-draft at head
+    `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`;
+  - no task307 worker_4 branch or PR is visible yet;
+  - lead mailbox unread count remains `0`.
+- Sent worker_4 a superseding task307 assignment for exact #369 head
+  `6ad9778ebed758cbcd72ee30ea71d9520a297ac7`, lead docs
+  `265646463c2bbac805a5765f14be508c1cc46fad`, eval source `894e2e7`, and all
+  drift ranges through `6ad9778`. Worker_4 pane shows active read-only artifact
+  review, but no formal branch/report yet.
+- Sent worker_3 a superseding HOLD update for #369 head `6ad9778`, requiring no
+  self-merge and no further head changes unless lead explicitly requests them.
+  Worker_3 pane records waiting for lead gate and no further eval/training/
+  export/endpoint/promotion work.
+- Gate remains FAIL/HOLD pending task307 independent review/runbook report.
+  #369 is not approved or merge-cleared.
+
 ## Session 206 - 2026-06-03 UTC - task306 follow-up head drift to 6ad9778
 
 - Observed #369 head advanced from

@@ -22,3 +22,6 @@
    `6ad9778ebed758cbcd72ee30ea71d9520a297ac7` after a queued worker_3 follow-up.
    Lead diff `8201b394..6ad9778` is status/session metadata only with unchanged
    FAIL metrics. Worker_4 must review exact head `6ad9778`.
+6. Session 207: task307 dispatched to worker_4 with exact #369 head `6ad9778`
+   and lead docs `26564646`. Worker_4 is active in pane but no branch/PR/mailbox
+   report is visible yet.
