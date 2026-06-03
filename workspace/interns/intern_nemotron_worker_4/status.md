@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task312_qwen_all_sft_independent_review_runbook_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Blocked,TASK=task313_qwen_all_sft_task310_checkpoint_salvage_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | ReadyForPR |
+| Status | Blocked |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task312_qwen_all_sft_independent_review_runbook_s1 |
-| PR | #375 |
+| Current Task | task313_qwen_all_sft_task310_checkpoint_salvage_review_s1 |
+| PR | pending branch push |
 | Session | 1 |
-| Progress | Completed task312 refreshed read-only review against current exact heads #374 `b798fdfcfc3144111dd0a6e0f80505df031bcc5e`, #372 `fe1bb38c55545b54dc017647ae9f299ee1a5ac02`, #373 `7000f3714442c39fd78e40249d9d5ed69528d9eb`, and #371 `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`. Decisions: #374 `APPROVE_PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`; #372 `APPROVE_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`; #373 `REQUEST_CHANGES_REFRESH_FOR_CONSTRAINED_TASK299_SEED_AFTER_TASK309_ACCEPTANCE`; #371 `APPROVE_BLOCKER_CLOSEOUT_WITH_FRESHNESS_RESIDUAL`. Task310 may proceed only after lead accepts #372 and only on the constrained V11/task299 seed; generic raw stage1 remains blocked. No training, packing, eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, product-code edits, main push, merge, or worker branch rewrites were performed. |
+| Progress | Accepted task313 from lead docs `453954faba8c646df907dcfcdb492edf0382ef28` on branch `intern_nemotron_worker_4/task313_qwen_all_sft_task310_checkpoint_salvage_review_s1` from current `origin/main` `004870e7d790778b5cdae5cc574257fdc19ec755`. Initial #373 check found current PR head `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`, not assigned exact head `7561a578f5f624cf1d3b85bef0dd8abb5c787533`; assigned commit exists and `7561a578..0cbcb3c` appears worker_5 status/task310 history/task_knowledge-only with diff-check clean, but substantive salvage review is HOLD pending lead confirmation of the exact current head. No training, eval, export, endpoint, promotion, merge, main push, worker branch rewrite, shared deletion, AIME2025 train data, or task255 reuse was performed. |
