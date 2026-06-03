@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | 30B closeout: #370/#369 merged; task306 FAIL 14/30 below base 15/30; no promotion/further 30B |
-| Session | 208 |
+| PR | Assigned task308-task312 all-SFT pipeline gates; waiting worker acceptance/evidence |
+| Session | 77 |

@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
 
 ## Session 0 - Created with team lead
 
@@ -10486,3 +10486,34 @@
   visible yet.
 - Gate remains HOLD pending complete task306 FT artifacts and official worker_3
   report. Lead did not interrupt the active worker-owned eval.
+
+## Session 77 - 2026-06-03 UTC - all-SFT pipeline gate split
+
+- Processed six unread closeout mailbox reports from task306/task307 and marked
+  them read. The reports matched already merged #369/#370 state: task306 final
+  corrected AIME result remains FAIL/no-promotion, FT `14/30` below task300
+  30B base `15/30`.
+- Accepted the coordinator instruction to start a new gate-driven all-SFT
+  pipeline review/run from current `origin/main`
+  `ecb14173a820df377270273b9f7d9d92cb5076d2`. This is not a promotion claim.
+- Created and assigned standard worker task docs:
+  - task308 to `intern_nemotron_worker_1`: current-main pipeline audit and
+    all-eligible trainable SFT inventory, including `stage1_sft`
+    `data_blend_raw`, task276/task299 packed data, M1 agentic/math sidecars,
+    and other eligible SFT data.
+  - task309 to `intern_nemotron_worker_2`: all-eligible-SFT `packed_qwen`
+    contract with counts, checksums, intended-vs-exposed parity, Qwen3-30B
+    chat-template/tokenizer proof, and no-AIME2025-train decontam proof.
+  - task310 to `intern_nemotron_worker_5`: full Qwen3-30B-A3B all-SFT training
+    gate after task308/task309/runtime gates, using
+    `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` unless
+    an exact blocker appears; no silent downgrade.
+  - task311 to `intern_nemotron_worker_3`: checkpoint-load/non-AIME canary and
+    available benchmark eval gate for corrected Qwen MMLU-Pro/AIME25/HMMT plus
+    runnable M1 launcher basket rows, with same-harness base-vs-FT evidence and
+    unavailable-row reasons.
+  - task312 to `intern_nemotron_worker_4`: independent review and runbook/
+    provenance closeout for task308-task311 evidence.
+- Preserved hard boundaries: no AIME2025 training prompts/labels, no task255
+  reuse, no shared deletion, no product/source-code edits by lead, no tests or
+  evals run by lead, no export/endpoint/promotion, no main push, and no merge.

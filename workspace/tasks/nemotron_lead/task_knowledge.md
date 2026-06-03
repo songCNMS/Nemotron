@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
 
 ## Knowledge Entries
 
@@ -38,6 +38,18 @@
 32. When assigning post-static live-gate tasks, notify every worker that branches should start from current `origin/main` after #321 and that lead docs live on `origin/intern_nemotron_lead/session1-recovery-task-docs`; worker task acceptance reports should include branch/head/PR or blocker.
 33. A review-only task249 PR opened before task246/task247/task248/task250 live evidence exists should stay in-progress/HOLD; do not approve it as a final go/no-go artifact until it contains decisions over the live inputs.
 34. If worker local status shows acceptance but no remote branch/mailbox, send a non-interrupting follow-up asking for either pushed acceptance branch or exact blocker; do not infer readiness from local status alone.
+35. For the all-SFT pipeline attempt after the 30B AIME fail closeout, split
+   work into audit -> packed contract -> training -> canary/benchmarks ->
+   independent review/runbook. Training stays HOLD until the data inventory,
+   packed-data contract, and 30B runtime/resource route are accepted.
+36. All-SFT inventory must include `stage1_sft` `data_blend_raw`,
+   task276/task299 packed-data evidence, M1 agentic/math sidecars, and other
+   eligible SFT data, while excluding held-out/eval/decontam rows and AIME2025
+   prompts/labels from training.
+37. For available benchmark evaluation, corrected Qwen MMLU-Pro/AIME25/HMMT and
+   runnable M1 launcher basket rows require same-harness base-vs-FT evidence
+   before judging any fine-tuned checkpoint; unavailable benchmark rows need
+   exact blocker reasons.
 35. task248's prepared command/report is not sufficient to start the pilot while task246 real corpus/input and task247 base artifacts are missing; keep it blocked before local prep/train and do not treat the candidate checkpoint path as evidence until actual artifacts exist.
 36. If a live runbook PR records branch/PR visibility blockers that contradict current remote state, mark it request-changes/HOLD and require a refresh even when the overall NO-GO conclusion is still correct.
 37. task247 local corrected AIME input/cache files are useful resource evidence, but they are not accepted gate evidence until worker_3 records them in task247 docs/branch/mailbox and clearly distinguishes remaining endpoint/base-score blockers.
