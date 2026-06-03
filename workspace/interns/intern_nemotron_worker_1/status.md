@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task299_qwen_aime_v11_30b_data_packing_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task308_qwen_all_sft_pipeline_inventory_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task299_qwen_aime_v11_30b_data_packing_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/365 |
-| Session | 83 |
-| Progress | Opened PR #365 with final task299 PASS_30B_DATA_PACKING_CONTRACT report; sending official final mailbox. |
+| Current Task | task308_qwen_all_sft_pipeline_inventory_audit_s1 |
+| PR |  |
+| Session | 85 |
+| Progress | Accepted task308 on worker branch from current origin/main; reading current-main all-SFT pipeline and trainable SFT inventory with no-run/no-mutation boundaries. |
