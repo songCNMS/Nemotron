@@ -1,6 +1,6 @@
 # task308_qwen_all_sft_pipeline_inventory_audit_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
 
 ## Knowledge Entries
 
@@ -11,3 +11,10 @@
 3. The inventory must include `stage1_sft` `data_blend_raw`, task276/task299
    packed-data evidence, M1 agentic/math sidecars, and any other eligible SFT
    source before task309 can produce a final all-SFT packed contract.
+4. Task308 result: current-main generic `stage1_sft/data_blend_raw` has repo
+   and file checksums but no exact row counts or heldout/AIME decontam proof in
+   current evidence, so task309 must materialize/count/scan it before including
+   it in all-SFT packing.
+5. Task308 checksum-backed seed for task309 is the task299 30B-ready V11
+   packed root plus task262/task276/task246 decontam evidence; task253 and
+   task255 remain excluded.
