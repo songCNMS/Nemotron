@@ -2575,3 +2575,9 @@
 672. Session 78: #380 current `6d43e0e7`, #383 current `99713578`, and #384
    current `9689b22b` are accepted as metadata/status drift over their prior
    gated heads; substantive reports are unchanged.
+673. Session 78: task322-task326 are assigned as next-phase prerequisites:
+   raw source materialize/count/decontam, validation-skip preflight, MMLU-aware
+   blend design, M1 launcher remediation route, and safety/runbook review.
+674. Session 78: task322-task326 still do not authorize final packing,
+   training, model eval, export/endpoint, promotion, task255 reuse, AIME2025
+   train rows, shared deletion, main push, merge, or self-merge.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #381/#382/#383/#384 approved docs/no-action at current heads; #380 refreshed; awaiting authorized non-self merge path |
+| PR | #381/#382/#383/#384 approved docs/no-action; task322-task326 next-phase prereq tasks drafted for worker dispatch |
 | Session | 78 |

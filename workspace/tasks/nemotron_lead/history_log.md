@@ -11564,3 +11564,24 @@
   #378 `df561ea9`, #379 `89cc7f74`, #380 `6d43e0e7`, #381 `4131915f`,
   #382 `a908b81d`, #383 `99713578`, #384 `9689b22b`. All remain docs/evidence
   only; no runtime action or self-merge is authorized.
+
+### Next-phase prerequisite tasks assigned
+
+- Converted accepted task318-task321 gates into the next lead-gated prerequisite
+  tasks for the all-SFT objective:
+  - task322 assigned to worker_2 for task-owned raw all-SFT source
+    materialize/count/decontam evidence before any packed contract;
+  - task323 assigned to worker_5 for no-optimizer Route A validation-skip
+    preflight using a task-owned train-only packed-root/input contract;
+  - task324 assigned to worker_1 for MMLU-aware blend design and source/bucket
+    constraints that preserve math gains without non-math regression;
+  - task325 assigned to worker_3 for M1 launcher remediation route or exact
+    `BLOCK_RUNTIME` confirmation without benchmark rows;
+  - task326 assigned to worker_4 for independent next-phase safety/runbook
+    review across task322-task325.
+- These tasks are prerequisites only. They do not authorize final packing,
+  training, optimizer steps, benchmark eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, main push, merge, or
+  self-merge.
+- Current main remains `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`; the earlier
+  objective's `ecb14173` baseline is superseded by current remote state.
