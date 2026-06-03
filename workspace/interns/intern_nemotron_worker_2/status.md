@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task298_qwen_aime_v11_30b_runtime_resource_base_load_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task309_qwen_all_sft_packed_data_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task298_qwen_aime_v11_30b_runtime_resource_base_load_s1 |
-| PR | #364 |
-| Session | 3 |
-| Last Update | 2026-06-02T14:57:23Z: Resent official task298/#364 exact-head mailbox for a1bd2af OPEN/CLEAN; holding for task302 review and lead gate, no self-merge or further runtime action. |
+| Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
+| PR | N/A |
+| Session | 1 |
+| Last Update | 2026-06-03T14:32:03Z: Accepted task309 all-eligible-SFT packed_qwen contract task from lead docs head 3e715c73 on worker branch from current origin/main 172cd0e7; no training/eval/export/endpoint/promotion/shared deletion. |
