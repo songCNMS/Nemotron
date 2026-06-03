@@ -2263,3 +2263,10 @@
    refreshed after current main `004870e7`; #373 remains stale HOLD head
    `a85b192e` and no task310 output artifacts are visible. Worker_5 was
    reminded to refresh/report or fail closed; stale #373 must not be merged.
+601. Session 78: worker_5 acknowledged task310 current-main release and locally
+   merged `origin/main` `004870e7` into task310 at local head `11651f8a`, but
+   remote #373 remains stale at `a85b192e`. Task310 setup artifacts are under
+   `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z`;
+   source vs remote dereferenced task299 packed manifests compare equal across
+   `391` entries with empty symlink manifests. No preflight, training,
+   checkpoint, or eval handoff artifact exists yet.

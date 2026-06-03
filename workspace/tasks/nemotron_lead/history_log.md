@@ -10770,3 +10770,30 @@
   task310 checkpoint evidence. No lead training/eval/test, product-code edit,
   merge, main push, export, endpoint, promotion, AIME2025 train data, task255
   reuse, silent downgrade, or shared deletion occurred.
+
+### Task310 current-main refresh acknowledgement
+
+- Processed and marked read worker_5 task310 mailbox
+  `c1682b7fbc2142a989e26e8577b9826c`. Worker_5 acknowledged the current-main
+  release and locally merged `origin/main`
+  `004870e7d790778b5cdae5cc574257fdc19ec755` into task310. Worker_5 local
+  task310 branch is at `11651f8ada734e813198bc9c0ccdaa473f26939f` and is
+  ahead of remote; remote #373 remains stale at
+  `a85b192e7632bd2da0e117fdaf994d8c70e16549`.
+- Worker_5 reported runtime/data refresh in progress under local output root
+  `/work-agents/intern_nemotron_worker_5/outputs/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z`
+  and remote run root
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z`.
+- Reported preliminary gate observations: 8x H200 idle, target model
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507` exists,
+  task298 base import exists, and task299 constrained packed root exists.
+- Lead read-only artifact check of the task310 setup root found source and
+  remote-dereferenced packed-data manifests with `391` entries each; source and
+  remote dereferenced file lists/checksum manifests compare equal, and both
+  symlink manifests are empty. `run_env.txt` records local task310 head
+  `11651f8a`, `ORIGIN_MAIN=004870e7`, and the constrained task299 packed root.
+- No no-training preflight result, training launch log, checkpoint, validation
+  loss, export, endpoint, canary, benchmark eval, or task311 handoff artifact is
+  visible yet. Worker_5's next reported step is no-training config/resource
+  preflight; bounded 30B training is allowed only if that gate passes, otherwise
+  fail closed with exact blocker.
