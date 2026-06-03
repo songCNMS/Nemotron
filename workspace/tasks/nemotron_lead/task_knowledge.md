@@ -2589,3 +2589,6 @@
    task324/task322/task323 assignment; substantive reports are unchanged.
 677. Session 78: no task322-task326 remote branches were visible immediately
    after next-phase dispatch and handoff drift refresh.
+678. Session 78: local observation found worker_2/3/5 had accepted task322,
+   task325, and task323 respectively, while worker_1/task324 and worker_4/task326
+   still needed reminders; both reminders were delivered.

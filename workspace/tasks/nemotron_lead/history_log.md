@@ -11612,3 +11612,8 @@
   Mailbox unread count was 0. Current gate remains no final packing, training,
   eval, export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or self-merge.
+- Local worker status observation showed worker_2 on task322, worker_3 on
+  task325, and worker_5 on task323 with task docs staged/modified but no remote
+  branches yet. Worker_1 still appeared on task314 and worker_4 still appeared
+  on old task302 with uncommitted old files; lead sent delivered reminders to
+  worker_1/task324 and worker_4/task326.

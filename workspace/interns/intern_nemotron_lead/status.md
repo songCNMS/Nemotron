@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #380/#383/#384 handoff drift re-gated; task322-task326 dispatched; awaiting worker branches/reports |
+| PR | #380/#383/#384 handoff drift re-gated; worker_2/3/5 accepted locally; worker_1/4 reminded; awaiting remote branches/reports |
 | Session | 78 |
