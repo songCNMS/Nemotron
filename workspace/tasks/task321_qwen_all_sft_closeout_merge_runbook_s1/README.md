@@ -69,9 +69,12 @@ and the next lead-gated repair tasks, without merging or changing PR branches.
 - Worker PR: #382.
 - Disposition: `APPROVE_RUNBOOK`.
 - Current PR sequencing recommendation: support docs #378/#380/#379, then #371
-  evidence/fail-closeout docs, then #377 repair plan docs, all through
+  evidence/fail-closeout docs, then #377 repair plan docs, then #384/#383/#381
+  repair preflight/feasibility/linkage docs, all through
   coordinator/authorized non-author merge only and only while exact heads remain
   clean/mergeable.
-- Next repair work remains limited to task318 validation/exit preflight,
-  task319 raw blend/decontam feasibility, and task320 MMLU data-repair linkage;
-  no runtime or promotion action is released.
+- task318/task319/task320 now have visible gated PRs: #384
+  `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING`, #383
+  `APPROVE_FEASIBILITY_DOCS / NO_PACK_OR_TRAIN_RELEASE`, and #381
+  `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`; no runtime or promotion action is
+  released.

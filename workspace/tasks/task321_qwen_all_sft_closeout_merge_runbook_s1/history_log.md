@@ -36,3 +36,32 @@
 - Did not merge, self-merge, push main, train, evaluate, pack, export, launch
   endpoint, promote, reuse task255, use AIME2025 train data, or delete shared
   files.
+
+## Session 2 - 2026-06-03 UTC - Refreshed matrix for task318-task320 PRs
+
+- Received lead gate `REQUEST_CHANGES / REFRESH_RUNBOOK_MATRIX` for #382 head
+  `2864c69e` because task320/#381, task319/#383, and task318/#384 became
+  visible and gated after the initial report.
+- Fetched current lead docs `48b3a5bc8bd21e15ebd8aa96e9b3bd7a145d5d1c` and
+  PR refs #371/#377/#378/#379/#380/#381/#383/#384.
+- Updated reviewed heads: #380 advanced to
+  `6d43e0e7091f42af13a435c882f4ab035ca2c4c5`; #381 is
+  `4131915f14acb4ff551ae6cf3f2325a67cf89945`; #383 is
+  `99713578c19a971683348128d7120f5822801337`; #384 is
+  `9689b22bf0e198cbf6f7ca7cbdc30f05bdbe751c`.
+- Recorded lead gate dispositions: #381 `APPROVE_LINKAGE_DOCS /
+  NO_ACTION_RELEASE`, #383 `APPROVE_FEASIBILITY_DOCS /
+  NO_PACK_OR_TRAIN_RELEASE`, and #384
+  `APPROVE_PREFLIGHT_PLAN_WITH_IMPLEMENTATION_REQUIRED / HOLD_TRAINING`.
+- Verified #384 drift from gated `2cdf39fd` to current `9689b22b` is worker_5
+  status plus task318 history/task_knowledge only; the validation preflight
+  report is unchanged.
+- Verified #380 drift from lead-refreshed `fc93290a` to current `6d43e0e7` is
+  worker_1 status plus task314 metadata/session bookkeeping only, and #383
+  drift from gated `4775bc17` to current `99713578` is worker_2 status plus
+  task319 history/task_knowledge gate-recording only.
+- Refreshed `closeout_merge_runbook_report.md`, README, task knowledge, and
+  worker status for PR #382.
+- Did not merge, self-merge, push main, train, evaluate, pack, export, launch
+  endpoint, promote, reuse task255, use AIME2025 train data, or delete shared
+  files.
