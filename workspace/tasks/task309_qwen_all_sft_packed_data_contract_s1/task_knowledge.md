@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -15,3 +15,10 @@
 5. task299 `run_20260602T150941Z` is useful preparatory evidence for Qwen3-30B
    tokenizer/chat-template compatibility and V11 packing/decontam counts, but
    it is not sufficient for all-eligible-SFT task310 release without task308.
+6. task308/#374 `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS` makes the
+   checksum-backed V11/M1 task299 seed usable as a constrained packed contract,
+   while generic `stage1_sft/data_blend_raw` remains excluded until materialized
+   row counts, decontam scans, Qwen packing proof, and supervised-token counts
+   are available.
+7. Task310 should be framed as conditional on the constrained V11/task299 seed;
+   it is still no-go for including generic raw SFT registry sources.

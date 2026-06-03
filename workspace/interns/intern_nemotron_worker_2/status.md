@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
 | PR | #372 |
-| Session | 2 |
-| Last Update | 2026-06-03T14:42:26Z: task309 PR #372 opened with exact blocker BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING; task308 has no PR/output inventory yet, task310 recommendation is NO_GO_HOLD, no training/eval/export/endpoint/promotion/shared deletion. |
+| Session | 3 |
+| Last Update | 2026-06-03T15:00:00Z: task309/#372 refreshed against task308/#374 PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS; disposition is PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS, generic raw SFT excluded, no training/eval/export/endpoint/promotion/shared deletion/main merge. |

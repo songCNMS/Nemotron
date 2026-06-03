@@ -1,19 +1,24 @@
 # task309 All-Eligible-SFT Packed Data Contract Report
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Disposition
 
-`BLOCK_DEPENDENCY_TASK308_INVENTORY_MISSING`.
+`PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
 
-Task309 is blocked before producing a new all-eligible-SFT `packed_qwen` root.
-The required upstream task308 all-SFT source inventory is not available: the
-task308 branch exists, but there is no visible PR, no report, and no task308
-output root with trainable source eligibility, exclusion, decontam, and blend
-decisions. Without that evidence, task309 cannot safely decide which sources are
-eligible to pack for task310.
+Task309 is refreshed against task308 PR #374 evidence. The checksum-backed
+V11/M1 sources that task308 marks task309-ready are covered by the reviewed
+task299 Qwen3-30B packed root. Task309 therefore identifies that root as the
+constrained packed-data contract for the current release path.
 
-Task310 recommendation: `NO_GO_HOLD`.
+The generic `stage1_sft/data_blend_raw` registry remains excluded from this
+contract. Task308 records those 12 HF raw sources as eligible in principle but
+not task309-ready because exact row counts, heldout/AIME decontam proof, Qwen
+chat-template packing evidence, and supervised-token counts are not
+materialized.
+
+Task310 recommendation:
+`CONDITIONAL_GO_FOR_CONSTRAINED_V11_TASK299_SEED_ONLY_AFTER_LEAD_ACCEPTS_TASK309; NO_GO_FOR_GENERIC_RAW_STAGE1_SFT_INCLUSION`.
 
 ## Run Identity
 
@@ -21,78 +26,85 @@ Task310 recommendation: `NO_GO_HOLD`.
   `intern_nemotron_worker_2/task309_qwen_all_sft_packed_data_contract_s1`
 - PR: #372
   `https://github.com/songCNMS/Nemotron/pull/372`
-- Evidence source head:
-  `d054925b1792a5365738247eeb8bdec462e1e6c6`
 - Current branch base:
   `origin/main` `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
 - Product-code baseline:
   `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Refreshed lead docs:
-  `5f4167dc819f5313e7db7fc43e57cec113306cc4`
+  `b2b5d5fb51270ab28e9b947bd744dc9aaebd9899`
 - Task-owned output root:
-  `/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T143700Z`
+  `/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T145300Z`
+- Contract manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T145300Z/manifests/task309_constrained_packed_contract_manifest.json`
+- Contract manifest sha256:
+  `f33a14d05ab911779a8f43b5af138c6f4fa815191af3305820480a27fed47a14`
+- Full artifact checksum manifest:
+  `/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T145300Z/manifests/task309_artifact_checksums.sha256`
+- Artifact checksum manifest sha256:
+  `b794bf3b96b6811d409b903b4b2ed2d95536b8ed655a4da44d9cf380143d6615`
 
-## Commands And Evidence
+## Task308 Evidence
 
-Commands used were read-only/preparatory:
+Task308 PR #374:
+`https://github.com/songCNMS/Nemotron/pull/374`
 
-```bash
-git fetch origin main intern_nemotron_lead/session1-recovery-task-docs
-git fetch origin
-git rev-parse origin/main origin/intern_nemotron_lead/session1-recovery-task-docs
-git rev-parse origin/intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1
-gh pr list --search 'task308_qwen_all_sft_pipeline_inventory_audit_s1' --state all --json ...
-find /work-agents -path '*/outputs/task308_qwen_all_sft_pipeline_inventory_audit_s1*' ...
-jq '{decision, packed_root, qwen3_30b_a3b_model, current_main, summary, artifact_checksums}' \
-  /work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/manifest.json
-sha256sum /mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507/{config.json,tokenizer.json,tokenizer_config.json,vocab.json,merges.txt}
-```
+Lead-cited evidence head:
+`4a46c9b5995d5cebe6624a5241d5543d48bee93c`
 
-No packing job, training, eval, export, endpoint, promotion, product-code edit,
-shared deletion, main push, or merge was run.
+Current #374 view at refresh:
 
-## Task308 Dependency State
+- State: `OPEN`
+- Base: `main`
+- Head: `b798fdfcfc3144111dd0a6e0f80505df031bcc5e`
+- Merge state: `CLEAN`
+- Draft: `false`
 
-Task308 branch:
+The task308 audit report hash is unchanged between the lead-cited head and the
+current fetched head:
 
-`origin/intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1`
+| Artifact | sha256 |
+|---|---|
+| task308 report at `4a46c9b` | `001154913dd28ffca20bdbe624ead7bf27c3bf4e27a95475e5f977db5cf97580` |
+| task308 report at current #374 head | `001154913dd28ffca20bdbe624ead7bf27c3bf4e27a95475e5f977db5cf97580` |
+| task308 inventory manifest | `4f629e015d4e7a8965899f1fb6c1a5e22e4e666fff28c5bfa69d9d9b31f97a61` |
 
-Task308 branch head:
+Task308 decision:
+`PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
 
-`348cba44c02043cd6310a36ec722a68278288db2`
+Task308 trainable checksum-backed V11/M1 JSONL sources:
 
-Task308 PR query:
+| Source | Raw rows | sha256 |
+|---|---:|---|
+| `m1-agentic-sft-v11-from-m0` | 1100 | `994166eeb83ffb5ebd213db9cc0d6cdd90208251bd2aab9dbb70cec7bf96691a` |
+| `m1-agentic-sft-v11-math-final-answer` | 200 | `0e5485eae86bf716d0c2e04e8e02595564b38a949d71d31a42874d6e87ef1731` |
+| `m1-agentic-sft-v11-math-hard-verified-full-solution` | 8 | `2039b67b2bcf5cf74b576a640f1f3a198d675e3fbd64a886da4be5753ad515d9` |
 
-`[]`
+Raw task308 source total for the constrained seed: `1308` rows.
 
-Task308 output probe:
+Generic `stage1_sft/data_blend_raw` status:
 
-- Visible output count: `0`
-- No task308 report, inventory tables, source manifest, or all-SFT blend
-  recommendation was found under `/work-agents`.
+- Dataset entries: `12`
+- Total bytes from HF metadata: `243316402226`
+- Contract status: excluded until materialized, counted, decontam scanned, and
+  Qwen-packed with supervised-token proof.
 
-Required missing evidence:
+## Packed Contract
 
-- Trainable all-eligible-SFT source inventory.
-- Per-source eligibility/exclusion decisions.
-- Held-out/eval/decontam row exclusions.
-- No-AIME2025-train proof over the final source list.
-- Concrete task309 blend plan or `PASS_AUDIT` recommendation.
-
-## Available But Insufficient Evidence
-
-Task299 provides a 30B-ready V11/task276 packing contract, but it is not the
-all-eligible-SFT source inventory required by task309.
-
-Task299 accepted root:
+Task309 uses the reviewed task299 Qwen3-30B-ready packed root as the constrained
+packed contract under task308 constraints:
 
 `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
 
 Task299 decision:
+`PASS_30B_DATA_PACKING_CONTRACT`.
 
-`PASS_30B_DATA_PACKING_CONTRACT`
+Task299 contract mode in task309:
+`identify_and_checksum_existing_reviewed_task299_packed_root_under_task308_constraints_no_new_packing_run`.
 
-Task299 counts:
+Target model:
+`/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+
+Split counts:
 
 | Split | Shards | Rows | Input tokens | Supervised tokens |
 |---|---:|---:|---:|---:|
@@ -100,7 +112,7 @@ Task299 counts:
 | valid | 1 | 1 | 1491 | 1428 |
 | test | 1 | 0 | 0 | 0 |
 
-Task299 train source counts:
+Train source counts:
 
 | Source | Shards | Rows | Input tokens | Supervised tokens |
 |---|---:|---:|---:|---:|
@@ -108,18 +120,15 @@ Task299 train source counts:
 | `m1-agentic-sft-v11-math-final-answer` | 16 | 28 | 75305 | 54821 |
 | `m1-agentic-sft-v11-math-hard-verified-full-solution` | 14 | 7 | 7279 | 6551 |
 
-Task299 evidence carried forward:
+Contract results:
 
-- Qwen packed chat contract: `PASS`
-- Qwen training pipeline contract: `PASS`
+- Qwen packed/training contract validation: `PASS`
 - Intended-vs-exposed multiset parity: `PASS`
 - Decontam/no-AIME2025-train proof: `PASS`
-- Task246 heldout prompt hashes: `560`
-- task246 prompt hash overlap: `0`
-- AIME contest mentions in trainable messages: `0`
+- Tokenizer-native Qwen chat-template/API equivalence: `PASS`
 - Task255 reuse: `false`
 
-Task299 artifact hashes:
+Task299 artifact hashes carried forward:
 
 | Artifact | sha256 |
 |---|---|
@@ -129,21 +138,8 @@ Task299 artifact hashes:
 | `decontam_proof.json` | `e5b73a79ae8d1cd35b3188bd0f6bda60570f37c21831ac16d126a006d7fd56bc` |
 | `tokenizer_chat_template_equivalence_probe.json` | `f31d5229da06ef1ff7c5457acfd66a7b4b4c91e92c61d7ae00f4492b476000ec` |
 | `packed_qwen_30b_shard_checksums.json` | `444aef9230129d689c27be295ff054fc1dc4800fae52827280a5c289408fed11` |
-| `packed_qwen_30b_shard_checksums.sha256` | `ff592c935f09037d81a2aceb9dc394189c871623cebf1a1d92dd9b4233d493fa` |
 
-Reason this does not satisfy task309:
-
-Task299 adapts task276 V11 packed data to Qwen3-30B-A3B. It does not inventory
-all current-main eligible SFT sources and does not authorize the final
-all-eligible-SFT blend for task310.
-
-## Qwen3-30B Tokenizer/Model Proof
-
-Target model path:
-
-`/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`
-
-Asset hashes:
+Qwen3-30B asset hashes:
 
 | File | sha256 |
 |---|---|
@@ -153,40 +149,34 @@ Asset hashes:
 | `vocab.json` | `ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910` |
 | `merges.txt` | `599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3` |
 
-Task299 already proved tokenizer-native chat-template equivalence for this
-30B target, but task309 did not produce new packed shards because the source
-eligibility dependency is missing.
+## Commands And Environment
 
-## Task-Owned Artifacts
+Commands used were read-only/preparatory except for worker-owned task309
+report/status/artifact writes:
 
-Key task309 artifacts:
+```bash
+git fetch --all --prune
+git fetch origin intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1
+gh pr view 372 --json number,state,baseRefName,headRefName,headRefOid,mergeStateStatus,isDraft,url
+gh pr view 374 --json number,state,baseRefName,headRefName,headRefOid,mergeStateStatus,isDraft,url,title
+git diff --name-status 4a46c9b5995d5cebe6624a5241d5543d48bee93c..origin/intern_nemotron_worker_1/task308_qwen_all_sft_pipeline_inventory_audit_s1
+git show 4a46c9b5995d5cebe6624a5241d5543d48bee93c:workspace/tasks/task308_qwen_all_sft_pipeline_inventory_audit_s1/all_sft_pipeline_inventory_audit_report.md
+jq over task308 and task299 manifests
+sha256sum over Qwen3-30B-A3B tokenizer/config assets
+```
 
-| Artifact | sha256 |
-|---|---|
-| `manifests/task309_blocker_manifest.json` | `0864222b7f0d3edde825b2a7c397a9888bc9b59687e0b05e79736077cb425a7d` |
-| `manifests/task299_summary.json` | `2801dd6b8b76cc1cf5cb43bc7554af862b0c3a192fe1758059bee9ec0966c1d0` |
-| `manifests/task299_decontam_proof.json` | `e5b73a79ae8d1cd35b3188bd0f6bda60570f37c21831ac16d126a006d7fd56bc` |
-| `manifests/qwen30b_asset_hashes.sha256` | `6757f82a5c790f32bebb4e987c2ce207033f81b205ad229b69a23ba9a5d8c1a1` |
-| `logs/task308_pr_query.json` | `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570` |
-| `logs/task308_output_probe.txt` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+No new packing job was run by task309. No training, eval, export, endpoint, or
+promotion command was run.
 
-Full checksum manifest:
+## Residual Risks
 
-`/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T143700Z/manifests/task309_artifact_checksums.sha256`
-
-## Recommendation
-
-Task310 should remain `NO_GO_HOLD`.
-
-Smallest unblock path:
-
-1. Complete task308 with `PASS_AUDIT` or an exact blocker.
-2. If task308 passes, rerun/update task309 using only task308 trainable
-   all-eligible-SFT sources.
-3. Produce a fresh task309 packed root with split manifest, counts,
-   token/supervised-token counts, shard/source counts, intended-vs-exposed
-   parity, checksums, tokenizer-native Qwen chat-template proof, and no-AIME2025
-   train decontam proof.
+- Generic `stage1_sft/data_blend_raw` remains excluded because exact rows,
+  decontam proof, Qwen packing proof, and supervised-token counts are not
+  materialized.
+- Valid split remains sparse at `1` row and test split has `0` rows, inherited
+  from task299/task276 packing evidence.
+- Task309 identifies a checksum-backed existing task299 packed root; it does
+  not claim a new all-raw-SFT materialization.
 
 ## Boundary Confirmation
 
@@ -196,7 +186,8 @@ Confirmed:
 - No benchmark eval.
 - No export.
 - No endpoint.
-- No promotion or go/no-go claim beyond `NO_GO_HOLD`.
+- No promotion or go/no-go claim beyond the constrained task310 recommendation
+  above.
 - No task255 reuse.
 - No AIME2025 prompts or labels used as train rows.
 - No product/source-code edits.

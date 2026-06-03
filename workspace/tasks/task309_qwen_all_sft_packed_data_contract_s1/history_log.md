@@ -1,6 +1,6 @@
 # task309_qwen_all_sft_packed_data_contract_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -56,3 +56,31 @@
 - Opened PR #372 to main with the blocker report and status/task metadata.
 - Boundaries held: no training, eval, export, endpoint, promotion, task255
   reuse, product-code edits, shared deletion, main push, or merge.
+
+## Session 3 - Refreshed task308 evidence and constrained packed contract
+
+- Refreshed after lead reported task308/#374 was no longer missing and had
+  `PASS_AUDIT_WITH_TASK309_FAIL_CLOSED_CONSTRAINTS`.
+- Fetched task308/#374 and confirmed the lead-cited report head
+  `4a46c9b5995d5cebe6624a5241d5543d48bee93c` had identical audit-report hash
+  to the current fetched #374 head `b798fdfcfc3144111dd0a6e0f80505df031bcc5e`;
+  post-`4a46c9b` drift is task308 status/history/task_knowledge metadata.
+- Reclassified task309 from the stale missing-dependency blocker to
+  `PASS_CONSTRAINED_V11_TASK299_PACKED_CONTRACT_WITH_RAW_STAGE1_EXCLUSIONS`.
+- Identified the reviewed task299 Qwen3-30B packed root as the constrained
+  packed contract under task308 constraints:
+  `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+- Recorded split counts: train `46` shards / `279` rows / `1024646` input
+  tokens / `228927` supervised tokens; valid `1` shard / `1` row / `1491`
+  input tokens / `1428` supervised tokens; test `1` shard / `0` rows.
+- Preserved generic `stage1_sft/data_blend_raw` exclusion: 12 HF registry
+  sources remain outside the contract until materialized, counted, decontam
+  scanned, and Qwen-packed with supervised-token proof.
+- Captured refreshed task-owned evidence under
+  `/work-agents/intern_nemotron_worker_2/outputs/task309_qwen_all_sft_packed_data_contract_s1/run_20260603T145300Z`.
+- Task310 recommendation updated to conditional use of the constrained V11
+  task299 seed only after lead accepts task309; no-go for generic raw SFT
+  inclusion.
+- Boundaries held: no training, eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train rows, product-code edits, shared deletion, main push,
+  or merge.
