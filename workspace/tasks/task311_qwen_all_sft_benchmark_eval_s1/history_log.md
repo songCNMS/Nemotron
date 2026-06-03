@@ -45,6 +45,7 @@
 - Added blocker reports for non-AIME canary, corrected Qwen benchmark rows,
   and M1 benchmark availability. Disposition:
   `BLOCK_UPSTREAM_TASK310_HANDOFF_MISSING`.
+- Opened PR #371 for blocker/status docs.
 - No checkpoint-load canary, benchmark eval, training, AIME2025 train-row use,
   task255 reuse, export, endpoint, shared deletion, promotion, product-code
   edit, direct main push, or merge occurred.

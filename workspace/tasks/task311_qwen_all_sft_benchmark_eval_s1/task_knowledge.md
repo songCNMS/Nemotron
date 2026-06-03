@@ -20,3 +20,4 @@
    `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T143618Z/manifests/blocker_manifest.json`
    with sha256
    `7b90155bc4f31bea4ccb5a67472d0c5d703c5607b0ec0a20d0523bdadc179ed8`.
+7. PR #371 records the task311 blocker/status docs for lead review.
