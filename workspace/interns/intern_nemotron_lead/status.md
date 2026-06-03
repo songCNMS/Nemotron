@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #385/#388 approved docs/HOLD; #389 request-changes stale safety matrix; full all-SFT pack/train HOLD |
+| PR | #388 partial approved/HOLD; #389 request-changes; task327 assigned; full all-SFT pack/train HOLD |
 | Session | 79 |

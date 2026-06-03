@@ -2621,3 +2621,6 @@
    and full decontam contract.
 687. Session 79: task326/#389 current head `59f5e16b` is request-changes/HOLD
    because its safety matrix is stale for current #388 and lead gate comments.
+688. Session 79: task327 is assigned to worker_2 to handle only the 10
+   task322-excluded large raw sources; it is no-packing/no-training raw
+   materialize/count/decontam evidence or exact blocker only.

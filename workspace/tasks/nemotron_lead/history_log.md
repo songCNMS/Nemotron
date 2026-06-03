@@ -11727,3 +11727,19 @@
   carry-forward/HOLD). No final packing, optimizer/training, benchmark eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
   deletion, main push, merge, or self-merge was authorized.
+
+### Task327 assignment
+
+- Created task327
+  `task327_qwen_all_sft_large_source_materialize_decontam_s1` for
+  worker_2 as the no-training successor to task322/#388. It targets only the 10
+  task322 `EXCLUDED_SIZE_GT_1GB` files totaling 242,773,079,314 selected bytes.
+- Required output is source-by-source materialization or exact blocker,
+  row counts, parse status, file/row-manifest checksums, heldout/decontam
+  results, split exposure status, disk/network/resource evidence, commands/env,
+  and checksum verification in a task-owned root.
+- Boundaries remain no packing, Qwen chat-template packing, optimizer/training,
+  benchmark eval, export, endpoint, promotion, task255 reuse, AIME2025 train
+  data, shared deletion/mutation, main push, merge, or self-merge. If shared
+  scratch is needed, worker_2 must stop and request lead approval with an exact
+  path plan first.
