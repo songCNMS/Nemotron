@@ -1,6 +1,6 @@
 # task310_qwen_all_sft_30b_full_training_s1 - Qwen all-SFT 30B full training gate
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_5,SESSION=77 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_5,SESSION=78 -->
 
 ## Background
 
@@ -79,8 +79,28 @@ pass; otherwise fail closed with exact resource/runtime/data blocker.
 - Team: `nemotron`
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_5`
-- Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
+- Current main: `004870e7d790778b5cdae5cc574257fdc19ec755`
 - Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependencies: task308, task309, prior 30B runtime/resource evidence
-- Downstream tasks: task311, task312
-- Gate state: full training is HOLD until upstream evidence is accepted.
+- Downstream tasks: task311, task312, task313
+- Gate state: final checkpoint is a salvage candidate only. Task311 remains
+  HOLD until task313 independent review is accepted by lead.
+
+## Current Lead Disposition
+
+Worker_5 refreshed PR #373 to exact head
+`7561a578f5f624cf1d3b85bef0dd8abb5c787533` and reported
+`TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`.
+
+The bounded run reached training iter `35/35`, recorded finite training losses,
+and preserved checkpoint candidate
+`/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`
+(`399G`, `28` files; payload manifest sha256
+`8cb4e7856f379bc7f1d63d407582bd63981b61c9f346455aa40fb389ef73cbe8`).
+Built-in validation did not complete, the lead-cleared salvage sent SIGTERM to
+the task310 torchrun parent, and the wrapper wrote `train_rc.txt=1`.
+
+This is not `PASS_TRAINING`. #373 remains HOLD pending task313 independent
+review; no task311 checkpoint-load/canary/benchmark, AIME/task243 eval, export,
+endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+direct main push, merge, or product-code edit is authorized by this state.

@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Qwen all-SFT benchmark evaluation gate
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_3,SESSION=77 -->
+<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_3,SESSION=78 -->
 
 ## Background
 
@@ -81,6 +81,7 @@ reasons.
 - Current main: `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`
 - Product-code baseline: `ecb14173a820df377270273b9f7d9d92cb5076d2`
 - Upstream dependency: task310 checkpoint handoff
-- Review dependency: task312
-- Gate state: benchmark eval waits for task310 usable checkpoint; base-vs-FT
-  evidence is required before any comparison statement.
+- Review dependencies: task312, task313
+- Gate state: benchmark eval waits for task313 review and explicit lead release
+  of a task310 checkpoint-load plus non-AIME canary path; base-vs-FT evidence
+  is required before any comparison statement.

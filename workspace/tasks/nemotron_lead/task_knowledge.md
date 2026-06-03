@@ -2300,3 +2300,14 @@
    final snapshot, graceful task-owned process termination, rc/signal recording,
    checkpoint preservation, final artifact sync, docs update, and mailbox.
    Task311 remains HOLD until final salvage report is accepted.
+606. Session 78: worker_5 sent official corrected task310 salvage closeout mail
+   `b3768110`; #373 is open at exact head `7561a578` with docs/status-only
+   final evidence. Disposition is
+   `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`,
+   not PASS. The run reached iter 35/35 with finite loss, preserved
+   `iter_0000035` at 399G/28 files, payload manifest sha `8cb4e785`, then
+   terminated validation via lead-cleared SIGTERM with `train_rc.txt=1`.
+607. Session 78: created task313 for worker_4 independent read-only review of
+   #373 exact head `7561a578` and task310 artifact/checksum/termination
+   evidence. Task311 remains HOLD until lead accepts task313 and explicitly
+   releases checkpoint-load plus non-AIME canary only.

@@ -10910,3 +10910,39 @@
   shared deletion, product-code edit, direct main push, or merge.
 - Task311 remains HOLD until lead reviews worker_5's final salvage report and
   explicitly releases checkpoint-load/non-AIME canary.
+
+### Task310 final salvage closeout and task313 review assignment
+
+- Processed and marked read worker_5 official task310 salvage closeout
+  mailboxes `081adfd36b6741c0af3137bd1bb32d22` and corrected
+  `b3768110fba243bda67737fa88d3923b`.
+- Rechecked #373/task310: PR is open/base `main`/CLEAN at exact head
+  `7561a578f5f624cf1d3b85bef0dd8abb5c787533`; diff is docs/status-only for
+  worker_5 status and task310 README/report/history/task_knowledge, and
+  `git diff --check origin/main...origin/intern_nemotron_worker_5/task310_qwen_all_sft_30b_full_training_s1`
+  passes.
+- Worker_5's final disposition remains
+  `TRAINING_LOOP_COMPLETE__VALIDATION_HANG_TERMINATED__CHECKPOINT_SALVAGE_CANDIDATE`,
+  not `PASS_TRAINING`: training reached iter `35/35` with finite loss and
+  skipped/NaN `0`, but built-in validation hung at `Evaluating iter 1/10`.
+- Lead-cleared salvage evidence records final pre-termination snapshot sha
+  `700f72dd76ebc1b179da38ed711d7e7651cef862ff2aadaf2d7b722661f20b25`,
+  SIGTERM to torchrun PID `1389032` at `2026-06-03T16:36:35Z`, no SIGKILL,
+  wrapper `train_rc.txt=1`, `train_end.txt=2026-06-03T16:36:36Z`,
+  zero remaining matching task310 processes, and all eight H200s released to
+  `1 MiB` / `0%`.
+- Checkpoint candidate remains
+  `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`,
+  `399G`, `28` files, inventory sha
+  `b30d83f641118da8d7a24438e6c379ba9a5e8e03793ef5ff26514d751d9fa676`,
+  and payload manifest sha
+  `8cb4e7856f379bc7f1d63d407582bd63981b61c9f346455aa40fb389ef73cbe8`.
+- Created task313
+  `task313_qwen_all_sft_task310_checkpoint_salvage_review_s1` and assigned it
+  to worker_4 for independent read-only review of #373 exact head `7561a578`
+  and task310 artifact/checksum/termination evidence.
+- Lead gate decision: #373 remains HOLD pending task313 review; task311/#371
+  remains HOLD. No checkpoint-load, canary, benchmark eval, AIME/task243 eval,
+  export, endpoint, promotion, task255 reuse, AIME2025 train data, shared
+  deletion, direct main push, merge, or product-code edit is authorized by this
+  turn.
