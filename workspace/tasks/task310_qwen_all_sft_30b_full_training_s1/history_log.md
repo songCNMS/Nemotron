@@ -35,5 +35,6 @@
   `ecb14173a820df377270273b9f7d9d92cb5076d2`.
 - Kept task310 at `BLOCK_PRETRAINING_GATE`: task308/task309 branches are
   visible, but accepted PASS reports/PRs are not visible.
+- Opened PR #373 for the docs-only task310 acceptance/blocker report.
 - Prepared branch push and mailbox report with no training/eval/export/endpoint
   promotion, product-code edit, shared deletion, direct main push, or merge.
