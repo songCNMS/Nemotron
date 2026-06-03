@@ -70,3 +70,5 @@
 - Decision: `APPROVE_FAIL_CLOSEOUT` for task306 as corrected AIME FAIL/no-
   promotion evidence only. FT `14/30` is below accepted base `15/30`; sampling
   exact-parameter mismatch remains a residual acceptable only for fail closeout.
+- Opened worker_4 review/docs PR #370 from branch
+  `intern_nemotron_worker_4/task307_qwen_aime_v11_30b_task306_fail_review_runbook_s1`.
