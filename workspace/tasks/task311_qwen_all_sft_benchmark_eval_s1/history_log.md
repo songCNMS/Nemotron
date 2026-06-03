@@ -174,3 +174,16 @@
   `2791357`, and began HMMT base evaluation under
   `base_hmmt_task311_20260603T183100Z`. HMMT and MMLU-Pro base-vs-FT
   comparisons remain pending.
+
+## Session 78 - 2026-06-03 UTC - HMMT base observed complete
+
+- Read-only HMMT base summary at
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/base_hmmt_task311_20260603T183100Z/summary.json`
+  reports 30 rows, 9 correct, exact-normalized accuracy `0.3`, 30 successful
+  responses, 18 parsed rows, parsed rate `0.6`, 14 length finishes, original
+  prompt, max_tokens 8192, temperature 0, top_p `1e-5`, and all-request
+  denominator.
+- HMMT has only same-route base evidence so far. No HMMT FT run or base-vs-FT
+  comparison is available.
+- Worker_3 pane reports the full MMLU-Pro base run is starting with 12032 rows,
+  answer-only JSON prompting, and max_tokens 64.

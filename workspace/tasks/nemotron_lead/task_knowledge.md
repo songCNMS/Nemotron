@@ -2426,3 +2426,10 @@
    NemTron port `13231` for Qwen3-30B-A3B-Instruct-2507 and began HMMT base
    run `base_hmmt_task311_20260603T183100Z`; HMMT/MMLU-Pro base-vs-FT
    judgments remain pending.
+631. Session 78: read-only HMMT base summary reports 9/30 exact-normalized
+   accuracy `0.3`, 30/30 successful responses, parsed 18/30, finish reasons
+   stop 16 and length 14, original prompt, max_tokens 8192, temperature 0,
+   top_p 1e-5, all-request denominator. HMMT FT comparison remains missing.
+632. Session 78: worker_3 began full 12032-row MMLU-Pro base run with
+   answer-only JSON prompting and max_tokens 64; no MMLU-Pro summary or
+   base-vs-FT judgment exists yet.

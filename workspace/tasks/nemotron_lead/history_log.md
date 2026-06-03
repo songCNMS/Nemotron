@@ -11250,3 +11250,22 @@
 - No official worker mailbox, PR refresh, accepted benchmark disposition,
   MMLU-Pro metrics, HMMT metrics, M1 basket row results, or unavailable-row
   final matrix has arrived. No promotion/merge/training gate changes.
+
+### Task311 HMMT base completed, MMLU-Pro base started
+
+- Follow-up read-only poll found HMMT base run completed at
+  `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/eval/corrected_qwen/base_hmmt_task311_20260603T183100Z`.
+  Summary reports 30 rows, 30 successful responses, 9 correct rows,
+  exact-normalized accuracy `0.3`, parsed rows `18`, parsed rate `0.6`,
+  finish reasons `stop=16` and `length=14`, original prompt variant,
+  `max_tokens=8192`, `temperature=0.0`, `top_p=1e-5`, and all-request
+  denominator. Full completions, parser diagnostics, results, command,
+  endpoint, row, and checksum manifests are present remotely.
+- HMMT remains a base-only observation; no task310 FT HMMT result or
+  base-vs-FT comparison exists yet, so no HMMT judgment is allowed.
+- Worker_3 pane reports they are starting the full 12032-row MMLU-Pro base run
+  with answer-only JSON prompting and `max_tokens=64`. No MMLU-Pro summary,
+  FT comparison, official mailbox, or PR refresh exists yet.
+- Global holds remain unchanged: no training/optimizer, no AIME2025 train rows,
+  no task255 reuse, no shared deletion, no promotion, no self-merge, and no
+  main push.

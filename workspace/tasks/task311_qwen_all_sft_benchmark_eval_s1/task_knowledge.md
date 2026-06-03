@@ -72,3 +72,7 @@
 21. Worker_3 has started same-route base work for HMMT/MMLU-Pro: base endpoint
     PID `2791357`, model `qwen3-30b-a3b-instruct-2507-base-task311`, port
     `13231`, max context `16384`; HMMT base run started but no summary yet.
+22. Read-only HMMT base summary reports 9/30 (`0.3`) with 18 parsed rows and
+    14 length finishes. HMMT FT and base-vs-FT comparison are still missing.
+23. MMLU-Pro base run has been started at full 12032-row scale, but no summary
+    or comparison is available.
