@@ -108,3 +108,10 @@
 33. #371 should not be worker self-merged under current no self-merge boundary;
     lead posted issuecomment `4615730412` and awaits coordinator/authorized
     non-author merge or further instruction.
+34. #371 head `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` is bookkeeping-only
+    drift from `2e4482ea`; corrected-Qwen report and runner hashes are
+    unchanged, and lead posted carry-forward issuecomment `4615769907`.
+35. Follow-up tasks created from task311 evidence: task314 for MMLU-Pro
+    regression forensics, task315 for M1 launcher runtime route/blocker,
+    task316 for all-SFT repair candidate planning, and task317 for independent
+    #371 closeout review.

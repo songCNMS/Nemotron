@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #371 task311 evidence closeout gate commented; fail-mixed metrics accepted, awaiting authorized/non-self merge |
+| PR | #371 current head 9361e6da gate carried forward; task314-task317 follow-ups assigned for MMLU/M1/repair/review |
 | Session | 78 |

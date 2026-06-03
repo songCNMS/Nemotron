@@ -2475,3 +2475,19 @@
    approval from the shared account, and the current no self-merge boundary
    means #371 should wait for coordinator/authorized non-author merge rather
    than worker self-merge.
+644. Session 78: #371 advanced to
+   `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6`; worker_3 mailbox
+   `bbe43a64a392414989ee394793c08ac9` and lead diff review classify the drift
+   as gate-ack bookkeeping only, with corrected-Qwen report and runner hashes
+   unchanged.
+645. Session 78: lead posted #371 issuecomment `4615769907` carrying forward
+   the task311 gate to current head `9361e6da`: evidence closeout acceptable,
+   performance fail-mixed, no promotion, no self-merge.
+646. Session 78: created task314 for worker_1 MMLU-Pro regression forensics,
+   task315 for worker_2 M1 launcher runtime route/blocker, task316 for
+   worker_5 all-SFT repair candidate plan, and task317 for worker_4 independent
+   #371/task311 closeout review.
+647. Session 78: follow-up tasks are read-only/planning/review only unless
+   lead later releases a bounded action; no new eval/training/export/endpoint,
+   AIME2025 train data, task255 reuse, shared deletion, promotion, main push,
+   merge, or self-merge is authorized.

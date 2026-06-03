@@ -252,3 +252,18 @@
   non-eval export/endpoint. Because GitHub blocked formal same-account approval
   and current instructions say no self-merge, #371 remains awaiting
   coordinator/authorized non-author merge.
+
+## Session 78 - 2026-06-03 UTC - Session 13 bookkeeping drift reviewed
+
+- #371 advanced to current head
+  `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6`. Worker_3 mailbox
+  `bbe43a64a392414989ee394793c08ac9` reported this as gate-ack bookkeeping
+  only; lead marked the mailbox read.
+- Lead diff review found `2e4482ea..9361e6da` only modifies worker_3 status,
+  task311 `history_log.md`, and task311 `task_knowledge.md`. The corrected-Qwen
+  benchmark report and task-owned endpoint runner hashes are unchanged.
+- #371 remains OPEN/CLEAN at `9361e6da`; `git diff --check` remains clean.
+- Lead posted issuecomment `4615769907` carrying forward
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED` to current head.
+  Merge remains coordinator/authorized non-author only; no self-merge or
+  promotion is authorized.

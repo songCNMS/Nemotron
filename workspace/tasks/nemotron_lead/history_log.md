@@ -11327,3 +11327,28 @@
   deletion, or non-eval export/endpoint. GitHub would not accept a formal
   approve review from the shared account, so merge must be handled by
   coordinator/authorized non-author under the no self-merge boundary.
+
+### Task311 head drift processed and follow-up tasks assigned
+
+- #371 advanced from `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` to
+  `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6`. Worker_3 mailbox
+  `bbe43a64a392414989ee394793c08ac9` confirmed this was Session 13 gate-ack
+  bookkeeping only. Lead marked the mailbox read.
+- Lead verified the drift only updates worker_3 status plus task311
+  `history_log.md` and `task_knowledge.md`; corrected-Qwen report and
+  `run_task311_endpoint_benchmark.py` hashes are unchanged; `git diff --check`
+  remains clean.
+- Lead posted #371 issuecomment `4615769907` carrying forward
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED` to current head
+  `9361e6da`.
+- Created follow-up worker tasks:
+  - task314 assigned to worker_1 for read-only MMLU-Pro row/category/parser
+    regression forensics;
+  - task315 assigned to worker_2 for M1 launcher runtime unblock/preflight
+    route or exact blocker;
+  - task316 assigned to worker_5 for no-training all-SFT repair candidate plan;
+  - task317 assigned to worker_4 for independent #371/task311 evidence
+    closeout review at current head `9361e6da`.
+- All follow-ups keep the global boundaries: no new training/eval/export/
+  endpoint, no AIME2025 train data, no task255 reuse, no shared deletion, no
+  promotion, no main push, no merge/self-merge.
