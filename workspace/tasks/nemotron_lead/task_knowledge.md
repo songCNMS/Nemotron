@@ -2331,3 +2331,7 @@
    checksum review because original task313 target was stale. Lead refreshed
    task313 docs to #373 head `0cbcb3c5` and sent worker_4 a delivered refresh
    instruction to complete full read-only review.
+612. Session 78: after a wait, #376 remained at `1a05dda` and mailbox was
+   empty. Lead sent a second delivered task313 refresh follow-up to worker_4
+   and posted #376 issuecomment `4614975363`. #373/#371/#376 all remain
+   OPEN/CLEAN but HOLD; task311 is not released.

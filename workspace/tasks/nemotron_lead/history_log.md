@@ -10979,6 +10979,15 @@
   drift range, and complete full read-only artifact/checksum/termination review
   before recommending task311 checkpoint-load plus non-AIME canary or continued
   HOLD. Peer send returned `delivered`.
+- Rechecked after a wait window: mailbox remained empty, #376 stayed
+  OPEN/CLEAN at `1a05dda17a6d1fe6b2ebb85ca7662d5d7d1f4fb7`, #373 stayed
+  OPEN/CLEAN at `0cbcb3c56df5f097a0fd63ebfa1a3c7cdb36f9b8`, and #371 stayed
+  OPEN/CLEAN at `c2a8209adade5d4381b7929c9119683bcc6c50a8`.
+- Sent worker_4 a second concise task313 refresh follow-up for current #373
+  head `0cbcb3c5`; peer send returned `delivered`.
+- Posted #376 gate comment
+  `https://github.com/songCNMS/Nemotron/pull/376#issuecomment-4614975363`
+  making the refreshed target and continued HOLD visible on the PR.
 - Lead gate decision: #373 remains HOLD pending task313 review; task311/#371
   remains HOLD. No checkpoint-load, canary, benchmark eval, AIME/task243 eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train data, shared

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | all-SFT gate: #376 task313 mismatch report received; worker_4 asked to refresh review for #373 head 0cbcb3c |
+| PR | all-SFT gate: #376 still mismatch/HOLD at 1a05dda; second worker_4 refresh delivered; task311 HOLD |
 | Session | 78 |
