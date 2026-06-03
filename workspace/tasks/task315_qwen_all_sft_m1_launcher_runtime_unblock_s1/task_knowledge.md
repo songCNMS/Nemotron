@@ -1,6 +1,6 @@
 # task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Knowledge Entries
 
@@ -28,3 +28,9 @@
    `mcp_mark`, `tool_decathlon`, and `swe_bench_verified` remain exact-task
    unavailable. Do not substitute MT-Bench, codec contamination checks,
    ToolTalk, or BFCL variants for those rows.
+9. Lead gate for task315/#379 accepted `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`
+   at head `bd0f3202d8597189048cb84b5edcc3c19ddd3519` with comment
+   `issuecomment-4615943606`; this approves blocker documentation only and
+   authorizes no benchmark execution or new action.
+10. Do not self-merge #379 unless a coordinator/authorized non-author path is
+    explicitly provided.

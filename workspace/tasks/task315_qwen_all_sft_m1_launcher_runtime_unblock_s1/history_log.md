@@ -1,6 +1,6 @@
 # task315_qwen_all_sft_m1_launcher_runtime_unblock_s1 - History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -47,3 +47,18 @@
   `https://github.com/songCNMS/Nemotron/pull/379`.
 - Did not run benchmark rows, training, eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, main push, or merge.
+
+## Session 3 - Lead gate acknowledged
+
+- Lead processed task315/#379 gate at head
+  `bd0f3202d8597189048cb84b5edcc3c19ddd3519` as
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME`; approval comment:
+  `issuecomment-4615943606`.
+- Accepted finding remains: no safe current M1 launcher route exists and
+  runtime remediation is required before any M1 launcher rows.
+- Lead explicitly did not authorize benchmark execution or new action.
+- Lead explicitly instructed not to self-merge unless a coordinator/authorized
+  non-author path is provided.
+- Session 3 update is status/history/knowledge acknowledgement only; no
+  benchmark rows, training, eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, main push, or merge was performed.
