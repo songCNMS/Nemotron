@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -83,3 +83,18 @@
   `workspace/tasks/task320_qwen_all_sft_mmlu_data_repair_linkage_s1/mmlu_data_repair_linkage_report.md`.
 - Task314/#380 remains approved docs/no-action-release and not self-merged;
   task314 report findings and output artifact checksums are unchanged.
+
+## Session 95 - 2026-06-03 UTC - Lead gate accepted task320 linkage
+
+- Lead processed task320/#381 at head
+  `4131915f14acb4ff551ae6cf3f2325a67cf89945` as
+  `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`.
+- Lead accepted task320 as linkage evidence only and noted residual dependency
+  that task319/#383 is now visible/gated.
+- Lead also carried forward approval for task314/#380 at current head
+  `fc93290a58e412eacf3c4371490f88149ad69aa7`.
+- No data materialization, packing, training, eval rerun, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, main push,
+  merge, or self-merge is authorized.
+- Awaiting coordinator or authorized non-author merge path if any; no
+  self-merge performed.
