@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - task knowledge
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 1. #400/task337 merged runtime remediation evidence at
    `2026-06-04T11:11:08Z`, merge commit
@@ -31,3 +31,7 @@
    fails, and `multistorageclient` passes from the task337 runtime target.
 10. task339 does not release task310 or training; it only provides the
     no-training launch/config/import/resource handoff and template.
+11. #402 merged at `2026-06-04T12:07:41Z` with merge commit
+    `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab` from approved head
+    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. The merge scope is
+    no-training preflight evidence only.

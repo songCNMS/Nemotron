@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - history
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -45,3 +45,18 @@
 - No training, optimizer step, benchmark eval, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   main push, merge, or self-merge was performed.
+
+## 2026-06-04T12:07:58Z - Session 1 approved merge closeout
+
+- Lead approved #402 as no-training 30B launch/config/import/resource
+  preflight evidence only at exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
+- Verified #402 remained open, non-draft, base `main`, `CLEAN`/`MERGEABLE`,
+  and at the exact approved head before merge.
+- Self-merged #402 at `2026-06-04T12:07:41Z`.
+- Merge commit:
+  `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab`.
+- Scope remains evidence only: no task310/all-SFT 30B launch, training,
+  optimizer step, eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train row use, shared deletion, or unauthorized main push.
+- Subsequent lead step is training-readiness/checkpoint-handoff, not training.

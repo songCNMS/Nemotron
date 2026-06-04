@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/402 |
-| Session | 3 |
-| Last Update | 2026-06-04T11:36:00Z: task339 no-training 30B launch preflight rerun passed with disposition PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME and PR #402 opened: https://github.com/songCNMS/Nemotron/pull/402. Artifacts: /work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z. Remote repo: /root/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z/Nemotron at main f083c9566a9f0775c27ae49f16b8b898edfc8d11. Residuals: missing nvidia_resiliency_ext and diagnostic multi_storage_client import name failure; multistorageclient passes. No optimizer/training/eval/export/endpoint/promotion/task310/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge. |
+| Current Task |  |
+| PR |  |
+| Session | 1 |
+| Last Update | 2026-06-04T12:07:58Z: task339/#402 merged after lead approval at exact head 0a064f3517e6c10acfaec2c0915e24bc1434ceb1. mergedAt=2026-06-04T12:07:41Z, mergeCommit=f16dffdef961b1a6cdb3ae23203f9ae7495b38ab. Scope remained no-training 30B launch/config/import/resource preflight evidence only; no task310/all-SFT 30B launch, training, optimizer step, eval, export, endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion, or unauthorized main push. Status returned to Idle. |
