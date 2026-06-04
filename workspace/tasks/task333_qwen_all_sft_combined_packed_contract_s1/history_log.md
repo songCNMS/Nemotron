@@ -1,6 +1,6 @@
 # task333_qwen_all_sft_combined_packed_contract_s1 - history
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=99 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_1,SESSION=100 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -33,3 +33,18 @@
   benchmark eval, export, endpoint, promotion, task310 release, 30B release,
   task255 reuse, AIME2025 train rows, shared deletion, main push, merge, or
   self-merge.
+
+## 2026-06-04 UTC - Session 100 - Lead-requested checksum correction
+
+- Received lead gate `REQUEST_CHANGES/HOLD` for PR #396 at exact head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`.
+- Refreshed `combined_packed_contract_report.md` provenance table so task299
+  seed row-manifest SHA256 values match
+  `run_20260604T074500Z/source_provenance.json` and direct row-manifest files:
+  from-m0 `7562c864`, math-final `e466ee7`, hard-verified `89ab29`.
+- Kept combined metrics, residuals, artifact root, and packed root unchanged.
+- Ran provenance `jq`, direct `sha256sum`, stale/correct hash `rg`, and
+  `git diff --check`; sent official mailbox closeout to lead.
+- Preserved boundaries: no training, eval, export, endpoint, promotion,
+  task310 release, 30B launch, task255 reuse, AIME2025 train rows, shared
+  deletion, main push, merge, or self-merge.

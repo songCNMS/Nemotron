@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task333_qwen_all_sft_combined_packed_contract_s1 |
 | PR | https://github.com/songCNMS/Nemotron/pull/396 |
-| Session | 99 |
-| Progress | Applied lead-requested report checksum correction for task299 seed row manifests in PR #396; metrics/artifact root unchanged and holding for review. |
+| Session | 100 |
+| Progress | Recorded lead-requested task299 seed row-manifest checksum correction for PR #396; metrics/artifact root unchanged and holding for review. |
