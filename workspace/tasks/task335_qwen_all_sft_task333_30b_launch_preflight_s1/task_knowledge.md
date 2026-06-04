@@ -13,3 +13,6 @@
 5. This task is no-training/no-eval preflight only. It must not run optimizer
    steps, benchmark/AIME eval, export, endpoint, promotion, task255, AIME2025
    train rows, shared deletion, main push, merge, or self-merge.
+6. Worker_2 acceptance branch/head:
+   `origin/intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`
+   at `51c02eba48c47bd73a764c195889f544e41dc4d6`. No PR yet.

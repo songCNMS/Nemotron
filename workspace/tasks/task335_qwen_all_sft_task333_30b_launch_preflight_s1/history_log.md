@@ -11,3 +11,12 @@
   task333 packed root.
 - Passing this task can only enable a later lead-gated training launch task.
   It does not authorize task310/training/eval/export/endpoint/promotion/30B.
+
+## 2026-06-04 UTC - Worker Acceptance
+
+- Worker_2 accepted task335 on branch
+  `intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`.
+- Acceptance head:
+  `51c02eba48c47bd73a764c195889f544e41dc4d6`.
+- No PR yet. Worker_2 acknowledged no-training/no-eval/no-export boundaries and
+  the NemTron `/root` sync rule before any remote/debug preflight.

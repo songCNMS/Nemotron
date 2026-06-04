@@ -3095,3 +3095,9 @@
    Qwen3-30B all-SFT launch/config/import/resource preflight over task333
    packed root. task310/training/eval/export/endpoint/promotion/30B remain
    blocked until task335 passes and lead creates a separate launch task.
+778. Session 86 task335 worker_2 acceptance head is
+   `51c02eba48c47bd73a764c195889f544e41dc4d6` on branch
+   `origin/intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`.
+   No PR yet. The task is no-training preflight only; if it passes, create a
+   separate lead-gated training task rather than treating task335 as task310
+   release.

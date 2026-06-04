@@ -12626,3 +12626,12 @@
   task335 must not run optimizer steps, eval, export, endpoint, promotion, task255,
   AIME2025 train rows, shared deletion, or task310 release. Passing task335 can
   only unblock a later lead-gated training launch task.
+- Session 86 task335 acceptance: processed worker_2 mailbox
+  `task335-acceptance-51c02eba-20260604T0848Z`. Verified remote branch
+  `origin/intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`
+  exists at `51c02eba48c47bd73a764c195889f544e41dc4d6`, created from
+  `origin/main` `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`, with lead docs
+  imported from `5c55be6227a01897adfec12231931ebe2eed7dbc`. No task335 PR is
+  open yet. Worker_2 acknowledged no-training boundaries and the NemTron `/root`
+  sync rule before any remote/debug preflight. task310/training/eval/export/
+  endpoint/promotion/30B remain HOLD.
