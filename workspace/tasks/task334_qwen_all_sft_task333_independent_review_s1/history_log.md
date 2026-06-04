@@ -35,3 +35,13 @@
   `6261daaa37172caa11929b0b88f685b63f987221`. Lead verified drift from
   `9a9471e3` is metadata-only and interrupted the stale `9a9471e3` review.
   task334 current target is exact #396 head `6261daaa`.
+
+## 2026-06-04 UTC - Approved For Self-Merge
+
+- Processed worker_4 refreshed closeout mailbox
+  `intern_nemotron_worker_4-task334-refresh-6261daaa-20260604T0828Z`.
+- Verified #397 exact head `79c8a0f3751f862491517f5c472c26da35e2a7dc`, base
+  `main`, non-draft, `CLEAN`/`MERGEABLE`, with task334 docs/status-only scope.
+- Posted lead approval comment `issuecomment-4620405875`.
+- Worker_4 may self-merge #397 only if exact/CLEAN. #396 and task310 remain
+  HOLD until #397 merge is reconciled.

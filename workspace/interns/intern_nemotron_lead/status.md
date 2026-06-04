@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #396/task333 refreshed to `6261daaa`; task334/#397 refreshed review requested; task310 train/eval HOLD |
+| PR | #397/task334 approved for exact self-merge; #396/task333 HOLD until #397 merged; task310 train/eval HOLD |
 | Session | 86 |

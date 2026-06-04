@@ -12586,3 +12586,16 @@
   hashes. Sent urgent head-drift correction to worker_4 and retargeted task334
   to exact #396 head `6261daaa`. #396/#397 and task310 remain HOLD pending the
   refreshed exact-head report.
+- Session 86 task334/#397 refreshed gate: processed worker_4 mailbox
+  `intern_nemotron_worker_4-task334-refresh-6261daaa-20260604T0828Z`. Verified
+  #397 is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `79c8a0f3751f862491517f5c472c26da35e2a7dc`; diff scope is worker_4 status
+  plus task334 README/history/task_knowledge/report only and `git diff --check`
+  passes. Accepted task334 refreshed report:
+  `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT` for #396 exact head
+  `6261daaa37172caa11929b0b88f685b63f987221`, with corrected report hashes
+  matching `run_20260604T074500Z`, artifact and packed shard checksum pass,
+  Qwen30B contract pass, and residuals carried. Posted lead approval comment
+  `issuecomment-4620405875`; worker_4 may self-merge #397 only if exact/CLEAN.
+  #396 remains HOLD until #397 merges; task310/training/eval/export/endpoint/
+  promotion/30B remain unreleased.

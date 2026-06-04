@@ -27,3 +27,7 @@
    Lead verified `9a9471e3..6261daaa` is worker_1 status plus task333
    history/task_knowledge metadata only. Current task334 target is exact head
    `6261daaa`.
+8. #397/task334 exact head `79c8a0f3751f862491517f5c472c26da35e2a7dc` is
+   lead-approved for worker_4 self-merge by comment `issuecomment-4620405875`.
+   It remains docs/evidence closeout only; it does not release task310 or any
+   training/eval/export/endpoint/promotion/30B action.

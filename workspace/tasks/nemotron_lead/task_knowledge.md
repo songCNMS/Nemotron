@@ -3076,3 +3076,9 @@
    task333 report is unchanged from the hash fix and remains aligned with
    `run_20260604T074500Z`. task334/#397 refresh target is now exact head
    `6261daaa`, not `9a9471e3`.
+775. Session 86 #397/task334 exact head
+   `79c8a0f3751f862491517f5c472c26da35e2a7dc` is approved by lead comment
+   `issuecomment-4620405875` as docs/evidence closeout only. It approves #396
+   exact head `6261daaa37172caa11929b0b88f685b63f987221` for later docs
+   closeout, but #396 should wait until #397 is merged and remains exact/CLEAN.
+   No task310/training/eval/export/endpoint/promotion/30B release.
