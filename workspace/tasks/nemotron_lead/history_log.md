@@ -12117,3 +12117,13 @@
   final rc, no source-level disposition for `math-proofs-lean`, no official
   worker_2 report, and no task327 PR. This is in-progress evidence only and
   does not release all-SFT packing/training/eval/export/endpoint/promotion.
+- Resume read-only poll caught the next stable `math-proofs-lean` checkpoint:
+  `2026-06-04T02:10:49Z PROGRESS math-proofs-lean rows=500000
+  mib=10173.5 rate_mib_s=8.20`. The task327 process remained active, no
+  `materialize_large_sources.rc` existed yet, the summary still listed only
+  the six completed sources, mailbox unread count was 0, no task327 PR was
+  visible, and worker_2 remained on branch
+  `intern_nemotron_worker_2/task327_qwen_all_sft_large_source_materialize_decontam_s1`
+  at `b20e642a648425fb23c324290c5f672163332943`. This is in-progress evidence
+  only and does not release all-SFT packing/training/eval/export/endpoint/
+  promotion.
