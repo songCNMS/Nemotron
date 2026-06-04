@@ -2721,3 +2721,7 @@
    the expected incomplete-gzip boundary. There is still no source-level
    disposition/final rc/worker report/task327 PR, so all-SFT pack/train/eval
    remains HOLD.
+715. Session 79: task327 `competitive-python-01` reached 400,000 rows /
+   18,441.8 MiB at `2026-06-04T00:49:09Z`; the source process remains active
+   with no final rc, source-level disposition, worker_2 report, or task327 PR.
+   all-SFT pack/train/eval/export/endpoint/promotion remains HOLD.
