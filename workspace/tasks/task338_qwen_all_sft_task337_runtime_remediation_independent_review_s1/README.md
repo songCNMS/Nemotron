@@ -1,6 +1,6 @@
 # task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1 - Review task337 runtime remediation
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
+<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 ## Background
 
@@ -105,3 +105,31 @@ Return one of:
   `origin/intern_nemotron_lead/session1-recovery-task-docs` `15dd0c0f`.
 - Worker_4 accepted read-only review scope and boundaries; substantive review
   is in progress.
+
+## Lead Gate
+
+- Review PR: #401 `https://github.com/songCNMS/Nemotron/pull/401`.
+- Review PR head:
+  `422ca360447e083f0e08c53b446653ad44d51707`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Worker_4 disposition:
+  `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE`.
+- Lead verification: #401 diff scope is worker_4 status plus task338 docs/report
+  only, and `git diff --check origin/main...origin/pr/401` passed.
+- Lead verification of #400: exact head
+  `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`; diff scope is worker_2 status plus task337
+  docs/report only, and `git diff --check origin/main...origin/pr/400` passed.
+- Lead artifact spot-checks: task337 report sha256 matched
+  `441bd4b3c46d923f880fe3ce55298bc810e03e730819b16405b8b3b5a995cd49`;
+  `sha256sum -c manifests/artifact_checksums.sha256` passed for the assigned
+  artifact root; baseline marker is
+  `TASK337_IMPORT_PROBE=BLOCK_MISSING_MEGATRON_ENERGON`; final markers are
+  `TASK337_IMPORT_PROBE=PASS_QWEN3_MOE_IMPORT` and
+  `TASK337_SYMBOL_PROBE=PASS_QWEN3_MOE_SYMBOL_IMPORT`.
+- Decision accepted for #401:
+  `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE` as independent no-training
+  runtime remediation review evidence only.
+- #401 may self-merge only if exact head `422ca360` remains `OPEN`/`CLEAN`.
+- #400/task337 and task310 remain HOLD until #401 lands and #400 is rechecked
+  at exact head `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
