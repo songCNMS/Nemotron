@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Session 0 - Created with team lead
 
@@ -12920,3 +12920,17 @@
   `3baff1a3e3de84852d8361a11a81917d4256d3f1` at
   `2026-06-04T12:53:46Z`. Scope remains blocker docs/status/report only with no
   boundary issues.
+- Session 92 coordinator runtime-access update: coordinator independently
+  reproduced #405/task342 `BLOCK_NEMTRON_ACCESS`. `ssh -o BatchMode=yes -o
+  ConnectTimeout=8 NemTron 'hostname && date -u ...'` fails rc `255` with
+  `channel 0: open failed: connect failed: Connection refused`; proxy hop
+  `sshuser@10.100.197.19:30222` succeeds and returns
+  `ssh-proxy-deployment-64fbf5f7d5-4flbz` at `2026-06-04T12:55:42Z`; proxy-side
+  Bash TCP to target `10.100.2.62:33808` fails rc `1` with connection refused.
+  Coordinator also verified the task342 artifact root checksum manifest validates
+  all 16 entries, and found LTP recovery is blocked because `ltp.py whoami`
+  reports missing `LTP_TOKEN`/`LTP_HOST` and no `~/.ltp_env`. Coordinator is not
+  authorizing training/eval/export/endpoint/promotion. Lead gate remains HOLD:
+  task341 cannot be rerun and task310 cannot launch until target service/port is
+  restored or a replacement lead-approved SSH/LTP route with credentials is
+  provided.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #405/task342 MERGED `3baff1a3`; BLOCK_NEMTRON_ACCESS requires infra route repair; task310 train/eval HOLD |
-| Session | 91 |
+| PR | #405/task342 MERGED `3baff1a3`; coordinator reproduced NemTron target-port blocker and lacks LTP credentials; task310 train/eval HOLD |
+| Session | 92 |

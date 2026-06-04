@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Knowledge Entries
 
@@ -3293,3 +3293,10 @@
    fresh task341-equivalent no-training handoff.
 816. Worker_4 #405 post-merge closeout mailbox confirms the merge and reports
    no issues or boundary violations; global gate remains unchanged.
+817. Coordinator independently reproduced #405/task342 `BLOCK_NEMTRON_ACCESS`:
+   `ssh NemTron` fails rc `255`, proxy hop works, and proxy-side TCP to
+   `10.100.2.62:33808` is connection refused. Coordinator also lacks LTP
+   recovery credentials (`LTP_TOKEN`/`LTP_HOST`, `~/.ltp_env` missing). No
+   training/eval/export/endpoint/promotion is authorized; task341 rerun requires
+   restored target service/port or a replacement lead-approved route with
+   credentials.
