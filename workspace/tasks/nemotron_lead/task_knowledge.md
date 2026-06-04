@@ -3207,3 +3207,9 @@
    `origin/intern_nemotron_worker_4/task340_qwen_all_sft_task339_independent_review_s1`
    at `15ee7c871fc02f944ca723aef44590d9e8971fdb`. This is ownership evidence
    only; wait for worker_4 review report/PR before deciding #402.
+799. #403/task340 exact head
+   `fd38791659910f667c0ff9418f161ddbcf7f46d0` reports
+   `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` for #402 exact head
+   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Lead approved #403 for
+   worker_4 self-merge as review evidence only. #402/task339 and task310 remain
+   HOLD pending #403 merge and post-#403 #402 recheck.

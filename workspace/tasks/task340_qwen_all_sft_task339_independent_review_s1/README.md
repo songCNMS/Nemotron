@@ -134,3 +134,26 @@ Return one of:
   report sha `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
 - Worker_4 accepted read-only review scope and boundaries; #402/task339 and
   task310 remain HOLD pending approve/request-changes/block report.
+
+## Lead Gate
+
+- Worker_4 closeout mailbox:
+  `intern_nemotron_worker_4-task340-closeout-20260604T1152Z`.
+- Review PR: #403 `https://github.com/songCNMS/Nemotron/pull/403`.
+- Review PR head: `fd38791659910f667c0ff9418f161ddbcf7f46d0`, `OPEN`,
+  non-draft, base `main`, `CLEAN`/`MERGEABLE`.
+- Worker_4 disposition:
+  `APPROVE_TASK339_NO_TRAINING_PREFLIGHT`.
+- Lead verification: #403 diff scope is worker_4 status plus task340 docs/report
+  only, and `git diff --check origin/main...origin/pr/403` passed.
+- Lead verification of #402: exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`; diff scope is worker_2 status plus task339 docs/
+  report/helper only, and `git diff --check origin/main...origin/pr/402`
+  passed.
+- Decision accepted for #403:
+  `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` as independent no-training preflight
+  review evidence only.
+- #403 may self-merge only if exact head `fd387916` remains `OPEN`/`CLEAN`.
+- #402/task339 and task310 remain HOLD until #403 lands and #402 is rechecked
+  at exact head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.

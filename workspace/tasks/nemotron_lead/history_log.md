@@ -12789,3 +12789,12 @@
   `0270526a`. Worker_4 accepted read-only review of #402 exact head
   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`; #402/task339 and task310 remain
   HOLD pending final review report.
+- Session 90 task340/#403 lead gate: processed worker_4 closeout mailbox
+  `intern_nemotron_worker_4-task340-closeout-20260604T1152Z`. Verified #403 is
+  `OPEN`, non-draft, base `main`, `CLEAN`/`MERGEABLE`, exact head
+  `fd38791659910f667c0ff9418f161ddbcf7f46d0`; diff scope is worker_4 status
+  plus task340 README/history/task_knowledge/report only and `git diff --check`
+  passes. Worker_4 decision is `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` for
+  #402 exact head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Lead approved
+  #403 for worker_4 self-merge only if exact/CLEAN. #402/task339 and task310
+  remain HOLD until #403 lands and #402 is rechecked.

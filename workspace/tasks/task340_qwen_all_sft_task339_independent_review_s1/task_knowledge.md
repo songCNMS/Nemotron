@@ -19,3 +19,7 @@
    `origin/intern_nemotron_worker_4/task340_qwen_all_sft_task339_independent_review_s1`
    at `15ee7c871fc02f944ca723aef44590d9e8971fdb`; this is ownership evidence
    only, not a #402 gate decision.
+7. #403/task340 head `fd38791659910f667c0ff9418f161ddbcf7f46d0` reports
+   `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` for #402 exact head
+   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`; lead approved #403 for
+   worker_4 self-merge if exact/CLEAN. This is review evidence only.
