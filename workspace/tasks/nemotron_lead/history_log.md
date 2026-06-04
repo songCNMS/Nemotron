@@ -12934,3 +12934,15 @@
   task341 cannot be rerun and task310 cannot launch until target service/port is
   restored or a replacement lead-approved SSH/LTP route with credentials is
   provided.
+- Session 92 task325/#387 release: rechecked #387 as `OPEN`, non-draft, base
+  `main`, `CLEAN`, exact head `e07ee3f9268b33658e18881c25a3d221bf2136ee`.
+  Existing lead gate comments `4616544252` and `4616568767` already accepted
+  the current head as `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`, with
+  report evidence that 14/19 M1 rows have exact launcher mappings, 5 rows remain
+  exact-task unavailable, and 0/19 rows are runnable under current runtime/
+  container/scheduler/credential evidence. Lead posted release comment
+  `4622390185` and notified worker_3 by peer_send; delivery returned
+  `delivered`. Worker_3 may self-merge #387 only if exact head remains `CLEAN`.
+  This closes M1 unavailable-row documentation only and does not authorize
+  benchmark row execution, training, eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train data, shared env mutation/deletion, or task310 release.

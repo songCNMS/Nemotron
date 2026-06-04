@@ -3300,3 +3300,10 @@
    training/eval/export/endpoint/promotion is authorized; task341 rerun requires
    restored target service/port or a replacement lead-approved route with
    credentials.
+818. #387/task325 current exact head `e07ee3f9268b33658e18881c25a3d221bf2136ee`
+   remains `CLEAN` and is released for worker_3 self-merge by lead comment
+   `4622390185`, carrying forward prior gate comments `4616544252` and
+   `4616568767`. The merged value is blocker documentation for M1 rows only:
+   14/19 exact launcher mappings, 5 exact missing/unavailable rows, 0/19
+   runnable now. It does not authorize any benchmark row execution or task310
+   release.
