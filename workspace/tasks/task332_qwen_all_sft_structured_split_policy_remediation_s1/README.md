@@ -96,6 +96,8 @@ contract after task331 SWE remediation, or fail closed with exact blockers.
 
 - Report:
   `workspace/tasks/task332_qwen_all_sft_structured_split_policy_remediation_s1/structured_split_policy_report.md`.
+- PR: #394
+  `https://github.com/songCNMS/Nemotron/pull/394`.
 - Output root:
   `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`.
 - Disposition: `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`.

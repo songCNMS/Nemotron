@@ -19,6 +19,7 @@ promotion. SWE remains blocked until task331 proves nonzero supervised tokens.
 | Item | Value |
 | --- | --- |
 | Worker branch | `intern_nemotron_worker_4/task332_qwen_all_sft_structured_split_policy_remediation_s1` |
+| Worker PR | #394 `https://github.com/songCNMS/Nemotron/pull/394` |
 | Base | `origin/main` `410c2247fc5e09e6ad831bdee1628830b97fbd89` |
 | Task docs imported | `bbbf19df7ea7dad3fc644588f1e84240c464febe` |
 | Task329 root | `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z` |

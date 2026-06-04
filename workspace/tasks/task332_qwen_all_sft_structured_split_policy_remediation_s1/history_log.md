@@ -46,6 +46,8 @@
   disposition is `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`.
 - Verified `python -m py_compile` for the helper and
   `sha256sum -c manifests/artifact_checksums.sha256` for task332 outputs.
+- Opened PR #394:
+  `https://github.com/songCNMS/Nemotron/pull/394`.
 - Boundaries maintained: no training, eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train rows, shared deletion, task329 artifact
   mutation, merge, self-merge, or main push.
