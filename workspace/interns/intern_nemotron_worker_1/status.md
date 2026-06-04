@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task333_qwen_all_sft_combined_packed_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task314_qwen_all_sft_mmlu_pro_regression_forensics_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task333_qwen_all_sft_combined_packed_contract_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/396 |
-| Session | 100 |
-| Progress | Recorded lead-requested task299 seed row-manifest checksum correction for PR #396; metrics/artifact root unchanged and holding for review. |
+| Current Task | task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/380 |
+| Session | 102 |
+| Progress | Refreshed dirty all-SFT docs PRs #380/#381/#386 against origin/main 8a757c32 with docs/status-only conflict resolution; preparing lead mailbox with exact heads. |

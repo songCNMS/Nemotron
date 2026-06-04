@@ -1,0 +1,204 @@
+# task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
+
+<!-- METADATA:SESSION=102 -->
+
+## Session 78 - 2026-06-03 UTC - Assigned
+
+- Created by `intern_nemotron_lead` after task311/#371 produced a fail-mixed
+  corrected-Qwen benchmark result.
+- Assigned to `intern_nemotron_worker_1`.
+- Scope is read-only MMLU-Pro row/category/parser/protocol forensics for #371
+  head `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6`.
+- No training, new eval, export, endpoint, merge, promotion, task255 reuse,
+  AIME2025 train data, shared deletion, or main push is authorized.
+
+## Session 90 - 2026-06-03 UTC - Accepted
+
+- Accepted by `intern_nemotron_worker_1` on branch
+  `intern_nemotron_worker_1/task314_qwen_all_sft_mmlu_pro_regression_forensics_s1`
+  from current `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`.
+- Lead docs source verified at
+  `f1f5efab8c425077033bcceeeef14062ea87d7c9`.
+- Audit target acknowledged: task311 artifacts under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z`
+  and #371 head `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6`.
+- Boundaries acknowledged: no training, new eval, packing, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, product-code
+  edits, main push, or merge.
+
+## Session 91 - 2026-06-03 UTC - Forensics complete
+
+- Completed read-only MMLU-Pro base-vs-FT forensics over task311 artifacts
+  under
+  `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z`.
+- Produced report
+  `workspace/tasks/task314_qwen_all_sft_mmlu_pro_regression_forensics_s1/mmlu_pro_regression_forensics_report.md`.
+- Produced worker-owned output tables under
+  `/work-agents/intern_nemotron_worker_1/outputs/task314_qwen_all_sft_mmlu_pro_regression_forensics_s1/run_20260603T191500Z`.
+- Row transition counts: `92` base-correct to FT-wrong, `90` base-wrong to
+  FT-correct, `6666` both-correct, `5184` both-wrong.
+- Category deltas show net `-2` despite math `+13`; largest losses were
+  physics `-6`, health `-4`, chemistry `-3`, history `-2`, and other `-2`.
+- No row-alignment, prompt-hash, expected-answer, parser, endpoint-protocol,
+  status, stop-reason, or result-bearing checksum issue was found.
+- Recommendation: `APPROVE_FORENSICS` while preserving task311 disposition
+  `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; no promotion or new
+  training/eval authorized.
+
+## Session 92 - 2026-06-03 UTC - Lead gate accepted and metadata cleanup
+
+- Lead processed task314/#380 gate at head
+  `d3bd97331932ba4263a1516c8f93c599d860046d` as
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE` and accepted the finding that
+  MMLU-Pro `-2` is real answer-choice drift, not an evaluator artifact.
+- Lead confirmed no promotion or new training/eval is authorized and instructed
+  not to self-merge unless a coordinator/authorized non-author path is
+  explicitly provided.
+- Applied hook-required metadata cleanup: worker `status.md` remains
+  `Working`, task/session metadata now records Session 92, and the duplicate
+  history Session 90 heading is resolved.
+- This is a docs/status metadata-only branch update; the task314 forensics
+  report findings and output artifact checksums are unchanged.
+
+## Session 93 - 2026-06-03 UTC - New task handoff recorded
+
+- Received lead assignment for
+  `task320_qwen_all_sft_mmlu_data_repair_linkage_s1`.
+- Task314/#380 remains approved as `APPROVE_FORENSICS_DOCS /
+  NO_ACTION_RELEASE` and no self-merge is authorized unless a coordinator or
+  authorized non-author path is explicitly provided.
+- Recorded handoff in task314 metadata before starting task320 from current
+  `origin/main`; task314 report findings and output artifact checksums are
+  unchanged.
+
+## Session 94 - 2026-06-03 UTC - Task320 visibility follow-up
+
+- Lead sent a task320 follow-up after the handoff note, reporting that task320
+  branch/files were not yet visible from the lead side.
+- Verified task320 was completed in a separate clean worktree on branch
+  `intern_nemotron_worker_1/task320_qwen_all_sft_mmlu_data_repair_linkage_s1`
+  at head `4131915f14acb4ff551ae6cf3f2325a67cf89945`.
+- Verified task320 PR #381 is `OPEN`, base `main`, non-draft,
+  `CLEAN/MERGEABLE`, with report
+  `workspace/tasks/task320_qwen_all_sft_mmlu_data_repair_linkage_s1/mmlu_data_repair_linkage_report.md`.
+- Task314/#380 remains approved docs/no-action-release and not self-merged;
+  task314 report findings and output artifact checksums are unchanged.
+
+## Session 95 - 2026-06-03 UTC - Lead gate accepted task320 linkage
+
+- Lead processed task320/#381 at head
+  `4131915f14acb4ff551ae6cf3f2325a67cf89945` as
+  `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`.
+- Lead accepted task320 as linkage evidence only and noted residual dependency
+  that task319/#383 is now visible/gated.
+- Lead also carried forward approval for task314/#380 at current head
+  `fc93290a58e412eacf3c4371490f88149ad69aa7`.
+- No data materialization, packing, training, eval rerun, export, endpoint,
+  promotion, task255 reuse, AIME2025 train data, shared deletion, main push,
+  merge, or self-merge is authorized.
+- Awaiting coordinator or authorized non-author merge path if any; no
+  self-merge performed.
+
+## Session 96 - 2026-06-03 UTC - New task324 handoff recorded
+
+- Received lead assignment for
+  `task324_qwen_all_sft_mmlu_aware_blend_design_s1`.
+- Task324 scope is docs/analysis only: use task319/task320/task314 to design
+  an MMLU-aware all-SFT blend and later packed-contract/eval constraints.
+- Task314/#380 and task320/#381 remain docs/no-action-release with no
+  self-merge authorization.
+- Recorded handoff before creating task324 branch from current `origin/main`;
+  task314 report findings and output artifact checksums are unchanged.
+
+## Session 97 - 2026-06-03 UTC - Task324 PR reported
+
+- Completed task324 docs/analysis work in separate worktree
+  `/work-agents/intern_nemotron_worker_1/Nemotron_task324`.
+- Opened task324 PR #386 at head
+  `8c4f7aa72f07e69e400789fced12acb17cf80cb7`, base `main`,
+  `OPEN`/`CLEAN`/`MERGEABLE`, with docs/status-only diff.
+- Sent official task324 mailbox closeout to `intern_nemotron_lead` with
+  branch/head/PR, evidence summary, residual risks, and boundary confirmation.
+- Task314/#380 remains approved docs/no-action-release only; no self-merge,
+  promotion, new eval, training, export, endpoint, main push, or artifact
+  mutation is authorized.
+
+## Session 98 - 2026-06-03 UTC - Task325 blocker gate recorded
+
+- Received lead gate result for task325/#387 at head `e6c5e1f`:
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`.
+- Recorded accepted blocker: current M1 runnable rows remain `0/19`, and no
+  M1 benchmark row execution is authorized.
+- Lead noted later remediation requires a separate lead-gated eval-only
+  runtime/container/scheduler/credential proof.
+- Boundaries remain unchanged: no eval, endpoint, export, training, promotion,
+  task255 reuse, AIME2025 train data, shared deletion, main push, merge, or
+  self-merge is authorized.
+- Task314/#380 remains approved docs/no-action-release only; task314 report
+  findings and output artifact checksums are unchanged.
+
+## Session 99 - 2026-06-04 UTC - Task333 PR reported
+
+- Accepted lead assignment for
+  `task333_qwen_all_sft_combined_packed_contract_s1`.
+- Completed task333 in separate worktree
+  `/work-agents/intern_nemotron_worker_1/Nemotron_task333`.
+- Opened task333 PR #396 at head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`, base `main`,
+  `OPEN`/`CLEAN`/`MERGEABLE`, with docs/status/helper/report-only diff.
+- Produced task-owned no-training combined packed-contract candidate under
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`
+  with disposition `PASS_COMBINED_PACKED_CONTRACT_READY_FOR_REVIEW`.
+- Sent official task333 mailbox closeout to `intern_nemotron_lead`.
+- Task314/#380 remains approved docs/no-action-release only; no self-merge,
+  promotion, new eval, training, export, endpoint, main push, or artifact
+  mutation is authorized for task314.
+
+## Session 100 - 2026-06-04 UTC - Task333 checksum fix reported
+
+- Received lead gate `REQUEST_CHANGES/HOLD` for task333/#396 at head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`.
+- Applied a report/provenance-table-only correction in task333 separate
+  worktree so the task299 seed row-manifest SHA256 values match
+  `run_20260604T074500Z` `source_provenance.json` and direct file checksums.
+- Pushed task333/#396 head
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`; PR #396 rechecked as
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE`.
+- Sent official task333 fix mailbox to `intern_nemotron_lead`.
+- No new artifact root, metrics change, training, eval, export, endpoint,
+  promotion, 30B/task310 release, main push, merge, or self-merge was
+  performed.
+
+## Session 101 - 2026-06-04 UTC - Task333 approved PR merged
+
+- Received lead gate `APPROVE_TASK333_COMBINED_PACKED_CONTRACT_DOCS_CLOSEOUT /
+  HOLD_TRAINING` for task333/#396, with self-merge authorized only if exact
+  head `6261daaa37172caa11929b0b88f685b63f987221` remained `CLEAN`.
+- Verified PR #396 was `OPEN`, base `main`, non-draft, `CLEAN`, and at exact
+  approved head before merge; merged with `gh pr merge --merge
+  --match-head-commit 6261daaa37172caa11929b0b88f685b63f987221`.
+- PR #396 merged at `2026-06-04T08:37:16Z` with merge commit
+  `76b9ebf98e623cb85075378ca9980ba6ee11c8ed` from head
+  `6261daaa37172caa11929b0b88f685b63f987221`.
+- Sent official mailbox closeout to `intern_nemotron_lead`.
+- No training, eval, export, endpoint, promotion, 30B/task310 release,
+  task255 reuse, AIME2025 train rows, shared deletion, main push, or release
+  action was performed.
+
+## Session 102 - 2026-06-04 UTC - All-SFT open PR refresh
+
+- Received lead refresh request for dirty open all-SFT PRs #380/task314,
+  #381/task320, and #386/task324 against `origin/main`
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
+- Rebases completed for all three PR branches. Each conflict was limited to
+  `workspace/interns/intern_nemotron_worker_1/status.md`, resolved toward the
+  corresponding PR branch status because the reports remain open evidence PRs.
+- Verified `git diff --check` passed on all three worktrees and each
+  `origin/main...HEAD` diff is limited to worker status plus that task's
+  workspace docs/report files.
+- Dispositions remain unchanged: task314 `APPROVE_FORENSICS_DOCS /
+  NO_ACTION_RELEASE`, task320 `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`, and
+  task324 `APPROVE_BLEND_DESIGN` evidence only. No self-merge is authorized.
+- No product-code changes, training, eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train rows, shared deletion, main push, or release
+  action was performed.
