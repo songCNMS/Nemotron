@@ -2772,3 +2772,7 @@
    6,078.1 MiB at `2026-06-04T02:02:32Z`; source remains active with no final
    rc, source-level disposition, worker_2 report, task327 PR, or all-SFT
    pack/train/eval release.
+725. Session 79: task327 `math-proofs-lean` reached 400,000 rows /
+   8,125.5 MiB at `2026-06-04T02:06:40Z`; source remains active with no final
+   rc, source-level disposition, worker_2 report, task327 PR, or all-SFT
+   pack/train/eval release.

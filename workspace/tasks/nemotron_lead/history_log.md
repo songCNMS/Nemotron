@@ -12111,3 +12111,9 @@
   final rc, no source-level disposition for `math-proofs-lean`, no official
   worker_2 report, and no task327 PR. This is in-progress evidence only and
   does not release all-SFT packing/training/eval/export/endpoint/promotion.
+- Bounded read-only poll caught the next stable `math-proofs-lean`
+  checkpoint: `2026-06-04T02:06:40Z PROGRESS math-proofs-lean rows=400000
+  mib=8125.5 rate_mib_s=8.20`. The source process remained active with no
+  final rc, no source-level disposition for `math-proofs-lean`, no official
+  worker_2 report, and no task327 PR. This is in-progress evidence only and
+  does not release all-SFT packing/training/eval/export/endpoint/promotion.
