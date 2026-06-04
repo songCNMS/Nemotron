@@ -1,0 +1,163 @@
+# task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
+
+<!-- METADATA:SESSION=93 -->
+
+## Knowledge Entries
+
+1. A corrected same-harness base result must exist before judging any all-SFT FT
+   checkpoint on AIME2025, HMMT, MMLU-Pro, or M1 launcher-available benchmarks.
+2. Non-AIME canary/checkpoint-load is required before benchmark evaluation.
+3. Eval-only export or endpoint may be used only if required for evaluation and
+   must not be described as promotion.
+4. Task311 branch was accepted from `origin/main`
+   `172cd0e7ceaba8ad2b412d1145441dbb4c5fd122`; merged task310 docs on that
+   base contain task creation only, so any canary/benchmark action depends on a
+   later verified task310 checkpoint handoff.
+5. Lead follow-up confirmed task311 remains blocked on task310 checkpoint
+   handoff and must perform checkpoint-load/non-AIME canary before benchmark
+   eval once that handoff exists.
+6. Session 2 blocker artifact is
+   `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T143618Z/manifests/blocker_manifest.json`
+   with sha256
+   `7b90155bc4f31bea4ccb5a67472d0c5d703c5607b0ec0a20d0523bdadc179ed8`.
+7. PR #371 records the task311 blocker/status docs for lead review.
+8. Lead verified PR #371 at head
+   `37a76caea59a2ca27c5d4cbc5d2e98d46d100420` and kept task311 on HOLD pending
+   task312 independent review plus upstream task309/task310 refresh; canary and
+   benchmarks remain prohibited until an accepted task310 checkpoint handoff
+   exists.
+9. Lead later confirmed task311/#371 remains HOLD at head
+   `6981a654c1c72c72dfb57fd42aa60cc15b0a9f77`; task309/#372 refreshed
+   constrained PASS, but task310 still has no accepted checkpoint handoff and
+   no task311 canary/benchmark action is authorized.
+10. Lead gate update for Session 5 reiterates the required future order:
+    refresh task311 from current main after accepted task310 checkpoint handoff,
+    run checkpoint-load/non-AIME canary first, then run corrected same-harness
+    benchmark eval only if that canary passes.
+11. Lead confirmed prerequisites #374/#372/#375 are merged and task310 is
+    released to worker_5, but task311 remains HOLD until an official task310
+    checkpoint handoff is accepted; stale #371 must not be self-merged or used
+    to run canary/benchmarks.
+12. Task310 produced only a salvage checkpoint candidate at PR #373 head
+    `7561a578` with `train_rc=1` after validation hang; task313 review is now
+    required before lead may release task311 checkpoint-load plus non-AIME
+    canary.
+13. After task313/#376 and task310/#373 merged, lead released only
+    checkpoint-load plus synthetic non-AIME canary/completion-retention for
+    task310 checkpoint
+    `/root/task310_qwen_all_sft_30b_full_training_s1/run_20260603T154206Z/checkpoints/iter_0000035`;
+    benchmark eval, AIME/task243 eval, MMLU-Pro/HMMT/M1 basket eval, export,
+    endpoint, promotion, additional training, task255 reuse, AIME2025 train
+    data, shared deletion, self-merge, and main push remained held.
+14. Task311 canary run `run_20260603T173607Z` used local artifact root
+    `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`
+    and remote artifact root
+    `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T173607Z`.
+15. The no-export/no-endpoint route was
+    `direct_in_process_mcore_static_engine_no_export_no_endpoint_30b_tp4_pp2_ep4_etp1_topk1_greedy`
+    with 8 H200s, TP=4, PP=2, EP=4, ETP=1, source head
+    `d2e275e3ec775cd8f73f7bdeeb0bd7f07b44c372`.
+16. Checkpoint-load proof rank0 for task310 iter 35 passed:
+    `load_megatron_model=PASS`, model `Float16Module`, unwrapped `GPTModel`,
+    dtype `torch.bfloat16`, eval true, hidden size 2048, 48 layers, 32
+    attention heads, sequence length 4096, padded vocab size 151936.
+17. Canary disposition is `PASS_NON_AIME_CANARY_ONLY`: 5 prompts requested,
+    5 completions retained, 5 non-empty responses, 5 exact expected-answer
+    matches, zero empty/mixed-script/degeneration counts, remote rc `0`.
+18. Key canary hashes: summary
+    `5da06d50f23bd581d2de5988f999cc4a2d7bb162f487afef1033c29810ce93b5`,
+    decision
+    `7678a8f8f3445882a1e5ea575169d37aae7f7ad9ead14b4f5d788fa5c5cb3ba5`,
+    full completions
+    `fd86644308d690340545be0fb308912dac87ddd8c3b499e2af4556635c3409f7`,
+    prompt manifest
+    `3838d39a779bd28df90ced9a1f9ba99f61bdb3dd747083450be0334cdf52c0b2`,
+    checksum manifest
+    `cc0f2be1d99e4b1caad4e5eb4e4e7d6f6a3bf99be2d28ff0c9e9b2beb23307d4`.
+19. Benchmark reports remain `HOLD_NOT_RUN` because the authorized task311
+    action stopped after checkpoint-load and non-AIME canary. No corrected Qwen
+    benchmark, AIME/task243 eval, HMMT, MMLU-Pro, or M1 basket row was run.
+20. Lead accepted task311 non-AIME canary at exact #371 head
+    `2ffbe8c4d9f833980d64d756965e909bf3260f20`, then clarified that any
+    benchmark row requiring eval-only export or endpoint must be reported as an
+    eval-only route/blocker before execution.
+21. Established corrected Qwen benchmark routes are endpoint-based for
+    MMLU-Pro/AIME2025/HMMT through task071/task300 evidence. Task310 is a
+    Megatron checkpoint, so that route requires eval-only HF export plus
+    eval-only SGLang endpoint before FT endpoint metrics can be collected.
+22. Accepted task300 AIME base `15/30 = 0.5` can be reused only for an endpoint
+    FT run matching model family, route, evaluator, prompt variant, sampling,
+    parser, normalizer, and all-request denominator. Direct no-export runs
+    cannot claim exact same-harness reuse of that endpoint base.
+23. Direct no-export alternative for AIME/HMMT/MMLU-Pro would need same-route
+    base rerun from task298 imported Megatron checkpoint
+    `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`
+    and FT run from task310 `iter_0000035`, with identical evaluator, prompts,
+    sampling, parser, selected-rank policy, and denominator.
+24. M1 launcher mapping has 14 exact launcher-available rows and 5 exact-missing
+    rows. Missing rows are `multichallenge`, `terminalbench`, `mcp_mark`,
+    `tool_decathlon`, and `swe_bench_verified`; listed candidate tasks are not
+    equivalent substitutes.
+25. Session 10 formal route-gate report is
+    `workspace/tasks/task311_qwen_all_sft_benchmark_eval_s1/all_sft_benchmark_route_gate_report.md`;
+    disposition remains
+    `HOLD_EVAL_ONLY_EXPORT_ENDPOINT_ROUTE_REPORT_BEFORE_RUN`.
+26. Session 11 remote verification before mailbox: #371 remote head
+    `34ffa587b47b43fed103e41bd3f1cb8661b02288` was visible via
+    `git ls-remote` and GitHub reported PR #371 `OPEN`, base `main`,
+    non-draft, `CLEAN`, and `MERGEABLE`.
+27. No benchmark/export/endpoint row may run until lead processes the official
+    route-gate mailbox and explicitly releases the next gate.
+28. Lead processed official mailbox `7f3481c90ee447cc80f3fe3a9516f995` and
+    accepted #371 head `1ce85c6382d0587a35ab02830c0d08b7c874c5b3` for
+    route-gate processing, carrying forward release for eval-only
+    export/endpoint preflight and same-harness benchmark execution.
+29. Session 12 eval-only HF export passed for task310 iter 35:
+    `/root/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/hf_export/task310_iter_0000035_hf`,
+    26 files, 16 safetensor shards, `61084232276` bytes. Export manifest
+    sha256 is
+    `74524dcf284beb655b154e4d043a8742248353ef85cb040f7de1e6ca6660fc42`;
+    HF export checksum manifest sha256 is
+    `45db4797ed0a2c833fc8a2278210431d56a4e332017ada9cbff0ca3cbff798b5`.
+30. Session 12 corrected-Qwen metrics under eval-only SGLang endpoint route:
+    AIME2025 FT `16/30` versus accepted task300 base `15/30`; HMMT FT
+    `11/30` versus same-route base `9/30`; MMLU-Pro FT `6756/12032` versus
+    same-route base `6758/12032`.
+31. Corrected-Qwen disposition is
+    `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; this is eval evidence only
+    and does not authorize promotion.
+32. Session 12 consolidated artifact summary is
+    `/work-agents/intern_nemotron_worker_3/outputs/task311_qwen_all_sft_benchmark_eval_s1/run_20260603T180911Z/manifests/session12_benchmark_summary.json`
+    with sha256
+    `67998f32982ccf15be7d7eeec55827ec1d5edf658a41ba494d6cb7899e6da828`.
+33. Current local and NemTron probes show `nemo-evaluator-launcher`,
+    `nemo-evaluator`, Docker, Slurm, and relevant benchmark modules are absent;
+    remaining M1 launcher rows are blocked as
+    `BLOCK_LAUNCHER_RUNTIME_MISSING_FOR_REMAINING_M1_ROWS`.
+34. All Session 12 eval-only endpoints were stopped after use; final port
+    `13231` was free and GPUs were idle.
+35. Lead gate for task311/#371 at head
+    `2e4482ea75e0b5f0223d70b0e4dfcce9388b2de9` is
+    `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`, recorded in
+    GitHub `issuecomment-4615730412`; no self-merge is allowed under the
+    current boundary, and the branch must wait for coordinator/authorized
+    non-author merge or further instruction.
+36. After task317/#378 independent review, task314/#380 forensics, and
+    task315/#379 runtime audit, lead posted GitHub
+    `issuecomment-4615943944` and marked #371 head
+    `9361e6da3ee6718c9ec5aa7f97b60a75c8e332b6` ready for
+    coordinator/authorized non-author merge as evidence/fail-closeout docs
+    only; no self-merge or downstream promotion/training/eval/export/endpoint
+    action is authorized.
+37. Session 93 refreshed #371 against current `origin/main`
+    `8a757c323b82f4330b765ee89a6d78f421d9d9be` after GitHub reported the PR
+    dirty. Conflict resolution was docs/status-only; task311 evidence and
+    disposition are unchanged.
+38. The M1 unavailable-row blocker portion of task311 is now also covered by
+    merged task325/#387 `BLOCK_RUNTIME_CONFIRMED`, but #371 still carries the
+    corrected-Qwen mixed-performance evidence:
+    `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`.
+39. Do not self-merge #371 until lead gates an exact refreshed CLEAN head; the
+    refresh authorizes no benchmark row execution, model eval, training,
+    export, endpoint, promotion, task255 reuse, AIME2025 train-row use, shared
+    deletion, or direct main push.
