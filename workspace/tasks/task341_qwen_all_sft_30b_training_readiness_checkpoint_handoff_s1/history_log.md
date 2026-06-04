@@ -1,6 +1,6 @@
 # task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 - history
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -45,3 +45,18 @@
 - No optimizer step, training loop, benchmark/AIME eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train rows, shared deletion/mutation, main
   push, merge, or self-merge was performed.
+
+## 2026-06-04T12:34:36Z - Lead-approved merge closeout
+
+- Lead gate accepted PR #404 as `BLOCK_TRAINING_READINESS` blocker closeout
+  evidence only for exact head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`.
+- Immediately before merge, PR #404 was verified as OPEN, non-draft, base
+  `main`, exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`, and
+  CLEAN/MERGEABLE.
+- Self-merged PR #404 at `2026-06-04T12:34:36Z`; merge commit
+  `371aea491776cc258e1cbb59a081d28be0530438`.
+- Merged scope remained blocker evidence only. No task310 launch, optimizer
+  step, training loop, benchmark/AIME eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train rows, shared deletion/mutation, main push, or
+  runtime mutation was performed.

@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/404 |
+| Current Task |  |
+| PR |  |
 | Session | 1 |
-| Last Update | 2026-06-04T12:29:00Z: task341 produced BLOCK_TRAINING_READINESS evidence and opened PR #404: https://github.com/songCNMS/Nemotron/pull/404. Artifact root: /work-agents/intern_nemotron_worker_2/outputs/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1/run_20260604T122328Z. Local task339 checksum/pass markers validate, and candidate checkpoint handoff is task298 iter0 root, but required NemTron SSH/runtime probe returned rc=255 / connect failed, blocking live /root sync, nvidia_resiliency_ext decision, and checkpoint validation. No optimizer step, training loop, eval, export, endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion/mutation, main push, merge, or self-merge. |
+| Last Update | 2026-06-04T12:34:36Z: task341 PR #404 was lead-approved as BLOCK_TRAINING_READINESS blocker evidence only at exact head 8211c1397ef61fd3be6718d4e2bde1ca4c7728ab and merged with commit 371aea491776cc258e1cbb59a081d28be0530438. Branch-only closeout set worker status Idle. No task310 launch, optimizer step, training loop, eval, export, endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion/mutation, main push, or runtime mutation was performed. |

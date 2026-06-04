@@ -1,6 +1,6 @@
 # task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 - Training readiness and checkpoint handoff
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Background
 

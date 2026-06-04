@@ -1,6 +1,6 @@
 # task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 - task knowledge
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 1. #402/task339 merged no-training preflight evidence at
    `2026-06-04T12:07:41Z`, merge commit
@@ -28,3 +28,9 @@
    but task341 could not validate it live because NemTron is unreachable.
 9. `nvidia_resiliency_ext` cannot be waived or remediated in task341 while
    NemTron is unreachable; keep it as an unresolved training-runtime blocker.
+10. PR #404 was lead-approved as blocker evidence only at exact head
+    `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` and merged at
+    `2026-06-04T12:34:36Z` with merge commit
+    `371aea491776cc258e1cbb59a081d28be0530438`. task310 launch/training,
+    eval, export, endpoint, promotion, and AIME2025 train use remain not
+    released.
