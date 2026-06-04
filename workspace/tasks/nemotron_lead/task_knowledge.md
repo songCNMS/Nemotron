@@ -3213,3 +3213,12 @@
    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Lead approved #403 for
    worker_4 self-merge as review evidence only. #402/task339 and task310 remain
    HOLD pending #403 merge and post-#403 #402 recheck.
+800. #403/task340 merged at `2026-06-04T12:02:06Z` via merge commit
+   `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from head
+   `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+801. Post-#403 #402/task339 is exact
+   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, base `main`, and
+   `CLEAN`/`MERGEABLE`; lead approved it for worker_2 self-merge as
+   `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` evidence only. No task310 training/
+   eval/export/endpoint/promotion release is authorized. Next gate is a bounded
+   training-readiness/checkpoint-handoff task after #402 lands.

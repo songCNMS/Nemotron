@@ -152,3 +152,24 @@ for current `origin/main` after #400. Return one of:
 - Gate state: #402/task339 remains HOLD pending task340 independent review.
   task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
   HOLD.
+
+## Lead Gate
+
+- Independent review: task340/#403 merged at `2026-06-04T12:02:06Z` with merge
+  commit `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from reviewed head
+  `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+- Post-#403 recheck: #402 exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Post-#403 diff scope remains worker_2 status plus task339 README/history/
+  task_knowledge/report/helper only; `git diff --check origin/main...origin/pr/402`
+  passed.
+- Decision: `APPROVE_TASK339_NO_TRAINING_PREFLIGHT`.
+- Meaning: accept #402/task339 as no-training 30B launch/config/import/resource
+  preflight evidence only.
+- #402 may self-merge only if exact head `0a064f35` remains `OPEN`/`CLEAN`.
+- Still blocked: task310/all-SFT 30B launch/training/eval/export/endpoint/
+  promotion. Next allowed lead action after #402 lands is a bounded
+  training-readiness/checkpoint-handoff task to resolve or explicitly waive
+  `nvidia_resiliency_ext`, fill lead-approved launch placeholders, and verify
+  imported checkpoint handoff before any optimizer step.

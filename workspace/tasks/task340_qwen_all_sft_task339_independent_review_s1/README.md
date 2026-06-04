@@ -157,3 +157,15 @@ Return one of:
 - #403 may self-merge only if exact head `fd387916` remains `OPEN`/`CLEAN`.
 - #402/task339 and task310 remain HOLD until #403 lands and #402 is rechecked
   at exact head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
+
+## Merge Closeout
+
+- #403 merged at `2026-06-04T12:02:06Z`.
+- Merge commit: `2d59861bdb0a332ea34ed6b82e9e77e4f775c062`.
+- Merged head: `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+- Merge scope from parent `f083c9566a9f0775c27ae49f16b8b898edfc8d11` is
+  worker_4 status plus task340 README/history/task_knowledge/report only;
+  `git diff --check` passed.
+- task340 is complete as independent no-training preflight review evidence
+  only. #402/task339 and task310 remain HOLD pending separate #402 recheck and
+  lead gate.

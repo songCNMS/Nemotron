@@ -49,3 +49,15 @@
 - #402/task339 and task310 remain HOLD until #403 lands and #402 is rechecked
   for a separate no-training preflight evidence decision. No training/eval/
   export/endpoint/promotion/30B launch is authorized.
+
+## 2026-06-04 UTC - Review PR Merged
+
+- Verified #403 merged at `2026-06-04T12:02:06Z` with merge commit
+  `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from exact approved head
+  `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+- Verified merge scope from parent `f083c9566a9f0775c27ae49f16b8b898edfc8d11`
+  is worker_4 status plus task340 README/history/task_knowledge/report only,
+  and `git diff --check` passes.
+- task340 is complete as independent no-training preflight review evidence
+  only. #402/task339 and task310 remain HOLD pending separate #402 recheck and
+  lead gate.

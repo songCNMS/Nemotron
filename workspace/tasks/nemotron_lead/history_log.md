@@ -12798,3 +12798,11 @@
   #402 exact head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Lead approved
   #403 for worker_4 self-merge only if exact/CLEAN. #402/task339 and task310
   remain HOLD until #403 lands and #402 is rechecked.
+- Session 90 task340/#403 merge and #402 gate: verified #403 merged at
+  `2026-06-04T12:02:06Z` with merge commit
+  `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from head
+  `fd38791659910f667c0ff9418f161ddbcf7f46d0`. Post-#403 #402/task339 remains
+  exact `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, base `main`,
+  `CLEAN`/`MERGEABLE`, with docs/report/helper-only scope and clean diff-check.
+  Lead approved #402 as no-training preflight evidence only; task310 remains
+  HOLD pending later training-readiness/checkpoint handoff.

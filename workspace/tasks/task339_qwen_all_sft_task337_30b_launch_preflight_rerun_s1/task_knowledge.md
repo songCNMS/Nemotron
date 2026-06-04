@@ -30,3 +30,13 @@
    remote `TASK339_REMOTE_PREFLIGHT=PASS`, 8 H200 GPUs, train-only view
    84/0/0 shards and 78,168 rows. Residuals remain: `nvidia_resiliency_ext`
    missing and diagnostic `multi_storage_client` name failure.
+10. task340/#403 merged independent review evidence at
+    `2026-06-04T12:02:06Z`, merge commit
+    `2d59861bdb0a332ea34ed6b82e9e77e4f775c062`. Post-#403 #402 is exact
+    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, base `main`,
+    `CLEAN`/`MERGEABLE`; lead approved #402 for worker_2 self-merge as
+    no-training preflight evidence only.
+11. The next allowed step after #402 lands is not training. A bounded
+    training-readiness/checkpoint-handoff task must resolve or explicitly waive
+    `nvidia_resiliency_ext`, fill lead-approved launch placeholders, and verify
+    checkpoint handoff before any optimizer step.

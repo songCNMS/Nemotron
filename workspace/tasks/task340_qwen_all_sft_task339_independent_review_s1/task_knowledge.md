@@ -23,3 +23,7 @@
    `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` for #402 exact head
    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`; lead approved #403 for
    worker_4 self-merge if exact/CLEAN. This is review evidence only.
+8. #403 merged at `2026-06-04T12:02:06Z` via merge commit
+   `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from head
+   `fd38791659910f667c0ff9418f161ddbcf7f46d0`. task340 is complete as review
+   evidence only.

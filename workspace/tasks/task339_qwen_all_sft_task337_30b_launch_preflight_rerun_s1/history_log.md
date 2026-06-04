@@ -51,3 +51,20 @@
   checks pass; no training/eval/export/endpoint/promotion occurred.
 - Created task340 for independent read-only review. #402/task339 and task310
   remain HOLD pending review.
+
+## 2026-06-04 UTC - Lead Gate Approved Preflight Evidence
+
+- task340/#403 independent review merged at `2026-06-04T12:02:06Z` with merge
+  commit `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` from exact approved head
+  `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+- Rechecked #402 after #403 landed: #402 is `OPEN`, non-draft, base `main`,
+  `CLEAN`/`MERGEABLE`, exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
+- Verified post-#403 #402 diff scope is worker_2 status plus task339 README/
+  history/task_knowledge/report/helper only, and `git diff --check` passes.
+- Lead decision: `APPROVE_TASK339_NO_TRAINING_PREFLIGHT`; worker_2 may
+  self-merge #402 only if exact/CLEAN and with no further pre-merge changes.
+- This accepts no-training launch/config/import/resource preflight evidence
+  only. task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD pending a later training-readiness/checkpoint-handoff task and separate
+  lead gate.
