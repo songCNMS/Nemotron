@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #391 task328 docs/status closeout gate-comment refreshed at 7181289; #390 non-author merge pending; all-SFT train/eval HOLD |
+| PR | task329 assigned to worker_2 for no-training raw-pass split/pack proof; #390/#391 open clean; all-SFT train/eval HOLD |
 | Session | 80 |

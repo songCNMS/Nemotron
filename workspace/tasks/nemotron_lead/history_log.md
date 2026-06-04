@@ -12390,3 +12390,11 @@
   refreshed gate comment `issuecomment-4619254901` for exact head `7181289`.
   Gate remains `APPROVE_DOCS_STATUS_CLOSEOUT` only; expanded all-SFT
   packing/training/eval/export/endpoint/promotion stay HOLD.
+- Created successor task329
+  `task329_qwen_all_sft_raw_pass_split_pack_proof_s1` and assigned it to
+  worker_2. Scope is no-training proof only: produce deterministic split
+  exposure/parity, heldout/decontam exclusion, and Qwen3-30B supervised-token
+  packing proof for the three raw pass sources
+  `instruction-following-structured`, `agentic-interactive`, and `swe`, or fail
+  closed with exact blockers. The nine task327 decontam-hit sources remain
+  excluded. No task310 training/eval/export/endpoint/promotion release.

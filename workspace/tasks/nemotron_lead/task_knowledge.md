@@ -2948,3 +2948,10 @@
    disposition. Refreshed gate comment `issuecomment-4619254901` preserves
    `APPROVE_DOCS_STATUS_CLOSEOUT` only; no new packed root, training, eval,
    export, endpoint, promotion, or expanded all-SFT release is authorized.
+757. Session 81 successor task329: worker_2 owns no-training split/pack proof
+   for the three raw pass sources blocked by task328. Required proof is source
+   provenance, deterministic train/valid/test split exposure/parity,
+   heldout/decontam exclusion with no AIME2025 train rows, Qwen3-30B
+   tokenizer/chat-template packing, supervised-token counts, shard checksums,
+   and exact pass/block disposition. task329 cannot use the nine task327
+   decontam-hit sources and cannot release training or benchmark eval.
