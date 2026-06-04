@@ -117,3 +117,16 @@ for current `origin/main` after #400. Return one of:
   `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
 - Gate state: task310/all-SFT 30B launch/training/eval/export/endpoint/
   promotion remain HOLD pending this no-training preflight and later lead gate.
+
+## Acceptance
+
+- Worker branch:
+  `origin/intern_nemotron_worker_2/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1`.
+- Acceptance head observed:
+  `d07f348eb2efef359e3aaf9fa0c2f725b57bac00`.
+- Base: `origin/main`
+  `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
+- No PR visible yet.
+- Formal mailbox acceptance is still pending; worker_2 pane indicates acceptance
+  commit only updates task339 docs/status and no product code or shared
+  artifacts were touched.

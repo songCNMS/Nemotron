@@ -18,3 +18,6 @@
    from task337, `nvidia-resiliency-ext` missing, and diagnostic
    `multi_storage_client` import name failure while `multi-storage-client`
    provides package path `multistorageclient`.
+7. Worker_2 acceptance branch is visible at
+   `d07f348eb2efef359e3aaf9fa0c2f725b57bac00`; no PR or formal mailbox
+   acceptance yet.
