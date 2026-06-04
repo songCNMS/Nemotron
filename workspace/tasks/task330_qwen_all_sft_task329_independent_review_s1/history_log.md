@@ -55,6 +55,7 @@
   included sources have zero carried decontam hits.
 - Added `task329_independent_review_report.md` with disposition
   `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`; task310 remains HOLD.
+- Opened worker PR #393 for task330 review docs/status only.
 - Did not edit product code, modify worker_2 branch/artifacts, train, eval,
   export, launch endpoint, promote, reuse task255, use AIME2025 train rows,
   delete shared files, merge, self-merge, or push main.

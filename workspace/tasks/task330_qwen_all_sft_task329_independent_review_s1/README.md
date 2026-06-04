@@ -73,6 +73,7 @@ all-SFT training contract can be considered.
   `workspace/tasks/task330_qwen_all_sft_task329_independent_review_s1/task329_independent_review_report.md`
 - Worker branch:
   `intern_nemotron_worker_4/task330_qwen_all_sft_task329_independent_review_s1`
+- Worker PR: #393
 - PR to `main` for review docs/status only, or branch-only report if lead
   explicitly accepts branch-only review.
 - Mailbox closeout with:
@@ -86,6 +87,7 @@ all-SFT training contract can be considered.
 
 - Report:
   `workspace/tasks/task330_qwen_all_sft_task329_independent_review_s1/task329_independent_review_report.md`.
+- Worker PR: #393.
 - Disposition: `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`.
 - #392 exact head reviewed:
   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`.

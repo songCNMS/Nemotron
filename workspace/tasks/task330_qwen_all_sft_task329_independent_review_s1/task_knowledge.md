@@ -28,3 +28,4 @@
 10. Exact blockers remain: SWE 0 supervised tokens, 6 structured
     validation-filtered rows, sparse valid/test exposure, and deferred
     combination with task299 seed.
+11. Worker PR for task330 review docs/status is #393.
