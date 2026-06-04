@@ -3321,3 +3321,8 @@
    `4622457488`, carrying forward prior gate comments `4616544268` and
    `4616643065`. This is Route A train-only validation-skip preflight
    documentation only; it does not authorize training/eval or task310 release.
+822. #385/task323 merged at `2026-06-04T13:13:07Z` with merge commit
+   `8a757c323b82f4330b765ee89a6d78f421d9d9be` from exact head
+   `de480248b1ad7abe16a620729e62fa397443228d`. This closes Route A preflight
+   docs only; task310 remains HOLD pending restored runtime route and later
+   training-readiness/eval handoff.

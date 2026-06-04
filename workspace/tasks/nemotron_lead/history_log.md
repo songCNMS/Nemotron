@@ -12975,3 +12975,11 @@
   #385 only if exact head remains `CLEAN`. This does not authorize optimizer/
   training/eval/export/endpoint/promotion/final packing/product-code edit/
   task255/AIME2025 train data/shared deletion/main push or task310 release.
+- Session 92 task323/#385 merge closeout: verified #385 merged at
+  `2026-06-04T13:13:07Z` with merge commit
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be` from exact head
+  `de480248b1ad7abe16a620729e62fa397443228d`; `origin/main` now includes
+  task323 Route A validation-skip preflight documentation. Accepted disposition
+  remains `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`; same-harness eval
+  handoff, restored runtime route, and later task341-equivalent handoff remain
+  required before task310 launch/training/eval.
