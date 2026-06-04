@@ -3070,3 +3070,9 @@
    old row-manifest hashes absent, and `074500Z` values present. task334/#397
    must now refresh the independent review for exact head `9a9471e3`; old #397
    request-changes report applies only to `8546ae8d`.
+774. Session 86 #396 latest head is
+   `6261daaa37172caa11929b0b88f685b63f987221`. Drift from `9a9471e3` is
+   metadata-only: worker_1 status plus task333 history/task_knowledge. The
+   task333 report is unchanged from the hash fix and remains aligned with
+   `run_20260604T074500Z`. task334/#397 refresh target is now exact head
+   `6261daaa`, not `9a9471e3`.

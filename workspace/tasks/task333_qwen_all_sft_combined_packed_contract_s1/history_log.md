@@ -37,3 +37,9 @@
 - The report now uses the assigned `run_20260604T074500Z` task299 seed
   row-manifest SHA256 values. #396 is still HOLD pending refreshed task334
   independent review for the new exact head.
+- Worker_1 subsequently pushed metadata-only head
+  `6261daaa37172caa11929b0b88f685b63f987221`. Lead verified
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66..6261daaa37172caa11929b0b88f685b63f987221`
+  changes only worker_1 status plus task333 history/task_knowledge; the report
+  remains unchanged from the hash fix. Refreshed task334 review must target
+  exact head `6261daaa`.

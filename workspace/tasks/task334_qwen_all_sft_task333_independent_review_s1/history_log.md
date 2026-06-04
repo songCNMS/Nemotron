@@ -31,3 +31,7 @@
   the row-manifest hash mismatch.
 - task334 is retargeted to refresh the independent review for exact #396 head
   `9a9471e3` and update #397/report with approve/request-changes/block.
+- During refresh, #396 advanced again to
+  `6261daaa37172caa11929b0b88f685b63f987221`. Lead verified drift from
+  `9a9471e3` is metadata-only and interrupted the stale `9a9471e3` review.
+  task334 current target is exact #396 head `6261daaa`.

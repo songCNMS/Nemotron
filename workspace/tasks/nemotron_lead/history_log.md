@@ -12574,3 +12574,15 @@
   for the old #396 head. Retargeted task334 to refresh its independent review
   against #396 head `9a9471e3`; #396/#397 and task310 remain HOLD pending that
   refreshed exact-head report.
+- Session 86 task333/#396 second refreshed-head drift: while worker_4 was
+  refreshing task334 for `9a9471e3`, worker_1 pushed metadata head
+  `6261daaa37172caa11929b0b88f685b63f987221`. Processed worker_1 mailboxes
+  `f20042f6517846a9a7fc7ced3703c25f` and
+  `4306d81968f8467c8b2e8764949d9cd4`; verified #396 is `OPEN`, base `main`,
+  non-draft, `CLEAN`/`MERGEABLE`, and no reviewDecision at `6261daaa`. Drift
+  from `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66` is worker_1 status plus
+  task333 history/task_knowledge metadata only; `combined_packed_contract_report.md`
+  is unchanged and still carries the corrected `7562c864`/`e466ee7`/`89ab29`
+  hashes. Sent urgent head-drift correction to worker_4 and retargeted task334
+  to exact #396 head `6261daaa`. #396/#397 and task310 remain HOLD pending the
+  refreshed exact-head report.

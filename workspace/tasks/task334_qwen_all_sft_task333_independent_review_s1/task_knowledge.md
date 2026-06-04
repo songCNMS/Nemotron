@@ -23,3 +23,7 @@
    a refreshed task334 review. The expected delta is worker_1 status plus
    task333 report hash correction only; the artifact root remains
    `run_20260604T074500Z`.
+7. #396 advanced again to `6261daaa37172caa11929b0b88f685b63f987221`.
+   Lead verified `9a9471e3..6261daaa` is worker_1 status plus task333
+   history/task_knowledge metadata only. Current task334 target is exact head
+   `6261daaa`.

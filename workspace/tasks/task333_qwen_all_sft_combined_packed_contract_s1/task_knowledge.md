@@ -40,3 +40,6 @@
    are absent and the three `run_20260604T074500Z` values are present. Approval
    still requires refreshed independent review because #396 head changed after
    task334's original `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH` report.
+9. Worker_1 later pushed metadata-only head
+   `6261daaa37172caa11929b0b88f685b63f987221`; the task333 report is unchanged
+   from head `9a9471e3`. Current exact-head review target is `6261daaa`.
