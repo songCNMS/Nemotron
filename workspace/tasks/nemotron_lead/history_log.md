@@ -12719,3 +12719,8 @@
   classification scope and confirmed no runtime mutation in the acceptance step.
   task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
   HOLD.
+- Session 88 task337 acceptance head correction: processed worker_2 correction
+  mailbox `task337-acceptance-head-correction-4db10e07-20260604T1002Z`. It
+  confirms exact pushed branch head
+  `4db10e0783823c8f6087748718d40e729879554d`, matching lead `ls-remote`
+  verification. Scope and boundaries are unchanged.

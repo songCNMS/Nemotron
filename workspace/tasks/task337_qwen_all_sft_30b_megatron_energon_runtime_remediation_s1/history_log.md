@@ -23,3 +23,12 @@
   `4fc5e1d3`.
 - Worker_2 accepted the no-training runtime remediation/classification scope
   and boundaries. No PR or runtime evidence yet.
+
+## 2026-06-04 UTC - Acceptance Head Correction
+
+- Processed worker_2 correction mailbox
+  `task337-acceptance-head-correction-4db10e07-20260604T1002Z`.
+- Correction confirms the exact pushed branch head is
+  `4db10e0783823c8f6087748718d40e729879554d`, matching the lead `ls-remote`
+  verification already recorded.
+- Scope, base, lead docs source, and boundaries are unchanged.

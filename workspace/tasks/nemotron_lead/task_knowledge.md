@@ -3152,3 +3152,6 @@
    at `4db10e0783823c8f6087748718d40e729879554d`. This is ownership evidence
    only; wait for worker_2 runtime remediation report/PR or exact blocker before
    assigning rerun preflight or training.
+788. task337 acceptance correction mailbox confirms the exact head in entry 787;
+   the longer SHA in the first mailbox content was inconsistent, but lead
+   already used the correct `ls-remote` head.

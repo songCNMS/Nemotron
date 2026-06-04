@@ -14,3 +14,6 @@
    `4db10e0783823c8f6087748718d40e729879554d` from `origin/main`
    `373d162d63a66f2dac6b94c43917be9c249cd83f`. Acceptance is ownership
    evidence only; no runtime remediation evidence exists yet.
+6. Worker_2 correction mailbox
+   `task337-acceptance-head-correction-4db10e07-20260604T1002Z` confirms the
+   exact acceptance head above; no scope or boundary changes.
