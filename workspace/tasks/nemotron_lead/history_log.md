@@ -12040,3 +12040,10 @@
   source-level disposition for python01, no official worker_2 report, and no
   task327 PR. This is in-progress evidence only and does not release all-SFT
   packing/training/eval/export/endpoint/promotion.
+- Bounded read-only poll caught the next stable `competitive-python-01`
+  checkpoint: `2026-06-04T01:22:58Z PROGRESS competitive-python-01 rows=800000
+  mib=37225.6 rate_mib_s=9.25`. The row manifest was still being written and
+  the source process remained active. There was still no final rc, no
+  source-level disposition for python01, no official worker_2 report, and no
+  task327 PR. This is in-progress evidence only and does not release all-SFT
+  packing/training/eval/export/endpoint/promotion.

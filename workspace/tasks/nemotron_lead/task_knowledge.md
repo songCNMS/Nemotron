@@ -2737,3 +2737,7 @@
    32,624.2 MiB at `2026-06-04T01:14:41Z`; the source process remains active
    with no final rc, source-level disposition, worker_2 report, or task327 PR.
    all-SFT pack/train/eval/export/endpoint/promotion remains HOLD.
+719. Session 79: task327 `competitive-python-01` reached 800,000 rows /
+   37,225.6 MiB at `2026-06-04T01:22:58Z`; the source process remains active
+   with no final rc, source-level disposition, worker_2 report, or task327 PR.
+   all-SFT pack/train/eval/export/endpoint/promotion remains HOLD.
