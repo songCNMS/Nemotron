@@ -2715,3 +2715,9 @@
 713. Session 79: task327 `competitive-python-01` reached 200,000 rows /
    9,125.1 MiB at `2026-06-04T00:32:24Z`; source remains in progress with no
    final rc, worker report, task327 PR, or all-SFT pack/train/eval release.
+714. Session 79: task327 `competitive-python-01` reached 300,000 rows /
+   13,763.3 MiB at `2026-06-04T00:40:44Z`; row manifest was still actively
+   being written and read-only gzip tail reached complete row 316,372 before
+   the expected incomplete-gzip boundary. There is still no source-level
+   disposition/final rc/worker report/task327 PR, so all-SFT pack/train/eval
+   remains HOLD.
