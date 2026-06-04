@@ -1,6 +1,6 @@
 # task334_qwen_all_sft_task333_independent_review_s1 - history
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=2 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -43,3 +43,33 @@
   `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`.
 - Opened worker_4 review PR #397:
   `https://github.com/songCNMS/Nemotron/pull/397`.
+
+## Session 2 - 2026-06-04 UTC - Refresh review after #396 fix and head drift
+
+- Fetched lead docs commit
+  `2c468fee49e69808eacead2fc42f9d92043cce09` and refreshed #396 first to exact
+  head `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`.
+- Received urgent correction before pushing: stop stale `9a9471e3` approval and
+  review exact current #396 head
+  `6261daaa37172caa11929b0b88f685b63f987221`.
+- Verified #396 PR metadata: `OPEN`, non-draft, base `main`,
+  `CLEAN`/`MERGEABLE`.
+- Verified drift
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e..9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`
+  is only worker_1 status plus the task333 report hash correction; drift
+  `git diff --check` is clean.
+- Verified drift
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66..6261daaa37172caa11929b0b88f685b63f987221`
+  is non-material worker_1 status/history/task_knowledge bookkeeping only;
+  drift `git diff --check` is clean.
+- Verified refreshed report values match assigned `run_20260604T074500Z`
+  `manifests/source_provenance.json` and direct row-manifest `sha256sum`; old
+  `5894818a`/`ca07a194`/`f1373026` values are absent and
+  `7562c864`/`e466ee7`/`89ab29` values are present.
+- Rechecked helper compile, `origin/main...origin/pr/396` diff-check, artifact
+  checksum manifest, packed shard checksum manifest, Qwen30B contract rc/log,
+  split symlink integrity, and intended-vs-exposed parity.
+- Updated disposition in `task333_independent_review_report.md` to
+  `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT` for #396 exact head
+  `6261daaa37172caa11929b0b88f685b63f987221`; task310/training/eval/export/
+  endpoint/promotion/30B remain unreleased.

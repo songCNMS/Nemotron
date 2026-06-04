@@ -1,6 +1,6 @@
 # task334_qwen_all_sft_task333_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=2 -->
 
 1. #396/task333 head `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is the only
    review target. If the PR head changes, stop and report head drift.
@@ -25,3 +25,12 @@
    pass checksum/contract/split/decontam checks, but the committed #396 report
    contains three task299 row-manifest SHA256 values from a different local
    `083000Z` root while naming `074500Z`.
+7. Refresh review result for #396 head
+   `6261daaa37172caa11929b0b88f685b63f987221` is
+   `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT`: drift from old
+   `8546ae8d` through `9a9471e3` is worker_1 status plus task333 report hash
+   correction; drift `9a9471e3..6261daaa` is non-material worker_1
+   status/history/task_knowledge bookkeeping only. The refreshed report matches
+   assigned `074500Z` source provenance/direct row-manifest hashes. Approval is
+   docs/evidence closeout only and does not release task310, training, eval,
+   export, endpoint, promotion, or 30B.

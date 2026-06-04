@@ -1,6 +1,6 @@
 # task334_qwen_all_sft_task333_independent_review_s1 - Review task333 combined packed contract
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=2 -->
 
 ## Background
 
@@ -12,7 +12,7 @@ release can be considered.
 Review target:
 
 - PR: #396 `https://github.com/songCNMS/Nemotron/pull/396`
-- Exact head: `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`
+- Exact head: `6261daaa37172caa11929b0b88f685b63f987221`
 - Base: `main`
 - Current observed PR state: `OPEN`, non-draft, `CLEAN`/`MERGEABLE`
 - Artifact root:
@@ -39,7 +39,7 @@ close #396 and decide the next gate.
 
 ## Required Review Checks
 
-Review exact PR head `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`.
+Review exact PR head `6261daaa37172caa11929b0b88f685b63f987221`.
 
 Check all of the following:
 
@@ -87,6 +87,37 @@ Check all of the following:
 - Mailbox closeout with branch/head/PR, commands run, artifact paths,
   pass/fail findings, residuals, and exact decision for #396.
 
+## Refresh Assignment - 2026-06-04 UTC
+
+After the initial request-changes report, worker_1 pushed #396 refreshed head
+`9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`, then advanced to exact current
+head `6261daaa37172caa11929b0b88f685b63f987221`.
+
+Refresh task334 for this new exact head and update #397/report with one of:
+
+- `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT`
+- `REQUEST_CHANGES`
+- `BLOCK_COMBINED_PACKED_CONTRACT`
+
+Minimum refreshed checks:
+
+- #396 PR metadata: exact head `6261daaa37172caa11929b0b88f685b63f987221`,
+  base `main`, non-draft, clean/mergeable.
+- Drift from old reviewed head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is only worker_1 status plus the
+  task333 report hash correction.
+- Drift from intermediate corrected head
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66` to current head
+  `6261daaa37172caa11929b0b88f685b63f987221` is non-material bookkeeping only.
+- `git diff --check origin/main...origin/intern_nemotron_worker_1/task333_qwen_all_sft_combined_packed_contract_s1`.
+- The report's task299 seed row-manifest SHA256 values match the assigned
+  `run_20260604T074500Z` row manifest files and
+  `manifests/source_provenance.json`.
+- The old `5894818a`/`ca07a194`/`f1373026` values are absent from the report and
+  the `7562c864`/`e466ee7`/`89ab29` values are present.
+- Preserve or explicitly update all earlier passing artifact checks and
+  residuals. Do not release task310/training/eval/export/endpoint/promotion/30B.
+
 ## Boundaries
 
 - Read-only review of #396 and task333 artifacts.
@@ -112,10 +143,14 @@ Check all of the following:
 - Report:
   `workspace/tasks/task334_qwen_all_sft_task333_independent_review_s1/task333_independent_review_report.md`
 - Reviewed #396 exact head:
-  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`
-- Disposition: `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`
-- Summary: assigned `run_20260604T074500Z` artifacts passed checksum,
-  Qwen30B contract, split parity, symlink, decontam/no-task255, and boundary
-  checks, but the committed #396 report's Source Provenance table contains
-  three task299 row-manifest SHA256 values from a different local
-  `run_20260604T083000Z` root while naming the assigned `074500Z` root.
+  `6261daaa37172caa11929b0b88f685b63f987221`
+- Disposition: `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT`
+- Summary: refreshed #396 drift from
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is worker_1 status plus task333
+  report hash correction only, and `9a9471e3..6261daaa` is non-material
+  worker_1 status/history/task_knowledge bookkeeping only. The corrected report
+  values match the assigned `run_20260604T074500Z` `source_provenance.json` and
+  direct row-manifest `sha256sum`; old `5894818a`/`ca07a194`/`f1373026` values
+  are absent and `7562c864`/`e466ee7`/`89ab29` values are present. This is
+  docs/evidence closeout only and does not release task310/training/eval/
+  export/endpoint/promotion/30B.
