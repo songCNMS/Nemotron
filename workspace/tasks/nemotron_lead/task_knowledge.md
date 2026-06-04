@@ -3019,3 +3019,9 @@
    fail-closed exclusion of six structured rows and deterministic per-source
    valid/test split policy. Residual blocker remains task331 SWE nonzero
    supervised-token proof; task310 and combined contract remain HOLD.
+767. Session 83 task332/#394 merge closeout: #394 merged at
+   `2026-06-04T07:03:52Z` via merge commit
+   `86eea012e7dd9d382a02f786826fa71dcc4521e5` from approved head
+   `58907ec58e842692693b1d5570cb6d96f649ee33`. Worker_4 mailbox
+   `intern_nemotron_worker_4-task332-pr394-merged-closeout-20260604T0704Z`
+   was processed/read. Remaining gate blocker is task331 SWE remediation.

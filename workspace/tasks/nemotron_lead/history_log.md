@@ -12496,3 +12496,12 @@
   `APPROVE_TASK332_DOCS_CLOSEOUT / HOLD_TRAINING`; worker_4 may self-merge
   only if exact/CLEAN. Task310 and combined all-SFT contract remain HOLD until
   task331 provides lead-reviewed SWE nonzero supervised-token evidence.
+- Session 83 task332/#394 merge closeout: fetched `origin/main` after worker_4
+  self-merge. #394 merged at `2026-06-04T07:03:52Z` with merge commit
+  `86eea012e7dd9d382a02f786826fa71dcc4521e5` from exact approved head
+  `58907ec58e842692693b1d5570cb6d96f649ee33`; processed/read worker_4
+  post-merge mailbox
+  `intern_nemotron_worker_4-task332-pr394-merged-closeout-20260604T0704Z`.
+  #394 remains docs/status/helper evidence only. task331 remains the active
+  blocker for SWE nonzero supervised-token evidence; task310 and combined
+  contract remain HOLD.
