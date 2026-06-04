@@ -2895,3 +2895,16 @@
    checkpoint at `2026-06-04T04:35:34Z` (`rows=500000`, `mib=20098.9`,
    `rate_mib_s=7.66`). Source remains active and not yet in the source summary;
    no final rc, worker_2 report, task327 PR, or all-SFT pack/train/eval release.
+751. Session 79 final read-only artifact evidence: task327 completed with rc
+   `2` and disposition `PARTIAL_PASS_WITH_EXACT_BLOCKERS` at
+   `2026-06-04T04:43:12Z`: 10/10 sources processed, 1 included pass (`swe`),
+   9 `BLOCKED_DECONTAM_HIT`. Artifact root is
+   `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`,
+   size `236G`; summary sha
+   `61f81d6c7dda8b1ee8a28c517d7a7783de9e2d3efc5829bee10501d282b42e14`,
+   matrix sha `3f98295c0a71bfc437c985722d1620653f57607db399f3bd84b755779c9418aa`.
+   `infinibyte-01` final row count is `587347`, parse errors `0`, file sha
+   `0124e374453dce8fa7a6e7ecd75356160f2bde525ba97b246d2b39e8479c4ef3`,
+   row-manifest sha `898ff4ab35d5711305463eb8a17e1b571b79ea1aba8e7636ba0ec05642218520`,
+   decontam hits `0/0/164`. No worker_2 official report/PR/mailbox yet; all-SFT
+   pack/train/eval remains HOLD.

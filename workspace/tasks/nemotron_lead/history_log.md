@@ -12313,3 +12313,20 @@
   remains active and is not yet in the source summary. The task327 process
   still has no final rc, worker_2 report, or task327 PR; downstream all-SFT
   packing/training/eval/export/endpoint/promotion stay HOLD.
+- Read-only final artifact poll found task327 completed at `2026-06-04T04:43:12Z`
+  with rc `2` and final disposition `PARTIAL_PASS_WITH_EXACT_BLOCKERS`:
+  `source_count=10`, `included_pass_count=1`, `blocked_count=9`. The only
+  `INCLUDED_PASS` large source is `swe` (`51029` rows, `0` parse errors,
+  `0/0/0` decontam hits). The other 9 sources are `BLOCKED_DECONTAM_HIT`,
+  including `infinibyte-01` with `587347` rows, `0` parse errors, file sha
+  `0124e374453dce8fa7a6e7ecd75356160f2bde525ba97b246d2b39e8479c4ef3`,
+  row-manifest sha
+  `898ff4ab35d5711305463eb8a17e1b571b79ea1aba8e7636ba0ec05642218520`,
+  and decontam hits `0/0/164`. Artifact root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`;
+  output size `236G`; summary sha
+  `61f81d6c7dda8b1ee8a28c517d7a7783de9e2d3efc5829bee10501d282b42e14`;
+  matrix sha `3f98295c0a71bfc437c985722d1620653f57607db399f3bd84b755779c9418aa`.
+  worker_2 branch/status still had no official report/PR/mailbox closeout, so
+  this is lead read-only artifact evidence pending worker_2 official report.
+  Downstream all-SFT packing/training/eval/export/endpoint/promotion stay HOLD.
