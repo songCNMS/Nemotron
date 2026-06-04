@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=101 -->
+<!-- METADATA:SESSION=102 -->
 
 ## Knowledge Entries
 
@@ -54,3 +54,8 @@
     `2026-06-04T08:37:16Z`. Approval remains `HOLD_TRAINING`, with no
     training, eval, export, endpoint, promotion, 30B/task310 release, task255
     reuse, or AIME2025 train rows authorized.
+18. Session 102 refresh rebased open all-SFT docs PRs #380, #381, and #386
+    onto `origin/main` `8a757c32`. Conflicts were limited to worker status;
+    diff-check passed and each PR diff remains task-local docs/report plus
+    worker status only. Dispositions remain evidence-only with no self-merge
+    or release authorization.

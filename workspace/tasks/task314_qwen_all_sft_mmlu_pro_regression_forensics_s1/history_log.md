@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=101 -->
+<!-- METADATA:SESSION=102 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -182,5 +182,23 @@
   `6261daaa37172caa11929b0b88f685b63f987221`.
 - Sent official mailbox closeout to `intern_nemotron_lead`.
 - No training, eval, export, endpoint, promotion, 30B/task310 release,
+  task255 reuse, AIME2025 train rows, shared deletion, main push, or release
+  action was performed.
+
+## Session 102 - 2026-06-04 UTC - All-SFT open PR refresh
+
+- Received lead refresh request for dirty open all-SFT PRs #380/task314,
+  #381/task320, and #386/task324 against `origin/main`
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
+- Rebases completed for all three PR branches. Each conflict was limited to
+  `workspace/interns/intern_nemotron_worker_1/status.md`, resolved toward the
+  corresponding PR branch status because the reports remain open evidence PRs.
+- Verified `git diff --check` passed on all three worktrees and each
+  `origin/main...HEAD` diff is limited to worker status plus that task's
+  workspace docs/report files.
+- Dispositions remain unchanged: task314 `APPROVE_FORENSICS_DOCS /
+  NO_ACTION_RELEASE`, task320 `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE`, and
+  task324 `APPROVE_BLEND_DESIGN` evidence only. No self-merge is authorized.
+- No product-code changes, training, eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train rows, shared deletion, main push, or release
   action was performed.
