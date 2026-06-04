@@ -2846,3 +2846,8 @@
    / 4,020.4 MiB at `2026-06-04T03:08:29Z`; source remains active with no final
    rc, source-level disposition, worker_2 report, task327 PR, or all-SFT
    pack/train/eval release.
+741. Session 79 goal-continuation: task327 `infinibyte-00` is active and
+   reached the stable 200k log checkpoint at `2026-06-04T03:17:14Z`
+   (`rows=200000`, `mib=8027.2`, `rate_mib_s=7.65`), while the row manifest
+   continued updating under the active process. No final rc, source-level
+   disposition, worker_2 report, task327 PR, or all-SFT pack/train/eval release.

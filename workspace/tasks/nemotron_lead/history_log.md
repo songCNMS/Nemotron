@@ -12253,3 +12253,10 @@
   rate_mib_s=7.67`. The task327 process remained active with no final rc,
   worker_2 report, or task327 PR; this is in-progress evidence only and
   downstream all-SFT packing/training/eval/export/endpoint/promotion stay HOLD.
+- Goal-continuation read-only poll found `infinibyte-00` still active with a
+  new stable checkpoint at `2026-06-04T03:17:14Z PROGRESS infinibyte-00
+  rows=200000 mib=8027.2 rate_mib_s=7.65`; the row manifest was still being
+  written by the active process. The task327 process remained active with no
+  final rc, worker_2 report, or task327 PR; this is in-progress evidence only
+  and downstream all-SFT packing/training/eval/export/endpoint/promotion stay
+  HOLD.
