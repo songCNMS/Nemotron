@@ -2921,3 +2921,9 @@
    refreshed `APPROVE_DOCS_STATUS_CLOSEOUT` as `issuecomment-4619092178`.
    Non-author/authorized merge remains pending; all-SFT pack/train/eval stays
    HOLD.
+754. Session 80 assignment: task328
+   `task328_qwen_all_sft_post_task327_packed_contract_s1` assigned to worker_2
+   as successor to merged task309/#372 blocker. It may produce a Qwen3-30B
+   packed-data contract or exact blocker from accepted post-task327 evidence,
+   but must exclude all nine task327 `BLOCKED_DECONTAM_HIT` sources and still
+   authorizes no training/eval/export/endpoint/promotion.

@@ -12350,3 +12350,14 @@
   refreshed gate comment `issuecomment-4619092178` with
   `APPROVE_DOCS_STATUS_CLOSEOUT` for current head; no merge by lead and no
   downstream all-SFT packing/training/eval release.
+- Processed worker_2 mailbox reports for task327/#390: official closeout at
+  `28d0b13abb91fe1fc0a3586097d6c94a98c69d9e` and amendment at current head
+  `49c5d748c8c9ecc95d21c69a1bd16af0118cba3d`; marked both mailbox messages
+  read. Confirmed task308/#374 and task309/#372 are already merged, with task309
+  merged as a blocker. Created successor task328
+  `task328_qwen_all_sft_post_task327_packed_contract_s1`, assigned to
+  worker_2, to produce a post-task327 all-eligible-SFT packed contract or exact
+  fail-closed blocker. task328 must exclude the nine task327
+  `BLOCKED_DECONTAM_HIT` sources and does not authorize training, eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
+  merge, or main push.
