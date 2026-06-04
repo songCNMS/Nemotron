@@ -67,3 +67,13 @@
 - Formal GitHub approval failed because GitHub treats this account as the PR
   author; lead posted gate comment `4622159239` with the same exact-head/CLEAN
   self-merge condition.
+
+## 2026-06-04 UTC - PR merged
+
+- Verified #404 merged at `2026-06-04T12:34:36Z` with merge commit
+  `371aea491776cc258e1cbb59a081d28be0530438` from exact head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`.
+- `origin/main` now includes task341 blocker closeout evidence. This is not a
+  training-readiness pass; the next required action is restoring NemTron SSH/
+  runtime access and rerunning task341 or an equivalent no-training handoff
+  probe.

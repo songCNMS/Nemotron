@@ -34,3 +34,7 @@
 8. Lead gate was posted as PR comment `4622159239` because GitHub rejected
    formal same-author approval. Worker_2 may self-merge #404 only if exact head
    `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` remains `CLEAN`.
+9. #404 merged at `2026-06-04T12:34:36Z` with merge commit
+   `371aea491776cc258e1cbb59a081d28be0530438` from exact head
+   `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`. The merged task341 disposition
+   remains `BLOCK_TRAINING_READINESS`; it does not authorize 30B training.

@@ -12857,3 +12857,10 @@
   remains exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` and `CLEAN`;
   otherwise worker_2 must refresh/report before merge. The authorization remains
   blocker closeout only and does not release task310 training/eval.
+- Session 91 #404 merge closeout: verified #404 merged at
+  `2026-06-04T12:34:36Z` with merge commit
+  `371aea491776cc258e1cbb59a081d28be0530438` from exact head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`; `origin/main` now includes
+  task341 blocker evidence. Global all-SFT Qwen pipeline remains blocked/HOLD
+  at NemTron SSH/runtime access; no 30B training/eval/export/endpoint/promotion
+  is authorized.

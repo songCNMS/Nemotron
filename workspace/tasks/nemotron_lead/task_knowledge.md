@@ -3257,3 +3257,8 @@
    may self-merge only if exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`
    remains `CLEAN`; this is a blocker-doc closeout merge condition, not
    training/eval authorization.
+809. #404/task341 merged at `2026-06-04T12:34:36Z` with merge commit
+   `371aea491776cc258e1cbb59a081d28be0530438` from exact head
+   `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`. The merged evidence proves a
+   blocker, not readiness: NemTron SSH/runtime access must be restored and the
+   no-training checkpoint handoff rerun before any task310 30B training launch.
