@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; math-proofs-lean reached 900k rows; all-SFT pack/train HOLD |
+| PR | task327 active; math-proofs-lean reached 1M rows; all-SFT pack/train HOLD |
 | Session | 79 |
