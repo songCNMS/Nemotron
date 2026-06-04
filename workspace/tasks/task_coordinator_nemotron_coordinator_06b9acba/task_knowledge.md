@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Knowledge Entries
 
@@ -160,3 +160,7 @@
 154. Session 50 merge state: #377/task316 merged into `origin/main` as `928d9d684b188fc1858914d0de7aef211627f697` from approved head `19f8a01f44aa4322635aab374d8ed22795639bda`; lead is awaiting worker_5 closeout mailbox.
 155. After Session 50 reconciliation, the only open worker PR is #384, which remains dirty at `9524e9fe7ac824102314b4cb045a17d6a529e3da`; coordinator #360 remains open/clean.
 156. Session 50 all-SFT HOLD remains unchanged: no task310/task341 rerun, training, benchmark eval, export, endpoint, or promotion until NemTron target access or a lead-approved replacement route exists.
+157. Session 51 merge state: #384/task318 merged into `origin/main` as `ff5576d8d73f7eb48f78ad8a0709f97054142345` from approved head `4df2cc5772bc543d5f16de0ea73e824334c725bc`.
+158. After Session 51 reconciliation, the only open GitHub PR is coordinator #360, which remains open/clean before the Session 51 docs update.
+159. Lead is still awaiting worker_5 closeout mailbox for #384/task318; this is lead-managed closeout bookkeeping and does not change the coordinator HOLD.
+160. Session 51 all-SFT HOLD remains unchanged: no task310/task341 rerun, training, benchmark eval, export, endpoint, or promotion until NemTron target access or a lead-approved replacement route exists.

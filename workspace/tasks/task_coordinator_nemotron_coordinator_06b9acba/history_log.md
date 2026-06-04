@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Session 0 - Created with coordinator
 
@@ -792,4 +792,22 @@
   - #360 remains `OPEN`/`CLEAN` at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53` before this Session 50 docs update.
   - Current open PR list is only #384 and #360.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the merges, current open PR list, and unchanged HOLD.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 51 - task318 merge reconciled
+
+- Received `intern_nemotron_lead` Session 96 update:
+  - #384/task318 merged at `2026-06-04T14:04:05Z` with merge commit `ff5576d8d73f7eb48f78ad8a0709f97054142345` from exact approved head `4df2cc5772bc543d5f16de0ea73e824334c725bc`.
+  - Lead reported `origin/main` at `ff5576d8`.
+  - Worker #384 closeout mailbox is not yet observed by lead; worker_5 has been asked to send it.
+  - Lead reported open PR list is now only #360 open/clean at `d63ea9f1309d6fd199b36442a10e11e7d7058ca2`.
+- Fetched origin and verified current remote state:
+  - `origin/main` is `ff5576d8d73f7eb48f78ad8a0709f97054142345`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` remains `6b18e44cd1d68e0f07158f1dbe335cc70628abed` at this fetch.
+  - `origin/main` top commits show #384 merge `ff5576d8`, #377 merge `928d9d68`, and #386 merge `6800c340`.
+- Verified GitHub PR state:
+  - #384 is `MERGED` with the reported merge time, merge commit, and head.
+  - #360 remains `OPEN`/`CLEAN` at `d63ea9f1309d6fd199b36442a10e11e7d7058ca2` before this Session 51 docs update.
+  - Current open PR list contains only #360.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #384 merge, only #360 open/clean, and unchanged HOLD.
 - Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
