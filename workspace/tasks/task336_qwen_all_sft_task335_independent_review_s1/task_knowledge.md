@@ -21,3 +21,5 @@
    `0a094483458f01813b50e4fb13e2ddefdbdc4517` is
    `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`: #398 is accurate blocker evidence
    for missing `megatron.energon`; task310/30B launch remains HOLD.
+8. Review-docs PR is #399:
+   `https://github.com/songCNMS/Nemotron/pull/399`.

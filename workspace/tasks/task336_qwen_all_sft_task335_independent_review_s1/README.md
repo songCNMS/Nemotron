@@ -82,6 +82,7 @@ Return one of:
 
 - Report:
   `workspace/tasks/task336_qwen_all_sft_task335_independent_review_s1/task335_independent_review_report.md`
+- Review PR: #399 `https://github.com/songCNMS/Nemotron/pull/399`
 - Reviewed #398 exact head:
   `0a094483458f01813b50e4fb13e2ddefdbdc4517`
 - Disposition: `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`
