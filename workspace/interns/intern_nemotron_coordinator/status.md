@@ -10,5 +10,5 @@
 | Team | N/A |
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #360 |
-| Session | 46 |
-| Last Update | 2026-06-03T14:17:24Z - User requested current pipeline review plus all-SFT full pipeline and available benchmark evaluation; delivered lead goal for gated all-SFT run. |
+| Session | 47 |
+| Last Update | 2026-06-04T12:57:30Z - Reproduced all-SFT NemTron SSH blocker after #405/task342 merged: proxy works, target 10.100.2.62:33808 refuses connections; task342 checksums validate, LTP credentials are missing locally, and lead was updated. |

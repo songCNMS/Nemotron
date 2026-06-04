@@ -693,3 +693,25 @@
   6. document unavailable full-basket rows, independent review, and runbook/provenance.
 - Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only and cannot enter trainable SFT data; no task255 reuse; no shared deletion; export/endpoint only if needed for evaluation and not promotion.
 - Coordinator did not run data packing, training, benchmark eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.
+
+## Session 47 - All-SFT NemTron runtime access blocker reproduced
+
+- Received lead escalation for the all-SFT pipeline:
+  - #404/task341 is merged as `BLOCK_TRAINING_READINESS` at `371aea491776cc258e1cbb59a081d28be0530438`.
+  - #405/task342 was reported open/clean at `22dd5187d6bb552e031646925bba59f79ed00732` and lead-gated as `BLOCK_NEMTRON_ACCESS` blocker closeout only.
+  - Reported route: proxy hop `sshuser@10.100.197.19:30222` works, but target `10.100.2.62:33808` refuses connections, so `ssh NemTron` fails `rc255`.
+- Fetched origin and verified current branch state:
+  - `origin/main` advanced to `3baff1a3e3de84852d8361a11a81917d4256d3f1` after #405 merged.
+  - #405/task342 is now merged at `2026-06-04T12:53:46Z` with merge commit `3baff1a3e3de84852d8361a11a81917d4256d3f1` from head `22dd5187d6bb552e031646925bba59f79ed00732`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` is visible at `443c32b20413`.
+  - Coordinator PR #360 remains open, non-draft, base `main`, head `24fe8443f35c627d982506dd2562de9440f517d9`, and `CLEAN` before this Session 47 docs update.
+- Reproduced the coordinator-side SSH blocker:
+  - `ssh -o BatchMode=yes -o ConnectTimeout=8 NemTron 'hostname && date -u ...'` failed `rc255` with `channel 0: open failed: connect failed: Connection refused`.
+  - Proxy hop `ssh -i /root/.ssh/ltp_ssh_key -p 30222 sshuser@10.100.197.19 'hostname && date -u ...'` succeeded, returning host `ssh-proxy-deployment-64fbf5f7d5-4flbz` and timestamp `2026-06-04T12:55:42Z`.
+  - Proxy-side bash TCP probe to `10.100.2.62:33808` failed `rc1` with `Connection refused` and marker `TARGET_PORT_CLOSED_RC_1`.
+- Verified task342 artifact integrity from `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z`:
+  - `sha256sum -c manifests/artifact_checksums.sha256` returned `OK` for all 16 manifest entries.
+  - The Python proxy probe residual is non-decisive because proxy-side `python3` is missing; the bash TCP probe is decisive for target-port refusal.
+- Used the LTP skill path for the runtime route check. `ltp.py whoami` cannot query jobs from this coordinator environment because `LTP_TOKEN`/`LTP_HOST` are absent and no usable `~/.ltp_env` is configured.
+- Sent a delivered peer update to `intern_nemotron_lead` summarizing the reproduced blocker, validated task342 checksum manifest, missing local LTP credentials, and required external action.
+- Coordinator conclusion: task341 cannot be rerun from here until infrastructure restores the target service/port for `10.100.2.62:33808` or provides a replacement lead-approved SSH/LTP route with credentials. No training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion is authorized by this Session.
