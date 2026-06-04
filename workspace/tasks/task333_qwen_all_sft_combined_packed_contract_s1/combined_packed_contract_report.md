@@ -52,9 +52,9 @@ The packed root exposes 96 split symlinks and `0` broken symlinks.
 
 | Source | Included status | Raw rows | Source sha256 | Row manifest sha256 |
 |---|---|---:|---|---|
-| `m1-agentic-sft-v11-from-m0` | task299 constrained seed | 1,100 | `994166eeb83ffb5ebd213db9cc0d6cdd90208251bd2aab9dbb70cec7bf96691a` | `5894818a7fcfea644e202da10f551f3de844b8369432221c376e5121ef80cd15` |
-| `m1-agentic-sft-v11-math-final-answer` | task299 constrained seed | 200 | `0e5485eae86bf716d0c2e04e8e02595564b38a949d71d31a42874d6e87ef1731` | `ca07a194e74131b726252bd2589a83c0572ef9bb04c426b710032fcbdc1bb521` |
-| `m1-agentic-sft-v11-math-hard-verified-full-solution` | task299 constrained seed | 8 | `2039b67b2bcf5cf74b576a640f1f3a198d675e3fbd64a886da4be5753ad515d9` | `f1373026c688817a7e47f6060878f975e9bf125e959aee6375bcf49149cf4820` |
+| `m1-agentic-sft-v11-from-m0` | task299 constrained seed | 1,100 | `994166eeb83ffb5ebd213db9cc0d6cdd90208251bd2aab9dbb70cec7bf96691a` | `7562c86407e00c890ba86eb150a28c8c9bfbc1d7d35eb2c43bfbc5a9af878599` |
+| `m1-agentic-sft-v11-math-final-answer` | task299 constrained seed | 200 | `0e5485eae86bf716d0c2e04e8e02595564b38a949d71d31a42874d6e87ef1731` | `e466ee7bd8032ff45596073d21c75f482611689edee3a20a9f5ade440a1ac653` |
+| `m1-agentic-sft-v11-math-hard-verified-full-solution` | task299 constrained seed | 8 | `2039b67b2bcf5cf74b576a640f1f3a198d675e3fbd64a886da4be5753ad515d9` | `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f` |
 | `agentic-interactive` | task322/task329 included pass | 19,028 | `dcfeda22372fa707c979cab29ddfe896b89a933f15ed4acbb4f16e7e3787d9dd` | `81f558b6cd08b9159402aab073283d9cee2898d0b83b23efd71a3a49e6160fbc` |
 | `instruction-following-structured` | task322/task329 included pass | 4,969 | `03e4cc9a657f9f193860d82fe49764acc6b298f6ce6811497412aa5a0181ec77` | `206e27cb006fce1321115dd68732531cf46f6d3eb7e2d385f0eb3a2e7bb4c7a7` |
 | `swe` | task331 no-tools-header included pass | 51,029 | `1e0fb6d9a8d955fb0f2160e44a4946e5f2c4eb3931e80dadb724ff823cdbc14c` | `998a95f209d2863de50b115704493bc7406ce5f37046732f75ab737bc9fa7ab2` |
