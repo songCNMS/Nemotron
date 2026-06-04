@@ -108,6 +108,8 @@ Return one of:
 
 ## Lead Gate
 
+- Worker_4 review closeout mailbox:
+  `intern_nemotron_worker_4-task338-closeout-20260604T1051Z`.
 - Review PR: #401 `https://github.com/songCNMS/Nemotron/pull/401`.
 - Review PR head:
   `422ca360447e083f0e08c53b446653ad44d51707`, `OPEN`, non-draft, base
