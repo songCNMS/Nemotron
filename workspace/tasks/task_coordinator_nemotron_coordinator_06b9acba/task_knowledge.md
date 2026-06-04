@@ -147,3 +147,4 @@
 141. The latest coordinator re-probe still shows the same NemTron blocker: direct `ssh NemTron` fails `rc255` and proxy-side TCP to `10.100.2.62:33808` reports `TARGET_PORT_CLOSED_RC_1`.
 142. Dirty worker PRs listed by lead Session 93 (#391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371) are lead-managed refresh/superseded-closeout work; coordinator should not contact workers directly.
 143. task310 training/eval/export/endpoint/promotion and task341 rerun remain blocked until restored NemTron target access or a replacement lead-approved SSH/LTP route with credentials is available.
+144. Stop-hook formatting fix: Session 47 history must have one `## Session 47` header; subsequent same-session updates should use lower-level continuation headings.

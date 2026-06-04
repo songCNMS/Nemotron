@@ -716,7 +716,7 @@
 - Sent a delivered peer update to `intern_nemotron_lead` summarizing the reproduced blocker, validated task342 checksum manifest, missing local LTP credentials, and required external action.
 - Coordinator conclusion: task341 cannot be rerun from here until infrastructure restores the target service/port for `10.100.2.62:33808` or provides a replacement lead-approved SSH/LTP route with credentials. No training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion is authorized by this Session.
 
-## Session 47 - Continuation after lead Session 93 HOLD update
+### Continuation - lead Session 93 HOLD update
 
 - Received `intern_nemotron_lead` Session 93 update after interruption:
   - `origin/main` reported at `8a757c323b82f4330b765ee89a6d78f421d9d9be`;

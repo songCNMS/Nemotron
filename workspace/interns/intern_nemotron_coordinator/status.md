@@ -11,4 +11,4 @@
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #360 |
 | Session | 47 |
-| Last Update | 2026-06-04T13:27:36Z - Acknowledged lead Session 93; origin/main is 8a757c32, #360 is OPEN/CLEAN, and a fresh coordinator probe still shows NemTron target 10.100.2.62:33808 refusing connections. |
+| Last Update | 2026-06-04T13:29:46Z - Fixed Session 47 history structure after stop-hook warning; #360 remains coordinator-doc-only and NemTron access HOLD remains unchanged. |
