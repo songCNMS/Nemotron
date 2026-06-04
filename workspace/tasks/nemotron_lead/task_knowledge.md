@@ -2751,3 +2751,12 @@
    tail showed `swe` past row 2,490. Five completed large sources are all
    decontam-blocked, with no final rc, worker report, task327 PR, or all-SFT
    pack/train/eval release.
+721. Session 79: task327 `swe` completed `INCLUDED_PASS` at
+   `2026-06-04T01:49:30Z`: 51,029 rows, parse errors 0, file sha
+   `1e0fb6d9a8d955fb0f2160e44a4946e5f2c4eb3931e80dadb724ff823cdbc14c`,
+   row manifest sha
+   `998a95f209d2863de50b115704493bc7406ce5f37046732f75ab737bc9fa7ab2`,
+   prompt/normalized/ngram hits 0/0/0. This is a task327 source-level pass,
+   not an all-SFT release: task327 is still running, final rc/report/PR are
+   missing, and packing/training/eval remain HOLD. task327 started
+   `math-proofs-lean`; read-only tail showed row 48,015 as live progress only.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; python-01 decontam-blocked; swe started; all-SFT pack/train HOLD |
+| PR | task327 active; swe included-pass; math-proofs-lean active; all-SFT pack/train HOLD |
 | Session | 79 |

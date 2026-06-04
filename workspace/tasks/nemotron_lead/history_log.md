@@ -12069,3 +12069,25 @@
 - Read-only tail showed `swe` active with row manifest already past 2,490 rows
   at `2026-06-04T01:33:51Z`. This is live progress only, not a source-level
   disposition.
+- Final snapshot after the `swe` active observation found a source-level
+  result: `swe` completed at `2026-06-04T01:49:30Z` with status
+  `INCLUDED_PASS`, and task327 immediately started `math-proofs-lean`.
+- Verified `swe` artifact details from
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`:
+  dataset `nvidia/Nemotron-SWE-v1`, revision
+  `0fe17a965b297a9c943a59050a14c42d5f0083ce`, selected file
+  `data/r2e_gym.jsonl`, expected/file bytes 11,141,242,062,
+  expected/file sha256
+  `1e0fb6d9a8d955fb0f2160e44a4946e5f2c4eb3931e80dadb724ff823cdbc14c`,
+  row count 51,029, parse errors 0, row manifest sha256
+  `998a95f209d2863de50b115704493bc7406ce5f37046732f75ab737bc9fa7ab2`,
+  prompt/normalized/ngram hits 0/0/0, split exposure
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+- Current task327 completed-source matrix has five `BLOCKED_DECONTAM_HIT`
+  sources and one `INCLUDED_PASS` source (`swe`). `swe` is not enough to
+  release all-SFT packing/training because task327 is still running, final rc
+  and official worker_2 report/PR are missing, and downstream packing still
+  needs the full reviewed materialization/decontam contract.
+- Read-only tail showed `math-proofs-lean` active with row manifest already
+  past row 48,015 at `2026-06-04T01:52:08Z`. This is live progress only, not a
+  source-level disposition.
