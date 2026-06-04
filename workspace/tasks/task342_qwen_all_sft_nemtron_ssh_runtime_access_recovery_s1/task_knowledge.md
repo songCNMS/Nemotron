@@ -21,6 +21,7 @@
 6. Worker_4 disposition is `BLOCK_NEMTRON_ACCESS`. `ssh NemTron` still fails
    with rc `255`, while the proxy hop is reachable and proxy-side `/dev/tcp`
    to target `10.100.2.62:33808` returns connection refused.
+   Review PR: #405 `https://github.com/songCNMS/Nemotron/pull/405`.
 7. Because the route does not reach the target, `/root`, task337 runtime target,
    task298 checkpoint candidate, task339 train-only root, and runtime imports
    were not testable.

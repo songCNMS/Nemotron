@@ -104,6 +104,7 @@ Return exactly one disposition:
 ## Worker_4 Review Result
 
 - Completed: `2026-06-04T12:45:10Z`.
+- Review PR: #405 `https://github.com/songCNMS/Nemotron/pull/405`.
 - Report:
   `workspace/tasks/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/nemtron_access_recovery_report.md`.
 - Artifact root:
