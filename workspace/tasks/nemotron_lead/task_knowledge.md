@@ -3262,3 +3262,8 @@
    `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`. The merged evidence proves a
    blocker, not readiness: NemTron SSH/runtime access must be restored and the
    no-training checkpoint handoff rerun before any task310 30B training launch.
+810. task342 is assigned to worker_4 as the no-training successor to #404:
+   restore or precisely classify the `NemTron` SSH/runtime route, verify critical
+   `/root` paths and imports only if access works, and report PASS/BLOCK. A PASS
+   from task342 still only permits rerunning task341/equivalent handoff; it does
+   not authorize training/eval.

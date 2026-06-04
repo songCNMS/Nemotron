@@ -12864,3 +12864,11 @@
   task341 blocker evidence. Global all-SFT Qwen pipeline remains blocked/HOLD
   at NemTron SSH/runtime access; no 30B training/eval/export/endpoint/promotion
   is authorized.
+- Session 91 task342 dispatch: created
+  `task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1` for worker_4
+  to independently recover or precisely classify the `NemTron` SSH/runtime
+  access blocker from #404. Scope is no-training/no-eval access proof only:
+  inspect non-secret SSH/proxy route, run/log simple `ssh NemTron` probe, and if
+  restored verify `/root` access plus task337 runtime, task298 checkpoint
+  candidate, task339 train-only root, and runtime imports. task310 remains HOLD
+  until access is restored and task341 or equivalent handoff is rerun.
