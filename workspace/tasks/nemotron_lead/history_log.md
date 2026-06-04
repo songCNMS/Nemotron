@@ -12361,3 +12361,21 @@
   `BLOCKED_DECONTAM_HIT` sources and does not authorize training, eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion,
   merge, or main push.
+- Gate-reviewed worker_2 task328 PR #391 at head
+  `32e23761dd4d0957f88b2b0705edaa234c6d75bc`: base `main`, `OPEN`,
+  `CLEAN`/`MERGEABLE`, non-draft, no checks reported. Diff scope is worker_2
+  status plus task328 README/history/task_knowledge/helper/report; `git diff
+  --check` passed. Artifact verification at
+  `/work-agents/intern_nemotron_worker_2/outputs/task328_qwen_all_sft_post_task327_packed_contract_s1/run_20260604T051338Z`
+  passed `sha256sum -c manifests/artifact_checksums.sha256` for generated
+  entries. Formal GitHub approval failed because the token is treated as the
+  PR author, so lead posted gate comment `issuecomment-4619228747` with
+  `APPROVE_DOCS_STATUS_CLOSEOUT` only. Accepted disposition is
+  `PARTIAL_PASS_WITH_EXACT_BLOCKERS`: no new post-task327 all-eligible
+  `packed_qwen` root is approved, only the prior constrained task299 packed
+  seed remains carry-forward evidence, the three raw pass sources
+  `instruction-following-structured`/`agentic-interactive`/`swe` remain
+  excluded until split exposure/parity plus Qwen3-30B supervised-token packing
+  proof exists, and the nine task327 decontam-hit sources remain excluded
+  fail-closed. No lead merge and no training/eval/export/endpoint/promotion
+  release.

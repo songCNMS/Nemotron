@@ -2927,3 +2927,17 @@
    packed-data contract or exact blocker from accepted post-task327 evidence,
    but must exclude all nine task327 `BLOCKED_DECONTAM_HIT` sources and still
    authorizes no training/eval/export/endpoint/promotion.
+755. Session 80 task328/#391 gate: exact head
+   `32e23761dd4d0957f88b2b0705edaa234c6d75bc` is approved only as a
+   docs/status blocker closeout by PR comment `issuecomment-4619228747`; formal
+   approval is blocked by own-PR token rules. task328 output root
+   `/work-agents/intern_nemotron_worker_2/outputs/task328_qwen_all_sft_post_task327_packed_contract_s1/run_20260604T051338Z`
+   verifies with checksum manifest, rc `2`, disposition
+   `PARTIAL_PASS_WITH_EXACT_BLOCKERS`. Carry-forward safe packed root remains
+   only
+   `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`
+   with 279 train rows, 1 valid row, 46 train shards, 1 valid shard,
+   1,024,646 train input tokens, 228,927 train supervised tokens, Qwen contract
+   PASS, and no AIME2025 train leakage PASS. New raw pass sources are not
+   accepted for training until split exposure/parity and Qwen3-30B packing proof
+   exist; nine task327 decontam-hit sources remain fail-closed exclusions.

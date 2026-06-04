@@ -13,3 +13,12 @@
    adjudication evidence.
 4. task328 does not release task310 training or benchmark evaluation; those
    require accepted packed-contract evidence and later independent review.
+5. Lead gate for #391 exact head
+   `32e23761dd4d0957f88b2b0705edaa234c6d75bc` accepted the worker report as
+   `PARTIAL_PASS_WITH_EXACT_BLOCKERS` / docs-status closeout only. The safe
+   carry-forward packed root is the prior constrained task299 seed at
+   `/work-agents/intern_nemotron_worker_1/outputs/task299_qwen_aime_v11_30b_data_packing_contract_s1/run_20260602T150941Z/packed_qwen_30b`.
+   `instruction-following-structured`, `agentic-interactive`, and `swe` remain
+   raw pass sources blocked before packing due missing accepted split
+   exposure/parity and Qwen3-30B supervised-token packing proof. The nine
+   task327 decontam-hit sources remain excluded fail-closed.
