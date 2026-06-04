@@ -12772,3 +12772,11 @@
   export/endpoint/promotion. Created
   `task340_qwen_all_sft_task339_independent_review_s1` for worker_4 read-only
   review. #402/task339 and task310 remain HOLD pending review.
+- Session 89 task339 official mailbox: processed worker_2 closeout mailbox
+  `intern_nemotron_worker_2_task339_closeout_pr402_0a064f35`. It confirms #402
+  head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, local artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z`,
+  final summary sha `af9220da4de0668b8f2baefe146ea3ec431a1ca66278d7235a6b3c476ae1bcdb`,
+  artifact checksums sha `d2be924429e8dc51b9ebc6f9cba124f6673fbfa7e6290db7f650f8eaa53a4500`,
+  train-only checksum pass for 84 shards, and residuals
+  `nvidia_resiliency_ext` plus diagnostic `multi_storage_client`.

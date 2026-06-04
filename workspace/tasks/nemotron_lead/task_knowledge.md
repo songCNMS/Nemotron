@@ -3196,3 +3196,10 @@
    exact head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. #402/task339 and
    task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
    HOLD pending that review and a separate lead gate.
+797. Worker_2 official mailbox
+   `intern_nemotron_worker_2_task339_closeout_pr402_0a064f35` confirms #402
+   task339 PASS facts and artifact shas. It also states GitHub mergeability was
+   UNKNOWN at worker query time, but lead observed #402 as CLEAN; keep rechecking
+   exact/CLEAN before any approval. The mailbox recommends independent review
+   and a later runtime-readiness/checkpoint handoff task before any optimizer
+   step.
