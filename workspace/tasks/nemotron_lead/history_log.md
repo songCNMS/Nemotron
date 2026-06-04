@@ -12225,3 +12225,18 @@
   process remained active with no final rc, worker_2 report, or task327 PR;
   this is in-progress evidence only and downstream all-SFT packing/training/
   eval/export/endpoint/promotion stay HOLD.
+- Read-only source-level verification found `agentic-tool-calling` completed at
+  `2026-06-04T02:58:53Z` with status `BLOCKED_DECONTAM_HIT`, after which
+  task327 started `infinibyte-00`. Verified details: dataset
+  `nvidia/Nemotron-Agentic-v1`, revision
+  `650d590978ca35c8f1ecea2faf136e5fac421b62`, selected file
+  `data/tool_calling.jsonl`, expected/file bytes 5,338,348,607,
+  expected/file sha256
+  `f537a901d38a999627b8fe59e77a1007af0d79d71a892ad9a4a3d80456e5601b`,
+  row count 316,094, parse errors 0, row manifest sha256
+  `ff1be6898b1576fef31ca6ac6ff6cf34bcffb154fcd7c76cea5ec30098ab4db5`,
+  prompt/normalized/ngram hits 0/0/1, split exposure
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+  task327 still had no final rc, worker_2 report, or task327 PR, and the
+  process remained active; downstream all-SFT packing/training/eval/export/
+  endpoint/promotion stay HOLD.

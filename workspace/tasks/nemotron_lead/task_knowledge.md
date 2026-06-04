@@ -2829,3 +2829,11 @@
    200,000 rows / 3,219.2 MiB at `2026-06-04T02:54:47Z`; source remains
    active with no final rc, source-level disposition, worker_2 report, task327
    PR, or all-SFT pack/train/eval release.
+738. Session 79 goal-continuation: task327 `agentic-tool-calling` completed
+   `BLOCKED_DECONTAM_HIT` at `2026-06-04T02:58:53Z`: 316,094 rows, parse
+   errors 0, file sha
+   `f537a901d38a999627b8fe59e77a1007af0d79d71a892ad9a4a3d80456e5601b`,
+   row manifest sha
+   `ff1be6898b1576fef31ca6ac6ff6cf34bcffb154fcd7c76cea5ec30098ab4db5`,
+   prompt/normalized/ngram hits 0/0/1. task327 started `infinibyte-00`; no
+   final rc, worker_2 report, task327 PR, or all-SFT pack/train/eval release.
