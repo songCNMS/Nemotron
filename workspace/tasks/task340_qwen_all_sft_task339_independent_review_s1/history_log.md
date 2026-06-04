@@ -31,6 +31,8 @@
 
 ## 2026-06-04 UTC - Independent review complete
 
+- Opened review PR #403:
+  `https://github.com/songCNMS/Nemotron/pull/403`.
 - Revalidated #402 exact head
   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1` as `OPEN`, non-draft, base
   `main`, `CLEAN`/`MERGEABLE`.
