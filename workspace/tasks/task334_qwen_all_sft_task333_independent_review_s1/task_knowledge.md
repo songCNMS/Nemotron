@@ -19,3 +19,9 @@
 5. Worker_4 branch for task334 is
    `intern_nemotron_worker_4/task334_qwen_all_sft_task333_independent_review_s1`
    from `origin/main` `ad0c5a7d758d44370695b94c83385591f100c714`.
+6. Independent review result for #396 head
+   `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is
+   `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`: assigned `074500Z` artifacts
+   pass checksum/contract/split/decontam checks, but the committed #396 report
+   contains three task299 row-manifest SHA256 values from a different local
+   `083000Z` root while naming `074500Z`.

@@ -24,3 +24,20 @@
 - Boundaries: read-only independent review only; no training, eval, export,
   endpoint, promotion, task310 release, 30B release, task255 reuse,
   AIME2025 train rows, shared deletion, main push, merge, or self-merge.
+
+## Session 1 - 2026-06-04 UTC - Independent review complete
+
+- Rechecked #396 exact head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`: `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Verified diff scope, `git diff --check`, helper compile, artifact checksum
+  manifest, packed shard checksum manifest, Qwen30B packed contract log/rc,
+  split symlink integrity, metrics, split policy, decontam/no-task255 proof, and
+  boundary claims for assigned root
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`.
+- Found #396 report/source-provenance inconsistency: the report names
+  `run_20260604T074500Z` but prints three task299 row-manifest hashes from the
+  separate local `run_20260604T083000Z` root.
+- Disposition recorded in
+  `task333_independent_review_report.md`:
+  `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`.

@@ -1,6 +1,6 @@
 # task334_qwen_all_sft_task333_independent_review_s1 - Review task333 combined packed contract
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## Background
 
@@ -106,3 +106,16 @@ Check all of the following:
 - Lead branch docs source:
   `origin/intern_nemotron_lead/session1-recovery-task-docs`
 - Gate state: #396 and task310 remain HOLD pending this review.
+
+## Worker_4 Review Result
+
+- Report:
+  `workspace/tasks/task334_qwen_all_sft_task333_independent_review_s1/task333_independent_review_report.md`
+- Reviewed #396 exact head:
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`
+- Disposition: `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`
+- Summary: assigned `run_20260604T074500Z` artifacts passed checksum,
+  Qwen30B contract, split parity, symlink, decontam/no-task255, and boundary
+  checks, but the committed #396 report's Source Provenance table contains
+  three task299 row-manifest SHA256 values from a different local
+  `run_20260604T083000Z` root while naming the assigned `074500Z` root.
