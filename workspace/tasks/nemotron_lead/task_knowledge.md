@@ -3013,3 +3013,9 @@
    tokens inside pack limits; worker_4 reproduced six invalid structured rows
    with the repo validator. These require pushed reports/artifacts and lead
    review before they can unblock a combined packed contract.
+766. Session 83 task332/#394 gate: exact head
+   `58907ec58e842692693b1d5570cb6d96f649ee33` is approved as docs/status
+   closeout by lead comment `issuecomment-4619803835`. Accepted evidence:
+   fail-closed exclusion of six structured rows and deterministic per-source
+   valid/test split policy. Residual blocker remains task331 SWE nonzero
+   supervised-token proof; task310 and combined contract remain HOLD.

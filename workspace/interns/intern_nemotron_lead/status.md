@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task331/task332 in progress on no-training remediation; no PRs yet; task310 train/eval HOLD |
+| PR | #394/task332 approved docs closeout; task331 SWE remains pending; task310 train/eval HOLD |
 | Session | 83 |

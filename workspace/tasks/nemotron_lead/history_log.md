@@ -12482,3 +12482,17 @@
   the first 4096-token pack, and worker_4 reproduced the exact six structured
   invalid rows via the repo validator. These are not lead gate evidence until
   worker PR/mailbox closeout arrives; task310 remains HOLD.
+- Session 83 task332/#394 gate: processed worker_4 task332 closeout mailbox
+  `intern_nemotron_worker_4-task332-closeout-20260604T0700Z` and marked it
+  read. Verified #394 is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`
+  at exact head `58907ec58e842692693b1d5570cb6d96f649ee33`; diff scope is
+  worker_4 status plus task332 docs/helper/report and `git diff --check`
+  passes. Lead-side checks passed for task-local helper compile,
+  `sha256sum -c manifests/artifact_checksums.sha256`, final disposition
+  `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`, structured row count 6 with
+  receipt match, deterministic split policy
+  `task332_per_source_shard_holdout_v1`, decontam/no-AIME train proof, and
+  task331 pending dependency. Posted gate comment `issuecomment-4619803835` as
+  `APPROVE_TASK332_DOCS_CLOSEOUT / HOLD_TRAINING`; worker_4 may self-merge
+  only if exact/CLEAN. Task310 and combined all-SFT contract remain HOLD until
+  task331 provides lead-reviewed SWE nonzero supervised-token evidence.
