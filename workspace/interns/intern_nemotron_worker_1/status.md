@@ -9,6 +9,6 @@
 | Role | worker |
 | Team | nemotron |
 | Current Task | task333_qwen_all_sft_combined_packed_contract_s1 |
-| PR | Pending |
+| PR | https://github.com/songCNMS/Nemotron/pull/396 |
 | Session | 99 |
-| Progress | Produced no-training combined all-SFT packed-contract candidate under task333 outputs with Qwen3-30B contract rc 0; preparing PR/mailbox. |
+| Progress | Opened PR #396 for no-training combined all-SFT packed-contract candidate; Qwen3-30B contract rc 0 and checksum checks rc 0; holding for lead/independent review. |
