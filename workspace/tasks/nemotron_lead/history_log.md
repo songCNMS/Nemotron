@@ -12271,3 +12271,8 @@
   remained active with no final rc, worker_2 report, or task327 PR. Summary
   still contains 8 completed sources only; downstream all-SFT packing/training/
   eval/export/endpoint/promotion stay HOLD.
+- Follow-up read-only wait captured `2026-06-04T03:43:29Z PROGRESS
+  infinibyte-00 rows=500000 mib=20056.4 rate_mib_s=7.64`; the task327 process
+  remained active with no final rc, worker_2 report, or task327 PR. Summary
+  still contains 8 completed sources only; downstream all-SFT packing/training/
+  eval/export/endpoint/promotion stay HOLD.

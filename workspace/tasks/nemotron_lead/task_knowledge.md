@@ -2861,3 +2861,8 @@
    `rate_mib_s=7.65`). Source remains active; summary still has 8 completed
    sources only and no final rc, source-level disposition, worker_2 report,
    task327 PR, or all-SFT pack/train/eval release.
+744. Session 79 follow-up: task327 `infinibyte-00` reached the stable 500k log
+   checkpoint at `2026-06-04T03:43:29Z` (`rows=500000`, `mib=20056.4`,
+   `rate_mib_s=7.64`). Source remains active; summary still has 8 completed
+   sources only and no final rc, source-level disposition, worker_2 report,
+   task327 PR, or all-SFT pack/train/eval release.
