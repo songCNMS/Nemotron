@@ -112,3 +112,16 @@ Return one of:
   `main`, `CLEAN`/`MERGEABLE`.
 - Scope and boundaries accepted as read-only review; #398 and task310 remain
   HOLD pending approve/request-changes/block report.
+
+## Lead Gate
+
+- Worker_4 closeout mailbox:
+  `intern_nemotron_worker_4-task336-closeout-20260604T0939Z`.
+- Review PR: #399 `https://github.com/songCNMS/Nemotron/pull/399`.
+- Review PR head: `f7f31359ae88f687d6fd857279a820358938089c`, `OPEN`,
+  non-draft, base `main`, `CLEAN`/`MERGEABLE`.
+- Decision accepted for #399:
+  `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT` as docs/review evidence only.
+- #399 may self-merge only if exact head `f7f31359` remains `OPEN`/`CLEAN`.
+- #398 and task310 remain HOLD until #399 lands and #398 is rechecked at exact
+  head `0a094483458f01813b50e4fb13e2ddefdbdc4517`.

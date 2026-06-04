@@ -3120,3 +3120,10 @@
    cannot be accepted as task335 blocker closeout, and task310/all-SFT 30B
    training cannot be released, until worker_4 sends formal task336
    approve/request-changes/block review evidence.
+782. Session 88 task336/#399 closeout report approves #398/task335 as
+   fail-closed blocker-docs evidence only. #399 exact head
+   `f7f31359ae88f687d6fd857279a820358938089c` is the worker_4 review evidence
+   PR and should self-merge first if still `OPEN`/`CLEAN`. After #399 lands,
+   recheck #398 exact head `0a094483458f01813b50e4fb13e2ddefdbdc4517` before
+   any separate #398 docs/blocker closeout approval. No task310/all-SFT 30B
+   training/eval/export/endpoint/promotion release is authorized.

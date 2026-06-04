@@ -17,3 +17,8 @@
    at `e4bc330d2050bf7b5e098956beb29ff934a8ba64`; #398 is still exact
    `0a094483458f01813b50e4fb13e2ddefdbdc4517`, `OPEN`, base `main`, and
    `CLEAN`/`MERGEABLE`. This is ownership evidence only, not a gate decision.
+7. Worker_4 closeout PR #399 at exact head
+   `f7f31359ae88f687d6fd857279a820358938089c` approves #398/task335 as
+   blocker-docs closeout evidence only. #399 should land first; then #398 can
+   be rechecked for a separate docs/blocker closeout decision. task310 remains
+   blocked.

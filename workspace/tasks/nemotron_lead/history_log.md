@@ -12668,3 +12668,17 @@
   no-promotion/no-task310-release/no-task255/no-AIME2025-train/no-shared-
   deletion/no-main-push/no-merge boundaries. #398 and task310 remain HOLD until
   worker_4 returns a formal approve/request-changes/block report.
+- Session 88 task336/#399 review closeout: processed worker_4 mailbox
+  `intern_nemotron_worker_4-task336-closeout-20260604T0939Z`. Verified #399 is
+  `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `f7f31359ae88f687d6fd857279a820358938089c`; diff scope is worker_4 status
+  plus task336 README/history/task_knowledge/report only and `git diff --check`
+  passes. Read the report decision
+  `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT` for #398 exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`. Worker_4 independently verified
+  task335 checksums, 84 train-only shard entries, train-only metrics, Qwen3-30B
+  model/tokenizer probe, validation fail-closed route, 8x H200 resource probe,
+  and exact blocker `ModuleNotFoundError("No module named 'megatron.energon'")`
+  for `megatron.bridge.recipes.qwen.qwen3_moe`. Lead accepted #399 for worker_4
+  self-merge if exact/CLEAN; #398 and task310 remain HOLD until #399 lands and
+  #398 is rechecked.

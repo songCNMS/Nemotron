@@ -25,3 +25,19 @@
   shared deletion/mutation, main push, merge, or self-merge.
 - #398 and task310 remain HOLD pending worker_4's formal
   approve/request-changes/block review report.
+
+## 2026-06-04 UTC - Review Closeout Processed
+
+- Processed worker_4 closeout mailbox
+  `intern_nemotron_worker_4-task336-closeout-20260604T0939Z`.
+- Verified #399 is `OPEN`, non-draft, base `main`, `CLEAN`/`MERGEABLE`, exact
+  head `f7f31359ae88f687d6fd857279a820358938089c`.
+- Verified #399 diff scope is worker_4 status plus task336 README/history/
+  task_knowledge/report only, and `git diff --check origin/main...origin/pr/399`
+  passes.
+- Read `task335_independent_review_report.md`: worker_4 decision is
+  `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT` for #398 exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`, with the same blocker
+  `ModuleNotFoundError("No module named 'megatron.energon'")`.
+- Lead accepted #399 as docs/review evidence only and kept #398/task310 HOLD
+  until #399 lands and #398 is rechecked.
