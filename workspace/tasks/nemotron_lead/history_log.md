@@ -11990,3 +11990,10 @@
 - Read-only tail showed `competitive-python-01` active with row manifest
   already past 5,308 rows at `2026-06-04T00:16:22Z`. This is live progress
   only, not a source-level disposition.
+- Bounded read-only poll caught the first stable `competitive-python-01`
+  checkpoint: `2026-06-04T00:24:03Z PROGRESS competitive-python-01 rows=100000
+  mib=4493.9 rate_mib_s=9.20`. The row manifest was still being written and
+  had reached row 100,878 in the immediate tail. There was still no final rc,
+  no source-level disposition for python01, no official worker_2 report, and no
+  task327 PR. This is in-progress evidence only and does not release all-SFT
+  packing/training/eval/export/endpoint/promotion.

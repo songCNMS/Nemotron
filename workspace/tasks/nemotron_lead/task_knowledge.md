@@ -2709,3 +2709,6 @@
    prompt/normalized/ngram hits 0/0/216. task327 started
    `competitive-python-01`; no final rc/report/PR or all-SFT pack/train/eval
    release.
+712. Session 79: task327 `competitive-python-01` reached 100,000 rows /
+   4,493.9 MiB at `2026-06-04T00:24:03Z`; source remains in progress with no
+   final rc, worker report, task327 PR, or all-SFT pack/train/eval release.
