@@ -2741,3 +2741,13 @@
    37,225.6 MiB at `2026-06-04T01:22:58Z`; the source process remains active
    with no final rc, source-level disposition, worker_2 report, or task327 PR.
    all-SFT pack/train/eval/export/endpoint/promotion remains HOLD.
+720. Session 79: task327 `competitive-python-01` completed
+   `BLOCKED_DECONTAM_HIT` at `2026-06-04T01:31:57Z`: 910,639 rows, parse
+   errors 0, file sha
+   `988cc7a00686d6212b3f8fbef95919c8e72bbda81c9f859dd556df789bf44b30`,
+   row manifest sha
+   `14cc371e6feae18bee76f698dc404de59db8254f100f5321badc38f8cc2cb247`,
+   prompt/normalized/ngram hits 0/0/196. task327 started `swe`; read-only
+   tail showed `swe` past row 2,490. Five completed large sources are all
+   decontam-blocked, with no final rc, worker report, task327 PR, or all-SFT
+   pack/train/eval release.
