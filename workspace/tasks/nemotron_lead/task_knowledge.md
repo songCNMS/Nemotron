@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Knowledge Entries
 
@@ -3366,3 +3366,8 @@
    MMLU-Pro below base by 2, so there is still no promotion. #381/#386/#384/#377
    are dirty after main `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985` and need
    owner refresh/re-report before any further merge gate.
+830. #381/task320 merged in Session 94 as exact-head docs evidence closeout,
+   moving `origin/main` to `12f20a5d59e117ab075faff9e6638f1791797364`. #386
+   must be refreshed/re-reported against this new main before any merge gate
+   because it shares worker_1 status/doc state. #384/#377 also remain dirty and
+   await worker_5 refresh or superseded closeout.

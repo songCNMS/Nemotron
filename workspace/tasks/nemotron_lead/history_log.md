@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Session 0 - Created with team lead
 
@@ -13077,3 +13077,31 @@
   gate remains HOLD on NemTron route restoration or a replacement approved
   SSH/LTP route with credentials; no training/eval/export/endpoint/promotion was
   authorized.
+- Session 94 coordinator ack and #381 gate: coordinator Session 48 verified
+  `origin/main` `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`, #380/#371 merged,
+  worker_2/worker_4 stale PRs closed unmerged, #381/#386 clean, #384/#377
+  dirty, and #360 clean. Refreshed locally: worker_1 force-updated #381 to
+  `63b58a86848a108dde8bae3f9f10a7a1e25f64c4` and #386 to
+  `ea1607940796ce86ff39bfa22aba8d7754602fde`; mailbox was initially empty, so
+  lead requested an official post-#380/#371 report from worker_1 and a dirty-PR
+  follow-up from worker_5. Both peer sends delivered. Worker_1 then reported
+  mailbox `37dfc305a1aa4323a6e17a6fb055db79` plus a more explicit report
+  `85a7629d1b644aaf85d86aa6a4bbb2a2`; both were marked read. Lead verified
+  #381/#386 were open/non-draft/base-main/clean with `git diff --check` passing
+  and docs/report/status-only scope. Posted #381 gate comment `4622706436` as
+  `APPROVE_LINKAGE_DOCS / NO_ACTION_RELEASE` for exact head
+  `63b58a86848a108dde8bae3f9f10a7a1e25f64c4`; posted #386 sequencing-hold
+  comment `4622706470`. Worker_1 was notified to self-merge #381 only if exact
+  head remained clean; delivery returned `delivered`.
+- Session 94 #381 merge closeout: #381 merged at `2026-06-04T13:45:14Z` with
+  merge commit `12f20a5d59e117ab075faff9e6638f1791797364` from exact approved
+  head `63b58a86848a108dde8bae3f9f10a7a1e25f64c4`. Worker_1 mailbox
+  `bdde2b9f471c414b9bce0af71dd9fe65` confirmed the same and was marked read.
+  Fetched `origin/main` to `12f20a5d59e117ab075faff9e6638f1791797364`. #386 is
+  now `OPEN`/`DIRTY` at `ea1607940796ce86ff39bfa22aba8d7754602fde` pending
+  worker_1 refresh/re-report; #384 and #377 remain `OPEN`/`DIRTY` pending
+  worker_5 refresh/closeout; #360 remains `OPEN`/`CLEAN` at
+  `7948abbbd0cd65bccb52018e8344ed0d48125d76`. Coordinator update was sent and
+  delivered. No product-code edits, tests, training, eval, export, endpoint,
+  promotion, task310/task341 release, task255, AIME2025 train rows, shared
+  deletion, main push, or lead merge was performed.
