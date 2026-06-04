@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #392/task329 HOLD pending task330 independent review; task310 train/eval HOLD |
-| Session | 82 |
+| PR | #393 task330 approved self-merge first; #392 task329 approved docs closeout after #393; task310 train/eval HOLD |
+| Session | 83 |

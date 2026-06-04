@@ -2979,3 +2979,18 @@
    `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`.
    Assignment was delivered by peer_send; expected closeout is
    approve/request-changes/block for #392 with remediation recommendation.
+761. Session 83 task330/#393 gate: exact head
+   `c01dd4e1bd8c0a1f58710ccee85c94256f8fa59c` is accepted as task330
+   independent review docs by lead comment `issuecomment-4619622415`;
+   worker_4 may self-merge only if exact/CLEAN. The report approves #392
+   only as `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING` and confirms checks pass for
+   #392 diff scope, helper compile, artifact checksums, packed shard checksums,
+   Qwen30B contract, and manifest assertions.
+762. Session 83 #392 gate: exact head
+   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` is approved by lead comment
+   `issuecomment-4619622406` only as docs/evidence closeout after task330
+   review. Merge sequence is #393 first, then #392 only if exact/CLEAN.
+   Training/eval/export/endpoint/promotion remain blocked because SWE has
+   zero supervised tokens, structured has 6 validation-filtered rows,
+   valid/test exposure is sparse, and task299 combination still needs a later
+   packed-contract review.

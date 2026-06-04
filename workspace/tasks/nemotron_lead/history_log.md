@@ -12431,3 +12431,21 @@
   current head, dispatched assignment by peer_send with `delivered` receipt, and
   observed worker_4 pane enter `Working`. No self-merge or task310
   training/eval/export/endpoint/promotion release.
+- Session 83 task330/#393 and task329/#392 gate: processed worker_4 task330
+  closeout mailbox `97125be0087d45d58a6cdcdf1f117a97` and marked it read.
+  Verified #393 is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE` at
+  exact head `c01dd4e1bd8c0a1f58710ccee85c94256f8fa59c`; diff scope is
+  worker_4 status plus task330 docs/report and `git diff --check` passes.
+  Reviewed report
+  `workspace/tasks/task330_qwen_all_sft_task329_independent_review_s1/task329_independent_review_report.md`
+  with disposition `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING` for #392 exact head
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`. Posted #393 gate comment
+  `issuecomment-4619622415` as `APPROVE_TASK330_REVIEW_DOCS / HOLD_TRAINING`
+  and authorized worker_4 self-merge only if exact/CLEAN. Posted #392 gate
+  comment `issuecomment-4619622406` as
+  `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`, with sequence #393 self-merge first,
+  then worker_2 may self-merge #392 only if exact head `d911ec58` and CLEAN.
+  Peer_send delivery receipts to worker_4 and worker_2 both returned
+  `delivered`. Task310 training/eval/export/endpoint/promotion remain HOLD; no
+  lead merge, main push, training, eval, export, endpoint, promotion, task255
+  reuse, AIME2025 train rows, or shared deletion was performed.
