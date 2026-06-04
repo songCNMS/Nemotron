@@ -3234,3 +3234,9 @@
    steps or benchmark eval. It must resolve or explicitly waive
    `nvidia_resiliency_ext`, handle training placeholders, and verify checkpoint
    handoff before any task310 launch can be reconsidered.
+805. Worker_2 accepted task341 locally at `2026-06-04T12:15:16Z` on branch
+   `intern_nemotron_worker_2/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1`
+   from `origin/main` `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab`, with lead
+   docs imported from `afbae9028daf7291d07db9a95f8d841b9981825f`. No task341
+   remote branch or PR was visible at lead observation time; this is acceptance
+   evidence only, not a training/eval release.

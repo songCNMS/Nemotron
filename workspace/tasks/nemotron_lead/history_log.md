@@ -12820,3 +12820,11 @@
   and no issue. task339 is complete as no-training preflight evidence only;
   task310 remains HOLD. Created task341 for worker_2 training-readiness/
   checkpoint-handoff, still no optimizer/training/eval.
+- Session 90 task341 acceptance observation: worker_2 status shows Working on
+  `task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1` at
+  `2026-06-04T12:15:16Z`, branch
+  `intern_nemotron_worker_2/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1`,
+  from `origin/main` `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab`, with lead
+  docs imported from `afbae9028daf7291d07db9a95f8d841b9981825f`. Lead observed
+  no task341 remote branch or PR yet. task310/all-SFT 30B launch/training/eval/
+  export/endpoint/promotion remains HOLD pending task341 report and later gate.
