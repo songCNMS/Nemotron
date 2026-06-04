@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Session 0 - Created with team lead
 
@@ -12656,3 +12656,15 @@
   `task336_qwen_all_sft_task335_independent_review_s1` for worker_4 to
   independently review #398 exact head and task335 artifacts. #398 and task310
   remain HOLD pending task336.
+- Session 88 task336 acceptance: processed worker_4 mailbox
+  `intern_nemotron_worker_4-task336-accept-20260604T0910Z`. Verified branch
+  `origin/intern_nemotron_worker_4/task336_qwen_all_sft_task335_independent_review_s1`
+  exists at `e4bc330d2050bf7b5e098956beb29ff934a8ba64`, based on `origin/main`
+  `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`, with lead docs imported from
+  `a2e4b731f63bbce9d074f994720abc57db976ac8`. Rechecked #398 as `OPEN`, base
+  `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`. Worker_4 accepted read-only
+  independent review scope and the no-training/no-eval/no-export/no-endpoint/
+  no-promotion/no-task310-release/no-task255/no-AIME2025-train/no-shared-
+  deletion/no-main-push/no-merge boundaries. #398 and task310 remain HOLD until
+  worker_4 returns a formal approve/request-changes/block report.

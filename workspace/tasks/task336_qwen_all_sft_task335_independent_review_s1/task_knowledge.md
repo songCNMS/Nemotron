@@ -1,6 +1,6 @@
 # task336_qwen_all_sft_task335_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=87 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 1. Review target is #398 exact head
    `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
@@ -12,3 +12,8 @@
    #398 is accepted as blocker docs.
 5. Approval would be docs/blocker closeout only. It must not release task310,
    training, eval, export, endpoint, promotion, or 30B scale.
+6. Worker_4 accepted task336 on branch
+   `origin/intern_nemotron_worker_4/task336_qwen_all_sft_task335_independent_review_s1`
+   at `e4bc330d2050bf7b5e098956beb29ff934a8ba64`; #398 is still exact
+   `0a094483458f01813b50e4fb13e2ddefdbdc4517`, `OPEN`, base `main`, and
+   `CLEAN`/`MERGEABLE`. This is ownership evidence only, not a gate decision.

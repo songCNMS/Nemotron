@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Knowledge Entries
 
@@ -3112,3 +3112,11 @@
    `megatron.bridge.recipes.qwen.qwen3_moe` because `megatron.energon` is
    missing. task336 is assigned to worker_4 for independent review before #398
    docs closeout. No task310/training/eval/export/endpoint/promotion/30B release.
+781. Session 88 task336 worker_4 acceptance branch is
+   `origin/intern_nemotron_worker_4/task336_qwen_all_sft_task335_independent_review_s1`
+   at `e4bc330d2050bf7b5e098956beb29ff934a8ba64`; #398 remains `OPEN`, base
+   `main`, non-draft, exact head `0a094483458f01813b50e4fb13e2ddefdbdc4517`,
+   and `CLEAN`/`MERGEABLE`. This is acceptance/ownership evidence only. #398
+   cannot be accepted as task335 blocker closeout, and task310/all-SFT 30B
+   training cannot be released, until worker_4 sends formal task336
+   approve/request-changes/block review evidence.

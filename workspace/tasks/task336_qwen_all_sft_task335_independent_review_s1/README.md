@@ -1,6 +1,6 @@
 # task336_qwen_all_sft_task335_independent_review_s1 - Review task335 launch preflight
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_4,SESSION=87 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 ## Background
 
@@ -95,3 +95,20 @@ Return one of:
 - Worker: `intern_nemotron_worker_4`
 - Base: current `origin/main` `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`
 - Gate state: #398 and task310 remain HOLD pending this review.
+
+## Acceptance
+
+- Worker acceptance mailbox:
+  `intern_nemotron_worker_4-task336-accept-20260604T0910Z`.
+- Worker branch:
+  `origin/intern_nemotron_worker_4/task336_qwen_all_sft_task335_independent_review_s1`
+  at `e4bc330d2050bf7b5e098956beb29ff934a8ba64`.
+- Acceptance base: `origin/main`
+  `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
+- Lead docs imported from:
+  `a2e4b731f63bbce9d074f994720abc57db976ac8`.
+- Review target reconfirmed: #398 exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Scope and boundaries accepted as read-only review; #398 and task310 remain
+  HOLD pending approve/request-changes/block report.
