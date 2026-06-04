@@ -41,6 +41,7 @@
   runtime residual validation, and checkpoint path validation could not complete.
 - Disposition recorded as `BLOCK_TRAINING_READINESS`.
 - Wrote `training_readiness_checkpoint_handoff_report.md`.
+- Opened PR #404: https://github.com/songCNMS/Nemotron/pull/404.
 - No optimizer step, training loop, benchmark/AIME eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train rows, shared deletion/mutation, main
   push, merge, or self-merge was performed.
