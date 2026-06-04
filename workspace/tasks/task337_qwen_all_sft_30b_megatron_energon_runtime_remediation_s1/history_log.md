@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - history
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -23,3 +23,29 @@
   missing `megatron.energon` Qwen3 MoE Bridge import route only. No training,
   eval, export, endpoint, promotion, task310, task255, AIME2025 train rows,
   shared-root mutation/deletion, main push, merge, or self-merge.
+
+## Session 2 - 2026-06-04 UTC - Runtime import remediated in task-owned target
+
+- Created task-owned local output root
+  `/work-agents/intern_nemotron_worker_2/outputs/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z`
+  and remote root
+  `/root/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z`.
+- Synced branch head `4db10e0783823c8f6087748718d40e729879554d`
+  to task-owned NemTron repo path. `rsync` was unavailable remotely, so the
+  successful sync used tar-over-ssh.
+- Reproduced the accepted blocker in the baseline probe:
+  `megatron-energon` distribution missing and qwen3_moe failed through missing
+  `megatron.energon`.
+- Installed only task-owned `--target` runtime packages under
+  `/root/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z/runtime_site`;
+  no system, user-site, or shared-root mutation was performed.
+- Final import probe passed:
+  `megatron.energon` imports from the task-owned runtime target and
+  `megatron.bridge.recipes.qwen.qwen3_moe` imports from the existing
+  Megatron Bridge package.
+- Symbol probe passed for qwen3_moe and recorded Qwen3-30B A3B config symbols
+  without model construction, weight loading, training, optimizer steps, eval,
+  export, or endpoint.
+- Wrote `qwen3_moe_runtime_remediation_report.md` with disposition
+  `PASS_RUNTIME_REMEDIATED`. Training and task310 remain HOLD pending a
+  separate lead-assigned task335-equivalent no-training preflight rerun.
