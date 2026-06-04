@@ -12954,3 +12954,10 @@
   `BLOCK_RUNTIME_CONFIRMED`: 0/19 M1 rows runnable now, 14/19 exact launcher
   mappings, and 5 exact rows unavailable. This does not change the NemTron
   target-port blocker or release task310 train/eval.
+- Session 92 worker_3 #387 merge closeout mailbox: processed mailbox
+  `3f9407781c954883ad25a0116325804c`, confirming #387 merged from exact
+  approved head `e07ee3f9268b33658e18881c25a3d221bf2136ee` with merge commit
+  `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b` at
+  `2026-06-04T13:03:37Z`; branch-only closeout/status head is
+  `1f9eff55266ed397fb66ecf716707e872e71a678`. Worker_3 reported no issue and
+  no boundary violations.

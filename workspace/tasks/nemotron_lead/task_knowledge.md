@@ -3312,3 +3312,7 @@
    `e07ee3f9268b33658e18881c25a3d221bf2136ee`. This closes M1 unavailable-row
    blocker documentation only; global training/eval gate remains blocked by
    NemTron target service/port and missing replacement route/credentials.
+820. Worker_3 #387 branch-only closeout/status head is
+   `1f9eff55266ed397fb66ecf716707e872e71a678`; canonical merged evidence remains
+   #387 head `e07ee3f9268b33658e18881c25a3d221bf2136ee` and merge commit
+   `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b`.
