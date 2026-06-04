@@ -3240,3 +3240,8 @@
    docs imported from `afbae9028daf7291d07db9a95f8d841b9981825f`. No task341
    remote branch or PR was visible at lead observation time; this is acceptance
    evidence only, not a training/eval release.
+806. Worker_2 official acceptance mailbox
+   `intern_nemotron_worker_2_task341_acceptance_2ec935c4` confirms task341 head
+   `2ec935c459b6d5953eb641d4ddc65fc247625288` on the expected branch. No
+   task341 PR is visible yet; task310 remains HOLD until worker_2 provides
+   readiness/pass/block evidence and lead gates it.

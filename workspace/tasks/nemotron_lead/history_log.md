@@ -12828,3 +12828,11 @@
   docs imported from `afbae9028daf7291d07db9a95f8d841b9981825f`. Lead observed
   no task341 remote branch or PR yet. task310/all-SFT 30B launch/training/eval/
   export/endpoint/promotion remains HOLD pending task341 report and later gate.
+- Session 90 task341 official acceptance: processed worker_2 mailbox
+  `intern_nemotron_worker_2_task341_acceptance_2ec935c4`, created
+  `2026-06-04T12:16:37Z`. Verified remote branch
+  `origin/intern_nemotron_worker_2/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1`
+  at `2ec935c459b6d5953eb641d4ddc65fc247625288`; no task341 PR is visible yet.
+  Worker_2 confirmed no optimizer/training/eval/export/endpoint/promotion,
+  task255 reuse, AIME2025 train rows, shared deletion/mutation, main push,
+  merge, or self-merge.

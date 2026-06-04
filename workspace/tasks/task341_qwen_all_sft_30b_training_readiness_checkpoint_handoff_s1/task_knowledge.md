@@ -19,3 +19,8 @@
    docs imported from `afbae9028daf7291d07db9a95f8d841b9981825f`. At lead
    observation time there was no task341 remote branch or PR yet, so this is
    acceptance/Working evidence only.
+6. Official worker_2 acceptance mailbox
+   `intern_nemotron_worker_2_task341_acceptance_2ec935c4` confirms branch
+   `origin/intern_nemotron_worker_2/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1`
+   at `2ec935c459b6d5953eb641d4ddc65fc247625288`. No task341 PR is visible yet;
+   wait for a report/PR or blocker before assigning any training launch.

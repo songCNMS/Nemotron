@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #402/task339 MERGED `f16dffde`; task341 worker_2 accepted/Working; no remote branch or PR yet; task310 train/eval HOLD |
+| PR | #402/task339 MERGED `f16dffde`; task341 accepted at remote head `2ec935c4`, no PR yet; task310 train/eval HOLD |
 | Session | 90 |
