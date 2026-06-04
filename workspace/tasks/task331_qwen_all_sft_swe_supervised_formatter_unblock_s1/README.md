@@ -1,6 +1,6 @@
 # task331_qwen_all_sft_swe_supervised_formatter_unblock_s1 - SWE supervised-token formatter unblock
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=83 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=83 -->
 
 ## Background
 
