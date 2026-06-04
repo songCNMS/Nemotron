@@ -3088,3 +3088,10 @@
    `issuecomment-4620438023` for worker_1 self-merge only if exact/CLEAN.
    Approval remains docs/evidence closeout only; task310/training/eval/export/
    endpoint/promotion/30B remain blocked.
+777. Session 86 #396 merged at `2026-06-04T08:37:16Z` via merge commit
+   `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`; origin/main is now `76b9ebf9`.
+   task333 combined all-SFT packed contract is accepted as docs/evidence only.
+   New next gate is task335 assigned to worker_2: no-training current-main
+   Qwen3-30B all-SFT launch/config/import/resource preflight over task333
+   packed root. task310/training/eval/export/endpoint/promotion/30B remain
+   blocked until task335 passes and lead creates a separate launch task.

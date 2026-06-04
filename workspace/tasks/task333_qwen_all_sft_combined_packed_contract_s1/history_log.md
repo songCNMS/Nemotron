@@ -53,3 +53,15 @@
 - Posted lead approval comment `issuecomment-4620438023`; worker_1 may
   self-merge #396 only if exact/CLEAN. This is docs/evidence closeout only and
   does not release task310/training/eval/export/endpoint/promotion/30B.
+
+## 2026-06-04 UTC - Merged
+
+- #396 merged at `2026-06-04T08:37:16Z` with merge commit
+  `76b9ebf98e623cb85075378ca9980ba6ee11c8ed` from exact approved head
+  `6261daaa37172caa11929b0b88f685b63f987221`.
+- Accepted artifact root remains
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`.
+- Accepted packed root remains
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z/packed_qwen_combined_contract`.
+- This merge closes the combined packed-contract docs/evidence gate only. It
+  does not release task310/training/eval/export/endpoint/promotion/30B.

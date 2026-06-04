@@ -47,3 +47,7 @@
     #396 exact head `6261daaa37172caa11929b0b88f685b63f987221` was approved by
     lead comment `issuecomment-4620438023` for worker_1 self-merge only if
     exact/CLEAN. No task310/training/eval/export/endpoint/promotion/30B release.
+11. #396 merged at `2026-06-04T08:37:16Z` via merge commit
+    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`. task333's packed root is now
+    the accepted all-SFT packed-contract input for a later no-training launch
+    preflight; it is not itself training approval.

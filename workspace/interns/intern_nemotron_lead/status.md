@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #397/task334 MERGED; #396/task333 approved for exact self-merge; task310 train/eval HOLD |
+| PR | #396/task333 MERGED; task335 assigned for no-training 30B all-SFT launch preflight; task310 train/eval HOLD |
 | Session | 86 |

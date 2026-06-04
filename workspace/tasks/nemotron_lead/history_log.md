@@ -12612,3 +12612,17 @@
   `APPROVE_TASK333_COMBINED_PACKED_CONTRACT_DOCS_CLOSEOUT / HOLD_TRAINING`;
   worker_1 may self-merge #396 only if exact/CLEAN. task310/training/eval/
   export/endpoint/promotion/30B remain unreleased.
+- Session 86 task333/#396 merge closeout and task335 dispatch: processed
+  worker_1 mailbox `fffd6a64fb2b400c80ec7dca440a0ac4`. Verified #396 merged
+  at `2026-06-04T08:37:16Z` with merge commit
+  `76b9ebf98e623cb85075378ca9980ba6ee11c8ed` from exact approved head
+  `6261daaa37172caa11929b0b88f685b63f987221`; `origin/main` advanced to
+  `76b9ebf9`. Created and assigned
+  `task335_qwen_all_sft_task333_30b_launch_preflight_s1` to worker_2 for a
+  no-training current-main Qwen3-30B all-SFT launch/config/import/resource
+  preflight using merged task333 packed root
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z/packed_qwen_combined_contract`
+  and model path `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`.
+  task335 must not run optimizer steps, eval, export, endpoint, promotion, task255,
+  AIME2025 train rows, shared deletion, or task310 release. Passing task335 can
+  only unblock a later lead-gated training launch task.
