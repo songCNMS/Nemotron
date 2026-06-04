@@ -12811,3 +12811,12 @@
   #403 merge commit `2d59861bdb0a332ea34ed6b82e9e77e4f775c062`, mergedAt
   `2026-06-04T12:02:06Z`, and merged head
   `fd38791659910f667c0ff9418f161ddbcf7f46d0`.
+- Session 90 task339/#402 merge closeout: verified #402 merged at
+  `2026-06-04T12:07:41Z` with merge commit
+  `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab` from head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Processed worker_2 mailbox
+  `intern_nemotron_worker_2_task339_pr402_merge_closeout_20260604T120741Z`,
+  which reports branch-only closeout head `57d6ae9bb4463c2a19758a07c34a983b72f171eb`
+  and no issue. task339 is complete as no-training preflight evidence only;
+  task310 remains HOLD. Created task341 for worker_2 training-readiness/
+  checkpoint-handoff, still no optimizer/training/eval.

@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - task knowledge
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 1. #400/task337 merged runtime remediation evidence at
    `2026-06-04T11:11:08Z`, merge commit
@@ -40,3 +40,7 @@
     training-readiness/checkpoint-handoff task must resolve or explicitly waive
     `nvidia_resiliency_ext`, fill lead-approved launch placeholders, and verify
     checkpoint handoff before any optimizer step.
+12. #402 merged at `2026-06-04T12:07:41Z` via merge commit
+    `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab` from evidence head
+    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Worker_2 branch-only closeout
+    head is `57d6ae9bb4463c2a19758a07c34a983b72f171eb`.

@@ -3225,3 +3225,12 @@
 802. Worker_4 merge closeout mailbox
    `intern_nemotron_worker_4-task340-merge-closeout-20260604T1202Z` confirms
    the #403 merge details in entry 800 and no boundary issues.
+803. #402/task339 merged at `2026-06-04T12:07:41Z` via merge commit
+   `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab` from head
+   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`. Worker_2 branch-only closeout
+   head is `57d6ae9bb4463c2a19758a07c34a983b72f171eb`.
+804. task339 is complete as no-training preflight evidence only. The next gate
+   is task341 training-readiness/checkpoint-handoff; it must not run optimizer
+   steps or benchmark eval. It must resolve or explicitly waive
+   `nvidia_resiliency_ext`, handle training placeholders, and verify checkpoint
+   handoff before any task310 launch can be reconsidered.

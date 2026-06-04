@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - Rerun 30B launch preflight with task337 runtime route
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -173,3 +173,20 @@ for current `origin/main` after #400. Return one of:
   training-readiness/checkpoint-handoff task to resolve or explicitly waive
   `nvidia_resiliency_ext`, fill lead-approved launch placeholders, and verify
   imported checkpoint handoff before any optimizer step.
+
+## Merge Closeout
+
+- Worker_2 merge closeout mailbox:
+  `intern_nemotron_worker_2_task339_pr402_merge_closeout_20260604T120741Z`.
+- #402 merged at `2026-06-04T12:07:41Z`.
+- Merge commit: `f16dffdef961b1a6cdb3ae23203f9ae7495b38ab`.
+- Merged evidence head: `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
+- Worker_2 branch-only closeout head:
+  `57d6ae9bb4463c2a19758a07c34a983b72f171eb`.
+- Merge scope from parent `2d59861bdb0a332ea34ed6b82e9e77e4f775c062` is
+  worker_2 status plus task339 README/history/task_knowledge/report/helper only;
+  `git diff --check` passed.
+- task339 is complete as no-training 30B launch/config/import/resource preflight
+  evidence only.
+- task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD pending task341 training-readiness/checkpoint-handoff and later lead gate.
