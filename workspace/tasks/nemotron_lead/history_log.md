@@ -12260,3 +12260,9 @@
   final rc, worker_2 report, or task327 PR; this is in-progress evidence only
   and downstream all-SFT packing/training/eval/export/endpoint/promotion stay
   HOLD.
+- Follow-up read-only poll found `infinibyte-00` still active with a new stable
+  checkpoint at `2026-06-04T03:25:59Z PROGRESS infinibyte-00 rows=300000
+  mib=12033.0 rate_mib_s=7.65`; the task327 process remained active with no
+  final rc, worker_2 report, or task327 PR. Summary still contains 8 completed
+  sources only; downstream all-SFT packing/training/eval/export/endpoint/
+  promotion stay HOLD.

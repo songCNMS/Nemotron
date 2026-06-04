@@ -2851,3 +2851,8 @@
    (`rows=200000`, `mib=8027.2`, `rate_mib_s=7.65`), while the row manifest
    continued updating under the active process. No final rc, source-level
    disposition, worker_2 report, task327 PR, or all-SFT pack/train/eval release.
+742. Session 79 follow-up: task327 `infinibyte-00` reached the stable 300k log
+   checkpoint at `2026-06-04T03:25:59Z` (`rows=300000`, `mib=12033.0`,
+   `rate_mib_s=7.65`). Source remains active; summary still has 8 completed
+   sources only and no final rc, source-level disposition, worker_2 report,
+   task327 PR, or all-SFT pack/train/eval release.
