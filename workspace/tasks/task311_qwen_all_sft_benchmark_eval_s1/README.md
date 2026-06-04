@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Qwen all-SFT benchmark evaluation gate
 
-<!-- METADATA:STATUS=FailMixed,ASSIGNEE=intern_nemotron_worker_3,SESSION=12 -->
+<!-- METADATA:STATUS=FailMixed,ASSIGNEE=intern_nemotron_worker_3,SESSION=93 -->
 
 ## Background
 
@@ -95,4 +95,9 @@ reasons.
   same-route base `9/30`, and MMLU-Pro FT `6756/12032` versus same-route base
   `6758/12032`. Overall corrected-Qwen disposition is
   `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`; M1 launcher rows remain
-  blocked by missing launcher runtime.
+  blocked by missing launcher runtime. Session 93 refreshed PR #371 onto
+  current `origin/main` `8a757c323b82f4330b765ee89a6d78f421d9d9be` after it
+  became dirty; the corrected-Qwen mixed-performance disposition remains
+  unchanged. The M1 unavailable-row blocker portion is now also covered by the
+  merged task325/#387 `BLOCK_RUNTIME_CONFIRMED` documentation, so #371 remains
+  evidence/fail-closeout docs only and is not a self-merge candidate.

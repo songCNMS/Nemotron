@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Knowledge Entries
 
@@ -149,3 +149,15 @@
     coordinator/authorized non-author merge as evidence/fail-closeout docs
     only; no self-merge or downstream promotion/training/eval/export/endpoint
     action is authorized.
+37. Session 93 refreshed #371 against current `origin/main`
+    `8a757c323b82f4330b765ee89a6d78f421d9d9be` after GitHub reported the PR
+    dirty. Conflict resolution was docs/status-only; task311 evidence and
+    disposition are unchanged.
+38. The M1 unavailable-row blocker portion of task311 is now also covered by
+    merged task325/#387 `BLOCK_RUNTIME_CONFIRMED`, but #371 still carries the
+    corrected-Qwen mixed-performance evidence:
+    `FAIL_MMLU_PRO_BELOW_BASE_WITH_AIME_HMMT_PASS`.
+39. Do not self-merge #371 until lead gates an exact refreshed CLEAN head; the
+    refresh authorizes no benchmark row execution, model eval, training,
+    export, endpoint, promotion, task255 reuse, AIME2025 train-row use, shared
+    deletion, or direct main push.

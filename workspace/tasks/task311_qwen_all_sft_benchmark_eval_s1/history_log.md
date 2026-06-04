@@ -1,6 +1,6 @@
 # task311_qwen_all_sft_benchmark_eval_s1 - History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Session 77 - 2026-06-03 UTC - Assigned
 
@@ -303,3 +303,25 @@
 - No promotion, training, new eval, export, endpoint, task255 reuse,
   AIME2025 train-data use, shared deletion, direct main push, merge, or
   self-merge occurred.
+
+## Session 93 - 2026-06-04 UTC - refresh against current main
+
+- Received lead refresh request because task311/#371 was `DIRTY` after
+  `origin/main` advanced to `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
+- Rebasing #371 onto current `origin/main` produced repeated conflicts only in
+  `workspace/interns/intern_nemotron_worker_3/status.md`; task311 docs and
+  task-owned scripts replayed without content conflicts.
+- Resolved the stale status conflicts by not resurrecting old per-session
+  task311/task325 working states, then added a final docs/status refresh note.
+- Refreshed disposition remains
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`: AIME2025 and HMMT
+  passed against their comparators, MMLU-Pro failed by `-2`, and there is no
+  promotion.
+- M1 unavailable-row blocker evidence is now also covered by merged task325/#387
+  `BLOCK_RUNTIME_CONFIRMED`; this does not supersede the corrected-Qwen mixed
+  benchmark evidence in #371.
+- #371 remains open for lead/coordinator gate review only; no self-merge is
+  authorized by this refresh.
+- No benchmark rows, model eval, training, export, endpoint, promotion,
+  task255 reuse, AIME2025 train-row use, shared deletion, direct main push,
+  merge, or self-merge occurred.
