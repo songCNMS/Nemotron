@@ -1,6 +1,6 @@
 # task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1 - history
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -27,3 +27,18 @@
 - Boundaries acknowledged: no optimizer/training/eval/export/endpoint/
   promotion/task255/AIME2025 train rows/shared deletion/product-code edit/main
   push/merge/self-merge.
+
+## 2026-06-04 UTC - Access probe complete
+
+- Created artifact root
+  `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z`.
+- Captured non-secret `ssh -G NemTron` route summary.
+- Ran required `ssh -o ConnectTimeout=10 NemTron 'hostname; date -u +%Y-%m-%dT%H:%M:%SZ'`;
+  result rc `255`, stderr `channel 0: open failed: connect failed:
+  Connection refused`.
+- Confirmed proxy hop is reachable and authenticates as
+  `ssh-proxy-deployment-64fbf5f7d5-4flbz`.
+- Confirmed proxy-side TCP connection to configured target
+  `10.100.2.62:33808` is refused.
+- Recorded disposition `BLOCK_NEMTRON_ACCESS` in
+  `nemtron_access_recovery_report.md`.

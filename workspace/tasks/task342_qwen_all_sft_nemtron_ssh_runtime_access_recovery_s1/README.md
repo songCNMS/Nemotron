@@ -1,6 +1,6 @@
 # task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1 - NemTron access recovery
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
 
 ## Background
 
@@ -100,3 +100,16 @@ Return exactly one disposition:
 - Boundary confirmation: no optimizer/training/eval/export/endpoint/promotion,
   task255 reuse, AIME2025 train rows, shared deletion/mutation, product-code
   edits, main push, merge, or self-merge.
+
+## Worker_4 Review Result
+
+- Completed: `2026-06-04T12:45:10Z`.
+- Report:
+  `workspace/tasks/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/nemtron_access_recovery_report.md`.
+- Artifact root:
+  `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z`.
+- Disposition: `BLOCK_NEMTRON_ACCESS`.
+- Summary: `ssh NemTron` still returns rc `255`; the proxy hop is reachable,
+  but proxy-side TCP connection to configured target `10.100.2.62:33808`
+  returns connection refused. task341 should not be rerun until target
+  host/port/service is restored or replaced by a lead-approved route.
