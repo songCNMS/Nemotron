@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #393 task330 approved self-merge first; #392 task329 approved docs closeout after #393; task310 train/eval HOLD |
+| PR | #392/#393 merged; task331/task332 assigned for no-training blocker remediation; task310 train/eval HOLD |
 | Session | 83 |

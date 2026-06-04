@@ -12449,3 +12449,19 @@
   `delivered`. Task310 training/eval/export/endpoint/promotion remain HOLD; no
   lead merge, main push, training, eval, export, endpoint, promotion, task255
   reuse, AIME2025 train rows, or shared deletion was performed.
+- Session 83 merge closeout and remediation split: fetched `origin/main` after
+  worker self-merges. #393 merged at `2026-06-04T06:33:54Z` with merge commit
+  `76886ab9c99cd4d227b0ed18bef43a9949129f73` from exact head
+  `c01dd4e1bd8c0a1f58710ccee85c94256f8fa59c`; processed worker_4 merge
+  closeout mailbox `ad22ddb882174c68b3d0980fd0e1de20`. #392 merged at
+  `2026-06-04T06:35:06Z` with merge commit
+  `410c2247fc5e09e6ad831bdee1628830b97fbd89` from exact head
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`; worker_2 branch-only closeout
+  head observed at `5c25c7689d9f0efa6ee428db74feb74256b48bcf` with Idle
+  status. Created task331
+  `task331_qwen_all_sft_swe_supervised_formatter_unblock_s1` for worker_2 to
+  unblock SWE nonzero supervised-token packing, and task332
+  `task332_qwen_all_sft_structured_split_policy_remediation_s1` for worker_4
+  to remediate structured filtered rows and sparse split exposure. Both tasks
+  are no-training/no-eval remediation only; task310 and benchmark release remain
+  HOLD.
