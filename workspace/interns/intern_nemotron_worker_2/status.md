@@ -10,5 +10,5 @@
 | Team | nemotron |
 | Current Task | task335_qwen_all_sft_task333_30b_launch_preflight_s1 |
 | PR | pending |
-| Session | 86 |
-| Last Update | 2026-06-04T08:45:00Z: Accepted task335 on branch intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1 from origin/main 76b9ebf98e623cb85075378ca9980ba6ee11c8ed; imported lead docs from 5c55be62. Scope is no-training Qwen3-30B all-SFT launch/config/import/resource preflight over task333 packed root only; no optimizer/training/eval/export/endpoint/promotion/30B release/task310/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge. |
+| Session | 2 |
+| Last Update | 2026-06-04T09:06:44Z: task335 no-training preflight evidence produced at /work-agents/intern_nemotron_worker_2/outputs/task335_qwen_all_sft_task333_30b_launch_preflight_s1/run_20260604T090300Z. Disposition BLOCK_LAUNCH_PREFLIGHT: model/data/resource/validation-route checks passed, but NemTron Qwen3 MoE Bridge import is blocked by missing megatron.energon. Preparing PR and official mailbox; no optimizer/training/eval/export/endpoint/promotion/task310 release/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge performed. |

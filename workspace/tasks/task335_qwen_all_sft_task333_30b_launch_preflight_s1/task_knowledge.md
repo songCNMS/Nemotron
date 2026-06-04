@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - task knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 1. #396/task333 merged at `2026-06-04T08:37:16Z` via merge commit
    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
@@ -20,3 +20,20 @@
 7. Before any NemTron remote/debug probe, current-main code must be synced to a
    task-owned `/root/task335_*` path. Do not run optimizer/training; only
    import/config/resource/data-path preflight is allowed.
+8. Session 2 output root:
+   `/work-agents/intern_nemotron_worker_2/outputs/task335_qwen_all_sft_task333_30b_launch_preflight_s1/run_20260604T090300Z`.
+9. The task-owned train-only view is the safe later launch data route:
+   `84` train shards, `78,168` rows, `300,046,415` input tokens,
+   `33,477,337` supervised tokens, and `0` valid/test shards. This preserves
+   `do_validation=false` and avoids repeating the task310 validation hang route.
+10. NemTron remote sync proof:
+    `/root/task335_qwen_all_sft_task333_30b_launch_preflight_s1/run_20260604T090300Z/Nemotron`
+    has synced head `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
+11. Current exact launch blocker:
+    `megatron.bridge.recipes.qwen.qwen3_moe` import fails with
+    `ModuleNotFoundError("No module named 'megatron.energon'")`; this keeps the
+    task at `BLOCK_LAUNCH_PREFLIGHT` and task310/all-SFT 30B training HOLD.
+12. Passing subchecks: model path exists as `Qwen3MoeForCausalLM`,
+    tokenizer chat template exists, Qwen packed/training pipeline contract
+    passes on the train-only root, remote split exposure is train-only, and
+    8 idle H200 GPUs are visible.
