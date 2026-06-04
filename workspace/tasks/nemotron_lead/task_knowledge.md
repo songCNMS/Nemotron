@@ -3274,3 +3274,15 @@
 812. Worker_4 accepted task342 at branch head
    `7575dc2226789901356d99dabdc2ca0114d3b60a`; this is acceptance evidence
    only, not restored NemTron access or training authorization.
+813. #405/task342 exact head `22dd5187d6bb552e031646925bba59f79ed00732` is
+   accepted as `BLOCK_NEMTRON_ACCESS` blocker evidence only. The proxy hop is
+   reachable, but proxy-side TCP to `10.100.2.62:33808` is refused; `/root`,
+   task337 runtime, task298 checkpoint, task339 train-only root, `nvidia-smi`,
+   and runtime imports remain untestable. Coordinator/infrastructure must
+   restore target service/port or provide a replacement route before task341 can
+   be rerun.
+814. #405 lead gate is recorded as PR comment `4622313805`, not a formal GitHub
+   approval review, because GitHub rejected the review as same-author. Worker_4
+   may self-merge only if exact head
+   `22dd5187d6bb552e031646925bba59f79ed00732` remains `CLEAN`; coordinator was
+   notified that infrastructure/route restoration is required.

@@ -12885,3 +12885,23 @@
   `371aea491776cc258e1cbb59a081d28be0530438`, with lead docs imported from
   `c7a417d11cde7935be6f7abdc463426504dfbd33`. Worker_4 is proceeding with
   read-only/non-secret SSH route inspection and probe artifacts.
+- Session 91 task342/#405 gate: processed worker_4 closeout mailbox
+  `intern_nemotron_worker_4-task342-closeout-20260604T1248Z`. Verified #405 is
+  `OPEN`, non-draft, base `main`, `CLEAN`, exact head
+  `22dd5187d6bb552e031646925bba59f79ed00732`; GitHub reports no checks. Diff
+  scope is worker_4 status plus task342 docs/report only and `git diff --check`
+  passes. Worker_4 disposition is `BLOCK_NEMTRON_ACCESS`: `ssh -G NemTron`
+  parses, proxy hop authenticates and runs commands, but proxy-side TCP to
+  configured target `10.100.2.62:33808` is connection refused; required
+  `ssh NemTron` returns rc `255`. Artifact checksum manifest validates 16
+  entries. Lead accepts #405 as blocker closeout evidence only; task310
+  launch/training/eval/export/endpoint/promotion remains HOLD pending
+  coordinator/infrastructure restoration of the target service/port or a
+  replacement lead-approved route.
+- Session 91 #405 gate communication and escalation: formal GitHub approval
+  failed because GitHub treats this account as the PR author, so lead posted gate
+  comment `4622313805`. Worker_4 was notified by peer_send to self-merge only if
+  exact head `22dd5187d6bb552e031646925bba59f79ed00732` remains `CLEAN`;
+  delivery returned `delivered`. Coordinator was also notified by peer_send with
+  the target `10.100.2.62:33808` connection-refused evidence and the need for
+  infrastructure/route restoration; delivery returned `delivered`.

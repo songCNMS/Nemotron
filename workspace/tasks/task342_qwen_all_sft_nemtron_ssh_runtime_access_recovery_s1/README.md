@@ -1,6 +1,6 @@
 # task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1 - NemTron access recovery
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_4,SESSION=91 -->
 
 ## Background
 
