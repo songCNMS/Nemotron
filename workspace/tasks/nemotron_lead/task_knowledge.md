@@ -3286,3 +3286,10 @@
    may self-merge only if exact head
    `22dd5187d6bb552e031646925bba59f79ed00732` remains `CLEAN`; coordinator was
    notified that infrastructure/route restoration is required.
+815. #405/task342 merged at `2026-06-04T12:53:46Z` with merge commit
+   `3baff1a3e3de84852d8361a11a81917d4256d3f1` from exact head
+   `22dd5187d6bb552e031646925bba59f79ed00732`. This closes blocker docs only;
+   task310 remains HOLD pending NemTron target service/port restoration and a
+   fresh task341-equivalent no-training handoff.
+816. Worker_4 #405 post-merge closeout mailbox confirms the merge and reports
+   no issues or boundary violations; global gate remains unchanged.

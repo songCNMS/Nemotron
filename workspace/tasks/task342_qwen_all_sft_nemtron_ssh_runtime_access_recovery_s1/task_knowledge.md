@@ -26,3 +26,10 @@
 8. Lead gate was posted as PR comment `4622313805` because GitHub rejected
    formal same-author approval. Worker_4 may self-merge #405 only if exact head
    `22dd5187d6bb552e031646925bba59f79ed00732` remains `CLEAN`.
+9. #405 merged at `2026-06-04T12:53:46Z` with merge commit
+   `3baff1a3e3de84852d8361a11a81917d4256d3f1` from exact head
+   `22dd5187d6bb552e031646925bba59f79ed00732`. Merged evidence remains
+   `BLOCK_NEMTRON_ACCESS`, not restored access.
+10. Worker_4 merge closeout mailbox
+   `intern_nemotron_worker_4-task342-merge-closeout-20260604T1254Z` confirms no
+   issues or boundary violations after #405 merge.

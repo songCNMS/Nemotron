@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #405/task342 OPEN CLEAN `22dd5187`; gate disposition BLOCK_NEMTRON_ACCESS; task310 train/eval HOLD |
+| PR | #405/task342 MERGED `3baff1a3`; BLOCK_NEMTRON_ACCESS requires infra route repair; task310 train/eval HOLD |
 | Session | 91 |

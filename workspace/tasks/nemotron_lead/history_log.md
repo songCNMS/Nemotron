@@ -12905,3 +12905,18 @@
   delivery returned `delivered`. Coordinator was also notified by peer_send with
   the target `10.100.2.62:33808` connection-refused evidence and the need for
   infrastructure/route restoration; delivery returned `delivered`.
+- Session 91 #405 merge closeout: verified #405 merged at
+  `2026-06-04T12:53:46Z` with merge commit
+  `3baff1a3e3de84852d8361a11a81917d4256d3f1` from exact head
+  `22dd5187d6bb552e031646925bba59f79ed00732`; `origin/main` now includes
+  task342 blocker evidence. Global all-SFT Qwen pipeline remains blocked/HOLD:
+  NemTron proxy hop works, but target service/port `10.100.2.62:33808` refuses
+  connections, so task341 handoff rerun and task310 launch/training/eval remain
+  unauthorized pending coordinator/infrastructure route repair.
+- Session 91 worker_4 #405 merge closeout mailbox: processed
+  `intern_nemotron_worker_4-task342-merge-closeout-20260604T1254Z`, confirming
+  worker_4 self-merged exact approved head
+  `22dd5187d6bb552e031646925bba59f79ed00732` with merge commit
+  `3baff1a3e3de84852d8361a11a81917d4256d3f1` at
+  `2026-06-04T12:53:46Z`. Scope remains blocker docs/status/report only with no
+  boundary issues.
