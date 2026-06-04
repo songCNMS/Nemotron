@@ -1,6 +1,6 @@
 # task325_qwen_all_sft_m1_launcher_remediation_route_s1 - History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -46,3 +46,24 @@
 - No benchmark rows, model eval, training, export, endpoint, promotion,
   task255 reuse, AIME2025 train data, shared deletion, system/shared env
   mutation, main push, merge, or self-merge was performed.
+
+## Session 16 - Lead-approved self-merge closeout
+
+- Received lead release for task325/#387:
+  `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED` at exact head
+  `e07ee3f9268b33658e18881c25a3d221bf2136ee`.
+- Verified #387 was `OPEN`, non-draft, base `main`, head
+  `e07ee3f9268b33658e18881c25a3d221bf2136ee`, `CLEAN`, and `MERGEABLE` before
+  merge.
+- Self-merged #387 using GitHub merge commit flow.
+- Confirmed #387 state `MERGED`, mergedAt `2026-06-04T13:03:37Z`, merge commit
+  `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b`, merged head
+  `e07ee3f9268b33658e18881c25a3d221bf2136ee`.
+- Updated task README/status/history/knowledge closeout metadata on the worker
+  branch after merge; this is branch-only closeout bookkeeping.
+- Final disposition remains blocker documentation only:
+  `BLOCK_RUNTIME_CONFIRMED`; no M1 benchmark row execution or runtime release
+  is authorized by this closeout.
+- No benchmark rows, model eval, training, export, endpoint, promotion,
+  task255 reuse, AIME2025 train data, shared env mutation/deletion, task310
+  release, direct main push, or additional merge was performed.

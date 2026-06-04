@@ -1,6 +1,6 @@
 # task325_qwen_all_sft_m1_launcher_remediation_route_s1 - M1 launcher remediation route
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_3,SESSION=78 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_3,SESSION=16 -->
 
 ## Background
 

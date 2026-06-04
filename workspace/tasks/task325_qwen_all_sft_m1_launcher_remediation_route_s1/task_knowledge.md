@@ -1,6 +1,6 @@
 # task325_qwen_all_sft_m1_launcher_remediation_route_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Knowledge Entries
 
@@ -32,3 +32,8 @@
    artifacts. PR #387 remains the task325 docs/report vehicle; worker status
    must use allowed status values only, so the open-PR state is recorded as
    `Working` rather than `ReadyForPR`.
+10. Session 16 merged PR #387 after lead release at exact head
+    `e07ee3f9268b33658e18881c25a3d221bf2136ee`; merge commit is
+    `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b`, mergedAt
+    `2026-06-04T13:03:37Z`. This remains blocker docs only and authorizes no
+    M1 row execution or runtime remediation.

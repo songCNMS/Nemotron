@@ -1,14 +1,14 @@
 # intern_nemotron_worker_3 - status
 
-<!-- METADATA:STATUS=Working,TASK=task325_qwen_all_sft_m1_launcher_remediation_route_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_3 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task325_qwen_all_sft_m1_launcher_remediation_route_s1 |
+| Current Task |  |
 | PR | #387 |
-| Session | 15 |
-| Progress | Task325 no-run M1 launcher remediation route/blocker audit completed and pushed to PR #387. Current disposition is BLOCK_RUNTIME_CONFIRMED: task315 blocker remains valid, 14 exact launcher mappings exist, 5 exact tasks remain unavailable, and 0/19 rows are runnable now without lead-gated runtime/container/credential remediation. |
+| Session | 16 |
+| Progress | Task325 completed. PR #387 merged at 2026-06-04T13:03:37Z with merge commit a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b; disposition remains BLOCK_RUNTIME_CONFIRMED docs only. |
