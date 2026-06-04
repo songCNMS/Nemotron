@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task330_qwen_all_sft_task329_independent_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task332_qwen_all_sft_structured_split_policy_remediation_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | ReadyForPR |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task330_qwen_all_sft_task329_independent_review_s1 |
-| PR | #393 |
+| Current Task | task332_qwen_all_sft_structured_split_policy_remediation_s1 |
+| PR | pending |
 | Session | 1 |
-| Progress | Opened PR #393 with task330 independent read-only review for #392 exact head `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` and artifact root `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`. Disposition `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`: diff scope/diff-check OK, helper compile PASS, artifact checksum manifest PASS, packed shard checksum manifest PASS, Qwen30B contract PASS, manifest assertions PASS. Exact blockers remain SWE 51,029 rows with 0 supervised tokens, 6 structured validation-filtered rows, sparse valid/test exposure, and deferred combination with task299 seed. All nine task327 decontam-hit sources remain excluded. Task310 remains HOLD. No product-code edits, training/eval/export/endpoint/promotion/task255/AIME2025 train rows/shared deletion/merge/self-merge/main push. |
+| Progress | Accepted task332 from lead docs `bbbf19df7ea7dad3fc644588f1e84240c464febe` on branch `intern_nemotron_worker_4/task332_qwen_all_sft_structured_split_policy_remediation_s1` from required `origin/main` `410c2247fc5e09e6ad831bdee1628830b97fbd89`. Scope is no-training remediation evidence for the 6 `instruction-following-structured` validation-filtered rows and sparse valid/test exposure, with task-owned outputs, checksums, decontam/no-AIME2025 train proof, deterministic split policy or blocker, and task331 dependency. No training/eval/export/endpoint/promotion/task255/shared deletion/merge/self-merge/main push. |
