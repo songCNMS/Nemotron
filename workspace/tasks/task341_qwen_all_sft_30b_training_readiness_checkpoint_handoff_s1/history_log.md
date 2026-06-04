@@ -1,6 +1,6 @@
 # task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 - history
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -25,3 +25,22 @@
 - Boundaries remain: no optimizer step, training loop, benchmark/AIME eval,
   export, endpoint, promotion, task255 reuse, AIME2025 train rows, shared
   deletion/mutation, main push, merge, or self-merge.
+
+## 2026-06-04T12:26:00Z - Readiness blocked by NemTron SSH
+
+- Ran task341 helper:
+  `PYTHONPATH=src python3 workspace/tasks/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1/build_task341_training_readiness_handoff.py`.
+- Produced task-owned local artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1/run_20260604T122328Z`.
+- Local task339 artifact checksum and train-only shard checksum validations
+  both returned `rc=0`.
+- Candidate checkpoint handoff path identified from task298:
+  `/root/task298_qwen_aime_v11_30b_runtime_resource_base_load_s1/run_20260602T143838Z/qwen3_30b_bridge_import_iter0`.
+- Required NemTron SSH/runtime probe returned `rc=255` with
+  `connect failed: Connection refused`, so live task-owned `/root` sync,
+  runtime residual validation, and checkpoint path validation could not complete.
+- Disposition recorded as `BLOCK_TRAINING_READINESS`.
+- Wrote `training_readiness_checkpoint_handoff_report.md`.
+- No optimizer step, training loop, benchmark/AIME eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train rows, shared deletion/mutation, main
+  push, merge, or self-merge was performed.
