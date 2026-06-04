@@ -15,3 +15,7 @@
    `multi_storage_client` import name failure, and launch contract placeholders
    `TASK339_TRAIN_ITERS`, `TASK339_LR`, `SUPER3_M1_PRETRAINED_CHECKPOINT`, and
    related parameters remain intentionally unset.
+6. Worker_4 accepted task340 on branch
+   `origin/intern_nemotron_worker_4/task340_qwen_all_sft_task339_independent_review_s1`
+   at `15ee7c871fc02f944ca723aef44590d9e8971fdb`; this is ownership evidence
+   only, not a #402 gate decision.

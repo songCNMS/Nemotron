@@ -114,3 +114,23 @@ Return one of:
 - Base: current `origin/main`
   `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
 - Gate state: #402/task339 and task310 remain HOLD pending this review.
+
+## Acceptance
+
+- Worker_4 acceptance mailbox:
+  `intern_nemotron_worker_4-task340-accept-20260604T1142Z`.
+- Worker branch:
+  `origin/intern_nemotron_worker_4/task340_qwen_all_sft_task339_independent_review_s1`.
+- Acceptance head:
+  `15ee7c871fc02f944ca723aef44590d9e8971fdb`.
+- Base: `origin/main`
+  `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
+- Lead docs imported from:
+  `origin/intern_nemotron_lead/session1-recovery-task-docs`
+  `0270526a5197eeb441ac43b5cec62ab46d122d8b`.
+- Review target reconfirmed: #402 exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z`,
+  report sha `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
+- Worker_4 accepted read-only review scope and boundaries; #402/task339 and
+  task310 remain HOLD pending approve/request-changes/block report.
