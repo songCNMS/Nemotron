@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -51,3 +51,18 @@
   separate lead-assigned task335-equivalent no-training preflight rerun.
 - Opened PR #400:
   `https://github.com/songCNMS/Nemotron/pull/400`.
+
+## Session 3 - 2026-06-04 UTC - Approved runtime-remediation evidence merged
+
+- Received lead approval to self-merge #400 only at exact head
+  `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`, with approval scope limited to
+  no-training runtime import remediation evidence.
+- Immediately before merge, verified #400 was OPEN, non-draft, base `main`,
+  exact head `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`,
+  `mergeStateStatus=CLEAN`, and `mergeable=MERGEABLE`.
+- Self-merged #400 at `2026-06-04T11:11:08Z` with merge commit
+  `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
+- Completion scope remains runtime import remediation evidence only. It does
+  not release task310/all-SFT 30B launch, training, eval, export, endpoint,
+  promotion, task255 reuse, AIME2025 train rows, shared deletion, or any
+  follow-on work without a separate lead assignment.

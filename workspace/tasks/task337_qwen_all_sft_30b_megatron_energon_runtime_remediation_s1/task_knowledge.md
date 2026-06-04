@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 1. Accepted task335 blocker is missing `megatron.energon` when importing
    `megatron.bridge.recipes.qwen.qwen3_moe` on the NemTron route.
@@ -25,3 +25,9 @@
    and `megatron.bridge.recipes.qwen.qwen3_moe` from existing Megatron Bridge.
    This proves runtime import remediation only; a task335-equivalent
    no-training launch preflight rerun is still required before any training.
+9. #400/task337 was approved as runtime-remediation evidence only at exact head
+   `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091` and merged at
+   `2026-06-04T11:11:08Z` with merge commit
+   `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
+10. The next lead step after task337 is no-training launch preflight rerun, not
+    task310/all-SFT 30B training.
