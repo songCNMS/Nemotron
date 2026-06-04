@@ -1,6 +1,6 @@
 # task330_qwen_all_sft_task329_independent_review_s1 - Independent review of task329 raw-pass evidence
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## Background
 
@@ -81,6 +81,17 @@ all-SFT training contract can be considered.
   - artifact paths and checksum results,
   - approve/request-changes/block decision for #392,
   - exact remediation recommendation for the all-SFT pipeline.
+
+## Worker Closeout Snapshot
+
+- Report:
+  `workspace/tasks/task330_qwen_all_sft_task329_independent_review_s1/task329_independent_review_report.md`.
+- Disposition: `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`.
+- #392 exact head reviewed:
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`.
+- Artifact root reviewed:
+  `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`.
+- Task310 remains HOLD; no training/eval/export/endpoint/promotion release.
 
 ## Boundaries
 

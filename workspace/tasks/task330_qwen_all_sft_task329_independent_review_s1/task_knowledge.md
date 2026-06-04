@@ -21,3 +21,10 @@
 7. Worker_4 branch for this review is
    `intern_nemotron_worker_4/task330_qwen_all_sft_task329_independent_review_s1`
    from `origin/main` `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`.
+8. Independent review disposition is `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`;
+   #392 is accurate partial evidence, not training release.
+9. Verified artifact checksums pass, packed shard checksums pass, helper
+   compiles, `QWEN30B_PACKED_CONTRACT=PASS`, and manifest assertions pass.
+10. Exact blockers remain: SWE 0 supervised tokens, 6 structured
+    validation-filtered rows, sparse valid/test exposure, and deferred
+    combination with task299 seed.
