@@ -2963,3 +2963,13 @@
    worker report, branch push/PR, artifact checksum manifest, explicit
    source/split/decontam/parity summary, and lead/independent review of sparse
    valid/test residuals.
+759. Session 82 #392/task329 gate: current exact PR head
+   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` is held by lead comment
+   `issuecomment-4619497556` pending task330 independent review. Earlier
+   comments `issuecomment-4619456297` and `issuecomment-4619471068` are
+   superseded after metadata-only head drift. Preliminary lead checks pass for
+   diff-check, helper compile, artifact checksums, packed shard checksums, and
+   Qwen3-30B packed contract. Blocking facts before training: SWE has
+   `supervised_tokens=0`, structured has 6 validation-filtered rows, valid/test
+   split exposure is sparse, and task299 combination remains unreviewed.
+   task310 and all benchmark/eval/export/endpoint/promotion stay blocked.

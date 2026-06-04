@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task329 local pack rc=0 live evidence pending worker report/PR; #390/#391 open clean; all-SFT train/eval HOLD |
-| Session | 81 |
+| PR | #392/task329 HOLD pending task330 independent review; task310 train/eval HOLD |
+| Session | 82 |

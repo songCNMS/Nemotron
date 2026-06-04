@@ -12412,3 +12412,21 @@
   validation but sparse shard-based valid/test residuals. No worker report, PR,
   mailbox closeout, or lead gate yet; this is live evidence only and all
   training/eval/export/endpoint/promotion remain HOLD.
+- Session 82 #392 gate: worker_2 opened task329 PR #392, then advanced through
+  metadata-only head updates to current exact head
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`; PR is `OPEN`, base `main`,
+  non-draft, `CLEAN`/`MERGEABLE`. Verified diff scope is worker_2 status plus
+  task329 README/history/task_knowledge/helper/report; `git diff --check`
+  passed; helper source compiled; `sha256sum -c` passed for
+  `manifests/artifact_checksums.sha256` and
+  `manifests/packed_shard_checksums.sha256`; Qwen3-30B contract log reports
+  `QWEN30B_PACKED_CONTRACT=PASS`. Lead posted current-head
+  `HOLD_FOR_INDEPENDENT_REVIEW` comment `issuecomment-4619497556`, superseding
+  earlier comments `issuecomment-4619456297` and `issuecomment-4619471068`.
+  Current disposition remains `PARTIAL_PASS_WITH_EXACT_BLOCKERS`: SWE
+  supervised tokens are zero, structured has 6 validation-filtered rows,
+  valid/test exposure is sparse, and combination with task299 is deferred.
+  Processed worker_2 mailbox closeout for `48d42bc` and hook/head-update
+  mailbox for `d911ec58`. Created task330 for worker_4 independent review of
+  current head. No self-merge or task310 training/eval/export/endpoint/promotion
+  release.
