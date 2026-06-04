@@ -1,6 +1,6 @@
 # task340_qwen_all_sft_task339_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=89 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=89 -->
 
 1. Review target is #402 exact head
    `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
@@ -19,3 +19,14 @@
    `intern_nemotron_worker_4/task340_qwen_all_sft_task339_independent_review_s1`
    from `origin/main` `f083c9566a9f0775c27ae49f16b8b898edfc8d11`; lead docs
    were imported from `0270526a5197eeb441ac43b5cec62ab46d122d8b`.
+7. Worker_4 independent review disposition is
+   `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` for #402 exact head
+   `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`.
+8. Verified task339 artifact checksums, 84 train-only shard checksums, upstream
+   task333 checksums/decontam proof, `TASK339_REMOTE_PREFLIGHT=PASS`,
+   task337 runtime handoff, Qwen3-30B model/config surface, 8x H200 probe, and
+   validation fail-closed route.
+9. Residuals carried forward: no training/checkpoint/optimizer proof,
+   `nvidia_resiliency_ext` missing for later runtime, diagnostic
+   `multi_storage_client` import name fails while `multistorageclient` passes,
+   and launch placeholders remain intentionally unset.

@@ -1,6 +1,6 @@
 # task340_qwen_all_sft_task339_independent_review_s1 - history
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=89 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=89 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -28,3 +28,20 @@
   training, optimizer steps, eval, export, endpoint, promotion, task310,
   task255, AIME2025 train rows, shared deletion, main push, merge, or
   self-merge.
+
+## 2026-06-04 UTC - Independent review complete
+
+- Revalidated #402 exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1` as `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Verified PR diff scope and `git diff --check`.
+- Verified task339 report sha256
+  `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
+- Verified task339 helper compile from PR head, task339 artifact checksum
+  manifest, task339 84 train-only shard checksums, and upstream task333
+  checksum/decontam proofs.
+- Recorded decision `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` in
+  `task339_independent_review_report.md`.
+- Boundary confirmation remains unchanged: no training/optimizer/eval/export/
+  endpoint/promotion/task310/task255/AIME2025 train rows/shared deletion/main
+  push/merge/self-merge.
