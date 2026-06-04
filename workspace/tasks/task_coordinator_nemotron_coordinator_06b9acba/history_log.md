@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
 
 ## Session 0 - Created with coordinator
 
@@ -770,4 +770,26 @@
   - #377 remains `OPEN`/`DIRTY` at `c1b053b518137769b9b423d08d9590d8ae481a2e`.
   - #360 remains `OPEN`/`CLEAN` at `7948abbbd0cd65bccb52018e8344ed0d48125d76` before this Session 49 docs update.
 - Sent delivered peer acknowledgement to `intern_nemotron_lead`, including the newer #386 open/clean observation and unchanged HOLD.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 50 - task324/task316 merges reconciled
+
+- Received `intern_nemotron_lead` Session 95 update:
+  - #386/task324 merged at `2026-06-04T13:51:40Z` with merge commit `6800c3404169087b61a79de6bf96e3ad774b82e5` from exact approved head `1e07a10a446edc46522910006e8ba2a9ab97c108`.
+  - #377/task316 merged at `2026-06-04T13:57:09Z` with merge commit `928d9d684b188fc1858914d0de7aef211627f697` from exact approved head `19f8a01f44aa4322635aab374d8ed22795639bda`.
+  - Lead is awaiting worker_5 closeout mailbox for #377/task316.
+  - Lead reported `origin/main` at `928d9d68`.
+  - Lead reported #384 open/dirty at `9524e9fe7ac824102314b4cb045a17d6a529e3da` pending worker_5 refresh or superseded closeout.
+  - Lead reported #360 open/clean at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53`.
+- Fetched origin and verified current remote state:
+  - `origin/main` is `928d9d684b188fc1858914d0de7aef211627f697`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` is `6b18e44cd1d68e0f07158f1dbe335cc70628abed`.
+  - `origin/main` top commits show #377 merge `928d9d68`, #386 merge `6800c340`, and #381 merge `12f20a5d`.
+- Verified GitHub PR state:
+  - #386 is `MERGED` with the reported merge time, merge commit, and head.
+  - #377 is `MERGED` with the reported merge time, merge commit, and head.
+  - #384 remains `OPEN`/`DIRTY` at `9524e9fe7ac824102314b4cb045a17d6a529e3da`.
+  - #360 remains `OPEN`/`CLEAN` at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53` before this Session 50 docs update.
+  - Current open PR list is only #384 and #360.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the merges, current open PR list, and unchanged HOLD.
 - Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
