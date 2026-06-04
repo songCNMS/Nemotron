@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task308_qwen_all_sft_pipeline_inventory_audit_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task333_qwen_all_sft_combined_packed_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task308_qwen_all_sft_pipeline_inventory_audit_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/374 |
-| Session | 88 |
-| Progress | Lead received current head b798fdfc as metadata-only drift; #374 remains on HOLD pending task312 refresh, with unchanged task309 fail-closed disposition for unmaterialized generic stage1_sft raw sources. |
+| Current Task | task333_qwen_all_sft_combined_packed_contract_s1 |
+| PR | Pending |
+| Session | 99 |
+| Progress | Produced no-training combined all-SFT packed-contract candidate under task333 outputs with Qwen3-30B contract rc 0; preparing PR/mailbox. |
