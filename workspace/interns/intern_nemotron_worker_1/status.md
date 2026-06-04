@@ -1,6 +1,6 @@
 # intern_nemotron_worker_1 - status
 
-<!-- METADATA:STATUS=Working,TASK=task320_qwen_all_sft_mmlu_data_repair_linkage_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task324_qwen_all_sft_mmlu_aware_blend_design_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task320_qwen_all_sft_mmlu_data_repair_linkage_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/381 |
-| Session | 93 |
-| Progress | Completed docs-only MMLU-Pro data-repair linkage report and opened PR #381. Recommendation: APPROVE_LINKAGE with raw blend packing/training blocked pending task319 source/decontam feasibility; no self-merge. |
+| Current Task | task324_qwen_all_sft_mmlu_aware_blend_design_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/386 |
+| Session | 96 |
+| Progress | Opened PR #386 with docs-only MMLU-aware all-SFT blend design report; preparing mailbox closeout and holding for lead gate. |
