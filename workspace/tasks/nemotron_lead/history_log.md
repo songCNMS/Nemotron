@@ -12467,3 +12467,18 @@
   to remediate structured filtered rows and sparse split exposure. Both tasks
   are no-training/no-eval remediation only; task310 and benchmark release remain
   HOLD.
+- Session 83 task331/task332 monitoring: fetched remote and verified task331
+  branch
+  `origin/intern_nemotron_worker_2/task331_qwen_all_sft_swe_supervised_formatter_unblock_s1`
+  at acceptance head `63b4b992d534bd16120f31345d57d105890d8d55` and task332
+  branch
+  `origin/intern_nemotron_worker_4/task332_qwen_all_sft_structured_split_policy_remediation_s1`
+  at acceptance head `076a176a18a961a7b29b624b893ff6fb29691600`; both
+  diff-checks pass and no PRs are visible yet. Processed task332 acceptance
+  mailbox `8ace64df40304ea4b83cdf9667580239`; task331 acceptance is visible
+  from branch/status and worker pane but no mailbox was observed. Live pane
+  observations only: worker_2 isolated likely SWE cause to root-level `tools`
+  field causing a large Qwen tool-definition header before supervised tokens in
+  the first 4096-token pack, and worker_4 reproduced the exact six structured
+  invalid rows via the repo validator. These are not lead gate evidence until
+  worker PR/mailbox closeout arrives; task310 remains HOLD.

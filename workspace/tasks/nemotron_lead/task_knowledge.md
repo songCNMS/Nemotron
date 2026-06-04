@@ -3008,3 +3008,8 @@
    Both are no-training tasks and must produce task-owned output roots,
    checksums, decontam proof, and pass/fail dispositions before any combined
    packed-contract task.
+765. Session 83 live remediation observations remain ungated: worker_2 has a
+   plausible SWE root cause around Qwen tool-header insertion masking supervised
+   tokens inside pack limits; worker_4 reproduced six invalid structured rows
+   with the repo validator. These require pushed reports/artifacts and lead
+   review before they can unblock a combined packed contract.
