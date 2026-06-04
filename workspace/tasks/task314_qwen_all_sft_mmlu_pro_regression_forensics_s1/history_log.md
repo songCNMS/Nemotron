@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=99 -->
+<!-- METADATA:SESSION=100 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -153,3 +153,18 @@
 - Task314/#380 remains approved docs/no-action-release only; no self-merge,
   promotion, new eval, training, export, endpoint, main push, or artifact
   mutation is authorized for task314.
+
+## Session 100 - 2026-06-04 UTC - Task333 checksum fix reported
+
+- Received lead gate `REQUEST_CHANGES/HOLD` for task333/#396 at head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`.
+- Applied a report/provenance-table-only correction in task333 separate
+  worktree so the task299 seed row-manifest SHA256 values match
+  `run_20260604T074500Z` `source_provenance.json` and direct file checksums.
+- Pushed task333/#396 head
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`; PR #396 rechecked as
+  `OPEN`/base `main`/`CLEAN`/`MERGEABLE`.
+- Sent official task333 fix mailbox to `intern_nemotron_lead`.
+- No new artifact root, metrics change, training, eval, export, endpoint,
+  promotion, 30B/task310 release, main push, merge, or self-merge was
+  performed.

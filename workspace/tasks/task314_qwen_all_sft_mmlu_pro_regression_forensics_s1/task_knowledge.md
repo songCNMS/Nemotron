@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=99 -->
+<!-- METADATA:SESSION=100 -->
 
 ## Knowledge Entries
 
@@ -44,3 +44,7 @@
     packed-contract candidate `run_20260604T074500Z`; this is review evidence
     only and does not authorize task310 release, training, eval, export,
     endpoint, promotion, 30B release, main push, merge, or self-merge.
+16. Task333/#396 report checksum fix at head `9a9471e3` changed only
+    worker status and `combined_packed_contract_report.md`; the task299 seed
+    row-manifest hashes now match source_provenance/direct files:
+    from-m0 `7562c864`, math-final `e466ee7`, hard-verified `89ab29`.
