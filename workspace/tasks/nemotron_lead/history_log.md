@@ -12342,3 +12342,11 @@
   endpoint/promotion; only later bounded eligible-source contract planning may
   use the accepted facts that task327 has one large-source `INCLUDED_PASS`
   (`swe`) and nine large-source decontam blockers.
+- PR #390 advanced to `49c5d748c8c9ecc95d21c69a1bd16af0118cba3d`.
+  Delta from `28d0b13a` is hook/status cleanup only: status metadata changed
+  from `ReadyForReview` to allowed `Working`, duplicate `Session 1` heading
+  wording was removed, and task327 evidence/report substance stayed unchanged.
+  PR remained `OPEN`, `CLEAN`/`MERGEABLE`, and diff-check clean. Lead posted
+  refreshed gate comment `issuecomment-4619092178` with
+  `APPROVE_DOCS_STATUS_CLOSEOUT` for current head; no merge by lead and no
+  downstream all-SFT packing/training/eval release.

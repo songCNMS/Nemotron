@@ -2915,3 +2915,9 @@
    `issuecomment-4619067862` because formal review approval is blocked by
    own-PR token rules. No merge performed by lead; downstream all-SFT
    packing/training/eval stays HOLD.
+753. Session 79 PR gate refresh: #390 current head
+   `49c5d748c8c9ecc95d21c69a1bd16af0118cba3d` has hook/status cleanup only
+   relative to `28d0b13a`; evidence/report substance unchanged. Lead posted
+   refreshed `APPROVE_DOCS_STATUS_CLOSEOUT` as `issuecomment-4619092178`.
+   Non-author/authorized merge remains pending; all-SFT pack/train/eval stays
+   HOLD.

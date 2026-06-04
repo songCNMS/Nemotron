@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #390 gate-commented approve docs closeout; non-author merge pending; all-SFT pack/train HOLD |
+| PR | #390 refreshed gate-comment approve at 49c5d748; non-author merge pending; all-SFT pack/train HOLD |
 | Session | 79 |
