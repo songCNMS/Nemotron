@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - Qwen all-SFT task333 30B launch preflight
 
-<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Background
 

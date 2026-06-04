@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - task knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 1. #396/task333 merged at `2026-06-04T08:37:16Z` via merge commit
    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
@@ -37,3 +37,10 @@
     tokenizer chat template exists, Qwen packed/training pipeline contract
     passes on the train-only root, remote split exposure is train-only, and
     8 idle H200 GPUs are visible.
+13. #398/task335 was approved as blocker-docs closeout only at exact head
+    `0a094483458f01813b50e4fb13e2ddefdbdc4517` and merged at
+    `2026-06-04T09:45:30Z` with merge commit
+    `373d162d63a66f2dac6b94c43917be9c249cd83f`.
+14. Next executable work is not training; it must be a separate lead-assigned
+    runtime remediation for missing `megatron.energon`, followed by rerun or
+    equivalent no-training preflight.

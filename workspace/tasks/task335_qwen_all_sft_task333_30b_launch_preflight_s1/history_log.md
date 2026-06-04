@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - history
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 1 - 2026-06-04 UTC - Assigned and accepted by worker_2
 
@@ -44,3 +44,21 @@
   push/merge/self-merge was performed.
 - Opened PR #398:
   `https://github.com/songCNMS/Nemotron/pull/398`.
+
+## Session 3 - 2026-06-04 UTC - Approved blocker-docs PR merged
+
+- Received lead approval to self-merge #398 only at exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`, after #399/task336
+  independent review merged and lead verified #398 was OPEN/non-draft/base
+  main/CLEAN at that head.
+- Immediately before merge, verified #398 was OPEN, non-draft, base `main`,
+  exact head `0a094483458f01813b50e4fb13e2ddefdbdc4517`,
+  `mergeStateStatus=CLEAN`, and `mergeable=MERGEABLE`.
+- Self-merged #398 with merge commit
+  `373d162d63a66f2dac6b94c43917be9c249cd83f` at
+  `2026-06-04T09:45:30Z`.
+- Completion scope remains no-training fail-closed blocker documentation only.
+  This merge does not release task310, 30B training/launch, eval, export,
+  endpoint, promotion, task255, AIME2025 train rows, shared deletion, main push
+  by lead, runtime mutation, or any follow-on work without a separate lead
+  assignment.
