@@ -20,3 +20,10 @@
   `51c02eba48c47bd73a764c195889f544e41dc4d6`.
 - No PR yet. Worker_2 acknowledged no-training/no-eval/no-export boundaries and
   the NemTron `/root` sync rule before any remote/debug preflight.
+
+## 2026-06-04 UTC - Acceptance Head Corrected
+
+- Worker_2 pushed metadata-cleanup head
+  `76227ae1ccf483579f19a3288778ced2f32262c6`.
+- Drift from `51c02eba48c47bd73a764c195889f544e41dc4d6` is task335
+  history/task_knowledge metadata only. Scope and boundaries are unchanged.

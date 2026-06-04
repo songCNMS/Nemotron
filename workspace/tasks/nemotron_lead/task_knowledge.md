@@ -3101,3 +3101,7 @@
    No PR yet. The task is no-training preflight only; if it passes, create a
    separate lead-gated training task rather than treating task335 as task310
    release.
+779. Session 86 task335 corrected acceptance head is
+   `76227ae1ccf483579f19a3288778ced2f32262c6`; drift from `51c02eba` is
+   task335 history/task_knowledge metadata cleanup only. Use `76227ae1` as the
+   current worker_2 branch head.

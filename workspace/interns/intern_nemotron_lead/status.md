@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #396/#397 MERGED; task335 accepted by worker_2 at `51c02eba`, no PR yet; task310 train/eval HOLD |
+| PR | #396/#397 MERGED; task335 accepted by worker_2 at `76227ae1`, no PR yet; task310 train/eval HOLD |
 | Session | 86 |

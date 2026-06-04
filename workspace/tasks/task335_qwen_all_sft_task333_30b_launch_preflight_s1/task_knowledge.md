@@ -16,3 +16,5 @@
 6. Worker_2 acceptance branch/head:
    `origin/intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`
    at `51c02eba48c47bd73a764c195889f544e41dc4d6`. No PR yet.
+7. Corrected worker_2 acceptance head is
+   `76227ae1ccf483579f19a3288778ced2f32262c6`; the correction is metadata only.

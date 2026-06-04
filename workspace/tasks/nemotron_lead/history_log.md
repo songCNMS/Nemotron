@@ -12635,3 +12635,8 @@
   open yet. Worker_2 acknowledged no-training boundaries and the NemTron `/root`
   sync rule before any remote/debug preflight. task310/training/eval/export/
   endpoint/promotion/30B remain HOLD.
+- Session 86 task335 acceptance head correction: processed worker_2 mailbox
+  `task335-acceptance-head-correction-76227ae1-20260604T0852Z`. Verified branch
+  advanced to `76227ae1ccf483579f19a3288778ced2f32262c6`; drift from
+  `51c02eba48c47bd73a764c195889f544e41dc4d6` is task335 history/task_knowledge
+  metadata cleanup only. No PR yet and no boundary changes.
