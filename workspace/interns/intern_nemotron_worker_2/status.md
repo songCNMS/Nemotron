@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 |
-| PR | https://github.com/songCNMS/Nemotron/pull/400 |
-| Session | 2 |
-| Last Update | 2026-06-04T10:14:00Z: task337 produced PASS_RUNTIME_REMEDIATED evidence at /work-agents/intern_nemotron_worker_2/outputs/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z and opened PR #400. qwen3_moe import now passes with task-owned runtime target /root/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z/runtime_site. No training/eval/export/endpoint/promotion/task310/task255/AIME2025 train rows/shared-root mutation/main push/merge/self-merge. |
+| Current Task | task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 |
+| PR | https://github.com/songCNMS/Nemotron/pull/402 |
+| Session | 3 |
+| Last Update | 2026-06-04T11:36:00Z: task339 no-training 30B launch preflight rerun passed with disposition PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME and PR #402 opened: https://github.com/songCNMS/Nemotron/pull/402. Artifacts: /work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z. Remote repo: /root/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z/Nemotron at main f083c9566a9f0775c27ae49f16b8b898edfc8d11. Residuals: missing nvidia_resiliency_ext and diagnostic multi_storage_client import name failure; multistorageclient passes. No optimizer/training/eval/export/endpoint/promotion/task310/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge. |
