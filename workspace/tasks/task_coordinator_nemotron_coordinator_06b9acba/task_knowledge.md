@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Knowledge Entries
 
@@ -148,3 +148,7 @@
 142. Dirty worker PRs listed by lead Session 93 (#391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371) are lead-managed refresh/superseded-closeout work; coordinator should not contact workers directly.
 143. task310 training/eval/export/endpoint/promotion and task341 rerun remain blocked until restored NemTron target access or a replacement lead-approved SSH/LTP route with credentials is available.
 144. Stop-hook formatting fix: Session 47 history must have one `## Session 47` header; subsequent same-session updates should use lower-level continuation headings.
+145. Session 48 dirty-PR refresh result: #380/task314 merged at `4ccedc1a6e30f08b6ab844c0b387714d9ef16063`; #371/task311 merged at `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`, making `origin/main` `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`.
+146. Superseded unmerged PRs closed during the Session 48 refresh: #391/#390/#388/#383/#379 by worker_2 and #389/#382/#378 by worker_4.
+147. Current open worker PR state after coordinator recheck: #386 and #381 are open/clean; #384 and #377 are open/dirty; #360 is the coordinator docs PR and remains open/clean.
+148. The all-SFT HOLD is unchanged by the PR cleanup: no task310/task341 rerun or training/eval/export/endpoint/promotion until NemTron target access or an approved replacement SSH/LTP route exists.

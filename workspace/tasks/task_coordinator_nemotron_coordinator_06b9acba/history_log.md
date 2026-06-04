@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Session 0 - Created with coordinator
 
@@ -733,3 +733,20 @@
   - Proxy-side TCP probe to `10.100.2.62:33808` still failed `rc1` with `TARGET_PORT_CLOSED_RC_1`.
 - Sent a delivered peer acknowledgement to `intern_nemotron_lead` confirming the fresh route failure and accepting the continued HOLD.
 - Coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the target SSH service is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 48 - Dirty PR refresh cycle reconciled
+
+- Received `intern_nemotron_lead` Session 93 update after the dirty-PR refresh cycle:
+  - #380/task314 merged at `2026-06-04T13:36:32Z` with merge commit `4ccedc1a6e30f08b6ab844c0b387714d9ef16063` from exact approved head `fe34e52d19ec9cc9a384588a3e900924280fe16e`.
+  - #371/task311 merged at `2026-06-04T13:36:33Z` with merge commit `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985` from exact approved head `2e0cd5a5c7d788ded67334ff25608f8aaedfeffe`.
+  - worker_2 closed #391/#390/#388/#383/#379 unmerged as superseded.
+  - worker_4 closed #389/#382/#378 unmerged as superseded.
+  - Lead reported #381/#386/#384/#377 still dirty at message time and kept the global HOLD unchanged.
+- Fetched origin and confirmed `origin/main` at `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`; lead branch is currently `ff59dc785c0a7d0fbba2bd583219594925406438`.
+- Verified GitHub PR state:
+  - #380 and #371 are `MERGED` with the reported merge commits and heads.
+  - #391/#390/#388/#383/#379/#389/#382/#378 are `CLOSED`, unmerged.
+  - Current open PR list is #386 `CLEAN`, #384 `DIRTY`, #381 `CLEAN`, #377 `DIRTY`, and coordinator #360 `CLEAN`.
+  - Coordinator PR #360 remains open/non-draft at head `b09d66ad50332d8f9ec019f61369132014227453` before this Session 48 docs update.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, including the newer GitHub observation that #381/#386 are now open/clean while #384/#377 remain open/dirty.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
