@@ -41,3 +41,5 @@
 - Disposition recorded in
   `task333_independent_review_report.md`:
   `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH`.
+- Opened worker_4 review PR #397:
+  `https://github.com/songCNMS/Nemotron/pull/397`.
