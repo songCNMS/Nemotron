@@ -3271,3 +3271,6 @@
    `e739c45d8a12def16c58d1999e2c391bc119f348`; canonical merged task341 evidence
    remains #404 head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` and merge
    commit `371aea491776cc258e1cbb59a081d28be0530438`.
+812. Worker_4 accepted task342 at branch head
+   `7575dc2226789901356d99dabdc2ca0114d3b60a`; this is acceptance evidence
+   only, not restored NemTron access or training authorization.

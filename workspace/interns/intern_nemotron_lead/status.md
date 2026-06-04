@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #404/task341 MERGED `371aea49`; task342 assigned to worker_4 for NemTron SSH/runtime access recovery; task310 train/eval HOLD |
+| PR | #404/task341 MERGED `371aea49`; task342 worker_4 accepted at `7575dc22`; task310 train/eval HOLD |
 | Session | 91 |
