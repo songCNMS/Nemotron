@@ -1,8 +1,8 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - history
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=86 -->
+<!-- METADATA:SESSION=1 -->
 
-## 2026-06-04 UTC - Assigned
+## Session 1 - 2026-06-04 UTC - Assigned and accepted by worker_2
 
 - Created after #396/task333 merged into `origin/main` at
   `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
@@ -11,9 +11,6 @@
   task333 packed root.
 - Passing this task can only enable a later lead-gated training launch task.
   It does not authorize task310/training/eval/export/endpoint/promotion/30B.
-
-## 2026-06-04 UTC - Accepted by worker_2
-
 - Accepted by `intern_nemotron_worker_2` on branch
   `intern_nemotron_worker_2/task335_qwen_all_sft_task333_30b_launch_preflight_s1`
   from `origin/main` `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.

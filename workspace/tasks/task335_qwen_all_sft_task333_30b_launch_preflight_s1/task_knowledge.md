@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - task knowledge
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=86 -->
+<!-- METADATA:SESSION=1 -->
 
 1. #396/task333 merged at `2026-06-04T08:37:16Z` via merge commit
    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
