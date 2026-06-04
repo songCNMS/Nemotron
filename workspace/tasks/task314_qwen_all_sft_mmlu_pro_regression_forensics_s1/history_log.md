@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=102 -->
+<!-- METADATA:SESSION=103 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -202,3 +202,28 @@
 - No product-code changes, training, eval, export, endpoint, promotion,
   task255 reuse, AIME2025 train rows, shared deletion, main push, or release
   action was performed.
+
+## Session 103 - 2026-06-04 UTC - Task314 merged and downstream PRs refreshed
+
+- Received lead gate approving #380/task314 self-merge only if exact head
+  `fe34e52d19ec9cc9a384588a3e900924280fe16e` remained `CLEAN`.
+- Verified PR #380 was `OPEN`, base `main`, non-draft, `CLEAN`, and at the
+  exact approved head; merged with `gh pr merge --merge --match-head-commit`.
+- PR #380 merged at `2026-06-04T13:36:32Z` with merge commit
+  `4ccedc1a6e30f08b6ab844c0b387714d9ef16063` from head
+  `fe34e52d19ec9cc9a384588a3e900924280fe16e`; mailbox closeout sent.
+- Fetched current `origin/main`
+  `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`, which includes #380 and #371.
+- Refreshed #381/task320 against current main; conflict was limited to worker
+  status, `git diff --check` passed, diff scope remains worker status plus
+  task320 docs/report, and PR #381 is `OPEN`/base `main`/`CLEAN` at head
+  `63b58a86848a108dde8bae3f9f10a7a1e25f64c4`.
+- Refreshed #386/task324 against current main; conflict was limited to worker
+  status, `git diff --check` passed, diff scope remains worker status plus
+  task324 docs/report, and PR #386 is `OPEN`/base `main`/`CLEAN` at head
+  `ea1607940796ce86ff39bfa22aba8d7754602fde`.
+- Task314 is complete/idle. #381 and #386 remain HOLD for lead sequencing; no
+  self-merge was performed for either downstream PR.
+- No product-code changes, training, eval, export, endpoint, promotion,
+  task310/task341 release, task255 reuse, AIME2025 train rows, shared deletion,
+  main push, or release action was performed.

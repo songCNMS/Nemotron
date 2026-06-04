@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=102 -->
+<!-- METADATA:SESSION=103 -->
 
 ## Knowledge Entries
 
@@ -59,3 +59,11 @@
     diff-check passed and each PR diff remains task-local docs/report plus
     worker status only. Dispositions remain evidence-only with no self-merge
     or release authorization.
+19. Session 103 merged task314/#380 at approved head
+    `fe34e52d19ec9cc9a384588a3e900924280fe16e`; merge commit
+    `4ccedc1a6e30f08b6ab844c0b387714d9ef16063`, merged at
+    `2026-06-04T13:36:32Z`. After fetching current main
+    `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`, #381 refreshed clean at
+    `63b58a86848a108dde8bae3f9f10a7a1e25f64c4` and #386 refreshed clean at
+    `ea1607940796ce86ff39bfa22aba8d7754602fde`; both remain HOLD for lead
+    sequencing.
