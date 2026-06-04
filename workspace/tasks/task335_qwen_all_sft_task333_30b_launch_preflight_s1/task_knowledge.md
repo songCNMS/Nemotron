@@ -18,3 +18,10 @@
    at `51c02eba48c47bd73a764c195889f544e41dc4d6`. No PR yet.
 7. Corrected worker_2 acceptance head is
    `76227ae1ccf483579f19a3288778ced2f32262c6`; the correction is metadata only.
+8. #398/task335 head `0a094483458f01813b50e4fb13e2ddefdbdc4517` reports
+   `BLOCK_LAUNCH_PREFLIGHT / BLOCK_RUNTIME_MISSING_IMPORT`. Passing subchecks:
+   task333 train-only view, model path, Qwen packed contract, validation
+   fail-closed route, and 8x H200 resource probe. Exact blocker:
+   `megatron.bridge.recipes.qwen.qwen3_moe` cannot import due to missing
+   `megatron.energon`.
+9. #398 remains HOLD pending task336 independent review.

@@ -12640,3 +12640,19 @@
   advanced to `76227ae1ccf483579f19a3288778ced2f32262c6`; drift from
   `51c02eba48c47bd73a764c195889f544e41dc4d6` is task335 history/task_knowledge
   metadata cleanup only. No PR yet and no boundary changes.
+- Session 87 task335/#398 intake and task336 dispatch: processed worker_2
+  closeout mailbox `task335-closeout-0a094483-short-20260604T0911Z`. Verified
+  #398 is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`; diff scope is worker_2 status
+  plus task335 docs/helper/report and `git diff --check` passes. Worker_2
+  disposition is `BLOCK_LAUNCH_PREFLIGHT / BLOCK_RUNTIME_MISSING_IMPORT`.
+  Lead spot-checks passed for artifact checksums, train-only shard checksums,
+  train-only metrics `84` shards/`78,168` rows/`300,046,415` input tokens/
+  `33,477,337` supervised tokens, current-main remote sync to `/root`, and
+  PASS subchecks for model path, remote train-only view, Qwen contract,
+  validation fail-closed route, and 8 H200 resource probe. Exact blocker is
+  `megatron.bridge.recipes.qwen.qwen3_moe` import failing with
+  `ModuleNotFoundError("No module named 'megatron.energon'")`. Created
+  `task336_qwen_all_sft_task335_independent_review_s1` for worker_4 to
+  independently review #398 exact head and task335 artifacts. #398 and task310
+  remain HOLD pending task336.

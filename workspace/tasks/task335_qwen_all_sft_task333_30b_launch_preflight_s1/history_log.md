@@ -27,3 +27,15 @@
   `76227ae1ccf483579f19a3288778ced2f32262c6`.
 - Drift from `51c02eba48c47bd73a764c195889f544e41dc4d6` is task335
   history/task_knowledge metadata only. Scope and boundaries are unchanged.
+
+## 2026-06-04 UTC - Closeout Under Review
+
+- Worker_2 opened #398 at head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+- Report disposition:
+  `BLOCK_LAUNCH_PREFLIGHT / BLOCK_RUNTIME_MISSING_IMPORT`.
+- Accepted lead spot-checks so far: artifact checksum manifest rc 0,
+  train-only shard checksum rc 0, model/data/resource/validation-route subchecks
+  pass, and exact runtime blocker is missing `megatron.energon`.
+- #398 is HOLD pending task336 independent review. No task310/training/eval/
+  export/endpoint/promotion/30B release is authorized.

@@ -3105,3 +3105,10 @@
    `76227ae1ccf483579f19a3288778ced2f32262c6`; drift from `51c02eba` is
    task335 history/task_knowledge metadata cleanup only. Use `76227ae1` as the
    current worker_2 branch head.
+780. Session 87 #398/task335 exact head is
+   `0a094483458f01813b50e4fb13e2ddefdbdc4517`, open/CLEAN. Disposition is
+   `BLOCK_LAUNCH_PREFLIGHT / BLOCK_RUNTIME_MISSING_IMPORT`: train-only task333
+   launch view and validation route pass, but NemTron cannot import
+   `megatron.bridge.recipes.qwen.qwen3_moe` because `megatron.energon` is
+   missing. task336 is assigned to worker_4 for independent review before #398
+   docs closeout. No task310/training/eval/export/endpoint/promotion/30B release.
