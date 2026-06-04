@@ -12172,3 +12172,12 @@
   `b20e642a648425fb23c324290c5f672163332943`. This remains in-progress
   materialization evidence only; downstream all-SFT packing/training/eval/
   export/endpoint/promotion stay HOLD.
+- Goal-continuation read-only poll caught the next stable `math-proofs-lean`
+  checkpoint: `2026-06-04T02:35:51Z PROGRESS math-proofs-lean rows=1100000
+  mib=22463.4 rate_mib_s=8.19`. The task327 process remained active, no final
+  rc existed yet, the summary/decontam outputs still covered only the six
+  completed sources, mailbox unread count was 0, no task327 PR was visible,
+  and worker_2's task327 branch remained
+  `b20e642a648425fb23c324290c5f672163332943`. This remains in-progress
+  materialization evidence only; downstream all-SFT packing/training/eval/
+  export/endpoint/promotion stay HOLD.
