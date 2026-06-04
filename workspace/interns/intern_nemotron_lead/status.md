@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #387/task325 released for exact/CLEAN self-merge; #405 blocker unchanged; task310 train/eval HOLD |
+| PR | #387/task325 MERGED `a612ff4f`; #405 blocker unchanged; task310 train/eval HOLD |
 | Session | 92 |

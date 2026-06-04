@@ -12946,3 +12946,11 @@
   This closes M1 unavailable-row documentation only and does not authorize
   benchmark row execution, training, eval, export, endpoint, promotion, task255
   reuse, AIME2025 train data, shared env mutation/deletion, or task310 release.
+- Session 92 task325/#387 merge closeout: verified #387 merged at
+  `2026-06-04T13:03:37Z` with merge commit
+  `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b` from exact head
+  `e07ee3f9268b33658e18881c25a3d221bf2136ee`; `origin/main` now includes
+  task325 M1 unavailable-row documentation. The accepted disposition remains
+  `BLOCK_RUNTIME_CONFIRMED`: 0/19 M1 rows runnable now, 14/19 exact launcher
+  mappings, and 5 exact rows unavailable. This does not change the NemTron
+  target-port blocker or release task310 train/eval.

@@ -3307,3 +3307,8 @@
    14/19 exact launcher mappings, 5 exact missing/unavailable rows, 0/19
    runnable now. It does not authorize any benchmark row execution or task310
    release.
+819. #387/task325 merged at `2026-06-04T13:03:37Z` with merge commit
+   `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b` from exact head
+   `e07ee3f9268b33658e18881c25a3d221bf2136ee`. This closes M1 unavailable-row
+   blocker documentation only; global training/eval gate remains blocked by
+   NemTron target service/port and missing replacement route/credentials.
