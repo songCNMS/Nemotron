@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=100 -->
+<!-- METADATA:SESSION=101 -->
 
 ## Knowledge Entries
 
@@ -48,3 +48,9 @@
     worker status and `combined_packed_contract_report.md`; the task299 seed
     row-manifest hashes now match source_provenance/direct files:
     from-m0 `7562c864`, math-final `e466ee7`, hard-verified `89ab29`.
+17. Task333/#396 was approved for docs closeout and self-merged at exact head
+    `6261daaa37172caa11929b0b88f685b63f987221`; merge commit
+    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`, merged at
+    `2026-06-04T08:37:16Z`. Approval remains `HOLD_TRAINING`, with no
+    training, eval, export, endpoint, promotion, 30B/task310 release, task255
+    reuse, or AIME2025 train rows authorized.
