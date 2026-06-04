@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #401/task338 MERGED `d87320cf`; #400/task337 APPROVED exact/CLEAN at `fb6ba0e7`; task310 train/eval HOLD |
+| PR | #401/task338 MERGED `d87320cf`; #400/task337 MERGED `f083c956`; task339 assigned no-training preflight; task310 train/eval HOLD |
 | Session | 88 |

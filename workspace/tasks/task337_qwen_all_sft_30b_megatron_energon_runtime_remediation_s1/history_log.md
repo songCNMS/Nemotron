@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - history
 
-<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -67,3 +67,17 @@
   launch/training/eval/export/endpoint/promotion remain HOLD pending a later
   task335-equivalent no-training launch preflight rerun using the approved
   runtime route or equivalent checksummed recreation.
+
+## 2026-06-04 UTC - Merged
+
+- Verified #400 merged at `2026-06-04T11:11:08Z` with merge commit
+  `f083c9566a9f0775c27ae49f16b8b898edfc8d11` from exact approved head
+  `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+- Verified merge scope from parent `d87320cfd0f2cedb786b0588f9ee7b564c467ee1`
+  is worker_2 status plus task337 README/history/task_knowledge/report only,
+  and `git diff --check` passes.
+- Verified merged report sha256 remains
+  `441bd4b3c46d923f880fe3ce55298bc810e03e730819b16405b8b3b5a995cd49`.
+- task337 is complete as no-training runtime import remediation evidence only.
+  task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD pending task339 no-training launch preflight rerun and later lead gate.

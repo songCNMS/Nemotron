@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - Runtime remediation for Qwen3 MoE Bridge import
 
-<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -158,3 +158,15 @@ Produce a task-owned no-training runtime remediation report that either:
   promotion. Next allowed lead action after #400 lands is a bounded
   task335-equivalent no-training launch preflight rerun using the approved
   task337 runtime route or equivalent checksummed recreation.
+
+## Merge Closeout
+
+- #400 merged at `2026-06-04T11:11:08Z`.
+- Merge commit: `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
+- Merged evidence head: `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+- Merge scope from parent `d87320cfd0f2cedb786b0588f9ee7b564c467ee1` is
+  worker_2 status plus task337 README/history/task_knowledge/report only;
+  `git diff --check` passed.
+- task337 is complete as no-training runtime import remediation evidence only.
+- task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD pending task339 no-training launch preflight rerun and later lead gate.
