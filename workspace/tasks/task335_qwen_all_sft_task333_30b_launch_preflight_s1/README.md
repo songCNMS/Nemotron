@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - Qwen all-SFT task333 30B launch preflight
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=86 -->
+<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -99,3 +99,19 @@ blocked.
 - Base: current `origin/main` `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`
 - Gate state: task310/training/eval/export/endpoint/promotion/30B release remain
   HOLD pending this no-training preflight and later lead gate.
+
+## Lead Gate
+
+- #398 exact head approved for worker_2 self-merge:
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+- Gate basis: worker_2 task335 closeout plus merged task336/#399 independent
+  review evidence.
+- Final post-#399 state: #398 `OPEN`, non-draft, base `main`,
+  `CLEAN`/`MERGEABLE`.
+- Decision: `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`.
+- Meaning: accept #398 as no-training fail-closed preflight/blocker evidence
+  only.
+- Still blocked: task310/all-SFT 30B launch/training/eval/export/endpoint/
+  promotion. Next allowed lead action after #398 lands is a bounded runtime
+  remediation task for missing `megatron.energon` or equivalent NemTron route
+  fix, followed by a rerun no-training preflight.

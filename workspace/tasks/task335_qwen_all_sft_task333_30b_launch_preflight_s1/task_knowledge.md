@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - task knowledge
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=86 -->
+<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 1. #396/task333 merged at `2026-06-04T08:37:16Z` via merge commit
    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
@@ -25,3 +25,9 @@
    `megatron.bridge.recipes.qwen.qwen3_moe` cannot import due to missing
    `megatron.energon`.
 9. #398 remains HOLD pending task336 independent review.
+10. task336/#399 independent review merged, and post-#399 #398 is exact
+    `0a094483458f01813b50e4fb13e2ddefdbdc4517`, `OPEN`, base `main`,
+    `CLEAN`/`MERGEABLE`. Lead approved #398 for worker_2 self-merge as blocker
+    docs only. This does not release task310 or any training/eval/export/
+    endpoint/promotion; next real work is runtime remediation for missing
+    `megatron.energon` plus rerun no-training preflight.

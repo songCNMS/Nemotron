@@ -3131,3 +3131,10 @@
    `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd` from head
    `f7f31359ae88f687d6fd857279a820358938089c`; #398/task335 remains held until
    rechecked against post-#399 `origin/main`.
+784. Post-#399 #398/task335 is exact
+   `0a094483458f01813b50e4fb13e2ddefdbdc4517`, `OPEN`, base `main`, and
+   `CLEAN`/`MERGEABLE`; diff scope/check remain acceptable. #398 is approved
+   for worker_2 self-merge as `BLOCK_LAUNCH_PREFLIGHT` documentation only.
+   No task310/all-SFT 30B launch or training is released; the next gate is
+   runtime remediation for missing `megatron.energon` followed by a no-training
+   preflight rerun or equivalent accepted proof.

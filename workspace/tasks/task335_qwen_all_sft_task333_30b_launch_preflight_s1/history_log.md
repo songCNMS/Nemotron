@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - history
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=86 -->
+<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -39,3 +39,18 @@
   pass, and exact runtime blocker is missing `megatron.energon`.
 - #398 is HOLD pending task336 independent review. No task310/training/eval/
   export/endpoint/promotion/30B release is authorized.
+
+## 2026-06-04 UTC - Lead Gate Approved Blocker Docs
+
+- task336/#399 independent review merged at `2026-06-04T09:40:16Z` with merge
+  commit `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd`.
+- Rechecked #398 after #399 landed: #398 is `OPEN`, non-draft, base `main`,
+  `CLEAN`/`MERGEABLE`, exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+- Verified #398 diff scope is worker_2 status plus task335 README/history/
+  task_knowledge/report/helper only, and `git diff --check` passes.
+- Lead decision: `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`; worker_2 may
+  self-merge #398 only if exact/CLEAN and with no further pre-merge changes.
+- This accepts blocker documentation only. task310/all-SFT 30B launch/training/
+  eval/export/endpoint/promotion remain HOLD because NemTron still lacks the
+  `megatron.energon` runtime route needed by the Qwen3 MoE Bridge recipe.

@@ -12689,3 +12689,13 @@
   `f7f31359ae88f687d6fd857279a820358938089c`; `origin/main` advanced to
   `2c98fb2a`. Worker_4 reported no issue. #398/task335 and task310 remain HOLD
   pending post-#399 #398 exact/CLEAN recheck and separate lead decision.
+- Session 88 task335/#398 post-#399 gate: rechecked #398 after #399 landed.
+  #398 is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`. Diff scope remains worker_2
+  status plus task335 README/history/task_knowledge/report/helper only and
+  `git diff --check origin/main...origin/pr/398` passes. Lead decision:
+  `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT` for worker_2 self-merge if exact/
+  CLEAN and no further pre-merge changes. This closes docs/blocker evidence only;
+  task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  blocked until missing `megatron.energon` is remediated and no-training
+  preflight is rerun or explicitly accepted.

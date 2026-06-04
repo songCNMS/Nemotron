@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #399/task336 MERGED at `2c98fb2a`; #398/task335 HOLD pending post-#399 recheck; task310 train/eval HOLD |
+| PR | #398/task335 OPEN CLEAN at `0a094483` approved for worker_2 self-merge as blocker docs; task310 train/eval HOLD |
 | Session | 88 |
