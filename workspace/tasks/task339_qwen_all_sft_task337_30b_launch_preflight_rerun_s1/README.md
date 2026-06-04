@@ -130,3 +130,23 @@ for current `origin/main` after #400. Return one of:
 - Formal mailbox acceptance is still pending; worker_2 pane indicates acceptance
   commit only updates task339 docs/status and no product code or shared
   artifacts were touched.
+
+## Closeout Under Review
+
+- PR: #402 `https://github.com/songCNMS/Nemotron/pull/402`.
+- PR head: `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Disposition reported: `PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME`.
+- Report:
+  `workspace/tasks/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/task337_runtime_route_30b_launch_preflight_report.md`.
+- Report sha256:
+  `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
+- Artifact root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z`.
+- Lead preliminary checks: #402 diff scope is worker_2 status plus task339
+  README/history/task_knowledge/report/helper only; `git diff --check`
+  passed. Report commit `926015f5` to PR head `0a064f35` is worker status and
+  task339 history PR metadata only.
+- Gate state: #402/task339 remains HOLD pending task340 independent review.
+  task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD.

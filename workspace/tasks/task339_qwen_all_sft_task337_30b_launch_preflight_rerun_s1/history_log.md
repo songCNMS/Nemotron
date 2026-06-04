@@ -27,3 +27,25 @@
   before no-training preflight artifact work; no product code, training, eval,
   export, endpoint, promotion, task255, AIME2025 train rows, shared deletion,
   main push, merge, or self-merge is authorized.
+
+## 2026-06-04 UTC - Closeout Under Review
+
+- Fetched #402/task339 at exact head
+  `0a064f3517e6c10acfaec2c0915e24bc1434ceb1`: `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Verified #402 diff scope is worker_2 status plus task339 README/history/
+  task_knowledge/report/helper only, and `git diff --check origin/main...origin/pr/402`
+  passes.
+- Verified report sha256
+  `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
+- Read report disposition: `PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME` from
+  current main `f083c9566a9f0775c27ae49f16b8b898edfc8d11`, artifact root
+  `/work-agents/intern_nemotron_worker_2/outputs/task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1/run_20260604T112611Z`.
+- Lead preliminary artifact spot-checks: final summary disposition is
+  `PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME`; remote log contains
+  `TASK339_REMOTE_PREFLIGHT=PASS`; artifact checksum manifest passes; train-only
+  view reports 84 train shards, 78,168 rows, 300,046,415 input tokens, and
+  33,477,337 supervised tokens; Qwen3 MoE imports/config/model path/GPU/validation
+  checks pass; no training/eval/export/endpoint/promotion occurred.
+- Created task340 for independent read-only review. #402/task339 and task310
+  remain HOLD pending review.

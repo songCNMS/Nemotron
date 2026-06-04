@@ -21,3 +21,12 @@
 7. Worker_2 acceptance branch is visible at
    `d07f348eb2efef359e3aaf9fa0c2f725b57bac00`; no PR or formal mailbox
    acceptance yet.
+8. #402/task339 head `0a064f3517e6c10acfaec2c0915e24bc1434ceb1` reports
+   `PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME`; report sha256 is
+   `b7115e42444defdc9e0f44ad15f1e622ad476679148e285da8836a6c8b74969e`.
+   This is not accepted until task340 independent review completes.
+9. Preliminary lead artifact checks are consistent with PASS: current main
+   `f083c9566a9f0775c27ae49f16b8b898edfc8d11`, artifact checksum manifest pass,
+   remote `TASK339_REMOTE_PREFLIGHT=PASS`, 8 H200 GPUs, train-only view
+   84/0/0 shards and 78,168 rows. Residuals remain: `nvidia_resiliency_ext`
+   missing and diagnostic `multi_storage_client` name failure.
