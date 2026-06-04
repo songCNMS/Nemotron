@@ -3351,3 +3351,8 @@
    diff-check/disposition through mailbox, or report/close the PR as superseded.
    No old approval should be reused across dirty PR state, and no worker should
    self-merge before a new exact-head lead gate.
+827. Worker_4 Session 93 stale PR closeout is accepted as docs-state cleanup:
+   #389/task326, #382/task321, and #378/task317 are closed unmerged as
+   superseded by newer all-SFT evidence. This reduces stale PR noise only; it
+   does not change task310 HOLD, because task341/task342 still block on NemTron
+   SSH target service/port restoration or a replacement approved route.

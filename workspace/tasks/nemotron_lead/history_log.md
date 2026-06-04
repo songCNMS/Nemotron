@@ -13019,3 +13019,17 @@
   proxy-side TCP to `10.100.2.62:33808` still reports `TARGET_PORT_CLOSED_RC_1`.
   Coordinator accepts the HOLD. Lead did not merge, run tests, run training, run
   eval, or authorize task310/task341 rerun/export/endpoint/promotion.
+- Session 93 worker_4 stale PR closeout: processed mailbox
+  `intern_nemotron_worker_4-session93-stale-pr-closeout-20260604T1319Z` and
+  marked it read. GitHub verification confirms #389/task326, #382/task321, and
+  #378/task317 are `CLOSED` unmerged with `mergedAt=null` and no merge commit,
+  at heads `6f235120b7305d94121630032cf07134543b068f`,
+  `a908b81dd6583976b08896c8193ca302909c52ff`, and
+  `df561ea93e696d8e704d4e969e2da83b719185f7` respectively. Worker_4
+  disposition is `CLOSED_SUPERSEDED_BY_NEWER_ALL_SFT_EVIDENCE`, citing newer
+  merged evidence through #385/#387 and the #392-#405 chain including task341
+  `BLOCK_TRAINING_READINESS` and task342 `BLOCK_NEMTRON_ACCESS`. Worker_4
+  reported no commits, product-code edits, training/eval/export/endpoint/
+  promotion, task255/AIME2025 train rows, shared deletion, merge/self-merge, or
+  main push. Refetched #360: it remains `OPEN`/`CLEAN`, now at head
+  `2d3a71987d9ac785ddc683f33cfdad17c54a88c4`.
