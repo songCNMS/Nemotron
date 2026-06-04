@@ -41,3 +41,29 @@
 - No task341 PR is visible yet. task310/all-SFT 30B launch/training/eval/export/
   endpoint/promotion remains HOLD pending worker_2 report/PR or blocker and a
   later lead gate.
+
+## 2026-06-04 UTC - Blocker PR gate
+
+- Processed worker_2 closeout mailbox
+  `intern_nemotron_worker_2_task341_closeout_pr404_8211c139`, created
+  `2026-06-04T12:28:17Z`.
+- Verified PR #404 is `OPEN`, non-draft, base `main`, `CLEAN`, exact head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`. Drift from report head
+  `d43a04b54a57c645c29780d6ad3aa6dad2e86351` is worker status plus adding
+  the PR number to task341 history; `training_readiness_checkpoint_handoff_report.md`
+  is unchanged.
+- Diff scope is worker_2 status plus task341 README/history/task_knowledge,
+  helper, and report only; `git diff --check` passes and GitHub reports no
+  checks.
+- Worker disposition is `BLOCK_TRAINING_READINESS`: task339 artifact and train-
+  only shard checksums validate, candidate checkpoint is task298 iter0 root, but
+  required NemTron SSH/runtime/checkpoint probe returns rc `255` with
+  `connect failed: Connection refused`.
+- Lead independently ran `ssh -o ConnectTimeout=10 NemTron 'hostname; date -u
+  +%Y-%m-%dT%H:%M:%SZ'` and observed the same `Connection refused` failure.
+- Lead accepts #404 as blocker closeout evidence only. It does not release
+  task310/all-SFT 30B launch, training, eval, export, endpoint, promotion, or
+  any AIME2025 train use.
+- Formal GitHub approval failed because GitHub treats this account as the PR
+  author; lead posted gate comment `4622159239` with the same exact-head/CLEAN
+  self-merge condition.

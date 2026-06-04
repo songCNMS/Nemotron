@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=91 -->
 
 ## Session 0 - Created with team lead
 
@@ -12836,3 +12836,24 @@
   Worker_2 confirmed no optimizer/training/eval/export/endpoint/promotion,
   task255 reuse, AIME2025 train rows, shared deletion/mutation, main push,
   merge, or self-merge.
+- Session 90 task341/#404 gate: processed worker_2 closeout mailbox
+  `intern_nemotron_worker_2_task341_closeout_pr404_8211c139`. Verified #404 is
+  `OPEN`, non-draft, base `main`, `CLEAN`, exact head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`; drift from `d43a04b5` is worker
+  status plus PR-number history only, with the report unchanged. Diff scope is
+  worker_2 status plus task341 docs/helper/report only, `git diff --check`
+  passes, and GitHub reports no checks. Artifact manifest validation at
+  `/work-agents/intern_nemotron_worker_2/outputs/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1/run_20260604T122328Z`
+  passes. Report disposition is `BLOCK_TRAINING_READINESS`: task339 artifact
+  and train-only shard checks pass, but required NemTron SSH/runtime/checkpoint
+  probe returns rc `255` / `connect failed: Connection refused`, blocking live
+  `/root` sync, task337 runtime validation, task298 checkpoint validation, and
+  `nvidia_resiliency_ext` waiver/remediation. Lead independently reproduced the
+  same SSH failure. Lead accepts #404 as blocker closeout evidence only; task310
+  launch/training/eval/export/endpoint/promotion remains HOLD.
+- Session 91 #404 gate communication: formal GitHub approval failed because
+  GitHub treats this account as the PR author, so lead posted gate comment
+  `4622159239` instead. The comment authorizes worker_2 self-merge only if #404
+  remains exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` and `CLEAN`;
+  otherwise worker_2 must refresh/report before merge. The authorization remains
+  blocker closeout only and does not release task310 training/eval.

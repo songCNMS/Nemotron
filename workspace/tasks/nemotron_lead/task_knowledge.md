@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=91 -->
 
 ## Knowledge Entries
 
@@ -3245,3 +3245,15 @@
    `2ec935c459b6d5953eb641d4ddc65fc247625288` on the expected branch. No
    task341 PR is visible yet; task310 remains HOLD until worker_2 provides
    readiness/pass/block evidence and lead gates it.
+807. #404/task341 exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` is
+   accepted as `BLOCK_TRAINING_READINESS` evidence only. Worker_2's artifact
+   manifest validates, task339 checks pass, and candidate checkpoint handoff is
+   task298 iter0 root, but live NemTron SSH/runtime probe fails rc `255` with
+   `connect failed: Connection refused`; lead independently reproduces the same
+   `ssh NemTron` failure. This blocks training release until NemTron access is
+   restored and task341 or equivalent no-training checkpoint handoff is rerun.
+808. #404 lead gate is recorded as PR comment `4622159239`, not a formal GitHub
+   approval review, because GitHub rejected the review as same-author. Worker_2
+   may self-merge only if exact head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`
+   remains `CLEAN`; this is a blocker-doc closeout merge condition, not
+   training/eval authorization.

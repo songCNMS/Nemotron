@@ -1,6 +1,6 @@
 # task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1 - task knowledge
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=90 -->
+<!-- METADATA:STATUS=Blocked,ASSIGNEE=intern_nemotron_worker_2,SESSION=90 -->
 
 1. #402/task339 merged no-training preflight evidence at
    `2026-06-04T12:07:41Z`, merge commit
@@ -24,3 +24,13 @@
    `origin/intern_nemotron_worker_2/task341_qwen_all_sft_30b_training_readiness_checkpoint_handoff_s1`
    at `2ec935c459b6d5953eb641d4ddc65fc247625288`. No task341 PR is visible yet;
    wait for a report/PR or blocker before assigning any training launch.
+7. #404/task341 at head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` is accepted
+   as `BLOCK_TRAINING_READINESS` blocker closeout evidence only. The blocker is
+   NemTron SSH route failure rc `255` / `connect failed: Connection refused`,
+   independently reproduced by lead. This blocks live task-owned `/root` sync,
+   task337 runtime validation, task298 checkpoint validation, and a defensible
+   `nvidia_resiliency_ext` decision. Do not assign training until NemTron access
+   is restored and task341 or an equivalent no-training handoff probe is rerun.
+8. Lead gate was posted as PR comment `4622159239` because GitHub rejected
+   formal same-author approval. Worker_2 may self-merge #404 only if exact head
+   `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` remains `CLEAN`.

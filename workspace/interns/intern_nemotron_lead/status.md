@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #402/task339 MERGED `f16dffde`; task341 accepted at remote head `2ec935c4`, no PR yet; task310 train/eval HOLD |
-| Session | 90 |
+| PR | #404/task341 OPEN CLEAN `8211c139`; gate disposition BLOCK_TRAINING_READINESS on NemTron SSH rc255; task310 train/eval HOLD |
+| Session | 91 |
