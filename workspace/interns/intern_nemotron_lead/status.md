@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #398/#399 MERGED; task337 accepted at `4db10e07`; task310 train/eval HOLD |
+| PR | #400/task337 OPEN CLEAN at `fb6ba0e7`; task338 independent review assigned; task310 train/eval HOLD |
 | Session | 88 |

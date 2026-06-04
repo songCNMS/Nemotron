@@ -3155,3 +3155,8 @@
 788. task337 acceptance correction mailbox confirms the exact head in entry 787;
    the longer SHA in the first mailbox content was inconsistent, but lead
    already used the correct `ls-remote` head.
+789. #400/task337 exact head
+   `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091` reports
+   `PASS_RUNTIME_REMEDIATED` for missing `megatron.energon` using task-owned
+   runtime target packages only. Treat this as pending evidence until task338
+   independent review approves/request-changes/blocks it. Training remains HOLD.

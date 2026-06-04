@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - history
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -32,3 +32,19 @@
   `4db10e0783823c8f6087748718d40e729879554d`, matching the lead `ls-remote`
   verification already recorded.
 - Scope, base, lead docs source, and boundaries are unchanged.
+
+## 2026-06-04 UTC - Closeout Under Review
+
+- Processed worker_2 closeout mailbox
+  `task337-closeout-fb6ba0e7-20260604T1015Z`.
+- Verified #400 is `OPEN`, non-draft, base `main`, `CLEAN`/`MERGEABLE`, exact
+  head `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+- Verified #400 diff scope is worker_2 status plus task337 README/history/
+  task_knowledge/report only, and `git diff --check origin/main...origin/pr/400`
+  passes.
+- Worker_2 reports `PASS_RUNTIME_REMEDIATED`: baseline reproduced missing
+  `megatron.energon`; task-owned runtime target imports `megatron.energon` and
+  `megatron.bridge.recipes.qwen.qwen3_moe`; symbol probe passes without model
+  construction, training, eval, export, or endpoint.
+- Created task338 for independent read-only review. #400/task337 and task310
+  remain HOLD pending review.

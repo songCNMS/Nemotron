@@ -12724,3 +12724,15 @@
   confirms exact pushed branch head
   `4db10e0783823c8f6087748718d40e729879554d`, matching lead `ls-remote`
   verification. Scope and boundaries are unchanged.
+- Session 88 task337/#400 intake and task338 dispatch: processed worker_2
+  closeout mailbox `task337-closeout-fb6ba0e7-20260604T1015Z`. Verified #400 is
+  `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`; diff scope is worker_2 status
+  plus task337 README/history/task_knowledge/report only and `git diff --check`
+  passes. Worker_2 reports `PASS_RUNTIME_REMEDIATED` with task-owned runtime
+  target under `/root/task337.../run_20260604T095948Z/runtime_site`; baseline
+  reproduced missing `megatron.energon`, final import probe passed
+  `TASK337_IMPORT_PROBE=PASS_QWEN3_MOE_IMPORT`, and symbol probe passed
+  `TASK337_SYMBOL_PROBE=PASS_QWEN3_MOE_SYMBOL_IMPORT`. Created
+  `task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1` for
+  worker_4 read-only review. #400/task337 and task310 remain HOLD pending review.

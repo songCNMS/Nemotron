@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - task knowledge
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 1. Accepted task335 blocker is missing `megatron.energon` when importing
    `megatron.bridge.recipes.qwen.qwen3_moe` on the NemTron route.
@@ -17,3 +17,8 @@
 6. Worker_2 correction mailbox
    `task337-acceptance-head-correction-4db10e07-20260604T1002Z` confirms the
    exact acceptance head above; no scope or boundary changes.
+7. #400/task337 head
+   `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091` reports
+   `PASS_RUNTIME_REMEDIATED` with task-owned runtime target
+   `/root/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z/runtime_site`.
+   This is not accepted until task338 independent review completes.

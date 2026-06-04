@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - Runtime remediation for Qwen3 MoE Bridge import
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -114,3 +114,21 @@ Produce a task-owned no-training runtime remediation report that either:
   `4fc5e1d3`.
 - PR: none yet; acceptance branch/mailbox only.
 - Worker_2 confirmed no runtime mutation was performed in the acceptance step.
+
+## Closeout Under Review
+
+- Worker_2 closeout mailbox:
+  `task337-closeout-fb6ba0e7-20260604T1015Z`.
+- PR: #400 `https://github.com/songCNMS/Nemotron/pull/400`.
+- PR head: `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`, `OPEN`,
+  non-draft, base `main`, `CLEAN`/`MERGEABLE`.
+- Disposition reported: `PASS_RUNTIME_REMEDIATED`.
+- Report:
+  `workspace/tasks/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/qwen3_moe_runtime_remediation_report.md`.
+- Report sha256:
+  `441bd4b3c46d923f880fe3ce55298bc810e03e730819b16405b8b3b5a995cd49`.
+- Artifact root:
+  `/work-agents/intern_nemotron_worker_2/outputs/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z`.
+- Gate state: #400/task337 remains HOLD pending task338 independent review.
+  task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD.
