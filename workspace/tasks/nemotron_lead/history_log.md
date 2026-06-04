@@ -12213,3 +12213,9 @@
   task327 still had no final rc, worker_2 report, or task327 PR, and the
   process remained active; downstream all-SFT packing/training/eval/export/
   endpoint/promotion stay HOLD.
+- Final read-only check caught the first stable `agentic-tool-calling`
+  checkpoint: `2026-06-04T02:51:16Z PROGRESS agentic-tool-calling rows=100000
+  mib=1610.7 rate_mib_s=7.61`. The task327 process remained active with no
+  final rc, worker_2 report, or task327 PR; this is in-progress evidence only
+  and downstream all-SFT packing/training/eval/export/endpoint/promotion stay
+  HOLD.

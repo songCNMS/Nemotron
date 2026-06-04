@@ -2821,3 +2821,7 @@
    prompt/normalized/ngram hits 0/0/940. task327 started
    `agentic-tool-calling`; no final rc, worker_2 report, task327 PR, or
    all-SFT pack/train/eval release.
+736. Session 79 goal-continuation: task327 `agentic-tool-calling` reached
+   100,000 rows / 1,610.7 MiB at `2026-06-04T02:51:16Z`; source remains
+   active with no final rc, source-level disposition, worker_2 report, task327
+   PR, or all-SFT pack/train/eval release.
