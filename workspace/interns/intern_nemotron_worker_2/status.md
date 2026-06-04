@@ -1,6 +1,6 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task309_qwen_all_sft_packed_data_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task328_qwen_all_sft_post_task327_packed_contract_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
@@ -8,7 +8,7 @@
 | Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task309_qwen_all_sft_packed_data_contract_s1 |
-| PR | #372 |
-| Session | 5 |
-| Last Update | 2026-06-03T15:18:00Z: task309/#372 lead-approved at 4e26317a but sequenced after #374; #374 still OPEN/CLEAN so no merge performed, constrained V11/task299 seed only, generic raw SFT no-go, no training/eval/export/endpoint/promotion/main push/merge. |
+| Current Task | task328_qwen_all_sft_post_task327_packed_contract_s1 |
+| PR | Pending |
+| Session | 80 |
+| Last Update | 2026-06-04T05:13:39Z: accepted task328 and produced PARTIAL_PASS_WITH_EXACT_BLOCKERS pre-pack evidence. Prior constrained task299 packed seed remains safe carry-forward only; task322/task327 raw pass sources are excluded before packing due missing split exposure/parity and Qwen3-30B supervised-token proof; nine task327 decontam-hit sources remain fail-closed. No packing/training/eval/export/endpoint/promotion/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge. |
