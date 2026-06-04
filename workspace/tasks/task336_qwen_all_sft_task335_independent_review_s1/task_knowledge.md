@@ -1,6 +1,6 @@
 # task336_qwen_all_sft_task335_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 1. Review target is #398 exact head
    `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
@@ -17,3 +17,7 @@
    from `origin/main` `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`; lead docs
    source is `origin/intern_nemotron_lead/session1-recovery-task-docs`
    `a2e4b731f63bbce9d074f994720abc57db976ac8`.
+7. Independent review result for #398 exact head
+   `0a094483458f01813b50e4fb13e2ddefdbdc4517` is
+   `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`: #398 is accurate blocker evidence
+   for missing `megatron.energon`; task310/30B launch remains HOLD.

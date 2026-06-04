@@ -1,6 +1,6 @@
 # task336_qwen_all_sft_task335_independent_review_s1 - Review task335 launch preflight
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## Background
 
@@ -77,6 +77,19 @@ Return one of:
   `workspace/tasks/task336_qwen_all_sft_task335_independent_review_s1/task335_independent_review_report.md`.
 - Mailbox closeout with branch/head/PR, commands run, pass/fail findings,
   residuals, and exact decision for #398.
+
+## Worker_4 Review Result
+
+- Report:
+  `workspace/tasks/task336_qwen_all_sft_task335_independent_review_s1/task335_independent_review_report.md`
+- Reviewed #398 exact head:
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`
+- Disposition: `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`
+- Summary: #398 accurately documents a no-training fail-closed launch preflight.
+  Data/model/resource/Qwen-contract/validation-route subchecks and checksum
+  manifests pass; the exact launch blocker is missing `megatron.energon` during
+  import of `megatron.bridge.recipes.qwen.qwen3_moe`. This keeps task310/30B
+  training HOLD.
 
 ## Boundaries
 

@@ -1,6 +1,6 @@
 # task336_qwen_all_sft_task335_independent_review_s1 - history
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -26,3 +26,24 @@
 - Boundaries: no task335 artifact or worker_2 branch mutation; no training,
   eval, export, endpoint, promotion, 30B release, task310 release, task255,
   AIME2025 train rows, shared deletion, main push, merge, or self-merge.
+
+## Session 1 - 2026-06-04 UTC - Independent review complete
+
+- Rechecked #398 exact head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`: `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Verified PR diff scope and `git diff --check`; helper compile from PR head
+  passed.
+- From assigned artifact root, verified `sha256sum -c
+  manifests/artifact_checksums.sha256` and `sha256sum -c
+  manifests/train_only_shard_checksums.sha256` both pass.
+- Verified final summary `BLOCK_LAUNCH_PREFLIGHT`, remote probe
+  `BLOCK_RUNTIME_MISSING_IMPORT`, train-only split exposure 84/0/0,
+  Qwen3-MoE model/chat-template proof, Qwen contract pass, validation
+  `do_validation=false` route, and 8 H200 GPU probe.
+- Verified exact blocker:
+  `megatron.bridge.recipes.qwen.qwen3_moe` fails with
+  `ModuleNotFoundError("No module named 'megatron.energon'")` while base
+  imports pass.
+- Recorded disposition in `task335_independent_review_report.md`:
+  `APPROVE_TASK335_BLOCKER_DOCS_CLOSEOUT`.
