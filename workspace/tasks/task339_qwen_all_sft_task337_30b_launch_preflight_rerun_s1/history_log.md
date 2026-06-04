@@ -41,6 +41,7 @@
 - Residuals recorded: `nvidia_resiliency_ext` missing and diagnostic
   `multi_storage_client` import name fails while `multistorageclient` passes.
 - Wrote `task337_runtime_route_30b_launch_preflight_report.md`.
+- Opened PR #402: https://github.com/songCNMS/Nemotron/pull/402.
 - No training, optimizer step, benchmark eval, AIME/task243 eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   main push, merge, or self-merge was performed.
