@@ -11967,3 +11967,26 @@
   unchanged with only the three completed `BLOCKED_DECONTAM_HIT` sources. This
   is in-progress evidence only and does not release all-SFT packing/training/
   eval/export/endpoint/promotion.
+- Final snapshot after the 900k checkpoint found a source-level result:
+  `competitive-python-00` completed at `2026-06-04T00:14:47Z` with status
+  `BLOCKED_DECONTAM_HIT`, and task327 immediately started
+  `competitive-python-01`.
+- Verified `competitive-python-00` artifact details from
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`:
+  dataset `nvidia/Nemotron-Competitive-Programming-v1`, revision
+  `d6e7c6b404ed5db6e1104b41d0f80a0c7dad7bf8`, selected file
+  `data/competitive_coding_python.part_00.jsonl`, expected/file bytes
+  44,531,003,881, expected/file sha256
+  `8314b37b7d42b32fb658c3be1fb974eb0814f44a856ccf2d90ec2d38856a7f5d`,
+  row count 910,639, parse errors 0, row manifest sha256
+  `9a82de3e04f810a6e091cca3f71b2653e6d2e70a032334145d0cbe757b216b15`,
+  prompt/normalized/ngram hits 0/0/216, split exposure
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+- The completed-source matrix now has four completed sources and all four are
+  `BLOCKED_DECONTAM_HIT`; no completed task327 source is train-ready without a
+  later lead-reviewed false-positive/filtering contract. There is still no
+  final rc, official worker_2 report, or task327 PR, and no release to
+  all-SFT packing/training/eval/export/endpoint/promotion.
+- Read-only tail showed `competitive-python-01` active with row manifest
+  already past 5,308 rows at `2026-06-04T00:16:22Z`. This is live progress
+  only, not a source-level disposition.

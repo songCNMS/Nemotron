@@ -2702,3 +2702,10 @@
 710. Session 79: task327 `competitive-python-00` reached 900,000 rows /
    41,974.3 MiB at `2026-06-04T00:13:54Z`; source remains in progress with no
    final rc, worker report, task327 PR, or all-SFT pack/train/eval release.
+711. Session 79: task327 `competitive-python-00` completed
+   `BLOCKED_DECONTAM_HIT` at `2026-06-04T00:14:47Z`: 910,639 rows, parse
+   errors 0, row manifest sha
+   `9a82de3e04f810a6e091cca3f71b2653e6d2e70a032334145d0cbe757b216b15`,
+   prompt/normalized/ngram hits 0/0/216. task327 started
+   `competitive-python-01`; no final rc/report/PR or all-SFT pack/train/eval
+   release.
