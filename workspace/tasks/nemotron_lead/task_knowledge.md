@@ -2812,3 +2812,12 @@
    1,300,000 rows / 26,605.1 MiB at `2026-06-04T02:44:16Z`; source remains
    active with no final rc, source-level disposition, worker_2 report, task327
    PR, or all-SFT pack/train/eval release.
+735. Session 79 goal-continuation: task327 `math-proofs-lean` completed
+   `BLOCKED_DECONTAM_HIT` at `2026-06-04T02:47:27Z`: 1,376,663 rows, parse
+   errors 0, file sha
+   `b423525d35ad16c791863670cbad76b27d8463e2574770732e2cf5bf70661a2e`,
+   row manifest sha
+   `fdf6f39c6ada67256b28212bd738fe51df7ca9b525679615d4ce76ac64c51137`,
+   prompt/normalized/ngram hits 0/0/940. task327 started
+   `agentic-tool-calling`; no final rc, worker_2 report, task327 PR, or
+   all-SFT pack/train/eval release.

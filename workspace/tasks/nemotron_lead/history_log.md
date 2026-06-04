@@ -12199,3 +12199,17 @@
   `b20e642a648425fb23c324290c5f672163332943`. This remains in-progress
   materialization evidence only; downstream all-SFT packing/training/eval/
   export/endpoint/promotion stay HOLD.
+- Read-only source-level verification found `math-proofs-lean` completed at
+  `2026-06-04T02:47:27Z` with status `BLOCKED_DECONTAM_HIT`, after which
+  task327 started `agentic-tool-calling`. Verified details:
+  dataset `nvidia/Nemotron-Math-Proofs-v1`, revision
+  `97229c590831adfe96202f5cd071d444d535bf91`, selected file
+  `data/lean.jsonl`, expected/file bytes 29,525,155,225, expected/file sha256
+  `b423525d35ad16c791863670cbad76b27d8463e2574770732e2cf5bf70661a2e`,
+  row count 1,376,663, parse errors 0, row manifest sha256
+  `fdf6f39c6ada67256b28212bd738fe51df7ca9b525679615d4ce76ac64c51137`,
+  prompt/normalized/ngram hits 0/0/940, split exposure
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+  task327 still had no final rc, worker_2 report, or task327 PR, and the
+  process remained active; downstream all-SFT packing/training/eval/export/
+  endpoint/promotion stay HOLD.
