@@ -12240,3 +12240,16 @@
   task327 still had no final rc, worker_2 report, or task327 PR, and the
   process remained active; downstream all-SFT packing/training/eval/export/
   endpoint/promotion stay HOLD.
+- Goal-continuation read-only poll found `infinibyte-00` active but not yet at
+  the first stable 100k log checkpoint: the row manifest mtime was
+  `2026-06-04 03:08:06Z`, read-only gzip tail reached complete row 95,491
+  before the expected active-writer gzip EOF, and
+  `materialize_large_sources.log` still ended at `SOURCE_START infinibyte-00`.
+  The task327 process remained active with no final rc, worker_2 report, or
+  task327 PR; this is pre-checkpoint evidence only and downstream all-SFT
+  packing/training/eval/export/endpoint/promotion stay HOLD.
+- Follow-up read-only tail caught the first stable `infinibyte-00` checkpoint:
+  `2026-06-04T03:08:29Z PROGRESS infinibyte-00 rows=100000 mib=4020.4
+  rate_mib_s=7.67`. The task327 process remained active with no final rc,
+  worker_2 report, or task327 PR; this is in-progress evidence only and
+  downstream all-SFT packing/training/eval/export/endpoint/promotion stay HOLD.

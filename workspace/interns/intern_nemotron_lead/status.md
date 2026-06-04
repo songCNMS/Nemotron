@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; agentic-tool-calling decontam-blocked; infinibyte-00 active; all-SFT pack/train HOLD |
+| PR | task327 active; infinibyte-00 reached 100k rows; all-SFT pack/train HOLD |
 | Session | 79 |

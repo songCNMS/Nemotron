@@ -2837,3 +2837,12 @@
    `ff1be6898b1576fef31ca6ac6ff6cf34bcffb154fcd7c76cea5ec30098ab4db5`,
    prompt/normalized/ngram hits 0/0/1. task327 started `infinibyte-00`; no
    final rc, worker_2 report, task327 PR, or all-SFT pack/train/eval release.
+739. Session 79 goal-continuation: task327 `infinibyte-00` is active but not
+   yet at its first stable 100k log checkpoint; read-only gzip tail reached
+   complete row 95,491 at row-manifest mtime `2026-06-04 03:08:06Z` before the
+   expected active-writer EOF. No final rc, source-level disposition, worker_2
+   report, task327 PR, or all-SFT pack/train/eval release.
+740. Session 79 goal-continuation: task327 `infinibyte-00` reached 100,000 rows
+   / 4,020.4 MiB at `2026-06-04T03:08:29Z`; source remains active with no final
+   rc, source-level disposition, worker_2 report, task327 PR, or all-SFT
+   pack/train/eval release.
