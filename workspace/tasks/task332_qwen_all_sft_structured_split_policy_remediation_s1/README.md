@@ -1,6 +1,6 @@
 # task332_qwen_all_sft_structured_split_policy_remediation_s1 - Structured rows and split-policy remediation
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_4,SESSION=1 -->
 
 ## Background
 
@@ -91,3 +91,19 @@ contract after task331 SWE remediation, or fail closed with exact blockers.
 - Team lead: `intern_nemotron_lead`
 - Worker: `intern_nemotron_worker_4`
 - Gate state: task310 training/eval/export/endpoint/promotion remain HOLD.
+
+## Worker_4 Result
+
+- Report:
+  `workspace/tasks/task332_qwen_all_sft_structured_split_policy_remediation_s1/structured_split_policy_report.md`.
+- Output root:
+  `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`.
+- Disposition: `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`.
+- Structured row disposition:
+  `PASS_STRUCTURED_ROWS_EXCLUDED_FAIL_CLOSED`.
+- Split policy:
+  `task332_per_source_shard_holdout_v1`, per-source `row_index % 16`
+  with valid remainder `14`, test remainder `15`, train all other
+  remainders.
+- Residual: task331 SWE supervised-token remediation is still pending; task310
+  remains HOLD.

@@ -25,3 +25,27 @@
 - Boundaries: no training, eval, export, endpoint, promotion, task255 reuse,
   shared deletion, merge, self-merge, direct main push, or mutation of task329
   artifacts.
+
+## Session 1 - 2026-06-04 UTC - Remediation evidence produced
+
+- Added task-local helper
+  `build_task332_structured_split_policy_evidence.py`.
+- Wrote task-owned output root
+  `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`.
+- Identified exactly six `instruction-following-structured` invalid rows via
+  `nemotron.data_prep.core.chat_template.validate_conversation`; the row
+  hashes and shard indices match task329 receipt validation-error counts.
+- Recorded fail-closed exclusion policy for those exact row hashes unless a
+  later source-remediation task repairs missing tool context and revalidates.
+- Proposed deterministic source-local split policy
+  `task332_per_source_shard_holdout_v1`: row remainder `14` valid,
+  remainder `15` test, all other remainders train for each included raw-pass
+  source.
+- Confirmed task331 is still acceptance/status/docs only at
+  `63b4b992d534bd16120f31345d57d105890d8d55` with no PR visible, so final
+  disposition is `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`.
+- Verified `python -m py_compile` for the helper and
+  `sha256sum -c manifests/artifact_checksums.sha256` for task332 outputs.
+- Boundaries maintained: no training, eval, export, endpoint, promotion,
+  task255 reuse, AIME2025 train rows, shared deletion, task329 artifact
+  mutation, merge, self-merge, or main push.
