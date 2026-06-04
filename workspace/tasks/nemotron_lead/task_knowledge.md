@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Knowledge Entries
 
@@ -3371,3 +3371,21 @@
    must be refreshed/re-reported against this new main before any merge gate
    because it shares worker_1 status/doc state. #384/#377 also remain dirty and
    await worker_5 refresh or superseded closeout.
+831. #386/task324 and #377/task316 merged in Session 95 as exact-head
+   docs/planning provenance closeouts, moving `origin/main` to
+   `928d9d684b188fc1858914d0de7aef211627f697`. #384/task318 remains the only
+   open worker PR and is dirty after #377; it needs worker_5 refresh/re-report
+   or a superseded-by-#385 closeout before any final gate. The global task310/
+   task341 training/eval gate remains blocked by NemTron route access, not by
+   these docs closeouts.
+832. #384/task318 merged in Session 96 as exact-head validation-exit preflight
+   provenance docs, moving `origin/main` to
+   `ff5576d8d73f7eb48f78ad8a0709f97054142345`. All worker PRs in this all-SFT
+   cleanup/recovery sequence are now merged or closed unmerged; only coordinator
+   #360 remains open. This does not unblock task310/task341 because the active
+   blocker remains NemTron SSH/runtime route access or a replacement approved
+   SSH/LTP route with credentials.
+833. Session 97 reconciled worker_5's #384 merge closeout mailbox. The worker
+   PR cleanup queue is fully closed from the lead side; any further movement now
+   depends on coordinator #360 and, for the real all-SFT objective, external
+   restoration of the NemTron route or an approved replacement SSH/LTP route.

@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Session 0 - Created with team lead
 
@@ -13105,3 +13105,82 @@
   delivered. No product-code edits, tests, training, eval, export, endpoint,
   promotion, task310/task341 release, task255, AIME2025 train rows, shared
   deletion, main push, or lead merge was performed.
+- Session 95 #386 gate and merge closeout: coordinator Session 49 verified
+  #381 merged and noted #386 clean at
+  `1e07a10a446edc46522910006e8ba2a9ab97c108`, #384/#377 state, and #360
+  state. Processed worker_1 mailbox `80eb787033bd4ea28b9912ec40c2ccc0`,
+  confirming #386 refresh after #381; marked it read. Lead independently
+  verified #386 was `OPEN`, non-draft, base `main`, `CLEAN`, exact head
+  `1e07a10a446edc46522910006e8ba2a9ab97c108`; `git diff --check` passed and
+  scope was worker_1 status plus task324 docs/report only. Posted gate comment
+  `4622764441` as `APPROVE_BLEND_DESIGN / EVIDENCE_DOCS_ONLY` and notified
+  worker_1 to self-merge only if the exact head remained clean; delivery
+  returned `delivered`. #386 merged at `2026-06-04T13:51:40Z` with merge commit
+  `6800c3404169087b61a79de6bf96e3ad774b82e5` from exact approved head
+  `1e07a10a446edc46522910006e8ba2a9ab97c108`. Worker_1 mailbox
+  `a1f67a4d2dd741868b5c01ea7f65c1d0` confirmed the same and was marked read.
+- Session 95 #377/#384 gate: after #386, worker_5 refreshed #377 to
+  `19f8a01f44aa4322635aab374d8ed22795639bda` and #384 to
+  `9524e9fe7ac824102314b4cb045a17d6a529e3da`. Processed worker_5 mailbox
+  `9d1311d387604da6ac0e53bd7136355b`; marked it read. Lead rechecked both
+  against current `origin/main` `6800c3404169087b61a79de6bf96e3ad774b82e5`:
+  both were `OPEN`, non-draft, base `main`, `CLEAN`, and `git diff --check`
+  passed. #377 scope was worker_5 status plus task316 docs/repair-plan
+  provenance; #384 scope was worker_5 status plus task318 validation-exit
+  preflight docs/report. Posted #377 gate comment `4622805452` as
+  `APPROVE_PLAN_DOCS / NO_ACTION_RELEASE` and #384 sequencing-hold comment
+  `4622805537`; notified worker_5 to self-merge #377 only if exact/clean and
+  to refresh or close #384 after #377. Delivery returned `delivered`.
+- Session 95 #377 merge closeout: #377 merged at `2026-06-04T13:57:09Z` with
+  merge commit `928d9d684b188fc1858914d0de7aef211627f697` from exact approved
+  head `19f8a01f44aa4322635aab374d8ed22795639bda`. Fetched `origin/main` to
+  `928d9d684b188fc1858914d0de7aef211627f697`. Worker_5 mailbox
+  `bc43068057d147a19b994f2a299d5624` confirmed the merge and was marked read.
+  #384 is now `OPEN`/`DIRTY` at `9524e9fe7ac824102314b4cb045a17d6a529e3da` and
+  remains HOLD pending worker_5 refresh/re-report or superseded closeout. #360
+  remains `OPEN`/`CLEAN` at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53`.
+  Coordinator update was sent and delivered. No product-code edits, tests,
+  training, eval, export, endpoint, promotion, task310/task341 release, task255,
+  AIME2025 train rows, shared deletion, lead main push, or lead merge was
+  performed.
+- Session 96 coordinator ack and #384 gate: coordinator Session 50 verified
+  `origin/main` `928d9d684b188fc1858914d0de7aef211627f697`, #386/#377 merged,
+  only #384 worker PR plus #360 coordinator PR open, and global HOLD unchanged.
+  Fetched origin and observed worker_5 refreshed #384 from
+  `9524e9fe7ac824102314b4cb045a17d6a529e3da` to
+  `4df2cc5772bc543d5f16de0ea73e824334c725bc`; #360 advanced to
+  `d63ea9f1309d6fd199b36442a10e11e7d7058ca2`. Processed worker_5 mailbox
+  `a4cec42b96b0457c976965677a2f24c5` and marked it read. Lead independently
+  verified #384 was `OPEN`, non-draft, base `main`, `CLEAN`, exact head
+  `4df2cc5772bc543d5f16de0ea73e824334c725bc`; `git diff --check` passed and
+  scope was worker_5 status plus task318 validation-exit preflight docs/report
+  only. Posted #384 gate comment `4622868441` as
+  `APPROVE_PREFLIGHT_PROVENANCE_DOCS / HOLD_TRAINING`; notified worker_5 to
+  self-merge only if exact/clean. Delivery returned `delivered`.
+- Session 96 #384 merge closeout state: #384 merged at
+  `2026-06-04T14:04:05Z` with merge commit
+  `ff5576d8d73f7eb48f78ad8a0709f97054142345` from exact approved head
+  `4df2cc5772bc543d5f16de0ea73e824334c725bc`. Fetched `origin/main` to
+  `ff5576d8d73f7eb48f78ad8a0709f97054142345`. No worker_5 post-merge closeout
+  mailbox was observed by the final check, so worker_5 was asked to send it.
+  Open PR list now contains only coordinator #360, `OPEN`/`CLEAN` at
+  `d63ea9f1309d6fd199b36442a10e11e7d7058ca2`. Coordinator update was sent and
+  delivered. All worker docs/status PRs in the all-SFT cleanup queue are now
+  merged or closed unmerged; no task310/task341 rerun, training, eval, export,
+  endpoint, promotion, task255, AIME2025 train rows, shared deletion, product
+  code edit, test run, lead main push, or lead merge was performed.
+- Session 97 #384 closeout reconciliation: coordinator Session 51 verified
+  `origin/main` `ff5576d8d73f7eb48f78ad8a0709f97054142345`, #384 merged at
+  `2026-06-04T14:04:05Z` with merge commit
+  `ff5576d8d73f7eb48f78ad8a0709f97054142345` from exact head
+  `4df2cc5772bc543d5f16de0ea73e824334c725bc`, and only coordinator #360 open/
+  clean. Processed worker_5 closeout mailboxes
+  `c4289f395d634736a32fb376ae674cdd` and
+  `7da08c865a204560a68c0e9a8476e3f9`; both confirm the #384 exact-head
+  self-merge through GitHub PR flow, no direct main push, docs/report/status-only
+  scope, and final disposition `APPROVE_PREFLIGHT_PROVENANCE_DOCS /
+  HOLD_TRAINING`. Both mailboxes were marked read. Refreshed open PR list:
+  only #360 remains `OPEN`/`CLEAN` at
+  `d63ea9f1309d6fd199b36442a10e11e7d7058ca2`. Global task310/task341 gate
+  remains HOLD pending NemTron target route restoration or an approved
+  replacement SSH/LTP route with credentials.
