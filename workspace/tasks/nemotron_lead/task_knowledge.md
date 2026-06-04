@@ -3330,3 +3330,18 @@
    `9b86179446d75d1a641d320d34cd9e2ca1890cd1`; canonical merged evidence remains
    #385 head `de480248b1ad7abe16a620729e62fa397443228d` and merge commit
    `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
+824. After coordinator Session 47 and the interrupted-turn continuation, the
+   actionable global blocker is still external runtime access: coordinator and
+   worker_4 both reproduced `ssh NemTron` rc `255`, proxy hop success, and
+   proxy-side TCP refusal to `10.100.2.62:33808`; coordinator also lacks LTP
+   credentials (`LTP_TOKEN`/`LTP_HOST`, no `~/.ltp_env`). Do not assign or
+   release task310 training/eval/export/endpoint/promotion or rerun task341
+   until the target service/port is restored or a replacement lead-approved
+   SSH/LTP route with credentials exists.
+825. Current open worker PRs #391/#390/#389/#388/#386/#384/#383/#382/#381/#380/
+   #379/#378/#377/#371 are `DIRTY` against `origin/main`
+   `8a757c323b82f4330b765ee89a6d78f421d9d9be`; none should self-merge or be
+   carried forward from an old gate without exact-head refresh, diff-check, and
+   fresh mailbox/gate evidence. Coordinator #360 is clean at
+   `7229c33b3111c7a25762c0192799f2cae01bf49d` with coordinator-doc-only scope,
+   but lead has not merged it.

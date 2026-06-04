@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #385/task323 MERGED `8a757c32`; #405 blocker unchanged; task310 train/eval HOLD |
+| PR | main `8a757c32`; #360 CLEAN coordinator records; worker PRs DIRTY; task310 train/eval HOLD on NemTron access |
 | Session | 92 |

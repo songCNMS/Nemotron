@@ -12990,3 +12990,17 @@
   `2026-06-04T13:13:07Z`; branch-only closeout/status head is
   `9b86179446d75d1a641d320d34cd9e2ca1890cd1`. Worker_5 reported no direct main
   push and no boundary violations.
+- Session 92 interrupted-conversation continuation at `2026-06-04T13:21:49Z`:
+  refreshed origin and mailbox after coordinator Session 47. Current
+  `origin/main` is `8a757c323b82f4330b765ee89a6d78f421d9d9be`; lead branch and
+  local `HEAD` are `3e3719d78e25757865274c9bfbfcc342398342ea`; mailbox is empty.
+  Rechecked open PRs: #391, #390, #389, #388, #386, #384, #383, #382, #381,
+  #380, #379, #378, #377, and #371 are all `DIRTY` after recent main merges and
+  cannot be released without worker refresh/re-report. Coordinator #360 is
+  `OPEN`, non-draft, base `main`, `CLEAN`, head
+  `7229c33b3111c7a25762c0192799f2cae01bf49d`; its diff is coordinator
+  status/history/knowledge docs only and `git diff --check` passes. Lead did not
+  merge or release any PR. Gate remains HOLD: task341 rerun and task310
+  launch/training/eval require restored `NemTron` target service/port
+  `10.100.2.62:33808` or a replacement lead-approved SSH/LTP route with
+  credentials.
