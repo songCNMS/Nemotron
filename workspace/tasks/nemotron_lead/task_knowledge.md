@@ -3389,3 +3389,5 @@
    PR cleanup queue is fully closed from the lead side; any further movement now
    depends on coordinator #360 and, for the real all-SFT objective, external
    restoration of the NemTron route or an approved replacement SSH/LTP route.
+834. Final Session 97 PR state: #360 remains the only open PR, at clean
+   coordinator-doc-only head `2cb793544ba17ac19212a736f93586d9459f815c`.
