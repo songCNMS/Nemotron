@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - Qwen all-SFT task333 30B launch preflight
 
-<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -115,3 +115,14 @@ blocked.
   promotion. Next allowed lead action after #398 lands is a bounded runtime
   remediation task for missing `megatron.energon` or equivalent NemTron route
   fix, followed by a rerun no-training preflight.
+
+## Merge Closeout
+
+- #398 merged at `2026-06-04T09:45:30Z`.
+- Merge commit: `373d162d63a66f2dac6b94c43917be9c249cd83f`.
+- Merged evidence head: `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+- Worker_2 branch-only closeout head:
+  `dad0fa87a196b75ec51fbfc9d317f9c402aaeb15`.
+- task335 is complete as no-training fail-closed blocker documentation only.
+- task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD pending separate runtime remediation and no-training preflight.

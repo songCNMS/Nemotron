@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #398/task335 OPEN CLEAN at `0a094483` approved for worker_2 self-merge as blocker docs; task310 train/eval HOLD |
+| PR | #398/#399 MERGED; task337 runtime remediation assigned to worker_2; task310 train/eval HOLD |
 | Session | 88 |

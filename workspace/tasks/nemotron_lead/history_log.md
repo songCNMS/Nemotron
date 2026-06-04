@@ -12699,3 +12699,14 @@
   task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
   blocked until missing `megatron.energon` is remediated and no-training
   preflight is rerun or explicitly accepted.
+- Session 88 task335/#398 merge closeout and task337 dispatch: processed worker_2
+  mailbox `task335-merge-closeout-373d162d-20260604T0946Z`. Verified #398
+  merged at `2026-06-04T09:45:30Z` with merge commit
+  `373d162d63a66f2dac6b94c43917be9c249cd83f` from exact approved head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`; `origin/main` advanced to
+  `373d162d`. Worker_2 branch-only closeout head is
+  `dad0fa87a196b75ec51fbfc9d317f9c402aaeb15` and does not change merged
+  evidence. Created `task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1`
+  for worker_2 to resolve or precisely classify the NemTron missing
+  `megatron.energon` runtime route, with no training/eval/export/endpoint/
+  promotion/task310 release.

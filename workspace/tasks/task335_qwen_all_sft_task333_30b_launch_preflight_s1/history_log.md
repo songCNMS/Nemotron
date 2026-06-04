@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - history
 
-<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -54,3 +54,18 @@
 - This accepts blocker documentation only. task310/all-SFT 30B launch/training/
   eval/export/endpoint/promotion remain HOLD because NemTron still lacks the
   `megatron.energon` runtime route needed by the Qwen3 MoE Bridge recipe.
+
+## 2026-06-04 UTC - Merged
+
+- Processed worker_2 closeout mailbox
+  `task335-merge-closeout-373d162d-20260604T0946Z`.
+- Verified #398 merged at `2026-06-04T09:45:30Z` with merge commit
+  `373d162d63a66f2dac6b94c43917be9c249cd83f` from exact approved head
+  `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+- Worker_2 pushed branch-only closeout head
+  `dad0fa87a196b75ec51fbfc9d317f9c402aaeb15`; this does not change the merged
+  evidence head.
+- No issue reported. task335 is complete as blocker documentation only.
+- task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD. Next lead step is a separate runtime remediation task for missing
+  `megatron.energon`, then a rerun or accepted equivalent no-training preflight.

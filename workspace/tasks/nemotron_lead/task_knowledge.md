@@ -3138,3 +3138,12 @@
    No task310/all-SFT 30B launch or training is released; the next gate is
    runtime remediation for missing `megatron.energon` followed by a no-training
    preflight rerun or equivalent accepted proof.
+785. #398/task335 merged at `2026-06-04T09:45:30Z` with merge commit
+   `373d162d63a66f2dac6b94c43917be9c249cd83f` from head
+   `0a094483458f01813b50e4fb13e2ddefdbdc4517`; worker_2 branch-only closeout
+   head `dad0fa87a196b75ec51fbfc9d317f9c402aaeb15` does not change merged
+   evidence. task335 is complete as blocker docs only.
+786. task337 is the next no-training gate: worker_2 must resolve or precisely
+   classify missing `megatron.energon` for the NemTron Qwen3 MoE Bridge recipe
+   route. A pass only enables rerun/equivalent no-training preflight; it does
+   not release task310 training/eval/export/endpoint/promotion.

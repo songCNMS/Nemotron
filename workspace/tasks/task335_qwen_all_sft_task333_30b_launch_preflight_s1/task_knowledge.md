@@ -1,6 +1,6 @@
 # task335_qwen_all_sft_task333_30b_launch_preflight_s1 - task knowledge
 
-<!-- METADATA:STATUS=ReadyForMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 1. #396/task333 merged at `2026-06-04T08:37:16Z` via merge commit
    `76b9ebf98e623cb85075378ca9980ba6ee11c8ed`.
@@ -31,3 +31,7 @@
     docs only. This does not release task310 or any training/eval/export/
     endpoint/promotion; next real work is runtime remediation for missing
     `megatron.energon` plus rerun no-training preflight.
+11. #398 merged at `2026-06-04T09:45:30Z` via merge commit
+    `373d162d63a66f2dac6b94c43917be9c249cd83f` from evidence head
+    `0a094483458f01813b50e4fb13e2ddefdbdc4517`. Branch-only closeout head is
+    `dad0fa87a196b75ec51fbfc9d317f9c402aaeb15`.
