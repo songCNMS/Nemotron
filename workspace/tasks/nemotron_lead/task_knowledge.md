@@ -3041,3 +3041,15 @@
    provenance into a fresh task-owned packed contract candidate. A PASS only
    enables later independent review; task310/training/eval/export/endpoint/
    promotion/30B release remain HOLD.
+770. Session 85 task333/#396 current gate: #396 is open and CLEAN at exact head
+   `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`. Lead precheck of
+   `run_20260604T074500Z` found `PASS_COMBINED_PACKED_CONTRACT_READY_FOR_REVIEW`,
+   96 shards, 89,325 rows, 342,875,996 input tokens, 38,245,535 supervised
+   tokens, artifact and packed shard checksum rc 0, Qwen3-30B contract rc 0,
+   AIME2025 prompt/label train rows 0, task255 not used, and no broken split
+   symlinks. Residuals: no fresh task333 decontam scan, task299 lacks normalized
+   prompt hit field, hard-math seed valid/test shards have zero rows, SWE still
+   truncates to 4096.
+771. Session 85 task334 is assigned to worker_4 for independent read-only
+   review of #396 exact head and artifact root. #396/task333 and task310 remain
+   HOLD until worker_4 reports approve/request-changes/block and lead gates it.

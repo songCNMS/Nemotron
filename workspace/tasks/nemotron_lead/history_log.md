@@ -12530,3 +12530,16 @@
   counts, split/decontam/parity/Qwen contract proofs, and checksums. Even a
   PASS only enables later independent review; no task310/training/eval/export/
   endpoint/promotion/30B release is authorized.
+- Session 85 task333/#396 intake and review dispatch: processed worker_1
+  mailbox `18ae09f39a7d4ffa83eec0af602d439f` for #396/task333. Verified #396
+  is `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, exact head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`; head drift from `168da2de` was
+  worker_1 status only, with report/helper unchanged. Lead precheck of
+  task333 artifact root
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`
+  confirmed disposition `PASS_COMBINED_PACKED_CONTRACT_READY_FOR_REVIEW`, 96
+  shards, 89,325 rows, 342,875,996 input tokens, 38,245,535 supervised tokens,
+  artifact checksum rc 0, packed shard checksum rc 0, Qwen3-30B contract rc 0
+  with `TASK333_QWEN30B_PACKED_CONTRACT=PASS`, AIME2025 train rows 0, task255
+  not used, and no broken split symlinks. Created task334 for worker_4
+  independent read-only review. #396 and task310 remain HOLD.

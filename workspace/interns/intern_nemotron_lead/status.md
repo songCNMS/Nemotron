@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #395/task331 merged; task333 combined packed contract assigned; task310 train/eval HOLD |
-| Session | 84 |
+| PR | #396/task333 open; task334 independent review assigned; task310 train/eval HOLD |
+| Session | 85 |
