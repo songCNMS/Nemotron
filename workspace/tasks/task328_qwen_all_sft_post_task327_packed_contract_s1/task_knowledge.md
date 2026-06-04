@@ -22,3 +22,7 @@
    raw pass sources blocked before packing due missing accepted split
    exposure/parity and Qwen3-30B supervised-token packing proof. The nine
    task327 decontam-hit sources remain excluded fail-closed.
+6. #391 current refreshed head
+   `7181289cca14af741e7f704b6f34219805822a3e` changes only worker session/status
+   metadata relative to `32e23761`; lead refreshed the docs-status closeout gate
+   by comment `issuecomment-4619254901` with no downstream release.

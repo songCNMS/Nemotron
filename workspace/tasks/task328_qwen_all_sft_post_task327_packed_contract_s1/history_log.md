@@ -30,3 +30,18 @@
   approved; only the prior constrained task299 seed remains carry-forward
   evidence. Expanded all-SFT packing/training/eval/export/endpoint/promotion
   remain HOLD.
+
+## Session 80 - 2026-06-04 UTC - Lead gate refresh for #391
+
+- Processed worker_2 mailbox closeout plus amendment. #391 advanced from
+  `32e23761dd4d0957f88b2b0705edaa234c6d75bc` to
+  `7181289cca14af741e7f704b6f34219805822a3e`.
+- Independent delta check found session/status metadata cleanup only; task328
+  report disposition, artifact root, source matrix, and blocker substance are
+  unchanged.
+- PR remains `OPEN`, base `main`, `CLEAN`/`MERGEABLE`, non-draft; `git diff
+  --check` and task328 artifact `sha256sum -c` still pass.
+- Refreshed gate comment `issuecomment-4619254901` records
+  `APPROVE_DOCS_STATUS_CLOSEOUT` for exact head `7181289` only. No training,
+  benchmark eval, export, endpoint, promotion, main push, or lead merge is
+  authorized.

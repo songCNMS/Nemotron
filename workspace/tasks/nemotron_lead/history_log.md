@@ -12379,3 +12379,14 @@
   proof exists, and the nine task327 decontam-hit sources remain excluded
   fail-closed. No lead merge and no training/eval/export/endpoint/promotion
   release.
+- Processed worker_2 task328/#391 closeout and amendment mailbox reports. #391
+  advanced from `32e23761dd4d0957f88b2b0705edaa234c6d75bc` to
+  `7181289cca14af741e7f704b6f34219805822a3e`; independent diff check confirmed
+  the delta is session/status metadata cleanup only, with
+  `post_task327_packed_contract_report.md` disposition, artifact root, source
+  matrix, and blocker substance unchanged. PR remains `OPEN`, `CLEAN`/
+  `MERGEABLE`, base `main`, non-draft; `git diff --check` still passes and
+  `sha256sum -c` still passes for task328 generated artifacts. Lead posted
+  refreshed gate comment `issuecomment-4619254901` for exact head `7181289`.
+  Gate remains `APPROVE_DOCS_STATUS_CLOSEOUT` only; expanded all-SFT
+  packing/training/eval/export/endpoint/promotion stay HOLD.

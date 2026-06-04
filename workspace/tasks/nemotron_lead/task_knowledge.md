@@ -2941,3 +2941,10 @@
    PASS, and no AIME2025 train leakage PASS. New raw pass sources are not
    accepted for training until split exposure/parity and Qwen3-30B packing proof
    exist; nine task327 decontam-hit sources remain fail-closed exclusions.
+756. Session 80 task328/#391 refreshed head:
+   `7181289cca14af741e7f704b6f34219805822a3e` supersedes `32e23761` by
+   session/status metadata cleanup only. Lead diff review found no change to the
+   task328 blocker substance, artifact root, source inclusion matrix, or
+   disposition. Refreshed gate comment `issuecomment-4619254901` preserves
+   `APPROVE_DOCS_STATUS_CLOSEOUT` only; no new packed root, training, eval,
+   export, endpoint, promotion, or expanded all-SFT release is authorized.
