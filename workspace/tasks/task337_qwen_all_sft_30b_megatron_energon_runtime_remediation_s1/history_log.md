@@ -49,3 +49,5 @@
 - Wrote `qwen3_moe_runtime_remediation_report.md` with disposition
   `PASS_RUNTIME_REMEDIATED`. Training and task310 remain HOLD pending a
   separate lead-assigned task335-equivalent no-training preflight rerun.
+- Opened PR #400:
+  `https://github.com/songCNMS/Nemotron/pull/400`.
