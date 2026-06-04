@@ -12276,3 +12276,15 @@
   remained active with no final rc, worker_2 report, or task327 PR. Summary
   still contains 8 completed sources only; downstream all-SFT packing/training/
   eval/export/endpoint/promotion stay HOLD.
+- Read-only source-completion poll captured `2026-06-04T03:51:06Z
+  SOURCE_DONE infinibyte-00 status=BLOCKED_DECONTAM_HIT` followed by
+  `SOURCE_START infinibyte-01`. The summary now records `infinibyte-00` with
+  `587347` rows, `0` parse errors, file sha
+  `7d6cc0943a9264696ba177f152fd12c60cc2e1b042787a205221abcd4059c9e7`,
+  row-manifest sha
+  `0b4b2d50c732f38e3478b2d7f9c7ad726b655c531259971311b3d2b09ce32143`,
+  decontam hits `0/0/164`, and split exposure
+  `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+  The task327 process remained active with no final rc, worker_2 report, or
+  task327 PR; downstream all-SFT packing/training/eval/export/endpoint/
+  promotion stay HOLD.

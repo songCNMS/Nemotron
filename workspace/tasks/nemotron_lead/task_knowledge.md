@@ -2866,3 +2866,11 @@
    `rate_mib_s=7.64`). Source remains active; summary still has 8 completed
    sources only and no final rc, source-level disposition, worker_2 report,
    task327 PR, or all-SFT pack/train/eval release.
+745. Session 79 source-level evidence: task327 `infinibyte-00` completed at
+   `2026-06-04T03:51:06Z` as `BLOCKED_DECONTAM_HIT`: `587347` rows, `0` parse
+   errors, file sha `7d6cc0943a9264696ba177f152fd12c60cc2e1b042787a205221abcd4059c9e7`,
+   row-manifest sha `0b4b2d50c732f38e3478b2d7f9c7ad726b655c531259971311b3d2b09ce32143`,
+   decontam hits `0/0/164`, split exposure
+   `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
+   The run started `infinibyte-01`; no final rc, worker_2 report, task327 PR,
+   or all-SFT pack/train/eval release.
