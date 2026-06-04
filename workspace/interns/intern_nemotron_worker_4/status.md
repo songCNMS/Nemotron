@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForReview,TASK=task332_qwen_all_sft_structured_split_policy_remediation_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForPR,TASK=task334_qwen_all_sft_task333_independent_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | ReadyForReview |
+| Status | ReadyForPR |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task332_qwen_all_sft_structured_split_policy_remediation_s1 |
-| PR | #394 https://github.com/songCNMS/Nemotron/pull/394 |
-| Session | 1 |
-| Progress | Produced task332 no-training evidence and report with disposition `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`. Output root `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`; exact 6 structured validation rows identified and fail-closed excluded; deterministic per-source split policy `task332_per_source_shard_holdout_v1` recorded; decontam/no-AIME2025 train proof carried; task331 remains pending at `63b4b992d534bd16120f31345d57d105890d8d55` with no PR visible and SWE supervised tokens still blocking combined contract. Verified helper compile and task332 output checksums. No training/eval/export/endpoint/promotion/task255/shared deletion/merge/self-merge/main push. |
+| Current Task | task334_qwen_all_sft_task333_independent_review_s1 |
+| PR | #397 `https://github.com/songCNMS/Nemotron/pull/397` |
+| Session | 2 |
+| Progress | Refreshed independent read-only review of #396 exact head `6261daaa37172caa11929b0b88f685b63f987221` after worker_1 fixed the task333 report and then advanced with bookkeeping. Disposition: `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT`. Verified drift from `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` to `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66` is only worker_1 status plus task333 report hash correction, and `9a9471e3..6261daaa` is non-material worker_1 status/history/task_knowledge bookkeeping only. Old `5894818a`/`ca07a194`/`f1373026` values are absent and corrected `7562c864`/`e466ee7`/`89ab29` values match assigned `run_20260604T074500Z` source_provenance/direct row-manifest sha256. Rechecked PR state/scope, diff-check, helper compile, artifact and packed-shard checksums, Qwen30B contract rc/log marker, split parity/symlinks, metrics, decontam/no-task255, and boundaries. No training/eval/export/endpoint/promotion/task310 release/30B release/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge or worker_1 artifact/branch mutation. |
