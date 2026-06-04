@@ -12872,3 +12872,9 @@
   restored verify `/root` access plus task337 runtime, task298 checkpoint
   candidate, task339 train-only root, and runtime imports. task310 remains HOLD
   until access is restored and task341 or equivalent handoff is rerun.
+- Session 91 worker_2 #404 merge closeout mailbox: processed
+  `intern_nemotron_worker_2-task341-pr404-merge-closeout-20260604T1234Z`,
+  confirming #404 merged from head
+  `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` with merge commit
+  `371aea491776cc258e1cbb59a081d28be0530438`; branch-only closeout head is
+  `e739c45d8a12def16c58d1999e2c391bc119f348`. No boundary issues reported.

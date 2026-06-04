@@ -38,3 +38,6 @@
    `371aea491776cc258e1cbb59a081d28be0530438` from exact head
    `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab`. The merged task341 disposition
    remains `BLOCK_TRAINING_READINESS`; it does not authorize 30B training.
+10. Worker_2 branch-only closeout head after #404 merge is
+   `e739c45d8a12def16c58d1999e2c391bc119f348`; it does not change the merged
+   evidence head or blocker disposition.

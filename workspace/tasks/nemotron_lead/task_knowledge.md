@@ -3267,3 +3267,7 @@
    `/root` paths and imports only if access works, and report PASS/BLOCK. A PASS
    from task342 still only permits rerunning task341/equivalent handoff; it does
    not authorize training/eval.
+811. Worker_2 #404 post-merge branch-only closeout head is
+   `e739c45d8a12def16c58d1999e2c391bc119f348`; canonical merged task341 evidence
+   remains #404 head `8211c1397ef61fd3be6718d4e2bde1ca4c7728ab` and merge
+   commit `371aea491776cc258e1cbb59a081d28be0530438`.

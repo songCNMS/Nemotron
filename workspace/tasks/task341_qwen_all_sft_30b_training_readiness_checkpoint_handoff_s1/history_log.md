@@ -77,3 +77,7 @@
   training-readiness pass; the next required action is restoring NemTron SSH/
   runtime access and rerunning task341 or an equivalent no-training handoff
   probe.
+- Processed worker_2 merge closeout mailbox
+  `intern_nemotron_worker_2-task341-pr404-merge-closeout-20260604T1234Z`,
+  confirming the same merge details and branch-only closeout head
+  `e739c45d8a12def16c58d1999e2c391bc119f348`.
