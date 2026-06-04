@@ -42,3 +42,5 @@
   `BLOCK_LAUNCH_PREFLIGHT`; no optimizer/training/eval/export/endpoint/
   promotion/task310 release/task255/AIME2025 train rows/shared mutation/main
   push/merge/self-merge was performed.
+- Opened PR #398:
+  `https://github.com/songCNMS/Nemotron/pull/398`.
