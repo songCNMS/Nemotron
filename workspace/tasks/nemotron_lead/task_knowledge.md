@@ -3147,3 +3147,8 @@
    classify missing `megatron.energon` for the NemTron Qwen3 MoE Bridge recipe
    route. A pass only enables rerun/equivalent no-training preflight; it does
    not release task310 training/eval/export/endpoint/promotion.
+787. task337 acceptance branch is
+   `origin/intern_nemotron_worker_2/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1`
+   at `4db10e0783823c8f6087748718d40e729879554d`. This is ownership evidence
+   only; wait for worker_2 runtime remediation report/PR or exact blocker before
+   assigning rerun preflight or training.

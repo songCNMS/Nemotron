@@ -12710,3 +12710,12 @@
   for worker_2 to resolve or precisely classify the NemTron missing
   `megatron.energon` runtime route, with no training/eval/export/endpoint/
   promotion/task310 release.
+- Session 88 task337 acceptance: processed worker_2 mailbox
+  `task337-acceptance-4db10e07-20260604T1001Z`. Verified remote branch
+  `origin/intern_nemotron_worker_2/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1`
+  exists at `4db10e0783823c8f6087748718d40e729879554d`, based on `origin/main`
+  `373d162d63a66f2dac6b94c43917be9c249cd83f`, with lead docs imported from
+  `4fc5e1d3`. No PR yet. Worker_2 accepted no-training runtime remediation/
+  classification scope and confirmed no runtime mutation in the acceptance step.
+  task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
+  HOLD.

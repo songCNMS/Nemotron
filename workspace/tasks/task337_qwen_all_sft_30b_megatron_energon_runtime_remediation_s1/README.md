@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - Runtime remediation for Qwen3 MoE Bridge import
 
-<!-- METADATA:STATUS=Assigned,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -100,3 +100,17 @@ Produce a task-owned no-training runtime remediation report that either:
 - Base: current `origin/main` `373d162d63a66f2dac6b94c43917be9c249cd83f`
 - Gate state: task310/all-SFT 30B training/eval/export/endpoint/promotion
   remains HOLD.
+
+## Acceptance
+
+- Worker_2 acceptance mailbox:
+  `task337-acceptance-4db10e07-20260604T1001Z`.
+- Worker branch:
+  `origin/intern_nemotron_worker_2/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1`.
+- Acceptance head: `4db10e0783823c8f6087748718d40e729879554d`.
+- Base: `origin/main` `373d162d63a66f2dac6b94c43917be9c249cd83f`.
+- Lead docs imported from:
+  `origin/intern_nemotron_lead/session1-recovery-task-docs`
+  `4fc5e1d3`.
+- PR: none yet; acceptance branch/mailbox only.
+- Worker_2 confirmed no runtime mutation was performed in the acceptance step.
