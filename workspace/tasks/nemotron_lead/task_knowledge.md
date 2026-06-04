@@ -2696,3 +2696,6 @@
 708. Session 79: task327 `competitive-python-00` reached 700,000 rows /
    32,646.5 MiB at `2026-06-03T23:57:06Z`; source remains in progress with no
    final rc, worker report, task327 PR, or all-SFT pack/train/eval release.
+709. Session 79: task327 `competitive-python-00` reached 800,000 rows /
+   37,272.1 MiB at `2026-06-04T00:05:25Z`; source remains in progress with no
+   final rc, worker report, task327 PR, or all-SFT pack/train/eval release.
