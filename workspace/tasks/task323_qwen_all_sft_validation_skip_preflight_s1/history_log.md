@@ -1,6 +1,6 @@
 # task323_qwen_all_sft_validation_skip_preflight_s1 - History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0 - 2026-06-03 UTC - Assigned
 
@@ -54,3 +54,23 @@
   coordinator or authorized non-author merge path if any.
 - Did not change `validation_skip_preflight_report.md` or task-owned output
   artifacts.
+
+## Session 6 - 2026-06-04 UTC - Self-merge closeout
+
+- Received lead release for task323/#385 at exact head
+  `de480248b1ad7abe16a620729e62fa397443228d`, with approval
+  `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`.
+- Verified #385 was open, non-draft, base `main`, exact head `de480248`, and
+  `CLEAN/MERGEABLE` before merging.
+- Self-merged #385 through the PR path at `2026-06-04T13:13:07Z`.
+- Merge commit:
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
+- Merged head:
+  `de480248b1ad7abe16a620729e62fa397443228d`.
+- Fast-forwarded the worker branch to `origin/main` merge commit and recorded
+  this closeout locally; did not push `main` directly.
+- Set worker status to `Idle` with current task `none`.
+- The merge records Route A train-only validation-skip preflight documentation
+  only. It does not authorize optimizer/training/eval/export/endpoint/
+  promotion/final packing/product-code edit/task255/AIME2025 train data/shared
+  deletion/main push or task310 release.

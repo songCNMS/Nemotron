@@ -1,6 +1,6 @@
 # task323_qwen_all_sft_validation_skip_preflight_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Knowledge Entries
 
@@ -26,3 +26,9 @@
    `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`; this remains preflight
    evidence only and does not authorize self-merge or any runtime/training/eval
    action.
+10. Task323/#385 was self-merged through the authorized PR path at
+    `2026-06-04T13:13:07Z`; merge commit
+    `8a757c323b82f4330b765ee89a6d78f421d9d9be`, merged head
+    `de480248b1ad7abe16a620729e62fa397443228d`. This remains docs/preflight
+    evidence only and does not release optimizer/training/eval/export/
+    endpoint/promotion/final packing/task310.
