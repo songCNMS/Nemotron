@@ -12505,3 +12505,28 @@
   #394 remains docs/status/helper evidence only. task331 remains the active
   blocker for SWE nonzero supervised-token evidence; task310 and combined
   contract remain HOLD.
+- Session 84 task331/#395 gate and merge closeout: processed worker_2 task331
+  mailbox `task331-closeout-ebcde1fa-20260604T0728Z`, verified #395 at
+  `ebcde1fa5aab6e0f7b5c812abb1b938ba8c9b84c`, and posted lead gate comment
+  `issuecomment-4619935148` as
+  `APPROVE_TASK331_SWE_SUPERVISED_UNBLOCK / HOLD_TRAINING`. Verified helper
+  compile, PR diff-check, artifact checksums, packed shard checksums, final
+  summary `PASS_SWE_SUPERVISED_UNBLOCK`, Qwen3-30B contract pass, and
+  decontam/no-AIME/task255 proof. Worker_2 then pushed metadata-only head
+  `84c06d4509794ac32257044242b136981d550a7c`; processed mailbox
+  `task331-closeout-head-correction-84c06d45-20260604T0738Z`, confirmed report
+  and helper unchanged, and posted refreshed gate comment
+  `issuecomment-4619951226`. #395 merged at `2026-06-04T07:26:34Z` with merge
+  commit `ad0c5a7d758d44370695b94c83385591f100c714` from approved head
+  `84c06d4509794ac32257044242b136981d550a7c`; processed/read worker_2
+  post-merge mailbox `task331-merged-closeout-ad0c5a7d-20260604T0727Z`.
+  Accepted task331 as no-training SWE formatter evidence only; task310 remains
+  HOLD.
+- Session 84 task333 dispatch: created
+  `task333_qwen_all_sft_combined_packed_contract_s1` for worker_1 to produce a
+  fresh no-training combined all-SFT packed contract from task299 constrained
+  seed, task322/task329 raw-pass sources, task332 split policy/exclusions, and
+  task331 SWE no-tools-header provenance. Required output is a task-owned root,
+  counts, split/decontam/parity/Qwen contract proofs, and checksums. Even a
+  PASS only enables later independent review; no task310/training/eval/export/
+  endpoint/promotion/30B release is authorized.

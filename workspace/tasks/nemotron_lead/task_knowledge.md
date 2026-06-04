@@ -3025,3 +3025,19 @@
    `58907ec58e842692693b1d5570cb6d96f649ee33`. Worker_4 mailbox
    `intern_nemotron_worker_4-task332-pr394-merged-closeout-20260604T0704Z`
    was processed/read. Remaining gate blocker is task331 SWE remediation.
+768. Session 84 task331/#395 accepted and merged: #395 merged at
+   `2026-06-04T07:26:34Z` via merge commit
+   `ad0c5a7d758d44370695b94c83385591f100c714` from refreshed approved head
+   `84c06d4509794ac32257044242b136981d550a7c`. Lead gate comments are
+   `issuecomment-4619935148` for initial head `ebcde1fa` and
+   `issuecomment-4619951226` for metadata-only head `84c06d45`. Accepted
+   evidence: SWE no-tools-header formatter/config proof with 51,029 rows,
+   28,524,315 supervised tokens, Qwen3-30B contract pass, checksum pass, zero
+   AIME2025 train rows, and no task255 reuse. This is no-training evidence only.
+769. Session 84 task333 is assigned to worker_1 as the next gate:
+   `task333_qwen_all_sft_combined_packed_contract_s1`. It must combine task299
+   constrained seed, accepted raw-pass sources, task332 split policy and six-row
+   structured exclusion, and task331 SWE `tools_field=task331_missing_tools_header`
+   provenance into a fresh task-owned packed contract candidate. A PASS only
+   enables later independent review; task310/training/eval/export/endpoint/
+   promotion/30B release remain HOLD.

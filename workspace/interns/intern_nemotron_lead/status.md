@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #394/task332 merged; task331 SWE remains pending/running; task310 train/eval HOLD |
-| Session | 83 |
+| PR | #395/task331 merged; task333 combined packed contract assigned; task310 train/eval HOLD |
+| Session | 84 |
