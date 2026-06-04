@@ -12428,5 +12428,6 @@
   valid/test exposure is sparse, and combination with task299 is deferred.
   Processed worker_2 mailbox closeout for `48d42bc` and hook/head-update
   mailbox for `d911ec58`. Created task330 for worker_4 independent review of
-  current head. No self-merge or task310 training/eval/export/endpoint/promotion
-  release.
+  current head, dispatched assignment by peer_send with `delivered` receipt, and
+  observed worker_4 pane enter `Working`. No self-merge or task310
+  training/eval/export/endpoint/promotion release.

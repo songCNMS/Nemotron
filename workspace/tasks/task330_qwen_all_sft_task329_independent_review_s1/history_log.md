@@ -17,5 +17,7 @@
   and hook/head-update mailbox for head
   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` were processed as the official
   task329 report chain.
+- Lead dispatched task330 to worker_4 via peer_send; receipt returned
+  `delivered`, and worker_4 pane entered `Working`.
 - Review must decide approve/request-changes/block for #392 docs/evidence
   closeout and state exact remediation before any task310 release.

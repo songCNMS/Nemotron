@@ -2973,3 +2973,9 @@
    `supervised_tokens=0`, structured has 6 validation-filtered rows, valid/test
    split exposure is sparse, and task299 combination remains unreviewed.
    task310 and all benchmark/eval/export/endpoint/promotion stay blocked.
+760. Session 82 task330 dispatch: worker_4 is assigned to read-only
+   independent review of #392 exact head
+   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` and task329 artifact root
+   `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`.
+   Assignment was delivered by peer_send; expected closeout is
+   approve/request-changes/block for #392 with remediation recommendation.
