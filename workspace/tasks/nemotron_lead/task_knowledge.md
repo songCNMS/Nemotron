@@ -2999,7 +2999,9 @@
    `76886ab9c99cd4d227b0ed18bef43a9949129f73`; #392 merged at
    `2026-06-04T06:35:06Z` via merge commit
    `410c2247fc5e09e6ad831bdee1628830b97fbd89`. These are docs/evidence
-   closeouts only and do not release task310.
+   closeouts only and do not release task310. Worker_2 post-merge mailbox
+   `intern_nemotron_worker_2-task329-pr392-merged-closeout-20260604-0638` was
+   processed/read.
 764. Session 83 next remediation split: task331 is assigned to worker_2 for
    SWE supervised-token formatter/config/source proof; task332 is assigned to
    worker_4 for structured filtered-row and valid/test split-policy remediation.

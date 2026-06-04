@@ -12458,7 +12458,9 @@
   `410c2247fc5e09e6ad831bdee1628830b97fbd89` from exact head
   `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`; worker_2 branch-only closeout
   head observed at `5c25c7689d9f0efa6ee428db74feb74256b48bcf` with Idle
-  status. Created task331
+  status, and mailbox
+  `intern_nemotron_worker_2-task329-pr392-merged-closeout-20260604-0638` was
+  processed/read. Created task331
   `task331_qwen_all_sft_swe_supervised_formatter_unblock_s1` for worker_2 to
   unblock SWE nonzero supervised-token packing, and task332
   `task332_qwen_all_sft_structured_split_policy_remediation_s1` for worker_4
