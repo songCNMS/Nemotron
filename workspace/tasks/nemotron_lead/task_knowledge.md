@@ -2908,3 +2908,10 @@
    row-manifest sha `898ff4ab35d5711305463eb8a17e1b571b79ea1aba8e7636ba0ec05642218520`,
    decontam hits `0/0/164`. No worker_2 official report/PR/mailbox yet; all-SFT
    pack/train/eval remains HOLD.
+752. Session 79 PR gate: worker_2 opened task327 PR #390 at
+   `28d0b13abb91fe1fc0a3586097d6c94a98c69d9e`; PR is `OPEN`,
+   `CLEAN`/`MERGEABLE`, diff-check clean, and artifact checksum verification
+   passed. Lead posted `APPROVE_DOCS_STATUS_CLOSEOUT` as
+   `issuecomment-4619067862` because formal review approval is blocked by
+   own-PR token rules. No merge performed by lead; downstream all-SFT
+   packing/training/eval stays HOLD.

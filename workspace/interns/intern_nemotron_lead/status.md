@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 artifacts complete rc2; awaiting worker_2 report/PR; all-SFT pack/train HOLD |
+| PR | #390 gate-commented approve docs closeout; non-author merge pending; all-SFT pack/train HOLD |
 | Session | 79 |

@@ -12330,3 +12330,15 @@
   worker_2 branch/status still had no official report/PR/mailbox closeout, so
   this is lead read-only artifact evidence pending worker_2 official report.
   Downstream all-SFT packing/training/eval/export/endpoint/promotion stay HOLD.
+- Gate-reviewed worker_2 task327 PR #390 at head
+  `28d0b13abb91fe1fc0a3586097d6c94a98c69d9e`: base `main`, `OPEN`,
+  `CLEAN`/`MERGEABLE`, non-draft, diff-check pass. Independent artifact
+  verification `sha256sum -c manifests/artifact_checksums.sha256` passed for
+  all 26 listed generated files. Formal GitHub approve failed because the token
+  is treated as PR author, so lead posted gate comment
+  `issuecomment-4619067862` with decision
+  `APPROVE_DOCS_STATUS_CLOSEOUT` only. Merge remains non-author/authorized path;
+  lead did not merge. Gate remains HOLD for all-SFT packing/training/eval/export/
+  endpoint/promotion; only later bounded eligible-source contract planning may
+  use the accepted facts that task327 has one large-source `INCLUDED_PASS`
+  (`swe`) and nine large-source decontam blockers.
