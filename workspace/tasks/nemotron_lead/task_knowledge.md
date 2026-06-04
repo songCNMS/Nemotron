@@ -2825,3 +2825,7 @@
    100,000 rows / 1,610.7 MiB at `2026-06-04T02:51:16Z`; source remains
    active with no final rc, source-level disposition, worker_2 report, task327
    PR, or all-SFT pack/train/eval release.
+737. Session 79 goal-continuation: task327 `agentic-tool-calling` reached
+   200,000 rows / 3,219.2 MiB at `2026-06-04T02:54:47Z`; source remains
+   active with no final rc, source-level disposition, worker_2 report, task327
+   PR, or all-SFT pack/train/eval release.

@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; agentic-tool-calling reached 100k rows; all-SFT pack/train HOLD |
+| PR | task327 active; agentic-tool-calling reached 200k rows; all-SFT pack/train HOLD |
 | Session | 79 |

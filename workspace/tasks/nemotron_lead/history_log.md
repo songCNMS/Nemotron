@@ -12219,3 +12219,9 @@
   final rc, worker_2 report, or task327 PR; this is in-progress evidence only
   and downstream all-SFT packing/training/eval/export/endpoint/promotion stay
   HOLD.
+- Goal-continuation read-only poll caught the next stable
+  `agentic-tool-calling` checkpoint: `2026-06-04T02:54:47Z PROGRESS
+  agentic-tool-calling rows=200000 mib=3219.2 rate_mib_s=7.61`. The task327
+  process remained active with no final rc, worker_2 report, or task327 PR;
+  this is in-progress evidence only and downstream all-SFT packing/training/
+  eval/export/endpoint/promotion stay HOLD.
