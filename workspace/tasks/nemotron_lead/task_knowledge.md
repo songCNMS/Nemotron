@@ -3222,3 +3222,6 @@
    `APPROVE_TASK339_NO_TRAINING_PREFLIGHT` evidence only. No task310 training/
    eval/export/endpoint/promotion release is authorized. Next gate is a bounded
    training-readiness/checkpoint-handoff task after #402 lands.
+802. Worker_4 merge closeout mailbox
+   `intern_nemotron_worker_4-task340-merge-closeout-20260604T1202Z` confirms
+   the #403 merge details in entry 800 and no boundary issues.
