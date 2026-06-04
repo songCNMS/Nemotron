@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - Task Knowledge
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
 
 ## Knowledge Entries
 
@@ -40,3 +40,7 @@
     `APPROVE_BLOCKER_DOCS / BLOCK_RUNTIME_CONFIRMED`: current M1 runnable rows
     remain `0/19`, so any M1 benchmark row execution remains blocked until a
     separate lead-gated runtime/container/scheduler/credential proof exists.
+15. Task333 completed as PR #396 at head `8546ae8d` with no-training combined
+    packed-contract candidate `run_20260604T074500Z`; this is review evidence
+    only and does not authorize task310 release, training, eval, export,
+    endpoint, promotion, 30B release, main push, merge, or self-merge.

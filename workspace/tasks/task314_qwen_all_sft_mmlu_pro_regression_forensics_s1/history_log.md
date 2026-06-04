@@ -1,6 +1,6 @@
 # task314_qwen_all_sft_mmlu_pro_regression_forensics_s1 - History Log
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
 
 ## Session 78 - 2026-06-03 UTC - Assigned
 
@@ -136,3 +136,20 @@
   self-merge is authorized.
 - Task314/#380 remains approved docs/no-action-release only; task314 report
   findings and output artifact checksums are unchanged.
+
+## Session 99 - 2026-06-04 UTC - Task333 PR reported
+
+- Accepted lead assignment for
+  `task333_qwen_all_sft_combined_packed_contract_s1`.
+- Completed task333 in separate worktree
+  `/work-agents/intern_nemotron_worker_1/Nemotron_task333`.
+- Opened task333 PR #396 at head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`, base `main`,
+  `OPEN`/`CLEAN`/`MERGEABLE`, with docs/status/helper/report-only diff.
+- Produced task-owned no-training combined packed-contract candidate under
+  `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`
+  with disposition `PASS_COMBINED_PACKED_CONTRACT_READY_FOR_REVIEW`.
+- Sent official task333 mailbox closeout to `intern_nemotron_lead`.
+- Task314/#380 remains approved docs/no-action-release only; no self-merge,
+  promotion, new eval, training, export, endpoint, main push, or artifact
+  mutation is authorized for task314.
