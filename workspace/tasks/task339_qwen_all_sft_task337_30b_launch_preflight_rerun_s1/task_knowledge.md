@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - task knowledge
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 1. #400/task337 merged runtime remediation evidence at
    `2026-06-04T11:11:08Z`, merge commit
@@ -21,3 +21,13 @@
 7. Acceptance branch base is current main
    `f083c9566a9f0775c27ae49f16b8b898edfc8d11`; lead docs were imported from
    `55d5b95cddea659f37817ebe0b161045422d40b5`.
+8. task339 run `run_20260604T112611Z` passed no-training preflight with
+   disposition `PASS_LAUNCH_PREFLIGHT_WITH_TASK337_RUNTIME`: qwen3_moe and
+   megatron.energon imports pass under task337 runtime, Qwen3-30B config
+   construction returns a `ConfigContainer`, train-only split exposure is
+   `84/0/0`, and GPU resource probe sees 8 H200 GPUs.
+9. Residuals remain for a separate lead-gated training-readiness task:
+   `nvidia_resiliency_ext` is missing, diagnostic `multi_storage_client` import
+   fails, and `multistorageclient` passes from the task337 runtime target.
+10. task339 does not release task310 or training; it only provides the
+    no-training launch/config/import/resource handoff and template.

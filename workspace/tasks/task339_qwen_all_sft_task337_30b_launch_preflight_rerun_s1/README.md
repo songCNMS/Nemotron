@@ -1,6 +1,6 @@
 # task339_qwen_all_sft_task337_30b_launch_preflight_rerun_s1 - Rerun 30B launch preflight with task337 runtime route
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Background
 
