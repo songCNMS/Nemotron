@@ -31,6 +31,8 @@
 - Final evidence disposition is `PARTIAL_PASS_WITH_EXACT_BLOCKERS`: SWE packed
   51,029 rows but 0 supervised tokens; structured source had 6
   validation-filtered rows; valid/test split exposure is agentic-only.
+- Opened PR https://github.com/songCNMS/Nemotron/pull/392 for task329
+  docs/status/helper/report evidence.
 - No training, optimizer step, nonzero-LR smoke, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train rows, shared deletion, main push,
   merge, or self-merge was performed.
