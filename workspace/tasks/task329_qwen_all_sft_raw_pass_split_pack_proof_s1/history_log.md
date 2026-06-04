@@ -1,6 +1,6 @@
 # task329_qwen_all_sft_raw_pass_split_pack_proof_s1 - history log
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 81 - 2026-06-04 UTC - Assigned by lead
 
@@ -36,3 +36,13 @@
 - No training, optimizer step, nonzero-LR smoke, eval, export, endpoint,
   promotion, task255 reuse, AIME2025 train rows, shared deletion, main push,
   merge, or self-merge was performed.
+
+## Session 3 - 2026-06-04 UTC - Hook bookkeeping correction
+
+- Fixed worker status metadata to the allowed `Working` status value and set
+  task329 bookkeeping to Session 3 for hook compliance.
+- Preserved the already-pushed task329/#392 evidence disposition:
+  `PARTIAL_PASS_WITH_EXACT_BLOCKERS`.
+- No new packing, training, optimizer step, nonzero-LR smoke, eval, export,
+  endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
+  main push, merge, or self-merge was performed.

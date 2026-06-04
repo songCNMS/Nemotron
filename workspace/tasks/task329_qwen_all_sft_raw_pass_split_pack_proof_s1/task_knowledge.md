@@ -1,6 +1,6 @@
 # task329_qwen_all_sft_raw_pass_split_pack_proof_s1 - task knowledge
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=3 -->
 
 1. task328/#391 exact refreshed head
    `7181289cca14af741e7f704b6f34219805822a3e` is approved only as a
@@ -32,3 +32,6 @@
 10. Task310 should remain unreleased for this raw-pass expansion until lead
     accepts independent review and assigns any needed remediation/combined
     packing follow-up.
+11. Session 3 hook correction changed only bookkeeping/status metadata after
+    the task329/#392 closeout; it did not change artifact evidence or authorize
+    packing, training, eval, export, endpoint, promotion, or merge.

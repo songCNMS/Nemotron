@@ -1,6 +1,6 @@
 # task329_qwen_all_sft_raw_pass_split_pack_proof_s1 - Raw-pass split and Qwen30B packing proof
 
-<!-- METADATA:STATUS=Reported,ASSIGNEE=intern_nemotron_worker_2,SESSION=82 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=3 -->
 
 ## Background
 

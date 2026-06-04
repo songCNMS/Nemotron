@@ -1,6 +1,6 @@
 # task329 raw-pass split and Qwen30B packing proof report
 
-<!-- METADATA:STATUS=Reported,DISPOSITION=PARTIAL_PASS_WITH_EXACT_BLOCKERS,SESSION=82 -->
+<!-- METADATA:STATUS=Working,DISPOSITION=PARTIAL_PASS_WITH_EXACT_BLOCKERS,SESSION=3 -->
 
 ## Disposition
 
