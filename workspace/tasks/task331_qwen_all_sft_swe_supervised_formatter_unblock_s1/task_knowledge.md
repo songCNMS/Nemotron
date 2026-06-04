@@ -27,3 +27,6 @@
    `sha256sum -c` from the run root.
 9. Positive result does not release training or task310. SWE can only enter a
    later lead-gated combined packed-contract task after independent review.
+10. Closeout PR is #395. Worker status must remain one of the allowed worker
+    states (`Idle` or `Working`); after task331 closeout the worker status is
+    `Idle` with PR #395 recorded in the status table.

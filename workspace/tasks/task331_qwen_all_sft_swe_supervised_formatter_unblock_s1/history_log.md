@@ -18,7 +18,7 @@
   lead docs from `origin/intern_nemotron_lead/session1-recovery-task-docs`
   `bbbf19df7ea7dad3fc644588f1e84240c464febe`.
 
-## Session 83 - 2026-06-04 UTC - PASS evidence packaged
+## 2026-06-04 UTC - PASS evidence packaged
 
 - Added task-local helper
   `build_task331_swe_supervised_formatter_unblock.py` and generated task-owned
@@ -39,3 +39,7 @@
 - Boundary confirmation: no training, optimizer steps, benchmark eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared mutation,
   main push, merge, or self-merge.
+- PR #395 opened at
+  `https://github.com/songCNMS/Nemotron/pull/395`; mailbox closeout sent to
+  lead with exact artifact root, checksum results, contract result, and
+  boundaries.
