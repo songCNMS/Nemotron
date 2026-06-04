@@ -2887,3 +2887,7 @@
    checkpoint at `2026-06-04T04:18:04Z` (`rows=300000`, `mib=12054.5`,
    `rate_mib_s=7.65`). Source remains active and not yet in the source summary;
    no final rc, worker_2 report, task327 PR, or all-SFT pack/train/eval release.
+749. Session 79 follow-up: task327 `infinibyte-01` reached the stable 400k log
+   checkpoint at `2026-06-04T04:26:49Z` (`rows=400000`, `mib=16071.8`,
+   `rate_mib_s=7.65`). Source remains active and not yet in the source summary;
+   no final rc, worker_2 report, task327 PR, or all-SFT pack/train/eval release.

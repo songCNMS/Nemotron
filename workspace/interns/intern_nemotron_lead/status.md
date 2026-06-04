@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task327 active; infinibyte-01 reached 300k rows; all-SFT pack/train HOLD |
+| PR | task327 active; infinibyte-01 reached 400k rows; all-SFT pack/train HOLD |
 | Session | 79 |
