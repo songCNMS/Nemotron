@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForReview,TASK=task332_qwen_all_sft_structured_split_policy_remediation_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task334_qwen_all_sft_task333_independent_review_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | ReadyForReview |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task332_qwen_all_sft_structured_split_policy_remediation_s1 |
-| PR | #394 https://github.com/songCNMS/Nemotron/pull/394 |
+| Current Task | task334_qwen_all_sft_task333_independent_review_s1 |
+| PR | pending |
 | Session | 1 |
-| Progress | Produced task332 no-training evidence and report with disposition `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`. Output root `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`; exact 6 structured validation rows identified and fail-closed excluded; deterministic per-source split policy `task332_per_source_shard_holdout_v1` recorded; decontam/no-AIME2025 train proof carried; task331 remains pending at `63b4b992d534bd16120f31345d57d105890d8d55` with no PR visible and SWE supervised tokens still blocking combined contract. Verified helper compile and task332 output checksums. No training/eval/export/endpoint/promotion/task255/shared deletion/merge/self-merge/main push. |
+| Progress | Accepted task334 from lead docs `aa2ca3ee54eb81995a571bde5b1ac2d7f70c3c73` on branch `intern_nemotron_worker_4/task334_qwen_all_sft_task333_independent_review_s1` from required `origin/main` `ad0c5a7d758d44370695b94c83385591f100c714`. Scope is independent read-only review of #396 exact head `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` and task333 artifact root `/work-agents/intern_nemotron_worker_1/outputs/task333_qwen_all_sft_combined_packed_contract_s1/run_20260604T074500Z`. No training/eval/export/endpoint/promotion/task310 release/30B release/task255/AIME2025 train rows/shared deletion/main push/merge/self-merge or worker_1 artifact/branch mutation. |
