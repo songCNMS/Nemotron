@@ -1,14 +1,14 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=Working,TASK=task329_qwen_all_sft_raw_pass_split_pack_proof_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Idle,TASK=none,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | Working |
+| Status | Idle |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task329_qwen_all_sft_raw_pass_split_pack_proof_s1 |
-| PR | #392 |
-| Session | 3 |
-| Last Update | 2026-06-04T06:08:03Z: task329/#392 hook bookkeeping fixed after closeout; branch remains pushed with disposition PARTIAL_PASS_WITH_EXACT_BLOCKERS and no training/eval/export/endpoint/promotion/task255/shared deletion/main push/merge. |
+| Current Task | none |
+| PR | https://github.com/songCNMS/Nemotron/pull/395 |
+| Session | 83 |
+| Last Update | 2026-06-04T07:35:00Z: Task331 closeout pushed and PR #395 opened. Disposition PASS_SWE_SUPERVISED_UNBLOCK; output root /work-agents/intern_nemotron_worker_2/outputs/task331_qwen_all_sft_swe_supervised_formatter_unblock_s1/run_20260604T065601Z; Qwen3-30B contract PASS; 51,029 SWE rows, 16 shards, 28,524,315 supervised tokens; checksum manifests verify. Mailbox closeout sent. No training/eval/export/endpoint/promotion/30B release/task255/AIME2025 train rows/shared mutation/main push/merge/self-merge. |
