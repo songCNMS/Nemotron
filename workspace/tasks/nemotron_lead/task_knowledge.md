@@ -2874,3 +2874,8 @@
    `RAW_SOURCE_FILE_NO_SPLIT_METADATA_TRAIN_ONLY_ASSUMPTION_FOR_LATER_LEAD_REVIEW`.
    The run started `infinibyte-01`; no final rc, worker_2 report, task327 PR,
    or all-SFT pack/train/eval release.
+746. Session 79 follow-up: task327 `infinibyte-01` reached the stable 100k log
+   checkpoint at `2026-06-04T04:00:34Z` (`rows=100000`, `mib=4016.0`,
+   `rate_mib_s=7.65`). Source remains active and not yet in the source
+   summary; no final rc, worker_2 report, task327 PR, or all-SFT
+   pack/train/eval release.

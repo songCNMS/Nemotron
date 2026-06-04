@@ -12288,3 +12288,8 @@
   The task327 process remained active with no final rc, worker_2 report, or
   task327 PR; downstream all-SFT packing/training/eval/export/endpoint/
   promotion stay HOLD.
+- Follow-up read-only wait captured `2026-06-04T04:00:34Z PROGRESS
+  infinibyte-01 rows=100000 mib=4016.0 rate_mib_s=7.65`; `infinibyte-01`
+  remains active and is not yet in the source summary. The task327 process
+  still has no final rc, worker_2 report, or task327 PR; downstream all-SFT
+  packing/training/eval/export/endpoint/promotion stay HOLD.
