@@ -45,3 +45,12 @@
 - Posted lead approval comment `issuecomment-4620405875`.
 - Worker_4 may self-merge #397 only if exact/CLEAN. #396 and task310 remain
   HOLD until #397 merge is reconciled.
+
+## 2026-06-04 UTC - Merged
+
+- #397 merged at `2026-06-04T08:33:14Z` with merge commit
+  `35b6d649cf15eddf09978628f60522b9416607af` from approved head
+  `79c8a0f3751f862491517f5c472c26da35e2a7dc`.
+- Merged scope is task334 review docs/status only. This enabled #396 docs
+  closeout gate but did not release task310/training/eval/export/endpoint/
+  promotion/30B.

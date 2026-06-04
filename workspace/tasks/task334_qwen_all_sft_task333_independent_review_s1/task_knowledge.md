@@ -31,3 +31,6 @@
    lead-approved for worker_4 self-merge by comment `issuecomment-4620405875`.
    It remains docs/evidence closeout only; it does not release task310 or any
    training/eval/export/endpoint/promotion/30B action.
+9. #397 merged at `2026-06-04T08:33:14Z` via merge commit
+   `35b6d649cf15eddf09978628f60522b9416607af`. It is the independent review
+   evidence supporting #396 docs closeout at exact head `6261daaa`.

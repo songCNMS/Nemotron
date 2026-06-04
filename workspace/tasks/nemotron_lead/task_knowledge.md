@@ -3082,3 +3082,9 @@
    exact head `6261daaa37172caa11929b0b88f685b63f987221` for later docs
    closeout, but #396 should wait until #397 is merged and remains exact/CLEAN.
    No task310/training/eval/export/endpoint/promotion/30B release.
+776. Session 86 #397 merged at `2026-06-04T08:33:14Z` via merge commit
+   `35b6d649cf15eddf09978628f60522b9416607af`. #396 exact head
+   `6261daaa37172caa11929b0b88f685b63f987221` is now lead-approved by comment
+   `issuecomment-4620438023` for worker_1 self-merge only if exact/CLEAN.
+   Approval remains docs/evidence closeout only; task310/training/eval/export/
+   endpoint/promotion/30B remain blocked.

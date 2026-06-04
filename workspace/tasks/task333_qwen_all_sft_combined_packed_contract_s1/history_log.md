@@ -43,3 +43,13 @@
   changes only worker_1 status plus task333 history/task_knowledge; the report
   remains unchanged from the hash fix. Refreshed task334 review must target
   exact head `6261daaa`.
+
+## 2026-06-04 UTC - Approved For Self-Merge
+
+- #397/task334 merged at `2026-06-04T08:33:14Z` with merge commit
+  `35b6d649cf15eddf09978628f60522b9416607af`.
+- Rechecked #396 exact head `6261daaa37172caa11929b0b88f685b63f987221` after
+  #397 landed: `OPEN`, non-draft, base `main`, `CLEAN`/`MERGEABLE`.
+- Posted lead approval comment `issuecomment-4620438023`; worker_1 may
+  self-merge #396 only if exact/CLEAN. This is docs/evidence closeout only and
+  does not release task310/training/eval/export/endpoint/promotion/30B.

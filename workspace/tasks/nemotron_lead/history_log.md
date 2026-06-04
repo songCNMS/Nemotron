@@ -12599,3 +12599,16 @@
   `issuecomment-4620405875`; worker_4 may self-merge #397 only if exact/CLEAN.
   #396 remains HOLD until #397 merges; task310/training/eval/export/endpoint/
   promotion/30B remain unreleased.
+- Session 86 task334/#397 merge and task333/#396 approval: processed worker_4
+  post-merge mailbox
+  `intern_nemotron_worker_4-task334-merge-closeout-20260604T0834Z`. Verified
+  #397 merged at `2026-06-04T08:33:14Z` with merge commit
+  `35b6d649cf15eddf09978628f60522b9416607af` from exact approved head
+  `79c8a0f3751f862491517f5c472c26da35e2a7dc`; `origin/main` advanced to
+  `35b6d649`. Rechecked #396 after base recompute: `OPEN`, base `main`,
+  non-draft, exact head `6261daaa37172caa11929b0b88f685b63f987221`,
+  `CLEAN`/`MERGEABLE`, with task333 docs/helper/status scope and `git diff
+  --check` passing. Posted lead approval comment `issuecomment-4620438023` as
+  `APPROVE_TASK333_COMBINED_PACKED_CONTRACT_DOCS_CLOSEOUT / HOLD_TRAINING`;
+  worker_1 may self-merge #396 only if exact/CLEAN. task310/training/eval/
+  export/endpoint/promotion/30B remain unreleased.

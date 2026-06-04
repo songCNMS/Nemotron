@@ -43,3 +43,7 @@
 9. Worker_1 later pushed metadata-only head
    `6261daaa37172caa11929b0b88f685b63f987221`; the task333 report is unchanged
    from head `9a9471e3`. Current exact-head review target is `6261daaa`.
+10. After #397/task334 merged at `35b6d649cf15eddf09978628f60522b9416607af`,
+    #396 exact head `6261daaa37172caa11929b0b88f685b63f987221` was approved by
+    lead comment `issuecomment-4620438023` for worker_1 self-merge only if
+    exact/CLEAN. No task310/training/eval/export/endpoint/promotion/30B release.
