@@ -1,6 +1,6 @@
 # nemotron_lead - History Log
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Session 0 - Created with team lead
 
@@ -13004,3 +13004,18 @@
   launch/training/eval require restored `NemTron` target service/port
   `10.100.2.62:33808` or a replacement lead-approved SSH/LTP route with
   credentials.
+- Session 93 continuation at `2026-06-04T13:28:20Z`: refreshed current state
+  again after coordinator ack. `origin/main` remains
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be`; #360 remains `OPEN`, non-draft,
+  base `main`, `CLEAN`, head `7229c33b3111c7a25762c0192799f2cae01bf49d`, with
+  coordinator-doc-only scope. Unread mailbox was empty. All open worker PRs
+  remain `DIRTY`: #391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/
+  #377/#371. Sent bounded refresh/superseded-closeout requests to worker_1,
+  worker_2, worker_4, and worker_5; delivery returned `delivered`. The first
+  worker_3 peer send failed with `tmux_send_failed`, but read-only tmux checks
+  showed the `intern_nemotron_worker_3` session/pane exists and is not dead; a
+  shorter retry delivered successfully. Sent coordinator update; coordinator
+  replied that it re-probed and confirmed `ssh NemTron` still fails rc `255` and
+  proxy-side TCP to `10.100.2.62:33808` still reports `TARGET_PORT_CLOSED_RC_1`.
+  Coordinator accepts the HOLD. Lead did not merge, run tests, run training, run
+  eval, or authorize task310/task341 rerun/export/endpoint/promotion.

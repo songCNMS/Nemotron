@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | main `8a757c32`; #360 CLEAN coordinator records; worker PRs DIRTY; task310 train/eval HOLD on NemTron access |
-| Session | 92 |
+| PR | main `8a757c32`; #360 CLEAN; worker refresh requested; task310/task341 HOLD on NemTron access |
+| Session | 93 |

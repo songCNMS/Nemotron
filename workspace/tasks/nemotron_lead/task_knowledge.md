@@ -1,6 +1,6 @@
 # nemotron_lead - Task Knowledge
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Knowledge Entries
 
@@ -3345,3 +3345,9 @@
    fresh mailbox/gate evidence. Coordinator #360 is clean at
    `7229c33b3111c7a25762c0192799f2cae01bf49d` with coordinator-doc-only scope,
    but lead has not merged it.
+826. Session 93 worker refresh rule: because all open worker PRs are `DIRTY`
+   after main `8a757c323b82f4330b765ee89a6d78f421d9d9be`, each worker must
+   either refresh/rebase docs/status only and report exact head/mergeability/
+   diff-check/disposition through mailbox, or report/close the PR as superseded.
+   No old approval should be reused across dirty PR state, and no worker should
+   self-merge before a new exact-head lead gate.
