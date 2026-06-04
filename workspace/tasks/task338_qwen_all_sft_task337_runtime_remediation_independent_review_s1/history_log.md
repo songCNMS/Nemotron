@@ -45,3 +45,5 @@
 - Recorded disposition in
   `task337_runtime_remediation_independent_review_report.md`:
   `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE`.
+- Opened review-docs PR #401:
+  `https://github.com/songCNMS/Nemotron/pull/401`.

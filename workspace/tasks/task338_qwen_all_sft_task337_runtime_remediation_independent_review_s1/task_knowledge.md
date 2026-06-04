@@ -19,3 +19,5 @@
    `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE`: accepted as no-training
    runtime import remediation evidence only; task310/training remain HOLD until
    a later task335-equivalent no-training preflight rerun is accepted.
+7. Review-docs PR is #401:
+   `https://github.com/songCNMS/Nemotron/pull/401`.
