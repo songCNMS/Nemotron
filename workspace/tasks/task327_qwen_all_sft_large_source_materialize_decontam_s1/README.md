@@ -1,6 +1,6 @@
 # task327_qwen_all_sft_large_source_materialize_decontam_s1 - Large-source raw materialize/decontam
 
-<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Background
 

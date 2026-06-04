@@ -1,11 +1,11 @@
 # intern_nemotron_worker_2 - status
 
-<!-- METADATA:STATUS=ReadyForReview,TASK=task327_qwen_all_sft_large_source_materialize_decontam_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=Working,TASK=task327_qwen_all_sft_large_source_materialize_decontam_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_2 |
-| Status | ReadyForReview |
+| Status | Working |
 | Role | worker |
 | Team | nemotron |
 | Current Task | task327_qwen_all_sft_large_source_materialize_decontam_s1 |

@@ -2,7 +2,7 @@
 
 <!-- METADATA:SESSION=1 -->
 
-## Session 1 - 2026-06-03 UTC - Assigned by lead
+## 2026-06-03 UTC - Assigned by lead
 
 - Created as successor to task322/#388 after lead accepted
   `APPROVE_PARTIAL_EVIDENCE_WITH_EXCLUSIONS / HOLD_FULL_ALL_SFT_PACK_TRAIN`.
@@ -13,7 +13,7 @@
 - Worker_2 must produce source-by-source materialize/count/checksum/row-manifest
   and decontam evidence, or exact resource/runtime blockers.
 
-## Session 1 - 2026-06-03 UTC - Acceptance and helper
+## 2026-06-03 UTC - Acceptance and helper
 
 - Created branch
   `intern_nemotron_worker_2/task327_qwen_all_sft_large_source_materialize_decontam_s1`
@@ -26,7 +26,7 @@
   write gzipped row manifests, run task246 decontam checks, and emit resource
   evidence. No product code was changed.
 
-## Session 1 - 2026-06-04 UTC - Materialization/decontam result
+## 2026-06-04 UTC - Materialization/decontam result
 
 - Ran task-owned helper against all 10 task322 `EXCLUDED_SIZE_GT_1GB` sources
   into
@@ -39,3 +39,11 @@
 - No packing, training, eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train data, shared deletion/mutation, main push, merge, or self-merge
   was performed.
+
+## 2026-06-04 UTC - Hook cleanup
+
+- Corrected worker/task metadata status values to `Working` because the prior
+  review-ready status label is not an allowed worker status value in the project
+  status hook.
+- Removed duplicate `Session 1` wording from history headings while preserving
+  the file-level `SESSION=1` metadata.

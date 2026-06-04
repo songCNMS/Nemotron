@@ -24,3 +24,6 @@
 9. This task produced raw materialize/count/decontam evidence only and does not
    release final packing, tokenizer packing, supervised-token accounting,
    training, benchmark eval, export, endpoint, promotion, or 30B runtime work.
+10. PR #390 is the official task327 closeout carrier. Worker status remains
+    `Working` while awaiting lead gate because only `Idle` and `Working` are
+    allowed status hook values.

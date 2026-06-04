@@ -1,6 +1,6 @@
 # task327 large-source materialize/decontam report
 
-<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Disposition
 
