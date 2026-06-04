@@ -22,3 +22,8 @@
    blocker-docs closeout evidence only. #399 should land first; then #398 can
    be rechecked for a separate docs/blocker closeout decision. task310 remains
    blocked.
+8. #399 merged at `2026-06-04T09:40:16Z` with merge commit
+   `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd` from exact approved head
+   `f7f31359ae88f687d6fd857279a820358938089c`. This closes task336 review
+   evidence only; #398/task335 still needs a post-#399 exact/CLEAN recheck and
+   separate gate.

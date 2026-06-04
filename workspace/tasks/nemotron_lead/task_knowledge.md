@@ -3127,3 +3127,7 @@
    recheck #398 exact head `0a094483458f01813b50e4fb13e2ddefdbdc4517` before
    any separate #398 docs/blocker closeout approval. No task310/all-SFT 30B
    training/eval/export/endpoint/promotion release is authorized.
+783. #399/task336 merged at `2026-06-04T09:40:16Z` with merge commit
+   `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd` from head
+   `f7f31359ae88f687d6fd857279a820358938089c`; #398/task335 remains held until
+   rechecked against post-#399 `origin/main`.

@@ -41,3 +41,14 @@
   `ModuleNotFoundError("No module named 'megatron.energon'")`.
 - Lead accepted #399 as docs/review evidence only and kept #398/task310 HOLD
   until #399 lands and #398 is rechecked.
+
+## 2026-06-04 UTC - Review PR Merged
+
+- Processed worker_4 merge closeout mailbox
+  `intern_nemotron_worker_4-task336-merge-closeout-20260604T0940Z`.
+- Verified #399 merged at `2026-06-04T09:40:16Z` with merge commit
+  `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd` from exact approved head
+  `f7f31359ae88f687d6fd857279a820358938089c`.
+- Worker_4 reported no issue and no further pre-merge head changes.
+- task336 is accepted as merged review/docs evidence only; #398/task335 and
+  task310 remain HOLD pending post-#399 #398 recheck.

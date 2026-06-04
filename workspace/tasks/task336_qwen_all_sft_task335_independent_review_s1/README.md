@@ -125,3 +125,14 @@ Return one of:
 - #399 may self-merge only if exact head `f7f31359` remains `OPEN`/`CLEAN`.
 - #398 and task310 remain HOLD until #399 lands and #398 is rechecked at exact
   head `0a094483458f01813b50e4fb13e2ddefdbdc4517`.
+
+## Merge Closeout
+
+- Worker_4 merge closeout mailbox:
+  `intern_nemotron_worker_4-task336-merge-closeout-20260604T0940Z`.
+- #399 merged at `2026-06-04T09:40:16Z`.
+- Merge commit: `2c98fb2aff66f7dc43f592f377fb7ba64ed244cd`.
+- Merged head: `f7f31359ae88f687d6fd857279a820358938089c`.
+- No post-merge issue reported.
+- This closes task336 review evidence only. #398/task335 and task310 remain
+  HOLD pending post-#399 #398 recheck and separate lead gate.
