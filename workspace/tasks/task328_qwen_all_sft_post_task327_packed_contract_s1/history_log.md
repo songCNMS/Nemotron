@@ -1,8 +1,8 @@
 # task328_qwen_all_sft_post_task327_packed_contract_s1 - history log
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=2 -->
 
-## Session 80 - 2026-06-04 UTC - Assigned by lead
+## Session 2 - 2026-06-04 UTC - Assigned by lead
 
 - Created as successor to merged task309/#372 after task322/#388 and
   task327/#390 produced raw materialize/count/checksum/decontam evidence.
@@ -13,7 +13,7 @@
 - No training, benchmark eval, export, endpoint, promotion, merge, self-merge,
   or main push is authorized.
 
-## 2026-06-04 UTC - Worker_2 preflight closeout
+## Session 2 - 2026-06-04 UTC - Worker_2 preflight closeout
 
 - Accepted task328 on branch
   `intern_nemotron_worker_2/task328_qwen_all_sft_post_task327_packed_contract_s1`
@@ -31,3 +31,9 @@
 - No packing, training, eval, export, endpoint, promotion, task255 reuse,
   AIME2025 train rows, shared deletion/mutation, main push, merge, or self-merge
   was performed.
+
+## Session 2 - 2026-06-04 UTC - Hook session cleanup
+
+- Corrected task328 history/task_knowledge and worker status session values
+  from lead-doc session `80` to worker session `2` so the status hook and final
+  reply agree on the active worker session.

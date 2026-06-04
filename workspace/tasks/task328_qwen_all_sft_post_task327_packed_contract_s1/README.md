@@ -1,6 +1,6 @@
 # task328_qwen_all_sft_post_task327_packed_contract_s1 - Post-task327 all-SFT packed contract
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=80 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Background
 

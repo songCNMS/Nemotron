@@ -1,6 +1,6 @@
 # task328 post-task327 packed contract report
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=80 -->
+<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=2 -->
 
 ## Disposition
 

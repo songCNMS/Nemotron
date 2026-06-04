@@ -1,6 +1,6 @@
 # task328_qwen_all_sft_post_task327_packed_contract_s1 - task knowledge
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=2 -->
 
 1. task309/#372 is merged as a packed-contract blocker and predates task322 and
    task327 final source evidence; task328 is the successor packed-contract task.
@@ -22,3 +22,5 @@
    supervised-token packing proof are missing.
 7. All nine task327 `BLOCKED_DECONTAM_HIT` sources remain excluded fail-closed;
    no false-positive/adjudication evidence was available in task328.
+8. Worker session metadata for task328 is `SESSION=2`; lead-doc session `80`
+   is treated as upstream documentation context only.
