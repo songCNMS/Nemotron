@@ -18,3 +18,9 @@
    separate later lead-approved false-positive/adjudication task proves safety.
 6. A `PASS_RAW_PASS_SPLIT_PACK_PROOF` outcome does not itself release task310;
    it only enables independent packed-contract review.
+7. Live worker_2 evidence as of `2026-06-04T05:53:36Z`: task329 materialized
+   no-training `data_prep.py` completed with rc `0` and produced
+   `packed_qwen_raw_pass_materialized` metrics `num_shards=16`,
+   `total_tokens=341849859`, `total_sequences=91315`, `pack_size=4096`. This
+   remains ungated until worker report/PR/checksums and sparse valid/test
+   residual review are available.

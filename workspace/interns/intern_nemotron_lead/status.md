@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | task329 assigned to worker_2 for no-training raw-pass split/pack proof; #390/#391 open clean; all-SFT train/eval HOLD |
-| Session | 80 |
+| PR | task329 local pack rc=0 live evidence pending worker report/PR; #390/#391 open clean; all-SFT train/eval HOLD |
+| Session | 81 |

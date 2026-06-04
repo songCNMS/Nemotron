@@ -2955,3 +2955,11 @@
    tokenizer/chat-template packing, supervised-token counts, shard checksums,
    and exact pass/block disposition. task329 cannot use the nine task327
    decontam-hit sources and cannot release training or benchmark eval.
+758. Session 81 task329 live evidence: local worker_2 materialized-pack retry
+   reached `data_prep_materialized.rc=0` under
+   `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`.
+   The raw `rc=0` proves packing completed locally, not that the contract is
+   accepted. Required gate inputs still missing as of `2026-06-04T05:53:36Z`:
+   worker report, branch push/PR, artifact checksum manifest, explicit
+   source/split/decontam/parity summary, and lead/independent review of sparse
+   valid/test residuals.

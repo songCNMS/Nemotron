@@ -12398,3 +12398,17 @@
   `instruction-following-structured`, `agentic-interactive`, and `swe`, or fail
   closed with exact blockers. The nine task327 decontam-hit sources remain
   excluded. No task310 training/eval/export/endpoint/promotion release.
+- Session 81 live observation: worker_2 task329 local run root
+  `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`
+  completed the materialized no-training `data_prep.py` retry with
+  `data_prep_materialized.rc=0` after the first direct HF blob attempt failed
+  with parquet-magic-byte format error. The successful run used the Qwen3-30B
+  tokenizer/model path
+  `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`, local CPU
+  streaming/Ray, `used_in_filter=null`, and wrote
+  `packed_qwen_raw_pass_materialized` at about `13G`. Reported data-prep
+  metrics from the log: `num_shards=16`, `total_tokens=341849859`,
+  `total_sequences=91315`, `pack_size=4096`. Worker pane notes contract
+  validation but sparse shard-based valid/test residuals. No worker report, PR,
+  mailbox closeout, or lead gate yet; this is live evidence only and all
+  training/eval/export/endpoint/promotion remain HOLD.
