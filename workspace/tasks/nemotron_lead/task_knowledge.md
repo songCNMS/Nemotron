@@ -2760,3 +2760,7 @@
    not an all-SFT release: task327 is still running, final rc/report/PR are
    missing, and packing/training/eval remain HOLD. task327 started
    `math-proofs-lean`; read-only tail showed row 48,015 as live progress only.
+722. Session 79: task327 `math-proofs-lean` reached 100,000 rows /
+   2,007.1 MiB at `2026-06-04T01:54:14Z`; source remains active with no final
+   rc, source-level disposition, worker_2 report, task327 PR, or all-SFT
+   pack/train/eval release.

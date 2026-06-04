@@ -12091,3 +12091,10 @@
 - Read-only tail showed `math-proofs-lean` active with row manifest already
   past row 48,015 at `2026-06-04T01:52:08Z`. This is live progress only, not a
   source-level disposition.
+- Bounded read-only poll caught the first stable `math-proofs-lean`
+  checkpoint: `2026-06-04T01:54:14Z PROGRESS math-proofs-lean rows=100000
+  mib=2007.1 rate_mib_s=8.16`. The row manifest was still being written and
+  the source process remained active. There was still no final rc, no
+  source-level disposition for `math-proofs-lean`, no official worker_2 report,
+  and no task327 PR. This is in-progress evidence only and does not release
+  all-SFT packing/training/eval/export/endpoint/promotion.
