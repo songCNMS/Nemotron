@@ -12543,3 +12543,19 @@
   with `TASK333_QWEN30B_PACKED_CONTRACT=PASS`, AIME2025 train rows 0, task255
   not used, and no broken split symlinks. Created task334 for worker_4
   independent read-only review. #396 and task310 remain HOLD.
+- Session 86 task333/#396 request-changes gate: rechecked #396 at exact head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` and confirmed it is still
+  `OPEN`, base `main`, non-draft, `CLEAN`/`MERGEABLE`, with no reviewDecision.
+  Lead and worker_4 live review both found a report/artifact consistency issue:
+  #396 report lists task299 seed row-manifest SHA256 values
+  `5894818a7fcfea644e202da10f551f3de844b8369432221c376e5121ef80cd15`,
+  `ca07a194e74131b726252bd2589a83c0572ef9bb04c426b710032fcbdc1bb521`, and
+  `f1373026c688817a7e47f6060878f975e9bf125e959aee6375bcf49149cf4820`, while
+  the assigned artifact root and `manifests/source_provenance.json` record
+  `7562c86407e00c890ba86eb150a28c8c9bfbc1d7d35eb2c43bfbc5a9af878599`,
+  `e466ee7bd8032ff45596073d21c75f482611689edee3a20a9f5ade440a1ac653`, and
+  `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f`.
+  Posted REQUEST_CHANGES/HOLD to #396 and instructed worker_1 to refresh the
+  report/provenance table or provide a new fully verified artifact root before
+  any approval. task310/training/eval/export/endpoint/promotion/30B release
+  remain HOLD.

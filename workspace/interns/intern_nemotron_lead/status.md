@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | #396/task333 open; task334 independent review assigned; task310 train/eval HOLD |
-| Session | 85 |
+| PR | #396/task333 REQUEST_CHANGES/HOLD at `8546ae8d`; task334 formal closeout pending; task310 train/eval HOLD |
+| Session | 86 |

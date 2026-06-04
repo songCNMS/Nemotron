@@ -25,3 +25,13 @@
 6. The task333 product is still no-training evidence. Even a PASS disposition
    only enables a later independent review task; task310 remains HOLD until that
    review and lead gate accept the combined contract.
+7. Session 86 request-changes blocker for #396 head
+   `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`: report table values
+   `5894818a7fcfea644e202da10f551f3de844b8369432221c376e5121ef80cd15`,
+   `ca07a194e74131b726252bd2589a83c0572ef9bb04c426b710032fcbdc1bb521`, and
+   `f1373026c688817a7e47f6060878f975e9bf125e959aee6375bcf49149cf4820` must be
+   reconciled against actual task333 artifact/source_provenance values
+   `7562c86407e00c890ba86eb150a28c8c9bfbc1d7d35eb2c43bfbc5a9af878599`,
+   `e466ee7bd8032ff45596073d21c75f482611689edee3a20a9f5ade440a1ac653`, and
+   `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f` before
+   #396 can be approved.

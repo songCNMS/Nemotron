@@ -3053,3 +3053,13 @@
 771. Session 85 task334 is assigned to worker_4 for independent read-only
    review of #396 exact head and artifact root. #396/task333 and task310 remain
    HOLD until worker_4 reports approve/request-changes/block and lead gates it.
+772. Session 86 #396/task333 gate is REQUEST_CHANGES/HOLD at exact head
+   `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`: the report table's three
+   task299 seed row-manifest SHA256 values do not match the assigned
+   `run_20260604T074500Z` artifact files or `manifests/source_provenance.json`.
+   Actual accepted artifact values are
+   `7562c86407e00c890ba86eb150a28c8c9bfbc1d7d35eb2c43bfbc5a9af878599`,
+   `e466ee7bd8032ff45596073d21c75f482611689edee3a20a9f5ade440a1ac653`, and
+   `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f`.
+   This is treated as a provenance/report consistency blocker for #396 merge,
+   not as training evidence. task310 remains HOLD.
