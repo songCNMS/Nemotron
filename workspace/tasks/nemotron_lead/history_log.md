@@ -12983,3 +12983,10 @@
   remains `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`; same-harness eval
   handoff, restored runtime route, and later task341-equivalent handoff remain
   required before task310 launch/training/eval.
+- Session 92 worker_5 #385 merge closeout mailbox: processed mailbox
+  `3ac41347b93f471b8f6f256595c191fa`, confirming #385 merged from exact
+  authorized head `de480248b1ad7abe16a620729e62fa397443228d` with merge commit
+  `8a757c323b82f4330b765ee89a6d78f421d9d9be` at
+  `2026-06-04T13:13:07Z`; branch-only closeout/status head is
+  `9b86179446d75d1a641d320d34cd9e2ca1890cd1`. Worker_5 reported no direct main
+  push and no boundary violations.

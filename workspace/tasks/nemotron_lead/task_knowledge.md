@@ -3326,3 +3326,7 @@
    `de480248b1ad7abe16a620729e62fa397443228d`. This closes Route A preflight
    docs only; task310 remains HOLD pending restored runtime route and later
    training-readiness/eval handoff.
+823. Worker_5 #385 branch-only closeout/status head is
+   `9b86179446d75d1a641d320d34cd9e2ca1890cd1`; canonical merged evidence remains
+   #385 head `de480248b1ad7abe16a620729e62fa397443228d` and merge commit
+   `8a757c323b82f4330b765ee89a6d78f421d9d9be`.
