@@ -92,3 +92,16 @@ Return one of:
 - Worker: `intern_nemotron_worker_4`
 - Base: current `origin/main` `373d162d63a66f2dac6b94c43917be9c249cd83f`
 - Gate state: #400/task337 and task310 remain HOLD pending this review.
+
+## Acceptance
+
+- Worker_4 acceptance mailbox:
+  `intern_nemotron_worker_4-task338-accept-20260604T1042Z`.
+- Worker branch:
+  `origin/intern_nemotron_worker_4/task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1`.
+- Acceptance head: `ddbc560e244f9990b7e122c600cb12282e7d3d29`.
+- Base: `origin/main` `373d162d63a66f2dac6b94c43917be9c249cd83f`.
+- Lead docs imported from:
+  `origin/intern_nemotron_lead/session1-recovery-task-docs` `15dd0c0f`.
+- Worker_4 accepted read-only review scope and boundaries; substantive review
+  is in progress.

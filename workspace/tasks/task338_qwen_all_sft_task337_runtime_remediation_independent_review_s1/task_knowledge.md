@@ -10,3 +10,6 @@
    `/root/task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1/run_20260604T095948Z/runtime_site`.
 4. Approval would be runtime import remediation evidence only. It must not
    release task310, training, eval, export, endpoint, promotion, or 30B launch.
+5. Worker_4 accepted task338 at branch head
+   `ddbc560e244f9990b7e122c600cb12282e7d3d29`; this is ownership evidence only,
+   not a #400 gate decision.

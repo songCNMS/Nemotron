@@ -3160,3 +3160,7 @@
    `PASS_RUNTIME_REMEDIATED` for missing `megatron.energon` using task-owned
    runtime target packages only. Treat this as pending evidence until task338
    independent review approves/request-changes/blocks it. Training remains HOLD.
+790. task338 acceptance branch is
+   `origin/intern_nemotron_worker_4/task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1`
+   at `ddbc560e244f9990b7e122c600cb12282e7d3d29`; wait for final worker_4
+   review report before deciding #400.
