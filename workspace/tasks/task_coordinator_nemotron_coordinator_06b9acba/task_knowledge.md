@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Knowledge Entries
 
@@ -143,3 +143,7 @@
 137. task342 artifact root `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z` has a valid checksum manifest: `sha256sum -c manifests/artifact_checksums.sha256` reports all 16 entries `OK`.
 138. This coordinator environment lacks LTP API credentials (`LTP_TOKEN`/`LTP_HOST` and usable `~/.ltp_env`), so it cannot list, restart, or recover LTP jobs directly. Required external unblock: restore the `10.100.2.62:33808` SSH service/port or provide a replacement lead-approved SSH/LTP route and credentials.
 139. Until the NemTron route is restored and lead re-gates task341, the all-SFT pipeline remains blocked: no training, benchmark eval, export, endpoint, promotion, AIME2025 training data, task255 reuse, or shared deletion is authorized.
+140. Lead Session 93 current state: `origin/main` is `8a757c323b82f4330b765ee89a6d78f421d9d9be`, lead branch is `2274f4920a5b216146429b135e3e768d1a6aa423`, and coordinator PR #360 is open/clean at `7229c33b3111c7a25762c0192799f2cae01bf49d`.
+141. The latest coordinator re-probe still shows the same NemTron blocker: direct `ssh NemTron` fails `rc255` and proxy-side TCP to `10.100.2.62:33808` reports `TARGET_PORT_CLOSED_RC_1`.
+142. Dirty worker PRs listed by lead Session 93 (#391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371) are lead-managed refresh/superseded-closeout work; coordinator should not contact workers directly.
+143. task310 training/eval/export/endpoint/promotion and task341 rerun remain blocked until restored NemTron target access or a replacement lead-approved SSH/LTP route with credentials is available.

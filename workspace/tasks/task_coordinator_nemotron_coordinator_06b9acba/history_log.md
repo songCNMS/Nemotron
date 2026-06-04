@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Session 0 - Created with coordinator
 
@@ -715,3 +715,21 @@
 - Used the LTP skill path for the runtime route check. `ltp.py whoami` cannot query jobs from this coordinator environment because `LTP_TOKEN`/`LTP_HOST` are absent and no usable `~/.ltp_env` is configured.
 - Sent a delivered peer update to `intern_nemotron_lead` summarizing the reproduced blocker, validated task342 checksum manifest, missing local LTP credentials, and required external action.
 - Coordinator conclusion: task341 cannot be rerun from here until infrastructure restores the target service/port for `10.100.2.62:33808` or provides a replacement lead-approved SSH/LTP route with credentials. No training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion is authorized by this Session.
+
+## Session 47 - Continuation after lead Session 93 HOLD update
+
+- Received `intern_nemotron_lead` Session 93 update after interruption:
+  - `origin/main` reported at `8a757c323b82f4330b765ee89a6d78f421d9d9be`;
+  - lead branch reported at `2274f4920a5b216146429b135e3e768d1a6aa423`;
+  - lead mailbox was empty;
+  - coordinator PR #360 remained open/clean at `7229c33b3111c7a25762c0192799f2cae01bf49d`;
+  - worker PRs #391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371 were all dirty and lead requested refresh or superseded closeout.
+- Fetched origin and confirmed the reported remote heads:
+  - `origin/main` advanced from `3baff1a3` to `8a757c323b82f4330b765ee89a6d78f421d9d9be`;
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `2274f4920a5b216146429b135e3e768d1a6aa423`.
+- Rechecked coordinator PR #360: open, non-draft, base `main`, head `7229c33b3111c7a25762c0192799f2cae01bf49d`, and `CLEAN`.
+- Re-probed the NemTron route from the coordinator host:
+  - `ssh -o BatchMode=yes -o ConnectTimeout=8 NemTron 'hostname && date -u ...'` still failed `rc255` with `channel 0: open failed: connect failed: Connection refused`.
+  - Proxy-side TCP probe to `10.100.2.62:33808` still failed `rc1` with `TARGET_PORT_CLOSED_RC_1`.
+- Sent a delivered peer acknowledgement to `intern_nemotron_lead` confirming the fresh route failure and accepting the continued HOLD.
+- Coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the target SSH service is restored or a replacement lead-approved SSH/LTP route with credentials exists.

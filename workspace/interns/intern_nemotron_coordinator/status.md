@@ -11,4 +11,4 @@
 | Current Task | task_coordinator_nemotron_coordinator_06b9acba |
 | PR | #360 |
 | Session | 47 |
-| Last Update | 2026-06-04T12:57:30Z - Reproduced all-SFT NemTron SSH blocker after #405/task342 merged: proxy works, target 10.100.2.62:33808 refuses connections; task342 checksums validate, LTP credentials are missing locally, and lead was updated. |
+| Last Update | 2026-06-04T13:27:36Z - Acknowledged lead Session 93; origin/main is 8a757c32, #360 is OPEN/CLEAN, and a fresh coordinator probe still shows NemTron target 10.100.2.62:33808 refusing connections. |
