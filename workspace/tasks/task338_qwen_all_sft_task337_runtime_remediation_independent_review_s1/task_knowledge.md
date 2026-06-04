@@ -1,6 +1,6 @@
 # task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
+<!-- METADATA:STATUS=ReadyForPR,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 1. Review target is #400 exact head
    `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
@@ -14,3 +14,8 @@
    `intern_nemotron_worker_4/task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1`
    from `origin/main` `373d162d63a66f2dac6b94c43917be9c249cd83f`; lead docs
    were imported from `15dd0c0f`.
+6. Independent review result for #400 exact head
+   `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091` is
+   `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE`: accepted as no-training
+   runtime import remediation evidence only; task310/training remain HOLD until
+   a later task335-equivalent no-training preflight rerun is accepted.
