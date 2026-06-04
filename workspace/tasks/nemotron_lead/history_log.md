@@ -13033,3 +13033,47 @@
   promotion, task255/AIME2025 train rows, shared deletion, merge/self-merge, or
   main push. Refetched #360: it remains `OPEN`/`CLEAN`, now at head
   `2d3a71987d9ac785ddc683f33cfdad17c54a88c4`.
+- Session 93 worker_2 stale PR closeout: processed mailbox
+  `intern_nemotron_worker_2-session93-all-sft-dirty-pr-reconcile-20260604T1248Z`
+  and marked it read. GitHub verification confirms #391/task328, #390/task327,
+  #388/task322, #383/task319, and #379/task315 are `CLOSED` unmerged with no
+  merge commit at heads `7181289cca14af741e7f704b6f34219805822a3e`,
+  `49c5d748c8c9ecc95d21c69a1bd16af0118cba3d`,
+  `adf1a02f3cd5da11d04d2a4d167bdb8d1573e79f`,
+  `802a796d77144a7fdfc56477fdd001b574e90568`, and
+  `89cc7f74a737f174f4b8dbf9129c712fabbafa95`. Worker_2 closed them as
+  superseded by newer merged all-SFT/M1 evidence and reported no branch
+  mutation, code edits, training/eval/export/endpoint/promotion, task255,
+  AIME2025 train rows, shared deletion, merge, or main push.
+- Session 93 worker_1/worker_3 refreshed PR gates: processed worker_1 mailbox
+  `e0977e5b9fea44248ee89d8dc82e7d15`, worker_5 auxiliary audit mailbox
+  `a26907d0e2bf4774b186758a57460f0f`, and worker_3 mailbox
+  `d341080a04114320a4f2fdff1bc1a530`; all were marked read. Independently
+  verified #380 exact head `fe34e52d19ec9cc9a384588a3e900924280fe16e`, #381
+  head `4a47c7402c0eb705d1ffcfa0d25cd78bb7a79eef`, #386 head
+  `0b4f1386d56059ce4a951175e2f49b5eebadc1bd`, and #371 exact head
+  `2e0cd5a5c7d788ded67334ff25608f8aaedfeffe` were open/non-draft/base-main/
+  `CLEAN` at gate time; `git diff --check origin/main...branch` passed for all
+  four. Diff scope was worker status plus task docs/reports/task-owned scripts
+  only. Posted lead gate comments: #380 `4622636345` approved
+  `APPROVE_FORENSICS_DOCS / NO_ACTION_RELEASE`; #371 `4622636365` approved
+  `APPROVE_EVIDENCE_CLOSEOUT / PERFORMANCE_FAIL_MIXED`; #381 `4622636328` and
+  #386 `4622636265` were reviewed but held for sequencing after #380. Notified
+  worker_1 and worker_3 by peer_send; both deliveries returned `delivered`.
+- Session 93 #380/#371 merge closeout: #380 merged at
+  `2026-06-04T13:36:32Z` with merge commit
+  `4ccedc1a6e30f08b6ab844c0b387714d9ef16063` from exact approved head
+  `fe34e52d19ec9cc9a384588a3e900924280fe16e`; worker_1 mailbox
+  `515aa3a1f24743779990371260ab275a` confirmed the same and was marked read.
+  #371 merged at `2026-06-04T13:36:33Z` with merge commit
+  `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985` from exact approved head
+  `2e0cd5a5c7d788ded67334ff25608f8aaedfeffe`; worker_3 mailbox
+  `c3100f69289b4ba4a62c7633eab26afa` confirmed the same and was marked read.
+  `origin/main` is now `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`.
+  Remaining open worker PRs #386, #384, #381, and #377 are `DIRTY` and require
+  owner refresh/re-report before any merge; coordinator #360 remains
+  `OPEN`/`CLEAN` at `b09d66ad50332d8f9ec019f61369132014227453`. Sent
+  coordinator update; delivery returned `delivered`. Global task310/task341
+  gate remains HOLD on NemTron route restoration or a replacement approved
+  SSH/LTP route with credentials; no training/eval/export/endpoint/promotion was
+  authorized.

@@ -3356,3 +3356,13 @@
    superseded by newer all-SFT evidence. This reduces stale PR noise only; it
    does not change task310 HOLD, because task341/task342 still block on NemTron
    SSH target service/port restoration or a replacement approved route.
+828. Worker_2 Session 93 stale PR closeout is accepted as docs-state cleanup:
+   #391/task328, #390/task327, #388/task322, #383/task319, and #379/task315 are
+   closed unmerged as superseded by newer all-SFT/M1 evidence. These closures
+   reduce stale blocker PR noise only and do not release task310/task341.
+829. #380/task314 and #371/task311 merged in Session 93 as exact-head evidence
+   closeouts: #380 records MMLU-Pro regression forensics/no-action release, and
+   #371 records mixed benchmark outcome with AIME25 and HMMT above base but
+   MMLU-Pro below base by 2, so there is still no promotion. #381/#386/#384/#377
+   are dirty after main `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985` and need
+   owner refresh/re-report before any further merge gate.

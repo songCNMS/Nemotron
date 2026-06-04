@@ -9,5 +9,5 @@
 | Role | team_lead |
 | Team | nemotron |
 | Current Task | nemotron_lead |
-| PR | main `8a757c32`; #360 CLEAN `2d3a7198`; worker_4 stale PRs closed; task310/task341 HOLD |
+| PR | main `4fbb4eec`; #380/#371 MERGED; #360 CLEAN `b09d66ad`; task310/task341 HOLD |
 | Session | 93 |
