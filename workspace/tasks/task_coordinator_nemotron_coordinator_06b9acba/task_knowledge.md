@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - Task Knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Knowledge Entries
 
@@ -127,3 +127,40 @@
 121. task293 metric evidence: task285 iter2 FT scored corrected AIME2025 `12/30 = 0.4` versus accepted base `11/30 = 0.36666666666666664`, delta `+1/30`, with task294 decision `APPROVE_AIME_GATE_PASS_WITH_RESIDUAL`.
 122. task293/task294 residual: `sampling_exact_parameter_match=false`; accepted only as deterministic greedy semantic match for metric-gate evidence. No export, endpoint, promotion, further training/eval, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
 123. Session 44 user request requires post-merge current-code confirmation/rerun from lead: use post-merge main, confirm task285/task293 artifact code-equivalence to current code or run a fresh current-code full data/training/eval pass, and report artifacts/metrics/residuals.
+124. Session 45 supersedes the current-code rerun uncertainty: task296/task297 merged into current main `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`, accepting path A that task285/task293 artifacts are product-code-equivalent to current main after #312.
+125. User Session 45 authorizes 30B full training/testing. Coordinator delivered lead goal `qwen-aime-v11-30b-full-train-test-session45`.
+126. Relevant discovered 30B Qwen path for lead verification: `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`; nearby candidates include `Qwen3-30B-A3B-Base`, `Qwen3-30B-A3B-Thinking-2507`, and `Qwen3-30B-A3B-Instruct-2507-FP8`.
+127. Existing repo 30B entrypoint clue: `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`, with tests around `qwen30b_a3b_local_train` and prior task071/task075 Qwen3-30B-A3B scale-up/eval evidence.
+128. 30B launch sequence must fail closed: prove 30B resource/runtime/base-load, establish 30B same-harness base AIME2025 score before FT judgment, verify data/chat-template/decontam contract, run full 30B train, then non-AIME canary and corrected AIME2025 FT-vs-base test with independent review.
+129. Session 45 30B boundaries: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; export/endpoint is eval-only if needed and not promotion unless separately approved.
+130. Session 46 current 30B closeout: task300 base `15/30 = 0.5`; task301 checkpoint `iter_0000035` is salvage-only after validation hang and `train_rc=1`; task306 FT `14/30 = 0.4666666666666667`; task307 decision `APPROVE_FAIL_CLOSEOUT`. This is a 30B AIME fail, not promotion evidence.
+131. Available benchmark surfaces for the new all-SFT request: M1 v0 basket has 8 rows; M1 full basket has 19 rows; Qwen corrected improvement subset is `mmlu_pro`, `aime25`, and `hmmt`; launcher-available rows must be separated from unavailable rows with exact blockers.
+132. Session 46 all-SFT request requires a fresh trainable SFT data inventory before launch. Candidate sources include stage1 SFT `data_blend_raw.json`, task276/task299 packed Qwen lineage, M1 agentic rows, math sidecar/final-answer rows, and hard-math rows. Held-out eval/decontam rows are excluded.
+133. Coordinator delivered lead goal `qwen-all-sft-full-pipeline-benchmarks-session46`: review current pipeline, produce all-eligible-SFT packed/decontam contract, run full training on selected Qwen target(s), run non-AIME canary, then evaluate corrected Qwen subset plus runnable M1 benchmark rows.
+134. Session 46 boundaries: no AIME2025 training, no task255 reuse, no shared deletion, and no promotion. Export/endpoint may be used only as an evaluation route if lead gates it and must not be framed as deployment or release.
+135. Session 47 all-SFT blocker state: #404/task341 is merged as `BLOCK_TRAINING_READINESS` at `371aea491776cc258e1cbb59a081d28be0530438`; #405/task342 is merged as `BLOCK_NEMTRON_ACCESS` blocker closeout at merge commit `3baff1a3e3de84852d8361a11a81917d4256d3f1` from head `22dd5187d6bb552e031646925bba59f79ed00732`.
+136. Coordinator reproduced the runtime failure: proxy `sshuser@10.100.197.19:30222` is reachable, but target `10.100.2.62:33808` refuses TCP connections, causing `ssh NemTron` to fail `rc255`.
+137. task342 artifact root `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z` has a valid checksum manifest: `sha256sum -c manifests/artifact_checksums.sha256` reports all 16 entries `OK`.
+138. This coordinator environment lacks LTP API credentials (`LTP_TOKEN`/`LTP_HOST` and usable `~/.ltp_env`), so it cannot list, restart, or recover LTP jobs directly. Required external unblock: restore the `10.100.2.62:33808` SSH service/port or provide a replacement lead-approved SSH/LTP route and credentials.
+139. Until the NemTron route is restored and lead re-gates task341, the all-SFT pipeline remains blocked: no training, benchmark eval, export, endpoint, promotion, AIME2025 training data, task255 reuse, or shared deletion is authorized.
+140. Lead Session 93 current state: `origin/main` is `8a757c323b82f4330b765ee89a6d78f421d9d9be`, lead branch is `2274f4920a5b216146429b135e3e768d1a6aa423`, and coordinator PR #360 is open/clean at `7229c33b3111c7a25762c0192799f2cae01bf49d`.
+141. The latest coordinator re-probe still shows the same NemTron blocker: direct `ssh NemTron` fails `rc255` and proxy-side TCP to `10.100.2.62:33808` reports `TARGET_PORT_CLOSED_RC_1`.
+142. Dirty worker PRs listed by lead Session 93 (#391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371) are lead-managed refresh/superseded-closeout work; coordinator should not contact workers directly.
+143. task310 training/eval/export/endpoint/promotion and task341 rerun remain blocked until restored NemTron target access or a replacement lead-approved SSH/LTP route with credentials is available.
+144. Stop-hook formatting fix: Session 47 history must have one `## Session 47` header; subsequent same-session updates should use lower-level continuation headings.
+145. Session 48 dirty-PR refresh result: #380/task314 merged at `4ccedc1a6e30f08b6ab844c0b387714d9ef16063`; #371/task311 merged at `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`, making `origin/main` `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`.
+146. Superseded unmerged PRs closed during the Session 48 refresh: #391/#390/#388/#383/#379 by worker_2 and #389/#382/#378 by worker_4.
+147. Current open worker PR state after coordinator recheck: #386 and #381 are open/clean; #384 and #377 are open/dirty; #360 is the coordinator docs PR and remains open/clean.
+148. The all-SFT HOLD is unchanged by the PR cleanup: no task310/task341 rerun or training/eval/export/endpoint/promotion until NemTron target access or an approved replacement SSH/LTP route exists.
+149. Session 49 merge state: #381/task320 merged into `origin/main` as `12f20a5d59e117ab075faff9e6638f1791797364` from approved head `63b58a86848a108dde8bae3f9f10a7a1e25f64c4`.
+150. After #381 merged, current coordinator recheck shows #386 open/clean at refreshed head `1e07a10a446edc46522910006e8ba2a9ab97c108`; because this is newer than the lead-reported dirty head, lead/worker report handling is still required before treating it as gate evidence.
+151. Current remaining dirty open worker PRs are #384 at `1c3048b96301b87e91fbcfa03649220c7a773e61` and #377 at `c1b053b518137769b9b423d08d9590d8ae481a2e`.
+152. Session 49 all-SFT HOLD remains unchanged: no task310/task341 rerun, training, benchmark eval, export, endpoint, or promotion until NemTron target access or a lead-approved replacement route exists.
+153. Session 50 merge state: #386/task324 merged into `origin/main` as `6800c3404169087b61a79de6bf96e3ad774b82e5` from approved head `1e07a10a446edc46522910006e8ba2a9ab97c108`.
+154. Session 50 merge state: #377/task316 merged into `origin/main` as `928d9d684b188fc1858914d0de7aef211627f697` from approved head `19f8a01f44aa4322635aab374d8ed22795639bda`; lead is awaiting worker_5 closeout mailbox.
+155. After Session 50 reconciliation, the only open worker PR is #384, which remains dirty at `9524e9fe7ac824102314b4cb045a17d6a529e3da`; coordinator #360 remains open/clean.
+156. Session 50 all-SFT HOLD remains unchanged: no task310/task341 rerun, training, benchmark eval, export, endpoint, or promotion until NemTron target access or a lead-approved replacement route exists.
+157. Session 51 merge state: #384/task318 merged into `origin/main` as `ff5576d8d73f7eb48f78ad8a0709f97054142345` from approved head `4df2cc5772bc543d5f16de0ea73e824334c725bc`.
+158. After Session 51 reconciliation, the only open GitHub PR is coordinator #360, which remains open/clean before the Session 51 docs update.
+159. Lead is still awaiting worker_5 closeout mailbox for #384/task318; this is lead-managed closeout bookkeeping and does not change the coordinator HOLD.
+160. Session 51 all-SFT HOLD remains unchanged: no task310/task341 rerun, training, benchmark eval, export, endpoint, or promotion until NemTron target access or a lead-approved replacement route exists.

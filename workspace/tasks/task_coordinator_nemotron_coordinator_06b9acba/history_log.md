@@ -1,6 +1,6 @@
 # task_coordinator_nemotron_coordinator_06b9acba - History Log
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Session 0 - Created with coordinator
 
@@ -619,3 +619,195 @@
   - no export, endpoint, promotion, task255 reuse, AIME2025 train data, shared deletion, 30B, or 8-GPU is authorized.
 - Prepared to merge #312 with exact-head protection after committing/pushing this Session 44 coordinator record.
 - Planned lead handoff after #312 merge: set a current-main full-pipeline confirmation/rerun goal requiring lead to use the post-merge main, confirm whether task285/task293 artifacts are code-equivalent to current main or launch a fresh current-code run, and report final data/training/eval artifacts, metrics, residuals, and blockers.
+
+## Session 45 - 30B full training and testing requested
+
+- Received user instruction `在 30b 模型上进行完整的训练和测试`.
+- Because PR #312 had been merged in Session 44, created a fresh coordinator branch from current `origin/main`: `intern_nemotron_coordinator/session45-30b-scaleup-coordination`.
+- Fetched `origin`; current state at dispatch time:
+  - `origin/main` is `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `b537d87b`;
+  - open GitHub PR list is empty.
+- Read latest lead Session 75 history and task296/task297 evidence. Current-main 4B equivalence request from Session 44 is closed as path A:
+  - task296/#359 merged at `31137bc1e28f7d08d4c6b5aa2448487d95aa07d7`;
+  - task297/#358 merged at `834472e69b23dc71b49824cda57f866a60839c0a`;
+  - decision is `A_PROVED_NO_RERUN` / `APPROVE_A_PROVED_NO_RERUN_WITH_RESIDUALS`;
+  - existing task285/task293 artifacts are accepted as product-code-equivalent to current main, so a fresh 4B rerun is not required.
+- Preserved known 4B residuals before 30B scale-up:
+  - task285 smoke command ended `RC=1` after iter2 checkpoint during built-in validation/SIGTERM;
+  - task276 valid/test split is sparse;
+  - task292 carries detokenized fallback residual;
+  - task293 `sampling_exact_parameter_match=false` is accepted only as semantic greedy equivalence.
+- Searched available model paths and found relevant local 30B candidates:
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Base`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Thinking-2507`;
+  - `/mnt/cephfs/data/stable/models/Qwen/Qwen3-30B-A3B-Instruct-2507-FP8`.
+- Searched repository and found existing 30B scale-up clues:
+  - training entrypoint `src/nemotron/recipes/super3/stage1_sft/qwen3_30b_a3b_local_train.py`;
+  - tests around `qwen30b_a3b_local_train`;
+  - prior task071/task075 Qwen3-30B-A3B train/export/eval runbook evidence and notes.
+- Sent delivered peer message to `intern_nemotron_lead` with the user instruction and requested gated 30B full data, training, and testing startup from current main.
+- Set delivered lead pressing goal `qwen-aime-v11-30b-full-train-test-session45`.
+- Created coordinator PR #360 for the Session 45 record, scoped to coordinator status/history/task_knowledge only.
+- Required lead sequence in the 30B handoff:
+  1. 30B runtime/resource/base-load proof with exact model path, GPU/parallelism, entrypoint, and testing route;
+  2. same-harness 30B base AIME2025 score before judging FT;
+  3. task276 V11 data reuse or adaptation only if Qwen 30B chat-template/decontam contract holds;
+  4. full 30B training with checkpoints, LR/loss/validation, logs, env, and checksums;
+  5. non-AIME canary and corrected AIME2025 FT-vs-base testing with completions and parser diagnostics;
+  6. independent review and runbook/provenance.
+- Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only; no task255 reuse; no shared `/mnt/cephfs/data/processing/lei.song` deletion; any export/endpoint is eval-only if needed, not promotion, unless separately approved.
+- Coordinator did not run 30B training, eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.
+
+## Session 46 - All-SFT full pipeline and available benchmark evaluation requested
+
+- Received user instruction `review the the current pipeline and start a full pipeline on all sft data and finally conduct an evaluation on benchmarks that are available`.
+- Fetched `origin`; current state at review time:
+  - `origin/main` is `ecb14173` after merged task306/task307 30B AIME fail closeout;
+  - lead branch `origin/intern_nemotron_lead/session1-recovery-task-docs` is `4bee7ad5`;
+  - coordinator PR #360 remains the only open PR and is `CLEAN`/`MERGEABLE`.
+- Reviewed latest lead/task evidence for the previous 30B AIME-focused run:
+  - task300 accepted Qwen3-30B-A3B base corrected AIME2025 comparator `15/30 = 0.5`;
+  - task301 full 30B SFT reached `35/35` and produced checkpoint `iter_0000035`, but built-in validation hung and termination produced `train_rc=1`, so it remains a salvage candidate rather than a clean training pass;
+  - task304/task305 accepted a bounded synthetic non-AIME canary only;
+  - task306 corrected AIME2025 FT-vs-base result is `14/30 = 0.4666666666666667`, below base `15/30`;
+  - task307 independently approved task306 as `APPROVE_FAIL_CLOSEOUT`, with no promotion/export/endpoint/further 30B authorization.
+- Reviewed benchmark registry surfaces:
+  - M1 v0 basket includes `mmlu_pro`, `aime25`, `gpqa`, `livecodebench`, `ifbench`, `multichallenge`, `ruler_256k`, and `taubench_airline`;
+  - M1 full basket adds `hmmt`, `hle`, `scicode`, `terminalbench`, `swe_bench_verified`, `aa_lcr`, `mmlu_prox`, `wmt24pp`, `bfcl`, `mcp_mark`, and `tool_decathlon`;
+  - Qwen corrected improvement subset is `mmlu_pro`, `aime25`, and `hmmt`;
+  - launcher-available rows should be separated from unavailable rows with exact runtime/blocker reasons.
+- Reviewed all-SFT data/pipeline clues:
+  - baseline SFT configs include `src/nemotron/recipes/super3/stage1_sft/config/data_prep/data_blend_raw.json`;
+  - current Qwen V11 packed data evidence is task276/task299 lineage, with known sparse valid/test residuals;
+  - repo evidence points to M1 agentic, math sidecar/final-answer, and hard-math SFT sources that require fresh inventory before an all-SFT launch.
+- Sent delivered peer message to `intern_nemotron_lead` requesting a new gate-driven all-SFT pipeline review/run, not a promotion claim.
+- Set delivered lead pressing goal `qwen-all-sft-full-pipeline-benchmarks-session46`.
+- Required lead sequence in the Session 46 handoff:
+  1. audit current data prep, packing, training, eval stages, blockers, and exact trainable SFT data inventory;
+  2. produce all-eligible-SFT packed-data/decontam contract or exact blocker;
+  3. run full training on selected Qwen target(s), prioritizing the current 30B path if runtime/resources pass and failing closed rather than silently downgrading;
+  4. run non-AIME checkpoint-load/completion canary before benchmark eval;
+  5. evaluate available benchmarks, including corrected Qwen `mmlu_pro`/`aime25`/`hmmt` same-harness base-vs-FT plus runnable M1 basket rows;
+  6. document unavailable full-basket rows, independent review, and runbook/provenance.
+- Boundaries preserved in the lead handoff: AIME2025 prompts/labels remain held-out eval/decontam only and cannot enter trainable SFT data; no task255 reuse; no shared deletion; export/endpoint only if needed for evaluation and not promotion.
+- Coordinator did not run data packing, training, benchmark eval, export, endpoint, promotion, shared deletion, or artifact mutation directly.
+
+## Session 47 - All-SFT NemTron runtime access blocker reproduced
+
+- Received lead escalation for the all-SFT pipeline:
+  - #404/task341 is merged as `BLOCK_TRAINING_READINESS` at `371aea491776cc258e1cbb59a081d28be0530438`.
+  - #405/task342 was reported open/clean at `22dd5187d6bb552e031646925bba59f79ed00732` and lead-gated as `BLOCK_NEMTRON_ACCESS` blocker closeout only.
+  - Reported route: proxy hop `sshuser@10.100.197.19:30222` works, but target `10.100.2.62:33808` refuses connections, so `ssh NemTron` fails `rc255`.
+- Fetched origin and verified current branch state:
+  - `origin/main` advanced to `3baff1a3e3de84852d8361a11a81917d4256d3f1` after #405 merged.
+  - #405/task342 is now merged at `2026-06-04T12:53:46Z` with merge commit `3baff1a3e3de84852d8361a11a81917d4256d3f1` from head `22dd5187d6bb552e031646925bba59f79ed00732`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` is visible at `443c32b20413`.
+  - Coordinator PR #360 remains open, non-draft, base `main`, head `24fe8443f35c627d982506dd2562de9440f517d9`, and `CLEAN` before this Session 47 docs update.
+- Reproduced the coordinator-side SSH blocker:
+  - `ssh -o BatchMode=yes -o ConnectTimeout=8 NemTron 'hostname && date -u ...'` failed `rc255` with `channel 0: open failed: connect failed: Connection refused`.
+  - Proxy hop `ssh -i /root/.ssh/ltp_ssh_key -p 30222 sshuser@10.100.197.19 'hostname && date -u ...'` succeeded, returning host `ssh-proxy-deployment-64fbf5f7d5-4flbz` and timestamp `2026-06-04T12:55:42Z`.
+  - Proxy-side bash TCP probe to `10.100.2.62:33808` failed `rc1` with `Connection refused` and marker `TARGET_PORT_CLOSED_RC_1`.
+- Verified task342 artifact integrity from `/work-agents/intern_nemotron_worker_4/outputs/task342_qwen_all_sft_nemtron_ssh_runtime_access_recovery_s1/run_20260604T124233Z`:
+  - `sha256sum -c manifests/artifact_checksums.sha256` returned `OK` for all 16 manifest entries.
+  - The Python proxy probe residual is non-decisive because proxy-side `python3` is missing; the bash TCP probe is decisive for target-port refusal.
+- Used the LTP skill path for the runtime route check. `ltp.py whoami` cannot query jobs from this coordinator environment because `LTP_TOKEN`/`LTP_HOST` are absent and no usable `~/.ltp_env` is configured.
+- Sent a delivered peer update to `intern_nemotron_lead` summarizing the reproduced blocker, validated task342 checksum manifest, missing local LTP credentials, and required external action.
+- Coordinator conclusion: task341 cannot be rerun from here until infrastructure restores the target service/port for `10.100.2.62:33808` or provides a replacement lead-approved SSH/LTP route with credentials. No training, eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion is authorized by this Session.
+
+### Continuation - lead Session 93 HOLD update
+
+- Received `intern_nemotron_lead` Session 93 update after interruption:
+  - `origin/main` reported at `8a757c323b82f4330b765ee89a6d78f421d9d9be`;
+  - lead branch reported at `2274f4920a5b216146429b135e3e768d1a6aa423`;
+  - lead mailbox was empty;
+  - coordinator PR #360 remained open/clean at `7229c33b3111c7a25762c0192799f2cae01bf49d`;
+  - worker PRs #391/#390/#389/#388/#386/#384/#383/#382/#381/#380/#379/#378/#377/#371 were all dirty and lead requested refresh or superseded closeout.
+- Fetched origin and confirmed the reported remote heads:
+  - `origin/main` advanced from `3baff1a3` to `8a757c323b82f4330b765ee89a6d78f421d9d9be`;
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` advanced to `2274f4920a5b216146429b135e3e768d1a6aa423`.
+- Rechecked coordinator PR #360: open, non-draft, base `main`, head `7229c33b3111c7a25762c0192799f2cae01bf49d`, and `CLEAN`.
+- Re-probed the NemTron route from the coordinator host:
+  - `ssh -o BatchMode=yes -o ConnectTimeout=8 NemTron 'hostname && date -u ...'` still failed `rc255` with `channel 0: open failed: connect failed: Connection refused`.
+  - Proxy-side TCP probe to `10.100.2.62:33808` still failed `rc1` with `TARGET_PORT_CLOSED_RC_1`.
+- Sent a delivered peer acknowledgement to `intern_nemotron_lead` confirming the fresh route failure and accepting the continued HOLD.
+- Coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the target SSH service is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 48 - Dirty PR refresh cycle reconciled
+
+- Received `intern_nemotron_lead` Session 93 update after the dirty-PR refresh cycle:
+  - #380/task314 merged at `2026-06-04T13:36:32Z` with merge commit `4ccedc1a6e30f08b6ab844c0b387714d9ef16063` from exact approved head `fe34e52d19ec9cc9a384588a3e900924280fe16e`.
+  - #371/task311 merged at `2026-06-04T13:36:33Z` with merge commit `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985` from exact approved head `2e0cd5a5c7d788ded67334ff25608f8aaedfeffe`.
+  - worker_2 closed #391/#390/#388/#383/#379 unmerged as superseded.
+  - worker_4 closed #389/#382/#378 unmerged as superseded.
+  - Lead reported #381/#386/#384/#377 still dirty at message time and kept the global HOLD unchanged.
+- Fetched origin and confirmed `origin/main` at `4fbb4eecfbe9db6402b1b627dd20c0d7d0b2e985`; lead branch is currently `ff59dc785c0a7d0fbba2bd583219594925406438`.
+- Verified GitHub PR state:
+  - #380 and #371 are `MERGED` with the reported merge commits and heads.
+  - #391/#390/#388/#383/#379/#389/#382/#378 are `CLOSED`, unmerged.
+  - Current open PR list is #386 `CLEAN`, #384 `DIRTY`, #381 `CLEAN`, #377 `DIRTY`, and coordinator #360 `CLEAN`.
+  - Coordinator PR #360 remains open/non-draft at head `b09d66ad50332d8f9ec019f61369132014227453` before this Session 48 docs update.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, including the newer GitHub observation that #381/#386 are now open/clean while #384/#377 remain open/dirty.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 49 - task320 merge and remaining dirty PRs reconciled
+
+- Received `intern_nemotron_lead` Session 94 update:
+  - #381/task320 merged at `2026-06-04T13:45:14Z` with merge commit `12f20a5d59e117ab075faff9e6638f1791797364` from exact approved head `63b58a86848a108dde8bae3f9f10a7a1e25f64c4`.
+  - Lead reported `origin/main` at `12f20a5d`.
+  - Lead reported #386 open/dirty at `ea1607940796ce86ff39bfa22aba8d7754602fde` pending worker_1 refresh/re-report after #381.
+  - Lead reported #384/#377 open/dirty pending worker_5 refresh/closeout.
+  - Lead reported #360 open/clean at `7948abbbd0cd65bccb52018e8344ed0d48125d76`.
+- Fetched origin and verified current remote state:
+  - `origin/main` is `12f20a5d59e117ab075faff9e6638f1791797364`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` is `eab81a29eb24cea1cd703799cb8c07204bab3bf0`.
+  - `origin/main` top commits include #381 merge `12f20a5d`, #371 merge `4fbb4eec`, and #380 merge `4ccedc1a`.
+- Verified GitHub PR state:
+  - #381 is `MERGED` with the reported merge time, merge commit, and head.
+  - #386 is now `OPEN`/`CLEAN` at a newer head `1e07a10a446edc46522910006e8ba2a9ab97c108`; this is newer than the lead-reported dirty head and still requires lead/worker report handling before any gate movement.
+  - #384 remains `OPEN`/`DIRTY` at `1c3048b96301b87e91fbcfa03649220c7a773e61`.
+  - #377 remains `OPEN`/`DIRTY` at `c1b053b518137769b9b423d08d9590d8ae481a2e`.
+  - #360 remains `OPEN`/`CLEAN` at `7948abbbd0cd65bccb52018e8344ed0d48125d76` before this Session 49 docs update.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, including the newer #386 open/clean observation and unchanged HOLD.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 50 - task324/task316 merges reconciled
+
+- Received `intern_nemotron_lead` Session 95 update:
+  - #386/task324 merged at `2026-06-04T13:51:40Z` with merge commit `6800c3404169087b61a79de6bf96e3ad774b82e5` from exact approved head `1e07a10a446edc46522910006e8ba2a9ab97c108`.
+  - #377/task316 merged at `2026-06-04T13:57:09Z` with merge commit `928d9d684b188fc1858914d0de7aef211627f697` from exact approved head `19f8a01f44aa4322635aab374d8ed22795639bda`.
+  - Lead is awaiting worker_5 closeout mailbox for #377/task316.
+  - Lead reported `origin/main` at `928d9d68`.
+  - Lead reported #384 open/dirty at `9524e9fe7ac824102314b4cb045a17d6a529e3da` pending worker_5 refresh or superseded closeout.
+  - Lead reported #360 open/clean at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53`.
+- Fetched origin and verified current remote state:
+  - `origin/main` is `928d9d684b188fc1858914d0de7aef211627f697`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` is `6b18e44cd1d68e0f07158f1dbe335cc70628abed`.
+  - `origin/main` top commits show #377 merge `928d9d68`, #386 merge `6800c340`, and #381 merge `12f20a5d`.
+- Verified GitHub PR state:
+  - #386 is `MERGED` with the reported merge time, merge commit, and head.
+  - #377 is `MERGED` with the reported merge time, merge commit, and head.
+  - #384 remains `OPEN`/`DIRTY` at `9524e9fe7ac824102314b4cb045a17d6a529e3da`.
+  - #360 remains `OPEN`/`CLEAN` at `f4d660fbd8ad1c812e960a4ee1d2be2a8229ba53` before this Session 50 docs update.
+  - Current open PR list is only #384 and #360.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming the merges, current open PR list, and unchanged HOLD.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
+
+## Session 51 - task318 merge reconciled
+
+- Received `intern_nemotron_lead` Session 96 update:
+  - #384/task318 merged at `2026-06-04T14:04:05Z` with merge commit `ff5576d8d73f7eb48f78ad8a0709f97054142345` from exact approved head `4df2cc5772bc543d5f16de0ea73e824334c725bc`.
+  - Lead reported `origin/main` at `ff5576d8`.
+  - Worker #384 closeout mailbox is not yet observed by lead; worker_5 has been asked to send it.
+  - Lead reported open PR list is now only #360 open/clean at `d63ea9f1309d6fd199b36442a10e11e7d7058ca2`.
+- Fetched origin and verified current remote state:
+  - `origin/main` is `ff5576d8d73f7eb48f78ad8a0709f97054142345`.
+  - `origin/intern_nemotron_lead/session1-recovery-task-docs` remains `6b18e44cd1d68e0f07158f1dbe335cc70628abed` at this fetch.
+  - `origin/main` top commits show #384 merge `ff5576d8`, #377 merge `928d9d68`, and #386 merge `6800c340`.
+- Verified GitHub PR state:
+  - #384 is `MERGED` with the reported merge time, merge commit, and head.
+  - #360 remains `OPEN`/`CLEAN` at `d63ea9f1309d6fd199b36442a10e11e7d7058ca2` before this Session 51 docs update.
+  - Current open PR list contains only #360.
+- Sent delivered peer acknowledgement to `intern_nemotron_lead`, confirming #384 merge, only #360 open/clean, and unchanged HOLD.
+- Global coordinator gate remains HOLD: no task310/task341 rerun, training, benchmark eval, export, endpoint, promotion, AIME2025 train data use, task255 reuse, or shared deletion until the NemTron target route is restored or a replacement lead-approved SSH/LTP route with credentials exists.
