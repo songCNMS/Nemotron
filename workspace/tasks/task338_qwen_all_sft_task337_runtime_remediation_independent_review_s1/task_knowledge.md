@@ -1,6 +1,6 @@
 # task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1 - task knowledge
 
-<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 1. Review target is #400 exact head
    `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
@@ -21,3 +21,7 @@
 7. Approval is independent review evidence only. #400/task337 must be rechecked
    after #401 lands, and task310/training/eval/export/endpoint/promotion/30B
    launch remain HOLD pending later no-training launch preflight rerun.
+8. #401 merged at `2026-06-04T11:05:56Z` via merge commit
+   `d87320cfd0f2cedb786b0588f9ee7b564c467ee1` from exact approved head
+   `422ca360447e083f0e08c53b446653ad44d51707`. task338 is complete as review
+   evidence only.

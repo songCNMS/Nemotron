@@ -1,6 +1,6 @@
 # task337_qwen_all_sft_30b_megatron_energon_runtime_remediation_s1 - Runtime remediation for Qwen3 MoE Bridge import
 
-<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
+<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_2,SESSION=88 -->
 
 ## Background
 
@@ -132,3 +132,29 @@ Produce a task-owned no-training runtime remediation report that either:
 - Gate state: #400/task337 remains HOLD pending task338 independent review.
   task310/all-SFT 30B launch/training/eval/export/endpoint/promotion remain
   HOLD.
+
+## Lead Gate
+
+- Independent review: task338/#401 merged at `2026-06-04T11:05:56Z` with merge
+  commit `d87320cfd0f2cedb786b0588f9ee7b564c467ee1` from reviewed head
+  `422ca360447e083f0e08c53b446653ad44d51707`.
+- Post-#401 recheck: #400 exact head
+  `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`, `OPEN`, non-draft, base
+  `main`, `CLEAN`/`MERGEABLE`.
+- Post-#401 diff scope remains worker_2 status plus task337 README/history/
+  task_knowledge/report only; `git diff --check origin/main...origin/pr/400`
+  passed.
+- Report sha256 remains
+  `441bd4b3c46d923f880fe3ce55298bc810e03e730819b16405b8b3b5a995cd49`.
+- Lead already spot-checked assigned artifact root checksums and markers:
+  baseline `TASK337_IMPORT_PROBE=BLOCK_MISSING_MEGATRON_ENERGON`; final
+  `TASK337_IMPORT_PROBE=PASS_QWEN3_MOE_IMPORT` and
+  `TASK337_SYMBOL_PROBE=PASS_QWEN3_MOE_SYMBOL_IMPORT`.
+- Decision: `APPROVE_TASK337_RUNTIME_REMEDIATION_EVIDENCE`.
+- Meaning: accept #400/task337 as no-training runtime import remediation
+  evidence only.
+- #400 may self-merge only if exact head `fb6ba0e7` remains `OPEN`/`CLEAN`.
+- Still blocked: task310/all-SFT 30B launch/training/eval/export/endpoint/
+  promotion. Next allowed lead action after #400 lands is a bounded
+  task335-equivalent no-training launch preflight rerun using the approved
+  task337 runtime route or equivalent checksummed recreation.

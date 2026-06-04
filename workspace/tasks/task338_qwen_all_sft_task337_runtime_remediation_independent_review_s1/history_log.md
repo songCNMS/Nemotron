@@ -1,6 +1,6 @@
 # task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1 - history
 
-<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 ## 2026-06-04 UTC - Assigned
 
@@ -51,3 +51,16 @@
 - #400/task337 and task310 remain HOLD until #401 lands and #400 is rechecked
   for a separate runtime remediation evidence decision. No training/eval/export/
   endpoint/promotion/30B launch is authorized.
+
+## 2026-06-04 UTC - Review PR Merged
+
+- Processed worker_4 merge closeout mailbox
+  `intern_nemotron_worker_4-task338-merge-closeout-20260604T1106Z`.
+- Verified #401 merged at `2026-06-04T11:05:56Z` with merge commit
+  `d87320cfd0f2cedb786b0588f9ee7b564c467ee1` from exact approved head
+  `422ca360447e083f0e08c53b446653ad44d51707`.
+- Worker_4 reported exact/CLEAN pre-merge state, no further pre-merge changes,
+  and no issue.
+- task338 is complete as independent no-training runtime remediation review
+  evidence only. #400/task337 and task310 remain HOLD pending separate #400
+  recheck and lead gate.

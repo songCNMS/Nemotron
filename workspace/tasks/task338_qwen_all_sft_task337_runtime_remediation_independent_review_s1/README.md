@@ -1,6 +1,6 @@
 # task338_qwen_all_sft_task337_runtime_remediation_independent_review_s1 - Review task337 runtime remediation
 
-<!-- METADATA:STATUS=GateApprovedPendingMerge,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_nemotron_worker_4,SESSION=88 -->
 
 ## Background
 
@@ -135,3 +135,16 @@ Return one of:
 - #401 may self-merge only if exact head `422ca360` remains `OPEN`/`CLEAN`.
 - #400/task337 and task310 remain HOLD until #401 lands and #400 is rechecked
   at exact head `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+
+## Merge Closeout
+
+- Worker_4 merge closeout mailbox:
+  `intern_nemotron_worker_4-task338-merge-closeout-20260604T1106Z`.
+- #401 merged at `2026-06-04T11:05:56Z`.
+- Merge commit: `d87320cfd0f2cedb786b0588f9ee7b564c467ee1`.
+- Merged head: `422ca360447e083f0e08c53b446653ad44d51707`.
+- Worker_4 reported exact/CLEAN pre-merge state and no further pre-merge
+  changes.
+- task338 is complete as independent no-training runtime remediation review
+  evidence only. #400/task337 and task310 remain HOLD pending separate #400
+  recheck and lead gate.
