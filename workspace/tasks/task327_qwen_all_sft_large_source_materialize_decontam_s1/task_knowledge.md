@@ -15,3 +15,12 @@
    scratch mutation.
 6. Task327 should use task322 summary JSON as source of truth for repo ids,
    revisions, selected filenames, expected sizes, and task308 sha256 values.
+7. Worker_2 run `run_20260603T211508Z` processed all 10 large sources and
+   produced 6,097,779 total counted rows with matching file sizes/sha256 and
+   zero parse errors.
+8. Only `swe` passed decontam (`51,029` rows). The other 9 large sources remain
+   excluded/fail-closed on task246 heldout 13-word n-gram hits until lead
+   accepts a false-positive/adjudication follow-up.
+9. This task produced raw materialize/count/decontam evidence only and does not
+   release final packing, tokenizer packing, supervised-token accounting,
+   training, benchmark eval, export, endpoint, promotion, or 30B runtime work.

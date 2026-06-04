@@ -1,6 +1,6 @@
 # task327_qwen_all_sft_large_source_materialize_decontam_s1 - Large-source raw materialize/decontam
 
-<!-- METADATA:STATUS=Working,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
+<!-- METADATA:STATUS=ReadyForReview,ASSIGNEE=intern_nemotron_worker_2,SESSION=1 -->
 
 ## Background
 
@@ -111,3 +111,14 @@ unless needed for parity checks.
 - Current main: `292c5bfabf1f5b14e3330e0be72b4ef9abdc4aeb`
 - Inputs: task322/#388, task319, task308, task246, task311, task314
 - Gate state: global all-SFT pack/train/eval remains HOLD.
+
+## Worker_2 result
+
+See `large_source_materialize_decontam_report.md`.
+
+Worker_2 processed all 10 task322 `EXCLUDED_SIZE_GT_1GB` sources in task-owned
+output root
+`/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`.
+Disposition is `PARTIAL_PASS_WITH_EXACT_BLOCKERS`: 10/10 materialized with
+matching bytes and sha256, zero parse errors, and row manifests; only `swe`
+passed decontam, while 9 sources remain fail-closed on heldout n-gram hits.

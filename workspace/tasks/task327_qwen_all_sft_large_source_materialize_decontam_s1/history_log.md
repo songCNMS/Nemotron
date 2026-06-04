@@ -25,3 +25,17 @@
   selected HF file into a task-owned cache, compute file sha256, count rows,
   write gzipped row manifests, run task246 decontam checks, and emit resource
   evidence. No product code was changed.
+
+## Session 1 - 2026-06-04 UTC - Materialization/decontam result
+
+- Ran task-owned helper against all 10 task322 `EXCLUDED_SIZE_GT_1GB` sources
+  into
+  `/work-agents/intern_nemotron_worker_2/outputs/task327_qwen_all_sft_large_source_materialize_decontam_s1/run_20260603T211508Z`.
+- Result disposition is `PARTIAL_PASS_WITH_EXACT_BLOCKERS`, return code `2`:
+  all 10 selected files materialized with matching bytes/sha256, zero parse
+  errors, and row manifests; `swe` passed heldout decontam and the other 9
+  sources are fail-closed `BLOCKED_DECONTAM_HIT`.
+- Verified generated artifact checksum manifest with `sha256sum -c`.
+- No packing, training, eval, export, endpoint, promotion, task255 reuse,
+  AIME2025 train data, shared deletion/mutation, main push, merge, or self-merge
+  was performed.
