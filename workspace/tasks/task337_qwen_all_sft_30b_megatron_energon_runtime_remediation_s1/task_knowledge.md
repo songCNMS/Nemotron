@@ -36,3 +36,6 @@
     `f083c9566a9f0775c27ae49f16b8b898edfc8d11` from evidence head
     `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`. task337 is complete as
     no-training runtime import remediation evidence only.
+11. Worker_2 branch-only closeout head is
+    `7cae0b9bfc351544a41158384aad59f29adbb8a8`; it reports no issue and does
+    not change the merged evidence head.

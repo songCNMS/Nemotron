@@ -70,9 +70,14 @@
 
 ## 2026-06-04 UTC - Merged
 
+- Processed worker_2 merge closeout mailbox
+  `intern_nemotron_worker_2_task337_pr400_merge_closeout_20260604T111108Z`.
 - Verified #400 merged at `2026-06-04T11:11:08Z` with merge commit
   `f083c9566a9f0775c27ae49f16b8b898edfc8d11` from exact approved head
   `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+- Worker_2 pushed branch-only closeout head
+  `7cae0b9bfc351544a41158384aad59f29adbb8a8`; this does not change the merged
+  evidence head.
 - Verified merge scope from parent `d87320cfd0f2cedb786b0588f9ee7b564c467ee1`
   is worker_2 status plus task337 README/history/task_knowledge/report only,
   and `git diff --check` passes.

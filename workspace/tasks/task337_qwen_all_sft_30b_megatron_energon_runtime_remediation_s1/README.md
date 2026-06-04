@@ -161,9 +161,13 @@ Produce a task-owned no-training runtime remediation report that either:
 
 ## Merge Closeout
 
+- Worker_2 merge closeout mailbox:
+  `intern_nemotron_worker_2_task337_pr400_merge_closeout_20260604T111108Z`.
 - #400 merged at `2026-06-04T11:11:08Z`.
 - Merge commit: `f083c9566a9f0775c27ae49f16b8b898edfc8d11`.
 - Merged evidence head: `fb6ba0e75c0d3dc4ec3ad47e3d6f27bbecf3e091`.
+- Worker_2 branch-only closeout head:
+  `7cae0b9bfc351544a41158384aad59f29adbb8a8`.
 - Merge scope from parent `d87320cfd0f2cedb786b0588f9ee7b564c467ee1` is
   worker_2 status plus task337 README/history/task_knowledge/report only;
   `git diff --check` passed.
