@@ -12105,3 +12105,9 @@
   source-level disposition for `math-proofs-lean`, no official worker_2 report,
   and no task327 PR. This is in-progress evidence only and does not release
   all-SFT packing/training/eval/export/endpoint/promotion.
+- Final verification caught the next stable `math-proofs-lean` checkpoint:
+  `2026-06-04T02:02:32Z PROGRESS math-proofs-lean rows=300000
+  mib=6078.1 rate_mib_s=8.17`. The source process remained active with no
+  final rc, no source-level disposition for `math-proofs-lean`, no official
+  worker_2 report, and no task327 PR. This is in-progress evidence only and
+  does not release all-SFT packing/training/eval/export/endpoint/promotion.
