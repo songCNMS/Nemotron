@@ -3063,3 +3063,10 @@
    `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f`.
    This is treated as a provenance/report consistency blocker for #396 merge,
    not as training evidence. task310 remains HOLD.
+773. Session 86 #396 refreshed head
+   `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66` is a report/status-only fix from
+   old head `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`. Lead drift check found
+   only worker_1 status plus task333 report changed, `git diff --check` clean,
+   old row-manifest hashes absent, and `074500Z` values present. task334/#397
+   must now refresh the independent review for exact head `9a9471e3`; old #397
+   request-changes report applies only to `8546ae8d`.

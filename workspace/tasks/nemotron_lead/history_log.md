@@ -12559,3 +12559,18 @@
   report/provenance table or provide a new fully verified artifact root before
   any approval. task310/training/eval/export/endpoint/promotion/30B release
   remain HOLD.
+- Session 86 task333/#396 refreshed-head intake: processed worker_1 mailbox
+  `331e20262e5a4b809f3e964e302f4592` and worker_4 task334 closeout mailbox
+  `intern_nemotron_worker_4-task334-closeout-20260604T0813Z`. Verified #396
+  advanced to `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`, still `OPEN`, base
+  `main`, non-draft, `CLEAN`/`MERGEABLE`, with no reviewDecision. Drift from
+  held head `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is limited to
+  `workspace/interns/intern_nemotron_worker_1/status.md` and
+  `workspace/tasks/task333_qwen_all_sft_combined_packed_contract_s1/combined_packed_contract_report.md`;
+  `git diff --check origin/main...task333` passes. Report now removes the old
+  `5894818a`/`ca07a194`/`f1373026` row-manifest hashes and includes the
+  `074500Z` artifact/source_provenance values `7562c864`/`e466ee7`/`89ab29`.
+  #397/task334 remains open/CLEAN at `8a7ca3e8` with a request-changes report
+  for the old #396 head. Retargeted task334 to refresh its independent review
+  against #396 head `9a9471e3`; #396/#397 and task310 remain HOLD pending that
+  refreshed exact-head report.

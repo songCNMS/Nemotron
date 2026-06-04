@@ -35,3 +35,8 @@
    `e466ee7bd8032ff45596073d21c75f482611689edee3a20a9f5ade440a1ac653`, and
    `89ab29ebe1ab5a11e4467652ff40a855612e1ef4a47d024bbdc02eb9cd965e2f` before
    #396 can be approved.
+8. Worker_1 submitted #396 fix head
+   `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`; lead verified the stale hashes
+   are absent and the three `run_20260604T074500Z` values are present. Approval
+   still requires refreshed independent review because #396 head changed after
+   task334's original `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH` report.

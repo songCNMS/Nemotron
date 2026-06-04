@@ -20,3 +20,14 @@
   assigned artifact root or `manifests/source_provenance.json`.
 - Lead disposition for #396 is `REQUEST_CHANGES/HOLD`; worker_4 may still send
   the formal task334 report, but #396 is not approved at this head.
+
+## 2026-06-04 UTC - Refresh Requested
+
+- Processed worker_4 formal request-changes closeout for #396 head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`; #397 is open at
+  `8a7ca3e8898514bbb1b56ed9996edfc35b4be617`.
+- Worker_1 then pushed #396 refreshed head
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`, a report/status-only fix for
+  the row-manifest hash mismatch.
+- task334 is retargeted to refresh the independent review for exact #396 head
+  `9a9471e3` and update #397/report with approve/request-changes/block.

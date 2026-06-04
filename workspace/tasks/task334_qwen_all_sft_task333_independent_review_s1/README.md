@@ -78,6 +78,33 @@ Check all of the following:
   with zero rows; SWE rows still truncate to 4096 but have nonzero supervised
   tokens.
 
+## Refresh Assignment - 2026-06-04 UTC
+
+After the initial request-changes report, worker_1 pushed #396 refreshed head
+`9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`.
+
+Refresh task334 for this new exact head and update #397/report with one of:
+
+- `APPROVE_COMBINED_PACKED_CONTRACT_FOR_DOCS_CLOSEOUT`
+- `REQUEST_CHANGES`
+- `BLOCK_COMBINED_PACKED_CONTRACT`
+
+Minimum refreshed checks:
+
+- #396 PR metadata: exact head `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`,
+  base `main`, non-draft, clean/mergeable.
+- Drift from old reviewed head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` is only worker_1 status plus the
+  task333 report hash correction.
+- `git diff --check origin/main...origin/intern_nemotron_worker_1/task333_qwen_all_sft_combined_packed_contract_s1`.
+- The report's task299 seed row-manifest SHA256 values match the assigned
+  `run_20260604T074500Z` row manifest files and
+  `manifests/source_provenance.json`.
+- The old `5894818a`/`ca07a194`/`f1373026` values are absent from the report and
+  the `7562c864`/`e466ee7`/`89ab29` values are present.
+- Preserve or explicitly update all earlier passing artifact checks and
+  residuals. Do not release task310/training/eval/export/endpoint/promotion/30B.
+
 ## Expected Output
 
 - Worker branch:

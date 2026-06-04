@@ -16,3 +16,10 @@
 4. Approval would only support docs/evidence closeout and a later lead-gated
    training-preflight task. It must not release task310, training, eval, export,
    endpoint, promotion, or 30B scale by itself.
+5. #397 head `8a7ca3e8898514bbb1b56ed9996edfc35b4be617` documents
+   `REQUEST_CHANGES_REPORT_ARTIFACT_MISMATCH` for old #396 head
+   `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e`.
+6. #396 refreshed head `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66` must receive
+   a refreshed task334 review. The expected delta is worker_1 status plus
+   task333 report hash correction only; the artifact root remains
+   `run_20260604T074500Z`.

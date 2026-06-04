@@ -26,3 +26,14 @@
 - Required worker_1 follow-up: refresh the #396 report/provenance table to match
   the actual artifact evidence, or provide a new fully verified artifact root and
   report. No training/eval/export/endpoint/promotion/30B release is authorized.
+
+## 2026-06-04 UTC - Report Hash Fix Submitted
+
+- Worker_1 pushed #396 refreshed head
+  `9a9471e35e3d80f6bf2995478ddf4bd1ef785a66`.
+- Lead drift check confirmed changes from old head
+  `8546ae8dc25c9f6a5bf06fdf48d8766677b8b75e` are limited to worker_1 status and
+  `combined_packed_contract_report.md`.
+- The report now uses the assigned `run_20260604T074500Z` task299 seed
+  row-manifest SHA256 values. #396 is still HOLD pending refreshed task334
+  independent review for the new exact head.
