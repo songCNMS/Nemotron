@@ -1,14 +1,14 @@
 # intern_nemotron_worker_4 - status
 
-<!-- METADATA:STATUS=ReadyForPR,TASK=task330_qwen_all_sft_task329_independent_review_s1,ROLE=worker,TEAM_ID=nemotron -->
+<!-- METADATA:STATUS=ReadyForReview,TASK=task332_qwen_all_sft_structured_split_policy_remediation_s1,ROLE=worker,TEAM_ID=nemotron -->
 
 | Field | Value |
 |------|-----|
 | Name | intern_nemotron_worker_4 |
-| Status | ReadyForPR |
+| Status | ReadyForReview |
 | Role | worker |
 | Team | nemotron |
-| Current Task | task330_qwen_all_sft_task329_independent_review_s1 |
-| PR | #393 |
+| Current Task | task332_qwen_all_sft_structured_split_policy_remediation_s1 |
+| PR | #394 https://github.com/songCNMS/Nemotron/pull/394 |
 | Session | 1 |
-| Progress | Opened PR #393 with task330 independent read-only review for #392 exact head `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` and artifact root `/work-agents/intern_nemotron_worker_2/outputs/task329_qwen_all_sft_raw_pass_split_pack_proof_s1/run_20260604T053349Z`. Disposition `APPROVE_DOCS_CLOSEOUT_HOLD_TRAINING`: diff scope/diff-check OK, helper compile PASS, artifact checksum manifest PASS, packed shard checksum manifest PASS, Qwen30B contract PASS, manifest assertions PASS. Exact blockers remain SWE 51,029 rows with 0 supervised tokens, 6 structured validation-filtered rows, sparse valid/test exposure, and deferred combination with task299 seed. All nine task327 decontam-hit sources remain excluded. Task310 remains HOLD. No product-code edits, training/eval/export/endpoint/promotion/task255/AIME2025 train rows/shared deletion/merge/self-merge/main push. |
+| Progress | Produced task332 no-training evidence and report with disposition `PASS_SPLIT_POLICY_READY_WITH_SWE_PENDING`. Output root `/work-agents/intern_nemotron_worker_4/outputs/task332_qwen_all_sft_structured_split_policy_remediation_s1/run_20260604T065013Z`; exact 6 structured validation rows identified and fail-closed excluded; deterministic per-source split policy `task332_per_source_shard_holdout_v1` recorded; decontam/no-AIME2025 train proof carried; task331 remains pending at `63b4b992d534bd16120f31345d57d105890d8d55` with no PR visible and SWE supervised tokens still blocking combined contract. Verified helper compile and task332 output checksums. No training/eval/export/endpoint/promotion/task255/shared deletion/merge/self-merge/main push. |
