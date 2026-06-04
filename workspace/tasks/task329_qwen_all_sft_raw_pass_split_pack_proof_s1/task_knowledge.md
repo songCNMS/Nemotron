@@ -1,6 +1,6 @@
 # task329_qwen_all_sft_raw_pass_split_pack_proof_s1 - task knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 1. task328/#391 exact refreshed head
    `7181289cca14af741e7f704b6f34219805822a3e` is approved only as a
@@ -35,3 +35,9 @@
 11. Session 3 hook correction changed only bookkeeping/status metadata after
     the task329/#392 closeout; it did not change artifact evidence or authorize
     packing, training, eval, export, endpoint, promotion, or merge.
+12. Session 4 lead gate approved #392 only as docs closeout with training held.
+    After #393 merged, #392 was self-merged from exact approved head
+    `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf` at
+    `2026-06-04T06:35:06Z`; merge commit
+    `410c2247fc5e09e6ad831bdee1628830b97fbd89`. The global next state remains
+    no training/eval/export/endpoint/promotion unless separately released.

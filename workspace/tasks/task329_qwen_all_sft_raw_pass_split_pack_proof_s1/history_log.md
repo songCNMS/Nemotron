@@ -1,6 +1,6 @@
 # task329_qwen_all_sft_raw_pass_split_pack_proof_s1 - history log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 81 - 2026-06-04 UTC - Assigned by lead
 
@@ -46,3 +46,19 @@
 - No new packing, training, optimizer step, nonzero-LR smoke, eval, export,
   endpoint, promotion, task255 reuse, AIME2025 train rows, shared deletion,
   main push, merge, or self-merge was performed.
+
+## Session 4 - 2026-06-04 UTC - Approved PR merge closeout
+
+- Verified dependency PR #393 was merged at `2026-06-04T06:33:54Z` with merge
+  commit `76886ab9c99cd4d227b0ed18bef43a9949129f73`.
+- Rechecked PR #392 immediately before merge: `OPEN`, base `main`,
+  non-draft, exact approved head
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`, `mergeable=MERGEABLE`, and
+  `mergeStateStatus=CLEAN`.
+- Self-merged PR #392 at `2026-06-04T06:35:06Z` from approved head
+  `d911ec58aaa83a0eb92ce19b6f3cbc5575a517cf`; merge commit
+  `410c2247fc5e09e6ad831bdee1628830b97fbd89`.
+- Scope remained docs/status/report evidence only for
+  `PARTIAL_PASS_WITH_EXACT_BLOCKERS`; no training, optimizer step, nonzero-LR
+  smoke, eval, export, endpoint, promotion, task255 reuse, AIME2025 train rows,
+  shared deletion, main push, or additional packing was performed.
