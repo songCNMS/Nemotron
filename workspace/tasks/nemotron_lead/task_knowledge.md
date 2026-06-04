@@ -3316,3 +3316,8 @@
    `1f9eff55266ed397fb66ecf716707e872e71a678`; canonical merged evidence remains
    #387 head `e07ee3f9268b33658e18881c25a3d221bf2136ee` and merge commit
    `a612ff4f3f09f55b3b5437e0b3b3a57fde976a3b`.
+821. #385/task323 exact head `de480248b1ad7abe16a620729e62fa397443228d`
+   remains `CLEAN` and is released for worker_5 self-merge by lead comment
+   `4622457488`, carrying forward prior gate comments `4616544268` and
+   `4616643065`. This is Route A train-only validation-skip preflight
+   documentation only; it does not authorize training/eval or task310 release.

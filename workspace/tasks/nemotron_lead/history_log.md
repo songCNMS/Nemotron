@@ -12961,3 +12961,17 @@
   `2026-06-04T13:03:37Z`; branch-only closeout/status head is
   `1f9eff55266ed397fb66ecf716707e872e71a678`. Worker_3 reported no issue and
   no boundary violations.
+- Session 92 task323/#385 release: rechecked #385 as `OPEN`, non-draft, base
+  `main`, `CLEAN`, exact head `de480248b1ad7abe16a620729e62fa397443228d`.
+  Prior lead gate comments `4616544268` and `4616643065` already accepted the
+  current head as `APPROVE_ROUTE_A_PREFLIGHT_DOCS / HOLD_TRAINING`; report
+  sha256 remains `f996e90ac8b75171ab0c7ca7d3fcc59354ad338075d8b1a229e6513a07f5917c`
+  and `git diff --check` passes. Accepted evidence remains Route A train-only
+  validation-skip preflight documentation: train=46/valid=0/test=0, 46/46 hash
+  parity, rows 279, input tokens 1,024,646, supervised tokens 228,927,
+  `do_validation=false`, `packed_val_data_path=null`, and same-harness eval
+  handoff still required. Lead posted release comment `4622457488` and notified
+  worker_5 by peer_send; delivery returned `delivered`. Worker_5 may self-merge
+  #385 only if exact head remains `CLEAN`. This does not authorize optimizer/
+  training/eval/export/endpoint/promotion/final packing/product-code edit/
+  task255/AIME2025 train data/shared deletion/main push or task310 release.
